@@ -51,7 +51,7 @@ export const Home: React.FC = () => {
   return (
     <div className="space-y-16 pb-12">
       {/* Hero Section */}
-      <section className="relative pt-12 pb-16 overflow-hidden">
+      <section className="relative pt-12 pb-16 overflow-hidden scroll-reveal">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-[var(--primary-color)] px-3 py-1 rounded-full text-xs font-mono text-[var(--primary-color)] shadow-[0_0_10px_var(--glow-color)]">
             <span className="w-2 h-2 rounded-full bg-[var(--primary-color)] animate-ping inline-block"></span>
@@ -112,7 +112,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Brand Sponsorships Marquee */}
-      <section className="border-y border-cyan-500/20 bg-black/40 py-6">
+      <section className="border-y border-cyan-500/20 bg-black/40 py-6 scroll-reveal">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center text-xs font-mono text-gray-500 tracking-widest uppercase mb-4">
             SPONSORED & PUBLISHED ON GLOBAL PLATFORMS
@@ -130,7 +130,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Featured Apps Showcase */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-reveal">
         <div className="flex items-center justify-between border-b border-cyan-500/20 pb-4 font-mono">
           <div>
             <h2 className="font-orbitron font-bold text-2xl text-white tracking-wider flex items-center space-x-2">

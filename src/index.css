@@ -133,3 +133,42 @@ body {
 .animate-glitch {
   animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
+
+
+/* Dynamic Theme Background Patterns & Glassmorphic Translucency */
+body {
+  background-color: var(--bg-color);
+  background-image: var(--bg-pattern);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  transition: background 0.6s ease, color 0.4s ease;
+}
+
+/* Scroll Reveal Animations */
+@keyframes scrollFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal {
+  animation: scrollFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* HUD Border Pulse Scan Animation */
+@keyframes hudScanPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px var(--glow-color);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--glow-color), inset 0 0 10px var(--glow-color);
+  }
+}
+
+.hud-pulse-glow {
+  animation: hudScanPulse 3s infinite ease-in-out;
+}
