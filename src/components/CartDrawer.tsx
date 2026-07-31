@@ -1,221 +1,301 @@
 import React, { useState } from 'react';
-import { X, Trash2, ShieldCheck, CreditCard, Lock, CheckCircle, PackageCheck } from 'lucide-react';
-import { useApp, Order } from '../context/AppContext';
+import { ShoppingCart, X, Trash2, ShieldCheck, CreditCard, Lock, CheckCircle, AlertTriangle } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 import { audioEngine } from './AudioEngine';
 
+// Luhn Algorithm for Credit Card Validation
+function isValidLuhn(numberStr: string): boolean {
+  const cleanStr = numberStr.replace(/\D/g, '');
+  if (cleanStr.length < 13 || cleanStr.length > 19) return false;
+  let sum = 0;
+  let shouldDouble = false;
+  for (let i = cleanStr.length - 1; i >= 0; i--) {
+    let digit = parseInt(cleanStr.charAt(i), 10);
+    if (shouldDouble) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+    shouldDouble = !shouldDouble;
+  }
+  return sum % 10 === 0;
+}
+
+// Auto-Detect Card Brand Network
+function detectCardBrand(numberStr: string): 'VISA' | 'MASTERCARD' | 'AMEX' | 'DISCOVER' | 'UNKNOWN' {
+  const cleanStr = numberStr.replace(/\D/g, '');
+  if (/^4/.test(cleanStr)) return 'VISA';
+  if (/^(5[1-5]|222[1-9]|22[3-9]\d|2[3-6]\d{2}|27[0-1]\d|2720)/.test(cleanStr)) return 'MASTERCARD';
+  if (/^3[47]/.test(cleanStr)) return 'AMEX';
+  if (/^6(?:011|5)/.test(cleanStr)) return 'DISCOVER';
+  return 'UNKNOWN';
+}
+
 export const CartDrawer: React.FC = () => {
-  const { cart, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, createOrder, setIsCaptchaOpen, setPendingCheckoutAction } = useApp();
-  const [promoCode, setPromoCode] = useState('');
-  const [discount, setDiscount] = useState(0);
-  const [deliveryType, setDeliveryType] = useState<'instant_download' | 'physical_shipping'>('instant_download');
-  const [shippingAddress, setShippingAddress] = useState('');
-  const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
+  const { cart, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, clearCart, user, createOrder } = useApp();
+
+  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'credit_card'>('credit_card');
+  const [cardName, setCardName] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardExp, setCardExp] = useState('');
+  const [cardCvc, setCardCvc] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState<any | null>(null);
+
+  const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+
+  const cardBrand = detectCardBrand(cardNumber);
+  const isCardValid = isValidLuhn(cardNumber);
+
+  const handleCheckoutSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    audioEngine.playClick();
+
+    // 1. Enforce Registered User Check
+    if (!user) {
+      alert('SECURITY MANDATE: Only registered & authenticated users can complete purchases on White Hat Dev platform. Please register or log in first!');
+      return;
+    }
+
+    if (cart.length === 0) return;
+
+    // 2. Credit Card Anti-Fraud Verification
+    if (paymentMethod === 'credit_card') {
+      if (!cardName.trim()) {
+        alert('ANTI-FRAUD CHECK: Please enter the Cardholder Full Name.');
+        return;
+      }
+      if (!isCardValid) {
+        alert('ANTI-FRAUD CHECK FAILED: Invalid Credit Card Number! Please enter a valid Visa, Mastercard, or Amex card number.');
+        return;
+      }
+      if (!cardExp.trim() || !/^(0[1-9]|1[0-2])\/?([0-9]{2})$/.test(cardExp.trim())) {
+        alert('ANTI-FRAUD CHECK FAILED: Please enter a valid Expiration Date in MM/YY format.');
+        return;
+      }
+      if (!cardCvc.trim() || cardCvc.length < 3) {
+        alert('ANTI-FRAUD CHECK FAILED: Please enter a valid 3 or 4-digit CVC code.');
+        return;
+      }
+    }
+
+    setIsProcessing(true);
+    audioEngine.playGlitch();
+
+    setTimeout(() => {
+      const newOrder = createOrder(paymentMethod === 'paypal' ? 'PAYPAL_EXPRESS' : 'ENCRYPTED_CREDIT_CARD');
+      clearCart();
+      setIsProcessing(false);
+      setCompletedOrder(newOrder);
+      audioEngine.playClick();
+    }, 1500);
+  };
 
   if (!isCartOpen) return null;
 
-  const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const finalTotal = Math.max(0, subtotal - discount);
-
-  const applyPromo = () => {
-    audioEngine.playClick();
-    if (promoCode.trim().toUpperCase() === 'WHITEHAT10') {
-      audioEngine.playSuccess();
-      setDiscount(subtotal * 0.1);
-    } else {
-      audioEngine.playGlitch();
-      alert('Invalid Promo Code. Try WHITEHAT10 for 10% off!');
-    }
-  };
-
-  const executeCheckout = () => {
-    if (cart.length === 0) return;
-    const order = createOrder(deliveryType, shippingAddress);
-    setCompletedOrder(order);
-  };
-
-  const handleCheckoutClick = () => {
-    audioEngine.playClick();
-    setPendingCheckoutAction(() => executeCheckout);
-    setIsCaptchaOpen(true);
-  };
-
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-end font-mono">
-      <div className="w-full max-w-md bg-[#0d0f18] border-l border-[var(--border-color)] h-full flex flex-col justify-between shadow-2xl p-6 overflow-y-auto">
-        <div>
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-cyan-500/20 pb-4 mb-6">
-            <h2 className="font-orbitron font-bold text-white text-lg tracking-wider flex items-center space-x-2">
-              <span className="text-[var(--primary-color)]">CYBER</span>_CART
-            </h2>
+    <div className="fixed inset-0 z-50 overflow-hidden font-mono">
+      {/* Backdrop */}
+      <div 
+        onClick={() => setIsCartOpen(false)}
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" 
+      />
+
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+        <div className="w-screen max-w-md bg-gray-950 border-l border-[var(--primary-color)]/40 p-6 flex flex-col justify-between shadow-2xl text-white">
+          
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between border-b border-cyan-500/20 pb-4">
+            <div className="flex items-center space-x-2">
+              <ShoppingCart className="text-[var(--primary-color)]" size={20} />
+              <h2 className="font-orbitron font-bold text-lg text-white">SECURE CART</h2>
+              <span className="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded">
+                {cart.length} item(s)
+              </span>
+            </div>
             <button 
-              onClick={() => {
-                audioEngine.playGlitch();
-                setIsCartOpen(false);
-                setCompletedOrder(null);
-              }}
-              className="text-gray-400 hover:text-white"
+              onClick={() => setIsCartOpen(false)}
+              className="text-gray-400 hover:text-white p-1"
             >
               <X size={20} />
             </button>
           </div>
 
+          {/* Cart Items List or Completed Invoice */}
           {completedOrder ? (
-            <div className="text-center py-8 space-y-4">
-              <div className="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto border-2 border-green-400 animate-bounce">
-                <CheckCircle size={36} />
-              </div>
-              <h3 className="font-orbitron font-bold text-xl text-white">PAYMENT SUCCESSFUL!</h3>
+            <div className="my-auto space-y-4 text-center p-4 bg-gray-900 border border-green-500/40 rounded-lg">
+              <CheckCircle size={48} className="mx-auto text-green-400 animate-bounce" />
+              <h3 className="font-orbitron font-bold text-lg text-white">TRANSACTION VERIFIED & COMPLETED</h3>
               <p className="text-xs text-gray-300">
-                Order ID: <span className="text-yellow-400 font-bold">{completedOrder.id}</span>
+                Order ID: <strong className="text-green-400">{completedOrder.id}</strong><br />
+                Total Paid: <strong>${completedOrder.totalPrice} USD</strong><br />
+                User Account: <strong>{completedOrder.userName}</strong>
               </p>
-              <p className="text-xs text-gray-400">
-                A confirmation receipt & download links have been issued to <span className="text-cyan-400">{completedOrder.userEmail}</span>.
-              </p>
-              <div className="p-4 bg-black/60 border border-cyan-500/30 rounded text-left text-xs space-y-2">
-                <div>Delivery Mode: <span className="text-white font-bold">{completedOrder.deliveryType}</span></div>
-                <div>Status: <span className="text-green-400 font-bold">Paid via PayPal Merchant</span></div>
-                <div>Est. Shipping/Delivery: <span className="text-yellow-400">7 - 15 Days Tracked (or Instant Download)</span></div>
+              <div className="p-3 bg-black/60 rounded text-[10px] text-cyan-300 border border-cyan-500/30">
+                🛡️ ANTI-FRAUD VERIFIED • INSTANT DIGITAL ACCESS GRANTED
               </div>
               <button
                 onClick={() => {
-                  audioEngine.playClick();
                   setCompletedOrder(null);
                   setIsCartOpen(false);
                 }}
-                className="w-full py-2.5 rounded bg-[var(--primary-color)] text-black font-bold hover:bg-yellow-400 transition-colors"
+                className="w-full py-2.5 bg-[var(--primary-color)] text-black font-bold rounded text-xs"
               >
-                DONE & CLOSE
+                RETURN TO MARKETPLACE
               </button>
             </div>
+          ) : cart.length === 0 ? (
+            <div className="my-auto text-center space-y-3 py-12">
+              <ShoppingCart size={48} className="mx-auto text-gray-600" />
+              <p className="text-sm text-gray-400">YOUR CART IS EMPTY</p>
+            </div>
           ) : (
-            <>
-              {/* Cart Items List */}
-              {cart.length === 0 ? (
-                <div className="text-center py-12 text-gray-500 space-y-3">
-                  <div className="text-4xl">🛒</div>
-                  <div>Your Cyber Cart is currently empty.</div>
+            <div className="flex-1 overflow-y-auto py-4 space-y-4 pr-1">
+              {cart.map(item => (
+                <div key={item.product.id} className="flex items-center justify-between p-3 bg-black/60 border border-gray-800 rounded">
+                  <img src={item.product.imageUrl} alt={item.product.title} className="w-12 h-12 object-cover rounded border border-gray-800" />
+                  <div className="flex-1 px-3">
+                    <div className="text-xs font-bold text-white line-clamp-1">{item.product.title}</div>
+                    <div className="text-xs text-[var(--secondary-color)]">${item.product.price} USD</div>
+                  </div>
+                  <button onClick={() => removeFromCart(item.product.id)} className="text-red-400 hover:text-red-300 p-1">
+                    <Trash2 size={16} />
+                  </button>
                 </div>
-              ) : (
-                <div className="space-y-4 mb-6">
-                  {cart.map(item => (
-                    <div key={item.product.id} className="p-3 bg-black/60 border border-gray-800 rounded flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <img src={item.product.imageUrl} alt="" className="w-12 h-12 object-cover rounded border border-cyan-500/20" />
-                        <div>
-                          <div className="text-xs text-white font-bold max-w-[180px] truncate">{item.product.title}</div>
-                          <div className="text-xs text-[var(--primary-color)]">${item.product.price} USD</div>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="number"
-                          min="1"
-                          value={item.quantity}
-                          onChange={e => updateQuantity(item.product.id, parseInt(e.target.value) || 1)}
-                          className="w-12 bg-black border border-gray-700 rounded text-center text-xs py-0.5 text-white"
-                        />
-                        <button
-                          onClick={() => removeFromCart(item.product.id)}
-                          className="text-red-400 hover:text-red-300 p-1"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+              ))}
+
+              {/* Registered User Authentication Check Banner */}
+              {!user && (
+                <div className="p-3 bg-yellow-950/60 border border-yellow-500/40 rounded text-xs text-yellow-300 space-y-1">
+                  <div className="font-bold flex items-center space-x-1">
+                    <AlertTriangle size={14} />
+                    <span>USER ACCOUNT REQUIRED FOR PURCHASE</span>
+                  </div>
+                  <p className="text-[10px] text-gray-300">
+                    To prevent fraud, purchases are restricted to registered users. Please log in or register using the Account button.
+                  </p>
                 </div>
               )}
 
-              {/* Delivery Options */}
-              <div className="space-y-3 mb-6">
-                <label className="text-xs text-gray-400 block font-bold">SELECT DELIVERY MODE:</label>
+              {/* Payment Method Selector */}
+              <div className="space-y-3 pt-2">
+                <label className="text-xs font-bold text-gray-300 uppercase tracking-wider block">CHOOSE PAYMENT METHOD</label>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <button
-                    onClick={() => setDeliveryType('instant_download')}
-                    className={`p-2 rounded border text-center ${
-                      deliveryType === 'instant_download'
-                        ? 'border-[var(--primary-color)] bg-cyan-500/10 text-cyan-400'
-                        : 'border-gray-800 text-gray-400'
+                    type="button"
+                    onClick={() => { audioEngine.playClick(); setPaymentMethod('credit_card'); }}
+                    className={`p-2.5 rounded border text-center font-bold flex items-center justify-center space-x-1 ${
+                      paymentMethod === 'credit_card'
+                        ? 'bg-[var(--primary-color)] text-black border-[var(--primary-color)] shadow-[0_0_10px_var(--glow-color)]'
+                        : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white'
                     }`}
                   >
-                    Digital Download (Instant)
+                    <CreditCard size={14} />
+                    <span>CREDIT CARD</span>
                   </button>
                   <button
-                    onClick={() => setDeliveryType('physical_shipping')}
-                    className={`p-2 rounded border text-center ${
-                      deliveryType === 'physical_shipping'
-                        ? 'border-[var(--primary-color)] bg-cyan-500/10 text-cyan-400'
-                        : 'border-gray-800 text-gray-400'
+                    type="button"
+                    onClick={() => { audioEngine.playClick(); setPaymentMethod('paypal'); }}
+                    className={`p-2.5 rounded border text-center font-bold flex items-center justify-center space-x-1 ${
+                      paymentMethod === 'paypal'
+                        ? 'bg-[var(--primary-color)] text-black border-[var(--primary-color)] shadow-[0_0_10px_var(--glow-color)]'
+                        : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white'
                     }`}
                   >
-                    Physical Shipping (7-15 Days)
+                    <Lock size={14} />
+                    <span>PAYPAL</span>
                   </button>
                 </div>
-
-                {deliveryType === 'physical_shipping' && (
-                  <textarea
-                    value={shippingAddress}
-                    onChange={e => setShippingAddress(e.target.value)}
-                    placeholder="Enter full shipping address & country for worldwide courier..."
-                    className="w-full bg-black border border-gray-700 rounded p-2 text-xs text-white h-20 focus:outline-none focus:border-[var(--primary-color)]"
-                  />
-                )}
               </div>
 
-              {/* Promo Code */}
-              <div className="flex space-x-2 mb-6">
-                <input
-                  type="text"
-                  value={promoCode}
-                  onChange={e => setPromoCode(e.target.value)}
-                  placeholder="PROMO CODE (e.g. WHITEHAT10)"
-                  className="flex-1 bg-black border border-gray-700 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[var(--primary-color)] uppercase"
-                />
-                <button
-                  onClick={applyPromo}
-                  className="px-3 py-1.5 bg-gray-800 border border-gray-700 text-white rounded text-xs hover:border-[var(--primary-color)]"
-                >
-                  APPLY
-                </button>
-              </div>
-
-              {/* Order Summary */}
-              <div className="border-t border-gray-800 pt-4 space-y-2 text-xs mb-6">
-                <div className="flex justify-between text-gray-400">
-                  <span>Subtotal:</span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-                {discount > 0 && (
-                  <div className="flex justify-between text-green-400">
-                    <span>Discount (10%):</span>
-                    <span>-${discount.toFixed(2)}</span>
+              {/* Credit Card Input Form */}
+              {paymentMethod === 'credit_card' && (
+                <div className="space-y-3 p-3 bg-black/80 border border-cyan-500/30 rounded text-xs">
+                  <div className="flex justify-between items-center text-[10px] text-cyan-400 font-bold">
+                    <span>ENCRYPTED CARD CHECKOUT</span>
+                    <span>BRAND: {cardBrand}</span>
                   </div>
-                )}
-                <div className="flex justify-between text-white font-bold text-sm pt-2 border-t border-gray-800">
-                  <span>TOTAL DUE:</span>
-                  <span className="text-[var(--secondary-color)]">${finalTotal.toFixed(2)} USD</span>
+
+                  <div>
+                    <label className="text-[10px] text-gray-400 block mb-1">CARDHOLDER FULL NAME</label>
+                    <input
+                      type="text"
+                      value={cardName}
+                      onChange={e => setCardName(e.target.value)}
+                      placeholder="e.g. MARCUS VANCE"
+                      className="w-full bg-gray-900 border border-gray-800 rounded px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[var(--primary-color)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-gray-400 block mb-1">CARD NUMBER (VISA / MASTERCARD / AMEX)</label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={cardNumber}
+                        onChange={e => setCardNumber(e.target.value)}
+                        placeholder="4532 •••• •••• ••••"
+                        className={`w-full bg-gray-900 border rounded px-3 py-1.5 text-xs text-white focus:outline-none ${
+                          cardNumber.length > 12 
+                            ? isCardValid ? 'border-green-500 text-green-300' : 'border-red-500 text-red-300' 
+                            : 'border-gray-800'
+                        }`}
+                      />
+                      {cardNumber.length > 12 && (
+                        <span className={`absolute right-2 top-2 text-[10px] font-bold ${isCardValid ? 'text-green-400' : 'text-red-400'}`}>
+                          {isCardValid ? '✓ VALID LUHN' : '✗ INVALID'}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-[10px] text-gray-400 block mb-1">EXPIRY (MM/YY)</label>
+                      <input
+                        type="text"
+                        value={cardExp}
+                        onChange={e => setCardExp(e.target.value)}
+                        placeholder="12/28"
+                        className="w-full bg-gray-900 border border-gray-800 rounded px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[var(--primary-color)]"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-gray-400 block mb-1">CVC / CVV</label>
+                      <input
+                        type="password"
+                        maxLength={4}
+                        value={cardCvc}
+                        onChange={e => setCardCvc(e.target.value)}
+                        placeholder="•••"
+                        className="w-full bg-gray-900 border border-gray-800 rounded px-3 py-1.5 text-xs text-white focus:outline-none focus:border-[var(--primary-color)]"
+                      />
+                    </div>
+                  </div>
                 </div>
+              )}
+            </div>
+          )}
+
+          {/* Drawer Footer & Checkout Button */}
+          {!completedOrder && cart.length > 0 && (
+            <div className="border-t border-cyan-500/20 pt-4 space-y-3">
+              <div className="flex justify-between items-center text-sm font-orbitron font-bold">
+                <span>TOTAL:</span>
+                <span className="text-xl text-[var(--secondary-color)]">${total} USD</span>
               </div>
-            </>
+
+              <button
+                onClick={handleCheckoutSubmit}
+                disabled={isProcessing}
+                className="w-full py-3 bg-[var(--primary-color)] text-black font-orbitron font-bold rounded text-xs hover:bg-yellow-400 transition-colors shadow-[0_0_15px_var(--glow-color)] flex items-center justify-center space-x-2"
+              >
+                <ShieldCheck size={16} />
+                <span>{isProcessing ? 'VERIFYING CARD & PROCESSING...' : `PAY $${total} USD NOW`}</span>
+              </button>
+            </div>
           )}
         </div>
-
-        {!completedOrder && cart.length > 0 && (
-          <div className="space-y-3">
-            <button
-              onClick={handleCheckoutClick}
-              className="w-full py-3 rounded bg-[#0070ba] hover:bg-[#005ea6] text-white font-orbitron font-bold text-xs tracking-wider flex items-center justify-center space-x-2 shadow-[0_0_15px_rgba(0,112,186,0.5)] transition-colors"
-            >
-              <CreditCard size={18} />
-              <span>PAY WITH PAYPAL MERCHANT</span>
-            </button>
-            <div className="flex items-center justify-center space-x-2 text-[10px] text-gray-500">
-              <ShieldCheck size={14} className="text-green-400" />
-              <span>256-Bit Anti-Fraud Protected Checkout</span>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

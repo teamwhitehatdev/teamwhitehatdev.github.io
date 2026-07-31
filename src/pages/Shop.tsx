@@ -10,19 +10,19 @@ import { audioEngine } from '../components/AudioEngine';
 import { ShopProduct } from '../utils/initialData';
 
 const CATEGORY_LABELS: Record<string, string> = {
-  digital_art: 'DIGITAL ARTS',
-  website_template: 'WEBSITE TEMPLATES',
-  app_template: 'APPLICATION TEMPLATES',
-  model_3d: '3D MODELS',
-  hacking_interface: 'HACKING LAYOUTS',
-  hud_package: 'HUD PACKAGES',
-  stream_layout: 'STREAMING PACKAGES',
-  tshirt_hoodie: 'T-SHIRTS & HOODIES',
-  sticker: 'STICKERS & MERCH',
-  automation_system: 'AUTOMATION SYSTEMS',
-  android_game: 'ANDROID READY GAMES',
-  python_tool: 'PYTHON TOOLS',
-  nft: 'CYBER NFTS'
+  digital_arts: 'DIGITAL ARTS',
+  website_templates: 'WEBSITE TEMPLATES',
+  app_templates: 'APPLICATION TEMPLATES',
+  '3d_models': '3D MODELS',
+  hacking_layouts: 'HACKING LAYOUTS',
+  hud_packages: 'HUD PACKAGES',
+  stream_packages: 'STREAMING PACKAGES',
+  merchandise: 'T-SHIRTS & HOODIES',
+  stickers: 'STICKERS & MERCH',
+  automation_systems: 'AUTOMATION SYSTEMS',
+  game_projects: 'ANDROID READY GAMES',
+  python_systems: 'PYTHON TOOLS',
+  nfts: 'CYBER NFTS'
 };
 
 export const Shop: React.FC = () => {
