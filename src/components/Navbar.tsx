@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Shield, Volume2, VolumeX, ShoppingBag, User, Settings, Terminal, 
-  Menu, X, Sparkles, Cpu
+  Shield, Volume2, VolumeX, ShoppingBag, User, Menu, X 
 } from 'lucide-react';
 import { useTheme, THEMES, ThemeName } from './ThemeEngine';
 import { audioEngine } from './AudioEngine';
@@ -10,8 +9,8 @@ import { useApp } from '../context/AppContext';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
-  const { currentTheme, setTheme, themeConfig } = useTheme();
-  const { cart, user, setIsCartOpen, setIsAuthOpen, isAdmin } = useApp();
+  const { currentTheme, setTheme } = useTheme();
+  const { cart, user, setIsCartOpen, setIsAuthOpen } = useApp();
   const [isAudioMuted, setIsAudioMuted] = useState(audioEngine.isMuted);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -32,9 +31,9 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#0d0f18]/90 backdrop-blur-md border-b border-[var(--border-color)]">
+    <header className="sticky top-0 z-40 bg-[#0d0f18]/90 backdrop-blur-md border-b border-[var(--border-color)] font-mono">
       {/* Top Status Bar */}
-      <div className="bg-black/60 border-b border-cyan-500/10 px-4 py-1 text-xs font-mono flex items-center justify-between text-gray-400">
+      <div className="bg-black/60 border-b border-cyan-500/10 px-4 py-1 text-xs flex items-center justify-between text-gray-400">
         <div className="flex items-center space-x-4">
           <span className="flex items-center space-x-1 text-cyan-400">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping inline-block"></span>
@@ -142,21 +141,6 @@ export const Navbar: React.FC = () => {
               </span>
             )}
           </button>
-
-          {/* Admin Portal Button */}
-          <Link
-            to="/admin"
-            onClick={() => audioEngine.playClick()}
-            className={`p-2 rounded font-mono text-xs border transition-all flex items-center space-x-1 ${
-              isAdmin
-                ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500 shadow-[0_0_8px_rgba(252,238,10,0.5)]'
-                : 'bg-black/60 text-gray-400 border-gray-700 hover:text-yellow-400 hover:border-yellow-500'
-            }`}
-            title="Cyber Backend Admin Portal"
-          >
-            <Terminal size={16} />
-            <span className="hidden sm:inline">ADMIN</span>
-          </Link>
 
           {/* Mobile Menu Button */}
           <button

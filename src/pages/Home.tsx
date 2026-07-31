@@ -26,7 +26,7 @@ export const Home: React.FC = () => {
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-orbitron font-black text-white tracking-tight leading-none">
             MOST ADVANCED & POWERFUL <br />
             <span className="neon-text-primary">
-              <GlitchText text="CYBERNETICS WEB & APP DEVELOPER" speed={40} />
+              <GlitchText text="HIRED EXPERTS WEB & APP DEVELOPER" speed={40} />
             </span>
           </h1>
 

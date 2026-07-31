@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type ThemeName = 'cyberpunk' | 'cybernotes' | 'matrix' | 'tron' | 'retrowave' | 'quantum';
+export type ThemeName = 'cyberpunk' | 'cyberpunk2077_neon' | 'hackthebox' | 'cybernotes' | 'matrix' | 'tron' | 'retrowave' | 'quantum';
 
 export interface ThemeConfig {
   name: ThemeName;
@@ -25,6 +25,28 @@ export const THEMES: Record<ThemeName, ThemeConfig> = {
     panel: 'rgba(18, 22, 36, 0.75)',
     glow: 'rgba(0, 240, 255, 0.5)',
     description: 'High contrast yellow, neon cyan and pink dark futuristic theme.'
+  },
+  cyberpunk2077_neon: {
+    name: 'cyberpunk2077_neon',
+    label: 'CYBERPUNK NEON GLITCH',
+    primary: '#fcee0a',
+    secondary: '#ff0055',
+    accent: '#00f0ff',
+    bg: '#05070f',
+    panel: 'rgba(20, 15, 30, 0.85)',
+    glow: 'rgba(252, 238, 10, 0.6)',
+    description: 'Ultra bright Cyberpunk 2077 yellow, electric hot pink and cyan glow.'
+  },
+  hackthebox: {
+    name: 'hackthebox',
+    label: 'HACK THE BOX (HTB)',
+    primary: '#9feaf9',
+    secondary: '#a2e048',
+    accent: '#ffaf00',
+    bg: '#111927',
+    panel: 'rgba(20, 29, 43, 0.85)',
+    glow: 'rgba(159, 234, 249, 0.5)',
+    description: 'Official HackTheBox hacker theme with neon green & dark hex panels.'
   },
   cybernotes: {
     name: 'cybernotes',

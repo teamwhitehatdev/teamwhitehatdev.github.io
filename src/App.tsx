@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './components/ThemeEngine';
 import { AppProvider } from './context/AppContext';
+import { SecurityEngine } from './components/SecurityEngine';
 import { CyberBackground } from './components/CyberBackground';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -19,6 +20,10 @@ import { Contact } from './pages/Contact';
 import { Admin } from './pages/Admin';
 
 export const App: React.FC = () => {
+  useEffect(() => {
+    SecurityEngine.initProtection();
+  }, []);
+
   return (
     <ThemeProvider>
       <AppProvider>

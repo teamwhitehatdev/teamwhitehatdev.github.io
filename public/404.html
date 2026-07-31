@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>404 // TARGET_NOT_FOUND - WHITE HAT DEV</title>
+  <style>
+    body { background: #0d0f18; color: #00f0ff; font-family: monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+    .glitch { font-size: 3rem; font-weight: bold; text-shadow: 0 0 10px #00f0ff, 0 0 20px #ff0055; }
+    .box { border: 2px solid #00f0ff; padding: 2rem; background: rgba(0,0,0,0.8); box-shadow: 0 0 25px rgba(0,240,255,0.4); max-width: 500px; }
+    a { color: #fcee0a; text-decoration: none; border: 1px solid #fcee0a; padding: 0.5rem 1rem; margin-top: 1.5rem; display: inline-block; font-weight: bold; }
+    a:hover { background: #fcee0a; color: #000; }
+  </style>
+  <script>
+    var pathSegmentsToKeep = 1;
+    var l = window.location;
+    if (l.pathname.split('/').length > pathSegmentsToKeep + 1) {
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    }
+  </script>
+</head>
+<body>
+  <div class="box">
+    <div class="glitch">404 :: ACCESS_DENIED</div>
+    <p>ERROR: The requested route node does not exist in the White Hat Dev telemetry matrix.</p>
+    <p style="color:#888; font-size: 11px;">ENCRYPTION_SIGNATURE: TeamWhiteHat-PinoyUnknown</p>
+    <a href="./">RETURN TO MAIN TERMINAL</a>
+  </div>
+</body>
+</html>
