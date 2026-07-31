@@ -172,3 +172,34 @@ body {
 .hud-pulse-glow {
   animation: hudScanPulse 3s infinite ease-in-out;
 }
+
+
+/* Mobile Responsive & Minimalist Mobile Polish */
+@media (max-width: 640px) {
+  body {
+    font-size: 13px;
+  }
+  
+  /* Minimalist padding & touch scrolling on mobile */
+  .hud-box, .hud-panel {
+    padding: 0.85rem !important;
+  }
+
+  /* Prevent any horizontal page overflow */
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Touch-friendly buttons and inputs */
+  button, input, select, a {
+    min-height: 40px;
+    touch-action: manipulation;
+  }
+
+  /* Hide excessive background glow on small screens for ultra-fast performance */
+  .neon-text-primary, .neon-text-secondary {
+    text-shadow: 0 0 5px var(--glow-color) !important;
+  }
+}
