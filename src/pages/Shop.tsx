@@ -26,7 +26,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export const Shop: React.FC = () => {
-  const { products, addToCart } = useApp();
+  const { products, addToCart, user, setIsAuthOpen } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -55,6 +55,14 @@ export const Shop: React.FC = () => {
   const handleAddToCart = (e: React.MouseEvent, product: ShopProduct) => {
     e.stopPropagation();
     audioEngine.playClick();
+
+    // Enforce Registered & Verified User Mandate
+    if (!user) {
+      alert('SECURITY MANDATE: Only verified registered users can add items to cart or make purchases. Please register and verify your email first!');
+      setIsAuthOpen(true);
+      return;
+    }
+
     addToCart(product);
     setAddedProductIds(prev => [...prev, product.id]);
     setTimeout(() => {
