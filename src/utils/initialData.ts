@@ -438,8 +438,8 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
     role: 'Lead Mobile Product Manager',
     company: 'AeroGames Studio',
     avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&q=80',
-    content: 'Bought the Flutter Mobile App template and Android Runner game project. The code was exceptionally clean and published seamlessly to Google Play Console!',
-    rating: 5,
+    content: 'Bought the Flutter Mobile App template and Android Runner game project. Excellent clean code structure and fast delivery. Very satisfied with the outcome!',
+    rating: 4,
     country: 'Germany 🇩🇪'
   },
   {
@@ -468,8 +468,8 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
     role: 'Founder & Architect',
     company: 'CyberPulse Asia',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
-    content: 'The custom HUD vector overlays and Web Audio API sound FX make our streaming overlays look like a multi-million dollar AAA studio product.',
-    rating: 5,
+    content: 'Great HUD vector overlays and Web Audio API sound FX. Really gave our streaming overlays a high-tech modern finish!',
+    rating: 4,
     country: 'Singapore 🇸🇬'
   },
   {
@@ -488,8 +488,8 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
     role: 'SaaS Founder',
     company: 'Krypton Labs',
     avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=200&q=80',
-    content: 'Purchased Python Pentest & Security Audit Toolkit v4. Saved our dev ops team weeks of scripting. White Hat Dev is the real deal.',
-    rating: 5,
+    content: 'Purchased Python Pentest & Security Audit Toolkit v4. Saved our dev ops team weeks of scripting. solid engineering work.',
+    rating: 4,
     country: 'Australia 🇦🇺'
   },
   {
