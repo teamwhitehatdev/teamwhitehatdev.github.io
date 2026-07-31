@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type ThemeName = 'cyberpunk' | 'cyberpunk2077_neon' | 'hackthebox' | 'cybernotes' | 'matrix' | 'tron' | 'retrowave' | 'quantum';
+export type ThemeName = 'hackthebox' | 'cyberpunk' | 'cyberpunk2077_neon' | 'cybernotes' | 'matrix' | 'tron' | 'retrowave' | 'quantum';
 
 export interface ThemeConfig {
   name: ThemeName;
@@ -15,6 +15,17 @@ export interface ThemeConfig {
 }
 
 export const THEMES: Record<ThemeName, ThemeConfig> = {
+  hackthebox: {
+    name: 'hackthebox',
+    label: 'HACK THE BOX (HTB)',
+    primary: '#9fef00',        // Official HTB Toxic Lime Green
+    secondary: '#22d3ee',      // Official HTB Cyan
+    accent: '#ffaf00',         // HTB Alert Orange
+    bg: '#0b1120',             // HTB Deep Space Dark Navy
+    panel: 'rgba(17, 24, 39, 0.85)', // HTB Dark Carbon Card
+    glow: 'rgba(159, 239, 0, 0.5)',
+    description: 'Authentic Hack The Box official theme with toxic lime green & deep space dark carbon.'
+  },
   cyberpunk: {
     name: 'cyberpunk',
     label: 'CYBERPUNK 2077',
@@ -36,17 +47,6 @@ export const THEMES: Record<ThemeName, ThemeConfig> = {
     panel: 'rgba(20, 15, 30, 0.85)',
     glow: 'rgba(252, 238, 10, 0.6)',
     description: 'Ultra bright Cyberpunk 2077 yellow, electric hot pink and cyan glow.'
-  },
-  hackthebox: {
-    name: 'hackthebox',
-    label: 'HACK THE BOX (HTB)',
-    primary: '#9feaf9',
-    secondary: '#a2e048',
-    accent: '#ffaf00',
-    bg: '#111927',
-    panel: 'rgba(20, 29, 43, 0.85)',
-    glow: 'rgba(159, 234, 249, 0.5)',
-    description: 'Official HackTheBox hacker theme with neon green & dark hex panels.'
   },
   cybernotes: {
     name: 'cybernotes',
@@ -115,7 +115,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState<ThemeName>(() => {
-    return (localStorage.getItem('whitehat_theme') as ThemeName) || 'cyberpunk';
+    return (localStorage.getItem('whitehat_theme') as ThemeName) || 'hackthebox';
   });
 
   const setTheme = (theme: ThemeName) => {
