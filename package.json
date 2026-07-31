@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://whitehatdev.github.io",
+  "homepage": "https://unidentifiedcyberghost.github.io",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
