@@ -75,6 +75,7 @@ const MOCK_AUDIT_LOGS = [
 export const Admin: React.FC = () => {
   const { orders, products, gallery, addProduct, deleteProduct, addGalleryItem, deleteGalleryItem } = useApp();
   
+  const [adminUser, setAdminUser] = useState('admin');
   const [passcode, setPasscode] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('whitehat_admin_auth') === 'true';
@@ -171,19 +172,33 @@ export const Admin: React.FC = () => {
             <h1 className="font-orbitron font-bold text-2xl text-white tracking-wider">CYBER BACKEND ADMIN</h1>
             <p className="text-xs text-gray-400 mt-1">RESTRICTED ACCESS • ENTER PASSCODE</p>
           </div>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <input
-              type="password"
-              value={passcode}
-              onChange={e => setPasscode(e.target.value)}
-              placeholder="ENTER PASSCODE (whitehat2026)"
-              className="w-full bg-black/80 border border-cyan-500/40 rounded px-4 py-3 text-center text-sm font-mono text-white focus:outline-none focus:border-[var(--primary-color)] shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]"
-            />
+          <form onSubmit={handleLogin} className="space-y-4 font-mono text-left">
+            <div>
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest block mb-1">ADMIN USERNAME</label>
+              <input
+                type="text"
+                value={adminUser}
+                onChange={e => setAdminUser(e.target.value)}
+                placeholder="USERNAME (admin / whitehatdev)"
+                className="w-full bg-black/80 border border-cyan-500/40 rounded px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[var(--primary-color)] shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest block mb-1">SECURITY PASSCODE</label>
+              <input
+                type="password"
+                value={passcode}
+                onChange={e => setPasscode(e.target.value)}
+                placeholder="PASSCODE (whitehat2026)"
+                className="w-full bg-black/80 border border-cyan-500/40 rounded px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[var(--primary-color)] shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]"
+              />
+            </div>
             <button
               type="submit"
-              className="w-full py-3 rounded bg-[var(--primary-color)] text-black font-orbitron font-bold text-sm hover:bg-yellow-400 transition-colors shadow-[0_0_15px_var(--glow-color)]"
+              className="w-full py-3 rounded bg-[var(--primary-color)] text-black font-orbitron font-bold text-xs hover:bg-yellow-400 transition-colors shadow-[0_0_15px_var(--glow-color)] tracking-wider mt-2 flex items-center justify-center space-x-2"
             >
-              AUTHENTICATE ADMIN SESSION
+              <Lock size={14} />
+              <span>LOG IN TO BACK-END CONTROL CENTER</span>
             </button>
           </form>
         </HUDPanel>
