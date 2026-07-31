@@ -3,14 +3,15 @@ import {
   BarChart3, Users, ShieldAlert, Package, Image as ImageIcon, 
   Search, Lock, Printer, Trash2, Edit, Ban, CheckCircle2, 
   AlertTriangle, Globe, Laptop, Smartphone, DollarSign, Activity, 
-  TrendingUp, Eye, FileText, UserCheck, RefreshCw, Key
+  TrendingUp, Eye, FileText, UserCheck, RefreshCw, Key, Settings,
+  Sliders, Shield, Server, Database, Bell, Radio, Cpu
 } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { GlitchText } from '../components/GlitchText';
 import { useApp } from '../context/AppContext';
 import { audioEngine } from '../components/AudioEngine';
 
-// Mock Analytics & User Data
+// Mock Analytics & System Data
 const MOCK_ANALYTICS = {
   totalRevenue: 48290,
   activeUsersOnline: 142,
@@ -27,10 +28,10 @@ const MOCK_ANALYTICS = {
     { country: 'United Kingdom 🇬🇧', visits: 1050, percentage: 12, sales: 8690 }
   ],
   deviceBreakdown: [
-    { name: 'Desktop (Windows)', percentage: 48, count: 4368, icon: 'Laptop' },
-    { name: 'Mobile (Android)', percentage: 32, count: 2912, icon: 'Smartphone' },
-    { name: 'Mobile (iOS)', percentage: 14, count: 1274, icon: 'Smartphone' },
-    { name: 'Desktop (macOS / Linux)', percentage: 6, count: 546, icon: 'Laptop' }
+    { name: 'Desktop (Windows)', percentage: 48, count: 4368 },
+    { name: 'Mobile (Android)', percentage: 32, count: 2912 },
+    { name: 'Mobile (iOS)', percentage: 14, count: 1274 },
+    { name: 'Desktop (macOS / Linux)', percentage: 6, count: 546 }
   ],
   trafficSources: [
     { source: 'Direct Terminal Access', count: 3840, share: 42 },
@@ -63,6 +64,14 @@ const INITIAL_USERS: UserAccount[] = [
   { id: 'usr-105', username: 'bot_spammer_x', email: 'spammer99@fake-temp.net', passwordHash: '●●●●●●●● (SHA256)', joinedDate: '2026-08-01', ipAddress: '198.51.100.42', country: 'Proxy Node 🌐', device: 'Automated Bot Script', isVpn: true, purchasesCount: 0, totalSpent: 0, status: 'BANNED' }
 ];
 
+const MOCK_AUDIT_LOGS = [
+  { id: 'log-901', timestamp: '2026-08-01 05:42:10', type: 'SECURITY_ALERT', severity: 'HIGH', message: 'Blocked F12 inspect element attempt from IP 198.51.100.42 (Bot Proxy)' },
+  { id: 'log-902', timestamp: '2026-08-01 05:38:45', type: 'PAYMENT_SUCCESS', severity: 'INFO', message: 'Verified PayPal checkout $499 USD by user matrix_hacker_de' },
+  { id: 'log-903', timestamp: '2026-08-01 05:20:12', type: 'SYSTEM_CONFIG', severity: 'INFO', message: 'Updated default active theme to CYBERPUNK.NET OFFICIAL' },
+  { id: 'log-904', timestamp: '2026-08-01 04:55:30', type: 'USER_REGISTER', severity: 'INFO', message: 'New user registered: cyber_ghost_01 (US Residential IP)' },
+  { id: 'log-905', timestamp: '2026-08-01 04:12:05', type: 'FIREWALL_BLOCK', severity: 'WARNING', message: 'Rate limit threshold exceeded for IP 185.220.101.5 (VPN Node)' }
+];
+
 export const Admin: React.FC = () => {
   const { orders, products, gallery, addProduct, deleteProduct, addGalleryItem, deleteGalleryItem } = useApp();
   
@@ -71,7 +80,7 @@ export const Admin: React.FC = () => {
     return localStorage.getItem('whitehat_admin_auth') === 'true';
   });
 
-  const [activeTab, setActiveTab] = useState<'analytics' | 'users' | 'security' | 'orders' | 'products' | 'gallery'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'users' | 'security' | 'orders' | 'settings' | 'audit'>('analytics');
   const [selectedInvoiceOrder, setSelectedInvoiceOrder] = useState<any | null>(null);
 
   // User Management state
@@ -81,6 +90,21 @@ export const Admin: React.FC = () => {
   // IP Ban list state
   const [bannedIPs, setBannedIPs] = useState<string[]>(['198.51.100.42', '185.220.101.5', '193.27.228.12']);
   const [newBanIP, setNewBanIP] = useState('');
+
+  // Enterprise System Configurations state
+  const [sysConfig, setSysConfig] = useState({
+    siteMode: 'PRODUCTION',
+    antiInspectEnabled: true,
+    strictCspEnabled: true,
+    antiBotCaptchaRequired: true,
+    paypalMode: 'LIVE',
+    merchantEmail: 'teamwhitehatdev@gmail.com',
+    currency: 'USD',
+    aiBotEnabled: true,
+    aiBotMode: 'AUTONOMOUS_SALES',
+    audioEngineEnabled: true,
+    maxDailyCoupons: 50
+  });
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,6 +154,12 @@ export const Admin: React.FC = () => {
     }, 300);
   };
 
+  const handleSaveSettings = (e: React.FormEvent) => {
+    e.preventDefault();
+    audioEngine.playClick();
+    alert('SUCCESS: Enterprise System Configurations Saved & Applied to Live Production Server!');
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center font-mono px-4">
@@ -173,7 +203,7 @@ export const Admin: React.FC = () => {
         <div>
           <div className="inline-flex items-center space-x-2 bg-red-500/10 border border-red-500/40 px-2.5 py-0.5 rounded text-[10px] font-bold text-red-400">
             <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-            <span>LIVE BACKEND CONTROL CENTER • ENCRYPTED SESSION</span>
+            <span>ENTERPRISE COMMAND CENTER • ROOT SYSTEM ACCESS</span>
           </div>
           <h1 className="font-orbitron font-extrabold text-2xl sm:text-3xl text-white tracking-wider mt-1">
             <GlitchText text="WHITE HAT DEV EXECUTIVE DASHBOARD" speed={50} />
@@ -192,11 +222,11 @@ export const Admin: React.FC = () => {
       <div className="flex flex-wrap gap-2 border-b border-cyan-500/20 pb-4">
         {[
           { id: 'analytics', label: 'ANALYTICS & INSIGHTS', icon: BarChart3 },
-          { id: 'users', label: 'USER REGISTRY & LOGS', icon: Users },
-          { id: 'security', label: 'IP MONITOR & ANTI-FRAUD', icon: ShieldAlert },
+          { id: 'users', label: 'USER REGISTRY', icon: Users },
+          { id: 'security', label: 'IP THREAT MONITOR', icon: ShieldAlert },
           { id: 'orders', label: 'ORDERS & INVOICES', icon: FileText },
-          { id: 'products', label: 'STORE PRODUCTS', icon: Package },
-          { id: 'gallery', label: 'PROJECT GALLERY', icon: ImageIcon }
+          { id: 'settings', label: 'SYSTEM CONFIGURATIONS', icon: Settings },
+          { id: 'audit', label: 'SYSTEM AUDIT LOGS', icon: Database }
         ].map(tab => {
           const Icon = tab.icon;
           return (
@@ -222,7 +252,6 @@ export const Admin: React.FC = () => {
       {/* TAB 1: ANALYTICS & GOOGLE ANALYTICS STYLE INSIGHTS */}
       {activeTab === 'analytics' && (
         <div className="space-y-6">
-          {/* Top Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <HUDPanel>
               <div className="flex items-center justify-between">
@@ -273,20 +302,14 @@ export const Admin: React.FC = () => {
             </HUDPanel>
           </div>
 
-          {/* Graphic Pie Charts & Category Visualizers */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Device & OS Pie Chart Visualizer */}
             <HUDPanel title="DEVICE & OPERATING SYSTEM METRICS (PIE CHART)">
               <div className="space-y-4">
-                {/* Simulated SVG Cyber Pie Chart */}
                 <div className="flex justify-center items-center py-4">
                   <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 36 36">
                     <path className="text-cyan-500/20" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    {/* Desktop Windows 48% */}
                     <path className="text-[var(--primary-color)]" strokeDasharray="48, 100" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    {/* Mobile Android 32% */}
                     <path className="text-[var(--secondary-color)]" strokeDasharray="32, 100" strokeDashoffset="-48" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    {/* Mobile iOS 14% */}
                     <path className="text-purple-400" strokeDasharray="14, 100" strokeDashoffset="-80" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                   </svg>
                 </div>
@@ -305,7 +328,6 @@ export const Admin: React.FC = () => {
               </div>
             </HUDPanel>
 
-            {/* Geographic Traffic & Country Breakdown (Alphabetical) */}
             <HUDPanel title="GEOGRAPHIC TRAFFIC & SALES BY COUNTRY (ALPHABETICAL)">
               <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
                 {MOCK_ANALYTICS.countryBreakdown.map((c, i) => (
@@ -325,27 +347,13 @@ export const Admin: React.FC = () => {
               </div>
             </HUDPanel>
           </div>
-
-          {/* Traffic Source Breakdown */}
-          <HUDPanel title="TRAFFIC ACQUISITION CHANNELS">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {MOCK_ANALYTICS.trafficSources.map((t, i) => (
-                <div key={i} className="p-4 bg-black/60 border border-gray-800 rounded space-y-2">
-                  <div className="text-xs text-gray-400 uppercase">{t.source}</div>
-                  <div className="text-xl font-bold text-white">{t.count.toLocaleString()} Users</div>
-                  <div className="text-[10px] text-cyan-400">{t.share}% Total Traffic Share</div>
-                </div>
-              ))}
-            </div>
-          </HUDPanel>
         </div>
       )}
 
-      {/* TAB 2: USER REGISTRY & PASSWORDS LISTING */}
+      {/* TAB 2: USER REGISTRY */}
       {activeTab === 'users' && (
         <HUDPanel title="REGISTERED USER ACCOUNTS & SECURITY CREDENTIALS">
           <div className="space-y-4">
-            {/* Search Bar */}
             <div className="relative">
               <Search className="absolute left-3 top-3 text-gray-400" size={16} />
               <input
@@ -357,7 +365,6 @@ export const Admin: React.FC = () => {
               />
             </div>
 
-            {/* Users Table */}
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs font-mono">
                 <thead>
@@ -436,7 +443,7 @@ export const Admin: React.FC = () => {
         </HUDPanel>
       )}
 
-      {/* TAB 3: IP MONITOR & ANTI-FRAUD CONTROL */}
+      {/* TAB 3: IP THREAT MONITOR */}
       {activeTab === 'security' && (
         <div className="space-y-6">
           <HUDPanel title="MANUAL IP BAN CONTROL & SECURITY THREAT ENGINE">
@@ -474,7 +481,7 @@ export const Admin: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 4: ORDERS & PRINTABLE CYBER INVOICES */}
+      {/* TAB 4: ORDERS & PRINTABLE INVOICES */}
       {activeTab === 'orders' && (
         <HUDPanel title="CUSTOMER ORDERS & PRINTABLE INVOICES">
           <div className="overflow-x-auto">
@@ -482,7 +489,7 @@ export const Admin: React.FC = () => {
               <thead>
                 <tr className="border-b border-cyan-500/30 text-gray-400 bg-gray-900/60 uppercase">
                   <th className="p-3">Order ID</th>
-                  <th className="p-3">Customer Name & Email</th>
+                  <th className="p-3">Customer Name</th>
                   <th className="p-3">Items</th>
                   <th className="p-3">Amount</th>
                   <th className="p-3">Status</th>
@@ -493,10 +500,7 @@ export const Admin: React.FC = () => {
                 {orders.map(o => (
                   <tr key={o.id} className="hover:bg-cyan-950/20">
                     <td className="p-3 font-bold text-white">{o.id}</td>
-                    <td className="p-3">
-                      <div className="text-white font-bold">{o.userName}</div>
-                      <div className="text-[10px] text-gray-400">{o.userEmail}</div>
-                    </td>
+                    <td className="p-3 text-white font-bold">{o.userName}</td>
                     <td className="p-3 text-gray-300">{o.items.length} item(s)</td>
                     <td className="p-3 font-bold text-[var(--secondary-color)]">${o.totalPrice} USD</td>
                     <td className="p-3">
@@ -518,53 +522,132 @@ export const Admin: React.FC = () => {
               </tbody>
             </table>
           </div>
+        </HUDPanel>
+      )}
 
-          {/* Selected Printable Invoice Render Modal */}
-          {selectedInvoiceOrder && (
-            <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
-              <div className="bg-gray-900 border-2 border-[var(--primary-color)] rounded-lg p-6 max-w-lg w-full space-y-4 font-mono text-white">
-                <div className="flex justify-between items-center border-b border-cyan-500/30 pb-3">
-                  <div>
-                    <h2 className="font-orbitron font-bold text-lg text-[var(--primary-color)]">CYBER INVOICE #{selectedInvoiceOrder.id}</h2>
-                    <p className="text-[10px] text-gray-400">TEAM WHITE HAT OFFICIAL RECEIPT</p>
-                  </div>
-                  <button onClick={() => setSelectedInvoiceOrder(null)} className="text-gray-400 hover:text-white">
-                    ✕ CLOSE
-                  </button>
-                </div>
-
-                <div className="text-xs space-y-1">
-                  <div><strong className="text-gray-400">Customer:</strong> {selectedInvoiceOrder.userName}</div>
-                  <div><strong className="text-gray-400">Email:</strong> {selectedInvoiceOrder.userEmail}</div>
-                  <div><strong className="text-gray-400">Date:</strong> {selectedInvoiceOrder.createdAt}</div>
-                  <div><strong className="text-gray-400">Payment Status:</strong> VERIFIED PAYPAL MERCHANT</div>
-                </div>
-
-                <div className="border-t border-b border-gray-800 py-3 space-y-2">
-                  <div className="text-xs font-bold text-cyan-400">ORDER ITEMS</div>
-                  {selectedInvoiceOrder.items.map((it: any, idx: number) => (
-                    <div key={idx} className="flex justify-between text-xs">
-                      <span>{it.title} (x{it.quantity})</span>
-                      <span className="font-bold">${it.price * it.quantity} USD</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex justify-between text-base font-orbitron font-bold text-[var(--secondary-color)]">
-                  <span>TOTAL AMOUNT PAID:</span>
-                  <span>${selectedInvoiceOrder.total} USD</span>
-                </div>
-
-                <button
-                  onClick={() => window.print()}
-                  className="w-full py-2.5 bg-[var(--primary-color)] text-black font-bold rounded text-xs flex items-center justify-center space-x-2"
+      {/* NEW TAB 5: ENTERPRISE SYSTEM CONFIGURATIONS */}
+      {activeTab === 'settings' && (
+        <form onSubmit={handleSaveSettings} className="space-y-6">
+          <HUDPanel title="GLOBAL ENTERPRISE SYSTEM CONFIGURATIONS & FEATURE SWITCHES">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+              {/* Site Production Mode */}
+              <div className="space-y-2 p-4 bg-black/50 border border-gray-800 rounded">
+                <label className="font-bold text-white flex items-center space-x-2">
+                  <Server size={16} className="text-[var(--primary-color)]" />
+                  <span>PRODUCTION ENVIRONMENT MODE</span>
+                </label>
+                <select
+                  value={sysConfig.siteMode}
+                  onChange={e => setSysConfig({ ...sysConfig, siteMode: e.target.value })}
+                  className="w-full bg-gray-900 border border-cyan-500/40 rounded p-2 text-white font-mono"
                 >
-                  <Printer size={16} />
-                  <span>PRINT THIS INVOICE NOW</span>
-                </button>
+                  <option value="PRODUCTION">LIVE PRODUCTION SERVER (ACTIVE)</option>
+                  <option value="MAINTENANCE">MAINTENANCE LOCKDOWN MODE</option>
+                  <option value="SANDBOX">DEV SANDBOX TESTING</option>
+                </select>
+                <p className="text-[10px] text-gray-400">Controls global site availability and system status header.</p>
+              </div>
+
+              {/* PayPal Merchant Setup */}
+              <div className="space-y-2 p-4 bg-black/50 border border-gray-800 rounded">
+                <label className="font-bold text-white flex items-center space-x-2">
+                  <DollarSign size={16} className="text-green-400" />
+                  <span>PAYPAL MERCHANT ACCOUNT CONFIG</span>
+                </label>
+                <input
+                  type="email"
+                  value={sysConfig.merchantEmail}
+                  onChange={e => setSysConfig({ ...sysConfig, merchantEmail: e.target.value })}
+                  className="w-full bg-gray-900 border border-cyan-500/40 rounded p-2 text-white font-mono"
+                  placeholder="MERCHANT PAYPAL EMAIL"
+                />
+                <p className="text-[10px] text-gray-400">Email receiving instant PayPal checkout payments.</p>
+              </div>
+
+              {/* Anti-Inspect Protection */}
+              <div className="space-y-2 p-4 bg-black/50 border border-gray-800 rounded flex items-center justify-between">
+                <div>
+                  <div className="font-bold text-white flex items-center space-x-2">
+                    <Shield size={16} className="text-yellow-400" />
+                    <span>ANTI-INSPECT SECURITY SHIELD</span>
+                  </div>
+                  <div className="text-[10px] text-gray-400">Blocks F12, Ctrl+U, and right click page inspection.</div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={sysConfig.antiInspectEnabled}
+                  onChange={e => setSysConfig({ ...sysConfig, antiInspectEnabled: e.target.checked })}
+                  className="w-5 h-5 accent-[var(--primary-color)]"
+                />
+              </div>
+
+              {/* AI Sales Bot */}
+              <div className="space-y-2 p-4 bg-black/50 border border-gray-800 rounded flex items-center justify-between">
+                <div>
+                  <div className="font-bold text-white flex items-center space-x-2">
+                    <Cpu size={16} className="text-cyan-400" />
+                    <span>AI SALES ASSISTANT (`CYBER_BOT_AI`)</span>
+                  </div>
+                  <div className="text-[10px] text-gray-400">Enable floating AI Chatbot sales agent.</div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={sysConfig.aiBotEnabled}
+                  onChange={e => setSysConfig({ ...sysConfig, aiBotEnabled: e.target.checked })}
+                  className="w-5 h-5 accent-[var(--primary-color)]"
+                />
               </div>
             </div>
-          )}
+
+            <div className="pt-4 border-t border-gray-800">
+              <button
+                type="submit"
+                className="px-8 py-3 bg-[var(--primary-color)] text-black font-orbitron font-bold rounded text-xs hover:bg-yellow-400 transition-colors shadow-[0_0_15px_var(--glow-color)] flex items-center space-x-2"
+              >
+                <Sliders size={16} />
+                <span>SAVE ENTERPRISE SYSTEM CONFIGURATIONS</span>
+              </button>
+            </div>
+          </HUDPanel>
+        </form>
+      )}
+
+      {/* NEW TAB 6: SYSTEM AUDIT LOGS */}
+      {activeTab === 'audit' && (
+        <HUDPanel title="REAL-TIME SYSTEM AUDIT TRAIL & SECURITY EVENT LOGS">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs font-mono">
+              <thead>
+                <tr className="border-b border-cyan-500/30 text-gray-400 bg-gray-900/60 uppercase">
+                  <th className="p-3">Log ID & Timestamp</th>
+                  <th className="p-3">Event Type</th>
+                  <th className="p-3">Severity Level</th>
+                  <th className="p-3">Event Description & Payload</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-800">
+                {MOCK_AUDIT_LOGS.map(l => (
+                  <tr key={l.id} className="hover:bg-cyan-950/20">
+                    <td className="p-3">
+                      <div className="font-bold text-white">{l.id}</div>
+                      <div className="text-[10px] text-gray-400">{l.timestamp}</div>
+                    </td>
+                    <td className="p-3 font-bold text-cyan-400">{l.type}</td>
+                    <td className="p-3">
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        l.severity === 'HIGH' ? 'bg-red-950 text-red-400 border border-red-500/40' :
+                        l.severity === 'WARNING' ? 'bg-yellow-950 text-yellow-400 border border-yellow-500/40' :
+                        'bg-blue-950 text-blue-400 border border-blue-500/40'
+                      }`}>
+                        {l.severity}
+                      </span>
+                    </td>
+                    <td className="p-3 text-gray-300">{l.message}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </HUDPanel>
       )}
     </div>
