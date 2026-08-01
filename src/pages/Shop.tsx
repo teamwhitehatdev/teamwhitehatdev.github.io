@@ -16,7 +16,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   '3d_models': '3D MODELS',
   hacking_layouts: 'HACKING LAYOUTS',
   hud_packages: 'HUD PACKAGES',
-  stream_packages: 'STREAMING PACKAGES',
+  stream_packages: 'STREAMING LAYOUT PACK',
   merchandise: 'T-SHIRTS & HOODIES',
   stickers: 'STICKERS & MERCH',
   automation_systems: 'AUTOMATION SYSTEMS',
