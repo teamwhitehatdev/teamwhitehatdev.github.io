@@ -3,6 +3,15 @@ import { X, Mail, Lock, User as UserIcon, ShieldCheck, KeyRound, CheckCircle2, A
 import { useApp } from '../context/AppContext';
 import { audioEngine } from './AudioEngine';
 
+export 
+  const isValidEmail = (emailStr: string) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!re.test(emailStr)) return false;
+    const domain = emailStr.split('@')[1].toLowerCase();
+    const bannedDomains = ['example.com', 'test.com', 'domain.com', 'mailinator.com', 'temp.com', 'dispostable.com'];
+    return !bannedDomains.includes(domain);
+  };
+
 export const AuthModal: React.FC = () => {
   const { isAuthOpen, setIsAuthOpen, user, registerUser,  logoutUser } = useApp();
   const [mode, setMode] = useState<'login' | 'register' | 'verify'>('login');
@@ -244,3 +253,5 @@ export const AuthModal: React.FC = () => {
     </div>
   );
 };
+
+export default AuthModal;

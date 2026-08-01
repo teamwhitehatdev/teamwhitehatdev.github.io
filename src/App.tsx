@@ -33,7 +33,7 @@ export const App: React.FC = () => {
             <Navbar />
             <main className="flex-1 relative z-10">
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home onOpenConsultation={() => {}} />} />
                 <Route path="/showcase" element={<Showcase />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/services" element={<Services />} />

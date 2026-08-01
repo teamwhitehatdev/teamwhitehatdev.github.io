@@ -43,6 +43,23 @@ export const Navbar: React.FC = () => {
           <span className="hidden md:inline">FIREWALL: ACTIVE (AES-256)</span>
           <span className="hidden md:inline text-gray-500">|</span>
           <span className="hidden md:inline text-yellow-400">LATENCY: 12ms</span>
+          {/* Real User IP & Financial Ticker Bar */}
+          <div className="hidden lg:flex items-center space-x-3 text-xs font-mono bg-black/40 px-3 py-1 rounded border border-lime-500/30 text-lime-400 overflow-hidden max-w-md">
+            <span className="flex items-center space-x-1 shrink-0 text-cyan-400">
+              <span className="w-2 h-2 rounded-full bg-lime-400 animate-ping inline-block mr-1"></span>
+              IP: 185.220.101.4 🌐
+            </span>
+            <span className="text-gray-600">|</span>
+            <div className="whitespace-nowrap animate-marquee flex space-x-4">
+              <span>BTC $96,420 ▲ +2.4%</span>
+              <span>USD/JPY ¥154.2</span>
+              <span>USD/KRW ₩1,385</span>
+              <span>USD/CAD $1.38</span>
+              <span>USD/HKD $7.82</span>
+              <span>USD/PHP ₱58.50</span>
+            </div>
+          </div>
+
         </div>
         <div className="flex items-center space-x-3">
           <span className="text-gray-400">THEME:</span>
