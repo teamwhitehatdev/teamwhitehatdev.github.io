@@ -25,7 +25,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   nfts: 'CYBER NFTS'
 };
 
-export const Shop: React.FC = () => {
+interface ShopProps { onAddToCart?: (product: any) => void; onOpenAuth?: () => void; }
+export const Shop: React.FC<ShopProps> = ({ onAddToCart, onOpenAuth }) => {
   const { products, addToCart, user, setIsAuthOpen } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');

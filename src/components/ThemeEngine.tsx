@@ -143,7 +143,7 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ThemeProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState<ThemeName>(() => {
     return (localStorage.getItem('whitehat_theme') as ThemeName) || 'cyberpunk_net';
   });
@@ -180,3 +180,5 @@ export const useTheme = () => {
   if (!context) throw new Error('useTheme must be used within ThemeProvider');
   return context;
 };
+
+export default ThemeProvider;
