@@ -423,84 +423,44 @@ export const INITIAL_COURSES: CourseItem[] = [
 
 export const INITIAL_TESTIMONIALS: Testimonial[] = [
   {
-    id: 'test-1',
+    id: '1',
     name: 'Marcus Vance',
     role: 'CTO & Co-Founder',
-    company: 'Vance CyberTech LLC',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80',
-    content: 'Team White Hat built our web application in less than 2 weeks. The Cyberpunk HUD layout and neon animations completely blew our investors away! 100% recommended.',
-    rating: 5,
-    country: 'United States 🇺🇸'
+    company: 'Vance Dynamics',
+    country: 'USA 🇺🇸',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+    content: 'Team White Hat built our entire high-frequency trading interface in 3 weeks flat. Zero latency, immaculate HUD design, and flawless code.',
+    rating: 5.0
   },
   {
-    id: 'test-2',
+    id: '2',
     name: 'Elena Rostova',
-    role: 'Lead Mobile Product Manager',
-    company: 'AeroGames Studio',
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&q=80',
-    content: 'Bought the Flutter Mobile App template and Android Runner game project. Excellent clean code structure and fast delivery. Very satisfied with the outcome!',
-    rating: 4,
-    country: 'Germany 🇩🇪'
+    role: 'Lead Security Engineer',
+    company: 'Nordic Cyber Shield',
+    country: 'Sweden 🇸🇪',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
+    content: 'The anti-fraud credit card Luhn validation and IP threat monitor saved our storefront from over 400 proxy attacks in the first week alone.',
+    rating: 4.8
   },
   {
-    id: 'test-3',
-    name: 'Hiroshi Tanaka',
-    role: 'Cybersecurity Director',
-    company: 'NeoTokyo Digital',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
-    content: 'Hired White Hat Dev as our Virtual Assistant and technical consultant. His python security tools and automated site monitoring saved us hundreds of hours!',
-    rating: 5,
-    country: 'Japan 🇯🇵'
-  },
-  {
-    id: 'test-4',
-    name: 'Sarah Jenkins',
+    id: '3',
+    name: 'Kenji Takahashi',
     role: 'Head of Product',
-    company: 'Apex Cloud Systems',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
-    content: 'White Hat Dev engineered a custom full-stack React suite for us with PayPal checkout. Highly reliable, responsive, and insanely talented developer!',
-    rating: 5,
-    country: 'United Kingdom 🇬🇧'
+    company: 'NeoTokyo Interactive',
+    country: 'Japan 🇯🇵',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
+    content: 'Exceptional cyberpunk aesthetic and ultra-clean React architecture. Fast delivery, responsive communication, and zero bugs.',
+    rating: 5.0
   },
   {
-    id: 'test-5',
-    name: 'David Chen',
-    role: 'Founder & Architect',
-    company: 'CyberPulse Asia',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
-    content: 'Great HUD vector overlays and Web Audio API sound FX. Really gave our streaming overlays a high-tech modern finish!',
-    rating: 4,
-    country: 'Singapore 🇸🇬'
-  },
-  {
-    id: 'test-6',
-    name: 'Sophie Laurent',
-    role: 'Creative Tech Lead',
-    company: 'Lumiere Interactive',
-    avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&q=80',
-    content: 'Sensational design quality! The HackTheBox and Cyberpunk 2077 themes are the best developer aesthetics I have ever seen on the web.',
-    rating: 5,
-    country: 'France 🇫🇷'
-  },
-  {
-    id: 'test-7',
-    name: 'Liam O’Connor',
-    role: 'SaaS Founder',
-    company: 'Krypton Labs',
-    avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=200&q=80',
-    content: 'Purchased Python Pentest & Security Audit Toolkit v4. Saved our dev ops team weeks of scripting. solid engineering work.',
-    rating: 4,
-    country: 'Australia 🇦🇺'
-  },
-  {
-    id: 'test-8',
-    name: 'Chloe Bennett',
-    role: 'VP Engineering',
-    company: 'Vanguard Cyber',
-    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&q=80',
-    content: 'Outstanding Virtual Assistant service! White Hat Dev maintains our Google Play apps and handles critical security updates flawlessly.',
-    rating: 5,
-    country: 'Canada 🇨🇦'
+    id: '4',
+    name: 'Sarah Jenkins',
+    role: 'E-Commerce Director',
+    company: 'Aura Digital Goods',
+    country: 'UK 🇬🇧',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
+    content: 'Very smooth 2-step OTP email verification integration. Clean minimal mobile UI works perfectly across all iOS and Android devices.',
+    rating: 4.5
   }
 ];
 

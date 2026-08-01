@@ -35,10 +35,6 @@ export const Home: React.FC<HomeProps> = ({ onOpenConsultation }) => {
 
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black font-rajdhani tracking-tight uppercase leading-none text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
             HIRED EXPERTS WEB & APP DEVELOPER
-            <span className="block text-lg md:text-xl font-mono text-cyan-400 font-normal mt-2">(for your business or brands.)</span>
-            <span className="block text-lg md:text-xl font-mono text-cyan-400 font-normal mt-2">(for your business or brands.)</span>
-            <span className="block text-lg md:text-xl font-mono text-cyan-400 font-normal mt-2">(for your business or brands.)</span>
-            <span className="block text-lg md:text-xl font-mono text-cyan-400 font-normal mt-2">(for your business or brands.)</span>
             <span className="block text-lg md:text-2xl font-mono text-cyan-400 font-normal mt-3 lowercase">
               (for your business or brands.)
             </span>
@@ -92,28 +88,33 @@ export const Home: React.FC<HomeProps> = ({ onOpenConsultation }) => {
         </HUDPanel>
       </section>
 
-      {/* Global Client Reviews & Verified Testimonials Carousel */}
+      {/* Minimal Photo Avatar Testimonials */}
       <section className="max-w-6xl mx-auto px-4">
         <HUDPanel title="GLOBAL CLIENT REVIEWS & VERIFIED TESTIMONIALS">
-          <div className="p-6 space-y-6">
+          <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {shuffledTestimonials.map((t) => (
                 <div key={t.id} className="bg-black/50 p-6 rounded-xl border border-gray-800/80 space-y-4 hover:border-[var(--primary-color)]/40 transition-all">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="text-base font-bold text-white font-rajdhani">{t.name}</h4>
-                      <p className="text-xs text-gray-500 font-mono">{t.role} • {t.company}</p>
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={t.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}
+                      alt={t.name}
+                      className="w-12 h-12 rounded-full border border-cyan-500/40 object-cover shrink-0 shadow-md shadow-cyan-500/10"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-base font-bold text-white font-rajdhani truncate">{t.name}</h4>
+                      <p className="text-xs text-gray-400 font-mono truncate">{t.role} • {t.company}</p>
                     </div>
-                    <div className="flex items-center space-x-1 text-amber-400 font-mono text-xs bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20">
+                    <div className="flex items-center space-x-1 text-amber-400 font-mono text-xs bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20 shrink-0">
                       <span>[ {(t.rating || 5.0).toFixed(1)} / 5.0 ★ ]</span>
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-300 font-mono italic leading-relaxed">
+                  <p className="text-sm text-gray-300 font-mono italic leading-relaxed pt-1">
                     "{t.content}"
                   </p>
 
-                  <div className="flex items-center space-x-2 text-xs text-lime-400 font-mono pt-2 border-t border-gray-800/50">
+                  <div className="flex items-center space-x-2 text-xs text-lime-400 font-mono pt-3 border-t border-gray-800/60">
                     <CheckCircle className="w-3.5 h-3.5" />
                     <span>VERIFIED CLIENT TRANSACTION</span>
                   </div>
