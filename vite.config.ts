@@ -11,7 +11,9 @@ export default defineConfig({
     minify: true,
     rollupOptions: {
       output: {
-        manualChunks: undefined
+        entryFileNames: 'assets/app-main.js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/app-main.[ext]'
       }
     }
   }
