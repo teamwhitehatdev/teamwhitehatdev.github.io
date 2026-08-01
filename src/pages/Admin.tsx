@@ -1,453 +1,435 @@
-import React, { useState } from 'react';
-import { 
-  BarChart3, Users, ShieldAlert, Package, Image as ImageIcon, 
-  Search, Lock, Printer, Trash2, Edit, Ban, CheckCircle2, 
-  AlertTriangle, Globe, Laptop, Smartphone, DollarSign, Activity, 
-  TrendingUp, Eye, FileText, UserCheck, RefreshCw, Key, Settings,
-  Sliders, Shield, Server, Database, Bell, Radio, Cpu
-} from 'lucide-react';
-import { HUDPanel } from '../components/HUDPanel';
-import { GlitchText } from '../components/GlitchText';
-import { useApp } from '../context/AppContext';
-import { audioEngine } from '../components/AudioEngine';
-
-// Mock Analytics & System Data
-const MOCK_ANALYTICS = {
-  totalRevenue: 48290,
-  activeUsersOnline: 142,
-  vpnDetections: 18,
-  totalOrders: 324,
-  countryBreakdown: [
-    { country: 'Australia 🇦🇺', visits: 1240, percentage: 14, sales: 5800 },
-    { country: 'Canada 🇨🇦', visits: 980, percentage: 11, sales: 4200 },
-    { country: 'France 🇫🇷', visits: 850, percentage: 9, sales: 3900 },
-    { country: 'Germany 🇩🇪', visits: 1450, percentage: 16, sales: 7400 },
-    { country: 'Japan 🇯🇵', visits: 1120, percentage: 12, sales: 6100 },
-    { country: 'Philippines 🇵🇭', visits: 1680, percentage: 18, sales: 8200 },
-    { country: 'Singapore 🇸🇬', visits: 720, percentage: 8, sales: 4100 },
-    { country: 'United Kingdom 🇬🇧', visits: 1050, percentage: 12, sales: 8690 }
-  ],
-  deviceBreakdown: [
-    { name: 'Desktop (Windows)', percentage: 48, count: 4368 },
-    { name: 'Mobile (Android)', percentage: 32, count: 2912 },
-    { name: 'Mobile (iOS)', percentage: 14, count: 1274 },
-    { name: 'Desktop (macOS / Linux)', percentage: 6, count: 546 }
-  ],
-  trafficSources: [
-    { source: 'Direct Terminal Access', count: 3840, share: 42 },
-    { source: 'Google Search & SEO', count: 2650, share: 29 },
-    { source: 'GitHub Repositories', count: 1720, share: 19 },
-    { source: 'Social Media & Discord', count: 890, share: 10 }
-  ]
-};
-
-interface UserAccount {
-  id: string;
-  username: string;
-  email: string;
-  passwordHash: string;
-  joinedDate: string;
-  ipAddress: string;
-  country: string;
-  device: string;
-  isVpn: boolean;
-  purchasesCount: number;
-  totalSpent: number;
-  status: 'ACTIVE' | 'SUSPICIOUS' | 'BANNED';
-}
-
-const INITIAL_USERS: UserAccount[] = [
-  { id: 'usr-101', username: 'cyber_ghost_01', email: 'ghost@vancecyber.com', passwordHash: '●●●●●●●● (SHA256)', joinedDate: '2026-07-28', ipAddress: '192.168.1.45', country: 'United States 🇺🇸', device: 'Desktop (Windows)', isVpn: false, purchasesCount: 4, totalSpent: 1290, status: 'ACTIVE' },
-  { id: 'usr-102', username: 'matrix_hacker_de', email: 'elena@aerogames.de', passwordHash: '●●●●●●●● (SHA256)', joinedDate: '2026-07-29', ipAddress: '85.214.132.10', country: 'Germany 🇩🇪', device: 'Desktop (Linux)', isVpn: false, purchasesCount: 2, totalSpent: 780, status: 'ACTIVE' },
-  { id: 'usr-103', username: 'tokyo_drift_net', email: 'hiroshi@neotokyo.jp', passwordHash: '●●●●●●●● (SHA256)', joinedDate: '2026-07-30', ipAddress: '185.220.101.5', country: 'Japan 🇯🇵', device: 'Mobile (Android)', isVpn: true, purchasesCount: 1, totalSpent: 499, status: 'SUSPICIOUS' },
-  { id: 'usr-104', username: 'krypton_val', email: 'val@krypton.io', passwordHash: '●●●●●●●● (SHA256)', joinedDate: '2026-07-31', ipAddress: '45.142.120.88', country: 'United Kingdom 🇬🇧', device: 'Desktop (Windows)', isVpn: false, purchasesCount: 3, totalSpent: 1650, status: 'ACTIVE' },
-  { id: 'usr-105', username: 'bot_spammer_x', email: 'spammer99@fake-temp.net', passwordHash: '●●●●●●●● (SHA256)', joinedDate: '2026-08-01', ipAddress: '198.51.100.42', country: 'Proxy Node 🌐', device: 'Automated Bot Script', isVpn: true, purchasesCount: 0, totalSpent: 0, status: 'BANNED' }
-];
-
-const MOCK_AUDIT_LOGS = [
-  { id: 'log-901', timestamp: '2026-08-01 05:42:10', type: 'SECURITY_ALERT', severity: 'HIGH', message: 'Blocked F12 inspect element attempt from IP 198.51.100.42 (Bot Proxy)' },
-  { id: 'log-902', timestamp: '2026-08-01 05:38:45', type: 'PAYMENT_SUCCESS', severity: 'INFO', message: 'Verified PayPal checkout $499 USD by user matrix_hacker_de' },
-  { id: 'log-903', timestamp: '2026-08-01 05:20:12', type: 'SYSTEM_CONFIG', severity: 'INFO', message: 'Updated default active theme to CYBERPUNK.NET OFFICIAL' },
-  { id: 'log-904', timestamp: '2026-08-01 04:55:30', type: 'USER_REGISTER', severity: 'INFO', message: 'New user registered: cyber_ghost_01 (US Residential IP)' },
-  { id: 'log-905', timestamp: '2026-08-01 04:12:05', type: 'FIREWALL_BLOCK', severity: 'WARNING', message: 'Rate limit threshold exceeded for IP 185.220.101.5 (VPN Node)' }
-];
+import React, { useState, useEffect } from 'react';
+import { Shield, Users, AlertTriangle, FileText, Settings, Activity, Plus, Trash2, Edit3, Save, CheckCircle, XCircle, Search, Lock, LogOut, Eye, ArrowUpRight, BarChart3, Database } from 'lucide-react';
 
 export const Admin: React.FC = () => {
-  const { orders, products, gallery, addProduct, deleteProduct, addGalleryItem, deleteGalleryItem } = useApp();
-  
-  const [adminUser, setAdminUser] = useState('admin');
-  const [passcode, setPasscode] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('whitehat_admin_auth') === 'true';
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [usernameInput, setUsernameInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'cms' | 'users' | 'threats' | 'orders' | 'config' | 'logs'>('analytics');
 
-  const [activeTab, setActiveTab] = useState<'analytics' | 'users' | 'security' | 'orders' | 'settings' | 'audit'>('analytics');
-  const [selectedInvoiceOrder, setSelectedInvoiceOrder] = useState<any | null>(null);
+  // CMS State for Published Apps, Marketplace, Services, Cyber Gallery
+  const [cmsSection, setCmsSection] = useState<'published_apps' | 'marketplace' | 'services_courses' | 'Cyber_gallery'>('published_apps');
+  const [cmsItems, setCmsItems] = useState<any[]>([]);
 
-  // User Management state
-  const [users, setUsers] = useState<UserAccount[]>(INITIAL_USERS);
+  // Form state for adding/editing CMS items
+  const [newItemTitle, setNewItemTitle] = useState('');
+  const [newItemCategory, setNewItemCategory] = useState('Website Templates');
+  const [newItemPrice, setNewItemPrice] = useState('49.99');
+  const [newItemDesc, setNewItemDesc] = useState('');
+
+  // Banned IPs state
+  const [bannedIps, setBannedIps] = useState<string[]>(['192.168.1.105', '45.33.22.11']);
+  const [ipToBan, setIpToBan] = useState('');
+
+  // Users state
+  const [registeredUsers, setRegisteredUsers] = useState<any[]>([]);
   const [userSearch, setUserSearch] = useState('');
 
-  // IP Ban list state
-  const [bannedIPs, setBannedIPs] = useState<string[]>(['198.51.100.42', '185.220.101.5', '193.27.228.12']);
-  const [newBanIP, setNewBanIP] = useState('');
+  // Orders state
+  const [orders, setOrders] = useState<any[]>([]);
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
 
-  // Enterprise System Configurations state
-  const [sysConfig, setSysConfig] = useState({
-    siteMode: 'PRODUCTION',
-    antiInspectEnabled: true,
-    strictCspEnabled: true,
-    antiBotCaptchaRequired: true,
-    paypalMode: 'LIVE',
-    merchantEmail: 'teamwhitehatdev@gmail.com',
-    currency: 'USD',
-    aiBotEnabled: true,
-    aiBotMode: 'AUTONOMOUS_SALES',
-    audioEngineEnabled: true,
-    maxDailyCoupons: 50
-  });
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (passcode === 'whitehat2026') {
-      audioEngine.playClick();
-      setIsAuthenticated(true);
-      localStorage.setItem('whitehat_admin_auth', 'true');
+  useEffect(() => {
+    // Load registered users from localStorage
+    const savedUsers = JSON.parse(localStorage.getItem('wh_registered_users') || '[]');
+    if (savedUsers.length === 0) {
+      const defaultUsers = [
+        { id: 'USR-89102', username: 'marcus_vance', email: 'm.vance@vancedynamics.com', passwordHash: 'sha256_89a71b2f...', joinedDate: '2026-05-10', totalPurchases: 249.99, ordersCount: 3, status: 'VERIFIED CLIENT 🟢' },
+        { id: 'USR-89103', username: 'elena_security', email: 'elena@nordicshield.io', passwordHash: 'sha256_91c34e1a...', joinedDate: '2026-06-01', totalPurchases: 189.50, ordersCount: 2, status: 'VERIFIED CLIENT 🟢' },
+        { id: 'USR-89104', username: 'kenji_tokyo', email: 'kenji@neotokyo.jp', passwordHash: 'sha256_44b11f9d...', joinedDate: '2026-06-15', totalPurchases: 599.00, ordersCount: 4, status: 'VERIFIED CLIENT 🟢' }
+      ];
+      setRegisteredUsers(defaultUsers);
+      localStorage.setItem('wh_registered_users', JSON.stringify(defaultUsers));
     } else {
-      audioEngine.playGlitch();
-      alert('ACCESS DENIED: Invalid Security Passcode!');
+      setRegisteredUsers(savedUsers);
+    }
+
+    // Load orders history
+    const savedOrders = JSON.parse(localStorage.getItem('wh_orders_history') || '[]');
+    if (savedOrders.length === 0) {
+      const defaultOrders = [
+        { id: 'ORD-982101', userEmail: 'm.vance@vancedynamics.com', itemsCount: 2, totalAmount: 149.99, paymentMethod: 'PayPal Gateway (Tokenized)', status: 'PAID & COMPLETED 🟢', date: '2026-07-28 14:22:10' },
+        { id: 'ORD-982102', userEmail: 'elena@nordicshield.io', itemsCount: 1, totalAmount: 89.99, paymentMethod: 'Tokenized VISA (4111)', status: 'PAID & COMPLETED 🟢', date: '2026-07-29 09:15:44' },
+        { id: 'ORD-982103', userEmail: 'kenji@neotokyo.jp', itemsCount: 3, totalAmount: 299.99, paymentMethod: 'Tokenized Mastercard (5424)', status: 'PAID & COMPLETED 🟢', date: '2026-07-31 18:40:02' }
+      ];
+      setOrders(defaultOrders);
+      localStorage.setItem('wh_orders_history', JSON.stringify(defaultOrders));
+    } else {
+      setOrders(savedOrders);
+    }
+
+    // Load CMS section items
+    loadCmsItems('published_apps');
+  }, []);
+
+  const loadCmsItems = (section: string) => {
+    const key = `wh_cms_${section}`;
+    const stored = JSON.parse(localStorage.getItem(key) || '[]');
+    if (stored.length === 0) {
+      let defaults: any[] = [];
+      if (section === 'published_apps') {
+        defaults = [
+          { id: 'APP-1', title: 'CyberShield Firewall v4', category: 'Security App', price: '129.99', desc: 'Real-time packet inspection & IP ban engine.' },
+          { id: 'APP-2', title: 'Quantum Trading Bot', category: 'Automation Engine', price: '199.99', desc: 'High-frequency stock & crypto algorithmic trader.' }
+        ];
+      } else if (section === 'marketplace') {
+        defaults = [
+          { id: 'MKT-1', title: 'Streaming Layout Pack', category: 'HUD Pack', price: '39.99', desc: 'Futuristic OBS stream overlays & sound triggers.' },
+          { id: 'MKT-2', title: 'React 19 Cyber Portfolio', category: 'Website Template', price: '49.99', desc: 'Next.js & Vite dark futuristic template.' }
+        ];
+      } else if (section === 'services_courses') {
+        defaults = [
+          { id: 'SVC-1', title: 'Full-Stack Security Audit', category: 'Services', price: '499.99', desc: 'Comprehensive penetration testing & code audit.' },
+          { id: 'SVC-2', title: '1337 Developer Masterclass', category: 'Courses', price: '99.99', desc: 'Advanced Web & Mobile Architecture Video Course.' }
+        ];
+      } else if (section === 'Cyber_gallery') {
+        defaults = [
+          { id: 'GAL-1', title: 'Cyberpunk Neon City 3D', category: 'Digital Arts', price: '29.99', desc: '4K High-Res Sci-Fi Render Asset.' },
+          { id: 'GAL-2', title: 'Hacker HUD Vector Elements', category: 'Vectors', price: '19.99', desc: 'SVG & PNG futuristic corner brackets pack.' }
+        ];
+      }
+      setCmsItems(defaults);
+      localStorage.setItem(key, JSON.stringify(defaults));
+    } else {
+      setCmsItems(stored);
     }
   };
 
-  const handleLogout = () => {
-    audioEngine.playClick();
-    setIsAuthenticated(false);
-    localStorage.removeItem('whitehat_admin_auth');
+  const handleCmsSectionChange = (section: any) => {
+    setCmsSection(section);
+    loadCmsItems(section);
   };
 
-  const handleBanIP = (ip: string) => {
-    audioEngine.playClick();
-    if (!bannedIPs.includes(ip)) {
-      setBannedIPs([...bannedIPs, ip]);
-      setUsers(users.map(u => u.ipAddress === ip ? { ...u, status: 'BANNED' } : u));
-    }
-  };
-
-  const handleUnbanIP = (ip: string) => {
-    audioEngine.playClick();
-    setBannedIPs(bannedIPs.filter(i => i !== ip));
-    setUsers(users.map(u => u.ipAddress === ip ? { ...u, status: 'ACTIVE' } : u));
-  };
-
-  const handleAddManualBan = (e: React.FormEvent) => {
+  const handleAddCmsItem = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newBanIP.trim() && !bannedIPs.includes(newBanIP.trim())) {
-      handleBanIP(newBanIP.trim());
-      setNewBanIP('');
+    if (!newItemTitle) return;
+    const newItem = {
+      id: 'ITEM-' + Date.now().toString().slice(-4),
+      title: newItemTitle,
+      category: newItemCategory,
+      price: newItemPrice,
+      desc: newItemDesc
+    };
+    const updated = [newItem, ...cmsItems];
+    setCmsItems(updated);
+    localStorage.setItem(`wh_cms_${cmsSection}`, JSON.stringify(updated));
+
+    setNewItemTitle('');
+    setNewItemDesc('');
+  };
+
+  const handleDeleteCmsItem = (id: string) => {
+    const updated = cmsItems.filter(item => item.id !== id);
+    setCmsItems(updated);
+    localStorage.setItem(`wh_cms_${cmsSection}`, JSON.stringify(updated));
+  };
+
+  const handleBanIp = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ipToBan || bannedIps.includes(ipToBan)) return;
+    setBannedIps([...bannedIps, ipToBan]);
+    setIpToBan('');
+  };
+
+  const handleUnbanIp = (ip: string) => {
+    setBannedIps(bannedIps.filter(item => item !== ip));
+  };
+
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if ((usernameInput === 'admin' || usernameInput === 'whitehatdev') && passwordInput === 'whitehat2026') {
+      setIsAuthenticated(true);
+      setAuthError('');
+    } else {
+      setAuthError('Invalid Admin Username or Security Passcode.');
     }
   };
 
-  const handlePrintInvoice = (order: any) => {
-    audioEngine.playClick();
-    setSelectedInvoiceOrder(order);
-    setTimeout(() => {
-      window.print();
-    }, 300);
-  };
-
-  const handleSaveSettings = (e: React.FormEvent) => {
-    e.preventDefault();
-    audioEngine.playClick();
-    alert('SUCCESS: Enterprise System Configurations Saved & Applied to Live Production Server!');
-  };
-
+  // Dedicated Login Screen
   if (!isAuthenticated) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center font-mono px-4">
-        <HUDPanel className="max-w-md w-full text-center space-y-6">
-          <div className="w-16 h-16 rounded-full bg-cyan-500/10 border-2 border-[var(--primary-color)] flex items-center justify-center mx-auto text-[var(--primary-color)] shadow-[0_0_20px_var(--glow-color)]">
-            <Lock size={32} />
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-gray-900 border border-cyan-500/30 rounded-2xl p-8 shadow-2xl space-y-6">
+          <div className="text-center space-y-3">
+            <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/40 text-cyan-400 flex items-center justify-center mx-auto shadow-lg shadow-cyan-500/20">
+              <Shield className="w-8 h-8" />
+            </div>
+            <h1 className="text-2xl font-black font-rajdhani text-white uppercase tracking-wider">
+              CYBER ADMIN AUTHENTICATION
+            </h1>
+            <p className="text-xs text-gray-400 font-mono">
+              Restricted Back-End Command Center • System v9.0.0
+            </p>
           </div>
-          <div>
-            <h1 className="font-orbitron font-bold text-2xl text-white tracking-wider">CYBER BACKEND ADMIN</h1>
-            <p className="text-xs text-gray-400 mt-1">RESTRICTED ACCESS • ENTER PASSCODE</p>
-          </div>
-          <form onSubmit={handleLogin} className="space-y-4 font-mono text-left">
+
+          {authError && (
+            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-xs font-mono text-center">
+              {authError}
+            </div>
+          )}
+
+          <form onSubmit={handleLoginSubmit} className="space-y-4 font-mono">
             <div>
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest block mb-1">ADMIN USERNAME</label>
+              <label className="block text-xs text-gray-400 mb-1">ADMIN USERNAME</label>
               <input
                 type="text"
-                value={adminUser}
-                onChange={e => setAdminUser(e.target.value)}
-                placeholder="USERNAME (admin / whitehatdev)"
-                className="w-full bg-black/80 border border-cyan-500/40 rounded px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[var(--primary-color)] shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]"
+                required
+                placeholder="admin"
+                value={usernameInput}
+                onChange={(e) => setUsernameInput(e.target.value)}
+                className="w-full bg-black/60 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:border-cyan-500 focus:outline-none"
               />
             </div>
+
             <div>
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest block mb-1">SECURITY PASSCODE</label>
+              <label className="block text-xs text-gray-400 mb-1">SECURITY PASSCODE</label>
               <input
                 type="password"
-                value={passcode}
-                onChange={e => setPasscode(e.target.value)}
-                placeholder="PASSCODE (whitehat2026)"
-                className="w-full bg-black/80 border border-cyan-500/40 rounded px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[var(--primary-color)] shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]"
+                required
+                placeholder="••••••••••••"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                className="w-full bg-black/60 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:border-cyan-500 focus:outline-none"
               />
             </div>
+
             <button
               type="submit"
-              className="w-full py-3 rounded bg-[var(--primary-color)] text-black font-orbitron font-bold text-xs hover:bg-yellow-400 transition-colors shadow-[0_0_15px_var(--glow-color)] tracking-wider mt-2 flex items-center justify-center space-x-2"
+              className="w-full py-3 bg-gradient-to-r from-cyan-500 to-lime-500 text-black font-bold font-rajdhani rounded-lg text-sm tracking-wider uppercase hover:opacity-90 transition-all shadow-lg shadow-cyan-500/20"
             >
-              <Lock size={14} />
-              <span>LOG IN TO BACK-END CONTROL CENTER</span>
+              LOG IN TO BACK-END CONTROL CENTER
             </button>
           </form>
-        </HUDPanel>
+        </div>
       </div>
     );
   }
 
-  // Filtered Users List (Alphabetical)
-  const filteredUsers = users
-    .filter(u => u.username.toLowerCase().includes(userSearch.toLowerCase()) || u.email.toLowerCase().includes(userSearch.toLowerCase()) || u.ipAddress.includes(userSearch))
-    .sort((a, b) => a.username.localeCompare(b.username));
-
+  // Standalone Full-Stack High-Tech Admin Dashboard View
   return (
-    <div className="space-y-8 pb-16 font-mono">
-      {/* Top Header & Navigation */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-cyan-500/20 pb-4 gap-4">
-        <div>
-          <div className="inline-flex items-center space-x-2 bg-red-500/10 border border-red-500/40 px-2.5 py-0.5 rounded text-[10px] font-bold text-red-400">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-            <span>ENTERPRISE COMMAND CENTER • ROOT SYSTEM ACCESS</span>
+    <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col font-sans">
+      {/* Top Console Header */}
+      <header className="bg-gray-900/90 border-b border-gray-800 px-6 py-4 flex items-center justify-between sticky top-0 z-30 backdrop-blur-md">
+        <div className="flex items-center space-x-3">
+          <div className="w-9 h-9 rounded-lg bg-black border border-cyan-500/50 flex items-center justify-center text-cyan-400">
+            <Shield className="w-5 h-5" />
           </div>
-          <h1 className="font-orbitron font-extrabold text-2xl sm:text-3xl text-white tracking-wider mt-1">
-            <GlitchText text="WHITE HAT DEV EXECUTIVE DASHBOARD" speed={50} />
-          </h1>
+          <div>
+            <h1 className="text-base font-black font-rajdhani text-white uppercase tracking-wider">
+              WHITE HAT <span className="text-cyan-400">BACK-END CONTROL CENTER</span>
+            </h1>
+            <span className="text-[10px] text-lime-400 font-mono block -mt-1">
+              SYSTEM MODE: FULL-STACK ENTERPRISE 🟢
+            </span>
+          </div>
         </div>
 
+        <div className="flex items-center space-x-4">
+          <span className="text-xs font-mono text-gray-400 hidden sm:inline">
+            LOGGED IN: <span className="text-cyan-400 font-bold">ADMIN / WHITEHATDEV</span>
+          </span>
+          <button
+            onClick={() => setIsAuthenticated(false)}
+            className="px-3 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 rounded text-xs font-mono flex items-center space-x-1 transition-all"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>TERMINATE SESSION</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Navigation Tabs Header */}
+      <div className="bg-black/60 border-b border-gray-800 px-6 py-2 flex flex-wrap gap-2">
         <button
-          onClick={handleLogout}
-          className="px-4 py-2 bg-red-950/60 border border-red-500/50 text-red-400 hover:bg-red-900 transition-colors rounded text-xs font-bold"
+          onClick={() => setActiveTab('analytics')}
+          className={`px-4 py-2 rounded-lg text-xs font-mono transition-all flex items-center space-x-2 ${
+            activeTab === 'analytics' ? 'bg-cyan-500 text-black font-bold' : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+          }`}
         >
-          TERMINATE ADMIN SESSION
+          <BarChart3 className="w-3.5 h-3.5" />
+          <span>ANALYTICS & INSIGHTS</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('cms')}
+          className={`px-4 py-2 rounded-lg text-xs font-mono transition-all flex items-center space-x-2 ${
+            activeTab === 'cms' ? 'bg-lime-400 text-black font-bold' : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+          }`}
+        >
+          <Database className="w-3.5 h-3.5" />
+          <span>CMS CONTENT MANAGER</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('users')}
+          className={`px-4 py-2 rounded-lg text-xs font-mono transition-all flex items-center space-x-2 ${
+            activeTab === 'users' ? 'bg-cyan-500 text-black font-bold' : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+          }`}
+        >
+          <Users className="w-3.5 h-3.5" />
+          <span>USER REGISTRY</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('threats')}
+          className={`px-4 py-2 rounded-lg text-xs font-mono transition-all flex items-center space-x-2 ${
+            activeTab === 'threats' ? 'bg-red-500 text-white font-bold' : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+          }`}
+        >
+          <AlertTriangle className="w-3.5 h-3.5" />
+          <span>IP THREAT MONITOR</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('orders')}
+          className={`px-4 py-2 rounded-lg text-xs font-mono transition-all flex items-center space-x-2 ${
+            activeTab === 'orders' ? 'bg-cyan-500 text-black font-bold' : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+          }`}
+        >
+          <FileText className="w-3.5 h-3.5" />
+          <span>ORDERS & INVOICES</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('config')}
+          className={`px-4 py-2 rounded-lg text-xs font-mono transition-all flex items-center space-x-2 ${
+            activeTab === 'config' ? 'bg-amber-400 text-black font-bold' : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+          }`}
+        >
+          <Settings className="w-3.5 h-3.5" />
+          <span>SYSTEM CONFIG</span>
         </button>
       </div>
 
-      {/* Admin Tab Navigation Bar */}
-      <div className="flex flex-wrap gap-2 border-b border-cyan-500/20 pb-4">
-        {[
-          { id: 'analytics', label: 'ANALYTICS & INSIGHTS', icon: BarChart3 },
-          { id: 'users', label: 'USER REGISTRY', icon: Users },
-          { id: 'security', label: 'IP THREAT MONITOR', icon: ShieldAlert },
-          { id: 'orders', label: 'ORDERS & INVOICES', icon: FileText },
-          { id: 'settings', label: 'SYSTEM CONFIGURATIONS', icon: Settings },
-          { id: 'audit', label: 'SYSTEM AUDIT LOGS', icon: Database }
-        ].map(tab => {
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => {
-                audioEngine.playClick();
-                setActiveTab(tab.id as any);
-              }}
-              className={`px-4 py-2 rounded text-xs font-orbitron font-bold flex items-center space-x-2 transition-all ${
-                activeTab === tab.id
-                  ? 'bg-[var(--primary-color)] text-black shadow-[0_0_15px_var(--glow-color)]'
-                  : 'bg-black/60 border border-cyan-500/30 text-gray-300 hover:border-[var(--primary-color)] hover:text-white'
-              }`}
-            >
-              <Icon size={14} />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* TAB 1: ANALYTICS & GOOGLE ANALYTICS STYLE INSIGHTS */}
-      {activeTab === 'analytics' && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <HUDPanel>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] text-gray-400 uppercase tracking-widest">TOTAL GROSS REVENUE</div>
-                  <div className="text-2xl font-orbitron font-extrabold text-[var(--secondary-color)] mt-1">${MOCK_ANALYTICS.totalRevenue.toLocaleString()} USD</div>
-                </div>
-                <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded text-yellow-400">
-                  <DollarSign size={24} />
-                </div>
+      {/* Main Back-End Console Body */}
+      <main className="flex-grow p-6 max-w-7xl w-full mx-auto space-y-6">
+        
+        {/* TAB 1: ANALYTICS & INSIGHTS */}
+        {activeTab === 'analytics' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="bg-gray-900 border border-gray-800 p-4 rounded-xl space-y-1">
+                <span className="text-xs text-gray-400 font-mono">TOTAL CLIENT SALES</span>
+                <p className="text-2xl font-bold font-rajdhani text-lime-400">$12,840.50 USD</p>
               </div>
-            </HUDPanel>
-
-            <HUDPanel>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] text-gray-400 uppercase tracking-widest">ACTIVE USERS ONLINE</div>
-                  <div className="text-2xl font-orbitron font-extrabold text-[var(--primary-color)] mt-1">{MOCK_ANALYTICS.activeUsersOnline} Live</div>
-                </div>
-                <div className="p-3 bg-cyan-500/10 border border-cyan-500/30 rounded text-[var(--primary-color)]">
-                  <Activity size={24} />
-                </div>
+              <div className="bg-gray-900 border border-gray-800 p-4 rounded-xl space-y-1">
+                <span className="text-xs text-gray-400 font-mono">VERIFIED CLIENTS</span>
+                <p className="text-2xl font-bold font-rajdhani text-cyan-400">{registeredUsers.length} Active</p>
               </div>
-            </HUDPanel>
-
-            <HUDPanel>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] text-gray-400 uppercase tracking-widest">TOTAL PROCESSED ORDERS</div>
-                  <div className="text-2xl font-orbitron font-extrabold text-green-400 mt-1">{MOCK_ANALYTICS.totalOrders} Completed</div>
-                </div>
-                <div className="p-3 bg-green-500/10 border border-green-500/30 rounded text-green-400">
-                  <TrendingUp size={24} />
-                </div>
+              <div className="bg-gray-900 border border-gray-800 p-4 rounded-xl space-y-1">
+                <span className="text-xs text-gray-400 font-mono">CLIENT IP TELEMETRY</span>
+                <p className="text-xl font-bold font-rajdhani text-white">185.220.101.4</p>
               </div>
-            </HUDPanel>
-
-            <HUDPanel>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] text-gray-400 uppercase tracking-widest">VPN & PROXY DETECTIONS</div>
-                  <div className="text-2xl font-orbitron font-extrabold text-red-400 mt-1">{MOCK_ANALYTICS.vpnDetections} Blocked</div>
-                </div>
-                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded text-red-400">
-                  <ShieldAlert size={24} />
-                </div>
+              <div className="bg-gray-900 border border-gray-800 p-4 rounded-xl space-y-1">
+                <span className="text-xs text-gray-400 font-mono">SECURITY SHIELD</span>
+                <p className="text-2xl font-bold font-rajdhani text-lime-400">100% PROTECTED</p>
               </div>
-            </HUDPanel>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <HUDPanel title="DEVICE & OPERATING SYSTEM METRICS (PIE CHART)">
-              <div className="space-y-4">
-                <div className="flex justify-center items-center py-4">
-                  <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 36 36">
-                    <path className="text-cyan-500/20" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path className="text-[var(--primary-color)]" strokeDasharray="48, 100" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path className="text-[var(--secondary-color)]" strokeDasharray="32, 100" strokeDashoffset="-48" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path className="text-purple-400" strokeDasharray="14, 100" strokeDashoffset="-80" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  </svg>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  {MOCK_ANALYTICS.deviceBreakdown.map((d, i) => (
-                    <div key={i} className="flex items-center justify-between p-2 bg-black/50 border border-gray-800 rounded">
-                      <span className="text-gray-300 flex items-center space-x-2">
-                        <span className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-[var(--primary-color)]' : i === 1 ? 'bg-[var(--secondary-color)]' : i === 2 ? 'bg-purple-400' : 'bg-gray-400'}`}></span>
-                        <span>{d.name}</span>
-                      </span>
-                      <span className="font-bold text-white">{d.percentage}%</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </HUDPanel>
-
-            <HUDPanel title="GEOGRAPHIC TRAFFIC & SALES BY COUNTRY (ALPHABETICAL)">
-              <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
-                {MOCK_ANALYTICS.countryBreakdown.map((c, i) => (
-                  <div key={i} className="space-y-1">
-                    <div className="flex justify-between text-xs font-bold">
-                      <span className="text-white">{c.country}</span>
-                      <span className="text-[var(--primary-color)]">${c.sales.toLocaleString()} USD ({c.visits} visits)</span>
-                    </div>
-                    <div className="w-full bg-gray-900 h-2 rounded overflow-hidden">
-                      <div 
-                        className="bg-gradient-to-r from-cyan-500 to-[var(--primary-color)] h-full transition-all duration-500" 
-                        style={{ width: `${c.percentage * 4}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </HUDPanel>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 2: USER REGISTRY */}
-      {activeTab === 'users' && (
-        <HUDPanel title="REGISTERED USER ACCOUNTS & SECURITY CREDENTIALS">
-          <div className="space-y-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 text-gray-400" size={16} />
-              <input
-                type="text"
-                value={userSearch}
-                onChange={e => setUserSearch(e.target.value)}
-                placeholder="SEARCH USERS BY USERNAME, EMAIL, OR IP ADDRESS..."
-                className="w-full bg-black/80 border border-cyan-500/40 rounded pl-10 pr-4 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-[var(--primary-color)]"
-              />
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-xs font-mono">
-                <thead>
-                  <tr className="border-b border-cyan-500/30 text-gray-400 bg-gray-900/60 uppercase">
-                    <th className="p-3">User ID & Username</th>
-                    <th className="p-3">Email Address</th>
-                    <th className="p-3">Password Hash</th>
-                    <th className="p-3">IP Address</th>
-                    <th className="p-3">Country & Device</th>
-                    <th className="p-3">Purchases</th>
-                    <th className="p-3">Security Status</th>
-                    <th className="p-3 text-right">Actions</th>
+            {/* SVG Pie Chart for Device & OS Breakdown */}
+            <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl space-y-4">
+              <h2 className="text-lg font-bold font-rajdhani text-white uppercase">DEVICE & OS TELEMETRY PIE CHART</h2>
+              <div className="flex flex-col md:flex-row items-center justify-around gap-6">
+                <svg viewBox="0 0 100 100" className="w-48 h-48 transform -rotate-90">
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#00f0ff" strokeWidth="20" strokeDasharray="120 251" />
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#9fef00" strokeWidth="20" strokeDasharray="80 251" strokeDashoffset="-120" />
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#fcee0a" strokeWidth="20" strokeDasharray="35 251" strokeDashoffset="-200" />
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="#ff0055" strokeWidth="20" strokeDasharray="16 251" strokeDashoffset="-235" />
+                </svg>
+                <div className="space-y-2 font-mono text-xs">
+                  <div className="flex items-center space-x-2"><span className="w-3 h-3 bg-cyan-400 rounded"></span><span className="text-white font-bold">Windows Desktop (48%)</span></div>
+                  <div className="flex items-center space-x-2"><span className="w-3 h-3 bg-lime-400 rounded"></span><span className="text-white font-bold">Android Mobile (32%)</span></div>
+                  <div className="flex items-center space-x-2"><span className="w-3 h-3 bg-yellow-400 rounded"></span><span className="text-white font-bold">iOS Mobile (14%)</span></div>
+                  <div className="flex items-center space-x-2"><span className="w-3 h-3 bg-pink-500 rounded"></span><span className="text-white font-bold">Linux / macOS (6%)</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: CMS CONTENT MANAGER (ADD / EDIT / DELETE) */}
+        {activeTab === 'cms' && (
+          <div className="space-y-6">
+            <div className="flex space-x-2 border-b border-gray-800 pb-3">
+              {(['published_apps', 'marketplace', 'services_courses', 'Cyber_gallery'] as const).map(sec => (
+                <button
+                  key={sec}
+                  onClick={() => handleCmsSectionChange(sec)}
+                  className={`px-3 py-1.5 rounded text-xs font-mono uppercase ${
+                    cmsSection === sec ? 'bg-lime-400 text-black font-bold' : 'bg-gray-900 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {sec.replace('_', ' ')}
+                </button>
+              ))}
+            </div>
+
+            {/* Add New Item Form */}
+            <form onSubmit={handleAddCmsItem} className="bg-gray-900 border border-gray-800 p-4 rounded-xl space-y-3 font-mono text-xs">
+              <h3 className="font-bold text-white uppercase text-sm">ADD NEW ITEM TO [{cmsSection.toUpperCase()}]</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <input
+                  type="text"
+                  required
+                  placeholder="Title (e.g., Cyber Bot v2)"
+                  value={newItemTitle}
+                  onChange={(e) => setNewItemTitle(e.target.value)}
+                  className="bg-black/60 border border-gray-800 rounded px-3 py-2 text-white focus:outline-none"
+                />
+                <input
+                  type="text"
+                  required
+                  placeholder="Price (e.g., 49.99)"
+                  value={newItemPrice}
+                  onChange={(e) => setNewItemPrice(e.target.value)}
+                  className="bg-black/60 border border-gray-800 rounded px-3 py-2 text-white focus:outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Description"
+                  value={newItemDesc}
+                  onChange={(e) => setNewItemDesc(e.target.value)}
+                  className="bg-black/60 border border-gray-800 rounded px-3 py-2 text-white focus:outline-none"
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-lime-400 text-black font-bold font-rajdhani rounded uppercase hover:bg-lime-300 transition-all flex items-center space-x-1"
+              >
+                <Plus className="w-4 h-4" />
+                <span>PUBLISH TO FRONT-END</span>
+              </button>
+            </form>
+
+            {/* Existing CMS Items Table */}
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <table className="w-full text-left font-mono text-xs">
+                <thead className="bg-black/60 text-gray-400 uppercase">
+                  <tr>
+                    <th className="p-3">ID</th>
+                    <th className="p-3">TITLE</th>
+                    <th className="p-3">CATEGORY</th>
+                    <th className="p-3">PRICE</th>
+                    <th className="p-3">DESCRIPTION</th>
+                    <th className="p-3 text-right">ACTION</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-800">
-                  {filteredUsers.map(u => (
-                    <tr key={u.id} className="hover:bg-cyan-950/20 transition-colors">
-                      <td className="p-3">
-                        <div className="font-bold text-white">{u.username}</div>
-                        <div className="text-[10px] text-gray-500">{u.id} • Joined {u.joinedDate}</div>
-                      </td>
-                      <td className="p-3 text-cyan-300">{u.email}</td>
-                      <td className="p-3 text-yellow-400 font-mono flex items-center space-x-1">
-                        <Key size={12} />
-                        <span>{u.passwordHash}</span>
-                      </td>
-                      <td className="p-3 font-bold text-gray-300">{u.ipAddress}</td>
-                      <td className="p-3">
-                        <div>{u.country}</div>
-                        <div className="text-[10px] text-gray-400">{u.device}</div>
-                      </td>
-                      <td className="p-3">
-                        <span className="font-bold text-green-400">${u.totalSpent}</span>
-                        <span className="text-[10px] text-gray-400"> ({u.purchasesCount} orders)</span>
-                      </td>
-                      <td className="p-3">
-                        {u.status === 'BANNED' ? (
-                          <span className="px-2 py-0.5 rounded bg-red-950 text-red-400 border border-red-500/40 text-[10px] font-bold">
-                            BANNED
-                          </span>
-                        ) : u.isVpn ? (
-                          <span className="px-2 py-0.5 rounded bg-yellow-950 text-yellow-400 border border-yellow-500/40 text-[10px] font-bold">
-                            VPN / PROXY DETECTED
-                          </span>
-                        ) : (
-                          <span className="px-2 py-0.5 rounded bg-green-950 text-green-400 border border-green-500/40 text-[10px] font-bold">
-                            VERIFIED USER
-                          </span>
-                        )}
-                      </td>
-                      <td className="p-3 text-right space-x-2">
-                        {u.status === 'BANNED' ? (
-                          <button
-                            onClick={() => handleUnbanIP(u.ipAddress)}
-                            className="p-1 rounded bg-green-900/60 text-green-300 hover:bg-green-800"
-                            title="Unban User"
-                          >
-                            <UserCheck size={14} />
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => handleBanIP(u.ipAddress)}
-                            className="p-1 rounded bg-red-900/60 text-red-300 hover:bg-red-800"
-                            title="Ban IP & User"
-                          >
-                            <Ban size={14} />
-                          </button>
-                        )}
+                <tbody className="divide-y divide-gray-800 text-gray-300">
+                  {cmsItems.map(item => (
+                    <tr key={item.id} className="hover:bg-black/40">
+                      <td className="p-3 text-cyan-400">{item.id}</td>
+                      <td className="p-3 font-bold text-white">{item.title}</td>
+                      <td className="p-3 text-lime-400">{item.category}</td>
+                      <td className="p-3">${item.price} USD</td>
+                      <td className="p-3 text-gray-400">{item.desc}</td>
+                      <td className="p-3 text-right">
+                        <button
+                          onClick={() => handleDeleteCmsItem(item.id)}
+                          className="p-1 text-red-400 hover:text-red-300"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -455,81 +437,101 @@ export const Admin: React.FC = () => {
               </table>
             </div>
           </div>
-        </HUDPanel>
-      )}
+        )}
 
-      {/* TAB 3: IP THREAT MONITOR */}
-      {activeTab === 'security' && (
-        <div className="space-y-6">
-          <HUDPanel title="MANUAL IP BAN CONTROL & SECURITY THREAT ENGINE">
-            <form onSubmit={handleAddManualBan} className="flex flex-col sm:flex-row gap-3">
+        {/* TAB 3: USER REGISTRY */}
+        {activeTab === 'users' && (
+          <div className="space-y-4">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div className="p-4 bg-black/60 border-b border-gray-800 flex justify-between items-center">
+                <h3 className="font-bold text-white uppercase text-sm font-rajdhani">REGISTERED USERS DATABASE ({registeredUsers.length})</h3>
+              </div>
+              <table className="w-full text-left font-mono text-xs">
+                <thead className="bg-black/40 text-gray-400 uppercase">
+                  <tr>
+                    <th className="p-3">USER ID</th>
+                    <th className="p-3">USERNAME</th>
+                    <th className="p-3">REAL EMAIL</th>
+                    <th className="p-3">SHA256 HASH</th>
+                    <th className="p-3">PURCHASES</th>
+                    <th className="p-3">STATUS</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-800 text-gray-300">
+                  {registeredUsers.map(u => (
+                    <tr key={u.id}>
+                      <td className="p-3 text-cyan-400">{u.id}</td>
+                      <td className="p-3 font-bold text-white">{u.username}</td>
+                      <td className="p-3 text-gray-300">{u.email}</td>
+                      <td className="p-3 text-gray-500 font-mono text-[10px]">{u.passwordHash || 'sha256_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}</td>
+                      <td className="p-3 text-lime-400">${u.totalPurchases || 0} USD</td>
+                      <td className="p-3 text-lime-400 font-bold">{u.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: IP THREAT MONITOR */}
+        {activeTab === 'threats' && (
+          <div className="space-y-4 font-mono text-xs">
+            <form onSubmit={handleBanIp} className="bg-gray-900 border border-gray-800 p-4 rounded-xl flex gap-3">
               <input
                 type="text"
-                value={newBanIP}
-                onChange={e => setNewBanIP(e.target.value)}
-                placeholder="ENTER IP ADDRESS TO BAN (e.g. 192.168.1.100)"
-                className="flex-1 bg-black/80 border border-cyan-500/40 rounded px-4 py-2.5 text-xs text-white focus:outline-none focus:border-red-500"
+                required
+                placeholder="IP Address to Ban (e.g. 192.168.1.50)"
+                value={ipToBan}
+                onChange={(e) => setIpToBan(e.target.value)}
+                className="flex-1 bg-black/60 border border-gray-800 rounded px-3 py-2 text-white focus:outline-none"
               />
-              <button
-                type="submit"
-                className="px-6 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded text-xs flex items-center justify-center space-x-2"
-              >
-                <Ban size={14} />
-                <span>BAN IP ADDRESS</span>
+              <button type="submit" className="px-4 py-2 bg-red-500 text-white font-bold rounded uppercase hover:bg-red-600">
+                BAN IP ADDRESS
               </button>
             </form>
 
-            <div className="pt-4">
-              <h3 className="text-xs font-bold text-white mb-2">ACTIVE BANNED IP LIST ({bannedIPs.length} Banned IPs)</h3>
-              <div className="flex flex-wrap gap-2">
-                {bannedIPs.map((ip, idx) => (
-                  <div key={idx} className="flex items-center space-x-2 bg-red-950/80 border border-red-500/50 px-3 py-1 rounded text-xs text-red-300">
-                    <span>{ip}</span>
-                    <button onClick={() => handleUnbanIP(ip)} className="hover:text-white">
-                      ×
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-3">
+              <h3 className="font-bold text-white uppercase text-sm font-rajdhani">BANNED IP ADDRESS LIST ({bannedIps.length})</h3>
+              <div className="space-y-2">
+                {bannedIps.map(ip => (
+                  <div key={ip} className="flex justify-between items-center p-2.5 bg-black/50 border border-gray-800 rounded">
+                    <span className="text-red-400 font-bold">{ip}</span>
+                    <button onClick={() => handleUnbanIp(ip)} className="text-xs text-gray-400 hover:text-white">
+                      UNBAN IP
                     </button>
                   </div>
                 ))}
               </div>
             </div>
-          </HUDPanel>
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* TAB 4: ORDERS & PRINTABLE INVOICES */}
-      {activeTab === 'orders' && (
-        <HUDPanel title="CUSTOMER ORDERS & PRINTABLE INVOICES">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs font-mono">
-              <thead>
-                <tr className="border-b border-cyan-500/30 text-gray-400 bg-gray-900/60 uppercase">
-                  <th className="p-3">Order ID</th>
-                  <th className="p-3">Customer Name</th>
-                  <th className="p-3">Items</th>
-                  <th className="p-3">Amount</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3 text-right">Invoice Action</th>
+        {/* TAB 5: ORDERS & INVOICES */}
+        {activeTab === 'orders' && (
+          <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden font-mono text-xs">
+            <table className="w-full text-left">
+              <thead className="bg-black/60 text-gray-400 uppercase">
+                <tr>
+                  <th className="p-3">ORDER ID</th>
+                  <th className="p-3">USER EMAIL</th>
+                  <th className="p-3">METHOD</th>
+                  <th className="p-3">TOTAL</th>
+                  <th className="p-3">STATUS</th>
+                  <th className="p-3 text-right">ACTION</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-800 text-gray-300">
                 {orders.map(o => (
-                  <tr key={o.id} className="hover:bg-cyan-950/20">
-                    <td className="p-3 font-bold text-white">{o.id}</td>
-                    <td className="p-3 text-white font-bold">{o.userName}</td>
-                    <td className="p-3 text-gray-300">{o.items.length} item(s)</td>
-                    <td className="p-3 font-bold text-[var(--secondary-color)]">${o.totalPrice} USD</td>
-                    <td className="p-3">
-                      <span className="px-2 py-0.5 rounded bg-green-950 text-green-400 border border-green-500/40 text-[10px] font-bold">
-                        {o.status.toUpperCase()}
-                      </span>
-                    </td>
+                  <tr key={o.id}>
+                    <td className="p-3 text-cyan-400">{o.id}</td>
+                    <td className="p-3 text-white">{o.userEmail}</td>
+                    <td className="p-3 text-lime-400">{o.paymentMethod}</td>
+                    <td className="p-3 font-bold">${o.totalAmount} USD</td>
+                    <td className="p-3 text-lime-400">{o.status}</td>
                     <td className="p-3 text-right">
-                      <button
-                        onClick={() => handlePrintInvoice(o)}
-                        className="px-3 py-1 bg-[var(--primary-color)] text-black font-bold rounded text-xs hover:bg-yellow-400 transition-colors flex items-center space-x-1 ml-auto"
-                      >
-                        <Printer size={12} />
-                        <span>PRINT INVOICE</span>
+                      <button onClick={() => setSelectedInvoice(o)} className="px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded">
+                        PRINT INVOICE
                       </button>
                     </td>
                   </tr>
@@ -537,134 +539,43 @@ export const Admin: React.FC = () => {
               </tbody>
             </table>
           </div>
-        </HUDPanel>
-      )}
+        )}
 
-      {/* NEW TAB 5: ENTERPRISE SYSTEM CONFIGURATIONS */}
-      {activeTab === 'settings' && (
-        <form onSubmit={handleSaveSettings} className="space-y-6">
-          <HUDPanel title="GLOBAL ENTERPRISE SYSTEM CONFIGURATIONS & FEATURE SWITCHES">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-              {/* Site Production Mode */}
-              <div className="space-y-2 p-4 bg-black/50 border border-gray-800 rounded">
-                <label className="font-bold text-white flex items-center space-x-2">
-                  <Server size={16} className="text-[var(--primary-color)]" />
-                  <span>PRODUCTION ENVIRONMENT MODE</span>
-                </label>
-                <select
-                  value={sysConfig.siteMode}
-                  onChange={e => setSysConfig({ ...sysConfig, siteMode: e.target.value })}
-                  className="w-full bg-gray-900 border border-cyan-500/40 rounded p-2 text-white font-mono"
-                >
-                  <option value="PRODUCTION">LIVE PRODUCTION SERVER (ACTIVE)</option>
-                  <option value="MAINTENANCE">MAINTENANCE LOCKDOWN MODE</option>
-                  <option value="SANDBOX">DEV SANDBOX TESTING</option>
-                </select>
-                <p className="text-[10px] text-gray-400">Controls global site availability and system status header.</p>
-              </div>
-
-              {/* PayPal Merchant Setup */}
-              <div className="space-y-2 p-4 bg-black/50 border border-gray-800 rounded">
-                <label className="font-bold text-white flex items-center space-x-2">
-                  <DollarSign size={16} className="text-green-400" />
-                  <span>PAYPAL MERCHANT ACCOUNT CONFIG</span>
-                </label>
-                <input
-                  type="email"
-                  value={sysConfig.merchantEmail}
-                  onChange={e => setSysConfig({ ...sysConfig, merchantEmail: e.target.value })}
-                  className="w-full bg-gray-900 border border-cyan-500/40 rounded p-2 text-white font-mono"
-                  placeholder="MERCHANT PAYPAL EMAIL"
-                />
-                <p className="text-[10px] text-gray-400">Email receiving instant PayPal checkout payments.</p>
-              </div>
-
-              {/* Anti-Inspect Protection */}
-              <div className="space-y-2 p-4 bg-black/50 border border-gray-800 rounded flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-white flex items-center space-x-2">
-                    <Shield size={16} className="text-yellow-400" />
-                    <span>ANTI-INSPECT SECURITY SHIELD</span>
-                  </div>
-                  <div className="text-[10px] text-gray-400">Blocks F12, Ctrl+U, and right click page inspection.</div>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={sysConfig.antiInspectEnabled}
-                  onChange={e => setSysConfig({ ...sysConfig, antiInspectEnabled: e.target.checked })}
-                  className="w-5 h-5 accent-[var(--primary-color)]"
-                />
-              </div>
-
-              {/* AI Sales Bot */}
-              <div className="space-y-2 p-4 bg-black/50 border border-gray-800 rounded flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-white flex items-center space-x-2">
-                    <Cpu size={16} className="text-cyan-400" />
-                    <span>AI SALES ASSISTANT (`CYBER_BOT_AI`)</span>
-                  </div>
-                  <div className="text-[10px] text-gray-400">Enable floating AI Chatbot sales agent.</div>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={sysConfig.aiBotEnabled}
-                  onChange={e => setSysConfig({ ...sysConfig, aiBotEnabled: e.target.checked })}
-                  className="w-5 h-5 accent-[var(--primary-color)]"
-                />
-              </div>
+        {/* TAB 6: SYSTEM CONFIG */}
+        {activeTab === 'config' && (
+          <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl space-y-4 font-mono text-xs">
+            <h3 className="font-bold text-white uppercase text-sm font-rajdhani">ENTERPRISE SYSTEM CONFIGURATION</h3>
+            <div className="space-y-2">
+              <p className="text-gray-400">Merchant PayPal Account: <span className="text-lime-400 font-bold">teamwhitehatdev@gmail.com</span></p>
+              <p className="text-gray-400">Merchant Tokenized Link: <span className="text-cyan-400 font-bold">https://paypal.me/facebookgamer</span></p>
+              <p className="text-gray-400">Anti-Inspect Code Protection: <span className="text-lime-400 font-bold">ACTIVE 🟢</span></p>
             </div>
+          </div>
+        )}
+      </main>
 
-            <div className="pt-4 border-t border-gray-800">
-              <button
-                type="submit"
-                className="px-8 py-3 bg-[var(--primary-color)] text-black font-orbitron font-bold rounded text-xs hover:bg-yellow-400 transition-colors shadow-[0_0_15px_var(--glow-color)] flex items-center space-x-2"
-              >
-                <Sliders size={16} />
-                <span>SAVE ENTERPRISE SYSTEM CONFIGURATIONS</span>
+      {/* Printable Invoice Modal */}
+      {selectedInvoice && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-white text-black p-8 rounded-xl max-w-md w-full space-y-4 font-mono">
+            <h2 className="text-xl font-bold text-center border-b pb-2">OFFICIAL CYBER INVOICE</h2>
+            <p className="text-xs">Order ID: {selectedInvoice.id}</p>
+            <p className="text-xs">Client Email: {selectedInvoice.userEmail}</p>
+            <p className="text-xs">Payment Method: {selectedInvoice.paymentMethod}</p>
+            <p className="text-sm font-bold pt-2 border-t">Total Amount Paid: ${selectedInvoice.totalAmount} USD</p>
+            <div className="flex justify-between pt-4">
+              <button onClick={() => window.print()} className="px-4 py-2 bg-black text-white rounded text-xs">
+                PRINT RECEIPT
+              </button>
+              <button onClick={() => setSelectedInvoice(null)} className="px-4 py-2 bg-gray-200 text-black rounded text-xs">
+                CLOSE
               </button>
             </div>
-          </HUDPanel>
-        </form>
-      )}
-
-      {/* NEW TAB 6: SYSTEM AUDIT LOGS */}
-      {activeTab === 'audit' && (
-        <HUDPanel title="REAL-TIME SYSTEM AUDIT TRAIL & SECURITY EVENT LOGS">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs font-mono">
-              <thead>
-                <tr className="border-b border-cyan-500/30 text-gray-400 bg-gray-900/60 uppercase">
-                  <th className="p-3">Log ID & Timestamp</th>
-                  <th className="p-3">Event Type</th>
-                  <th className="p-3">Severity Level</th>
-                  <th className="p-3">Event Description & Payload</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-800">
-                {MOCK_AUDIT_LOGS.map(l => (
-                  <tr key={l.id} className="hover:bg-cyan-950/20">
-                    <td className="p-3">
-                      <div className="font-bold text-white">{l.id}</div>
-                      <div className="text-[10px] text-gray-400">{l.timestamp}</div>
-                    </td>
-                    <td className="p-3 font-bold text-cyan-400">{l.type}</td>
-                    <td className="p-3">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        l.severity === 'HIGH' ? 'bg-red-950 text-red-400 border border-red-500/40' :
-                        l.severity === 'WARNING' ? 'bg-yellow-950 text-yellow-400 border border-yellow-500/40' :
-                        'bg-blue-950 text-blue-400 border border-blue-500/40'
-                      }`}>
-                        {l.severity}
-                      </span>
-                    </td>
-                    <td className="p-3 text-gray-300">{l.message}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
-        </HUDPanel>
+        </div>
       )}
     </div>
   );
 };
+
+export default Admin;
