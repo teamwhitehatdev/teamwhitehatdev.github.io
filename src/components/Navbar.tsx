@@ -25,9 +25,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
           
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group shrink-0">
-            <div className="w-9 h-9 rounded-lg bg-black border border-cyan-500/50 flex items-center justify-center text-cyan-400 group-hover:scale-105 transition-all shadow-md shadow-cyan-500/10">
-              <Shield className="w-5 h-5" />
-            </div>
+            <img
+              src="./logo.png"
+              alt="Team White Hat Dev Logo"
+              className="w-10 h-10 rounded-xl border border-cyan-500/50 object-cover group-hover:scale-105 transition-all shadow-md shadow-cyan-500/30"
+            />
             <div>
               <span className="text-base font-black font-rajdhani text-white tracking-wider uppercase block">
                 WHITE HAT <span className="text-cyan-400">DEV</span>
