@@ -16,10 +16,10 @@ export const AntiBotCaptcha: React.FC = () => {
     audioEngine.playClick();
     if (parseInt(answer) === num1 + num2) {
       audioEngine.playSuccess();
-      setIsCaptchaOpen(false);
+      setIsCaptchaOpen?.(false);
       if (pendingCheckoutAction) {
         pendingCheckoutAction();
-        setPendingCheckoutAction(null);
+        setPendingCheckoutAction?.(null);
       }
     } else {
       audioEngine.playGlitch();

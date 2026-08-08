@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Shield, ShoppingBag, User, Lock, Terminal, Cpu } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Shield, Code, Layers, Mail, Briefcase, Grid } from 'lucide-react';
 
 interface NavbarProps {
-  onOpenAuth: () => void;
-  onOpenCart: () => void;
-  cartCount: number;
+  onOpenConsultation: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenCart, cartCount }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
   const [userIp, setUserIp] = useState('Fetching IP...');
+  const location = useLocation();
 
   useEffect(() => {
-    // Fetch visitor's actual real IP address from client lookup service
     fetch('https://api.ipify.org?format=json')
       .then(res => res.json())
       .then(data => setUserIp(data.ip))
       .catch(() => setUserIp('185.220.101.4'));
   }, []);
-
-  const activeUser = JSON.parse(localStorage.getItem('wh_active_user') || 'null');
 
   return (
     <nav className="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800">
@@ -54,35 +50,40 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth, onOpenCart, cartCoun
             </div>
           </div>
 
-          {/* Navigation Links & Action Controls */}
-          <div className="flex items-center space-x-4">
-            <Link to="/shop" className="text-xs font-mono text-gray-300 hover:text-white uppercase tracking-wider">
-              MARKETPLACE
+          {/* Navigation Links */}
+          <div className="flex items-center space-x-6">
+            <Link
+              to="/"
+              className={`text-xs font-mono uppercase tracking-wider transition-colors ${
+                location.pathname === '/' ? 'text-[var(--primary-color)] font-bold' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              HOME
             </Link>
 
-            <Link to="/admin" className="px-3 py-1.5 rounded bg-black/60 border border-cyan-500/40 text-cyan-400 hover:text-white hover:border-cyan-400 text-xs font-mono flex items-center space-x-1 transition-all">
-              <Lock className="w-3.5 h-3.5" />
-              <span>ADMIN PORTAL</span>
+            <Link
+              to="/showcase"
+              className={`text-xs font-mono uppercase tracking-wider transition-colors ${
+                location.pathname === '/showcase' ? 'text-[var(--primary-color)] font-bold' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              PROJECTS
+            </Link>
+
+            <Link
+              to="/services"
+              className={`text-xs font-mono uppercase tracking-wider transition-colors ${
+                location.pathname === '/services' ? 'text-[var(--primary-color)] font-bold' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              SERVICES & STACK
             </Link>
 
             <button
-              onClick={onOpenCart}
-              className="relative p-2 text-gray-300 hover:text-white transition-colors"
+              onClick={onOpenConsultation}
+              className="px-4 py-2 bg-gradient-to-r from-[var(--primary-color)] to-cyan-500 text-black font-bold font-rajdhani rounded-lg text-xs uppercase tracking-wider hover:opacity-90 transition-all shadow-md shadow-[var(--primary-color)]/20"
             >
-              <ShoppingBag className="w-5 h-5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-lime-400 text-black text-[10px] font-bold font-mono w-4 h-4 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </button>
-
-            <button
-              onClick={onOpenAuth}
-              className="flex items-center space-x-1 px-3 py-1.5 bg-gray-900 border border-gray-800 rounded text-xs font-mono text-gray-300 hover:text-white hover:border-gray-700 transition-all"
-            >
-              <User className="w-3.5 h-3.5" />
-              <span>{activeUser ? activeUser.username : 'LOGIN'}</span>
+              HIRE OUR TEAM
             </button>
           </div>
         </div>

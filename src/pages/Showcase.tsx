@@ -1,131 +1,122 @@
 import React, { useState } from 'react';
-import { Smartphone, Globe, Shield, Star, ExternalLink, X } from 'lucide-react';
-import { useApp } from '../context/AppContext';
+import { ExternalLink, Github, Filter, Code, ArrowRight } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
-import { audioEngine } from '../components/AudioEngine';
+import { PROJECTS, Project } from '../utils/initialData';
 
 export const Showcase: React.FC = () => {
-  const { apps } = useApp();
   const [filter, setFilter] = useState<string>('all');
-  const [selectedApp, setSelectedApp] = useState<typeof apps[0] | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const filteredApps = filter === 'all' ? apps : apps.filter(a => a.category === filter);
+  const filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.category === filter);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-mono">
+    <div className="space-y-12 max-w-6xl mx-auto px-4">
       {/* Header */}
-      <div className="text-center space-y-3">
-        <h1 className="font-orbitron font-black text-3xl sm:text-4xl text-white">
-          PUBLISHED <span className="neon-text-primary">APPS & WEB PLATFORMS</span>
+      <div className="text-center space-y-4 py-8">
+        <h1 className="text-4xl md:text-5xl font-black font-rajdhani uppercase text-white tracking-wider">
+          PROJECTS & ARCHITECTURAL CASE STUDIES
         </h1>
-        <p className="text-xs text-gray-400 max-w-2xl mx-auto">
-          Explore mobile applications published on Google Play Store, iOS App Store, enterprise web suites, and custom software systems developed by WHITE HAT DEV.
+        <p className="text-sm text-gray-400 font-mono max-w-2xl mx-auto">
+          Explore real-world enterprise applications, mobile ecosystems, cybersecurity tools, and high-frequency automation software built by Senior Architect Team White Hat.
         </p>
       </div>
 
-      {/* Category Filter Tabs */}
-      <div className="flex flex-wrap justify-center gap-2 text-xs">
-        {['all', 'playstore', 'webapp', 'enterprise'].map(cat => (
+      {/* Category Filter Buttons */}
+      <div className="flex flex-wrap justify-center gap-2 font-mono text-xs">
+        {[
+          { key: 'all', label: 'ALL PROJECTS' },
+          { key: 'web', label: 'WEB APPLICATIONS' },
+          { key: 'mobile', label: 'MOBILE APPS' },
+          { key: 'security', label: 'CYBERSECURITY' },
+          { key: 'automation', label: 'AUTOMATION & AI' }
+        ].map(btn => (
           <button
-            key={cat}
-            onClick={() => {
-              audioEngine.playClick();
-              setFilter(cat);
-            }}
-            className={`px-4 py-2 rounded uppercase border transition-all ${
-              filter === cat
-                ? 'border-[var(--primary-color)] bg-cyan-500/20 text-cyan-400 font-bold shadow-[0_0_10px_var(--glow-color)]'
-                : 'border-gray-800 text-gray-400 hover:border-gray-700'
+            key={btn.key}
+            onClick={() => setFilter(btn.key)}
+            className={`px-4 py-2 rounded-lg transition-all ${
+              filter === btn.key
+                ? 'bg-gradient-to-r from-cyan-500 to-lime-500 text-black font-bold shadow-lg shadow-cyan-500/20'
+                : 'bg-black/60 border border-gray-800 text-gray-400 hover:text-white'
             }`}
           >
-            {cat === 'all' ? 'ALL PROJECTS' : cat}
+            {btn.label}
           </button>
         ))}
       </div>
 
-      {/* Apps Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredApps.map(app => (
-          <HUDPanel key={app.id} badge={app.category.toUpperCase()}>
-            <div className="space-y-4">
-              <img src={app.imageUrl} alt={app.title} className="w-full h-48 object-cover rounded border border-cyan-500/30" />
+      {/* Projects Grid */}
+      <HUDPanel title={`PROJECT PORTFOLIO MATRIX (${filtered.length})`}>
+        <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map(p => (
+            <div key={p.id} className="bg-black/50 border border-gray-800 rounded-xl overflow-hidden hover:border-cyan-500/50 transition-all flex flex-col justify-between group">
               <div>
-                <h3 className="font-orbitron font-bold text-white text-lg">{app.title}</h3>
-                <p className="text-xs text-gray-300 mt-1">{app.description}</p>
+                <div className="relative h-48 overflow-hidden">
+                  <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                  <div className="absolute top-3 left-3 bg-black/80 px-2.5 py-1 rounded text-[10px] font-mono text-lime-400 border border-lime-500/30">
+                    {p.metrics}
+                  </div>
+                </div>
+
+                <div className="p-5 space-y-3">
+                  <h3 className="text-lg font-bold text-white font-rajdhani">{p.title}</h3>
+                  <p className="text-xs text-gray-400 font-mono leading-relaxed line-clamp-3">{p.description}</p>
+                </div>
               </div>
 
-              <div className="flex flex-wrap gap-1">
-                {app.techStack.map((t, idx) => (
-                  <span key={idx} className="bg-cyan-950 text-cyan-400 border border-cyan-500/30 text-[10px] px-2 py-0.5 rounded">
-                    {t}
-                  </span>
-                ))}
-              </div>
+              <div className="p-5 pt-0 space-y-3">
+                <div className="flex flex-wrap gap-1">
+                  {p.techStack.map((tech, idx) => (
+                    <span key={idx} className="text-[10px] font-mono px-2 py-0.5 rounded bg-gray-900 border border-gray-800 text-gray-300">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
 
-              <div className="pt-4 border-t border-gray-800 flex items-center justify-between text-xs">
-                <span className="text-yellow-400 font-bold flex items-center">
-                  <Star size={14} className="fill-yellow-400 mr-1" /> {app.rating} ({app.downloads})
-                </span>
                 <button
-                  onClick={() => {
-                    audioEngine.playClick();
-                    setSelectedApp(app);
-                  }}
-                  className="px-3 py-1.5 rounded bg-[var(--primary-color)] text-black font-bold hover:bg-yellow-400 transition-colors"
+                  onClick={() => setSelectedProject(p)}
+                  className="w-full py-2 bg-gray-900 border border-gray-800 hover:border-cyan-500 text-cyan-400 text-xs font-mono rounded-lg transition-all flex items-center justify-center space-x-1"
                 >
-                  VIEW SPECS & DEMO
+                  <span>INSPECT ARCHITECTURE</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
-          </HUDPanel>
-        ))}
-      </div>
+          ))}
+        </div>
+      </HUDPanel>
 
-      {/* Modal Detail View */}
-      {selectedApp && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0d0f18] border-2 border-[var(--primary-color)] rounded-lg p-6 max-w-2xl w-full shadow-[0_0_30px_var(--glow-color)] relative space-y-4 max-h-[90vh] overflow-y-auto">
-            <button 
-              onClick={() => {
-                audioEngine.playGlitch();
-                setSelectedApp(null);
-              }}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white"
-            >
-              <X size={20} />
+      {/* Project Lightbox Inspection Modal */}
+      {selectedProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-gray-900 border border-cyan-500/40 rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onClick={() => setSelectedProject(null)} className="absolute top-4 right-4 text-gray-400 hover:text-white p-1">
+              ✕
             </button>
 
-            <h2 className="font-orbitron font-bold text-xl text-white">{selectedApp.title}</h2>
-            <img src={selectedApp.imageUrl} alt="" className="w-full h-56 object-cover rounded border border-cyan-500/30" />
-            <p className="text-xs text-gray-300">{selectedApp.longDescription}</p>
-
-            <div className="p-3 bg-black/60 border border-gray-800 rounded space-y-1 text-xs">
-              <div>Category: <span className="text-cyan-400 font-bold">{selectedApp.category.toUpperCase()}</span></div>
-              <div>Downloads / Reach: <span className="text-yellow-400 font-bold">{selectedApp.downloads}</span></div>
-              <div>Rating: <span className="text-yellow-400">★ {selectedApp.rating} / 5.0</span></div>
+            <div className="space-y-2">
+              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest">[ {selectedProject.category} ]</span>
+              <h2 className="text-2xl font-bold font-rajdhani text-white uppercase">{selectedProject.title}</h2>
             </div>
 
-            <div className="flex gap-3 pt-2">
-              {selectedApp.playStoreUrl && (
-                <a
-                  href={selectedApp.playStoreUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 py-2 rounded bg-green-600 text-white font-bold text-center text-xs hover:bg-green-500 transition-colors"
-                >
-                  GOOGLE PLAY STORE PAGE
-                </a>
-              )}
-              {selectedApp.liveUrl && (
-                <a
-                  href={selectedApp.liveUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 py-2 rounded bg-[var(--primary-color)] text-black font-bold text-center text-xs hover:bg-yellow-400 transition-colors"
-                >
-                  LIVE WEB DEMO
-                </a>
-              )}
+            <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-64 object-cover rounded-xl border border-gray-800" />
+
+            <div className="space-y-4 font-mono text-xs text-gray-300">
+              <p className="leading-relaxed">{selectedProject.description}</p>
+              
+              <div className="p-3 bg-black/60 border border-lime-500/30 rounded-lg text-lime-400">
+                PERFORMANCE METRICS: <span className="font-bold text-white">{selectedProject.metrics}</span>
+              </div>
+
+              <div>
+                <h4 className="text-white font-bold mb-2">TECHNOLOGY STACK USED:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.techStack.map((tech, idx) => (
+                    <span key={idx} className="px-3 py-1 bg-gray-950 border border-gray-800 rounded text-cyan-400">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -133,3 +124,5 @@ export const Showcase: React.FC = () => {
     </div>
   );
 };
+
+export default Showcase;
