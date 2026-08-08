@@ -12,16 +12,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <script>
-    // Force purge old browser cache and stale sessions
+    // Force purge old browser cache, stale sessions, and legacy state
     (function() {
-      var currentVer = 'v8.2.0';
+      var currentVer = 'v12.0.0';
       if (localStorage.getItem('wh_app_ver') !== currentVer) {
-        localStorage.clear();
-        sessionStorage.clear();
-        localStorage.setItem('wh_app_ver', currentVer);
+        try {
+          localStorage.clear();
+          sessionStorage.clear();
+          localStorage.setItem('wh_app_ver', currentVer);
+          if (window.caches) {
+            caches.keys().then(function(names) {
+              for (var name of names) caches.delete(name);
+            });
+          }
+        } catch (e) {}
       }
     })();
   </script>
+
+
 
 
 
