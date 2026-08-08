@@ -9,7 +9,7 @@ interface HomeProps {
   onOpenConsultation: () => void;
 }
 
-export const Home: React.FC<HomeProps> = ({ onOpenConsultation }) => {
+export const HomePage: React.FC<HomeProps> = ({ onOpenConsultation }) => {
   const [shuffledTestimonials, setShuffledTestimonials] = useState<Testimonial[]>([]);
 
   useEffect(() => {
@@ -165,4 +165,4 @@ export const Home: React.FC<HomeProps> = ({ onOpenConsultation }) => {
   );
 };
 
-export default Home;
+export default HomePage;

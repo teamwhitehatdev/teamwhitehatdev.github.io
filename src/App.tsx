@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import { Footer } from './components/Footer';
-import Home from './pages/Home';
-import { Showcase } from './pages/Showcase';
-import { Services } from './pages/Services';
-import { ConsultationModal } from './components/ConsultationModal';
-import ThemeEngine from './components/ThemeEngine';
+import Navbar from './components/Navbar.tsx';
+import { Footer } from './components/Footer.tsx';
+import HomePage from './pages/HomePage.tsx';
+import { Showcase } from './pages/Showcase.tsx';
+import { Services } from './pages/Services.tsx';
+import { ConsultationModal } from './components/ConsultationModal.tsx';
+import ThemeEngine from './components/ThemeEngine.tsx';
 
 export function App() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
@@ -19,7 +19,7 @@ export function App() {
           
           <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <Routes>
-              <Route path="/" element={<Home onOpenConsultation={() => setIsConsultationOpen(true)} />} />
+              <Route path="/" element={<HomePage onOpenConsultation={() => setIsConsultationOpen(true)} />} />
               <Route path="/showcase" element={<Showcase />} />
               <Route path="/services" element={<Services />} />
             </Routes>
