@@ -8,12 +8,13 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
-    minify: true,
+    cssCodeSplit: false,
     rollupOptions: {
       output: {
         entryFileNames: 'assets/app-main.js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/app-main.[ext]'
+        chunkFileNames: 'assets/app-main.js',
+        assetFileNames: 'assets/app-main.[ext]',
+        manualChunks: () => 'app-main'
       }
     }
   }
