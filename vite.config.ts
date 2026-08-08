@@ -11,10 +11,10 @@ export default defineConfig({
     cssCodeSplit: false,
     rollupOptions: {
       output: {
-        entryFileNames: 'assets/app-main.js',
-        chunkFileNames: 'assets/app-main.js',
-        assetFileNames: 'assets/app-main.[ext]',
-        manualChunks: () => 'app-main'
+        entryFileNames: 'assets/app-main-v14.js',
+        chunkFileNames: 'assets/app-main-v14.js',
+        assetFileNames: 'assets/app-main-v14.[ext]',
+        manualChunks: () => 'app-main-v14'
       }
     }
   }
