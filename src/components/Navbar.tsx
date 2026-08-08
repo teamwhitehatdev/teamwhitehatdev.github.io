@@ -34,7 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
               <span className="text-base font-black font-rajdhani text-white tracking-wider uppercase block">
                 WHITE HAT <span className="text-cyan-400">DEV</span>
               </span>
-              <span className="text-[10px] text-gray-400 block -mt-1">WEB & APPLICATION DEVELOPER</span>
+              <span className="text-[10px] text-gray-400 block -mt-1">PROFESSIONAL VIRTUAL ASSISTANT</span>
             </div>
           </Link>
 
@@ -87,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
               onClick={onOpenConsultation}
               className="px-3.5 py-1.5 bg-gradient-to-r from-cyan-500 to-lime-400 text-black font-bold font-rajdhani rounded-lg text-xs uppercase tracking-wider hover:opacity-90 transition-all shadow-md shadow-cyan-500/20"
             >
-              HIRE US
+              HIRE VA
             </button>
           </div>
         </div>

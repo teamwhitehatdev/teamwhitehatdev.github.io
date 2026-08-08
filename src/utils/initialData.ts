@@ -46,9 +46,9 @@ export interface AffiliateLink {
 export const AFFILIATE_LINKS: AffiliateLink[] = [
   {
     id: 'aff-1',
-    title: 'DigitalOcean Cloud VPS & Kubernetes',
+    title: 'DigitalOcean Cloud VPS & Hosting',
     category: 'Cloud Infrastructure',
-    description: 'Get $200 free cloud credits to deploy high-speed SSD VPS servers and Kubernetes clusters.',
+    description: 'Get $200 free cloud credits to deploy high-speed SSD VPS servers and web apps.',
     referralUrl: 'https://m.do.co/c/teamwhitehatdev',
     bannerImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
     badge: 'CLOUD OFFER',
@@ -68,7 +68,7 @@ export const AFFILIATE_LINKS: AffiliateLink[] = [
     id: 'aff-3',
     title: 'Envato Elements Unlimited Assets',
     category: 'Graphics & Design',
-    description: 'Unlimited downloads of 3D renders, Figma templates, vector HUD assets, and photos.',
+    description: 'Unlimited downloads of 3D renders, Figma templates, vector HUD assets, and graphics.',
     referralUrl: 'https://1.envato.market/teamwhitehatdev',
     bannerImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
     badge: 'DESIGNER DEALS',
@@ -89,32 +89,22 @@ export const AFFILIATE_LINKS: AffiliateLink[] = [
 export const PROJECTS: Project[] = [
   {
     id: 'proj-1',
-    title: 'Nexus Enterprise SaaS Dashboard',
+    title: 'Executive Virtual Assistance Suite',
     category: 'web',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
-    description: 'Real-time web application analytics dashboard built with Next.js 15, React 19, TypeScript, and WebSockets.',
-    techStack: ['React 19', 'Next.js 15', 'TypeScript', 'TailwindCSS'],
-    metrics: '10k req/sec • 99.99% Uptime',
+    description: 'Comprehensive virtual assistant support including email management, CRM administration, and workflow automation.',
+    techStack: ['Executive VA', 'CRM Data Entry', 'Workflow Automation'],
+    metrics: '100% Client Satisfaction',
     featured: true
   },
   {
     id: 'proj-2',
-    title: 'Aegis Security Threat Sentinel',
-    category: 'security',
-    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
-    description: 'Cybersecurity monitoring platform featuring automated IP threat detection and proxy auto-blocking.',
-    techStack: ['Node.js', 'Python', 'Redis', 'Docker'],
-    metrics: '400+ Attacks Blocked/Day',
-    featured: true
-  },
-  {
-    id: 'proj-3',
-    title: 'Valkyrie Mobile App Suite',
+    title: 'Web & Mobile Application Maintenance',
     category: 'mobile',
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-    description: 'Cross-platform iOS & Android mobile application built with React Native and Published on Google Play.',
-    techStack: ['React Native', 'TypeScript', 'iOS Swift', 'Android Kotlin'],
-    metrics: '50k+ Downloads on Play Store',
+    description: 'Full-service web and mobile app updates, content publishing, and Google Play Store management.',
+    techStack: ['Web Management', 'Mobile App Support', 'Google Play Admin'],
+    metrics: '24/7 Availability',
     featured: true
   }
 ];
@@ -123,82 +113,62 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
   {
     id: '1',
     name: 'Marcus Vance',
-    role: 'CTO',
-    company: 'Vance Dynamics',
+    role: 'CEO',
+    company: 'Vance Capital',
     country: 'USA 🇺🇸',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-    content: 'Team White Hat built our web application in 3 weeks flat. Zero latency, immaculate HUD design, and flawless code.',
+    content: 'Team White Hat is the most reliable Virtual Assistant team we have hired. Exceptional executive support and web management.',
     rating: 5.0
   },
   {
     id: '2',
     name: 'Elena Rostova',
-    role: 'Lead Security Engineer',
-    company: 'Nordic Shield',
+    role: 'Operations Director',
+    company: 'Nordic Operations',
     country: 'Sweden 🇸🇪',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-    content: 'The anti-fraud security engineering and real-time IP threat monitoring saved our platform from proxy attacks.',
-    rating: 4.8
+    content: 'Brilliant VA services! Managed our schedule, graphics design, and technical administration with extreme precision.',
+    rating: 5.0
   },
   {
     id: '3',
     name: 'Kenji Takahashi',
-    role: 'Head of Product',
-    company: 'NeoTokyo Interactive',
+    role: 'Founder',
+    company: 'NeoTokyo Tech',
     country: 'Japan 🇯🇵',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
-    content: 'Exceptional mobile application development and ultra-clean React architecture. Fast delivery and zero bugs.',
-    rating: 5.0
+    content: 'Handled our e-commerce store updates, mobile app publishing, and customer inquiry management perfectly.',
+    rating: 4.9
   },
   {
     id: '4',
     name: 'Sarah Jenkins',
-    role: 'E-Commerce Director',
-    company: 'Aura Goods',
+    role: 'Marketing Lead',
+    company: 'Aura Media',
     country: 'UK 🇬🇧',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-    content: 'Very smooth mobile-responsive design. Clean minimal UI works perfectly across all iOS and Android devices.',
-    rating: 4.5
-  },
-  {
-    id: '5',
-    name: 'David Miller',
-    role: 'VP Infrastructure',
-    company: 'CloudMatrix',
-    country: 'Canada 🇨🇦',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80',
-    content: 'The custom web software architecture made scaling our web application effortless. Highly recommended developer.',
-    rating: 5.0
-  },
-  {
-    id: '6',
-    name: 'Amelie Laurent',
-    role: 'Creative Director',
-    company: 'Lumiere Studios',
-    country: 'France 🇫🇷',
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80',
-    content: 'Beautiful translucent glassmorphic HUD components and lightning-fast page transition animations.',
-    rating: 4.9
+    content: 'Extremely versatile Virtual Assistant. Created amazing graphics design banners and handled daily administrative tasks.',
+    rating: 4.8
   }
 ];
 
 export const SERVICES: ServiceItem[] = [
   {
     id: 'svc-1',
-    title: 'Web Application Development',
-    category: 'Web Applications',
-    icon: 'Code',
-    description: 'Custom React 19, Next.js 15, and Node.js microservices engineered for extreme speed, SEO optimization, and high availability.',
-    features: ['Single Page Apps (SPA) & SSR', 'TypeScript Codebase', 'TailwindCSS / Glassmorphic UI'],
-    deliverables: 'Complete Source Code + Deployment'
+    title: 'Executive Virtual Assistance',
+    category: 'Administrative Support',
+    icon: 'Briefcase',
+    description: 'Email triage, calendar scheduling, CRM data entry, customer support, and administrative project coordination.',
+    features: ['Email & Inbox Management', 'CRM & Spreadsheet Data Entry', 'Calendar & Travel Scheduling'],
+    deliverables: 'Dedicated Executive Support'
   },
   {
     id: 'svc-2',
-    title: 'Mobile Application Development',
-    category: 'Mobile Apps',
-    icon: 'Smartphone',
-    description: 'Native and cross-platform iOS & Android mobile applications built with React Native & Published on Google Play.',
-    features: ['Google Play Store & iOS Ready', 'Biometric & Push Notifications', 'Offline First Architecture'],
-    deliverables: 'App Store Build + Binary Packages'
+    title: 'Digital Solutions & Technical VA',
+    category: 'Technical Management',
+    icon: 'Laptop',
+    description: 'Website maintenance, mobile application publishing, graphics design creation, and security data audits.',
+    features: ['Web & App Content Updates', 'Social Media Graphics Design', 'Account & Security Audits'],
+    deliverables: 'Full-Service Digital Management'
   }
 ];

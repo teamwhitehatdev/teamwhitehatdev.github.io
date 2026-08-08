@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Code, Smartphone, ArrowRight, CheckCircle, ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Briefcase, Code, Smartphone, Palette, ShieldCheck, ArrowRight } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { AffiliateBanners } from '../components/AffiliateBanners';
 import { INITIAL_TESTIMONIALS, PROJECTS, PLAY_STORE_URL, Testimonial } from '../utils/initialData';
@@ -23,7 +22,7 @@ export const HomePage: React.FC<HomeProps> = ({ onOpenConsultation }) => {
   }, []);
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 font-sans">
       {/* 2-Column Grid Layout: Main Content (Left) + Affiliates Sidebar (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         
@@ -34,13 +33,13 @@ export const HomePage: React.FC<HomeProps> = ({ onOpenConsultation }) => {
           <section className="bg-black/40 border border-gray-800/80 rounded-2xl p-6 sm:p-8 space-y-6 relative overflow-hidden backdrop-blur-md">
             <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full text-xs font-mono text-cyan-400">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-              <span>TEAM WHITE HAT • THE LAZY 1337 DEVELOPER</span>
+              <span>TEAM WHITE HAT • PROFESSIONAL VIRTUAL ASSISTANT</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-black font-rajdhani uppercase text-white tracking-tight leading-none">
-              WEB & APPLICATION DEVELOPER
+              PROFESSIONAL VIRTUAL ASSISTANT
               <span className="block text-xs sm:text-sm font-mono text-cyan-400 font-normal mt-3 lowercase">
-                (Engineering high-performance web applications & mobile ecosystems.)
+                (Providing elite executive support, web & mobile app management, graphic design, and cybersecurity services.)
               </span>
             </h1>
 
@@ -49,7 +48,7 @@ export const HomePage: React.FC<HomeProps> = ({ onOpenConsultation }) => {
                 onClick={onOpenConsultation}
                 className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-lime-400 text-black font-bold font-rajdhani rounded-lg text-xs uppercase tracking-wider hover:opacity-90 transition-all flex items-center space-x-2 shadow-lg shadow-cyan-500/20"
               >
-                <span>HIRE OUR TEAM</span>
+                <span>HIRE VIRTUAL ASSISTANT</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -65,32 +64,46 @@ export const HomePage: React.FC<HomeProps> = ({ onOpenConsultation }) => {
             </div>
           </section>
 
-          {/* Minimal 2-Services Overview */}
-          <HUDPanel title="CORE DEVELOPMENT CAPABILITIES">
+          {/* Versatile Virtual Assistant Capabilities */}
+          <HUDPanel title="VERSATILE VA SERVICES & CAPABILITIES">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 font-mono text-xs">
+              
               <div className="bg-black/50 p-4 rounded-xl border border-gray-800 space-y-2">
-                <Code className="w-6 h-6 text-cyan-400" />
-                <h3 className="text-base font-bold text-white font-rajdhani">Web Application Development</h3>
-                <p className="text-gray-400 leading-relaxed text-[11px]">React 19, Next.js 15, and Node.js microservices engineered for extreme performance.</p>
+                <Briefcase className="w-6 h-6 text-lime-400" />
+                <h3 className="text-base font-bold text-white font-rajdhani">Executive Support & Admin</h3>
+                <p className="text-gray-400 leading-relaxed text-[11px]">Email management, calendar scheduling, CRM data entry, and customer support.</p>
               </div>
 
               <div className="bg-black/50 p-4 rounded-xl border border-gray-800 space-y-2">
-                <Smartphone className="w-6 h-6 text-lime-400" />
-                <h3 className="text-base font-bold text-white font-rajdhani">Mobile Application Development</h3>
-                <p className="text-gray-400 leading-relaxed text-[11px]">Native & Cross-Platform iOS & Android applications published on Google Play.</p>
+                <Code className="w-6 h-6 text-cyan-400" />
+                <h3 className="text-base font-bold text-white font-rajdhani">Web & Application Support</h3>
+                <p className="text-gray-400 leading-relaxed text-[11px]">Website updates, content publishing, bug fixes, and app store management.</p>
               </div>
+
+              <div className="bg-black/50 p-4 rounded-xl border border-gray-800 space-y-2">
+                <Palette className="w-6 h-6 text-purple-400" />
+                <h3 className="text-base font-bold text-white font-rajdhani">Graphics Design & Branding</h3>
+                <p className="text-gray-400 leading-relaxed text-[11px]">Social media banners, promotional graphics, brand visual kits, and UI assets.</p>
+              </div>
+
+              <div className="bg-black/50 p-4 rounded-xl border border-gray-800 space-y-2">
+                <ShieldCheck className="w-6 h-6 text-amber-400" />
+                <h3 className="text-base font-bold text-white font-rajdhani">Cybersecurity & Data Audits</h3>
+                <p className="text-gray-400 leading-relaxed text-[11px]">Account security auditing, password protection, and threat monitoring.</p>
+              </div>
+
             </div>
           </HUDPanel>
 
-          {/* Featured Projects Grid */}
-          <HUDPanel title="FEATURED PROJECTS">
+          {/* Featured VA Solutions */}
+          <HUDPanel title="FEATURED VA PROJECTS & SOLUTIONS">
             <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {PROJECTS.slice(0, 2).map((p) => (
-                <div key={p.id} className="bg-black/50 border border-gray-800 rounded-xl overflow-hidden space-y-3 p-4 hover:border-cyan-500/40 transition-all">
+                <div key={p.id} className="bg-black/50 border border-gray-800 rounded-xl overflow-hidden space-y-3 p-4 hover:border-cyan-500/40 transition-all font-mono">
                   <img src={p.image} alt={p.title} className="w-full h-36 object-cover rounded-lg border border-gray-800" />
                   <div className="space-y-1">
                     <h4 className="text-base font-bold text-white font-rajdhani">{p.title}</h4>
-                    <p className="text-[11px] text-gray-400 font-mono line-clamp-2">{p.description}</p>
+                    <p className="text-[11px] text-gray-400 line-clamp-2">{p.description}</p>
                   </div>
                 </div>
               ))}
@@ -98,7 +111,7 @@ export const HomePage: React.FC<HomeProps> = ({ onOpenConsultation }) => {
           </HUDPanel>
 
           {/* Minimal Animated Randomized Testimonials Carousel */}
-          <HUDPanel title="RANDOMIZED CLIENT REVIEWS">
+          <HUDPanel title="CLIENT REVIEWS & VERIFIED TESTIMONIALS">
             <div className="p-5 font-mono text-xs space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {testimonials.slice(0, 4).map((t) => (

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Shield, Lock } from 'lucide-react';
-import { PLAY_STORE_URL } from '../utils/initialData';
 
 export const Footer: React.FC = () => {
   return (
@@ -9,7 +8,7 @@ export const Footer: React.FC = () => {
         
         <div className="flex items-center space-x-2 text-white font-rajdhani font-bold">
           <Shield className="w-4 h-4 text-cyan-400" />
-          <span>WHITE HAT DEV • WEB & APPLICATION DEVELOPER</span>
+          <span>WHITE HAT DEV • PROFESSIONAL VIRTUAL ASSISTANT</span>
         </div>
 
         <div className="flex items-center space-x-2 text-lime-400 text-[11px]">
