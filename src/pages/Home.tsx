@@ -57,7 +57,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenConsultation }) => {
         </div>
       </section>
 
-      {/* 4 Core Pillars Grid */}
+      {/* 4 Core Expertise Pillars */}
       <section className="max-w-6xl mx-auto px-4">
         <HUDPanel title="4 CORE EXPERTISE PILLARS">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-6">
