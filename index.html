@@ -14,7 +14,7 @@
   <script>
     // Force purge old browser cache, stale sessions, and legacy state
     (function() {
-      var currentVer = 'v13.0.0';
+      var currentVer = 'v14.0.0';
       if (localStorage.getItem('wh_app_ver') !== currentVer) {
         try {
           localStorage.clear();
@@ -43,8 +43,10 @@
 
 
 
-  <script type="module" crossorigin src="./assets/app-main.js?v=13.0.0"></script>
-  <link rel="stylesheet" crossorigin href="./assets/app-main.css?v=13.0.0">
+
+
+  <script type="module" crossorigin src="./assets/app-main-v14.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/app-main-v14.css">
 </head>
 <body class="bg-gray-950 text-gray-100 antialiased selection:bg-[var(--primary-color)] selection:text-black">
   <div id="root"></div>
