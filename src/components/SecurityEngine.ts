@@ -1,74 +1,42 @@
-import { audioEngine } from './AudioEngine';
+import { useEffect } from 'react';
 
-export class SecurityEngine {
-  public static SIGNATURE = 'TeamWhiteHat-PinoyUnknown';
-
-  public static initProtection() {
-    if (typeof window === 'undefined') return;
-
+export const useSecurityShield = () => {
+  useEffect(() => {
     // 1. Disable Right Click Context Menu
-    document.addEventListener('contextmenu', (e) => {
+    const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
-      audioEngine.playGlitch();
-      SecurityEngine.showSecurityWarning('RIGHT_CLICK_DISABLED');
-    });
+      return false;
+    };
 
-    // 2. Disable Key Shortcuts (F12, Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+S)
-    document.addEventListener('keydown', (e) => {
-      const isF12 = e.key === 'F12' || e.keyCode === 123;
-      const isCtrlU = (e.ctrlKey || e.metaKey) && (e.key === 'u' || e.key === 'U');
-      const isCtrlS = (e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S');
-      const isInspect = (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c');
-
-      if (isF12 || isCtrlU || isCtrlS || isInspect) {
+    // 2. Disable Keyboard Shortcuts (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U, Ctrl+S)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+        (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's')) ||
+        (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'i' || e.key === 'U' || e.key === 'u'))
+      ) {
         e.preventDefault();
-        e.stopPropagation();
-        audioEngine.playGlitch();
-        SecurityEngine.showSecurityWarning('INSPECT_SOURCE_BLOCKED');
+        return false;
       }
-    });
+    };
 
-    // 3. Anti-Debugger Loop Detection
-    setInterval(() => {
-      const startTime = performance.now();
-      try {
-        (function() { return false; })['constructor']('debugger')();
-      } catch(err){}
-      const endTime = performance.now();
-      if (endTime - startTime > 100) {
-        audioEngine.playGlitch();
-      }
-    }, 2000);
-  }
+    // 3. Disable Text Selection
+    const handleSelectStart = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
 
-  private static showSecurityWarning(type: string) {
-    const warning = document.createElement('div');
-    warning.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-950/90 border-2 border-red-500 text-white font-mono px-4 py-2 rounded shadow-[0_0_20px_rgba(255,0,0,0.8)] text-xs animate-bounce';
-    warning.innerHTML = `⚠️ ACCESS DENIED // ${type} // PROTOCOL: ${SecurityEngine.SIGNATURE}`;
-    document.body.appendChild(warning);
-    setTimeout(() => warning.remove(), 2500);
-  }
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('selectstart', handleSelectStart);
 
-  public static encryptPayload(data: string): string {
-    const key = SecurityEngine.SIGNATURE;
-    let result = '';
-    for (let i = 0; i < data.length; i++) {
-      result += String.fromCharCode(data.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-    }
-    return window.btoa(result);
-  }
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('selectstart', handleSelectStart);
+    };
+  }, []);
+};
 
-  public static decryptPayload(cipherText: string): string {
-    try {
-      const key = SecurityEngine.SIGNATURE;
-      const data = window.atob(cipherText);
-      let result = '';
-      for (let i = 0; i < data.length; i++) {
-        result += String.fromCharCode(data.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-      }
-      return result;
-    } catch (e) {
-      return cipherText;
-    }
-  }
-}
+export default useSecurityShield;

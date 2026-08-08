@@ -1,70 +1,105 @@
 import React, { useEffect, useRef } from 'react';
-import { useTheme } from './ThemeEngine';
 
 export const CyberBackground: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const { themeConfig } = useTheme();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
 
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
-    window.addEventListener('resize', handleResize);
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-    // Matrix Characters
-    const chars = 'ABCDEF0123456789$#@%&*+=<>?/';
-    const fontSize = 14;
-    const columns = Math.floor(width / fontSize);
-    const drops: number[] = new Array(columns).fill(1);
+    // Particle nodes for sci-fi mesh
+    const particles: { x: number; y: number; vx: number; vy: number; radius: number; alpha: number }[] = [];
+    const numParticles = Math.min(60, Math.floor(window.innerWidth / 25));
 
-    const render = () => {
-      // Semi-transparent dark background for matrix trail
-      ctx.fillStyle = 'rgba(13, 15, 24, 0.12)';
-      ctx.fillRect(0, 0, width, height);
+    for (let i = 0; i < numParticles; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 1.5 + 1,
+        alpha: Math.random() * 0.5 + 0.2
+      });
+    }
 
-      ctx.fillStyle = themeConfig.primary;
-      ctx.font = `${fontSize}px "Share Tech Mono", monospace`;
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (let i = 0; i < drops.length; i++) {
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-
-        ctx.fillText(text, x, y);
-
-        if (y > height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
+      // Draw subtle grid lines
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.03)';
+      ctx.lineWidth = 1;
+      const gridSize = 50;
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
       }
 
-      animationFrameId = requestAnimationFrame(render);
+      // Update & render particles
+      particles.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        ctx.fillStyle = `rgba(0, 240, 255, ${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Connect nearby particles
+        for (let j = idx + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 120) {
+            ctx.strokeStyle = `rgba(159, 239, 0, ${0.15 * (1 - dist / 120)})`;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(draw);
     };
 
-    render();
+    draw();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [themeConfig.primary]);
+  }, []);
 
   return (
-    <canvas 
-      ref={canvasRef} 
-      className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-25"
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-0 opacity-80"
     />
   );
 };
+
+export default CyberBackground;

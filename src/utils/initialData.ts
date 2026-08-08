@@ -1,11 +1,12 @@
+export const PLAY_STORE_URL = 'https://play.google.com/store/apps/dev?id=7374638355121114347';
+
 export interface Project {
   id: string;
   title: string;
-  category: 'web' | 'mobile' | 'security' | 'design' | 'automation';
+  category: 'web' | 'mobile' | 'security' | 'design';
   image: string;
   description: string;
   techStack: string[];
-  liveUrl?: string;
   metrics: string;
   featured: boolean;
 }
@@ -47,17 +48,17 @@ export const AFFILIATE_LINKS: AffiliateLink[] = [
     id: 'aff-1',
     title: 'DigitalOcean Cloud VPS & Kubernetes',
     category: 'Cloud Infrastructure',
-    description: 'Get $200 free cloud credits to deploy high-speed SSD VPS servers, Kubernetes clusters, and databases.',
+    description: 'Get $200 free cloud credits to deploy high-speed SSD VPS servers and Kubernetes clusters.',
     referralUrl: 'https://m.do.co/c/teamwhitehatdev',
     bannerImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
-    badge: 'EXCLUSIVE DEALS',
+    badge: 'CLOUD OFFER',
     discountText: '$200 FREE CREDITS 🎁'
   },
   {
     id: 'aff-2',
     title: 'NordVPN Cyber Shield & Threat Protection',
     category: 'Cybersecurity',
-    description: 'Military-grade encryption, malware protection, and IP masking for developers and remote teams.',
+    description: 'Military-grade encryption, malware protection, and IP masking for remote teams.',
     referralUrl: 'https://nordvpn.com/ref/teamwhitehatdev',
     bannerImage: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80',
     badge: 'SECURITY OFFER',
@@ -65,19 +66,19 @@ export const AFFILIATE_LINKS: AffiliateLink[] = [
   },
   {
     id: 'aff-3',
-    title: 'Envato Elements Unlimited UI/UX Assets',
+    title: 'Envato Elements Unlimited Assets',
     category: 'Graphics & Design',
-    description: 'Unlimited downloads of 3D renders, Figma templates, vector HUD assets, motion graphics, and stock photos.',
+    description: 'Unlimited downloads of 3D renders, Figma templates, vector HUD assets, and photos.',
     referralUrl: 'https://1.envato.market/teamwhitehatdev',
     bannerImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
-    badge: 'DESIGNER FAVORITE',
-    discountText: '50% OFF ANNUAL PASS 🎨'
+    badge: 'DESIGNER DEALS',
+    discountText: '50% OFF PASS 🎨'
   },
   {
     id: 'aff-4',
-    title: 'TradingView Pro Charting & Bot Signal Platform',
+    title: 'TradingView Pro Charting Platform',
     category: 'FinTech & Trading',
-    description: 'The world’s top technical analysis charts and WebSocket data feeds for crypto, stocks, and Forex traders.',
+    description: 'Top technical analysis charts and real-time data feeds for crypto, stocks, and Forex.',
     referralUrl: 'https://www.tradingview.com/?aff_id=teamwhitehatdev',
     bannerImage: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=600&q=80',
     badge: 'PRO TRADING',
@@ -91,8 +92,8 @@ export const PROJECTS: Project[] = [
     title: 'Nexus Enterprise SaaS Dashboard',
     category: 'web',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
-    description: 'Real-time financial analytics dashboard built with Next.js 15, React 19, TypeScript, and WebSockets.',
-    techStack: ['React 19', 'Next.js 15', 'TypeScript', 'TailwindCSS', 'WebSockets'],
+    description: 'Real-time web application analytics dashboard built with Next.js 15, React 19, TypeScript, and WebSockets.',
+    techStack: ['React 19', 'Next.js 15', 'TypeScript', 'TailwindCSS'],
     metrics: '10k req/sec • 99.99% Uptime',
     featured: true
   },
@@ -101,29 +102,19 @@ export const PROJECTS: Project[] = [
     title: 'Aegis Security Threat Sentinel',
     category: 'security',
     image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
-    description: 'Cybersecurity monitoring platform featuring automated IP threat detection, proxy auto-blocking, and PCI-DSS compliance.',
-    techStack: ['Node.js', 'Python', 'Redis', 'Docker', 'CyberShield Core'],
+    description: 'Cybersecurity monitoring platform featuring automated IP threat detection and proxy auto-blocking.',
+    techStack: ['Node.js', 'Python', 'Redis', 'Docker'],
     metrics: '400+ Attacks Blocked/Day',
     featured: true
   },
   {
     id: 'proj-3',
-    title: 'Valkyrie Mobile Crypto Wallet',
+    title: 'Valkyrie Mobile App Suite',
     category: 'mobile',
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-    description: 'Cross-platform iOS & Android cryptocurrency wallet app featuring biometric auth, token swaps, and multi-sig security.',
+    description: 'Cross-platform iOS & Android mobile application built with React Native and Published on Google Play.',
     techStack: ['React Native', 'TypeScript', 'iOS Swift', 'Android Kotlin'],
-    metrics: '50k+ Active Downloads',
-    featured: true
-  },
-  {
-    id: 'proj-4',
-    title: 'Cyberpunk Neon City 3D & Vector HUD Suite',
-    category: 'design',
-    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80',
-    description: 'High-resolution 3D cyberpunk renders, vector HUD overlays, and motion graphics design system for modern web apps.',
-    techStack: ['Blender 3D', 'Figma', 'Adobe Illustrator', 'Canvas API'],
-    metrics: 'Used by 50+ Top Brands',
+    metrics: '50k+ Downloads on Play Store',
     featured: true
   }
 ];
@@ -132,21 +123,21 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
   {
     id: '1',
     name: 'Marcus Vance',
-    role: 'CTO & Co-Founder',
+    role: 'CTO',
     company: 'Vance Dynamics',
     country: 'USA 🇺🇸',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-    content: 'Team White Hat built our entire high-frequency trading interface in 3 weeks flat. Zero latency, immaculate HUD design, and flawless code.',
+    content: 'Team White Hat built our web application in 3 weeks flat. Zero latency, immaculate HUD design, and flawless code.',
     rating: 5.0
   },
   {
     id: '2',
     name: 'Elena Rostova',
     role: 'Lead Security Engineer',
-    company: 'Nordic Cyber Shield',
+    company: 'Nordic Shield',
     country: 'Sweden 🇸🇪',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-    content: 'The anti-fraud security engineering and real-time IP threat monitoring saved our enterprise platform from over 400 proxy attacks in the first week.',
+    content: 'The anti-fraud security engineering and real-time IP threat monitoring saved our platform from proxy attacks.',
     rating: 4.8
   },
   {
@@ -156,29 +147,49 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
     company: 'NeoTokyo Interactive',
     country: 'Japan 🇯🇵',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
-    content: 'Exceptional cyberpunk aesthetic, graphic design skills, and ultra-clean React architecture. Fast delivery and zero bugs.',
+    content: 'Exceptional mobile application development and ultra-clean React architecture. Fast delivery and zero bugs.',
     rating: 5.0
   },
   {
     id: '4',
     name: 'Sarah Jenkins',
     role: 'E-Commerce Director',
-    company: 'Aura Digital Goods',
+    company: 'Aura Goods',
     country: 'UK 🇬🇧',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-    content: 'Very smooth mobile-responsive design. Clean minimal UI works perfectly across all iOS, Android, and Desktop devices.',
+    content: 'Very smooth mobile-responsive design. Clean minimal UI works perfectly across all iOS and Android devices.',
     rating: 4.5
+  },
+  {
+    id: '5',
+    name: 'David Miller',
+    role: 'VP Infrastructure',
+    company: 'CloudMatrix',
+    country: 'Canada 🇨🇦',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80',
+    content: 'The custom web software architecture made scaling our web application effortless. Highly recommended developer.',
+    rating: 5.0
+  },
+  {
+    id: '6',
+    name: 'Amelie Laurent',
+    role: 'Creative Director',
+    company: 'Lumiere Studios',
+    country: 'France 🇫🇷',
+    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80',
+    content: 'Beautiful translucent glassmorphic HUD components and lightning-fast page transition animations.',
+    rating: 4.9
   }
 ];
 
 export const SERVICES: ServiceItem[] = [
   {
     id: 'svc-1',
-    title: 'Programming & Full-Stack Web Development',
+    title: 'Web Application Development',
     category: 'Web Applications',
     icon: 'Code',
     description: 'Custom React 19, Next.js 15, and Node.js microservices engineered for extreme speed, SEO optimization, and high availability.',
-    features: ['Single Page Apps (SPA) & SSR', 'TypeScript Codebase', 'TailwindCSS / Glassmorphic UI', 'REST & GraphQL APIs'],
+    features: ['Single Page Apps (SPA) & SSR', 'TypeScript Codebase', 'TailwindCSS / Glassmorphic UI'],
     deliverables: 'Complete Source Code + Deployment'
   },
   {
@@ -186,26 +197,8 @@ export const SERVICES: ServiceItem[] = [
     title: 'Mobile Application Development',
     category: 'Mobile Apps',
     icon: 'Smartphone',
-    description: 'Native and cross-platform iOS & Android mobile applications built with React Native and Flutter for seamless user experiences.',
-    features: ['iOS & Android App Store Ready', 'Biometric & Push Notifications', 'Offline First Architecture', 'High Performance UI'],
+    description: 'Native and cross-platform iOS & Android mobile applications built with React Native & Published on Google Play.',
+    features: ['Google Play Store & iOS Ready', 'Biometric & Push Notifications', 'Offline First Architecture'],
     deliverables: 'App Store Build + Binary Packages'
-  },
-  {
-    id: 'svc-3',
-    title: 'Graphics Designing & UI/UX Asset Suites',
-    category: 'Design Engineering',
-    icon: 'Palette',
-    description: 'Futuristic glassmorphic HUD interfaces, 3D blender renders, logo branding suites, and responsive Figma design systems.',
-    features: ['Figma UI/UX Prototypes', '3D Product Renders', 'Vector HUD Asset Packs', 'Brand Identity Systems'],
-    deliverables: 'Source Figma Files + Vector Assets'
-  },
-  {
-    id: 'svc-4',
-    title: 'Cyber Security & Ethical Hacking',
-    category: 'Security Engineering',
-    icon: 'Shield',
-    description: 'Comprehensive web application penetration testing, IP threat monitoring, XSS/SQLi defense shielding, and PCI-DSS compliance audits.',
-    features: ['Web App Vulnerability Scans', 'Real-time IP Firewall Engine', 'Anti-Bot Protection', 'Secure Auth Systems'],
-    deliverables: 'Audit Report + Patched Codebase'
   }
 ];

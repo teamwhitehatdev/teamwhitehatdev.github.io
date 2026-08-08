@@ -1,166 +1,137 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Code, Palette, Smartphone, ArrowRight, ExternalLink, CheckCircle } from 'lucide-react';
+import { Shield, Code, Smartphone, ArrowRight, CheckCircle, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { HUDPanel } from '../components/HUDPanel';
 import { AffiliateBanners } from '../components/AffiliateBanners';
-import { INITIAL_TESTIMONIALS, PROJECTS, Testimonial } from '../utils/initialData';
+import { INITIAL_TESTIMONIALS, PROJECTS, PLAY_STORE_URL, Testimonial } from '../utils/initialData';
 
 interface HomeProps {
   onOpenConsultation: () => void;
 }
 
 export const HomePage: React.FC<HomeProps> = ({ onOpenConsultation }) => {
-  const [shuffledTestimonials, setShuffledTestimonials] = useState<Testimonial[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   useEffect(() => {
+    // Automatically shuffle testimonials on mount/refresh
     const array = [...INITIAL_TESTIMONIALS];
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
-    setShuffledTestimonials(array.slice(0, 4));
+    setTestimonials(array);
   }, []);
 
   return (
-    <div className="space-y-16">
-      {/* Hero Section */}
-      <section className="relative py-12 md:py-20 overflow-hidden">
-        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8 px-4">
-          <div className="inline-flex items-center space-x-2 bg-black/60 border border-[var(--primary-color)]/40 px-4 py-1.5 rounded-full text-xs font-mono text-[var(--primary-color)] backdrop-blur-md shadow-lg shadow-[var(--primary-color)]/10 animate-pulse">
-            <span className="w-2 h-2 rounded-full bg-[var(--primary-color)] inline-block"></span>
-            <span>TEAM WHITE HAT • THE LAZY 1337 DEVELOPER</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black font-rajdhani tracking-tight uppercase leading-tight text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
-            SENIOR FULL-STACK DEVELOPER, UI/UX DESIGNER & CYBERSECURITY ARCHITECT
-            <span className="block text-base sm:text-lg md:text-xl font-mono text-cyan-400 font-normal mt-4 lowercase">
-              (engineering high-performance web & mobile apps, stunning graphic designs, and bulletproof cyber defenses.)
-            </span>
-          </h1>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-            <Link
-              to="/showcase"
-              className="px-8 py-4 bg-gradient-to-r from-[var(--primary-color)] to-cyan-500 text-black font-extrabold rounded-lg font-rajdhani uppercase tracking-wider text-base shadow-xl shadow-[var(--primary-color)]/20 hover:scale-105 transition-all flex items-center space-x-2"
-            >
-              <span>EXPLORE PROJECTS & CASE STUDIES</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-
-            <button
-              onClick={onOpenConsultation}
-              className="px-8 py-4 bg-black/60 border border-gray-700 text-white font-bold rounded-lg font-rajdhani uppercase tracking-wider text-base hover:border-[var(--primary-color)] hover:text-[var(--primary-color)] transition-all backdrop-blur-md"
-            >
-              HIRE OUR TEAM
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* 4 Core Expertise Pillars */}
-      <section className="max-w-6xl mx-auto px-4">
-        <HUDPanel title="4 CORE EXPERTISE PILLARS">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-6">
-            <div className="bg-black/40 p-5 rounded-xl border border-gray-800 hover:border-[var(--primary-color)]/50 transition-all space-y-3">
-              <Code className="w-8 h-8 text-[var(--primary-color)]" />
-              <h3 className="text-lg font-bold font-rajdhani text-white">Programming & Web Dev</h3>
-              <p className="text-xs text-gray-400 font-mono">React 19, Next.js 15, TypeScript, Node.js, and Python microservices.</p>
+    <div className="space-y-12">
+      {/* 2-Column Grid Layout: Main Content (Left) + Affiliates Sidebar (Right) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        
+        {/* LEFT COLUMN: Main Hero & Content (2 Columns Wide on Desktop) */}
+        <div className="lg:col-span-2 space-y-10">
+          
+          {/* Hero Section */}
+          <section className="bg-black/40 border border-gray-800/80 rounded-2xl p-6 sm:p-8 space-y-6 relative overflow-hidden backdrop-blur-md">
+            <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full text-xs font-mono text-cyan-400">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+              <span>TEAM WHITE HAT • THE LAZY 1337 DEVELOPER</span>
             </div>
 
-            <div className="bg-black/40 p-5 rounded-xl border border-gray-800 hover:border-cyan-500/50 transition-all space-y-3">
-              <Smartphone className="w-8 h-8 text-cyan-400" />
-              <h3 className="text-lg font-bold font-rajdhani text-white">Mobile Ecosystems</h3>
-              <p className="text-xs text-gray-400 font-mono">Native & Cross-Platform iOS Swift, Android Kotlin, and React Native apps.</p>
+            <h1 className="text-3xl sm:text-5xl font-black font-rajdhani uppercase text-white tracking-tight leading-none">
+              WEB & APPLICATION DEVELOPER
+              <span className="block text-xs sm:text-sm font-mono text-cyan-400 font-normal mt-3 lowercase">
+                (Engineering high-performance web applications & mobile ecosystems.)
+              </span>
+            </h1>
+
+            <div className="flex flex-wrap gap-3 pt-2 font-mono">
+              <button
+                onClick={onOpenConsultation}
+                className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-lime-400 text-black font-bold font-rajdhani rounded-lg text-xs uppercase tracking-wider hover:opacity-90 transition-all flex items-center space-x-2 shadow-lg shadow-cyan-500/20"
+              >
+                <span>HIRE OUR TEAM</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <a
+                href={PLAY_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 bg-black/60 border border-gray-700 text-lime-400 font-bold rounded-lg text-xs uppercase hover:border-lime-400 transition-all flex items-center space-x-2"
+              >
+                <Smartphone className="w-4 h-4" />
+                <span>GOOGLE PLAY STORE LINK</span>
+              </a>
             </div>
+          </section>
 
-            <div className="bg-black/40 p-5 rounded-xl border border-gray-800 hover:border-lime-400/50 transition-all space-y-3">
-              <Palette className="w-8 h-8 text-lime-400" />
-              <h3 className="text-lg font-bold font-rajdhani text-white">Graphics Designing</h3>
-              <p className="text-xs text-gray-400 font-mono">Figma UI/UX, 3D Blender renders, vector HUD layouts, and branding assets.</p>
+          {/* Minimal 2-Services Overview */}
+          <HUDPanel title="CORE DEVELOPMENT CAPABILITIES">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 font-mono text-xs">
+              <div className="bg-black/50 p-4 rounded-xl border border-gray-800 space-y-2">
+                <Code className="w-6 h-6 text-cyan-400" />
+                <h3 className="text-base font-bold text-white font-rajdhani">Web Application Development</h3>
+                <p className="text-gray-400 leading-relaxed text-[11px]">React 19, Next.js 15, and Node.js microservices engineered for extreme performance.</p>
+              </div>
+
+              <div className="bg-black/50 p-4 rounded-xl border border-gray-800 space-y-2">
+                <Smartphone className="w-6 h-6 text-lime-400" />
+                <h3 className="text-base font-bold text-white font-rajdhani">Mobile Application Development</h3>
+                <p className="text-gray-400 leading-relaxed text-[11px]">Native & Cross-Platform iOS & Android applications published on Google Play.</p>
+              </div>
             </div>
+          </HUDPanel>
 
-            <div className="bg-black/40 p-5 rounded-xl border border-gray-800 hover:border-red-500/50 transition-all space-y-3">
-              <Shield className="w-8 h-8 text-red-400" />
-              <h3 className="text-lg font-bold font-rajdhani text-white">Cyber Security</h3>
-              <p className="text-xs text-gray-400 font-mono">Penetration testing, IP threat monitoring, XSS defense, and security audits.</p>
-            </div>
-          </div>
-        </HUDPanel>
-      </section>
-
-      {/* Affiliation & Partner Referral Banners */}
-      <section className="max-w-6xl mx-auto px-4">
-        <HUDPanel title="AFFILIATES & PARTNER REFERRAL HUB">
-          <div className="p-6">
-            <AffiliateBanners />
-          </div>
-        </HUDPanel>
-      </section>
-
-      {/* Featured Projects Showcase */}
-      <section className="max-w-6xl mx-auto px-4">
-        <HUDPanel title="FEATURED PROJECTS & CASE STUDIES">
-          <div className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {PROJECTS.map((p) => (
-                <div key={p.id} className="bg-black/50 border border-gray-800 rounded-xl overflow-hidden hover:border-[var(--primary-color)]/50 transition-all group flex flex-col justify-between">
-                  <div className="relative h-48 overflow-hidden">
-                    <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
-                    <div className="absolute top-3 left-3 bg-black/80 px-3 py-1 rounded text-xs font-mono text-cyan-400 border border-cyan-500/30">
-                      {p.metrics}
-                    </div>
+          {/* Featured Projects Grid */}
+          <HUDPanel title="FEATURED PROJECTS">
+            <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {PROJECTS.slice(0, 2).map((p) => (
+                <div key={p.id} className="bg-black/50 border border-gray-800 rounded-xl overflow-hidden space-y-3 p-4 hover:border-cyan-500/40 transition-all">
+                  <img src={p.image} alt={p.title} className="w-full h-36 object-cover rounded-lg border border-gray-800" />
+                  <div className="space-y-1">
+                    <h4 className="text-base font-bold text-white font-rajdhani">{p.title}</h4>
+                    <p className="text-[11px] text-gray-400 font-mono line-clamp-2">{p.description}</p>
                   </div>
+                </div>
+              ))}
+            </div>
+          </HUDPanel>
 
-                  <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
-                    <div className="space-y-2">
-                      <h4 className="text-lg font-bold text-white font-rajdhani">{p.title}</h4>
-                      <p className="text-xs text-gray-400 font-mono leading-relaxed">{p.description}</p>
-                    </div>
-
-                    <div className="space-y-3 pt-3 border-t border-gray-800">
-                      <div className="flex flex-wrap gap-1.5">
-                        {p.techStack.map((tech, idx) => (
-                          <span key={idx} className="text-[10px] font-mono px-2 py-0.5 rounded bg-gray-900 border border-gray-800 text-gray-300">
-                            {tech}
-                          </span>
-                        ))}
+          {/* Minimal Animated Randomized Testimonials Carousel */}
+          <HUDPanel title="RANDOMIZED CLIENT REVIEWS">
+            <div className="p-5 font-mono text-xs space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {testimonials.slice(0, 4).map((t) => (
+                  <div key={t.id} className="bg-black/50 p-4 rounded-xl border border-gray-800/80 space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full border border-cyan-500/40 object-cover shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <h5 className="text-sm font-bold text-white font-rajdhani truncate">{t.name}</h5>
+                        <p className="text-[10px] text-gray-400 truncate">{t.role} • {t.company}</p>
                       </div>
+                      <span className="text-[10px] text-amber-400 shrink-0 font-bold">[ {(t.rating || 5.0).toFixed(1)} ★ ]</span>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </HUDPanel>
-      </section>
 
-      {/* Testimonials */}
-      <section className="max-w-6xl mx-auto px-4">
-        <HUDPanel title="CLIENT REVIEWS & VERIFIED TESTIMONIALS">
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {shuffledTestimonials.map((t) => (
-                <div key={t.id} className="bg-black/50 p-6 rounded-xl border border-gray-800 space-y-4">
-                  <div className="flex items-center space-x-4">
-                    <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full border border-cyan-500/40 object-cover" />
-                    <div className="flex-1">
-                      <h4 className="text-base font-bold text-white font-rajdhani">{t.name}</h4>
-                      <p className="text-xs text-gray-400 font-mono">{t.role} • {t.company}</p>
-                    </div>
-                    <div className="text-amber-400 font-mono text-xs bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20">
-                      [ {(t.rating || 5.0).toFixed(1)} / 5.0 ★ ]
-                    </div>
+                    <p className="text-[11px] text-gray-300 italic leading-relaxed">
+                      "{t.content}"
+                    </p>
                   </div>
-
-                  <p className="text-sm text-gray-300 font-mono italic leading-relaxed">
-                    "{t.content}"
-                  </p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </HUDPanel>
-      </section>
+          </HUDPanel>
+        </div>
+
+        {/* RIGHT COLUMN: AFFILIATES & PARTNER REFERRAL HUB (1 Column Wide) */}
+        <div className="lg:col-span-1 sticky top-20">
+          <HUDPanel title="AFFILIATE REFERRAL HUB">
+            <div className="p-4">
+              <AffiliateBanners />
+            </div>
+          </HUDPanel>
+        </div>
+
+      </div>
     </div>
   );
 };
