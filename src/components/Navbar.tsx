@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shield, Code, Layers, Mail, Briefcase, Grid } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 interface NavbarProps {
   onOpenConsultation: () => void;
@@ -22,7 +22,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="w-9 h-9 rounded-lg bg-black border border-[var(--primary-color)]/50 flex items-center justify-center text-[var(--primary-color)] group-hover:scale-105 transition-all shadow-md shadow-[var(--primary-color)]/10">
               <Shield className="w-5 h-5" />
@@ -35,7 +34,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             </div>
           </Link>
 
-          {/* Real User IP & Financial Ticker */}
           <div className="hidden md:flex items-center space-x-3 text-xs font-mono bg-black/60 px-3 py-1.5 rounded-lg border border-lime-500/30 text-lime-400 max-w-sm overflow-hidden">
             <span className="flex items-center space-x-1 shrink-0 text-cyan-400">
               <span className="w-2 h-2 rounded-full bg-lime-400 animate-ping inline-block mr-1"></span>
@@ -50,8 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             </div>
           </div>
 
-          {/* Navigation Links */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-5">
             <Link
               to="/"
               className={`text-xs font-mono uppercase tracking-wider transition-colors ${
@@ -76,7 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                 location.pathname === '/services' ? 'text-[var(--primary-color)] font-bold' : 'text-gray-400 hover:text-white'
               }`}
             >
-              SERVICES & STACK
+              SERVICES
             </Link>
 
             <button
