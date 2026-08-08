@@ -135,7 +135,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
                 className="w-full py-3 bg-gradient-to-r from-cyan-500 to-lime-500 text-black font-bold font-rajdhani rounded-lg text-sm tracking-wider uppercase hover:opacity-90 transition-all flex items-center justify-center space-x-2 shadow-lg shadow-cyan-500/20"
               >
                 <Send className="w-4 h-4" />
-                <span>SUBMIT INQUIRY TO SENIOR ARCHITECT</span>
+                <span>SUBMIT INQUIRY TO LEAD DEVELOPER</span>
               </button>
             </form>
           </>
