@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { HUDPanel } from '../components/HUDPanel';
+import { AffiliateBanners } from '../components/AffiliateBanners';
 import { Shield, Sparkles, Rocket, Server, Smartphone, ExternalLink } from 'lucide-react';
 import { PLAY_STORE_URL } from '../utils/initialData';
 
@@ -53,6 +54,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
 
       {/* 2-COLUMN MAIN CONTENT */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* LEFT COLUMN: CORE VA & DIGITAL SERVICES */}
         <div className="lg:col-span-2 space-y-8">
           <HUDPanel title="CORE VIRTUAL ASSISTANT & DIGITAL SERVICES">
             <div className="p-6 space-y-6">
@@ -101,7 +104,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
           </HUDPanel>
         </div>
 
-        {/* RIGHT COLUMN */}
+        {/* RIGHT COLUMN: FREE WEBHOSTING WITH BANNER IMAGE */}
         <div className="space-y-8">
           <HUDPanel title="FREE WEBHOSTING & HOSTINGER CLOUD DEALS">
             <div className="p-5 space-y-4">
@@ -110,6 +113,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                   <Server className="w-4 h-4 text-lime-400" />
                   <span>RECOMMENDED FOR VAs & DEVELOPERS</span>
                 </span>
+                
+                <div className="rounded-xl overflow-hidden border border-lime-400/40">
+                  <img src="./media_1786586391503.png" alt="Hostinger Web Hosting Banner" className="w-full h-28 object-cover" />
+                </div>
+
                 <h3 className="text-sm font-black font-rajdhani text-white uppercase">HOSTINGER CLOUD & VPS HOSTING</h3>
                 <p className="text-xs text-gray-300 font-sans leading-relaxed">
                   Get up to 75% OFF + Free Domain + Unlimited Free SSL Certificates.
@@ -129,7 +137,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
             </div>
           </HUDPanel>
         </div>
+
       </div>
+
+      {/* FULL REFERRAL BANNERS GRID AT BOTTOM */}
+      <AffiliateBanners />
+
     </div>
   );
 };
