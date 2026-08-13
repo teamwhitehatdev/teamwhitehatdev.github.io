@@ -18,9 +18,15 @@ export const CyberBackground: React.FC = () => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Particle nodes for sci-fi mesh
+    // MATRIX RAIN SETUP
+    const chars = '0123456789ABCDEF01010101XYZ#$@%&*+=-<>~ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ';
+    const fontSize = 14;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops: number[] = new Array(columns).fill(1).map(() => Math.floor(Math.random() * -100));
+
+    // PARTICLE MESH SETUP
     const particles: { x: number; y: number; vx: number; vy: number; radius: number; alpha: number }[] = [];
-    const numParticles = Math.min(60, Math.floor(window.innerWidth / 25));
+    const numParticles = Math.min(50, Math.floor(canvas.width / 30));
 
     for (let i = 0; i < numParticles; i++) {
       particles.push({
@@ -33,13 +39,54 @@ export const CyberBackground: React.FC = () => {
       });
     }
 
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let frameCount = 0;
 
-      // Draw subtle grid lines
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.03)';
+    const draw = () => {
+      frameCount++;
+
+      // Semi-transparent background fade for Matrix trail effect
+      ctx.fillStyle = 'rgba(5, 7, 15, 0.15)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 1. DRAW MATRIX DIGITAL RAIN
+      ctx.font = `${fontSize}px "Share Tech Mono", monospace`;
+      
+      for (let i = 0; i < drops.length; i++) {
+        // Random Matrix Character
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        // Lead character is bright white / lime, trailing characters are neon cyan / green
+        if (Math.random() > 0.85) {
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = '#00f0ff';
+          ctx.shadowBlur = 8;
+        } else if (i % 3 === 0) {
+          ctx.fillStyle = '#a3e635'; // Neon Lime
+          ctx.shadowColor = '#a3e635';
+          ctx.shadowBlur = 4;
+        } else {
+          ctx.fillStyle = '#00f0ff'; // Cyber Cyan
+          ctx.shadowBlur = 0;
+        }
+
+        ctx.fillText(text, x, y);
+
+        // Reset drop after reaching canvas height with random delay
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+
+      // Reset shadow blur after Matrix Rain
+      ctx.shadowBlur = 0;
+
+      // 2. DRAW CYBER GRID LINES
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.04)';
       ctx.lineWidth = 1;
-      const gridSize = 50;
+      const gridSize = 60;
       for (let x = 0; x < canvas.width; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -53,7 +100,7 @@ export const CyberBackground: React.FC = () => {
         ctx.stroke();
       }
 
-      // Update & render particles
+      // 3. DRAW PARTICLES AND CONSTELLATION LINES
       particles.forEach((p, idx) => {
         p.x += p.vx;
         p.y += p.vy;
@@ -61,12 +108,11 @@ export const CyberBackground: React.FC = () => {
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        ctx.fillStyle = `rgba(0, 240, 255, ${p.alpha})`;
+        ctx.fillStyle = `rgba(163, 230, 53, ${p.alpha})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Connect nearby particles
         for (let j = idx + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
@@ -74,7 +120,7 @@ export const CyberBackground: React.FC = () => {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < 120) {
-            ctx.strokeStyle = `rgba(159, 239, 0, ${0.15 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(0, 240, 255, ${0.12 * (1 - dist / 120)})`;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
