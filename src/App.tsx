@@ -1,21 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar.tsx';
-import { Footer } from './components/Footer.tsx';
-import HomePage from './pages/HomePage.tsx';
-import { Showcase } from './pages/Showcase.tsx';
-import { Services } from './pages/Services.tsx';
-import { ConsultationModal } from './components/ConsultationModal.tsx';
-import { PlayStoreModal } from './components/PlayStoreModal.tsx';
-import { CyberBackground } from './components/CyberBackground.tsx';
-import { useSecurityShield } from './components/SecurityEngine.ts';
-import ThemeEngine from './components/ThemeEngine.tsx';
+import Navbar from './components/Navbar';
+import { StockTicker } from './components/StockTicker';
+import { Footer } from './components/Footer';
+import HomePage from './pages/HomePage';
+import { About } from './pages/About';
+import { WebHosting } from './pages/WebHosting';
+import { Showcase } from './pages/Showcase';
+import { Services } from './pages/Services';
+import { Admin } from './pages/Admin';
+import { ConsultationModal } from './components/ConsultationModal';
+import { PlayStoreModal } from './components/PlayStoreModal';
+import { GumroadModal } from './components/GumroadModal';
+import { ElevenLabsModal } from './components/ElevenLabsModal';
+import { StickyConversionBar } from './components/StickyConversionBar';
+import { LiveActivityTicker } from './components/LiveActivityTicker';
+import { CyberBackground } from './components/CyberBackground';
+import { BannedOverlay } from './components/BannedOverlay';
+import { useSecurityShield } from './components/SecurityEngine';
+import ThemeEngine from './components/ThemeEngine';
+import { AppProvider, useApp } from './context/AppContext';
 
-export function App() {
+export function AppContent() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<string | undefined>(undefined);
+  
+  const [showGumroadModal, setShowGumroadModal] = useState(false);
+  const [showElevenLabsModal, setShowElevenLabsModal] = useState(false);
 
-  // Enable Source Code Anti-Inspect Protection
+  const { userIp, bannedIps } = useApp();
+
   useSecurityShield();
+
+  useEffect(() => {
+    const flashGumroad = Math.random() < 0.60;
+    if (flashGumroad) {
+      setShowGumroadModal(true);
+      setShowElevenLabsModal(false);
+    } else {
+      setShowGumroadModal(false);
+      const timer = setTimeout(() => {
+        setShowElevenLabsModal(true);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleOpenConsultation = (serviceTitle?: string) => {
+    setSelectedService(serviceTitle);
+    setIsConsultationOpen(true);
+  };
+
+  const handleGumroadComplete = () => {
+    setShowGumroadModal(false);
+    setShowElevenLabsModal(true);
+  };
+
+  if (userIp && bannedIps.includes(userIp)) {
+    return <BannedOverlay userIp={userIp} />;
+  }
 
   return (
     <Router>
@@ -24,24 +67,46 @@ export function App() {
           <CyberBackground />
           
           <div className="relative z-10 flex flex-col min-h-screen">
-            <Navbar onOpenConsultation={() => setIsConsultationOpen(true)} />
+            <Navbar onOpenConsultation={() => handleOpenConsultation()} />
+            <StockTicker />
             
             <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
               <Routes>
-                <Route path="/" element={<HomePage onOpenConsultation={() => setIsConsultationOpen(true)} />} />
+                <Route path="/" element={<HomePage onOpenConsultation={(svc) => handleOpenConsultation(svc)} />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/web-hosting" element={<WebHosting />} />
                 <Route path="/showcase" element={<Showcase />} />
-                <Route path="/services" element={<Services />} />
+                <Route path="/services" element={<Services onOpenConsultation={(svc) => handleOpenConsultation(svc)} />} />
+                <Route path="/admin" element={<Admin />} />
               </Routes>
             </main>
 
             <Footer />
           </div>
 
-          <ConsultationModal isOpen={isConsultationOpen} onClose={() => setIsConsultationOpen(false)} />
+          <ConsultationModal
+            isOpen={isConsultationOpen}
+            onClose={() => setIsConsultationOpen(false)}
+            selectedService={selectedService}
+          />
+          
+          {showGumroadModal && <GumroadModal onComplete={handleGumroadComplete} />}
+          {showElevenLabsModal && <ElevenLabsModal isOpen={showElevenLabsModal} onClose={() => setShowElevenLabsModal(false)} />}
+          
+          <StickyConversionBar onOpenConsultation={() => handleOpenConsultation()} />
+          <LiveActivityTicker />
           <PlayStoreModal />
         </div>
       </ThemeEngine>
     </Router>
+  );
+}
+
+export function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }
 

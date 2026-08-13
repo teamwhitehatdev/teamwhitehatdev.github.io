@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shield, Smartphone, Lock } from 'lucide-react';
+import { Smartphone, ExternalLink, Menu, X, Info, Home, Briefcase, Rocket, Server } from 'lucide-react';
 import { PLAY_STORE_URL } from '../utils/initialData';
 
 interface NavbarProps {
@@ -8,90 +8,174 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
-  const [userIp, setUserIp] = useState('Fetching IP...');
   const location = useLocation();
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  useEffect(() => {
-    fetch('https://api.ipify.org?format=json')
-      .then(res => res.json())
-      .then(data => setUserIp(data.ip))
-      .catch(() => setUserIp('185.220.101.4'));
-  }, []);
+  const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800 font-mono">
+    <nav className="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-cyan-500/30 font-mono">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group shrink-0">
+          {/* BRAND LOGO & SUB-TEXT */}
+          <Link to="/" className="flex items-center space-x-3 group flex-shrink-0">
             <img
               src="./logo.png"
-              alt="Team White Hat Dev Logo"
-              className="w-10 h-10 rounded-xl border border-cyan-500/50 object-cover group-hover:scale-105 transition-all shadow-md shadow-cyan-500/30"
+              alt="White Hat Dev Logo"
+              className="w-9 h-9 rounded-full object-cover border-2 border-cyan-400 group-hover:scale-105 transition-transform"
+              draggable="false"
             />
             <div>
-              <span className="text-base font-black font-rajdhani text-white tracking-wider uppercase block">
-                WHITE HAT <span className="text-cyan-400">DEV</span>
+              <span className="text-base font-extrabold font-rajdhani text-white group-hover:text-cyan-400 transition-colors uppercase tracking-wider block leading-none">
+                TEAM WHITEHAT DEV
               </span>
-              <span className="text-[10px] text-gray-400 block -mt-1">PROFESSIONAL VIRTUAL ASSISTANT</span>
+              <span className="text-[10px] text-lime-400 font-bold block leading-tight pt-0.5">
+                — Learn. Create. Develop. Assist. Grow.
+              </span>
             </div>
           </Link>
 
-          {/* Telemetry: IP + Security Level + Financial Ticker */}
-          <div className="hidden lg:flex items-center space-x-3 text-xs bg-black/60 px-3 py-1.5 rounded-lg border border-gray-800 text-lime-400 max-w-xl overflow-hidden">
-            <span className="flex items-center space-x-1 shrink-0 text-cyan-400 font-bold">
-              <span className="w-2 h-2 rounded-full bg-lime-400 animate-ping inline-block mr-1"></span>
-              <span>IP: {userIp}</span>
-            </span>
-
-            <span className="text-gray-700">|</span>
-
-            <span className="text-[11px] text-lime-400 font-bold shrink-0">
-              SECURITY_LEVEL: MAXIMUM • SSL_ENCRYPTED_256
-            </span>
-
-            <span className="text-gray-700">|</span>
-
-            <div className="whitespace-nowrap animate-marquee flex space-x-3 text-[11px] text-gray-300">
-              <span className="text-lime-400 font-bold">BTC $96,420 ▲</span>
-              <span>USD/PHP ₱58.50</span>
-              <span>USD/JPY ¥154.20</span>
-              <span>USD/CNY ¥7.24</span>
-              <span>USD/HKD $7.82</span>
-            </div>
-          </div>
-
-          {/* Nav Links & Google Play Link */}
-          <div className="flex items-center space-x-4 shrink-0">
+          {/* DESKTOP NAV PANEL ORDER: HOME | SERVICES | WEB HOSTING | SHOWCASE | ABOUT | GOOGLE PLAY | HIRE VA */}
+          <div className="hidden md:flex items-center space-x-5 lg:space-x-7">
             <Link
               to="/"
-              className={`text-xs uppercase tracking-wider transition-colors ${
-                location.pathname === '/' ? 'text-cyan-400 font-bold' : 'text-gray-400 hover:text-white'
+              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-cyan-400 transition-colors ${
+                isActive('/') ? 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1' : 'text-gray-300'
               }`}
             >
-              HOME
+              <Home className="w-3.5 h-3.5 text-cyan-400" />
+              <span>HOME</span>
+            </Link>
+
+            <Link
+              to="/services"
+              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-cyan-400 transition-colors ${
+                isActive('/services') ? 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1' : 'text-gray-300'
+              }`}
+            >
+              <Briefcase className="w-3.5 h-3.5 text-cyan-400" />
+              <span>SERVICES</span>
+            </Link>
+
+            <Link
+              to="/web-hosting"
+              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-lime-400 transition-colors ${
+                isActive('/web-hosting') ? 'text-lime-400 font-bold border-b-2 border-lime-400 pb-1' : 'text-lime-300 font-semibold'
+              }`}
+            >
+              <Server className="w-3.5 h-3.5 text-lime-400" />
+              <span>WEB HOSTING</span>
+            </Link>
+
+            <Link
+              to="/showcase"
+              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-cyan-400 transition-colors ${
+                isActive('/showcase') ? 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1' : 'text-gray-300'
+              }`}
+            >
+              <Rocket className="w-3.5 h-3.5 text-cyan-400" />
+              <span>SHOWCASE</span>
+            </Link>
+
+            <Link
+              to="/about"
+              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-cyan-400 transition-colors ${
+                isActive('/about') ? 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1' : 'text-gray-300'
+              }`}
+            >
+              <Info className="w-3.5 h-3.5 text-cyan-400" />
+              <span>ABOUT</span>
             </Link>
 
             <a
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs uppercase tracking-wider text-lime-400 hover:text-lime-300 flex items-center space-x-1 font-bold bg-lime-400/10 px-2.5 py-1 rounded border border-lime-400/30"
+              className="text-xs uppercase tracking-wider text-lime-400 hover:text-lime-300 flex items-center space-x-1 font-bold"
             >
-              <Smartphone className="w-3.5 h-3.5" />
-              <span>GOOGLE PLAY STORE</span>
+              <Smartphone className="w-3.5 h-3.5 text-lime-400" />
+              <span>GOOGLE PLAY</span>
+              <ExternalLink className="w-3 h-3" />
             </a>
 
             <button
               onClick={onOpenConsultation}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-cyan-500 to-lime-400 text-black font-bold font-rajdhani rounded-lg text-xs uppercase tracking-wider hover:opacity-90 transition-all shadow-md shadow-cyan-500/20"
+              className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-lime-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl hover:opacity-90 transition-all shadow-md shadow-cyan-500/20 flex-shrink-0"
             >
-              HIRE VA
+              HIRE VA (20% OFF)
             </button>
           </div>
+
+          {/* MOBILE MENU TRIGGER */}
+          <div className="md:hidden flex items-center space-x-2">
+            <button
+              onClick={() => setIsMobileOpen(!isMobileOpen)}
+              className="p-2 text-gray-300 hover:text-white bg-gray-900 border border-gray-800 rounded-xl"
+            >
+              {isMobileOpen ? <X className="w-6 h-6 text-cyan-400" /> : <Menu className="w-6 h-6 text-cyan-400" />}
+            </button>
+          </div>
+
         </div>
       </div>
+
+      {/* MOBILE DROPDOWN */}
+      {isMobileOpen && (
+        <div className="md:hidden bg-black/95 border-b border-cyan-500/30 px-4 pt-3 pb-5 space-y-3 font-mono text-xs animate-fadeIn">
+          <Link
+            to="/"
+            onClick={() => setIsMobileOpen(false)}
+            className={`block py-2.5 px-3 rounded-xl border ${isActive('/') ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 font-bold' : 'border-gray-800 text-gray-300'}`}
+          >
+            🏠 HOME (VA ACCELERATOR & MASTERCLASS)
+          </Link>
+          <Link
+            to="/services"
+            onClick={() => setIsMobileOpen(false)}
+            className={`block py-2.5 px-3 rounded-xl border ${isActive('/services') ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 font-bold' : 'border-gray-800 text-gray-300'}`}
+          >
+            🛠️ SERVICES (VA & FULL-STACK DEV)
+          </Link>
+          <Link
+            to="/web-hosting"
+            onClick={() => setIsMobileOpen(false)}
+            className={`block py-2.5 px-3 rounded-xl border ${isActive('/web-hosting') ? 'bg-lime-500/20 border-lime-400 text-lime-400 font-bold' : 'border-gray-800 text-lime-300 font-bold'}`}
+          >
+            🌐 WEB HOSTING (HOSTINGER CLOUD DEALS)
+          </Link>
+          <Link
+            to="/showcase"
+            onClick={() => setIsMobileOpen(false)}
+            className={`block py-2.5 px-3 rounded-xl border ${isActive('/showcase') ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 font-bold' : 'border-gray-800 text-gray-300'}`}
+          >
+            🚀 SHOWCASE (FEATURED PROJECTS)
+          </Link>
+          <Link
+            to="/about"
+            onClick={() => setIsMobileOpen(false)}
+            className={`block py-2.5 px-3 rounded-xl border ${isActive('/about') ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 font-bold' : 'border-gray-800 text-gray-300'}`}
+          >
+            ℹ️ ABOUT (OUR VISION & DIGITAL HUB)
+          </Link>
+          <a
+            href={PLAY_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMobileOpen(false)}
+            className="block py-2.5 px-3 rounded-xl border border-lime-500/40 text-lime-400 font-bold flex items-center justify-between"
+          >
+            <span>📱 GOOGLE PLAY STORE APPS</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
+          <button
+            onClick={() => { setIsMobileOpen(false); onOpenConsultation(); }}
+            className="w-full py-3 bg-gradient-to-r from-cyan-500 to-lime-400 text-black font-extrabold text-xs uppercase rounded-xl shadow-lg"
+          >
+            HIRE VA CONSULTATION (20% OFF)
+          </button>
+        </div>
+      )}
     </nav>
   );
 };
