@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { HUDPanel } from '../components/HUDPanel';
-import { Shield, Sparkles, Terminal, Code, Cpu, Globe, Rocket, Award, Users, CheckCircle, ExternalLink, Server, Smartphone } from 'lucide-react';
+import { Shield, Sparkles, Rocket, Server, Smartphone, ExternalLink } from 'lucide-react';
 import { PLAY_STORE_URL } from '../utils/initialData';
 
 interface HomePageProps {
@@ -51,10 +51,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         </div>
       </div>
 
-      {/* 2-COLUMN MAIN CONTENT: LEFT COLUMN SERVICES / RIGHT COLUMN HOSTINGER & GOOGLE PLAY */}
+      {/* 2-COLUMN MAIN CONTENT */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* LEFT COLUMN: CORE VA & DIGITAL SERVICES (2 COLS WIDE) */}
         <div className="lg:col-span-2 space-y-8">
           <HUDPanel title="CORE VIRTUAL ASSISTANT & DIGITAL SERVICES">
             <div className="p-6 space-y-6">
@@ -63,19 +61,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                   { title: 'Executive Virtual Assistance', desc: 'Administrative support, inbox management, client scheduling, CRM data entry, and executive correspondence.', price: '$15 / hr' },
                   { title: 'Full-Stack Web Development', desc: 'Custom responsive web applications built with React, TypeScript, Next.js, and Node.js backend systems.', price: '$499 / project' },
                   { title: 'Mobile App Development', desc: 'Cross-platform Android & iOS applications published directly to Google Play Store and App Store.', price: '$799 / project' },
-                  { title: 'Graphic Design & Branding', desc: 'Professional social media graphics, corporate brand logos, UI/UX mockups, and marketing collaterals.', price: '$250 / brand' },
-                  { title: 'SEO & Digital Marketing', desc: 'Search engine optimization, lead generation campaigns, automated email marketing, and analytics tracking.', price: '$350 / month' },
-                  { title: 'Cybersecurity & IP Protection', desc: 'AES-256 website security audits, firewall rule configuration, anti-bot protection, and data privacy.', price: '$299 / audit' }
+                  { title: 'Graphic Design & Branding', desc: 'Professional social media graphics, corporate brand logos, UI/UX mockups, and marketing collaterals.', price: '$250 / brand' }
                 ].map((svc, idx) => (
                   <div key={idx} className="bg-black/80 border border-gray-800 p-4 rounded-2xl space-y-2 hover:border-cyan-500/50 transition-all">
                     <h4 className="text-sm font-bold text-white font-rajdhani uppercase">{svc.title}</h4>
                     <p className="text-xs text-gray-400 font-sans leading-relaxed">{svc.desc}</p>
                     <div className="flex justify-between items-center pt-2 text-xs font-mono">
                       <span className="text-lime-400 font-bold">{svc.price}</span>
-                      <button
-                        onClick={() => onOpenConsultation(svc.title)}
-                        className="text-cyan-400 hover:underline font-bold"
-                      >
+                      <button onClick={() => onOpenConsultation(svc.title)} className="text-cyan-400 hover:underline font-bold">
                         BOOK NOW &rarr;
                       </button>
                     </div>
@@ -85,15 +78,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
             </div>
           </HUDPanel>
 
-          {/* SLOW 150S CLIENT REVIEWS & VERIFIED TESTIMONIALS */}
+          {/* SLOW 150S CLIENT REVIEWS */}
           <HUDPanel title="CLIENT REVIEWS & VERIFIED TESTIMONIALS">
             <div className="p-6 overflow-hidden">
               <div className="flex space-x-6 animate-marqueeSlow whitespace-nowrap hover:[animation-play-state:paused]">
                 {[
                   { name: 'Sarah L.', role: 'E-commerce CEO', text: 'Team WhiteHat Dev provided exceptional Virtual Assistant support. Highly recommended!' },
                   { name: 'Michael K.', role: 'Tech Founder', text: 'Outstanding web development speed and clean TypeScript code. The web hosting setup was seamless.' },
-                  { name: 'David R.', role: 'Agency Owner', text: 'Top-tier executive VA support! Saved our team over 30 hours per week.' },
-                  { name: 'Elena M.', role: 'Digital Marketer', text: 'Reliable, professional, and ultra-fast turnaround times. 10/10 service.' }
+                  { name: 'David R.', role: 'Agency Owner', text: 'Top-tier executive VA support! Saved our team over 30 hours per week.' }
                 ].map((rev, idx) => (
                   <div key={idx} className="inline-block w-80 bg-black/80 border border-gray-800 p-4 rounded-2xl space-y-2 flex-shrink-0">
                     <div className="flex items-center space-x-2">
@@ -109,10 +101,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
           </HUDPanel>
         </div>
 
-        {/* RIGHT COLUMN: FREE WEBHOSTING CARD & GOOGLE PLAY STORE */}
+        {/* RIGHT COLUMN */}
         <div className="space-y-8">
-          
-          {/* FREE WEBHOSTING & HOSTINGER CARD */}
           <HUDPanel title="FREE WEBHOSTING & HOSTINGER CLOUD DEALS">
             <div className="p-5 space-y-4">
               <div className="bg-gradient-to-r from-lime-950/80 to-cyan-950/80 border border-lime-400/50 p-4 rounded-2xl space-y-3">
@@ -120,70 +110,27 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                   <Server className="w-4 h-4 text-lime-400" />
                   <span>RECOMMENDED FOR VAs & DEVELOPERS</span>
                 </span>
-
-                <h3 className="text-sm font-black font-rajdhani text-white uppercase">
-                  HOSTINGER CLOUD & VPS HOSTING
-                </h3>
-
+                <h3 className="text-sm font-black font-rajdhani text-white uppercase">HOSTINGER CLOUD & VPS HOSTING</h3>
                 <p className="text-xs text-gray-300 font-sans leading-relaxed">
-                  Get up to 75% OFF + Free Domain + Unlimited Free SSL Certificates. Essential for Virtual Assistants building client portfolio websites.
+                  Get up to 75% OFF + Free Domain + Unlimited Free SSL Certificates.
                 </p>
-
                 <p className="text-xs text-lime-300 font-mono font-bold bg-black/60 p-2 rounded-lg border border-lime-500/30">
                   Referral Code: <span className="underline text-white">DPDCABINCEHM</span>
                 </p>
-
-                <div className="pt-1 space-y-2">
-                  <a
-                    href={HOSTINGER_LINK}
-                    target="_blank"
-                    rel="sponsored noopener noreferrer"
-                    className="block w-full py-2.5 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all"
-                  >
-                    REGISTER ON HOSTINGER NOW &rarr;
-                  </a>
-
-                  <Link
-                    to="/web-hosting"
-                    className="block w-full py-2.5 bg-black border border-gray-800 text-cyan-400 font-bold text-xs uppercase rounded-xl text-center hover:border-cyan-500/50 transition-all"
-                  >
-                    LEARN MORE ABOUT WEB HOSTING &rarr;
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </HUDPanel>
-
-          {/* GOOGLE PLAY STORE APPS */}
-          <HUDPanel title="OFFICIAL GOOGLE PLAY STORE APPS">
-            <div className="p-5 space-y-4">
-              <div className="bg-black/80 border border-gray-800 p-4 rounded-2xl space-y-3">
-                <div className="flex items-center space-x-2 text-lime-400 font-bold text-xs">
-                  <Smartphone className="w-4 h-4 text-lime-400" />
-                  <span>PUBLISHED ANDROID APPS</span>
-                </div>
-                <p className="text-xs text-gray-300 font-sans">
-                  Explore our collection of published mobile applications and tools on Google Play Store.
-                </p>
                 <a
-                  href={PLAY_STORE_URL}
+                  href={HOSTINGER_LINK}
                   target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full py-2.5 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-1"
+                  rel="sponsored noopener noreferrer"
+                  className="block w-full py-2.5 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold text-xs uppercase rounded-xl text-center shadow-lg"
                 >
-                  <span>VIEW GOOGLE PLAY DEVELOPER PAGE</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  REGISTER ON HOSTINGER NOW &rarr;
                 </a>
               </div>
             </div>
           </HUDPanel>
-
         </div>
-
       </div>
-
     </div>
   );
 };
-
 export default HomePage;
