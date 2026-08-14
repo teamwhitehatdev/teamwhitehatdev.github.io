@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, ExternalLink, Heart, Server, ShoppingBag, Mic, Smartphone } from 'lucide-react';
+import { Shield, Server, ShoppingBag, Mic, Smartphone } from 'lucide-react';
+import { HOSTINGER_LINK, GUMROAD_LINK, ELEVENLABS_LINK, PLAY_STORE_URL } from '../utils/constants';
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -9,10 +10,8 @@ export const Footer: React.FC = () => {
     <footer className="bg-black/95 border-t-2 border-cyan-500/40 text-gray-400 font-mono relative z-20 mt-16 pt-10 pb-16 sm:pb-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto space-y-8">
         
-        {/* TOP BRANDING & GRID LINKS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           
-          {/* COL 1: LOGO & TAGLINE */}
           <div className="space-y-3 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start space-x-2.5">
               <img src="./favicon.png" alt="Team WhiteHat Dev Logo" className="w-8 h-8 rounded-full border border-cyan-400 object-cover" />
@@ -28,41 +27,19 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* COL 2: QUICK NAVIGATION */}
           <div className="space-y-2 text-center sm:text-left">
             <h4 className="text-xs font-bold text-cyan-300 uppercase tracking-wider border-b border-gray-800 pb-1">
               QUICK NAVIGATION
             </h4>
             <ul className="space-y-1.5 text-xs">
-              <li>
-                <Link to="/" className="hover:text-cyan-400 transition-colors block py-0.5">
-                  &gt; Home &amp; Accelerator
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="hover:text-cyan-400 transition-colors block py-0.5">
-                  &gt; About Platform &amp; Vision
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="hover:text-cyan-400 transition-colors block py-0.5">
-                  &gt; Virtual Assistant Services
-                </Link>
-              </li>
-              <li>
-                <Link to="/showcase" className="hover:text-cyan-400 transition-colors block py-0.5">
-                  &gt; Software &amp; Showcase
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="hover:text-cyan-400 transition-colors block py-0.5">
-                  &gt; Contact &amp; Consultations
-                </Link>
-              </li>
+              <li><Link to="/" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Home &amp; Accelerator</Link></li>
+              <li><Link to="/about" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; About Platform &amp; Vision</Link></li>
+              <li><Link to="/services" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Virtual Assistant Services</Link></li>
+              <li><Link to="/showcase" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Software &amp; Showcase</Link></li>
+              <li><Link to="/admin" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Master Portal</Link></li>
             </ul>
           </div>
 
-          {/* COL 3: VERIFIED PARTNERSHIPS */}
           <div className="space-y-2 text-center sm:text-left">
             <h4 className="text-xs font-bold text-lime-400 uppercase tracking-wider border-b border-gray-800 pb-1">
               VERIFIED PARTNERS
@@ -95,7 +72,6 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* COL 4: CYBERSECURITY & COMPLIANCE */}
           <div className="space-y-2 text-center sm:text-left">
             <h4 className="text-xs font-bold text-purple-400 uppercase tracking-wider border-b border-gray-800 pb-1">
               CYBER SENTINEL & SAFETY
@@ -113,18 +89,17 @@ export const Footer: React.FC = () => {
 
         </div>
 
-        {/* BOTTOM COPYRIGHT & LEGAL NOTICE */}
         <div className="pt-6 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-xs space-y-4 md:space-y-0 text-center md:text-left">
           <div className="text-gray-400 font-sans">
             &copy; {currentYear} <strong className="text-white font-mono uppercase">Team WhiteHat Dev</strong>. All Rights Reserved. Learn. Create. Develop. Assist. Grow.
           </div>
 
           <div className="flex flex-wrap justify-center space-x-4 text-[11px] text-gray-400">
-            <Link to="/contact" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+            <Link to="/about" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
             <span>•</span>
-            <Link to="/contact" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
+            <Link to="/about" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
             <span>•</span>
-            <Link to="/contact" className="hover:text-cyan-400 transition-colors">Client Support</Link>
+            <Link to="/about" className="hover:text-cyan-400 transition-colors">Client Support</Link>
           </div>
         </div>
 

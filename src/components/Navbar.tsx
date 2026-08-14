@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Rocket, Shield, Terminal, Globe, Server, Smartphone } from 'lucide-react';
-import { PLAY_STORE_URL } from '../utils/initialData';
+import { Shield, Smartphone, ExternalLink, Menu, X, Rocket } from 'lucide-react';
+import { PLAY_STORE_URL } from '../utils/constants';
 
-interface NavbarProps {
-  onOpenConsultation: () => void;
+export interface NavbarProps {
+  onOpenConsultation?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
@@ -12,119 +12,127 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
   const location = useLocation();
 
   const navLinks = [
-    { name: 'HOME', path: '/' },
-    { name: 'SERVICES', path: '/services' },
-    { name: 'WEB HOSTING', path: '/web-hosting' },
-    { name: 'SHOWCASE', path: '/showcase' },
-    { name: 'ABOUT', path: '/about' },
+    { path: '/', label: 'HOME' },
+    { path: '/about', label: 'ABOUT' },
+    { path: '/web-hosting', label: 'WEB HOSTING' },
+    { path: '/showcase', label: 'SHOWCASE' },
+    { path: '/services', label: 'SERVICES' },
+    { path: '/admin', label: 'PORTAL' }
   ];
 
+  const isActive = (path: string) => location.pathname === path;
+
   return (
-    <header className="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-cyan-500/30 select-none font-mono">
+    <nav className="bg-black/90 border-b border-cyan-500/40 text-gray-100 font-mono sticky top-0 z-50 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16">
           
-          {/* LOGO WITH CYBER AVATAR */}
-          <Link to="/" className="flex items-center space-x-3 group">
+          <Link to="/" className="flex items-center space-x-2.5 group">
             <div className="relative">
-              <img
-                src="./logo.png"
-                alt="Team WhiteHat Dev Official Logo"
-                className="w-12 h-12 rounded-full border-2 border-cyan-400 object-cover shadow-lg shadow-cyan-500/30 group-hover:scale-105 transition-transform"
-              />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-lime-400 rounded-full border-2 border-black animate-pulse" />
+              <img src="./favicon.png" alt="WhiteHat Dev Cyber Avatar Logo" className="w-9 h-9 rounded-full border-2 border-cyan-400 object-cover group-hover:border-lime-400 transition-colors shadow-lg" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-lime-400 rounded-full border border-black animate-ping" />
             </div>
-            <div>
-              <span className="text-lg font-black font-rajdhani text-white uppercase tracking-wider block leading-none">
-                TEAM WHITEHAT DEV
+            <div className="flex flex-col">
+              <span className="font-black font-rajdhani text-lg sm:text-xl text-white tracking-widest leading-none group-hover:text-cyan-400 transition-colors uppercase">
+                WHITE HAT DEV
               </span>
-              <span className="text-[10px] text-lime-400 font-bold block leading-tight pt-0.5">
-                VA Accelerator & Software Suite
+              <span className="text-[9px] text-lime-400 font-mono tracking-wider leading-tight uppercase">
+                VA ACCELERATOR & FULL-STACK PORTAL
               </span>
             </div>
           </Link>
 
-          {/* DESKTOP NAV LINKS */}
-          <nav className="hidden md:flex items-center space-x-1 font-rajdhani text-sm font-bold uppercase">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`px-4 py-2 rounded-xl transition-all ${
-                    isActive
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-md'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-900'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
+          <div className="hidden md:flex items-center space-x-1 text-xs">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`px-3 py-1.5 rounded-lg font-extrabold uppercase transition-all ${
+                  isActive(link.path)
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-lime-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-900'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
 
             <a
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 rounded-xl text-lime-400 hover:bg-lime-500/10 border border-lime-500/30 transition-all flex items-center space-x-1"
+              className="px-3 py-1.5 bg-gray-900 border border-cyan-500/30 text-cyan-400 hover:text-lime-300 rounded-lg font-bold flex items-center space-x-1 transition-all"
             >
-              <Smartphone className="w-4 h-4 text-lime-400" />
-              <span>GOOGLE PLAY</span>
+              <Smartphone className="w-3.5 h-3.5" />
+              <span>PLAY STORE</span>
             </a>
 
-            <button
-              onClick={onOpenConsultation}
-              className="ml-2 px-5 py-2.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold text-xs uppercase rounded-xl hover:opacity-95 shadow-lg flex items-center space-x-1.5"
-            >
-              <Rocket className="w-4 h-4" />
-              <span>HIRE VA (20% OFF)</span>
-            </button>
-          </nav>
+            {onOpenConsultation && (
+              <button
+                onClick={onOpenConsultation}
+                className="px-3.5 py-1.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-black font-rajdhani text-xs uppercase rounded-lg hover:opacity-95 shadow-md flex items-center space-x-1 ml-2"
+              >
+                <Rocket className="w-3.5 h-3.5" />
+                <span>HIRE VA &rarr;</span>
+              </button>
+            )}
+          </div>
 
-          {/* MOBILE MENU TOGGLE */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-cyan-400 hover:text-white"
+              className="p-2 text-cyan-400 hover:text-white rounded-lg border border-gray-800"
             >
-              {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
         </div>
       </div>
 
-      {/* MOBILE DROPDOWN */}
       {isOpen && (
-        <div className="md:hidden bg-black border-b border-cyan-500/40 px-4 pt-2 pb-6 space-y-3 font-mono text-sm">
+        <div className="md:hidden bg-black/95 border-b border-cyan-500/40 px-4 pt-2 pb-4 space-y-2 text-xs">
           {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
               onClick={() => setIsOpen(false)}
-              className="block px-3 py-2 rounded-lg text-gray-200 hover:bg-cyan-500/20"
+              className={`block px-3 py-2 rounded-lg font-bold uppercase ${
+                isActive(link.path)
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-900'
+              }`}
             >
-              {link.name}
+              {link.label}
             </Link>
           ))}
+
           <a
             href={PLAY_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="block px-3 py-2 rounded-lg text-lime-400 font-bold"
+            onClick={() => setIsOpen(false)}
+            className="block px-3 py-2 bg-gray-900 text-cyan-400 rounded-lg font-bold flex items-center space-x-2"
           >
-            📱 GOOGLE PLAY STORE APPS
+            <Smartphone className="w-4 h-4" />
+            <span>GOOGLE PLAY STORE APPS</span>
           </a>
-          <button
-            onClick={() => { setIsOpen(false); onOpenConsultation(); }}
-            className="w-full py-3 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold text-xs uppercase rounded-xl"
-          >
-            HIRE VA CONSULTATION (20% OFF)
-          </button>
+
+          {onOpenConsultation && (
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                onOpenConsultation();
+              }}
+              className="w-full py-2.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-black font-rajdhani text-xs uppercase rounded-lg text-center shadow-md flex items-center justify-center space-x-1.5"
+            >
+              <Rocket className="w-4 h-4" />
+              <span>HIRE VA CONSULTATION</span>
+            </button>
+          )}
         </div>
       )}
-    </header>
+    </nav>
   );
 };
 export default Navbar;
