@@ -15,7 +15,6 @@ interface AppContextType {
   pendingCheckoutAction: (() => void) | null;
   setPendingCheckoutAction: (action: (() => void) | null) => void;
   
-  // CRUD MUTATORS
   addService: (service: Omit<Service, 'id'>) => void;
   updateService: (id: string, service: Partial<Service>) => void;
   deleteService: (id: string) => void;
@@ -35,26 +34,50 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [services, setServices] = useState<Service[]>(() => {
-    const saved = localStorage.getItem('wh_services');
-    return saved ? JSON.parse(saved) : (SERVICES as any);
+    try {
+      const saved = localStorage.getItem('wh_services');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return SERVICES as any;
   });
 
   const [projects, setProjects] = useState<Project[]>(() => {
-    const saved = localStorage.getItem('wh_projects');
-    return saved ? JSON.parse(saved) : (PROJECTS as any);
+    try {
+      const saved = localStorage.getItem('wh_projects');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return PROJECTS as any;
   });
 
   const [affiliates] = useState<Affiliate[]>([]);
   const [testimonials] = useState<Testimonial[]>(INITIAL_TESTIMONIALS as any);
 
   const [inquiries, setInquiries] = useState<ContactInquiry[]>(() => {
-    const saved = localStorage.getItem('wh_inquiries');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('wh_inquiries');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {}
+    return [];
   });
 
   const [bannedIps, setBannedIps] = useState<string[]>(() => {
-    const saved = localStorage.getItem('wh_banned_ips');
-    return saved ? JSON.parse(saved) : ['192.168.1.105', '10.0.0.44'];
+    try {
+      const saved = localStorage.getItem('wh_banned_ips');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {}
+    return ['192.168.1.105', '10.0.0.44'];
   });
 
   const [userIp] = useState('112.203.45.18');
@@ -62,22 +85,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [pendingCheckoutAction, setPendingCheckoutAction] = useState<(() => void) | null>(null);
 
   useEffect(() => {
-    localStorage.setItem('wh_services', JSON.stringify(services));
+    try { localStorage.setItem('wh_services', JSON.stringify(services)); } catch (e) {}
   }, [services]);
 
   useEffect(() => {
-    localStorage.setItem('wh_projects', JSON.stringify(projects));
+    try { localStorage.setItem('wh_projects', JSON.stringify(projects)); } catch (e) {}
   }, [projects]);
 
   useEffect(() => {
-    localStorage.setItem('wh_inquiries', JSON.stringify(inquiries));
+    try { localStorage.setItem('wh_inquiries', JSON.stringify(inquiries)); } catch (e) {}
   }, [inquiries]);
 
   useEffect(() => {
-    localStorage.setItem('wh_banned_ips', JSON.stringify(bannedIps));
+    try { localStorage.setItem('wh_banned_ips', JSON.stringify(bannedIps)); } catch (e) {}
   }, [bannedIps]);
 
-  // SERVICES CRUD
   const addService = (svc: Omit<Service, 'id'>) => {
     const newSvc: Service = { ...svc, id: `svc_${Date.now()}` };
     setServices((prev) => [...prev, newSvc]);
@@ -91,7 +113,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setServices((prev) => prev.filter((s) => s.id !== id));
   };
 
-  // PROJECTS CRUD
   const addProject = (proj: Omit<Project, 'id'>) => {
     const newProj: Project = { ...proj, id: `proj_${Date.now()}` };
     setProjects((prev) => [...prev, newProj]);
@@ -105,7 +126,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setProjects((prev) => prev.filter((p) => p.id !== id));
   };
 
-  // IP BANNING
   const addBannedIp = (ip: string) => {
     if (!bannedIps.includes(ip)) {
       setBannedIps((prev) => [...prev, ip]);
@@ -116,7 +136,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setBannedIps((prev) => prev.filter((item) => item !== ip));
   };
 
-  // INQUIRIES
   const addInquiry = (inq: Omit<ContactInquiry, 'id' | 'createdAt'>) => {
     const newInq: ContactInquiry = {
       ...inq,
