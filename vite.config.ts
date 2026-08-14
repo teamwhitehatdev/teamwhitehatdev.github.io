@@ -6,7 +6,7 @@ export default defineConfig({
   base: './',
   build: {
     outDir: 'dist',
-    emptyOutDir: false, // PRESERVE PREVIOUS BUNDLES SO RETURNING VISITORS NEVER GET 404 BLANK PAGES
+    emptyOutDir: true,
     assetsDir: 'assets'
   }
 });

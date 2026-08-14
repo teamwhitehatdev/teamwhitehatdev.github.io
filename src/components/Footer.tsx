@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, Server, ShoppingBag, Mic, Smartphone } from 'lucide-react';
-import { HOSTINGER_LINK, GUMROAD_LINK, ELEVENLABS_LINK, PLAY_STORE_URL } from '../utils/constants';
 
 export const Footer: React.FC = () => {
+  const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
+  const GUMROAD_LINK = "https://gumroad.com/discover?a=815255139";
+  const ELEVENLABS_LINK = "https://try.elevenlabs.io/e5xwigkl9igv";
+  const PLAY_STORE_URL = "https://play.google.com/store/apps/dev?id=7374638355121114347";
   const currentYear = new Date().getFullYear();
 
   return (
