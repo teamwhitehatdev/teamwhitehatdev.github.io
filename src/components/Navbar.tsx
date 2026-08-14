@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shield, Smartphone, ExternalLink, Menu, X, Rocket } from 'lucide-react';
-import { PLAY_STORE_URL } from '../utils/constants';
+import { Smartphone, Menu, X, Rocket } from 'lucide-react';
 
 export interface NavbarProps {
   onOpenConsultation?: () => void;
@@ -10,14 +9,14 @@ export interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const PLAY_STORE_URL = "https://play.google.com/store/apps/dev?id=7374638355121114347";
 
   const navLinks = [
     { path: '/', label: 'HOME' },
     { path: '/about', label: 'ABOUT' },
     { path: '/web-hosting', label: 'WEB HOSTING' },
     { path: '/showcase', label: 'SHOWCASE' },
-    { path: '/services', label: 'SERVICES' },
-    { path: '/admin', label: 'PORTAL' }
+    { path: '/services', label: 'SERVICES' }
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -29,7 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
           
           <Link to="/" className="flex items-center space-x-2.5 group">
             <div className="relative">
-              <img src="./favicon.png" alt="WhiteHat Dev Cyber Avatar Logo" className="w-9 h-9 rounded-full border-2 border-cyan-400 object-cover group-hover:border-lime-400 transition-colors shadow-lg" />
+              <img src="./favicon.png" alt="WhiteHat Dev Logo" className="w-9 h-9 rounded-full border-2 border-cyan-400 object-cover group-hover:border-lime-400 transition-colors shadow-lg" />
               <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-lime-400 rounded-full border border-black animate-ping" />
             </div>
             <div className="flex flex-col">
@@ -37,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                 WHITE HAT DEV
               </span>
               <span className="text-[9px] text-lime-400 font-mono tracking-wider leading-tight uppercase">
-                VA ACCELERATOR & FULL-STACK PORTAL
+                VA ACCELERATOR &amp; FULL-STACK PORTAL
               </span>
             </div>
           </Link>
