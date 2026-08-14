@@ -1,164 +1,130 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Terminal, Globe, Server, ExternalLink } from 'lucide-react';
-import { PLAY_STORE_URL } from '../utils/initialData';
+import { Shield, ExternalLink, Heart, Server, ShoppingBag, Mic, Smartphone } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
-  const GUMROAD_LINK = "https://gumroad.com/discover?a=815255139";
-  const ELEVENLABS_LINK = "https://try.elevenlabs.io/e5xwigkl9igv";
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-black/95 border-t border-cyan-500/30 text-gray-400 font-mono text-xs mt-16 select-none relative z-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+    <footer className="bg-black/95 border-t-2 border-cyan-500/40 text-gray-400 font-mono relative z-20 mt-16 pt-10 pb-16 sm:pb-12 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto space-y-8">
         
-        {/* TOP ROW: BRAND & SYSTEM STATUS */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-gray-900">
+        {/* TOP BRANDING & GRID LINKS */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           
-          {/* BRAND COLUMN */}
-          <div className="space-y-3 md:col-span-1">
-            <Link to="/" className="flex items-center space-x-3 group">
-              <img
-                src="./logo.png"
-                alt="Team WhiteHat Dev Official Logo"
-                className="w-10 h-10 rounded-full border-2 border-cyan-400 object-cover group-hover:scale-105 transition-transform"
-              />
-              <div>
-                <span className="text-base font-extrabold font-rajdhani text-white uppercase tracking-wider block leading-none">
-                  TEAM WHITEHAT DEV
-                </span>
-                <span className="text-[10px] text-lime-400 font-bold block leading-tight pt-0.5">
-                  Learn. Create. Develop. Assist. Grow.
-                </span>
-              </div>
-            </Link>
-
-            <p className="text-xs text-gray-400 font-sans leading-relaxed">
-              All-in-one digital platform empowering Virtual Assistants, developers, freelancers, creators, and entrepreneurs worldwide with masterclass training, software development, and cloud solutions.
+          {/* COL 1: LOGO & TAGLINE */}
+          <div className="space-y-3 text-center sm:text-left">
+            <div className="flex items-center justify-center sm:justify-start space-x-2.5">
+              <img src="./favicon.png" alt="Team WhiteHat Dev Logo" className="w-8 h-8 rounded-full border border-cyan-400 object-cover" />
+              <span className="font-black font-rajdhani text-lg text-white tracking-widest uppercase">
+                WHITE HAT DEV
+              </span>
+            </div>
+            <p className="text-xs text-gray-300 font-sans leading-relaxed">
+              Your all-in-one digital hub for Virtual Assistance, Technology, Development, Creativity, and Digital Opportunities.
             </p>
-
-            <div className="flex items-center space-x-2 text-[10px] text-lime-400 font-bold bg-lime-500/10 border border-lime-500/30 px-2.5 py-1 rounded-md w-max">
-              <Shield className="w-3 h-3 text-lime-400" />
-              <span>AES-256 ENCRYPTED FIREWALL ACTIVE</span>
+            <div className="text-[10px] text-lime-400 font-mono font-bold pt-1">
+              "We don't just build software for today. We explore what software can become tomorrow."
             </div>
           </div>
 
-          {/* SECTION 2: WEBSITES MAPPING / SITEMAP (STEALTH MODE - NO ADMIN LINK) */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold text-cyan-400 font-rajdhani uppercase tracking-widest border-b border-cyan-500/30 pb-1 flex items-center space-x-1">
-              <Globe className="w-3.5 h-3.5 text-cyan-400" />
-              <span>WEBSITES MAPPING & NAVIGATION</span>
+          {/* COL 2: QUICK NAVIGATION */}
+          <div className="space-y-2 text-center sm:text-left">
+            <h4 className="text-xs font-bold text-cyan-300 uppercase tracking-wider border-b border-gray-800 pb-1">
+              QUICK NAVIGATION
             </h4>
-            <ul className="space-y-2 text-xs font-sans">
+            <ul className="space-y-1.5 text-xs">
               <li>
-                <Link to="/" className="hover:text-cyan-400 transition-colors flex items-center space-x-1.5">
-                  <span className="text-cyan-400">&rsaquo;</span>
-                  <span>🏠 HOME (VA ACCELERATOR & MASTERCLASS)</span>
+                <Link to="/" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  &gt; Home &amp; Accelerator
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="hover:text-cyan-400 transition-colors flex items-center space-x-1.5">
-                  <span className="text-cyan-400">&rsaquo;</span>
-                  <span>🛠️ SERVICES (VA & FULL-STACK DEV)</span>
+                <Link to="/about" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  &gt; About Platform &amp; Vision
                 </Link>
               </li>
               <li>
-                <Link to="/web-hosting" className="hover:text-lime-400 text-lime-300 font-bold transition-colors flex items-center space-x-1.5">
-                  <span className="text-lime-400">&rsaquo;</span>
-                  <span>🌐 WEB HOSTING (HOSTINGER CLOUD DEALS)</span>
+                <Link to="/services" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  &gt; Virtual Assistant Services
                 </Link>
               </li>
               <li>
-                <Link to="/showcase" className="hover:text-cyan-400 transition-colors flex items-center space-x-1.5">
-                  <span className="text-cyan-400">&rsaquo;</span>
-                  <span>🚀 SHOWCASE (FEATURED PROJECTS)</span>
+                <Link to="/showcase" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  &gt; Software &amp; Showcase
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-cyan-400 transition-colors flex items-center space-x-1.5">
-                  <span className="text-cyan-400">&rsaquo;</span>
-                  <span>ℹ️ ABOUT US (VISION & DIGITAL HUB)</span>
+                <Link to="/contact" className="hover:text-cyan-400 transition-colors block py-0.5">
+                  &gt; Contact &amp; Consultations
                 </Link>
               </li>
+            </ul>
+          </div>
+
+          {/* COL 3: VERIFIED PARTNERSHIPS */}
+          <div className="space-y-2 text-center sm:text-left">
+            <h4 className="text-xs font-bold text-lime-400 uppercase tracking-wider border-b border-gray-800 pb-1">
+              VERIFIED PARTNERS
+            </h4>
+            <ul className="space-y-1.5 text-xs">
               <li>
-                <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer" className="hover:text-lime-400 text-lime-400 font-bold transition-colors flex items-center space-x-1.5">
-                  <span className="text-lime-400">&rsaquo;</span>
-                  <span>📱 GOOGLE PLAY STORE APPS</span>
+                <a href={HOSTINGER_LINK} target="_blank" rel="sponsored noopener noreferrer" className="hover:text-lime-300 transition-colors flex items-center justify-center sm:justify-start space-x-1 py-0.5">
+                  <Server className="w-3 h-3 text-lime-400" />
+                  <span>Hostinger Cloud (75% OFF)</span>
+                </a>
+              </li>
+              <li>
+                <a href={GUMROAD_LINK} target="_blank" rel="sponsored noopener noreferrer" className="hover:text-pink-300 transition-colors flex items-center justify-center sm:justify-start space-x-1 py-0.5">
+                  <ShoppingBag className="w-3 h-3 text-pink-400" />
+                  <span>Gumroad Creator Store</span>
+                </a>
+              </li>
+              <li>
+                <a href={ELEVENLABS_LINK} target="_blank" rel="sponsored noopener noreferrer" className="hover:text-purple-300 transition-colors flex items-center justify-center sm:justify-start space-x-1 py-0.5">
+                  <Mic className="w-3 h-3 text-purple-400" />
+                  <span>ElevenLabs AI Voice Studio</span>
+                </a>
+              </li>
+              <li>
+                <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-300 transition-colors flex items-center justify-center sm:justify-start space-x-1 py-0.5">
+                  <Smartphone className="w-3 h-3 text-cyan-400" />
+                  <span>Google Play Developer Apps</span>
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* SECTION 3: REFERRAL PARTNERS & MONETIZATION */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold text-lime-400 font-rajdhani uppercase tracking-widest border-b border-lime-500/30 pb-1 flex items-center space-x-1">
-              <Server className="w-3.5 h-3.5 text-lime-400" />
-              <span>OFFICIAL REFERRAL PARTNERS</span>
+          {/* COL 4: CYBERSECURITY & COMPLIANCE */}
+          <div className="space-y-2 text-center sm:text-left">
+            <h4 className="text-xs font-bold text-purple-400 uppercase tracking-wider border-b border-gray-800 pb-1">
+              CYBER SENTINEL & SAFETY
             </h4>
-            <ul className="space-y-2 text-xs font-sans">
-              <li>
-                <a href={HOSTINGER_LINK} target="_blank" rel="sponsored noopener noreferrer" className="hover:text-lime-300 text-lime-400 font-bold transition-colors flex items-center justify-between">
-                  <span>⚡ HOSTINGER WEB HOSTING (75% OFF)</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </li>
-              <li>
-                <a href={GUMROAD_LINK} target="_blank" rel="sponsored noopener noreferrer" className="hover:text-cyan-400 text-cyan-300 font-bold transition-colors flex items-center justify-between">
-                  <span>📦 GUMROAD DIGITAL PRODUCTS HUB</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </li>
-              <li>
-                <a href={ELEVENLABS_LINK} target="_blank" rel="sponsored noopener noreferrer" className="hover:text-purple-400 text-purple-300 font-bold transition-colors flex items-center justify-between">
-                  <span>🎙️ ELEVENLABS AI VOICE STUDIO</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </li>
-              <li>
-                <span className="text-gray-400 text-[11px] block pt-1">
-                  • Official Impact.com Affiliate Tracking Tag Active
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          {/* SECTION 4: SYSTEM TELEMETRY & SECURITY */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold text-cyan-400 font-rajdhani uppercase tracking-widest border-b border-cyan-500/30 pb-1 flex items-center space-x-1">
-              <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-              <span>SECURITY & SYSTEM TELEMETRY</span>
-            </h4>
-            <div className="space-y-2 text-[11px] font-mono">
-              <div className="flex justify-between border-b border-gray-900 pb-1">
-                <span className="text-gray-500">FIREWALL STATUS:</span>
-                <span className="text-lime-400 font-bold">ONLINE (AES-256)</span>
-              </div>
-              <div className="flex justify-between border-b border-gray-900 pb-1">
-                <span className="text-gray-500">LIVE TRADING TICKER:</span>
-                <span className="text-lime-400 font-bold">ACTIVE</span>
-              </div>
-              <div className="flex justify-between border-b border-gray-900 pb-1">
-                <span className="text-gray-500">IMPACT AFFILIATE TAG:</span>
-                <span className="text-cyan-400 font-bold">VERIFIED</span>
-              </div>
-              <div className="flex justify-between pb-1">
-                <span className="text-gray-500">SYSTEM UPTIME:</span>
-                <span className="text-white font-bold">99.99%</span>
-              </div>
+            <p className="text-[11px] text-gray-400 font-sans leading-relaxed">
+              Protected by WhiteHat Sentinel Firewall with AES-256 telemetry monitoring and automated IP filtering.
+            </p>
+            <div className="pt-1 flex justify-center sm:justify-start space-x-2">
+              <span className="inline-flex items-center space-x-1 bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-[10px] px-2.5 py-1 rounded-full font-bold">
+                <Shield className="w-3 h-3 text-lime-400" />
+                <span>SSL SECURE 256-BIT</span>
+              </span>
             </div>
           </div>
 
         </div>
 
-        {/* BOTTOM ROW: COPYRIGHT */}
-        <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-mono pt-4 text-gray-500">
-          <div className="flex items-center space-x-2">
-            <span>&copy; 2010 - 2026 TEAM WHITEHAT DEV. ALL RIGHTS RESERVED.</span>
+        {/* BOTTOM COPYRIGHT & LEGAL NOTICE */}
+        <div className="pt-6 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-xs space-y-4 md:space-y-0 text-center md:text-left">
+          <div className="text-gray-400 font-sans">
+            &copy; {currentYear} <strong className="text-white font-mono uppercase">Team WhiteHat Dev</strong>. All Rights Reserved. Learn. Create. Develop. Assist. Grow.
           </div>
 
-          <div className="flex items-center space-x-4">
-            <span className="text-gray-400">DESIGNED FOR VIRTUAL ASSISTANTS & DEVELOPERS</span>
-            <span className="text-lime-400 font-bold">• FASTLY CDN EDGE DEPLOYED</span>
+          <div className="flex flex-wrap justify-center space-x-4 text-[11px] text-gray-400">
+            <Link to="/contact" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+            <span>•</span>
+            <Link to="/contact" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
+            <span>•</span>
+            <Link to="/contact" className="hover:text-cyan-400 transition-colors">Client Support</Link>
           </div>
         </div>
 
