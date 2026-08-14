@@ -18,54 +18,56 @@ export const CyberBackground: React.FC = () => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // MATRIX RAIN SETUP
+    // MATRIX RAIN SETUP - DENSE & FAST
     const chars = '0123456789ABCDEF01010101XYZ#$@%&*+=-<>~ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ';
-    const fontSize = 14;
+    const fontSize = 12;
     let columns = Math.floor(canvas.width / fontSize);
-    let drops: number[] = new Array(columns).fill(1).map(() => Math.floor(Math.random() * -100));
+    let drops: number[] = new Array(columns).fill(1).map(() => Math.floor(Math.random() * -120));
 
-    // PARTICLE MESH SETUP
+    // GEOMETRIC PARTICLES SETUP
     const particles: { x: number; y: number; vx: number; vy: number; radius: number; alpha: number }[] = [];
-    const numParticles = Math.min(50, Math.floor(canvas.width / 30));
+    const numParticles = Math.min(65, Math.floor(canvas.width / 20));
 
     for (let i = 0; i < numParticles; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        radius: Math.random() * 1.5 + 1,
-        alpha: Math.random() * 0.5 + 0.2
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        radius: Math.random() * 1.8 + 1,
+        alpha: Math.random() * 0.6 + 0.2
       });
     }
 
-    let frameCount = 0;
+    let rotationAngle = 0;
 
     const draw = () => {
-      frameCount++;
+      rotationAngle += 0.005;
 
-      // Semi-transparent background fade for Matrix trail effect
-      ctx.fillStyle = 'rgba(5, 7, 15, 0.15)';
+      // Darker trail fade for high contrast Matrix rain
+      ctx.fillStyle = 'rgba(2, 4, 10, 0.22)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 1. DRAW MATRIX DIGITAL RAIN
+      // 1. HIGH-DENSITY MATRIX CODE RAIN
       ctx.font = `${fontSize}px "Share Tech Mono", monospace`;
       
       for (let i = 0; i < drops.length; i++) {
-        // Random Matrix Character
         const text = chars[Math.floor(Math.random() * chars.length)];
         const x = i * fontSize;
         const y = drops[i] * fontSize;
 
-        // Lead character is bright white / lime, trailing characters are neon cyan / green
-        if (Math.random() > 0.85) {
+        // Lead glowing character
+        if (Math.random() > 0.88) {
           ctx.fillStyle = '#ffffff';
           ctx.shadowColor = '#00f0ff';
-          ctx.shadowBlur = 8;
-        } else if (i % 3 === 0) {
+          ctx.shadowBlur = 10;
+        } else if (i % 4 === 0) {
           ctx.fillStyle = '#a3e635'; // Neon Lime
           ctx.shadowColor = '#a3e635';
-          ctx.shadowBlur = 4;
+          ctx.shadowBlur = 5;
+        } else if (i % 2 === 0) {
+          ctx.fillStyle = '#00ff66'; // Matrix Green
+          ctx.shadowBlur = 0;
         } else {
           ctx.fillStyle = '#00f0ff'; // Cyber Cyan
           ctx.shadowBlur = 0;
@@ -73,20 +75,49 @@ export const CyberBackground: React.FC = () => {
 
         ctx.fillText(text, x, y);
 
-        // Reset drop after reaching canvas height with random delay
         if (y > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
         drops[i]++;
       }
 
-      // Reset shadow blur after Matrix Rain
       ctx.shadowBlur = 0;
 
-      // 2. DRAW CYBER GRID LINES
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.04)';
+      // 2. ANIMATED GEOMETRIC PATTERNS (HEXAGONS & RADAR RINGS)
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate(rotationAngle);
+
+      // Rotating Hexagon
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.05)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      const hexRadius = Math.min(canvas.width, canvas.height) * 0.35;
+      for (let side = 0; side < 6; side++) {
+        const angle = (side * Math.PI) / 3;
+        const hx = hexRadius * Math.cos(angle);
+        const hy = hexRadius * Math.sin(angle);
+        if (side === 0) ctx.moveTo(hx, hy);
+        else ctx.lineTo(hx, hy);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      // Outer Radar Ring
+      ctx.strokeStyle = 'rgba(163, 230, 53, 0.04)';
+      ctx.beginPath();
+      ctx.arc(0, 0, hexRadius * 1.15, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+
+      // 3. CYBER PERSPECTIVE GRID LINES
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.03)';
       ctx.lineWidth = 1;
-      const gridSize = 60;
+      const gridSize = 50;
       for (let x = 0; x < canvas.width; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -100,7 +131,7 @@ export const CyberBackground: React.FC = () => {
         ctx.stroke();
       }
 
-      // 3. DRAW PARTICLES AND CONSTELLATION LINES
+      // 4. CONSTELLATION PARTICLES & LASER LINKS
       particles.forEach((p, idx) => {
         p.x += p.vx;
         p.y += p.vy;
@@ -119,8 +150,8 @@ export const CyberBackground: React.FC = () => {
           const dy = p.y - p2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 120) {
-            ctx.strokeStyle = `rgba(0, 240, 255, ${0.12 * (1 - dist / 120)})`;
+          if (dist < 130) {
+            ctx.strokeStyle = `rgba(0, 240, 255, ${0.15 * (1 - dist / 130)})`;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
@@ -143,7 +174,7 @@ export const CyberBackground: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 opacity-80"
+      className="fixed inset-0 pointer-events-none z-0 opacity-90"
     />
   );
 };
