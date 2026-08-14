@@ -12,6 +12,10 @@ export const DynamicAdsSidebar: React.FC = () => {
 
   useEffect(() => {
     refreshAds();
+    const interval = setInterval(() => {
+      refreshAds();
+    }, 12000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -20,14 +24,15 @@ export const DynamicAdsSidebar: React.FC = () => {
       <div className="flex items-center justify-between bg-black/90 border border-cyan-500/40 p-3 rounded-2xl">
         <span className="text-xs font-bold text-cyan-300 uppercase tracking-widest flex items-center space-x-1.5">
           <Sparkles className="w-4 h-4 text-lime-400 animate-pulse" />
-          <span>VERIFIED AFFILIATE DEALS</span>
+          <span>DEDICATED PROMO ADS COLUMN</span>
         </span>
         <button
           onClick={refreshAds}
-          className="p-1.5 bg-gray-900 border border-gray-800 text-cyan-400 hover:text-lime-300 rounded-lg transition-all"
-          title="Refresh Randomized Deals"
+          className="p-1.5 bg-gray-900 border border-gray-800 text-cyan-400 hover:text-lime-300 rounded-lg transition-all flex items-center space-x-1 text-[10px]"
+          title="Refresh Deals"
         >
           <RefreshCw className="w-3.5 h-3.5" />
+          <span>ROTATING (12s)</span>
         </button>
       </div>
 
@@ -39,9 +44,14 @@ export const DynamicAdsSidebar: React.FC = () => {
                 <ShoppingBag className="w-3 h-3" />
                 <span>{ad.brand}</span>
               </span>
-              <span className="bg-black/60 text-cyan-300 text-[9px] font-bold px-2 py-0.5 rounded border border-gray-800">
-                {ad.badge}
-              </span>
+              <div className="flex items-center space-x-1">
+                <span className="bg-purple-950/80 text-purple-300 text-[8px] font-bold px-1.5 py-0.5 rounded border border-purple-800 uppercase">
+                  {ad.category} • {ad.sizeType}
+                </span>
+                <span className="bg-black/60 text-cyan-300 text-[9px] font-bold px-1.5 py-0.5 rounded border border-gray-800">
+                  {ad.badge}
+                </span>
+              </div>
             </div>
 
             {ad.iframeUrl ? (

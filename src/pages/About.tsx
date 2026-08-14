@@ -1,227 +1,197 @@
 import React from 'react';
+import { Terminal, Shield, Cpu, Code, Sparkles, CheckCircle2, ArrowRight, Zap, Globe, Eye, Layers, Atom, Activity, Rocket, ExternalLink, Award, Lock, Server, Palette } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
-import { Shield, Cpu, Code, Users, Rocket, Sparkles, Terminal, Award, CheckCircle2, Globe, Flame, Zap, Compass, Layers, Bot, Atom, Brain, Eye, Activity } from 'lucide-react';
+import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
+import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
 
 export const About: React.FC = () => {
   return (
-    <div className="space-y-8 font-mono max-w-7xl mx-auto pb-12">
+    <div className="space-y-10 max-w-7xl mx-auto px-4 py-6 font-mono">
       
-      {/* HERO BANNER & PLATFORM OVERVIEW */}
-      <div className="bg-gradient-to-r from-gray-950 via-black to-cyan-950/90 border border-cyan-500/40 rounded-3xl p-6 sm:p-10 space-y-6 shadow-2xl relative overflow-hidden">
-        <div className="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
-          <Shield className="w-96 h-96 text-cyan-400" />
+      {/* HEADER HERO */}
+      <div className="text-center space-y-4 max-w-4xl mx-auto">
+        <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full text-cyan-300 text-xs font-bold uppercase tracking-widest">
+          <Terminal className="w-4 h-4 text-lime-400" />
+          <span>ABOUT TEAM WHITEHAT DEV</span>
         </div>
-
-        <div className="inline-flex items-center space-x-2 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">
-          <Sparkles className="w-4 h-4 text-lime-400 animate-pulse" />
-          <span>ALL-IN-ONE DIGITAL ECOSYSTEM & PROFESSIONAL PLATFORM</span>
-        </div>
-
-        <h1 className="text-3xl sm:text-6xl font-black font-rajdhani text-white uppercase tracking-wide leading-tight">
-          TEAM WHITEHAT DEV — <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400">
-            LEARN. CREATE. DEVELOP. ASSIST. GROW.
-          </span>
+        <h1 className="text-3xl md:text-5xl font-black font-rajdhani text-white uppercase tracking-wider">
+          ALL-IN-ONE DIGITAL ECOSYSTEM & FREELANCE VA GATEWAY
         </h1>
-
-        <p className="text-sm sm:text-base text-gray-200 font-sans leading-relaxed max-w-4xl">
-          <strong className="text-white">Team WhiteHat Dev</strong> is an all-in-one digital platform for <strong className="text-cyan-300">Virtual Assistants, developers, freelancers, creators, entrepreneurs, and businesses</strong>.
+        <p className="text-xs md:text-sm text-gray-300 font-sans leading-relaxed">
+          Connecting Virtual Assistance, Web Development, Mobile Apps, Cybersecurity, and Professional Tech Certifications into one high-converting digital platform.
         </p>
-
-        <p className="text-xs sm:text-sm text-gray-300 font-sans leading-relaxed max-w-4xl">
-          Learn how to become a successful Virtual Assistant, discover valuable digital tools and resources, explore software and web development, build mobile applications, improve your digital skills, and discover opportunities in graphic design, music production, 3D modeling, affiliate marketing, freelancing, and more.
-        </p>
-
-        <div className="p-4 bg-black/60 border border-lime-400/40 rounded-2xl text-xs sm:text-sm text-lime-300 font-mono font-bold">
-          Your all-in-one hub for Virtual Assistance, Technology, Development, Creativity, and Digital Opportunities.
-        </div>
       </div>
 
-      {/* CORE VISION FOR FUTURISTIC SOFTWARE & TAGLINE */}
-      <HUDPanel title="🔮 OUR VISION FOR FUTURISTIC SOFTWARE">
-        <div className="p-6 sm:p-8 space-y-6 font-sans text-sm">
-          
-          <div className="p-6 bg-gradient-to-r from-purple-950/80 via-black to-cyan-950/80 border-2 border-purple-500/50 rounded-2xl space-y-3 shadow-xl">
-            <span className="text-xs font-mono font-bold text-lime-400 uppercase tracking-widest block">
-              FLAGSHIP PHILOSOPHY & FEATURED TAGLINE:
-            </span>
-            <blockquote className="text-lg sm:text-2xl font-black font-rajdhani text-white italic leading-snug">
-              "We don't just build software for today. We explore what software can become tomorrow."
-            </blockquote>
-          </div>
-
-          <div className="space-y-4 text-gray-300 leading-relaxed">
-            <p>
-              At <strong className="text-white">Team WhiteHat Dev</strong>, we believe software should not simply perform tasks — it should help people work <strong className="text-cyan-300">smarter, faster, and more efficiently</strong>.
-            </p>
-            <p>
-              Our vision is to develop and showcase <strong className="text-lime-300">futuristic, next-generation software</strong> inspired by emerging technologies such as <strong className="text-white">Artificial Intelligence, automation, advanced computing, quantum computing research, intelligent data processing, and spatial user interfaces</strong>.
-            </p>
-          </div>
-
-          {/* 10 CORE CHARACTERISTICS OF FUTURISTIC SOFTWARE */}
-          <div className="space-y-3 pt-2">
-            <h3 className="text-base font-bold font-mono text-cyan-400 uppercase tracking-wider">
-              What We Mean by "Futuristic Software"
-            </h3>
-            <p className="text-xs text-gray-400">
-              Futuristic software refers to next-generation applications designed around intelligent automation, AI-assisted workflows, advanced data processing, emerging computing technologies, and modern spatial interfaces:
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 font-mono text-xs">
-              {[
-                { icon: Bot, label: 'Automate repetitive workflows' },
-                { icon: Brain, label: 'Use Artificial Intelligence to assist users' },
-                { icon: Sparkles, label: 'Predict patterns and help anticipate user needs' },
-                { icon: Zap, label: 'Process & organize large amounts of info efficiently' },
-                { icon: Globe, label: 'Connect different digital systems and services' },
-                { icon: Eye, label: 'Provide modern and immersive user interfaces' },
-                { icon: Layers, label: 'Explore spatial and interactive computing experiences' },
-                { icon: Atom, label: 'Experiment with emerging quantum-computing frameworks' },
-                { icon: Activity, label: 'Transform complex information into useful insights' },
-                { icon: Rocket, label: 'Create faster, smarter, and intuitive digital experiences' }
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center space-x-3 bg-black/80 border border-gray-800 p-3 rounded-xl hover:border-cyan-500/40 transition-all">
-                  <item.icon className="w-4 h-4 text-lime-400 flex-shrink-0" />
-                  <span className="text-gray-200 text-xs">{item.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="p-4 bg-cyan-950/40 border border-cyan-500/30 rounded-xl space-y-2 text-xs font-mono text-cyan-200">
-            <strong className="text-white block uppercase">Technology Without Limits:</strong>
-            Artificial Intelligence • Software Development • Web Development • Mobile Applications • Automation • Advanced Computing • Spatial Interfaces • Digital Creativity • Data Processing • Emerging Technologies
-          </div>
-
-        </div>
-      </HUDPanel>
-
-      {/* GATEWAY TO BECOMING A SUCCESSFUL VA & PROFESSIONAL VA SERVICES */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        {/* VA CAREER GATEWAY */}
-        <HUDPanel title="🎓 GATEWAY TO BECOMING A SUCCESSFUL VA">
-          <div className="p-6 space-y-4 font-sans text-xs text-gray-300 leading-relaxed">
-            <p>
-              Team WhiteHat Dev provides useful information, practical guides, tips, resources, and career advice for people who want to become successful <strong className="text-white">Virtual Assistants</strong>.
-            </p>
+        {/* MAIN CONTENT COLUMN (3 COLS) */}
+        <div className="lg:col-span-3 space-y-10">
 
-            <div className="space-y-2 font-mono text-xs">
-              {[
-                'How to become a Virtual Assistant',
-                'Essential Virtual Assistant skills',
-                'Recommended tools and software',
-                'Productivity and time-management techniques',
-                'Working with clients & client communication',
-                'Building a professional portfolio',
-                'Finding online remote opportunities',
-                'Freelancing and remote work strategies',
-                'Creating high-converting professional profiles',
-                'Growing a sustainable Virtual Assistant career'
-              ].map((point, idx) => (
-                <div key={idx} className="flex items-center space-x-2 text-gray-200">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-lime-400 flex-shrink-0" />
-                  <span>{point}</span>
-                </div>
-              ))}
+          {/* VISION & CAPABILITIES */}
+          <HUDPanel title="🚀 OUR VISION & CORE CAPABILITIES">
+            <div className="p-6 space-y-6 font-sans text-xs text-gray-300 leading-relaxed">
+              <p className="text-sm text-white">
+                Team WhiteHat Dev is dedicated to building modern software solutions, empowering Virtual Assistants with career tools, and providing businesses with reliable remote technical assistance.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+                {[
+                  { icon: Sparkles, label: 'AI Prompt Engineering & Automation' },
+                  { icon: Zap, label: 'Full-Stack Web & Mobile Engineering' },
+                  { icon: Globe, label: 'Global Remote Virtual Assistance' },
+                  { icon: Eye, label: 'Cybersecurity Audits & Data Privacy' },
+                  { icon: Layers, label: 'Cloud Hosting & Domain Infrastructure' },
+                  { icon: Atom, label: 'Digital Asset Design & Multimedia' },
+                  { icon: Activity, label: 'High-Frequency Affiliate Marketing' },
+                  { icon: Rocket, label: 'Certified Career Development Pathways' }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-center space-x-3 bg-black/80 border border-gray-800 p-3 rounded-xl hover:border-cyan-500/40 transition-all">
+                    <item.icon className="w-4 h-4 text-lime-400 flex-shrink-0" />
+                    <span className="text-gray-200 text-xs">{item.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </HUDPanel>
+          </HUDPanel>
 
-        {/* PROFESSIONAL VA SERVICES */}
-        <HUDPanel title="💼 PROFESSIONAL VA SERVICES FOR CLIENTS">
-          <div className="p-6 space-y-4 font-sans text-xs text-gray-300 leading-relaxed">
-            <p>
-              Team WhiteHat Dev also serves as a platform where businesses, entrepreneurs, organizations, and individuals can discover and <strong className="text-white">hire professional Virtual Assistants</strong>.
-            </p>
+          {/* ULTIMATE GUIDE TO BECOMING A SUCCESSFUL VIRTUAL ASSISTANT */}
+          <HUDPanel title="🎓 ULTIMATE GUIDE: HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT">
+            <div className="p-6 space-y-6 font-sans text-xs text-gray-300 leading-relaxed">
+              
+              <div className="bg-gradient-to-r from-cyan-950/60 via-black to-purple-950/60 border border-cyan-500/40 p-4 rounded-2xl space-y-2">
+                <h3 className="text-base font-black font-rajdhani text-white uppercase flex items-center space-x-2">
+                  <Award className="w-5 h-5 text-lime-400" />
+                  <span>STEP-BY-STEP VIRTUAL ASSISTANT SUCCESS ROADMAP</span>
+                </h3>
+                <p className="text-xs text-gray-200 leading-relaxed">
+                  Becoming a top 1% Virtual Assistant requires the right combination of accredited skills, data security tools, reliable web hosting, and professional design software. Follow our verified recommendations below:
+                </p>
+              </div>
 
-            <div className="space-y-3 font-mono text-xs">
-              {[
-                { title: 'Administrative Assistance', desc: 'Email triage, calendar scheduling, meeting minutes.' },
-                { title: 'Research & Data Entry', desc: 'Market research, CRM updates, lead generation.' },
-                { title: 'Content & Social Media Support', desc: 'Social media planning, graphic design, copywriting.' },
-                { title: 'E-commerce & Customer Support', desc: 'Store management, ticket support, order processing.' }
-              ].map((svc, idx) => (
-                <div key={idx} className="bg-black/80 border border-gray-800 p-3 rounded-xl space-y-1">
-                  <h4 className="text-xs font-bold text-cyan-300 uppercase">{svc.title}</h4>
-                  <p className="text-[11px] text-gray-400 font-sans">{svc.desc}</p>
+              {/* VA TOPIC 1 */}
+              <div className="bg-black/90 border border-gray-800 p-4 rounded-2xl space-y-3 hover:border-cyan-400 transition-all">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-cyan-400 font-mono uppercase flex items-center space-x-1.5">
+                    <Lock className="w-4 h-4 text-lime-400" />
+                    <span>TOPIC 1: WORKSTATION SECURITY & CLIENT DATA PROTECTION</span>
+                  </span>
+                  <span className="bg-lime-500/20 text-lime-300 text-[10px] font-bold px-2 py-0.5 rounded border border-lime-500/50">
+                    REQUIRED FOR ALL VAs
+                  </span>
                 </div>
-              ))}
+                <p className="text-gray-300 leading-relaxed">
+                  International clients demand strict data privacy. When managing passwords, financial spreadsheets, or social accounts, always shield your connection with 256-bit AES encryption.
+                </p>
+                <div className="bg-cyan-950/40 border border-cyan-500/30 p-3 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <strong className="text-white font-mono text-xs">RECOMMENDED SECURITY TOOL: NORDVPN (68% OFF)</strong>
+                    <a href="https://nordvpn.sjv.io/c/5024116/976014/7452" target="_blank" rel="sponsored noopener noreferrer" className="text-lime-300 hover:underline font-mono text-xs font-bold">
+                      CLAIM NORDVPN DEAL &rarr;
+                    </a>
+                  </div>
+                  <p className="text-[11px] text-gray-400">
+                    Includes Threat Protection malware blocking, password management, and 10 simultaneous device connections.
+                  </p>
+                </div>
+              </div>
+
+              {/* VA TOPIC 2 */}
+              <div className="bg-black/90 border border-gray-800 p-4 rounded-2xl space-y-3 hover:border-cyan-400 transition-all">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-purple-400 font-mono uppercase flex items-center space-x-1.5">
+                    <Award className="w-4 h-4 text-purple-400" />
+                    <span>TOPIC 2: GLOBAL CERTIFICATIONS & UP-SKILLING</span>
+                  </span>
+                  <span className="bg-purple-500/20 text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded border border-purple-500/50">
+                    EARN $50+/HR
+                  </span>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
+                  Level up your hourly rates by acquiring official certifications from Google, IBM, Meta, and Stanford. Specialized skills in AI Prompt Engineering, Data Science, and Project Management command premium rates.
+                </p>
+                <div className="bg-purple-950/40 border border-purple-500/30 p-3 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <strong className="text-white font-mono text-xs">RECOMMENDED PLATFORM: COURSERA CERTIFICATES</strong>
+                    <a href="https://imp.i384100.net/c/5024116/3801376/14726" target="_blank" rel="sponsored noopener noreferrer" className="text-purple-300 hover:underline font-mono text-xs font-bold">
+                      EXPLORE COURSERA COURSES &rarr;
+                    </a>
+                  </div>
+                  <p className="text-[11px] text-gray-400">
+                    Access over 7,000+ university courses and accredited professional credentials to add to your resume.
+                  </p>
+                </div>
+              </div>
+
+              {/* VA TOPIC 3 */}
+              <div className="bg-black/90 border border-gray-800 p-4 rounded-2xl space-y-3 hover:border-cyan-400 transition-all">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-lime-400 font-mono uppercase flex items-center space-x-1.5">
+                    <Server className="w-4 h-4 text-lime-400" />
+                    <span>TOPIC 3: WEB HOSTING, PORTFOLIOS & EMAIL AUTOMATION</span>
+                  </span>
+                  <span className="bg-lime-500/20 text-lime-300 text-[10px] font-bold px-2 py-0.5 rounded border border-lime-500/50">
+                    75% DISCOUNT
+                  </span>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
+                  Every Virtual Assistant needs a fast, professional portfolio site and custom domain email address (`name@yourbrand.com`). Hostinger provides cloud hosting and automated email marketing.
+                </p>
+                <div className="bg-lime-950/40 border border-lime-500/30 p-3 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <strong className="text-white font-mono text-xs">RECOMMENDED HOSTING: HOSTINGER CLOUD (75% OFF)</strong>
+                    <a href="https://hostinger.sjv.io/c/6215170/1822851/18485" target="_blank" rel="sponsored noopener noreferrer" className="text-lime-300 hover:underline font-mono text-xs font-bold">
+                      GET HOSTINGER DISCOUNT &rarr;
+                    </a>
+                  </div>
+                  <p className="text-[11px] text-gray-400">
+                    Free custom SSL, unmetered bandwidth, free domain registration, and AI site builder included.
+                  </p>
+                </div>
+              </div>
+
+              {/* VA TOPIC 4 */}
+              <div className="bg-black/90 border border-gray-800 p-4 rounded-2xl space-y-3 hover:border-cyan-400 transition-all">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-pink-400 font-mono uppercase flex items-center space-x-1.5">
+                    <Palette className="w-4 h-4 text-pink-400" />
+                    <span>TOPIC 4: GRAPHIC DESIGN & MULTIMEDIA SUITES</span>
+                  </span>
+                  <span className="bg-pink-500/20 text-pink-300 text-[10px] font-bold px-2 py-0.5 rounded border border-pink-500/50">
+                    CREATIVE ASSETS
+                  </span>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
+                  Design eye-catching client social posts, marketing banners, and video promos using industry-standard tools like CorelDraw Graphics Suite and Envato ThemeForest templates.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <a href="https://corel.sjv.io/c/5024116/3809733/20119" target="_blank" rel="sponsored noopener noreferrer" className="p-3 bg-gray-900 border border-gray-800 rounded-xl hover:border-pink-500 text-left block space-y-1">
+                    <span className="text-white font-bold block text-xs font-mono">COREL DRAW GRAPHICS SUITE &rarr;</span>
+                    <span className="text-[10px] text-gray-400 block font-sans">Professional vector illustration & graphic editor.</span>
+                  </a>
+                  <a href="https://1.envato.market/c/5024116/805521/4415?subId2=sidebar&subId1=jp_themeforest" target="_blank" rel="sponsored noopener noreferrer" className="p-3 bg-gray-900 border border-gray-800 rounded-xl hover:border-cyan-500 text-left block space-y-1">
+                    <span className="text-white font-bold block text-xs font-mono">ENVATO THEMEFOREST TEMPLATES &rarr;</span>
+                    <span className="text-[10px] text-gray-400 block font-sans">Over 50,000+ website themes & design assets.</span>
+                  </a>
+                </div>
+              </div>
+
             </div>
+          </HUDPanel>
+
+          {/* DYNAMIC AFFILIATE STANDALONE PLACEMENTS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <DynamicAffiliateAd category="security" sizeType="hero" />
+            <DynamicAffiliateAd category="education" sizeType="hero" />
           </div>
-        </HUDPanel>
+
+        </div>
+
+        {/* DEDICATED PROMO ADS COLUMN (1 COL) */}
+        <aside className="lg:col-span-1 border-t lg:border-t-0 lg:border-l-2 border-cyan-500/40 lg:pl-6 space-y-6 sticky top-24">
+          <DynamicAdsSidebar />
+        </aside>
 
       </div>
-
-      {/* WEB, SOFTWARE & APPLICATION DEVELOPMENT */}
-      <HUDPanel title="💻 WEB, SOFTWARE & APPLICATION DEVELOPMENT">
-        <div className="p-6 sm:p-8 space-y-6 font-sans text-xs text-gray-300 leading-relaxed">
-          <p className="text-sm text-gray-200">
-            Beyond Virtual Assistance, Team WhiteHat Dev provides custom software, website, and mobile application engineering services to transform ideas into functional digital products:
-          </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 font-mono text-xs">
-            {[
-              'Business Websites',
-              'Personal Portfolios',
-              'Web Applications',
-              'Mobile Apps (Android & iOS)',
-              'Custom Software',
-              'Management Systems',
-              'Online Platforms',
-              'E-commerce Solutions',
-              'Custom Digital Tools',
-              'User-Friendly Apps',
-              'Cybersecurity Tools',
-              'API Integrations'
-            ].map((item, idx) => (
-              <div key={idx} className="bg-black/90 border border-cyan-500/30 p-3 rounded-xl text-center text-cyan-300 font-bold hover:border-lime-400 transition-all">
-                {item}
-              </div>
-            ))}
-          </div>
-        </div>
-      </HUDPanel>
-
-      {/* TARGET AUDIENCES: MORE THAN JUST A WEBSITE */}
-      <HUDPanel title="🌐 MORE THAN JUST A WEBSITE — FOR DIGITAL CREATORS & PROFESSIONALS">
-        <div className="p-6 sm:p-8 space-y-6 font-sans text-xs text-gray-300 leading-relaxed">
-          <p className="text-sm text-white">
-            Team WhiteHat Dev is envisioned as a digital hub where people can learn, discover opportunities, hire professionals, develop ideas, and build their careers. Designed specifically for:
-          </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 font-mono text-xs">
-            {[
-              'Aspiring VAs',
-              'Experienced VAs',
-              'Freelancers',
-              'Business Owners',
-              'Entrepreneurs',
-              'Developers',
-              'Graphic Designers',
-              'Musicians & Producers',
-              '3D Artists',
-              'Digital Creators',
-              'Clients Seeking VAs',
-              'Software Buyers'
-            ].map((audience, idx) => (
-              <div key={idx} className="bg-gradient-to-r from-gray-900 to-black border border-purple-500/40 p-3 rounded-xl text-center text-purple-300 font-bold">
-                ✓ {audience}
-              </div>
-            ))}
-          </div>
-
-          <div className="p-4 bg-gradient-to-r from-lime-950/60 via-black to-cyan-950/60 border border-lime-400/40 rounded-2xl text-center space-y-2">
-            <h4 className="text-base font-black font-rajdhani text-white uppercase">
-              OUR VISION FOR AN ALL-IN-ONE DIGITAL ECOSYSTEM
-            </h4>
-            <p className="text-xs text-gray-200">
-              We help people turn their <strong className="text-lime-300">skills into careers, ideas into digital products, and businesses into stronger digital platforms.</strong>
-            </p>
-          </div>
-        </div>
-      </HUDPanel>
 
     </div>
   );
