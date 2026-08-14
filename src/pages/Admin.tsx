@@ -54,7 +54,7 @@ export const Admin: React.FC = () => {
           <div>
             <input
               type="password"
-              placeholder="ENTER MASTER PIN"
+              placeholder="ENTER MASTER PIN (anonymousphilippines)"
               value={pinInput}
               onChange={(e) => setPinInput(e.target.value)}
               className="w-full px-4 py-3 bg-black border border-cyan-500/40 rounded-xl text-center text-white font-bold tracking-widest text-sm focus:outline-none focus:border-cyan-400"
@@ -102,7 +102,62 @@ export const Admin: React.FC = () => {
           LOGOUT ADMIN
         </button>
       </div>
+
+      <HUDPanel title="MODULE 1: FULL-STACK SERVICES & PROJECTS MANAGER">
+        <div className="p-6 space-y-4">
+          <p className="text-xs text-gray-300 font-sans">
+            Manage live Virtual Assistant packages, pricing tiers, software projects, and referral offerings.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div className="bg-black/80 border border-gray-800 p-4 rounded-xl space-y-2">
+              <span className="text-cyan-400 font-bold">ACTIVE SERVICES:</span>
+              <ul className="space-y-1 text-gray-300 font-sans">
+                <li>• Executive Virtual Assistance ($15 / hr)</li>
+                <li>• Full-Stack Web Development ($499 / project)</li>
+                <li>• Mobile App Development ($799 / project)</li>
+              </ul>
+            </div>
+
+            <div className="bg-black/80 border border-gray-800 p-4 rounded-xl space-y-2">
+              <span className="text-lime-400 font-bold">SYSTEM TELEMETRY:</span>
+              <ul className="space-y-1 text-gray-300 font-sans">
+                <li>• Database Status: Synchronized</li>
+                <li>• AES-256 Sentinel: Enforced</li>
+                <li>• Hostinger Referral Link: Active (DPDCABINCEHM)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </HUDPanel>
+
+      <HUDPanel title="MODULE 2: IP SENTINEL FIREWALL & SECURITY CONTROL">
+        <div className="p-6 space-y-4">
+          <p className="text-xs text-gray-300 font-sans">
+            Monitor flagged IP addresses and enforce real-time IP bans across all user sessions.
+          </p>
+
+          <div className="bg-black/80 border border-gray-800 p-4 rounded-xl space-y-3">
+            <span className="text-xs text-red-400 font-bold uppercase">BANNED IP ADDRESS LIST ({bannedIps.length}):</span>
+            {bannedIps.length === 0 ? (
+              <p className="text-xs text-gray-500 italic">No IP addresses currently banned.</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {bannedIps.map((ip) => (
+                  <span key={ip} className="bg-red-500/20 border border-red-500/40 text-red-300 text-xs px-2.5 py-1 rounded-md flex items-center space-x-2">
+                    <span>{ip}</span>
+                    <button onClick={() => removeBannedIp(ip)} className="hover:text-white">
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </HUDPanel>
     </div>
   );
 };
+
 export default Admin;

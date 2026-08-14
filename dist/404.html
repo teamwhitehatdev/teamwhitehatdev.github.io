@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>WHITE HAT DEV | How to Become a Successful VA?</title>
-  <link rel="icon" type="image/png" href="./assets/favicon-jccYB0uj-jccYB0uj-jccYB0uj-jccYB0uj-jccYB0uj-jccYB0uj.png">
+  <link rel="icon" type="image/png" href="./assets/favicon-jccYB0uj-jccYB0uj-jccYB0uj-jccYB0uj-jccYB0uj-jccYB0uj-jccYB0uj.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -98,12 +98,28 @@
     })();
   </script>
 
-  <script type="module" crossorigin src="./assets/index-Ct-Qs6Nk.js?v=110.0.0"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CZXQyzut.css?v=110.0.0">
+
+
 
   <script>
     (function() {
       var currentVer = 'v110.0.0';
+      if (localStorage.getItem('wh_app_ver') !== currentVer) {
+        try {
+          localStorage.clear();
+          sessionStorage.clear();
+          localStorage.setItem('wh_app_ver', currentVer);
+        } catch (e) {}
+      }
+    })();
+  </script>
+
+  <script type="module" crossorigin src="./assets/index-xqJpgo3J.js?v=112.0.0"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CZXQyzut.css?v=112.0.0">
+
+  <script>
+    (function() {
+      var currentVer = 'v112.0.0';
       if (localStorage.getItem('wh_app_ver') !== currentVer) {
         try {
           localStorage.clear();
