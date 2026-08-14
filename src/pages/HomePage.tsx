@@ -1,101 +1,116 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Terminal, Shield, Zap, Code, CheckCircle2, ArrowRight, ExternalLink, Sparkles, Star, Award, BookOpen, Layers, Play, DollarSign, ShoppingBag } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
-import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { AffiliateBanners } from '../components/AffiliateBanners';
-import { Sparkles, Rocket, Server, Target, Zap, Users, Star, ShoppingBag, Mic, Smartphone, Terminal, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
-import { generate100Testimonials, TestimonialItem } from '../data/testimonialsData';
+import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
+import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
+import { TESTIMONIALS } from '../data/testimonialsData';
 
-export interface HomePageProps {
-  onOpenConsultation?: (serviceTitle?: string) => void;
+interface HomePageProps {
+  onOpenConsultation: (serviceTitle?: string) => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
   const GUMROAD_LINK = "https://gumroad.com/discover?a=815255139";
+  const PATREON_POST_LINK = "https://www.patreon.com/FuturisticSoftwares/posts/futuristic-gui-166644782";
+  const PATREON_CHANNEL_LINK = "https://www.patreon.com/cw/FuturisticSoftwares";
   const GUI_TOOL_LINK = "https://futuristicsoftwares.gumroad.com/l/NETWORKANDDATAINFORMATIONS-GUI-TOOLS?a=815255139";
   const ELEVENLABS_LINK = "https://try.elevenlabs.io/e5xwigkl9igv";
   const PLAY_STORE_URL = "https://play.google.com/store/apps/dev?id=7374638355121114347";
 
-  const handleConsult = (svc?: string) => {
+  const [displayTestimonials, setDisplayTestimonials] = useState(TESTIMONIALS);
+
+  useEffect(() => {
+    const shuffled = [...TESTIMONIALS].sort(() => Math.random() - 0.5);
+    setDisplayTestimonials(shuffled);
+  }, []);
+
+  const handleConsult = (title: string) => {
     if (onOpenConsultation) {
-      onOpenConsultation(svc);
+      onOpenConsultation(title);
     }
   };
 
-  const [displayTestimonials, setDisplayTestimonials] = useState<TestimonialItem[]>([]);
-
-  useEffect(() => {
-    const fullList = generate100Testimonials();
-    const shuffled = [...fullList].sort(() => Math.random() - 0.5);
-    setDisplayTestimonials(shuffled.slice(0, 18));
-  }, []);
-
   return (
-    <div className="space-y-8 font-mono max-w-7xl mx-auto pb-10">
+    <div className="space-y-8 font-mono">
       
-      {/* NO BACKGROUND ON HEADLINE HERO SECTION */}
-      <div className="p-2 sm:p-4 space-y-4">
-        <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-          <Sparkles className="w-3.5 h-3.5 text-lime-400 animate-pulse" />
-          <span>VIRTUAL ASSISTANT CAREER ACCELERATOR</span>
+      {/* 🚀 TOP HERO MASTERCLASS BANNER: HOW TO BECOME SUCCESSFUL AFFILIATE MARKETER */}
+      <div className="bg-gradient-to-r from-purple-950 via-black to-cyan-950 border-2 border-lime-400 p-4 sm:p-6 rounded-3xl shadow-2xl space-y-3 relative overflow-hidden group">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-2xl bg-lime-400/20 border border-lime-400 flex items-center justify-center text-lime-400 flex-shrink-0 animate-bounce">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-[10px] font-black text-lime-400 uppercase tracking-widest block font-mono">
+                🔥 NEW DEDICATED GUIDE &amp; MASTERCLASS
+              </span>
+              <h2 className="text-base sm:text-xl font-black text-white font-rajdhani uppercase leading-tight">
+                HOW TO BECOME A SUCCESSFUL AFFILIATE MARKETER?
+              </h2>
+            </div>
+          </div>
+
+          <Link
+            to="/affiliate-guide"
+            className="px-5 py-2.5 bg-gradient-to-r from-lime-400 via-cyan-400 to-purple-400 text-black font-black font-rajdhani text-xs uppercase rounded-xl hover:scale-105 transition-all shadow-lg flex items-center space-x-1.5"
+          >
+            <span>ACCESS COMPLETE AFFILIATE MASTERCLASS &rarr;</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
-        <h1 className="text-3xl sm:text-6xl font-black font-rajdhani text-white uppercase tracking-wide leading-tight">
-          EARN $3,000+/MO AS A <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400">SUCCESSFUL VIRTUAL ASSISTANT</span>
-        </h1>
-
-        <p className="text-xs sm:text-sm text-gray-300 font-sans max-w-3xl leading-relaxed">
-          Masterclass guides, portfolio hosting strategies, and digital creator toolkits designed to help freelancers and VAs land high-paying clients worldwide.
+        <p className="text-xs text-gray-200 font-sans leading-relaxed">
+          Learn our 10 Value-First Tutorial Blueprints, 5 Problem &rarr; Solution Strategies, and Impact.com partner referral monetization tools tailored for Virtual Assistants &amp; Freelancers!
         </p>
-
-        <div className="flex flex-wrap gap-3 pt-2">
-          <button
-            onClick={() => handleConsult('Executive VA Accelerator Package')}
-            className="px-5 py-2.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl hover:opacity-95 shadow-md flex items-center space-x-1.5"
-          >
-            <Rocket className="w-4 h-4" />
-            <span>HIRE VA CONSULTATION (20% OFF)</span>
-          </button>
-
-          <a
-            href={HOSTINGER_LINK}
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            className="px-5 py-2.5 bg-black/80 border border-lime-400/50 text-lime-300 font-extrabold font-rajdhani text-xs uppercase rounded-xl hover:bg-lime-500/20 transition-all flex items-center space-x-1.5"
-          >
-            <Server className="w-4 h-4 text-lime-400" />
-            <span>HOSTINGER 75% OFF (CODE: DPDCABINCEHM)</span>
-          </a>
-        </div>
       </div>
 
-      {/* MAIN GRID: LEFT CONTENT (2 COLS) + DEDICATED SEPARATED RIGHT COLUMN SIDEBAR (1 COL) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      {/* HEADLINE: UN-BOXED CLEAN TITLE WITH SUBTITLE */}
+      <div className="text-center space-y-3 pt-2">
+        <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full text-cyan-300 text-xs font-bold uppercase tracking-widest">
+          <Terminal className="w-4 h-4 text-lime-400" />
+          <span>VIRTUAL ASSISTANT ACCELERATOR &amp; DIGITAL HUB</span>
+        </div>
+
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black font-rajdhani text-white uppercase tracking-wider leading-none">
+          EARN $3,000+/MO AS A SUCCESSFUL VIRTUAL ASSISTANT
+        </h1>
+
+        <p className="text-sm sm:text-base text-gray-300 font-sans max-w-3xl mx-auto leading-relaxed">
+          Master in-demand technical skills, automate client workflows, and launch digital software applications on Gumroad, Patreon, and Google Play Store.
+        </p>
+      </div>
+
+      {/* MAIN TWO-COLUMN LAYOUT: MAIN CONTENT (LEFT 3 COLS) + DEDICATED PROMO ADS SIDEBAR (RIGHT 1 COL) */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        {/* LEFT COLUMN CONTENT */}
-        <div className="lg:col-span-2 space-y-8">
-          
-          {/* EXPANDED MASTERCLASS ROADMAP TUTORIALS & GUIDES */}
-          <HUDPanel title="🎓 COMPREHENSIVE VA & FREELANCER MASTERCLASS ROADMAP (6-STEP SUCCESS GUIDE)">
-            <div className="p-5 space-y-6 font-sans text-xs">
-              <p className="text-gray-300 leading-relaxed font-mono text-[11px]">
-                Follow our proven step-by-step blueprint to build a high-earning Virtual Assistant career, launch digital products, and drive traffic using our verified partner platforms:
+        {/* MAIN COLUMN (3 COLS) */}
+        <div className="lg:col-span-3 space-y-8">
+
+          {/* 6-STEP VA MASTERCLASS ROADMAP */}
+          <HUDPanel title="🎓 6-STEP BLUEPRINT: HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT">
+            <div className="p-5 sm:p-6 space-y-6">
+              
+              <p className="text-xs text-gray-300 font-sans leading-relaxed">
+                Follow our step-by-step roadmap to scale from a beginner freelancer to a high-earning Virtual Assistant commanding $30-$50+/hr:
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 font-mono text-xs">
                 
                 {/* STEP 1 */}
-                <div className="bg-black/90 border border-lime-500/40 p-4 rounded-2xl space-y-3 hover:border-lime-400 transition-all flex flex-col justify-between">
+                <div className="bg-black/90 border border-cyan-500/40 p-4 rounded-2xl space-y-3 hover:border-cyan-400 transition-all flex flex-col justify-between">
                   <div className="space-y-2">
-                    <span className="text-[10px] font-bold text-lime-400 font-mono uppercase tracking-wider flex items-center space-x-1">
-                      <Server className="w-3.5 h-3.5 text-lime-400" />
-                      <span>STEP 1: WEBSITE &amp; BRANDING</span>
+                    <span className="text-[10px] font-bold text-cyan-400 font-mono uppercase tracking-wider flex items-center space-x-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-lime-400" />
+                      <span>STEP 1: HOSTING &amp; DOMAIN SETUP</span>
                     </span>
                     <h4 className="text-xs font-black text-white font-rajdhani uppercase">
-                      Build Your Custom VA Portfolio Site
+                      Build Your Professional VA Portfolio
                     </h4>
                     <p className="text-gray-300 leading-relaxed text-[11px]">
-                      International clients trust VAs with custom <code className="text-lime-300">.com</code> domains over basic PDF resumes. Get fast NVMe hosting, free domain, and 99.9% uptime.
+                      Get 75% OFF Hostinger Cloud Hosting. Claim your free domain, SSL certificate, and business email address to pitch clients.
                     </p>
                   </div>
 
@@ -103,7 +118,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                     href={HOSTINGER_LINK}
                     target="_blank"
                     rel="sponsored noopener noreferrer"
-                    className="w-full py-2 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold font-mono text-[10px] uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1"
+                    className="w-full py-2 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold font-mono text-[10px] uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1"
                   >
                     <span>CLAIM HOSTINGER 75% OFF</span>
                     <ArrowRight className="w-3 h-3" />
@@ -118,10 +133,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                       <span>STEP 2: DIGITAL PRODUCTS</span>
                     </span>
                     <h4 className="text-xs font-black text-white font-rajdhani uppercase">
-                      Package &amp; Sell Client Decks on Gumroad
+                      Sell Templates &amp; E-Books on Gumroad
                     </h4>
                     <p className="text-gray-300 leading-relaxed text-[11px]">
-                      Earn passive income selling onboarding templates, contract agreements, and social media kits on Gumroad with instant global payouts.
+                      Create digital downloadable assets, VA proposal templates, and client onboarding guides to earn passive income.
                     </p>
                   </div>
 
@@ -129,9 +144,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                     href={GUMROAD_LINK}
                     target="_blank"
                     rel="sponsored noopener noreferrer"
-                    className="w-full py-2 bg-gradient-to-r from-pink-400 to-purple-400 text-black font-extrabold font-mono text-[10px] uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1"
+                    className="w-full py-2 bg-gray-900 border border-pink-400/50 text-pink-300 font-extrabold font-mono text-[10px] uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1"
                   >
-                    <span>JOIN GUMROAD CREATOR STORE</span>
+                    <span>REGISTER ON GUMROAD</span>
                     <ArrowRight className="w-3 h-3" />
                   </a>
                 </div>
@@ -140,14 +155,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                 <div className="bg-black/90 border border-purple-500/40 p-4 rounded-2xl space-y-3 hover:border-purple-400 transition-all flex flex-col justify-between">
                   <div className="space-y-2">
                     <span className="text-[10px] font-bold text-purple-400 font-mono uppercase tracking-wider flex items-center space-x-1">
-                      <Mic className="w-3.5 h-3.5 text-purple-400" />
-                      <span>STEP 3: AI VOICE SERVICES</span>
+                      <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                      <span>STEP 3: AI VOICE &amp; AUDIO</span>
                     </span>
                     <h4 className="text-xs font-black text-white font-rajdhani uppercase">
-                      AI Voice Studio &amp; Audio Narration
+                      Offer AI Voiceover &amp; Podcasting
                     </h4>
                     <p className="text-gray-300 leading-relaxed text-[11px]">
-                      Offer high-paying AI voiceovers, podcast editing, and voice clone narration for executive clients using ElevenLabs AI Studio.
+                      Use ElevenLabs AI Voice Studio to generate human-grade narration for client audiobooks, videos, and ads.
                     </p>
                   </div>
 
@@ -155,7 +170,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                     href={ELEVENLABS_LINK}
                     target="_blank"
                     rel="sponsored noopener noreferrer"
-                    className="w-full py-2 bg-gradient-to-r from-purple-500 to-cyan-400 text-white font-extrabold font-mono text-[10px] uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1"
+                    className="w-full py-2 bg-gray-900 border border-purple-400/50 text-purple-300 font-extrabold font-mono text-[10px] uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1"
                   >
                     <span>TRY ELEVENLABS AI VOICE</span>
                     <ArrowRight className="w-3 h-3" />
@@ -163,17 +178,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                 </div>
 
                 {/* STEP 4 */}
-                <div className="bg-black/90 border border-cyan-500/40 p-4 rounded-2xl space-y-3 hover:border-cyan-400 transition-all flex flex-col justify-between">
+                <div className="bg-black/90 border border-lime-500/40 p-4 rounded-2xl space-y-3 hover:border-lime-400 transition-all flex flex-col justify-between">
                   <div className="space-y-2">
-                    <span className="text-[10px] font-bold text-cyan-400 font-mono uppercase tracking-wider flex items-center space-x-1">
-                      <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>STEP 4: TECHNICAL VA TOOLS</span>
+                    <span className="text-[10px] font-bold text-lime-400 font-mono uppercase tracking-wider flex items-center space-x-1">
+                      <Code className="w-3.5 h-3.5 text-lime-400" />
+                      <span>STEP 4: TECHNICAL NETWORK TOOLS</span>
                     </span>
                     <h4 className="text-xs font-black text-white font-rajdhani uppercase">
-                      Network &amp; Data Information GUI Software
+                      Automate IT &amp; Data Diagnostics
                     </h4>
                     <p className="text-gray-300 leading-relaxed text-[11px]">
-                      Master desktop IT diagnostics, network analytics, and server monitoring software to offer specialized technical assistance.
+                      Use our specialized desktop GUI software to diagnose client networks, ping servers, and automate data collection.
                     </p>
                   </div>
 
@@ -181,18 +196,18 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                     href={GUI_TOOL_LINK}
                     target="_blank"
                     rel="sponsored noopener noreferrer"
-                    className="w-full py-2 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold font-mono text-[10px] uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1"
+                    className="w-full py-2 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold font-mono text-[10px] uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1"
                   >
-                    <span>GET NETWORK GUI TOOL ON GUMROAD</span>
+                    <span>GET GUI NETWORK TOOL ($14.99)</span>
                     <ArrowRight className="w-3 h-3" />
                   </a>
                 </div>
 
                 {/* STEP 5 */}
-                <div className="bg-black/90 border border-lime-500/40 p-4 rounded-2xl space-y-3 hover:border-lime-400 transition-all flex flex-col justify-between">
+                <div className="bg-black/90 border border-cyan-500/40 p-4 rounded-2xl space-y-3 hover:border-cyan-400 transition-all flex flex-col justify-between">
                   <div className="space-y-2">
-                    <span className="text-[10px] font-bold text-lime-400 font-mono uppercase tracking-wider flex items-center space-x-1">
-                      <Smartphone className="w-3.5 h-3.5 text-lime-400" />
+                    <span className="text-[10px] font-bold text-cyan-400 font-mono uppercase tracking-wider flex items-center space-x-1">
+                      <Layers className="w-3.5 h-3.5 text-cyan-400" />
                       <span>STEP 5: MOBILE APP SOLUTIONS</span>
                     </span>
                     <h4 className="text-xs font-black text-white font-rajdhani uppercase">
@@ -244,8 +259,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
             </div>
           </HUDPanel>
 
-          {/* REGISTER NOW AND SELL YOUR DIGITAL PRODUCTS HERE (FIXED IN LEFT COLUMN TO SAVE SPACE) */}
+          {/* DYNAMIC CATEGORIZED & SIZED AFFILIATE BANNERS SHOWCASE (22 IMPACT.COM AD UNITS) */}
           <AffiliateBanners />
+
+          {/* DYNAMIC STANDALONE ROTATING AD CARDS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <DynamicAffiliateAd category="hardware" sizeType="hero" />
+            <DynamicAffiliateAd category="creative" sizeType="hero" />
+          </div>
 
           {/* CORE VIRTUAL ASSISTANT PACKAGES */}
           <HUDPanel title="🛠️ CORE VIRTUAL ASSISTANT PACKAGES">
@@ -276,9 +297,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
 
         {/* DEDICATED SEPARATED RIGHT COLUMN PROMO AD SIDEBAR */}
         <aside className="lg:col-span-1 border-t lg:border-t-0 lg:border-l-2 border-cyan-500/40 lg:pl-6 space-y-6 sticky top-24">
-          <div className="bg-cyan-500/10 border border-cyan-500/30 p-2.5 rounded-xl text-center text-xs font-mono font-bold text-cyan-300 uppercase tracking-widest">
-            ⚡ DEDICATED PROMO ADS COLUMN
-          </div>
           <DynamicAdsSidebar />
         </aside>
 
