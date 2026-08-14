@@ -12,28 +12,31 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js?v=180.0.0"></script>
+  
+  <!-- SAFE OPTIONAL EXTERNAL SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" async></script>
+
+  <!-- AUTOMATIC CACHE RECOVERY ON SCRIPT LOAD ERROR -->
+  <script>
+    (function() {
+      window.addEventListener('error', function(e) {
+        if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) {
+          if (!sessionStorage.getItem('wh_reloaded')) {
+            sessionStorage.setItem('wh_reloaded', '1');
+            try { localStorage.clear(); } catch(err) {}
+            window.location.reload(true);
+          }
+        }
+      }, true);
+    })();
+  </script>
 
   <!-- OFFICIAL APP.IMPACT.COM AFFILIATE TRACKING TAG -->
   <script type="text/javascript">
     (function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/P-A5024116-1495-4f8e-88fd-54d8d32a55be1.js','script','impactStat',document,window);impactStat('trackImpression');
   </script>
-  <script type="module" crossorigin src="./assets/index-DG_4sy1C.js?v=180.0.0"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-B5qzDDSB.css?v=180.0.0">
-
-  <script>
-    (function() {
-      var currentVer = 'v180.0.0';
-      if (localStorage.getItem('wh_app_ver') !== currentVer) {
-        try {
-          localStorage.clear();
-          sessionStorage.clear();
-          localStorage.setItem('wh_app_ver', currentVer);
-        } catch (e) {}
-      }
-    })();
-  </script>
-
+  <script type="module" crossorigin src="./assets/index-DG_4sy1C.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-B5qzDDSB.css">
 </head>
 <body class="cyber-bg-gradient text-gray-100 antialiased selection:bg-[var(--primary-cyan)] selection:text-black min-h-screen">
   <div id="root"></div>
