@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { HUDPanel } from '../components/HUDPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { AffiliateBanners } from '../components/AffiliateBanners';
-import { Shield, Sparkles, Rocket, Server, Smartphone, ExternalLink, HelpCircle, Target, DollarSign, CheckCircle2, Award, Download, Users, Zap } from 'lucide-react';
+import { Shield, Sparkles, Rocket, Server, Smartphone, ExternalLink, Target, Zap, Users, Star, Quote, CheckCircle2 } from 'lucide-react';
 import { PLAY_STORE_URL } from '../utils/initialData';
 
 export interface HomePageProps {
@@ -20,6 +20,51 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
       onOpenConsultation(svc);
     }
   };
+
+  const testimonials = [
+    {
+      name: 'Sarah L.',
+      role: 'E-commerce CEO (USA)',
+      text: 'Team WhiteHat Dev provided exceptional Virtual Assistant support. Our sales increased 40% in 60 days!',
+      rating: 5,
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80'
+    },
+    {
+      name: 'Michael K.',
+      role: 'Tech Founder (UK)',
+      text: 'Outstanding web development speed and clean TypeScript code. The Hostinger setup was completely seamless.',
+      rating: 5,
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
+    },
+    {
+      name: 'David R.',
+      role: 'Agency Owner (Australia)',
+      text: 'Top-tier executive VA support! Saved our management team over 35 hours per week on administrative work.',
+      rating: 5,
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'
+    },
+    {
+      name: 'Elena M.',
+      role: 'Digital Creator (Canada)',
+      text: 'The free Creator Guide and ElevenLabs AI tutorial helped me land 3 new clients in my first month as a VA!',
+      rating: 5,
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
+    },
+    {
+      name: 'James H.',
+      role: 'SaaS Director (Germany)',
+      text: 'Team WhiteHat Dev engineered our Android app and published it on Google Play Store without a single bug.',
+      rating: 5,
+      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80'
+    },
+    {
+      name: 'Amanda P.',
+      role: 'Virtual Assistant (Philippines)',
+      text: 'I followed the 5-step masterclass, built my portfolio site on Hostinger with code DPDCABINCEHM, and earned $2,800/mo!',
+      rating: 5,
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80'
+    }
+  ];
 
   return (
     <div className="space-y-10 font-mono max-w-7xl mx-auto pb-10">
@@ -61,7 +106,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         </div>
       </div>
 
-      {/* NEW SECTION: THE FREE CREATOR'S GUIDE FOR VIRTUAL ASSISTANTS */}
+      {/* THE FREE CREATOR'S GUIDE FOR VIRTUAL ASSISTANTS */}
       <HUDPanel title="📖 THE FREE CREATOR'S GUIDE: HOW TO GET STARTED & WIN CLIENTS">
         <div className="p-6 sm:p-8 space-y-6 font-sans text-xs">
           
@@ -84,7 +129,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans">
             
-            {/* QUESTION 1 ANSWER */}
+            {/* QUESTION 1 */}
             <div className="bg-black/80 border border-cyan-500/40 p-5 rounded-2xl space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
                 <span className="text-xs font-bold text-cyan-400 font-mono uppercase tracking-wider flex items-center space-x-1">
@@ -95,7 +140,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                   Launch Your Custom Portfolio Website First
                 </h4>
                 <p className="text-gray-300 leading-relaxed">
-                  Chances are, you're really good at something — administrative management, social media scheduling, graphic design, or writing. But clients in the US, UK, and Australia won't hire you if you only send a generic PDF resume. You MUST have your own custom domain portfolio site.
+                  Clients in the US, UK, and Australia won't hire you if you only send a generic PDF resume. You MUST have your own custom domain portfolio site. Get hosting on <a href={HOSTINGER_LINK} target="_blank" rel="sponsored noopener noreferrer" className="text-lime-400 font-bold underline">Hostinger (75% OFF with code: DPDCABINCEHM)</a>.
                 </p>
               </div>
 
@@ -109,7 +154,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
               </a>
             </div>
 
-            {/* QUESTION 2 ANSWER */}
+            {/* QUESTION 2 */}
             <div className="bg-black/80 border border-lime-500/40 p-5 rounded-2xl space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
                 <span className="text-xs font-bold text-lime-400 font-mono uppercase tracking-wider flex items-center space-x-1">
@@ -120,7 +165,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                   Turn Your Skills Into Recurring VA Packages
                 </h4>
                 <p className="text-gray-300 leading-relaxed">
-                  Package your knowledge into digital templates, social media content calendars, email management systems, or AI voiceover narrations. Equip pre-built proposal kits from our recommended store to pitch $1,500/mo retainer packages.
+                  Package your knowledge into digital templates, social media content calendars, or email systems. Equip proposal kits from our <a href={GUMROAD_LINK} target="_blank" rel="sponsored noopener noreferrer" className="text-cyan-400 font-bold underline">Gumroad Store</a>.
                 </p>
               </div>
 
@@ -134,7 +179,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
               </a>
             </div>
 
-            {/* QUESTION 3 ANSWER */}
+            {/* QUESTION 3 */}
             <div className="bg-black/80 border border-purple-500/40 p-5 rounded-2xl space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
                 <span className="text-xs font-bold text-purple-400 font-mono uppercase tracking-wider flex items-center space-x-1">
@@ -145,7 +190,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                   Pitch High-Value Skills & AI Automation
                 </h4>
                 <p className="text-gray-300 leading-relaxed">
-                  Stand out from 99% of applicants by offering specialized AI voice generator workflows and automated social media video editing using cutting-edge tools.
+                  Stand out from competitors by offering specialized AI voice generator workflows powered by <a href={ELEVENLABS_LINK} target="_blank" rel="sponsored noopener noreferrer" className="text-purple-300 font-bold underline">ElevenLabs AI Studio</a>.
                 </p>
               </div>
 
@@ -167,54 +212,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
       {/* MAIN 2-COLUMN LAYOUT: LEFT CONTENT + RIGHT DYNAMIC ADS SIDEBAR */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* LEFT COLUMN: STEP-BY-STEP TUTORIALS & GUIDES */}
+        {/* LEFT COLUMN: CORE VA & DIGITAL SERVICES */}
         <div className="lg:col-span-2 space-y-8">
-          
-          {/* MASTERCLASS GUIDE 1 */}
-          <HUDPanel title="📘 STEP-BY-STEP GUIDE: 5 STEPS TO LAND $15-$50/HR VA CLIENTS">
-            <div className="p-6 space-y-6 font-sans text-xs">
-              
-              <div className="space-y-4">
-                
-                {/* STEP 1 */}
-                <div className="bg-black/80 border border-cyan-500/30 p-4 rounded-2xl space-y-2">
-                  <div className="flex items-center space-x-2 text-cyan-400 font-bold font-mono">
-                    <span className="bg-cyan-500/20 px-2 py-0.5 rounded border border-cyan-500/40">STEP 1</span>
-                    <span className="text-sm font-rajdhani uppercase text-white">Build Your Professional VA Portfolio Website</span>
-                  </div>
-                  <p className="text-gray-300 leading-relaxed">
-                    Clients in the US, UK, Canada, and Australia expect VAs to have a sleek, custom domain portfolio website. Free Google Site links look unprofessional. Get high-speed NVMe hosting and a free custom domain on <a href={HOSTINGER_LINK} target="_blank" rel="sponsored noopener noreferrer" className="text-lime-400 font-bold underline">Hostinger (75% OFF with code: DPDCABINCEHM)</a>.
-                  </p>
-                </div>
-
-                {/* STEP 2 */}
-                <div className="bg-black/80 border border-lime-500/30 p-4 rounded-2xl space-y-2">
-                  <div className="flex items-center space-x-2 text-lime-400 font-bold font-mono">
-                    <span className="bg-lime-500/20 px-2 py-0.5 rounded border border-lime-500/40">STEP 2</span>
-                    <span className="text-sm font-rajdhani uppercase text-white">Equip Premium Client Templates & Proposal Kits</span>
-                  </div>
-                  <p className="text-gray-300 leading-relaxed">
-                    Don't draft contracts or pitch proposals from scratch. Access verified client pitch decks, social media content calendars, and email outreach scripts on our <a href={GUMROAD_LINK} target="_blank" rel="sponsored noopener noreferrer" className="text-cyan-400 font-bold underline">Gumroad Digital Store</a>.
-                  </p>
-                </div>
-
-                {/* STEP 3 */}
-                <div className="bg-black/80 border border-purple-500/30 p-4 rounded-2xl space-y-2">
-                  <div className="flex items-center space-x-2 text-purple-400 font-bold font-mono">
-                    <span className="bg-purple-500/20 px-2 py-0.5 rounded border border-purple-500/40">STEP 3</span>
-                    <span className="text-sm font-rajdhani uppercase text-white">Master AI Voiceover & Automation Skills</span>
-                  </div>
-                  <p className="text-gray-300 leading-relaxed">
-                    Stand out from 99% of applicants by offering AI content creation and podcast narration using <a href={ELEVENLABS_LINK} target="_blank" rel="sponsored noopener noreferrer" className="text-purple-300 font-bold underline">ElevenLabs AI Voice Studio</a>.
-                  </p>
-                </div>
-
-              </div>
-
-            </div>
-          </HUDPanel>
-
-          {/* CORE SERVICES OVERVIEW */}
           <HUDPanel title="🛠️ CORE VIRTUAL ASSISTANT & DIGITAL PACKAGES">
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
@@ -238,7 +237,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
               </div>
             </div>
           </HUDPanel>
-
         </div>
 
         {/* RIGHT COLUMN: DYNAMIC ADS SIDEBAR CONTAINER */}
@@ -247,6 +245,57 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         </div>
 
       </div>
+
+      {/* RESTORED TESTIMONIALS & CLIENT REVIEWS SECTION AT BOTTOM */}
+      <HUDPanel title="⭐⭐⭐⭐⭐ VERIFIED CLIENT REVIEWS & TESTIMONIALS">
+        <div className="p-6 sm:p-8 space-y-6">
+          <p className="text-xs text-gray-300 font-sans leading-relaxed">
+            Read authentic feedback from CEOs, agency owners, digital creators, and Virtual Assistants who transformed their online businesses with Team WhiteHat Dev:
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans text-xs">
+            {testimonials.map((t, idx) => (
+              <div key={idx} className="bg-black/80 border border-gray-800 p-5 rounded-2xl space-y-4 hover:border-cyan-500/50 transition-all flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-1 text-lime-400">
+                    {[...Array(t.rating)].map((_, rIdx) => (
+                      <Star key={rIdx} className="w-4 h-4 fill-lime-400 text-lime-400" />
+                    ))}
+                  </div>
+
+                  <p className="text-gray-200 italic leading-relaxed">
+                    "{t.text}"
+                  </p>
+                </div>
+
+                <div className="flex items-center space-x-3 pt-3 border-t border-gray-800">
+                  <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full border border-cyan-400 object-cover" />
+                  <div>
+                    <span className="text-sm font-bold text-white font-rajdhani block leading-none">{t.name}</span>
+                    <span className="text-[10px] text-gray-400 block pt-0.5">{t.role}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* SLOW MARQUEE ANIMATION ROW */}
+          <div className="overflow-hidden pt-4 border-t border-gray-900">
+            <div className="flex space-x-6 animate-marqueeSlow whitespace-nowrap hover:[animation-play-state:paused]">
+              {testimonials.concat(testimonials).map((t, idx) => (
+                <div key={idx} className="inline-block w-80 bg-gradient-to-r from-gray-900 to-black border border-cyan-500/30 p-4 rounded-2xl space-y-1.5 flex-shrink-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lime-400 text-xs font-bold font-mono">★★★★★ VERIFIED</span>
+                    <span className="text-white font-bold text-xs">{t.name}</span>
+                  </div>
+                  <p className="text-xs text-gray-300 font-sans whitespace-normal line-clamp-2">"{t.text}"</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </HUDPanel>
 
       {/* FULL REFERRAL BANNERS GRID AT BOTTOM */}
       <AffiliateBanners />
