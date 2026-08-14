@@ -39,7 +39,6 @@ export const Footer: React.FC = () => {
               <li><Link to="/about" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; About Platform &amp; Vision</Link></li>
               <li><Link to="/services" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Virtual Assistant Services</Link></li>
               <li><Link to="/showcase" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Software &amp; Showcase</Link></li>
-              <li><Link to="/admin" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Master Portal</Link></li>
             </ul>
           </div>
 
@@ -77,7 +76,7 @@ export const Footer: React.FC = () => {
 
           <div className="space-y-2 text-center sm:text-left">
             <h4 className="text-xs font-bold text-purple-400 uppercase tracking-wider border-b border-gray-800 pb-1">
-              CYBER SENTINEL & SAFETY
+              CYBER SENTINEL &amp; SAFETY
             </h4>
             <p className="text-[11px] text-gray-400 font-sans leading-relaxed">
               Protected by WhiteHat Sentinel Firewall with AES-256 telemetry monitoring and automated IP filtering.
