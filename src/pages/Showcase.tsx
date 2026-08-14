@@ -1,128 +1,121 @@
 import React, { useState } from 'react';
-import { ExternalLink,  Filter, Code, ArrowRight } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
-import { PROJECTS, Project } from '../utils/initialData';
+import { ExternalLink, Terminal, Shield, Sparkles, Laptop, Smartphone, Code, ShoppingBag } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 export const Showcase: React.FC = () => {
-  const [filter, setFilter] = useState<string>('all');
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const { projects } = useApp();
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
 
-  const filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.category === filter);
+  const categories = ['ALL', 'Computer Applications', 'Web App', 'Mobile App'];
+
+  const filteredProjects = selectedCategory === 'ALL'
+    ? projects
+    : projects.filter((p) => p.category.toLowerCase() === selectedCategory.toLowerCase());
 
   return (
-    <div className="space-y-12 max-w-6xl mx-auto px-4">
-      {/* Header */}
-      <div className="text-center space-y-4 py-8">
-        <h1 className="text-4xl md:text-5xl font-black font-rajdhani uppercase text-white tracking-wider">
-          PROJECTS & ARCHITECTURAL CASE STUDIES
+    <div className="space-y-8 font-mono max-w-7xl mx-auto pb-10">
+      
+      {/* HEADER BANNER */}
+      <div className="bg-gradient-to-r from-gray-900 via-black to-cyan-950/90 border border-cyan-500/40 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xl">
+        <div className="inline-flex items-center space-x-2 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+          <Laptop className="w-4 h-4 text-lime-400 animate-pulse" />
+          <span>FEATURED SOFTWARE & COMPUTER APPLICATIONS SHOWCASE</span>
+        </div>
+
+        <h1 className="text-3xl sm:text-5xl font-black font-rajdhani text-white uppercase tracking-wide">
+          OUR SHOWCASE & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400">SOFTWARE PRODUCTS</span>
         </h1>
-        <p className="text-sm text-gray-400 font-mono max-w-2xl mx-auto">
-          Explore real-world enterprise applications, mobile ecosystems, cybersecurity tools, and high-frequency automation software built by Senior Architect Team White Hat.
+
+        <p className="text-xs sm:text-sm text-gray-300 font-sans max-w-3xl leading-relaxed">
+          Explore our portfolio of computer applications, cybersecurity diagnostic tools, full-stack web applications, and published Google Play Store mobile apps.
         </p>
+
+        {/* CATEGORY FILTER TABS */}
+        <div className="flex flex-wrap gap-2 pt-2 font-mono text-xs">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 rounded-xl uppercase font-bold transition-all ${
+                selectedCategory === cat
+                  ? 'bg-gradient-to-r from-cyan-400 to-lime-400 text-black shadow-lg'
+                  : 'bg-black/60 border border-gray-800 text-gray-400 hover:text-white'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Category Filter Buttons */}
-      <div className="flex flex-wrap justify-center gap-2 font-mono text-xs">
-        {[
-          { key: 'all', label: 'ALL PROJECTS' },
-          { key: 'web', label: 'WEB APPLICATIONS' },
-          { key: 'mobile', label: 'MOBILE APPS' },
-          { key: 'security', label: 'CYBERSECURITY' },
-          { key: 'automation', label: 'AUTOMATION & AI' }
-        ].map(btn => (
-          <button
-            key={btn.key}
-            onClick={() => setFilter(btn.key)}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              filter === btn.key
-                ? 'bg-gradient-to-r from-cyan-500 to-lime-500 text-black font-bold shadow-lg shadow-cyan-500/20'
-                : 'bg-black/60 border border-gray-800 text-gray-400 hover:text-white'
-            }`}
-          >
-            {btn.label}
-          </button>
-        ))}
-      </div>
+      {/* PROJECTS GRID */}
+      <HUDPanel title={`🚀 FEATURED PROJECTS (${filteredProjects.length})`}>
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredProjects.map((proj) => {
+              const isGumroadProject = proj.liveUrl.includes('gumroad.com');
+              return (
+                <div key={proj.id} className="bg-black/90 border-2 border-gray-800 hover:border-cyan-500/60 p-5 rounded-2xl space-y-4 shadow-xl transition-all flex flex-col justify-between">
+                  <div className="space-y-3">
+                    
+                    <div className="rounded-xl overflow-hidden border border-gray-700 relative">
+                      <img src={proj.image} alt={proj.title} className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300" />
+                      
+                      <span className="absolute top-3 right-3 bg-black/80 text-lime-400 text-[10px] font-bold px-2.5 py-1 rounded-full border border-lime-500/40 font-mono uppercase">
+                        {proj.category}
+                      </span>
+                    </div>
 
-      {/* Projects Grid */}
-      <HUDPanel title={`PROJECT PORTFOLIO MATRIX (${filtered.length})`}>
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map(p => (
-            <div key={p.id} className="bg-black/50 border border-gray-800 rounded-xl overflow-hidden hover:border-cyan-500/50 transition-all flex flex-col justify-between group">
-              <div>
-                <div className="relative h-48 overflow-hidden">
-                  <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
-                  <div className="absolute top-3 left-3 bg-black/80 px-2.5 py-1 rounded text-[10px] font-mono text-lime-400 border border-lime-500/30">
-                    {p.metrics}
+                    <h3 className="text-lg font-black font-rajdhani text-white uppercase tracking-wider">
+                      {proj.title}
+                    </h3>
+
+                    <p className="text-xs text-gray-300 font-sans leading-relaxed">
+                      {proj.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 pt-1 font-mono">
+                      {proj.tags.map((tag, idx) => (
+                        <span key={idx} className="bg-cyan-500/10 text-cyan-300 text-[10px] px-2 py-0.5 rounded border border-cyan-500/30">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <a
+                      href={proj.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`w-full py-3 ${
+                        isGumroadProject
+                          ? 'bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 text-white'
+                          : 'bg-gradient-to-r from-cyan-400 to-lime-400 text-black'
+                      } font-extrabold font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-2`}
+                    >
+                      {isGumroadProject ? (
+                        <>
+                          <ShoppingBag className="w-4 h-4" />
+                          <span>GET ON GUMROAD SOFTWARE STORE &rarr;</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>VIEW LIVE PROJECT DEMO &rarr;</span>
+                          <ExternalLink className="w-4 h-4" />
+                        </>
+                      )}
+                    </a>
                   </div>
                 </div>
-
-                <div className="p-5 space-y-3">
-                  <h3 className="text-lg font-bold text-white font-rajdhani">{p.title}</h3>
-                  <p className="text-xs text-gray-400 font-mono leading-relaxed line-clamp-3">{p.description}</p>
-                </div>
-              </div>
-
-              <div className="p-5 pt-0 space-y-3">
-                <div className="flex flex-wrap gap-1">
-                  {p.techStack.map((tech, idx) => (
-                    <span key={idx} className="text-[10px] font-mono px-2 py-0.5 rounded bg-gray-900 border border-gray-800 text-gray-300">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <button
-                  onClick={() => setSelectedProject(p)}
-                  className="w-full py-2 bg-gray-900 border border-gray-800 hover:border-cyan-500 text-cyan-400 text-xs font-mono rounded-lg transition-all flex items-center justify-center space-x-1"
-                >
-                  <span>INSPECT ARCHITECTURE</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          ))}
+              );
+            })}
+          </div>
         </div>
       </HUDPanel>
 
-      {/* Project Lightbox Inspection Modal */}
-      {selectedProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="bg-gray-900 border border-cyan-500/40 rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button onClick={() => setSelectedProject(null)} className="absolute top-4 right-4 text-gray-400 hover:text-white p-1">
-              ✕
-            </button>
-
-            <div className="space-y-2">
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest">[ {selectedProject.category} ]</span>
-              <h2 className="text-2xl font-bold font-rajdhani text-white uppercase">{selectedProject.title}</h2>
-            </div>
-
-            <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-64 object-cover rounded-xl border border-gray-800" />
-
-            <div className="space-y-4 font-mono text-xs text-gray-300">
-              <p className="leading-relaxed">{selectedProject.description}</p>
-              
-              <div className="p-3 bg-black/60 border border-lime-500/30 rounded-lg text-lime-400">
-                PERFORMANCE METRICS: <span className="font-bold text-white">{selectedProject.metrics}</span>
-              </div>
-
-              <div>
-                <h4 className="text-white font-bold mb-2">TECHNOLOGY STACK USED:</h4>
-                <div className="flex flex-wrap gap-2">
-                  {selectedProject.techStack.map((tech, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-gray-950 border border-gray-800 rounded text-cyan-400">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
-
 export default Showcase;

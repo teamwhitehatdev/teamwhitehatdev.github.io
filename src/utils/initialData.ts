@@ -1,174 +1,124 @@
+import { ServiceItem, Project, AffiliateLink, Testimonial } from '../types';
+
 export const PLAY_STORE_URL = 'https://play.google.com/store/apps/dev?id=7374638355121114347';
+export const GUMROAD_GUI_LINK = 'https://futuristicsoftwares.gumroad.com/l/NETWORKANDDATAINFORMATIONS-GUI-TOOLS?a=815255139';
 
-export interface Project {
-  id: string;
-  title: string;
-  category: 'web' | 'mobile' | 'security' | 'design';
-  image: string;
-  description: string;
-  techStack: string[];
-  metrics: string;
-  featured: boolean;
-}
-
-export interface Testimonial {
-  id: string;
-  name: string;
-  role: string;
-  company: string;
-  country: string;
-  avatar: string;
-  content: string;
-  rating: number;
-}
-
-export interface ServiceItem {
-  id: string;
-  title: string;
-  category: string;
-  icon: string;
-  description: string;
-  features: string[];
-  deliverables: string;
-}
-
-export interface AffiliateLink {
-  id: string;
-  title: string;
-  category: string;
-  description: string;
-  referralUrl: string;
-  bannerImage: string;
-  badge: string;
-  discountText: string;
-}
-
-export const AFFILIATE_LINKS: AffiliateLink[] = [
+export const SERVICES: ServiceItem[] = [
   {
-    id: 'aff-1',
-    title: 'DigitalOcean Cloud VPS & Hosting',
-    category: 'Cloud Infrastructure',
-    description: 'Get $200 free cloud credits to deploy high-speed SSD VPS servers and web apps.',
-    referralUrl: 'https://m.do.co/c/teamwhitehatdev',
-    bannerImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
-    badge: 'CLOUD OFFER',
-    discountText: '$200 FREE CREDITS 🎁'
+    id: 's1',
+    title: 'Executive Virtual Assistance',
+    category: 'va',
+    price: '$15 / hr',
+    description: 'Inbox triage, calendar scheduling, CRM data entry, customer support, and administrative project coordination.',
+    features: ['Dedicated Executive VA', 'Calendar & Email Management', 'CRM Data Entry', '24/7 Global Coverage']
   },
   {
-    id: 'aff-2',
-    title: 'NordVPN Cyber Shield & Threat Protection',
-    category: 'Cybersecurity',
-    description: 'Military-grade encryption, malware protection, and IP masking for remote teams.',
-    referralUrl: 'https://nordvpn.com/ref/teamwhitehatdev',
-    bannerImage: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80',
-    badge: 'SECURITY OFFER',
-    discountText: '70% OFF + 3 MO EXTRA 🛡️'
+    id: 's2',
+    title: 'Full-Stack Web Application Engineering',
+    category: 'dev',
+    price: '$499 / project',
+    description: 'Custom responsive web applications built with React, TypeScript, Next.js, Node.js, and high-speed cloud infrastructure.',
+    features: ['React & TypeScript Frontend', 'Node.js & Database Architecture', 'SEO & Performance Optimization', 'Fastly CDN Edge Deployment']
   },
   {
-    id: 'aff-3',
-    title: 'Envato Elements Unlimited Assets',
-    category: 'Graphics & Design',
-    description: 'Unlimited downloads of 3D renders, Figma templates, vector HUD assets, and graphics.',
-    referralUrl: 'https://1.envato.market/teamwhitehatdev',
-    bannerImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
-    badge: 'DESIGNER DEALS',
-    discountText: '50% OFF PASS 🎨'
+    id: 's3',
+    title: 'Mobile App Development (Android & iOS)',
+    category: 'dev',
+    price: '$799 / project',
+    description: 'Cross-platform mobile applications compiled, tested, and published directly to Google Play Store and Apple App Store.',
+    features: ['Flutter / React Native Engine', 'Google Play Store Publishing', 'Push Notifications & Auth', 'Crashlytics Diagnostics']
   },
   {
-    id: 'aff-4',
-    title: 'TradingView Pro Charting Platform',
-    category: 'FinTech & Trading',
-    description: 'Top technical analysis charts and real-time data feeds for crypto, stocks, and Forex.',
-    referralUrl: 'https://www.tradingview.com/?aff_id=teamwhitehatdev',
-    bannerImage: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=600&q=80',
-    badge: 'PRO TRADING',
-    discountText: '$30 BONUS CREDIT 📈'
+    id: 's4',
+    title: 'Graphic Design & Corporate Branding',
+    category: 'va',
+    price: '$250 / brand',
+    description: 'Social media branding assets, company logos, UI/UX mockups, promotional banners, and marketing collaterals.',
+    features: ['Vector Logo Design', 'Social Media Planners', 'Figma UI/UX Mockups', 'Print & Digital Formats']
   }
 ];
 
 export const PROJECTS: Project[] = [
   {
-    id: 'proj-1',
-    title: 'Executive Virtual Assistance Suite',
-    category: 'web',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
-    description: 'Comprehensive virtual assistant support including email management, CRM administration, and workflow automation.',
-    techStack: ['Executive VA', 'CRM Data Entry', 'Workflow Automation'],
-    metrics: '100% Client Satisfaction',
+    id: 'p0',
+    title: 'NETWORK & DATA INFORMATIONS - GUI',
+    category: 'Computer Applications',
+    description: 'Real-time holographic diagnostic dashboard designed to monitor network interface traffic, detect active VPN/VPS tunnels, classify public egress IP addresses, inspect system hardware performance & storage drives, and ensure ISP masking & online privacy.',
+    image: './network_gui_tool.png',
+    tags: ['Cybersecurity', 'Python GUI', 'VPN Diagnostics', 'Gumroad Software'],
+    githubUrl: GUMROAD_GUI_LINK,
+    liveUrl: GUMROAD_GUI_LINK,
     featured: true
   },
   {
-    id: 'proj-2',
-    title: 'Web & Mobile Application Maintenance',
-    category: 'mobile',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-    description: 'Full-service web and mobile app updates, content publishing, and Google Play Store management.',
-    techStack: ['Web Management', 'Mobile App Support', 'Google Play Admin'],
-    metrics: '24/7 Availability',
+    id: 'p1',
+    title: 'Cyberpunk Portfolio & CMS Platform',
+    category: 'Web App',
+    description: 'Ultra-fast responsive portfolio platform equipped with AES-256 IP sentinel firewall, stealth back-end CMS, and live trading ticker.',
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80',
+    tags: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
+    githubUrl: 'https://github.com/teamwhitehatdev',
+    liveUrl: 'https://teamwhitehatdev.github.io',
     featured: true
+  },
+  {
+    id: 'p2',
+    title: 'Android Mobile Utility Suite',
+    category: 'Mobile App',
+    description: 'Published suite of Android mobile productivity utilities and developer tools on Google Play Store.',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=80',
+    tags: ['Android', 'Kotlin', 'Google Play', 'Mobile'],
+    githubUrl: PLAY_STORE_URL,
+    liveUrl: PLAY_STORE_URL,
+    featured: true
+  },
+  {
+    id: 'p3',
+    title: 'Hostinger Cloud Web Accelerator',
+    category: 'Web App',
+    description: 'Cloud hosting integration engine optimizing NVMe web servers and custom domains for Virtual Assistant portfolios.',
+    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80',
+    tags: ['Hostinger', 'NVMe Cloud', 'DNS Management', 'SSL'],
+    githubUrl: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
+    liveUrl: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
+    featured: true
+  }
+];
+
+export const AFFILIATE_LINKS: AffiliateLink[] = [
+  {
+    id: 'a1',
+    name: 'Hostinger Cloud Hosting',
+    code: 'DPDCABINCEHM',
+    discount: '75% OFF + Free Domain',
+    url: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
+    description: 'Ultra-fast web hosting for Virtual Assistant portfolios and client applications.'
+  },
+  {
+    id: 'a2',
+    name: 'Gumroad Creator Store',
+    code: '815255139',
+    discount: 'Verified Creator Store',
+    url: 'https://gumroad.com/discover?a=815255139',
+    description: 'Download client contract templates, proposal pitch decks, and digital products.'
+  },
+  {
+    id: 'a3',
+    name: 'ElevenLabs AI Voice Studio',
+    code: 'e5xwigkl9igv',
+    discount: 'Free Trial',
+    url: 'https://try.elevenlabs.io/e5xwigkl9igv',
+    description: 'AI voice generator for podcast narration and automated video voiceovers.'
   }
 ];
 
 export const INITIAL_TESTIMONIALS: Testimonial[] = [
   {
-    id: '1',
-    name: 'Marcus Vance',
-    role: 'CEO',
-    company: 'Vance Capital',
-    country: 'USA 🇺🇸',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-    content: 'Team White Hat is the most reliable Virtual Assistant team we have hired. Exceptional executive support and web management.',
-    rating: 5.0
-  },
-  {
-    id: '2',
-    name: 'Elena Rostova',
-    role: 'Operations Director',
-    company: 'Nordic Operations',
-    country: 'Sweden 🇸🇪',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-    content: 'Brilliant VA services! Managed our schedule, graphics design, and technical administration with extreme precision.',
-    rating: 5.0
-  },
-  {
-    id: '3',
-    name: 'Kenji Takahashi',
-    role: 'Founder',
-    company: 'NeoTokyo Tech',
-    country: 'Japan 🇯🇵',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
-    content: 'Handled our e-commerce store updates, mobile app publishing, and customer inquiry management perfectly.',
-    rating: 4.9
-  },
-  {
-    id: '4',
-    name: 'Sarah Jenkins',
-    role: 'Marketing Lead',
-    company: 'Aura Media',
-    country: 'UK 🇬🇧',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-    content: 'Extremely versatile Virtual Assistant. Created amazing graphics design banners and handled daily administrative tasks.',
-    rating: 4.8
-  }
-];
-
-export const SERVICES: ServiceItem[] = [
-  {
-    id: 'svc-1',
-    title: 'Executive Virtual Assistance',
-    category: 'Administrative Support',
-    icon: 'Briefcase',
-    description: 'Email triage, calendar scheduling, CRM data entry, customer support, and administrative project coordination.',
-    features: ['Email & Inbox Management', 'CRM & Spreadsheet Data Entry', 'Calendar & Travel Scheduling'],
-    deliverables: 'Dedicated Executive Support'
-  },
-  {
-    id: 'svc-2',
-    title: 'Digital Solutions & Technical VA',
-    category: 'Technical Management',
-    icon: 'Laptop',
-    description: 'Website maintenance, mobile application publishing, graphics design creation, and security data audits.',
-    features: ['Web & App Content Updates', 'Social Media Graphics Design', 'Account & Security Audits'],
-    deliverables: 'Full-Service Digital Management'
+    id: 't1',
+    name: 'Sarah L.',
+    role: 'E-commerce Founder (USA)',
+    text: 'Team WhiteHat Dev provided exceptional Virtual Assistant support. Our sales increased 40% in 60 days!',
+    rating: 5,
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80'
   }
 ];

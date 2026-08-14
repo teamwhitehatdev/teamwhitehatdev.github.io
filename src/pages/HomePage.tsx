@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { HUDPanel } from '../components/HUDPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { AffiliateBanners } from '../components/AffiliateBanners';
-import { Sparkles, Rocket, Server, ExternalLink, Target, Zap, Users, Star, ArrowRight } from 'lucide-react';
+import { Sparkles, Rocket, Server, ExternalLink, Target, Zap, Users, Star } from 'lucide-react';
 import { generate100Testimonials, TestimonialItem } from '../data/testimonialsData';
 
 export interface HomePageProps {
@@ -21,7 +21,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
     }
   };
 
-  // RANDOMIZED SHUFFLED TESTIMONIALS (100+ DATASET)
   const [displayTestimonials, setDisplayTestimonials] = useState<TestimonialItem[]>([]);
 
   useEffect(() => {
@@ -69,10 +68,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         </div>
       </div>
 
-      {/* HIGHLIGHTED MINIMAL MASTERCLASS TUTORIALS & CREATOR'S GUIDE */}
+      {/* HIGHLIGHTED MINIMAL TUTORIALS & CREATOR'S GUIDE */}
       <HUDPanel title="📘 HIGHLIGHTED TUTORIALS & THE FREE CREATOR'S GUIDE">
         <div className="p-5 sm:p-6 space-y-6 font-sans text-xs">
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             
             {/* GUIDE 1 */}
@@ -151,14 +149,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
             </div>
 
           </div>
-
         </div>
       </HUDPanel>
 
-      {/* MAIN 2-COLUMN LAYOUT: SERVICES + DYNAMIC SIDEBAR */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* MAIN LAYOUT: LEFT CONTENT (2 COLS) + DEDICATED SEPARATED RIGHT COLUMN SIDEBAR (1 COL) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         
-        {/* LEFT COLUMN */}
+        {/* LEFT CONTENT COLUMN */}
         <div className="lg:col-span-2 space-y-8">
           <HUDPanel title="🛠️ CORE VIRTUAL ASSISTANT PACKAGES">
             <div className="p-5 space-y-3">
@@ -185,17 +182,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
           </HUDPanel>
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="space-y-8">
+        {/* DEDICATED VISUALLY SEPARATED RIGHT COLUMN AD SIDEBAR */}
+        <aside className="lg:col-span-1 border-t lg:border-t-0 lg:border-l-2 border-cyan-500/40 lg:pl-6 space-y-6 sticky top-24">
+          <div className="bg-cyan-500/10 border border-cyan-500/30 p-2.5 rounded-xl text-center text-xs font-mono font-bold text-cyan-300 uppercase tracking-widest">
+            ⚡ DEDICATED PROMO ADS COLUMN
+          </div>
           <DynamicAdsSidebar />
-        </div>
+        </aside>
 
       </div>
 
       {/* REFERRAL BANNERS GRID */}
       <AffiliateBanners />
 
-      {/* 100+ RANDOMIZED TESTIMONIALS AT ABSOLUTE BOTTOM WITH SLOW MARQUEE */}
+      {/* 100+ RANDOMIZED TESTIMONIALS AT ABSOLUTE BOTTOM */}
       <HUDPanel title="⭐⭐⭐⭐⭐ 100+ RANDOMIZED VERIFIED CLIENT & VA REVIEWS">
         <div className="p-6 space-y-6">
           <p className="text-xs text-gray-300 font-sans leading-relaxed">
