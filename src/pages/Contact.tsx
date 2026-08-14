@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Terminal, Mail, Send, Github, Youtube, Linkedin, Globe, PhoneCall } from 'lucide-react';
+import { Terminal, Mail, Send,    Globe, PhoneCall } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { audioEngine } from '../components/AudioEngine';
 

@@ -72,7 +72,7 @@ export function AppContent() {
             
             <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
               <Routes>
-                <Route path="/" element={<HomePage onOpenConsultation={(svc) => handleOpenConsultation(svc)} />} />
+                <Route path="/" element={<HomePage onOpenConsultation={(svc?: string) => handleOpenConsultation(svc)} />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/web-hosting" element={<WebHosting />} />
                 <Route path="/showcase" element={<Showcase />} />

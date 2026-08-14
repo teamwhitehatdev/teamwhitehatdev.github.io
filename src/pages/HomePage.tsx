@@ -5,7 +5,7 @@ import { AffiliateBanners } from '../components/AffiliateBanners';
 import { Shield, Sparkles, Rocket, Server, Smartphone, ExternalLink } from 'lucide-react';
 import { PLAY_STORE_URL } from '../utils/initialData';
 
-interface HomePageProps {
+export interface HomePageProps {
   onOpenConsultation: (serviceTitle?: string) => void;
 }
 

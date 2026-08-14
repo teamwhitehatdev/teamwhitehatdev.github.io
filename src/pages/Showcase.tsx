@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink, Github, Filter, Code, ArrowRight } from 'lucide-react';
+import { ExternalLink,  Filter, Code, ArrowRight } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { PROJECTS, Project } from '../utils/initialData';
 

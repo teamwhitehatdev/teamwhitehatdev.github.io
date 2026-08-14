@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bot, X, Send, Sparkles, Youtube, CheckCircle2, ShoppingCart } from 'lucide-react';
+import { Bot, X, Send, Sparkles,  CheckCircle2, ShoppingCart } from 'lucide-react';
 import { audioEngine } from './AudioEngine';
 import { useApp } from '../context/AppContext';
 
