@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { HUDPanel } from './HUDPanel';
-import { ExternalLink, Sparkles, Server, ShoppingBag, Mic, Smartphone, Flame } from 'lucide-react';
+import { ExternalLink, Sparkles, Flame } from 'lucide-react';
 
 export const DynamicAdsSidebar: React.FC = () => {
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
@@ -24,26 +24,40 @@ export const DynamicAdsSidebar: React.FC = () => {
       btnGradient: 'from-lime-400 to-cyan-400 text-black'
     },
     {
-      id: 'gumroad',
-      badge: 'GUMROAD VA STORE',
+      id: 'gumroad_comic',
+      badge: 'GUMROAD CREATOR HUB',
       code: 'VERIFIED KITS',
       img: './media_1786590207160.png',
       title: 'GUMROAD CLIENT PROPOSAL & CONTRACT KITS',
       desc: 'Download client contract templates, social media content planners, and email pitch decks.',
       link: GUMROAD_LINK,
       btn: 'EXPLORE GUMROAD KITS',
+      gradient: 'from-gray-900 via-black to-pink-950/90',
+      border: 'border-pink-500/60',
+      textClr: 'text-pink-400',
+      btnGradient: 'from-pink-400 to-purple-400 text-black'
+    },
+    {
+      id: 'gumroad_logo',
+      badge: 'GUMROAD OFFICIAL STORE',
+      code: 'DIGITAL ASSETS',
+      img: './media_1786675376512.jpg',
+      title: 'SELL YOUR DIGITAL PRODUCTS ON GUMROAD',
+      desc: 'Turn your Virtual Assistant skills into ebooks, guides, and templates sold automatically worldwide.',
+      link: GUMROAD_LINK,
+      btn: 'GET GUMROAD CREATOR KITS',
       gradient: 'from-gray-900 via-black to-cyan-950/90',
       border: 'border-cyan-500/60',
       textClr: 'text-cyan-400',
-      btnGradient: 'from-cyan-400 to-purple-400 text-black'
+      btnGradient: 'from-cyan-400 to-lime-400 text-black'
     },
     {
-      id: 'elevenlabs',
-      badge: 'AI VOICE STUDIO',
+      id: 'eleven_creative',
+      badge: 'ELEVENLABS CREATIVE',
       code: 'FREE TRIAL',
-      img: './media_1786191713841.jpg',
-      title: 'ELEVENLABS AI VOICE & AUDIO GENERATOR',
-      desc: 'Offer premium AI voiceovers, podcast editing, and audiobook narrations for clients in 29+ languages.',
+      img: './media_1786677582671.jpg',
+      title: 'ELEVENLABS ALL-IN-ONE AI VOICE & IMAGE TOOL',
+      desc: 'Generate realistic AI voiceovers and images for client marketing videos and social media reels.',
       link: ELEVENLABS_LINK,
       btn: 'TRY ELEVENLABS FREE',
       gradient: 'from-gray-900 via-black to-purple-950/90',
@@ -52,22 +66,21 @@ export const DynamicAdsSidebar: React.FC = () => {
       btnGradient: 'from-purple-500 to-cyan-400 text-white'
     },
     {
-      id: 'playstore',
-      badge: 'OFFICIAL APPS SUITE',
-      code: 'GOOGLE PLAY',
-      img: './media_1786178491269.jpg',
-      title: 'OFFICIAL GOOGLE PLAY STORE MOBILE APPS',
-      desc: 'Download our collection of Android mobile productivity tools and developer utilities directly from Google Play.',
-      link: PLAY_STORE_URL,
-      btn: 'VIEW GOOGLE PLAY APPS',
-      gradient: 'from-gray-900 via-black to-lime-950/90',
-      border: 'border-lime-500/60',
-      textClr: 'text-lime-400',
-      btnGradient: 'from-lime-400 to-cyan-400 text-black'
+      id: 'eleven_agents',
+      badge: 'ELEVENLABS AI AGENTS',
+      code: 'HUMAN SOUND',
+      img: './media_1786677582680.jpg',
+      title: 'ELEVENLABS HUMAN-SOUNDING VOICE AGENTS',
+      desc: 'Deploy AI conversational voice agents that handle client phone calls and customer service 24/7.',
+      link: ELEVENLABS_LINK,
+      btn: 'DEPLOY AI VOICE AGENTS',
+      gradient: 'from-gray-900 via-black to-blue-950/90',
+      border: 'border-blue-500/60',
+      textClr: 'text-blue-400',
+      btnGradient: 'from-blue-500 to-cyan-400 text-white'
     }
   ];
 
-  // Randomize initial ad on every page visit or browser refresh
   const [activeIdx, setActiveIdx] = useState(() => Math.floor(Math.random() * ads.length));
 
   useEffect(() => {
@@ -81,11 +94,11 @@ export const DynamicAdsSidebar: React.FC = () => {
 
   return (
     <HUDPanel title="⚡ DYNAMIC ADS & SHUFFLED OFFERS">
-      <div className="p-4 space-y-5 font-mono">
+      <div className="p-4 space-y-4 font-mono">
         <div className="flex items-center justify-between text-[10px] text-gray-400 border-b border-gray-800 pb-2">
           <span className="flex items-center space-x-1 text-lime-400 font-bold">
             <Flame className="w-3.5 h-3.5 animate-bounce text-lime-400" />
-            <span>SHUFFLED PROMO AD ({activeIdx + 1}/{ads.length})</span>
+            <span>PROMO AD ({activeIdx + 1}/{ads.length})</span>
           </span>
           <span className="text-gray-500 bg-gray-900 px-2 py-0.5 rounded border border-gray-800">
             ADSENSE READY
@@ -123,15 +136,6 @@ export const DynamicAdsSidebar: React.FC = () => {
           >
             {currentAd.btn} &rarr;
           </a>
-        </div>
-
-        <div className="bg-black/90 border border-dashed border-gray-800 p-4 rounded-2xl text-center space-y-1">
-          <span className="text-[10px] text-gray-500 uppercase block font-mono">
-            GOOGLE ADSENSE & MEDIA.NET CONTAINER
-          </span>
-          <p className="text-[11px] text-gray-400 font-sans">
-            Banner ads automatically shuffle on page refreshes and route transitions.
-          </p>
         </div>
       </div>
     </HUDPanel>
