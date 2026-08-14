@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { HUDPanel } from '../components/HUDPanel';
-import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, Server, Users, Mail, Activity, Database, FileText, PieChart, BarChart2, TrendingUp, X } from 'lucide-react';
+import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, Server, Users, Mail, Activity, Database, FileText, PieChart, BarChart2, TrendingUp, X, Send } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { Service, Project } from '../types';
 
@@ -155,7 +155,7 @@ export const Admin: React.FC = () => {
   const handleExportBackup = () => {
     const backupData = {
       timestamp: new Date().toISOString(),
-      version: 'v140.0.0',
+      version: 'v145.0.0',
       services,
       projects,
       bannedIps,
@@ -245,7 +245,7 @@ export const Admin: React.FC = () => {
           { id: 'services', label: '🛠️ SERVICES CMS', icon: Server },
           { id: 'projects', label: '🚀 PROJECTS CMS', icon: FileText },
           { id: 'firewall', label: '🛡️ IP FIREWALL', icon: Shield },
-          { id: 'inquiries', label: '📬 INQUIRIES INBOX', icon: Mail },
+          { id: 'inquiries', label: `📬 INQUIRIES INBOX (${inquiries.length})`, icon: Mail },
           { id: 'telemetry', label: '📡 LIVE TELEMETRY', icon: Terminal },
           { id: 'backup', label: '💾 JSON BACKUP & RESTORE', icon: Database },
         ].map((tab) => (
@@ -292,7 +292,7 @@ export const Admin: React.FC = () => {
               {/* CHARTS ROW */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
-                {/* BAR CHART: REFERRAL CONVERSIONS & TRAFFIC */}
+                {/* BAR CHART */}
                 <div className="bg-black/80 border border-cyan-500/40 p-5 rounded-2xl space-y-4">
                   <div className="flex items-center justify-between border-b border-gray-800 pb-2">
                     <span className="text-xs font-extrabold text-cyan-400 font-rajdhani uppercase flex items-center space-x-1">
@@ -332,20 +332,10 @@ export const Admin: React.FC = () => {
                         <div className="bg-gradient-to-r from-purple-500 to-lime-400 h-full w-[32%]" />
                       </div>
                     </div>
-
-                    <div>
-                      <div className="flex justify-between text-[11px] pb-1">
-                        <span className="text-amber-300">Google Play Store Mobile Apps</span>
-                        <span className="text-white font-bold">510 Installs (24% Conv)</span>
-                      </div>
-                      <div className="w-full bg-gray-900 h-3 rounded-full overflow-hidden border border-gray-800">
-                        <div className="bg-gradient-to-r from-amber-400 to-cyan-400 h-full w-[24%]" />
-                      </div>
-                    </div>
                   </div>
                 </div>
 
-                {/* PIE CHART: VISITOR DEVICE BREAKDOWN */}
+                {/* PIE CHART */}
                 <div className="bg-black/80 border border-lime-500/40 p-5 rounded-2xl space-y-4">
                   <div className="flex items-center justify-between border-b border-gray-800 pb-2">
                     <span className="text-xs font-extrabold text-lime-400 font-rajdhani uppercase flex items-center space-x-1">
@@ -367,21 +357,6 @@ export const Admin: React.FC = () => {
                     <div className="bg-purple-500/10 border border-purple-500/30 p-3 rounded-xl">
                       <span className="text-xs text-gray-400 block">TABLET</span>
                       <span className="text-xl font-bold text-purple-300">8%</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5 font-mono text-[11px] text-gray-300 pt-2 border-t border-gray-800">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">• UNITED STATES & CANADA:</span>
-                      <span className="text-lime-400 font-bold">42% Traffic</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">• UNITED KINGDOM & EUROPE:</span>
-                      <span className="text-cyan-400 font-bold">31% Traffic</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">• AUSTRALIA & PHILIPPINES:</span>
-                      <span className="text-purple-400 font-bold">27% Traffic</span>
                     </div>
                   </div>
                 </div>
@@ -503,6 +478,65 @@ export const Admin: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </HUDPanel>
+      )}
+
+      {/* TAB 5: INQUIRIES INBOX */}
+      {activeTab === 'inquiries' && (
+        <HUDPanel title={`📬 VISITOR INQUIRIES & CONSULTATION BOOKINGS (${inquiries.length})`}>
+          <div className="p-6 space-y-6 font-mono text-xs">
+            <p className="text-gray-300 font-sans">
+              All consultation bookings and client inquiries submitted on the front-end arrive here in real time.
+            </p>
+
+            {inquiries.length === 0 ? (
+              <div className="bg-black/80 border border-dashed border-gray-800 p-8 rounded-2xl text-center text-gray-500 italic">
+                No client inquiries currently received in the inbox.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {inquiries.map((inq) => (
+                  <div key={inq.id} className="bg-black/90 border border-cyan-500/40 p-5 rounded-2xl space-y-3 hover:border-cyan-400 transition-all">
+                    <div className="flex flex-wrap items-center justify-between border-b border-gray-800 pb-2">
+                      <div className="space-y-0.5">
+                        <span className="text-sm font-bold text-white font-rajdhani">{inq.name}</span>
+                        <span className="text-xs text-cyan-400 block">{inq.email}</span>
+                      </div>
+                      <span className="bg-cyan-500/20 text-cyan-300 text-[10px] px-2.5 py-0.5 rounded border border-cyan-500/40 font-bold uppercase">
+                        SERVICE: {inq.service}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-gray-300 font-sans leading-relaxed bg-gray-900/60 p-3 rounded-xl border border-gray-800">
+                      "{inq.message}"
+                    </p>
+
+                    <div className="flex flex-wrap items-center justify-between pt-1 gap-2">
+                      <span className="text-[10px] text-gray-500">RECEIVED: {new Date(inq.createdAt).toLocaleString()}</span>
+                      
+                      <div className="flex items-center space-x-2">
+                        <a
+                          href={`mailto:${inq.email}?subject=Reply from Team WhiteHat Dev&body=Hi ${inq.name}, Thank you for your inquiry!`}
+                          className="px-3.5 py-1.5 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold text-xs uppercase rounded-lg shadow flex items-center space-x-1 hover:opacity-95"
+                        >
+                          <Send className="w-3.5 h-3.5" />
+                          <span>REPLY / EMAIL CLIENT</span>
+                        </a>
+
+                        <button
+                          onClick={() => deleteInquiry(inq.id)}
+                          className="px-3.5 py-1.5 bg-red-500/20 border border-red-500/40 text-red-400 hover:bg-red-500/30 rounded-lg text-xs font-bold flex items-center space-x-1"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>DELETE INQUIRY</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </HUDPanel>
       )}
