@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Smartphone, ExternalLink, Menu, X, Info, Home, Briefcase, Rocket, Server } from 'lucide-react';
+import { Menu, X, Rocket, Shield, Terminal, Globe, Server, Smartphone } from 'lucide-react';
 import { PLAY_STORE_URL } from '../utils/initialData';
 
 interface NavbarProps {
@@ -8,112 +8,87 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  const isActive = (path: string) => location.pathname === path;
+  const navLinks = [
+    { name: 'HOME', path: '/' },
+    { name: 'SERVICES', path: '/services' },
+    { name: 'WEB HOSTING', path: '/web-hosting' },
+    { name: 'SHOWCASE', path: '/showcase' },
+    { name: 'ABOUT', path: '/about' },
+  ];
 
   return (
-    <nav className="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-cyan-500/30 font-mono">
+    <header className="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-cyan-500/30 select-none font-mono">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           
-          {/* BRAND LOGO & SUB-TEXT */}
-          <Link to="/" className="flex items-center space-x-3 group flex-shrink-0">
-            <img
-              src="./logo.png"
-              alt="White Hat Dev Logo"
-              className="w-9 h-9 rounded-full object-cover border-2 border-cyan-400 group-hover:scale-105 transition-transform"
-              draggable="false"
-            />
+          {/* LOGO WITH CYBER AVATAR */}
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className="relative">
+              <img
+                src="./logo.png"
+                alt="Team WhiteHat Dev Official Logo"
+                className="w-12 h-12 rounded-full border-2 border-cyan-400 object-cover shadow-lg shadow-cyan-500/30 group-hover:scale-105 transition-transform"
+              />
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-lime-400 rounded-full border-2 border-black animate-pulse" />
+            </div>
             <div>
-              <span className="text-base font-extrabold font-rajdhani text-white group-hover:text-cyan-400 transition-colors uppercase tracking-wider block leading-none">
+              <span className="text-lg font-black font-rajdhani text-white uppercase tracking-wider block leading-none">
                 TEAM WHITEHAT DEV
               </span>
               <span className="text-[10px] text-lime-400 font-bold block leading-tight pt-0.5">
-                — Learn. Create. Develop. Assist. Grow.
+                VA Accelerator & Software Suite
               </span>
             </div>
           </Link>
 
-          {/* DESKTOP NAV PANEL ORDER: HOME | SERVICES | WEB HOSTING | SHOWCASE | ABOUT | GOOGLE PLAY | HIRE VA */}
-          <div className="hidden md:flex items-center space-x-5 lg:space-x-7">
-            <Link
-              to="/"
-              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-cyan-400 transition-colors ${
-                isActive('/') ? 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1' : 'text-gray-300'
-              }`}
-            >
-              <Home className="w-3.5 h-3.5 text-cyan-400" />
-              <span>HOME</span>
-            </Link>
-
-            <Link
-              to="/services"
-              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-cyan-400 transition-colors ${
-                isActive('/services') ? 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1' : 'text-gray-300'
-              }`}
-            >
-              <Briefcase className="w-3.5 h-3.5 text-cyan-400" />
-              <span>SERVICES</span>
-            </Link>
-
-            <Link
-              to="/web-hosting"
-              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-lime-400 transition-colors ${
-                isActive('/web-hosting') ? 'text-lime-400 font-bold border-b-2 border-lime-400 pb-1' : 'text-lime-300 font-semibold'
-              }`}
-            >
-              <Server className="w-3.5 h-3.5 text-lime-400" />
-              <span>WEB HOSTING</span>
-            </Link>
-
-            <Link
-              to="/showcase"
-              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-cyan-400 transition-colors ${
-                isActive('/showcase') ? 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1' : 'text-gray-300'
-              }`}
-            >
-              <Rocket className="w-3.5 h-3.5 text-cyan-400" />
-              <span>SHOWCASE</span>
-            </Link>
-
-            <Link
-              to="/about"
-              className={`text-xs uppercase tracking-wider flex items-center space-x-1 hover:text-cyan-400 transition-colors ${
-                isActive('/about') ? 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1' : 'text-gray-300'
-              }`}
-            >
-              <Info className="w-3.5 h-3.5 text-cyan-400" />
-              <span>ABOUT</span>
-            </Link>
+          {/* DESKTOP NAV LINKS */}
+          <nav className="hidden md:flex items-center space-x-1 font-rajdhani text-sm font-bold uppercase">
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`px-4 py-2 rounded-xl transition-all ${
+                    isActive
+                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-md'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-900'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
 
             <a
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs uppercase tracking-wider text-lime-400 hover:text-lime-300 flex items-center space-x-1 font-bold"
+              className="px-4 py-2 rounded-xl text-lime-400 hover:bg-lime-500/10 border border-lime-500/30 transition-all flex items-center space-x-1"
             >
-              <Smartphone className="w-3.5 h-3.5 text-lime-400" />
+              <Smartphone className="w-4 h-4 text-lime-400" />
               <span>GOOGLE PLAY</span>
-              <ExternalLink className="w-3 h-3" />
             </a>
 
             <button
               onClick={onOpenConsultation}
-              className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-lime-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl hover:opacity-90 transition-all shadow-md shadow-cyan-500/20 flex-shrink-0"
+              className="ml-2 px-5 py-2.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold text-xs uppercase rounded-xl hover:opacity-95 shadow-lg flex items-center space-x-1.5"
             >
-              HIRE VA (20% OFF)
+              <Rocket className="w-4 h-4" />
+              <span>HIRE VA (20% OFF)</span>
             </button>
-          </div>
+          </nav>
 
-          {/* MOBILE MENU TRIGGER */}
-          <div className="md:hidden flex items-center space-x-2">
+          {/* MOBILE MENU TOGGLE */}
+          <div className="md:hidden">
             <button
-              onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className="p-2 text-gray-300 hover:text-white bg-gray-900 border border-gray-800 rounded-xl"
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 text-cyan-400 hover:text-white"
             >
-              {isMobileOpen ? <X className="w-6 h-6 text-cyan-400" /> : <Menu className="w-6 h-6 text-cyan-400" />}
+              {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
             </button>
           </div>
 
@@ -121,63 +96,35 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
       </div>
 
       {/* MOBILE DROPDOWN */}
-      {isMobileOpen && (
-        <div className="md:hidden bg-black/95 border-b border-cyan-500/30 px-4 pt-3 pb-5 space-y-3 font-mono text-xs animate-fadeIn">
-          <Link
-            to="/"
-            onClick={() => setIsMobileOpen(false)}
-            className={`block py-2.5 px-3 rounded-xl border ${isActive('/') ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 font-bold' : 'border-gray-800 text-gray-300'}`}
-          >
-            🏠 HOME (VA ACCELERATOR & MASTERCLASS)
-          </Link>
-          <Link
-            to="/services"
-            onClick={() => setIsMobileOpen(false)}
-            className={`block py-2.5 px-3 rounded-xl border ${isActive('/services') ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 font-bold' : 'border-gray-800 text-gray-300'}`}
-          >
-            🛠️ SERVICES (VA & FULL-STACK DEV)
-          </Link>
-          <Link
-            to="/web-hosting"
-            onClick={() => setIsMobileOpen(false)}
-            className={`block py-2.5 px-3 rounded-xl border ${isActive('/web-hosting') ? 'bg-lime-500/20 border-lime-400 text-lime-400 font-bold' : 'border-gray-800 text-lime-300 font-bold'}`}
-          >
-            🌐 WEB HOSTING (HOSTINGER CLOUD DEALS)
-          </Link>
-          <Link
-            to="/showcase"
-            onClick={() => setIsMobileOpen(false)}
-            className={`block py-2.5 px-3 rounded-xl border ${isActive('/showcase') ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 font-bold' : 'border-gray-800 text-gray-300'}`}
-          >
-            🚀 SHOWCASE (FEATURED PROJECTS)
-          </Link>
-          <Link
-            to="/about"
-            onClick={() => setIsMobileOpen(false)}
-            className={`block py-2.5 px-3 rounded-xl border ${isActive('/about') ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400 font-bold' : 'border-gray-800 text-gray-300'}`}
-          >
-            ℹ️ ABOUT (OUR VISION & DIGITAL HUB)
-          </Link>
+      {isOpen && (
+        <div className="md:hidden bg-black border-b border-cyan-500/40 px-4 pt-2 pb-6 space-y-3 font-mono text-sm">
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              onClick={() => setIsOpen(false)}
+              className="block px-3 py-2 rounded-lg text-gray-200 hover:bg-cyan-500/20"
+            >
+              {link.name}
+            </Link>
+          ))}
           <a
             href={PLAY_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setIsMobileOpen(false)}
-            className="block py-2.5 px-3 rounded-xl border border-lime-500/40 text-lime-400 font-bold flex items-center justify-between"
+            className="block px-3 py-2 rounded-lg text-lime-400 font-bold"
           >
-            <span>📱 GOOGLE PLAY STORE APPS</span>
-            <ExternalLink className="w-4 h-4" />
+            📱 GOOGLE PLAY STORE APPS
           </a>
           <button
-            onClick={() => { setIsMobileOpen(false); onOpenConsultation(); }}
-            className="w-full py-3 bg-gradient-to-r from-cyan-500 to-lime-400 text-black font-extrabold text-xs uppercase rounded-xl shadow-lg"
+            onClick={() => { setIsOpen(false); onOpenConsultation(); }}
+            className="w-full py-3 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold text-xs uppercase rounded-xl"
           >
             HIRE VA CONSULTATION (20% OFF)
           </button>
         </div>
       )}
-    </nav>
+    </header>
   );
 };
-
 export default Navbar;
