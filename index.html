@@ -23,6 +23,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- FORCE BROWSER CACHE PURGE SCRIPT -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        for (var r of regs) r.unregister();
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function(keys) {
+        for (var k of keys) caches.delete(k);
+      });
+    }
+  </script>
+
   <!-- OFFICIAL LEMON SQUEEZY AFFILIATE REFERRAL TRACKING TAG -->
   <script>window.lemonSqueezyAffiliateConfig = { store: "futuristicsoftwares" };</script>
   <script src="https://lmsqueezy.com/affiliate.js" defer></script>
