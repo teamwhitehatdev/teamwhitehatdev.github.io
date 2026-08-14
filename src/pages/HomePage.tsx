@@ -339,6 +339,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                   <img
                     src={t.avatar}
                     alt={t.name}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=0D9488&color=fff&size=150`;
+                    }}
                     className="w-10 h-10 rounded-full border-2 border-[var(--primary-cyan)]/50 object-cover shrink-0 shadow-md"
                   />
                   <div className="truncate">
