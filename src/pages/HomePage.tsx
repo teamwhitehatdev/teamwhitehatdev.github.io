@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { HUDPanel } from '../components/HUDPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { AffiliateBanners } from '../components/AffiliateBanners';
-import { Shield, Sparkles, Rocket, Server, Smartphone, ExternalLink, BookOpen, CheckCircle, DollarSign, Award, Target, HelpCircle } from 'lucide-react';
+import { Shield, Sparkles, Rocket, Server, Smartphone, ExternalLink, HelpCircle, Target, DollarSign, CheckCircle2, Award, Download, Users, Zap } from 'lucide-react';
 import { PLAY_STORE_URL } from '../utils/initialData';
 
 export interface HomePageProps {
@@ -60,6 +60,109 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
           </Link>
         </div>
       </div>
+
+      {/* NEW SECTION: THE FREE CREATOR'S GUIDE FOR VIRTUAL ASSISTANTS */}
+      <HUDPanel title="📖 THE FREE CREATOR'S GUIDE: HOW TO GET STARTED & WIN CLIENTS">
+        <div className="p-6 sm:p-8 space-y-6 font-sans text-xs">
+          
+          <div className="bg-gradient-to-r from-gray-900 to-black border-l-4 border-lime-400 p-5 rounded-r-2xl space-y-3">
+            <p className="text-sm sm:text-base font-bold text-white font-rajdhani leading-snug">
+              Getting started can feel overwhelming. Download our masterclass strategies to answer the 3 core questions every beginner asks:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 font-mono">
+              <div className="bg-black/80 border border-cyan-500/30 p-3 rounded-xl text-cyan-300 font-bold">
+                1. "How do I get started?"
+              </div>
+              <div className="bg-black/80 border border-lime-500/30 p-3 rounded-xl text-lime-300 font-bold">
+                2. "What could I sell?"
+              </div>
+              <div className="bg-black/80 border border-purple-500/30 p-3 rounded-xl text-purple-300 font-bold">
+                3. "How do I find my first clients?"
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans">
+            
+            {/* QUESTION 1 ANSWER */}
+            <div className="bg-black/80 border border-cyan-500/40 p-5 rounded-2xl space-y-3 flex flex-col justify-between">
+              <div className="space-y-2">
+                <span className="text-xs font-bold text-cyan-400 font-mono uppercase tracking-wider flex items-center space-x-1">
+                  <Target className="w-4 h-4 text-cyan-400" />
+                  <span>1. HOW DO I GET STARTED?</span>
+                </span>
+                <h4 className="text-sm font-extrabold text-white font-rajdhani uppercase">
+                  Launch Your Custom Portfolio Website First
+                </h4>
+                <p className="text-gray-300 leading-relaxed">
+                  Chances are, you're really good at something — administrative management, social media scheduling, graphic design, or writing. But clients in the US, UK, and Australia won't hire you if you only send a generic PDF resume. You MUST have your own custom domain portfolio site.
+                </p>
+              </div>
+
+              <a
+                href={HOSTINGER_LINK}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="w-full py-2.5 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold font-mono text-[11px] uppercase rounded-xl text-center shadow-md hover:opacity-95 transition-all block"
+              >
+                GET HOSTINGER HOSTING (75% OFF) &rarr;
+              </a>
+            </div>
+
+            {/* QUESTION 2 ANSWER */}
+            <div className="bg-black/80 border border-lime-500/40 p-5 rounded-2xl space-y-3 flex flex-col justify-between">
+              <div className="space-y-2">
+                <span className="text-xs font-bold text-lime-400 font-mono uppercase tracking-wider flex items-center space-x-1">
+                  <Zap className="w-4 h-4 text-lime-400" />
+                  <span>2. WHAT COULD I SELL?</span>
+                </span>
+                <h4 className="text-sm font-extrabold text-white font-rajdhani uppercase">
+                  Turn Your Skills Into Recurring VA Packages
+                </h4>
+                <p className="text-gray-300 leading-relaxed">
+                  Package your knowledge into digital templates, social media content calendars, email management systems, or AI voiceover narrations. Equip pre-built proposal kits from our recommended store to pitch $1,500/mo retainer packages.
+                </p>
+              </div>
+
+              <a
+                href={GUMROAD_LINK}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="w-full py-2.5 bg-gradient-to-r from-cyan-400 to-purple-400 text-black font-extrabold font-mono text-[11px] uppercase rounded-xl text-center shadow-md hover:opacity-95 transition-all block"
+              >
+                DOWNLOAD GUMROAD PROPOSAL KITS &rarr;
+              </a>
+            </div>
+
+            {/* QUESTION 3 ANSWER */}
+            <div className="bg-black/80 border border-purple-500/40 p-5 rounded-2xl space-y-3 flex flex-col justify-between">
+              <div className="space-y-2">
+                <span className="text-xs font-bold text-purple-400 font-mono uppercase tracking-wider flex items-center space-x-1">
+                  <Users className="w-4 h-4 text-purple-400" />
+                  <span>3. FIND FIRST CUSTOMERS</span>
+                </span>
+                <h4 className="text-sm font-extrabold text-white font-rajdhani uppercase">
+                  Pitch High-Value Skills & AI Automation
+                </h4>
+                <p className="text-gray-300 leading-relaxed">
+                  Stand out from 99% of applicants by offering specialized AI voice generator workflows and automated social media video editing using cutting-edge tools.
+                </p>
+              </div>
+
+              <a
+                href={ELEVENLABS_LINK}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="w-full py-2.5 bg-gradient-to-r from-purple-500 to-cyan-400 text-white font-extrabold font-mono text-[11px] uppercase rounded-xl text-center shadow-md hover:opacity-95 transition-all block"
+              >
+                TRY ELEVENLABS AI STUDIO FREE &rarr;
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      </HUDPanel>
 
       {/* MAIN 2-COLUMN LAYOUT: LEFT CONTENT + RIGHT DYNAMIC ADS SIDEBAR */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
