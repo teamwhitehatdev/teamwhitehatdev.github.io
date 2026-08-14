@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Award, BookOpen, CheckCircle2, AlertTriangle, Zap, Flame, HelpCircle, ExternalLink, ArrowRight, ShieldCheck, Star, Layers, Sparkles, TrendingUp } from 'lucide-react';
+import { Award, BookOpen, CheckCircle2, AlertTriangle, Zap, Flame, HelpCircle, ExternalLink, ArrowRight, ShieldCheck, Star, Layers, Sparkles, TrendingUp, ChevronDown, ChevronUp, Check } from 'lucide-react';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 
 export const AffiliateGuide: React.FC = () => {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [expandedTutorial, setExpandedTutorial] = useState<number | null>(null);
 
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
 
@@ -12,61 +13,71 @@ export const AffiliateGuide: React.FC = () => {
       id: 1,
       title: "How to Build a VA Portfolio Website in a Weekend (No Code Required)",
       angle: "Website Builder walkthrough, drag-and-drop + business email setup",
-      format: "Step-by-step with screenshots"
+      format: "Step-by-step with screenshots",
+      details: "Step 1: Pick a domain name reflecting your VA niche. Step 2: Select Hostinger Premium Web Hosting ($2.99/mo) with free domain & custom email. Step 3: Choose a drag-and-drop template. Step 4: Add your bio, services, portfolio case studies, and Calendly booking link. Step 5: Publish with free 1-click SSL."
     },
     {
       id: 2,
       title: "How to Set Up a Professional Business Email as a Freelancer",
       angle: "Hostinger Business Email - why you@yourdomain.com beats Gmail for client trust",
-      format: "Tutorial + comparison"
+      format: "Tutorial + comparison",
+      details: "Clients view @gmail.com or @yahoo.com addresses as amateurish. Hostinger Business Email gives you unlimited custom email aliases (e.g. hello@yourdomain.com). Walkthrough includes setting up SPF, DKIM, and DMARC DNS records so your pitches never land in spam folders."
     },
     {
       id: 3,
       title: "How to Deploy Your First WordPress Blog in Under 30 Minutes",
       angle: "WordPress Hosting + 1-click install walkthrough",
-      format: "Beginner tutorial"
+      format: "Beginner tutorial",
+      details: "Hostinger offers a 1-click auto-installer for WordPress with pre-configured LiteSpeed Cache. This tutorial guides beginners through choosing a theme, installing essential plugins (Yoast SEO, Elementor, Wordfence), and writing their first SEO-optimized tutorial post."
     },
     {
       id: 4,
       title: "How to Host a Client's Website Without Using Your Own Hostinger Account",
       angle: "Hostinger Pro (agency) - sub-accounts, client management",
-      format: "Tutorial for VA/freelancers"
+      format: "Tutorial for VA/freelancers",
+      details: "Learn how to use Hostinger Pro agency dashboard to create separate client sub-accounts. VAs can manage client hosting, billing, and DNS access without ever exposing master account credentials or mixing client hosting budgets."
     },
     {
       id: 5,
       title: "How to Move a Client's WordPress Site to a New Host (Without Downtime)",
       angle: "Hostinger's free migration + DNS changeover guide",
-      format: "Migration walkthrough"
+      format: "Migration walkthrough",
+      details: "Step-by-step guide on using Hostinger's free automated migration tool. Enter the client's current WordPress admin credentials, and Hostinger transfers all files and databases in the background. Update DNS A-records at domain registrar after verification."
     },
     {
       id: 6,
       title: "How to Set Up a Landing Page for Your Freelance Services",
       angle: "Website Builder → published landing page with contact form",
-      format: "Step-by-step"
+      format: "Step-by-step",
+      details: "Focuses on high-converting landing page structure: Hero headline, social proof logos, service packages, client testimonials, and a embedded lead capture form pointing to your custom Hostinger email inbox."
     },
     {
       id: 7,
       title: "How to Build a Simple Affiliate Review Site That Earns While You Sleep",
       angle: "Hostinger WordPress Hosting as the starting point",
-      format: "Beginner affiliate tutorial"
+      format: "Beginner affiliate tutorial",
+      details: "Covers niche keyword research, writing authentic tool comparisons, embedding Impact.com tracking links, disclosing affiliate disclosures compliant with FTC guidelines, and using Hostinger's fast servers to achieve 90+ PageSpeed scores."
     },
     {
       id: 8,
       title: "How to Set Up Google Analytics + Hostinger for Your First Website",
       angle: "DNS + plugin setup, performance monitoring basics",
-      format: "Technical tutorial"
+      format: "Technical tutorial",
+      details: "Explains creating a Google Analytics 4 property, pasting the GA4 tag into Hostinger hPanel header scripts or using Site Kit for WordPress, verifying DNS records, and setting up goal conversions for contact form submissions."
     },
     {
       id: 9,
       title: "How to Launch a Side Hustle Online Store for Under $50",
       angle: "Hostinger Website Builder (Business tier) built-in store",
-      format: "Budget-focused walkthrough"
+      format: "Budget-focused walkthrough",
+      details: "Walks through Hostinger Business tier's built-in e-commerce builder. Add digital templates, ebooks, or physical products, connect Stripe / PayPal payment gateways, and configure automated invoice emails without paying 3% transaction fees."
     },
     {
       id: 10,
       title: "How to Use n8n on Hostinger VPS to Automate Your Freelance Admin",
       angle: "Hostinger VPS + n8n one-click install, automation workflows",
-      format: "Intermediate tutorial"
+      format: "Intermediate tutorial",
+      details: "Guides tech-savvy VAs through selecting a Hostinger KVM VPS with pre-installed n8n workflow automation engine. Connect webhooks between Google Sheets, Gmail, Slack, and Stripe for 100% self-hosted automated business administration."
     }
   ];
 
@@ -219,32 +230,39 @@ export const AffiliateGuide: React.FC = () => {
                     📚 10 Tutorial Content Ideas (Hostinger Naturally Introduced)
                   </h2>
                   <p className="text-slate-600 text-xs md:text-sm mt-1 font-medium">
-                    Each tutorial solves a real problem. Hostinger enters naturally at the setup step - not as a sales pitch.
+                    Each tutorial solves a real problem. Hostinger enters naturally at the setup step - not as a sales pitch. Click any tutorial to reveal the full step-by-step breakdown:
                   </p>
                 </div>
               </div>
 
-              <div className="overflow-x-auto rounded-xl border border-slate-300 shadow-sm mb-6">
-                <table className="w-full text-left text-xs md:text-sm text-slate-900">
-                  <thead className="bg-slate-900 text-white font-orbitron uppercase text-xs">
-                    <tr>
-                      <th className="p-3.5 w-12 text-center">#</th>
-                      <th className="p-3.5">Title</th>
-                      <th className="p-3.5">Hostinger Angle</th>
-                      <th className="p-3.5 w-44">Best Format</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 bg-white">
-                    {hostingerTutorials.map((t) => (
-                      <tr key={t.id} className="hover:bg-indigo-50/50 transition-colors">
-                        <td className="p-3.5 text-center font-black font-mono text-indigo-600 bg-slate-50">{t.id}</td>
-                        <td className="p-3.5 font-bold text-slate-900">{t.title}</td>
-                        <td className="p-3.5 text-slate-700 font-medium">{t.angle}</td>
-                        <td className="p-3.5 text-slate-600 font-mono text-xs font-bold">{t.format}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="space-y-4 mb-6">
+                {hostingerTutorials.map((t) => (
+                  <div key={t.id} className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm hover:border-indigo-300 transition-all">
+                    <button
+                      onClick={() => setExpandedTutorial(expandedTutorial === t.id ? null : t.id)}
+                      className="w-full text-left p-4 flex items-center justify-between gap-3 bg-slate-50/70 hover:bg-indigo-50/40 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="w-7 h-7 rounded-lg bg-indigo-600 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">{t.id}</span>
+                        <div>
+                          <h3 className="font-bold text-slate-900 text-sm md:text-base">{t.title}</h3>
+                          <p className="text-xs text-slate-600 font-medium mt-0.5">{t.angle}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="hidden sm:inline-block px-2.5 py-1 rounded bg-slate-200 text-slate-700 font-mono text-[11px] font-bold">{t.format}</span>
+                        {expandedTutorial === t.id ? <ChevronUp className="w-4 h-4 text-indigo-600" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                      </div>
+                    </button>
+
+                    {expandedTutorial === t.id && (
+                      <div className="p-4 border-t border-slate-200 bg-white text-xs md:text-sm text-slate-700 leading-relaxed font-medium">
+                        <strong className="text-indigo-700 block mb-1 uppercase tracking-wider text-xs">Full Implementation Blueprint:</strong>
+                        {t.details}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
 
               {/* STRATEGIC PLACEMENT TIP */}

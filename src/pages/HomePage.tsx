@@ -303,22 +303,31 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
 
       </div>
 
-      {/* 100+ RANDOMIZED TESTIMONIALS AT ABSOLUTE BOTTOM */}
-      <HUDPanel title="⭐⭐⭐⭐⭐ 100+ RANDOMIZED VERIFIED CLIENT & VA REVIEWS">
+      {/* 100+ RANDOMIZED UNIQUE TESTIMONIALS AT ABSOLUTE BOTTOM */}
+      <HUDPanel title="⭐⭐⭐⭐⭐ 100+ RANDOMIZED VERIFIED CLIENT & VA REVIEWS (ZERO DUPLICATES)">
         <div className="p-6 space-y-6">
-          <p className="text-xs text-gray-300 font-sans leading-relaxed">
-            Every browser refresh randomly displays verified feedback from our 100+ global network of Virtual Assistants, agency CEOs, and digital creators:
-          </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <p className="text-xs text-gray-300 font-sans leading-relaxed">
+              Every browser refresh or shuffle randomly displays verified 100% unique feedback with distinct non-repeating photos & detailed case study reviews from our 100+ global network of Virtual Assistants, agency CEOs, and digital creators:
+            </p>
+            <button
+              onClick={() => setDisplayTestimonials([...TESTIMONIALS].sort(() => Math.random() - 0.5))}
+              className="px-4 py-2 bg-[var(--primary-cyan)]/20 hover:bg-[var(--primary-cyan)]/40 border border-[var(--primary-cyan)] text-[var(--primary-cyan)] font-mono text-xs rounded-lg font-bold flex items-center gap-2 transition-all shrink-0 shadow-md"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>🔀 SHUFFLE & VIEW MORE UNIQUE REVIEWS</span>
+            </button>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 font-sans text-xs">
-            {displayTestimonials.slice(0, 6).map((t) => (
-              <div key={t.id} className="bg-black/90 border border-gray-800 p-4 rounded-xl space-y-2 hover:border-cyan-500/40 transition-all flex flex-col justify-between">
+            {displayTestimonials.slice(0, 12).map((t) => (
+              <div key={t.id} className="bg-black/90 border border-gray-800 p-4 rounded-xl space-y-3 hover:border-[var(--primary-cyan)]/60 transition-all flex flex-col justify-between shadow-lg hover:shadow-cyan-500/10">
                 <div className="space-y-2">
                   <div className="flex items-center space-x-1 text-lime-400">
                     {[...Array(t.rating)].map((_, rIdx) => (
                       <Star key={rIdx} className="w-3.5 h-3.5 fill-lime-400 text-lime-400" />
                     ))}
-                    <span className="text-[10px] text-gray-500 font-mono pl-1">VERIFIED</span>
+                    <span className="text-[10px] text-lime-400 font-mono font-bold pl-1">✓ VERIFIED CLIENT/VA</span>
                   </div>
 
                   <p className="text-gray-200 italic leading-relaxed text-[11px]">
@@ -326,31 +335,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                   </p>
                 </div>
 
-                <div className="flex items-center space-x-2.5 pt-2 border-t border-gray-900">
-                  <img src={t.avatar} alt={t.name} className="w-8 h-8 rounded-full border border-cyan-400 object-cover" />
-                  <div>
-                    <span className="text-xs font-bold text-white font-rajdhani block leading-none">{t.name}</span>
-                    <span className="text-[9px] text-gray-400 block pt-0.5">{t.role}</span>
+                <div className="flex items-center space-x-3 pt-2.5 border-t border-gray-800/80 mt-2">
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    className="w-10 h-10 rounded-full border-2 border-[var(--primary-cyan)]/50 object-cover shrink-0 shadow-md"
+                  />
+                  <div className="truncate">
+                    <div className="font-bold text-white text-[12px] truncate">{t.name}</div>
+                    <div className="text-[10px] text-[var(--primary-lime)] font-mono truncate">{t.role}</div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-
-          <div className="overflow-hidden pt-4 border-t border-gray-900">
-            <div className="flex space-x-4 animate-marqueeSlow whitespace-nowrap hover:[animation-play-state:paused]">
-              {displayTestimonials.map((t) => (
-                <div key={t.id} className="inline-block w-72 bg-gradient-to-r from-gray-900 to-black border border-cyan-500/30 p-3 rounded-xl space-y-1 flex-shrink-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-lime-400 text-[10px] font-bold font-mono">★★★★★ VERIFIED</span>
-                    <span className="text-white font-bold text-xs font-rajdhani">{t.name}</span>
-                  </div>
-                  <p className="text-[11px] text-gray-300 font-sans whitespace-normal line-clamp-2">"{t.text}"</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
         </div>
       </HUDPanel>
 
