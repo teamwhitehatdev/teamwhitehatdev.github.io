@@ -6,7 +6,6 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  error?: Error;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -14,27 +13,37 @@ export class ErrorBoundary extends Component<Props, State> {
     hasError: false
   };
 
-  public static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+  public static getDerivedStateFromError(_: Error): State {
+    return { hasError: true };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught React Error:', error, errorInfo);
+    console.error('Uncaught React Error caught by ErrorBoundary:', error, errorInfo);
     try {
       localStorage.removeItem('wh_services');
       localStorage.removeItem('wh_projects');
       localStorage.removeItem('wh_inquiries');
       localStorage.removeItem('wh_banned_ips');
+      localStorage.removeItem('whd_app_version');
+    } catch (e) {}
+
+    // Auto recover silently once if not already reloaded
+    try {
+      if (!sessionStorage.getItem('whd_auto_recovered')) {
+        sessionStorage.setItem('whd_auto_recovered', 'true');
+        window.location.reload();
+      }
     } catch (e) {}
   }
 
   public render() {
     if (this.state.hasError) {
+      // If auto-recovery already attempted, render children safely or clean fallback
       return (
-        <div style={{ padding: '40px 20px', textAlign: 'center', background: '#090d16', color: '#00f0ff', fontFamily: 'monospace', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#a3e635' }}>⚡ WHITE HAT DEV | AUTOMATIC RECOVERY MODE</h1>
-          <p style={{ color: '#cbd5e1', margin: '16px 0', maxWidth: '500px', fontSize: '14px', lineHeight: '1.6' }}>
-            A local browser storage cache conflict was detected. Click below to instantly clear cache and restore the website.
+        <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col items-center justify-center p-6 text-center font-mono">
+          <h2 className="text-xl font-bold text-lime-400 mb-2">Team WhiteHat Dev | Portal Reloading...</h2>
+          <p className="text-sm text-gray-400 max-w-md mb-4">
+            Refreshing application assets. If page does not update automatically, click below:
           </p>
           <button
             onClick={() => {
@@ -44,9 +53,9 @@ export class ErrorBoundary extends Component<Props, State> {
               } catch (e) {}
               window.location.href = window.location.origin + window.location.pathname;
             }}
-            style={{ padding: '14px 28px', background: 'linear-gradient(to right, #22d3ee, #a3e635)', color: '#000', border: 'none', borderRadius: '12px', fontWeight: '900', cursor: 'pointer', fontSize: '14px', textTransform: 'uppercase' }}
+            className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold text-xs uppercase rounded-xl shadow-lg hover:opacity-90 transition-all"
           >
-            CLEAR CACHE & RELOAD WEBSITE
+            RELOAD WEBSITE NOW
           </button>
         </div>
       );
