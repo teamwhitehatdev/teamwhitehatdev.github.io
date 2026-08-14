@@ -10,6 +10,42 @@ export const AffiliateBanners: React.FC = () => {
 
   const allBanners = [
     {
+      title: 'GUMROAD TAX CENTER & PAYOUTS HUB',
+      badge: 'NEW TAX DOCS',
+      img: './media_1786678133861.png',
+      desc: 'One place for all your Gumroad creator tax documents, 1099 forms, and direct bank payouts.',
+      link: GUMROAD_LINK,
+      btn: 'EXPLORE GUMROAD PRODUCTS NOW',
+      gradient: 'from-gray-900 via-black to-pink-950/80',
+      border: 'border-pink-500/50',
+      textClr: 'text-pink-400',
+      btnGrad: 'from-pink-400 to-purple-400 text-black'
+    },
+    {
+      title: 'JINGSKETCH GUMROAD CREATOR STORY (1M+ ARTISTS)',
+      badge: '1M+ CREATORS',
+      img: './media_1786678133950.png',
+      desc: 'Learn how digital product creators build global multi-million dollar audiences selling brush packs and VA kits on Gumroad.',
+      link: GUMROAD_LINK,
+      btn: 'START SELLING ON GUMROAD FREE',
+      gradient: 'from-gray-900 via-black to-purple-950/80',
+      border: 'border-purple-500/50',
+      textClr: 'text-purple-400',
+      btnGrad: 'from-purple-400 to-cyan-400 text-black'
+    },
+    {
+      title: 'KYLE T WEBSTER: DISNEY & PIXAR GUMROAD PARTNERSHIP',
+      badge: 'DISNEY & ADOBE',
+      img: './media_1786678134008.png',
+      desc: 'How selling digital assets on Gumroad opened doors to global corporate partnerships with Pixar, Disney, and Adobe.',
+      link: GUMROAD_LINK,
+      btn: 'JOIN GUMROAD CREATOR NETWORK',
+      gradient: 'from-gray-900 via-black to-blue-950/80',
+      border: 'border-blue-500/50',
+      textClr: 'text-blue-400',
+      btnGrad: 'from-blue-400 to-cyan-400 text-black'
+    },
+    {
       title: 'HOSTINGER CLOUD & VPS HOSTING (75% OFF)',
       badge: 'CODE: DPDCABINCEHM',
       img: './media_1786586391503.png',
@@ -20,46 +56,9 @@ export const AffiliateBanners: React.FC = () => {
       border: 'border-lime-500/50',
       textClr: 'text-lime-400',
       btnGrad: 'from-lime-400 to-cyan-400 text-black'
-    },
-    {
-      title: 'GUMROAD DIGITAL ASSETS & VA TEMPLATES',
-      badge: 'VERIFIED STORE',
-      img: './media_1786590207160.png',
-      desc: 'Explore curated digital templates, software tools, client proposal kits, and ebooks to build your online business.',
-      link: GUMROAD_LINK,
-      btn: 'DISCOVER GUMROAD PRODUCTS',
-      gradient: 'from-gray-900 via-black to-cyan-950/80',
-      border: 'border-cyan-500/50',
-      textClr: 'text-cyan-400',
-      btnGrad: 'from-cyan-400 to-purple-400 text-black'
-    },
-    {
-      title: 'ELEVENLABS AI VOICE & AUDIO GENERATOR',
-      badge: 'FREE TRIAL',
-      img: './media_1786191713841.jpg',
-      desc: 'Generate human-like AI voiceovers for podcasting, content creation, client videos, and VA tasks in 29+ languages.',
-      link: ELEVENLABS_LINK,
-      btn: 'TRY ELEVENLABS FREE',
-      gradient: 'from-gray-900 via-black to-purple-950/80',
-      border: 'border-purple-500/50',
-      textClr: 'text-purple-400',
-      btnGrad: 'from-purple-500 to-cyan-400 text-white'
-    },
-    {
-      title: 'OFFICIAL GOOGLE PLAY STORE APPS SUITE',
-      badge: 'PLAY STORE',
-      img: './media_1786178491269.jpg',
-      desc: 'Download our collection of published mobile productivity applications, utilities, and developer tools on Android.',
-      link: PLAY_STORE_URL,
-      btn: 'VIEW GOOGLE PLAY STORE APPS',
-      gradient: 'from-gray-900 via-black to-lime-950/80',
-      border: 'border-lime-500/50',
-      textClr: 'text-lime-400',
-      btnGrad: 'from-lime-400 to-cyan-400 text-black'
     }
   ];
 
-  // Shuffle banner order randomly on refresh
   const [shuffledBanners, setShuffledBanners] = useState(allBanners);
 
   useEffect(() => {
@@ -68,10 +67,10 @@ export const AffiliateBanners: React.FC = () => {
   }, []);
 
   return (
-    <HUDPanel title="OFFICIAL REFERRAL PARTNERS & SHUFFLED PROMO BANNERS">
+    <HUDPanel title="OFFICIAL GUMROAD CREATOR BANNERS & REFERRAL PARTNERS">
       <div className="p-6 space-y-6">
         <p className="text-xs sm:text-sm text-gray-300 font-sans leading-relaxed">
-          Accelerate your Virtual Assistant career and online business with our official verified referral partners. Get exclusive discounts on web hosting, digital tools, AI voice generators, and mobile developer suites:
+          Accelerate your Virtual Assistant career and online business with our official verified Gumroad digital marketplace and web hosting partners:
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono">
@@ -80,8 +79,8 @@ export const AffiliateBanners: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className={`text-xs font-extrabold ${item.textClr} uppercase tracking-widest flex items-center space-x-1`}>
-                    <Server className="w-4 h-4" />
-                    <span>REFERRAL PARTNER</span>
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>GUMROAD REFERRAL BANNER</span>
                   </span>
                   <span className="bg-black/60 text-lime-300 text-[10px] font-bold px-2 py-0.5 rounded border border-gray-700">
                     {item.badge}
@@ -89,7 +88,7 @@ export const AffiliateBanners: React.FC = () => {
                 </div>
 
                 <div className="rounded-xl overflow-hidden border border-gray-700">
-                  <img src={item.img} alt={item.title} className="w-full h-36 object-cover hover:scale-105 transition-transform duration-300" />
+                  <img src={item.img} alt={item.title} className="w-full h-40 object-cover hover:scale-105 transition-transform duration-300" />
                 </div>
 
                 <h4 className="text-base font-black font-rajdhani text-white uppercase">
