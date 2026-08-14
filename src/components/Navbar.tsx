@@ -13,10 +13,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
 
   const navLinks = [
     { path: '/', label: 'HOME' },
-    { path: '/about', label: 'ABOUT' },
-    { path: '/web-hosting', label: 'WEB HOSTING' },
     { path: '/showcase', label: 'SHOWCASE' },
-    { path: '/services', label: 'SERVICES' }
+    { path: '/web-hosting', label: 'WEB HOSTING' },
+    { path: '/services', label: 'SERVICES' },
+    { path: '/about', label: 'ABOUT' },
+    { path: '/affiliate-guide', label: 'HOW TO BECOME SUCCESSFUL AFFILIATE MARKETER?' }
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -35,18 +36,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
               <span className="font-black font-rajdhani text-lg sm:text-xl text-white tracking-widest leading-none group-hover:text-cyan-400 transition-colors uppercase">
                 WHITE HAT DEV
               </span>
-              <span className="text-[9px] text-lime-400 font-mono tracking-wider leading-tight uppercase">
-                VA ACCELERATOR &amp; FULL-STACK PORTAL
+              <span className="text-[9px] text-lime-400 font-mono tracking-wider leading-tight uppercase font-bold">
+                LEARN. CREATE. DEVELOP. ASSIST. GROW.
               </span>
             </div>
           </Link>
 
-          <div className="hidden md:flex items-center space-x-1 text-xs">
+          <div className="hidden lg:flex items-center space-x-1 text-xs">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-3 py-1.5 rounded-lg font-extrabold uppercase transition-all ${
+                className={`px-2.5 py-1.5 rounded-lg font-extrabold uppercase transition-all whitespace-nowrap ${
                   isActive(link.path)
                     ? 'bg-gradient-to-r from-cyan-500/20 to-lime-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
                     : 'text-gray-300 hover:text-white hover:bg-gray-900'
@@ -60,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1.5 bg-gray-900 border border-cyan-500/30 text-cyan-400 hover:text-lime-300 rounded-lg font-bold flex items-center space-x-1 transition-all"
+              className="px-2.5 py-1.5 bg-gray-900 border border-cyan-500/30 text-cyan-400 hover:text-lime-300 rounded-lg font-bold flex items-center space-x-1 transition-all whitespace-nowrap"
             >
               <Smartphone className="w-3.5 h-3.5" />
               <span>PLAY STORE</span>
@@ -69,7 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             {onOpenConsultation && (
               <button
                 onClick={onOpenConsultation}
-                className="px-3.5 py-1.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-black font-rajdhani text-xs uppercase rounded-lg hover:opacity-95 shadow-md flex items-center space-x-1 ml-2"
+                className="px-3 py-1.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-black font-rajdhani text-xs uppercase rounded-lg hover:opacity-95 shadow-md flex items-center space-x-1 ml-1 whitespace-nowrap"
               >
                 <Rocket className="w-3.5 h-3.5" />
                 <span>HIRE VA &rarr;</span>
@@ -77,7 +78,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             )}
           </div>
 
-          <div className="md:hidden flex items-center">
+          <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 text-cyan-400 hover:text-white rounded-lg border border-gray-800"
@@ -90,7 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-black/95 border-b border-cyan-500/40 px-4 pt-2 pb-4 space-y-2 text-xs">
+        <div className="lg:hidden bg-black/95 border-b border-cyan-500/40 px-4 pt-2 pb-4 space-y-2 text-xs">
           {navLinks.map((link) => (
             <Link
               key={link.path}

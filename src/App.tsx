@@ -8,6 +8,7 @@ import { About } from './pages/About';
 import { WebHosting } from './pages/WebHosting';
 import { Showcase } from './pages/Showcase';
 import { Services } from './pages/Services';
+import { AffiliateGuide } from './pages/AffiliateGuide';
 import { Admin } from './pages/Admin';
 import { ConsultationModal } from './components/ConsultationModal';
 import { PlayStoreModal } from './components/PlayStoreModal';
@@ -73,10 +74,11 @@ export function AppContent() {
             <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
               <Routes>
                 <Route path="/" element={<HomePage onOpenConsultation={(svc?: string) => handleOpenConsultation(svc)} />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/web-hosting" element={<WebHosting />} />
                 <Route path="/showcase" element={<Showcase />} />
+                <Route path="/web-hosting" element={<WebHosting />} />
                 <Route path="/services" element={<Services onOpenConsultation={(svc) => handleOpenConsultation(svc)} />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/affiliate-guide" element={<AffiliateGuide />} />
                 <Route path="/admin" element={<Admin />} />
               </Routes>
             </main>

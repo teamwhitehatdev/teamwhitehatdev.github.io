@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Server, ShoppingBag, Mic, Smartphone } from 'lucide-react';
+import { Shield, Server, ShoppingBag, Mic, Smartphone, Sparkles } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
@@ -18,11 +18,16 @@ export const Footer: React.FC = () => {
           <div className="space-y-3 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start space-x-2.5">
               <img src="./favicon.png" alt="Team WhiteHat Dev Logo" className="w-8 h-8 rounded-full border border-cyan-400 object-cover" />
-              <span className="font-black font-rajdhani text-lg text-white tracking-widest uppercase">
-                WHITE HAT DEV
-              </span>
+              <div className="flex flex-col">
+                <span className="font-black font-rajdhani text-lg text-white tracking-widest uppercase leading-none">
+                  WHITE HAT DEV
+                </span>
+                <span className="text-[8px] text-lime-400 font-mono font-bold leading-tight uppercase pt-0.5">
+                  LEARN. CREATE. DEVELOP. ASSIST. GROW.
+                </span>
+              </div>
             </div>
-            <p className="text-xs text-gray-300 font-sans leading-relaxed">
+            <p className="text-xs text-gray-300 font-sans leading-relaxed pt-1">
               Your all-in-one digital hub for Virtual Assistance, Technology, Development, Creativity, and Digital Opportunities.
             </p>
             <div className="text-[10px] text-lime-400 font-mono font-bold pt-1">
@@ -35,10 +40,12 @@ export const Footer: React.FC = () => {
               QUICK NAVIGATION
             </h4>
             <ul className="space-y-1.5 text-xs">
-              <li><Link to="/" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Home &amp; Accelerator</Link></li>
-              <li><Link to="/about" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; About Platform &amp; Vision</Link></li>
-              <li><Link to="/services" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Virtual Assistant Services</Link></li>
-              <li><Link to="/showcase" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Software &amp; Showcase</Link></li>
+              <li><Link to="/" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Home</Link></li>
+              <li><Link to="/showcase" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Showcase</Link></li>
+              <li><Link to="/web-hosting" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Web Hosting</Link></li>
+              <li><Link to="/services" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; Services</Link></li>
+              <li><Link to="/about" className="hover:text-cyan-400 transition-colors block py-0.5">&gt; About</Link></li>
+              <li><Link to="/affiliate-guide" className="hover:text-lime-300 transition-colors block py-0.5 text-lime-400 font-bold">&gt; Become Successful Affiliate Marketer</Link></li>
             </ul>
           </div>
 
@@ -93,7 +100,7 @@ export const Footer: React.FC = () => {
 
         <div className="pt-6 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between text-xs space-y-4 md:space-y-0 text-center md:text-left">
           <div className="text-gray-400 font-sans">
-            &copy; {currentYear} <strong className="text-white font-mono uppercase">Team WhiteHat Dev</strong>. All Rights Reserved. Learn. Create. Develop. Assist. Grow.
+            &copy; {currentYear} <strong className="text-white font-mono uppercase">Team WhiteHat Dev</strong>. All Rights Reserved. LEARN. CREATE. DEVELOP. ASSIST. GROW.
           </div>
 
           <div className="flex flex-wrap justify-center space-x-4 text-[11px] text-gray-400">
