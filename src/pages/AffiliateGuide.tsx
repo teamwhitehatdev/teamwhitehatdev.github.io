@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { Terminal, Sparkles, Rocket, CheckCircle2, ArrowRight, Shield, Globe, Award, HelpCircle, ExternalLink, RefreshCw, ShoppingBag, Video, BookOpen, MessageSquare, DollarSign, Layers, AlertTriangle, Zap, Flame, Star, Check } from 'lucide-react';
-import { HUDPanel } from '../components/HUDPanel';
+import { Award, BookOpen, CheckCircle2, AlertTriangle, Zap, Flame, HelpCircle, ExternalLink, ArrowRight, ShieldCheck, Star, Layers, Sparkles, TrendingUp } from 'lucide-react';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
-import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
-import { ALL_AFFILIATE_ADS } from '../data/affiliateAdsData';
 
 export const AffiliateGuide: React.FC = () => {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
@@ -77,7 +74,7 @@ export const AffiliateGuide: React.FC = () => {
     {
       id: 1,
       title: "1. 'My Client's Website Keeps Going Down - What's Wrong and How Do I Fix It?'",
-      problem: "Unreliable shared hosting killing client relationships and destroying trust.",
+      problem: "Unreliable shared hosting killing client relationships and destroying hard-earned trust.",
       solution: "Explain the signs of bad hosting → introduce Hostinger Cloud Hosting with auto-scaling and 99.9% uptime guarantees.",
       cta: "Here's how I moved my client's site in an afternoon",
       link: HOSTINGER_LINK
@@ -171,199 +168,269 @@ export const AffiliateGuide: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* HEADER SECTION */}
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--primary-cyan)]/10 border border-[var(--primary-cyan)]/30 text-[var(--primary-cyan)] mb-4">
-          <Award className="w-5 h-5" />
-          <span className="text-xs md:text-sm font-bold tracking-wider uppercase">Official Masterclass Blueprint</span>
+    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 text-slate-900 font-sans py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* LIGHT THEME HERO BANNER */}
+        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/80 border border-slate-200/80 p-6 md:p-10 mb-10 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mt-8 -mr-8 w-40 h-40 bg-indigo-50 rounded-full blur-2xl pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-40 h-40 bg-cyan-50 rounded-full blur-2xl pointer-events-none"></div>
+          
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs md:text-sm font-bold uppercase tracking-wider mb-4 shadow-sm">
+            <Award className="w-4 h-4 text-indigo-600" />
+            <span>Masterclass Blueprint & Career Accelerator</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4 font-orbitron">
+            HOW TO BECOME A SUCCESSFUL <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent">AFFILIATE MARKETER</span>
+          </h1>
+
+          <p className="text-slate-600 max-w-3xl mx-auto text-base md:text-lg leading-relaxed font-medium">
+            A practical, value-first roadmap for Virtual Assistants, Freelancers, and Digital Creators to build high-converting referral channels by solving real client problems.
+          </p>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs md:text-sm font-semibold text-slate-700">
+            <span className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 rounded-lg border border-slate-200">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>100% Value-First Strategy</span>
+            </span>
+            <span className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 rounded-lg border border-slate-200">
+              <ShieldCheck className="w-4 h-4 text-indigo-600" />
+              <span>Tested & Verified Workflows</span>
+            </span>
+            <span className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 rounded-lg border border-slate-200">
+              <TrendingUp className="w-4 h-4 text-cyan-600" />
+              <span>High Conversion Yields</span>
+            </span>
+          </div>
         </div>
-        <h1 className="text-3xl md:text-5xl font-black text-white font-orbitron tracking-wide mb-4">
-          HOW TO BECOME A SUCCESSFUL <span className="cyber-text-gradient">AFFILIATE MARKETER</span>
-        </h1>
-        <p className="text-gray-300 max-w-3xl mx-auto text-sm md:text-base leading-relaxed">
-          Learn how Virtual Assistants, Freelancers, and Digital Creators build high-converting referral channels by solving real problems first.
-        </p>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
-        {/* MAIN CONTENT AREA */}
-        <div className="lg:col-span-3 space-y-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          
+          {/* MAIN LIGHT CONTENT AREA */}
+          <div className="lg:col-span-3 space-y-10">
 
-          {/* SECTION 1: 10 HOSTINGER TUTORIAL CONTENT IDEAS */}
-          <HUDPanel title="📚 10 TUTORIAL CONTENT IDEAS (HOSTINGER NATURALLY INTRODUCED)">
-            <p className="text-gray-300 text-sm mb-6 leading-relaxed">
-              Each tutorial solves a real problem. Hostinger enters naturally at the practical setup step - not as the punchline of a sales pitch.
-            </p>
+            {/* SECTION 1: 10 HOSTINGER TUTORIAL CONTENT IDEAS */}
+            <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/70 border border-slate-200/90 p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
+                <BookOpen className="w-6 h-6 text-indigo-600 shrink-0" />
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900 font-orbitron">
+                    📚 10 Tutorial Content Ideas (Hostinger Naturally Introduced)
+                  </h2>
+                  <p className="text-slate-600 text-xs md:text-sm mt-1">
+                    Each tutorial solves a real problem. Hostinger enters naturally at the setup step - not as a sales pitch.
+                  </p>
+                </div>
+              </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs md:text-sm text-gray-200 border border-gray-800 rounded-lg overflow-hidden">
-                <thead className="bg-gray-900/80 text-[var(--primary-cyan)] font-orbitron uppercase border-b border-gray-800">
-                  <tr>
-                    <th className="p-3 w-12 text-center">#</th>
-                    <th className="p-3">Title</th>
-                    <th className="p-3">Hostinger Angle</th>
-                    <th className="p-3 w-48">Best Format</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-800/60 bg-gray-950/40">
-                  {hostingerTutorials.map((t) => (
-                    <tr key={t.id} className="hover:bg-gray-900/50 transition-colors">
-                      <td className="p-3 text-center font-mono font-bold text-[var(--primary-lime)]">{t.id}</td>
-                      <td className="p-3 font-semibold text-white">{t.title}</td>
-                      <td className="p-3 text-gray-300">{t.angle}</td>
-                      <td className="p-3 text-gray-400 font-mono text-xs">{t.format}</td>
+              <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm mb-6">
+                <table className="w-full text-left text-xs md:text-sm text-slate-800">
+                  <thead className="bg-slate-900 text-white font-orbitron uppercase text-xs">
+                    <tr>
+                      <th className="p-3.5 w-12 text-center">#</th>
+                      <th className="p-3.5">Title</th>
+                      <th className="p-3.5">Hostinger Angle</th>
+                      <th className="p-3.5 w-44">Best Format</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 bg-white">
+                    {hostingerTutorials.map((t) => (
+                      <tr key={t.id} className="hover:bg-indigo-50/40 transition-colors">
+                        <td className="p-3.5 text-center font-bold font-mono text-indigo-600 bg-slate-50">{t.id}</td>
+                        <td className="p-3.5 font-bold text-slate-900">{t.title}</td>
+                        <td className="p-3.5 text-slate-600 font-medium">{t.angle}</td>
+                        <td className="p-3.5 text-slate-500 font-mono text-xs">{t.format}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* STRATEGIC PLACEMENT TIP */}
+              <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 flex items-start gap-3 shadow-sm">
+                <Zap className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-xs font-bold uppercase text-amber-800 tracking-wider">💡 Strategic Placement Tip</h4>
+                  <p className="text-xs md:text-sm text-slate-700 mt-1 leading-relaxed">
+                    Within each tutorial, introduce Hostinger at the <strong>"what do you need?"</strong> setup step - not in the intro. Let the tool earn its recommendation by solving the immediate problem!
+                  </p>
+                </div>
+              </div>
             </div>
 
-            {/* PLACEMENT TIP BOX */}
-            <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-yellow-500/5 to-transparent border border-amber-500/30 flex items-start gap-3">
-              <Zap className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-              <div>
-                <h4 className="text-xs font-bold uppercase text-amber-400 tracking-wider">💡 Strategic Placement Tip</h4>
-                <p className="text-xs md:text-sm text-gray-300 mt-1">
-                  Within each tutorial, introduce Hostinger at the <strong>"what do you need?"</strong> setup step - not in the intro. Let the tool earn its recommendation by solving the immediate need!
+            {/* SECTION 2: 5 PROBLEM -> SOLUTION CONTENT IDEAS */}
+            <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/70 border border-slate-200/90 p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                <Flame className="w-6 h-6 text-rose-600 shrink-0" />
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900 font-orbitron">
+                    🔥 5 "Problem → Solution" Content Ideas
+                  </h2>
+                  <p className="text-slate-600 text-xs md:text-sm mt-1">
+                    These target readers at the exact moment of pain - right before they are ready to buy.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {problemSolutions.map((ps) => (
+                  <div key={ps.id} className="p-5 rounded-xl bg-slate-50 border border-slate-200 hover:border-indigo-300 transition-all shadow-sm">
+                    <h3 className="text-base font-bold text-slate-900 mb-3 flex items-center gap-2 font-orbitron">
+                      <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                      {ps.title}
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm mb-4">
+                      <div className="p-3.5 rounded-lg bg-rose-50 border border-rose-200">
+                        <span className="font-bold text-rose-800 block mb-1 uppercase text-xs tracking-wider">Problem:</span>
+                        <p className="text-slate-700">{ps.problem}</p>
+                      </div>
+                      <div className="p-3.5 rounded-lg bg-emerald-50 border border-emerald-200">
+                        <span className="font-bold text-emerald-800 block mb-1 uppercase text-xs tracking-wider">Solution:</span>
+                        <p className="text-slate-700">{ps.solution}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                      <span className="text-xs font-bold text-indigo-700 font-mono">CTA: {ps.cta}</span>
+                      <a
+                        href={ps.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md shadow-indigo-200 transition-all"
+                      >
+                        <span>RECOMMEND HOSTINGER</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* SECTION 3: 3 VIRAL STYLE CONTENT TITLES */}
+            <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/70 border border-slate-200/90 p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                <Sparkles className="w-6 h-6 text-purple-600 shrink-0" />
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900 font-orbitron">
+                    💥 3 High-Interest, Viral-Style Content Titles
+                  </h2>
+                  <p className="text-slate-600 text-xs md:text-sm mt-1">
+                    Designed for high shareability and strong click-through rate in VA communities and social channels.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {viralTitles.map((vt, idx) => (
+                  <div key={idx} className="p-5 rounded-xl bg-gradient-to-r from-purple-50 via-indigo-50 to-white border border-purple-200 shadow-sm">
+                    <h3 className="text-base font-bold text-slate-900 mb-2 font-orbitron">{vt.title}</h3>
+                    <div className="p-3 rounded-lg bg-white border border-purple-100 text-xs md:text-sm text-slate-700">
+                      <strong className="text-purple-700 uppercase tracking-wider mr-2">Why it works:</strong>
+                      {vt.reason}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* SECTION 4: COMMON PRE-PURCHASE QUESTIONS & TRUST ANSWERS */}
+            <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/70 border border-slate-200/90 p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                <HelpCircle className="w-6 h-6 text-blue-600 shrink-0" />
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900 font-orbitron">
+                    ❓ Common Pre-Purchase Questions - With Trust-Building Answers
+                  </h2>
+                  <p className="text-slate-600 text-xs md:text-sm mt-1">
+                    Use these as a dedicated FAQ section to handle objections before readers bounce.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {prePurchaseFaqs.map((faq, idx) => (
+                  <div key={idx} className="rounded-xl border border-slate-200 overflow-hidden bg-slate-50/60 shadow-sm">
+                    <button
+                      onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
+                      className="w-full text-left p-4 flex items-center justify-between text-sm md:text-base font-bold text-slate-900 hover:text-indigo-600 transition-colors bg-white"
+                    >
+                      <span className="flex items-center gap-2">
+                        <HelpCircle className="w-4 h-4 text-indigo-600 shrink-0" />
+                        {faq.q}
+                      </span>
+                      <span className="text-xs font-mono font-bold text-slate-500">{activeFaq === idx ? '[-]' : '[+]'}</span>
+                    </button>
+                    {activeFaq === idx && (
+                      <div className="p-4 text-xs md:text-sm text-slate-700 border-t border-slate-200 bg-slate-50 leading-relaxed font-medium">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* SECTION 5: CONTENT PRIORITY ORDER */}
+            <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/70 border border-slate-200/90 p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                <Layers className="w-6 h-6 text-emerald-600 shrink-0" />
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900 font-orbitron">
+                    🗓️ Content Priority Order (Start Here)
+                  </h2>
+                  <p className="text-slate-600 text-xs md:text-sm mt-1">
+                    Follow this strategic rollout roadmap for maximum initial traction and fastest conversion wins.
+                  </p>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm mb-6">
+                <table className="w-full text-left text-xs md:text-sm text-slate-800">
+                  <thead className="bg-slate-900 text-white font-orbitron uppercase text-xs">
+                    <tr>
+                      <th className="p-3.5 w-28">Priority</th>
+                      <th className="p-3.5">Content Piece</th>
+                      <th className="p-3.5">Why First</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 bg-white">
+                    {priorityOrder.map((po, idx) => (
+                      <tr key={idx} className="hover:bg-emerald-50/40 transition-colors">
+                        <td className="p-3.5 font-bold font-mono text-emerald-600 bg-slate-50">{po.p}</td>
+                        <td className="p-3.5 font-bold text-slate-900">{po.title}</td>
+                        <td className="p-3.5 text-slate-600 font-medium">{po.reason}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* THROUGH-LINE CONCLUSION */}
+              <div className="p-5 rounded-xl bg-gradient-to-r from-emerald-50 via-cyan-50 to-white border border-emerald-200 shadow-sm">
+                <h4 className="text-sm font-bold text-emerald-900 uppercase tracking-wider mb-2 flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                  The Core Strategic Through-Line
+                </h4>
+                <p className="text-xs md:text-sm text-slate-700 leading-relaxed font-medium">
+                  Every single piece of content helps the reader solve something real. Hostinger earns its placement because it genuinely fits what this audience needs - not because it is the product being pushed. That is what makes affiliate content people actually trust and buy through!
                 </p>
               </div>
             </div>
-          </HUDPanel>
 
-          {/* SECTION 2: 5 PROBLEM -> SOLUTION CONTENT IDEAS */}
-          <HUDPanel title="🔥 5 PROBLEM → SOLUTION CONTENT IDEAS">
-            <p className="text-gray-300 text-sm mb-6">
-              These target readers at the exact moment of pain - right before they are ready to purchase.
-            </p>
+          </div>
 
-            <div className="space-y-6">
-              {problemSolutions.map((ps) => (
-                <div key={ps.id} className="p-5 rounded-xl bg-gray-900/60 border border-gray-800/80 hover:border-[var(--primary-cyan)]/40 transition-all">
-                  <h3 className="text-base font-bold text-white mb-3 flex items-center gap-2 font-orbitron">
-                    <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-                    {ps.title}
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm mb-4">
-                    <div className="p-3 rounded-lg bg-rose-950/20 border border-rose-900/30">
-                      <span className="font-bold text-rose-400 block mb-1 uppercase tracking-wider">Problem:</span>
-                      <p className="text-gray-300">{ps.problem}</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-emerald-950/20 border border-emerald-900/30">
-                      <span className="font-bold text-emerald-400 block mb-1 uppercase tracking-wider">Solution:</span>
-                      <p className="text-gray-300">{ps.solution}</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-gray-800/60">
-                    <span className="text-xs text-[var(--primary-lime)] font-mono">CTA: {ps.cta}</span>
-                    <a
-                      href={ps.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full sm:w-auto px-4 py-2 rounded-lg bg-[var(--primary-cyan)] hover:bg-cyan-400 text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md"
-                    >
-                      <span>RECOMMEND HOSTINGER</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                </div>
-              ))}
+          {/* RIGHT SIDEBAR PROMO COLUMN */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-20 bg-white p-4 rounded-2xl shadow-lg border border-slate-200">
+              <DynamicAdsSidebar />
             </div>
-          </HUDPanel>
-
-          {/* SECTION 3: 3 VIRAL STYLE CONTENT TITLES */}
-          <HUDPanel title="💥 3 HIGH-INTEREST, VIRAL-STYLE CONTENT TITLES">
-            <p className="text-gray-300 text-sm mb-6">
-              Designed for high shareability and strong click-through rate in VA communities, Facebook groups, and LinkedIn.
-            </p>
-
-            <div className="grid grid-cols-1 gap-4">
-              {viralTitles.map((vt, idx) => (
-                <div key={idx} className="p-5 rounded-xl bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900 border border-purple-500/30 hover:border-purple-400 transition-all">
-                  <h3 className="text-base font-bold text-white mb-2 font-orbitron">{vt.title}</h3>
-                  <div className="p-3 rounded-lg bg-purple-950/20 border border-purple-900/40 text-xs md:text-sm text-gray-300">
-                    <strong className="text-purple-400 uppercase tracking-wider mr-2">Why it works:</strong>
-                    {vt.reason}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </HUDPanel>
-
-          {/* SECTION 4: COMMON PRE-PURCHASE QUESTIONS & TRUST ANSWERS */}
-          <HUDPanel title="❓ COMMON PRE-PURCHASE QUESTIONS - WITH TRUST-BUILDING ANSWERS">
-            <p className="text-gray-300 text-sm mb-6">
-              Use these as a dedicated FAQ section or embed them within relevant tutorials to handle objections before readers bounce.
-            </p>
-
-            <div className="space-y-4">
-              {prePurchaseFaqs.map((faq, idx) => (
-                <div key={idx} className="rounded-xl bg-gray-900/50 border border-gray-800 overflow-hidden">
-                  <button
-                    onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                    className="w-full text-left p-4 flex items-center justify-between text-sm md:text-base font-bold text-white hover:text-[var(--primary-cyan)] transition-colors"
-                  >
-                    <span className="flex items-center gap-2">
-                      <HelpCircle className="w-4 h-4 text-[var(--primary-lime)] shrink-0" />
-                      {faq.q}
-                    </span>
-                    <span className="text-xs font-mono text-gray-500">{activeFaq === idx ? '[-]' : '[+]'}</span>
-                  </button>
-                  {activeFaq === idx && (
-                    <div className="p-4 pt-0 text-xs md:text-sm text-gray-300 border-t border-gray-800/60 leading-relaxed bg-gray-950/40">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </HUDPanel>
-
-          {/* SECTION 5: CONTENT PRIORITY ORDER */}
-          <HUDPanel title="🗓️ CONTENT PRIORITY ORDER (START HERE)">
-            <p className="text-gray-300 text-sm mb-6">
-              Follow this strategic rollout roadmap for maximum initial traction and fastest conversion wins.
-            </p>
-
-            <div className="overflow-x-auto mb-6">
-              <table className="w-full text-left text-xs md:text-sm text-gray-200 border border-gray-800 rounded-lg overflow-hidden">
-                <thead className="bg-gray-900/80 text-[var(--primary-lime)] font-orbitron uppercase border-b border-gray-800">
-                  <tr>
-                    <th className="p-3 w-28">Priority</th>
-                    <th className="p-3">Content Piece</th>
-                    <th className="p-3">Why First</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-800/60 bg-gray-950/40">
-                  {priorityOrder.map((po, idx) => (
-                    <tr key={idx} className="hover:bg-gray-900/50 transition-colors">
-                      <td className="p-3 font-mono font-bold text-[var(--primary-cyan)]">{po.p}</td>
-                      <td className="p-3 font-semibold text-white">{po.title}</td>
-                      <td className="p-3 text-gray-300">{po.reason}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* THROUGH-LINE CONCLUSION */}
-            <div className="p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-transparent border border-emerald-500/40">
-              <h4 className="text-xs md:text-sm font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                The Core Strategic Through-Line
-              </h4>
-              <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
-                Every single piece of content helps the reader solve something real. Hostinger earns its placement because it genuinely fits what this audience needs - not because it is the product being pushed. That is what makes affiliate content people actually trust and buy through!
-              </p>
-            </div>
-          </HUDPanel>
+          </div>
 
         </div>
 
-        {/* RIGHT SIDEBAR PROMO COLUMN */}
-        <div className="lg:col-span-1">
-          <DynamicAdsSidebar />
-        </div>
       </div>
     </div>
   );
