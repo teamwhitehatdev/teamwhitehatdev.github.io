@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Terminal, Sparkles, Rocket, CheckCircle2, ArrowRight, Shield, Globe, Award, HelpCircle, ExternalLink, RefreshCw, ShoppingBag, Youtube, Linkedin, BookOpen, MessageSquare, DollarSign, Layers } from 'lucide-react';
+import { Terminal, Sparkles, Rocket, CheckCircle2, ArrowRight, Shield, Globe, Award, HelpCircle, ExternalLink, RefreshCw, ShoppingBag, Video, Globe, BookOpen, MessageSquare, DollarSign, Layers } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
@@ -310,7 +310,7 @@ export const AffiliateGuide: React.FC = () => {
                 
                 <div className="bg-black/90 border border-red-500/40 p-4 rounded-2xl space-y-2">
                   <div className="flex items-center space-x-2 text-red-400">
-                    <Youtube className="w-5 h-5" />
+                    <Video className="w-5 h-5" />
                     <span className="font-bold text-xs uppercase font-rajdhani text-white">YOUTUBE & SHORTS</span>
                   </div>
                   <p className="text-[11px] text-gray-300 font-sans leading-relaxed">
@@ -320,7 +320,7 @@ export const AffiliateGuide: React.FC = () => {
 
                 <div className="bg-black/90 border border-blue-500/40 p-4 rounded-2xl space-y-2">
                   <div className="flex items-center space-x-2 text-blue-400">
-                    <Linkedin className="w-5 h-5" />
+                    <Globe className="w-5 h-5" />
                     <span className="font-bold text-xs uppercase font-rajdhani text-white">LINKEDIN B2B</span>
                   </div>
                   <p className="text-[11px] text-gray-300 font-sans leading-relaxed">

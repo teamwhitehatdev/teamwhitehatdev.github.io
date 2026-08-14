@@ -5,7 +5,8 @@ import { HUDPanel } from '../components/HUDPanel';
 import { AffiliateBanners } from '../components/AffiliateBanners';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
-import { TESTIMONIALS } from '../data/testimonialsData';
+import { generate100Testimonials } from '../data/testimonialsData';
+const TESTIMONIALS = generate100Testimonials();
 
 interface HomePageProps {
   onOpenConsultation: (serviceTitle?: string) => void;
