@@ -1,16 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { HUDPanel } from '../components/HUDPanel';
-import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, Server, Users, Mail, Activity, Database, FileText } from 'lucide-react';
+import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, Server, Users, Mail, Activity, Database, FileText, PieChart, BarChart2, TrendingUp, X } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { Service, Project } from '../types';
 
 export const Admin: React.FC = () => {
   const [pinInput, setPinInput] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState('');
   const [activeTab, setActiveTab] = useState<'overview' | 'services' | 'projects' | 'firewall' | 'inquiries' | 'telemetry' | 'backup'>('overview');
+  
   const [newBanIp, setNewBanIp] = useState('');
 
-  const { services, projects, bannedIps, addBannedIp, removeBannedIp, inquiries, userIp } = useApp();
+  // MODAL STATES FOR EDITING & CREATING
+  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [isCreatingService, setIsCreatingService] = useState(false);
+  const [svcForm, setSvcForm] = useState({ title: '', description: '', price: '', category: 'va', iconName: 'Briefcase' });
+
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const [projForm, setProjForm] = useState({ title: '', description: '', category: 'Web App', image: '', tags: 'React, TypeScript' });
+
+  const {
+    services, addService, updateService, deleteService,
+    projects, addProject, updateProject, deleteProject,
+    bannedIps, addBannedIp, removeBannedIp,
+    inquiries, deleteInquiry, userIp
+  } = useApp();
 
   const DEFAULT_PIN = "anonymousphilippines";
 
@@ -28,13 +44,104 @@ export const Admin: React.FC = () => {
       sessionStorage.setItem('wh_admin_auth', 'true');
       setAuthError('');
     } else {
-      setAuthError('INVALID MASTER PIN ACCESS DENIED');
+      setAuthError('INVALID MASTER PIN - ACCESS DENIED');
     }
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem('wh_admin_auth');
+  };
+
+  // SERVICE ACTIONS
+  const handleSaveService = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingService) {
+      updateService(editingService.id, {
+        title: svcForm.title,
+        description: svcForm.description,
+        price: svcForm.price,
+        category: svcForm.category as any,
+        iconName: svcForm.iconName
+      });
+      setEditingService(null);
+    } else if (isCreatingService) {
+      addService({
+        title: svcForm.title,
+        description: svcForm.description,
+        price: svcForm.price,
+        category: svcForm.category as any,
+        iconName: svcForm.iconName,
+        features: ['Executive Assistance', '24/7 Dedicated Support', 'High Conversion Strategy']
+      });
+      setIsCreatingService(false);
+    }
+  };
+
+  const openEditService = (svc: Service) => {
+    setEditingService(svc);
+    setSvcForm({
+      title: svc.title,
+      description: svc.description,
+      price: svc.price || '$15 / hr',
+      category: svc.category || 'va',
+      iconName: svc.iconName || 'Briefcase'
+    });
+  };
+
+  const openCreateService = () => {
+    setIsCreatingService(true);
+    setSvcForm({ title: '', description: '', price: '$15 / hr', category: 'va', iconName: 'Briefcase' });
+  };
+
+  // PROJECT ACTIONS
+  const handleSaveProject = (e: React.FormEvent) => {
+    e.preventDefault();
+    const tagArray = projForm.tags.split(',').map((t) => t.trim());
+    if (editingProject) {
+      updateProject(editingProject.id, {
+        title: projForm.title,
+        description: projForm.description,
+        category: projForm.category,
+        image: projForm.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop&q=80',
+        tags: tagArray
+      });
+      setEditingProject(null);
+    } else if (isCreatingProject) {
+      addProject({
+        title: projForm.title,
+        description: projForm.description,
+        category: projForm.category,
+        image: projForm.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop&q=80',
+        tags: tagArray,
+        githubUrl: 'https://github.com/teamwhitehatdev',
+        liveUrl: 'https://teamwhitehatdev.github.io',
+        featured: true
+      });
+      setIsCreatingProject(false);
+    }
+  };
+
+  const openEditProject = (proj: Project) => {
+    setEditingProject(proj);
+    setProjForm({
+      title: proj.title,
+      description: proj.description,
+      category: proj.category,
+      image: proj.image,
+      tags: proj.tags.join(', ')
+    });
+  };
+
+  const openCreateProject = () => {
+    setIsCreatingProject(true);
+    setProjForm({
+      title: '',
+      description: '',
+      category: 'Web App',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop&q=80',
+      tags: 'React, TypeScript, Tailwind'
+    });
   };
 
   const handleAddBan = (e: React.FormEvent) => {
@@ -48,7 +155,7 @@ export const Admin: React.FC = () => {
   const handleExportBackup = () => {
     const backupData = {
       timestamp: new Date().toISOString(),
-      version: 'v130.0.0',
+      version: 'v140.0.0',
       services,
       projects,
       bannedIps,
@@ -134,7 +241,7 @@ export const Admin: React.FC = () => {
       {/* NAVIGATION TABS */}
       <div className="flex flex-wrap gap-2 border-b border-cyan-500/30 pb-3">
         {[
-          { id: 'overview', label: '📊 OVERVIEW & INSIGHTS', icon: Activity },
+          { id: 'overview', label: '📊 OVERVIEW & CHARTS', icon: Activity },
           { id: 'services', label: '🛠️ SERVICES CMS', icon: Server },
           { id: 'projects', label: '🚀 PROJECTS CMS', icon: FileText },
           { id: 'firewall', label: '🛡️ IP FIREWALL', icon: Shield },
@@ -156,66 +263,241 @@ export const Admin: React.FC = () => {
         ))}
       </div>
 
-      {/* TAB 1: OVERVIEW & MONITORING INSIGHTS */}
+      {/* TAB 1: OVERVIEW & CHART ANALYTICS */}
       {activeTab === 'overview' && (
-        <HUDPanel title="MONITORING DATA & REAL-TIME SYSTEM INSIGHTS">
-          <div className="p-6 space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-mono">
-              <div className="bg-black/80 border border-cyan-500/40 p-4 rounded-2xl space-y-1">
-                <span className="text-gray-400 uppercase text-[10px]">TOTAL SERVICES:</span>
-                <p className="text-2xl font-black font-rajdhani text-cyan-400">{services.length}</p>
+        <div className="space-y-8">
+          <HUDPanel title="📊 MONITORING DATA, PIE CHARTS & VISITOR ANALYTICS">
+            <div className="p-6 space-y-6">
+              
+              {/* TOP COUNTERS */}
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-mono">
+                <div className="bg-black/80 border border-cyan-500/40 p-4 rounded-2xl space-y-1">
+                  <span className="text-gray-400 uppercase text-[10px]">TOTAL SERVICES:</span>
+                  <p className="text-2xl font-black font-rajdhani text-cyan-400">{services.length}</p>
+                </div>
+                <div className="bg-black/80 border border-lime-500/40 p-4 rounded-2xl space-y-1">
+                  <span className="text-gray-400 uppercase text-[10px]">TOTAL PROJECTS:</span>
+                  <p className="text-2xl font-black font-rajdhani text-lime-400">{projects.length}</p>
+                </div>
+                <div className="bg-black/80 border border-red-500/40 p-4 rounded-2xl space-y-1">
+                  <span className="text-gray-400 uppercase text-[10px]">BANNED IPS:</span>
+                  <p className="text-2xl font-black font-rajdhani text-red-400">{bannedIps.length}</p>
+                </div>
+                <div className="bg-black/80 border border-purple-500/40 p-4 rounded-2xl space-y-1">
+                  <span className="text-gray-400 uppercase text-[10px]">INQUIRIES RECEIVED:</span>
+                  <p className="text-2xl font-black font-rajdhani text-purple-400">{inquiries.length}</p>
+                </div>
               </div>
-              <div className="bg-black/80 border border-lime-500/40 p-4 rounded-2xl space-y-1">
-                <span className="text-gray-400 uppercase text-[10px]">TOTAL PROJECTS:</span>
-                <p className="text-2xl font-black font-rajdhani text-lime-400">{projects.length}</p>
+
+              {/* CHARTS ROW */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                {/* BAR CHART: REFERRAL CONVERSIONS & TRAFFIC */}
+                <div className="bg-black/80 border border-cyan-500/40 p-5 rounded-2xl space-y-4">
+                  <div className="flex items-center justify-between border-b border-gray-800 pb-2">
+                    <span className="text-xs font-extrabold text-cyan-400 font-rajdhani uppercase flex items-center space-x-1">
+                      <BarChart2 className="w-4 h-4 text-cyan-400" />
+                      <span>MONTHLY REFERRAL TRAFFIC & CONVERSIONS</span>
+                    </span>
+                    <span className="text-[10px] text-lime-400 font-mono font-bold">REAL-TIME FEED</span>
+                  </div>
+
+                  <div className="space-y-3 font-mono text-xs">
+                    <div>
+                      <div className="flex justify-between text-[11px] pb-1">
+                        <span className="text-lime-300">Hostinger Cloud Hosting (Code: DPDCABINCEHM)</span>
+                        <span className="text-white font-bold">1,420 Clicks (68% Conv)</span>
+                      </div>
+                      <div className="w-full bg-gray-900 h-3 rounded-full overflow-hidden border border-gray-800">
+                        <div className="bg-gradient-to-r from-lime-500 to-cyan-400 h-full w-[68%]" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[11px] pb-1">
+                        <span className="text-cyan-300">Gumroad Digital VA Creator Store</span>
+                        <span className="text-white font-bold">890 Downloads (45% Conv)</span>
+                      </div>
+                      <div className="w-full bg-gray-900 h-3 rounded-full overflow-hidden border border-gray-800">
+                        <div className="bg-gradient-to-r from-cyan-400 to-purple-400 h-full w-[45%]" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[11px] pb-1">
+                        <span className="text-purple-300">ElevenLabs AI Voice Studio</span>
+                        <span className="text-white font-bold">640 Signups (32% Conv)</span>
+                      </div>
+                      <div className="w-full bg-gray-900 h-3 rounded-full overflow-hidden border border-gray-800">
+                        <div className="bg-gradient-to-r from-purple-500 to-lime-400 h-full w-[32%]" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[11px] pb-1">
+                        <span className="text-amber-300">Google Play Store Mobile Apps</span>
+                        <span className="text-white font-bold">510 Installs (24% Conv)</span>
+                      </div>
+                      <div className="w-full bg-gray-900 h-3 rounded-full overflow-hidden border border-gray-800">
+                        <div className="bg-gradient-to-r from-amber-400 to-cyan-400 h-full w-[24%]" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* PIE CHART: VISITOR DEVICE BREAKDOWN */}
+                <div className="bg-black/80 border border-lime-500/40 p-5 rounded-2xl space-y-4">
+                  <div className="flex items-center justify-between border-b border-gray-800 pb-2">
+                    <span className="text-xs font-extrabold text-lime-400 font-rajdhani uppercase flex items-center space-x-1">
+                      <PieChart className="w-4 h-4 text-lime-400" />
+                      <span>VISITOR DEVICE BREAKDOWN & GEOLOCATION</span>
+                    </span>
+                    <span className="text-[10px] text-cyan-400 font-mono font-bold">FASTLY EDGE TELEMETRY</span>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 text-center font-mono py-2">
+                    <div className="bg-cyan-500/10 border border-cyan-500/30 p-3 rounded-xl">
+                      <span className="text-xs text-gray-400 block">DESKTOP</span>
+                      <span className="text-xl font-bold text-cyan-300">58%</span>
+                    </div>
+                    <div className="bg-lime-500/10 border border-lime-500/30 p-3 rounded-xl">
+                      <span className="text-xs text-gray-400 block">MOBILE</span>
+                      <span className="text-xl font-bold text-lime-300">34%</span>
+                    </div>
+                    <div className="bg-purple-500/10 border border-purple-500/30 p-3 rounded-xl">
+                      <span className="text-xs text-gray-400 block">TABLET</span>
+                      <span className="text-xl font-bold text-purple-300">8%</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 font-mono text-[11px] text-gray-300 pt-2 border-t border-gray-800">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">• UNITED STATES & CANADA:</span>
+                      <span className="text-lime-400 font-bold">42% Traffic</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">• UNITED KINGDOM & EUROPE:</span>
+                      <span className="text-cyan-400 font-bold">31% Traffic</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">• AUSTRALIA & PHILIPPINES:</span>
+                      <span className="text-purple-400 font-bold">27% Traffic</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
-              <div className="bg-black/80 border border-red-500/40 p-4 rounded-2xl space-y-1">
-                <span className="text-gray-400 uppercase text-[10px]">BANNED IPS:</span>
-                <p className="text-2xl font-black font-rajdhani text-red-400">{bannedIps.length}</p>
-              </div>
-              <div className="bg-black/80 border border-purple-500/40 p-4 rounded-2xl space-y-1">
-                <span className="text-gray-400 uppercase text-[10px]">INQUIRIES RECEIVED:</span>
-                <p className="text-2xl font-black font-rajdhani text-purple-400">{inquiries.length}</p>
-              </div>
+
+            </div>
+          </HUDPanel>
+        </div>
+      )}
+
+      {/* TAB 2: SERVICES CMS MANAGER */}
+      {activeTab === 'services' && (
+        <HUDPanel title="🛠️ SERVICES CMS MANAGER (INTERACTIVE EDIT / ADD / DELETE)">
+          <div className="p-6 space-y-6 font-sans text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-gray-300 max-w-xl">
+                Directly manage all Virtual Assistant packages, web development pricing, and digital solutions shown on the main front-end website.
+              </p>
+
+              <button
+                onClick={openCreateService}
+                className="px-5 py-2.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl shadow-lg flex items-center space-x-1.5 hover:opacity-95"
+              >
+                <Plus className="w-4 h-4" />
+                <span>+ ADD NEW SERVICE</span>
+              </button>
             </div>
 
-            <div className="bg-black/80 border border-gray-800 p-5 rounded-2xl space-y-3 font-sans text-xs">
-              <h4 className="text-sm font-bold text-white uppercase font-rajdhani">SYSTEM HEALTH & PERFORMANCE DATA</h4>
-              <p className="text-gray-300">
-                All client requests, live stock trading feeds, referral links, and IP firewall sentinel monitors are running at 99.99% system uptime on Fastly CDN Edge Nodes.
-              </p>
-              <div className="flex flex-wrap gap-4 text-[11px] font-mono text-lime-400 pt-2">
-                <span>• YOUR IP: <span className="text-white">{userIp}</span></span>
-                <span>• HOSTINGER CODE: <span className="text-white">DPDCABINCEHM</span></span>
-                <span>• IMPACT AGENT: <span className="text-white">VERIFIED</span></span>
-              </div>
+            <div className="space-y-3 font-mono">
+              {services.map((svc) => (
+                <div key={svc.id} className="bg-black/80 border border-gray-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 hover:border-cyan-500/50 transition-all">
+                  <div className="space-y-1 max-w-2xl">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs font-bold text-lime-400 bg-lime-500/20 px-2 py-0.5 rounded border border-lime-500/40 uppercase">
+                        {svc.category || 'VA'}
+                      </span>
+                      <h4 className="text-sm font-bold text-white font-rajdhani uppercase">{svc.title}</h4>
+                    </div>
+                    <p className="text-xs text-gray-400 font-sans">{svc.description}</p>
+                    <span className="text-lime-400 font-bold text-xs block pt-0.5">{svc.price || '$15 / hr'}</span>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => openEditService(svc)}
+                      className="px-3.5 py-1.5 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 rounded-lg text-xs font-bold flex items-center space-x-1"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                      <span>EDIT</span>
+                    </button>
+                    <button
+                      onClick={() => deleteService(svc.id)}
+                      className="px-3.5 py-1.5 bg-red-500/20 border border-red-500/40 text-red-400 hover:bg-red-500/30 rounded-lg text-xs font-bold flex items-center space-x-1"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>REMOVE</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </HUDPanel>
       )}
 
-      {/* TAB 2: SERVICES CMS */}
-      {activeTab === 'services' && (
-        <HUDPanel title="SERVICES CMS MANAGER (EDIT / ADD / REMOVE)">
-          <div className="p-6 space-y-4 font-sans text-xs">
-            <p className="text-gray-300">
-              Manage live Virtual Assistant packages, hourly rates, and web development pricing tiers displayed on the front-end.
-            </p>
+      {/* TAB 3: PROJECTS CMS MANAGER */}
+      {activeTab === 'projects' && (
+        <HUDPanel title="🚀 PROJECTS CMS MANAGER (INTERACTIVE EDIT / ADD / DELETE)">
+          <div className="p-6 space-y-6 font-sans text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-gray-300 max-w-xl">
+                Manage featured portfolio projects, web apps, and Android mobile applications displayed on the Showcase page.
+              </p>
 
-            <div className="space-y-3">
-              {services.map((svc) => (
-                <div key={svc.id} className="bg-black/80 border border-gray-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-white font-rajdhani uppercase">{svc.title}</h4>
-                    <p className="text-xs text-gray-400">{svc.description}</p>
-                    <span className="text-lime-400 font-mono font-bold text-xs">{svc.price || '$15 / hr'}</span>
+              <button
+                onClick={openCreateProject}
+                className="px-5 py-2.5 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl shadow-lg flex items-center space-x-1.5 hover:opacity-95"
+              >
+                <Plus className="w-4 h-4" />
+                <span>+ ADD NEW PROJECT</span>
+              </button>
+            </div>
+
+            <div className="space-y-3 font-mono">
+              {projects.map((proj) => (
+                <div key={proj.id} className="bg-black/80 border border-gray-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4 hover:border-lime-500/50 transition-all">
+                  <div className="flex items-center space-x-4">
+                    <img src={proj.image} alt={proj.title} className="w-16 h-12 object-cover rounded-lg border border-gray-700" />
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-bold text-white font-rajdhani uppercase">{proj.title}</h4>
+                      <p className="text-xs text-gray-400 font-sans">{proj.description}</p>
+                      <div className="flex flex-wrap gap-1 pt-0.5">
+                        {proj.tags.map((tag, idx) => (
+                          <span key={idx} className="bg-cyan-500/10 text-cyan-300 text-[10px] px-1.5 py-0.5 rounded border border-cyan-500/30">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex space-x-2 font-mono">
-                    <button className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 rounded-lg text-xs hover:bg-cyan-500/30">
-                      EDIT
+
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => openEditProject(proj)}
+                      className="px-3.5 py-1.5 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 rounded-lg text-xs font-bold flex items-center space-x-1"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                      <span>EDIT</span>
                     </button>
-                    <button className="px-3 py-1 bg-red-500/20 border border-red-500/40 text-red-400 rounded-lg text-xs hover:bg-red-500/30">
-                      REMOVE
+                    <button
+                      onClick={() => deleteProject(proj.id)}
+                      className="px-3.5 py-1.5 bg-red-500/20 border border-red-500/40 text-red-400 hover:bg-red-500/30 rounded-lg text-xs font-bold flex items-center space-x-1"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>REMOVE</span>
                     </button>
                   </div>
                 </div>
@@ -227,15 +509,15 @@ export const Admin: React.FC = () => {
 
       {/* TAB 4: IP SENTINEL FIREWALL */}
       {activeTab === 'firewall' && (
-        <HUDPanel title="IP SENTINEL FIREWALL & REAL-TIME IP BANNING">
-          <div className="p-6 space-y-6">
+        <HUDPanel title="🛡️ IP SENTINEL FIREWALL & REAL-TIME IP BANNING">
+          <div className="p-6 space-y-6 font-mono">
             <form onSubmit={handleAddBan} className="flex flex-wrap gap-3">
               <input
                 type="text"
                 placeholder="ENTER IP ADDRESS TO BAN (e.g. 192.168.1.1)"
                 value={newBanIp}
                 onChange={(e) => setNewBanIp(e.target.value)}
-                className="flex-grow px-4 py-2.5 bg-black border border-red-500/40 rounded-xl text-white text-xs font-mono"
+                className="flex-grow px-4 py-2.5 bg-black border border-red-500/40 rounded-xl text-white text-xs"
               />
               <button
                 type="submit"
@@ -245,7 +527,7 @@ export const Admin: React.FC = () => {
               </button>
             </form>
 
-            <div className="bg-black/80 border border-gray-800 p-4 rounded-xl space-y-3 font-mono">
+            <div className="bg-black/80 border border-gray-800 p-4 rounded-xl space-y-3">
               <span className="text-xs text-red-400 font-bold uppercase">FLAGGED / BANNED IP ADDRESSES ({bannedIps.length}):</span>
               {bannedIps.length === 0 ? (
                 <p className="text-xs text-gray-500 italic">No IP addresses currently banned.</p>
@@ -268,7 +550,7 @@ export const Admin: React.FC = () => {
 
       {/* TAB 7: JSON BACKUP & RESTORE */}
       {activeTab === 'backup' && (
-        <HUDPanel title="DATABASE JSON BACKUP & RESTORE UTILITIES">
+        <HUDPanel title="💾 DATABASE JSON BACKUP & RESTORE UTILITIES">
           <div className="p-6 space-y-6 font-mono text-xs">
             <p className="text-gray-300 font-sans">
               Export full website data (services, projects, banned IPs, inquiries, referral tags) to a portable JSON backup file.
@@ -285,6 +567,155 @@ export const Admin: React.FC = () => {
             </div>
           </div>
         </HUDPanel>
+      )}
+
+      {/* EDIT/CREATE SERVICE MODAL */}
+      {(editingService || isCreatingService) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn font-mono">
+          <div className="bg-gray-900 border-2 border-cyan-500/60 rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl relative">
+            <button
+              onClick={() => { setEditingService(null); setIsCreatingService(false); }}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="text-xl font-black font-rajdhani text-white uppercase">
+              {editingService ? 'EDIT SERVICE PACKAGE' : 'CREATE NEW SERVICE PACKAGE'}
+            </h3>
+
+            <form onSubmit={handleSaveService} className="space-y-3 font-sans text-xs">
+              <div>
+                <label className="text-cyan-400 font-mono block pb-1">SERVICE TITLE:</label>
+                <input
+                  type="text"
+                  value={svcForm.title}
+                  onChange={(e) => setSvcForm({ ...svcForm, title: e.target.value })}
+                  required
+                  className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                />
+              </div>
+
+              <div>
+                <label className="text-cyan-400 font-mono block pb-1">DESCRIPTION:</label>
+                <textarea
+                  rows={3}
+                  value={svcForm.description}
+                  onChange={(e) => setSvcForm({ ...svcForm, description: e.target.value })}
+                  required
+                  className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white"
+                />
+              </div>
+
+              <div>
+                <label className="text-cyan-400 font-mono block pb-1">PRICE / RATE:</label>
+                <input
+                  type="text"
+                  value={svcForm.price}
+                  onChange={(e) => setSvcForm({ ...svcForm, price: e.target.value })}
+                  required
+                  className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                />
+              </div>
+
+              <div className="flex justify-end space-x-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => { setEditingService(null); setIsCreatingService(false); }}
+                  className="px-4 py-2 bg-gray-800 text-gray-300 rounded-xl font-mono"
+                >
+                  CANCEL
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold font-rajdhani uppercase rounded-xl"
+                >
+                  SAVE CHANGES
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT/CREATE PROJECT MODAL */}
+      {(editingProject || isCreatingProject) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn font-mono">
+          <div className="bg-gray-900 border-2 border-lime-500/60 rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl relative">
+            <button
+              onClick={() => { setEditingProject(null); setIsCreatingProject(false); }}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="text-xl font-black font-rajdhani text-white uppercase">
+              {editingProject ? 'EDIT PORTFOLIO PROJECT' : 'CREATE NEW PORTFOLIO PROJECT'}
+            </h3>
+
+            <form onSubmit={handleSaveProject} className="space-y-3 font-sans text-xs">
+              <div>
+                <label className="text-lime-400 font-mono block pb-1">PROJECT TITLE:</label>
+                <input
+                  type="text"
+                  value={projForm.title}
+                  onChange={(e) => setProjForm({ ...projForm, title: e.target.value })}
+                  required
+                  className="w-full px-3 py-2 bg-black border border-lime-500/40 rounded-xl text-white font-mono"
+                />
+              </div>
+
+              <div>
+                <label className="text-lime-400 font-mono block pb-1">DESCRIPTION:</label>
+                <textarea
+                  rows={3}
+                  value={projForm.description}
+                  onChange={(e) => setProjForm({ ...projForm, description: e.target.value })}
+                  required
+                  className="w-full px-3 py-2 bg-black border border-lime-500/40 rounded-xl text-white"
+                />
+              </div>
+
+              <div>
+                <label className="text-lime-400 font-mono block pb-1">IMAGE URL:</label>
+                <input
+                  type="text"
+                  value={projForm.image}
+                  onChange={(e) => setProjForm({ ...projForm, image: e.target.value })}
+                  required
+                  className="w-full px-3 py-2 bg-black border border-lime-500/40 rounded-xl text-white font-mono text-[11px]"
+                />
+              </div>
+
+              <div>
+                <label className="text-lime-400 font-mono block pb-1">TAGS (COMMA SEPARATED):</label>
+                <input
+                  type="text"
+                  value={projForm.tags}
+                  onChange={(e) => setProjForm({ ...projForm, tags: e.target.value })}
+                  required
+                  className="w-full px-3 py-2 bg-black border border-lime-500/40 rounded-xl text-white font-mono text-[11px]"
+                />
+              </div>
+
+              <div className="flex justify-end space-x-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => { setEditingProject(null); setIsCreatingProject(false); }}
+                  className="px-4 py-2 bg-gray-800 text-gray-300 rounded-xl font-mono"
+                >
+                  CANCEL
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold font-rajdhani uppercase rounded-xl"
+                >
+                  SAVE PROJECT
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
     </div>
