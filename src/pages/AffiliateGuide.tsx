@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Terminal, Sparkles, Rocket, CheckCircle2, ArrowRight, Shield, Globe, Award, HelpCircle, ExternalLink, RefreshCw, ShoppingBag, Video, Globe, BookOpen, MessageSquare, DollarSign, Layers } from 'lucide-react';
+import { Terminal, Sparkles, Rocket, CheckCircle2, ArrowRight, Shield, Globe, Award, HelpCircle, ExternalLink, RefreshCw, ShoppingBag, Video, BookOpen, MessageSquare, DollarSign, Layers, AlertTriangle, Zap, Flame, Star, Check } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
@@ -8,380 +8,309 @@ import { ALL_AFFILIATE_ADS } from '../data/affiliateAdsData';
 export const AffiliateGuide: React.FC = () => {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  const IMPACT_SIGNUP_URL = "https://utt.impactcdn.com/P-A5024116-1495-4f8e-88fd-54d8d32a55be1.js";
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
 
-  const tutorials = [
+  const hostingerTutorials = [
     {
-      title: "1. How VAs Can Add 'Website Setup' to Services (And Earn 2x More)",
-      goal: "Teach Virtual Assistants how to offer basic website creation to clients using easy drag-and-drop builders or WordPress.",
-      solution: "Show them how to manage client hosting setups and use Impact.com to manage affiliate partnerships for the software tools recommended to clients.",
-      ctaText: "GET HOSTINGER VA HOSTING (75% OFF)",
-      ctaUrl: HOSTINGER_LINK
+      id: 1,
+      title: "How to Build a VA Portfolio Website in a Weekend (No Code Required)",
+      angle: "Website Builder walkthrough, drag-and-drop + business email setup",
+      format: "Step-by-step with screenshots"
     },
     {
-      title: "2. How to Deploy a High-Speed Web App / Portfolio for Under $3/Month",
-      goal: "Guide developers and tech freelancers through setting up low-cost, high-performance hosting.",
-      solution: "Walk through budget hosting services (Hostinger, Namecheap, Vercel/Render integrations) obtainable via Impact.com affiliate partnerships.",
-      ctaText: "BUILD ON HOSTINGER CLOUD",
-      ctaUrl: HOSTINGER_LINK
+      id: 2,
+      title: "How to Set Up a Professional Business Email as a Freelancer",
+      angle: "Hostinger Business Email - why you@yourdomain.com beats Gmail for client trust",
+      format: "Tutorial + comparison"
     },
     {
-      title: "3. The Freelancer's Guide to Building an Affiliate Resource Hub in 2 Hours",
-      goal: "Teach freelancers how to build a recommendation page ('My Recommended Tech Stack') to earn passive income.",
-      solution: "Demonstrate signing up for Impact.com to search for brands they already use and grab clean affiliate tracking links.",
-      ctaText: "JOIN IMPACT.COM PARTNER NETWORK",
-      ctaUrl: "https://nordvpn.sjv.io/c/5024116/976014/7452"
+      id: 3,
+      title: "How to Deploy Your First WordPress Blog in Under 30 Minutes",
+      angle: "WordPress Hosting + 1-click install walkthrough",
+      format: "Beginner tutorial"
     },
     {
-      title: "4. How to Build an E-Commerce Website for a Local Small Business (Step-by-Step)",
-      goal: "Show small business owners or freelancers how to take a physical shop online affordably.",
-      solution: "Compare budget hosting & domain options, showing how to select reliable hosting and launch WooCommerce or store templates via ThemeForest.",
-      ctaText: "EXPLORE THEMEFOREST TEMPLATES",
-      ctaUrl: "https://1.envato.market/c/5024116/805521/4415?subId2=sidebar&subId1=jp_themeforest"
+      id: 4,
+      title: "How to Host a Client's Website Without Using Your Own Hostinger Account",
+      angle: "Hostinger Pro (agency) - sub-accounts, client management",
+      format: "Tutorial for VA/freelancers"
     },
     {
-      title: "5. How VAs Can Earn Recurring Passive Income from Client Web Maintenance",
-      goal: "Educate Virtual Assistants on charging monthly retainers for website domain renewals, hosting checks, and maintenance.",
-      solution: "Teach them to register as partners on Impact.com so every client tool signup generates ongoing affiliate payouts.",
-      ctaText: "START RECURRING VA INCOME",
-      ctaUrl: HOSTINGER_LINK
+      id: 5,
+      title: "How to Move a Client's WordPress Site to a New Host (Without Downtime)",
+      angle: "Hostinger's free migration + DNS changeover guide",
+      format: "Migration walkthrough"
     },
     {
-      title: "6. Migrating a Slow Client Site to Fast, Budget-Friendly Cloud Hosting",
-      goal: "Step-by-step guide for developers/freelancers fixing slow website load speeds.",
-      solution: "Benchmarking hosting providers, recommending optimized hosting plans signed up via affiliate links.",
-      ctaText: "MIGRATE TO FAST CLOUD HOSTING",
-      ctaUrl: HOSTINGER_LINK
+      id: 6,
+      title: "How to Set Up a Landing Page for Your Freelance Services",
+      angle: "Website Builder → published landing page with contact form",
+      format: "Step-by-step"
     },
     {
-      title: "7. Zero-Code Web Application Hosting: From Localhost to Live URL",
-      goal: "Help non-technical freelancers and small business owners publish web apps, landing pages, or digital products.",
-      solution: "Step-by-step walkthrough using reliable, beginner-friendly hosting providers.",
-      ctaText: "LAUNCH LIVE WEBSITES NOW",
-      ctaUrl: HOSTINGER_LINK
+      id: 7,
+      title: "How to Build a Simple Affiliate Review Site That Earns While You Sleep",
+      angle: "Hostinger WordPress Hosting as the starting point",
+      format: "Beginner affiliate tutorial"
     },
     {
-      title: "8. How to Build a High-Converting Client Intake Funnel on a Budget",
-      goal: "Solve the client acquisition problem for freelancers and VAs by building a clean booking/intake website.",
-      solution: "Show how to buy a domain, connect hosting, and integrate free/affordable tools linked via Impact.com.",
-      ctaText: "BUILD CLIENT FUNNEL",
-      ctaUrl: HOSTINGER_LINK
+      id: 8,
+      title: "How to Set Up Google Analytics + Hostinger for Your First Website",
+      angle: "DNS + plugin setup, performance monitoring basics",
+      format: "Technical tutorial"
     },
     {
-      title: "9. How to Track and Organize Your Affiliate Links Like a Pro Marketer",
-      goal: "Teach beginner affiliate marketers how to avoid broken links, messy spreadsheets, and lost payouts.",
-      solution: "Showcase Impact.com's dashboard, tracking tools, vanity links, and payout reporting as the central hub.",
-      ctaText: "ACCESS IMPACT.COM DASHBOARD",
-      ctaUrl: "https://imp.i384100.net/c/5024116/3801376/14726"
+      id: 9,
+      title: "How to Launch a Side Hustle Online Store for Under $50",
+      angle: "Hostinger Website Builder (Business tier) built-in store",
+      format: "Budget-focused walkthrough"
     },
     {
-      title: "10. Building a Tech Stack Portfolio for Developers: Host Projects Ultra-Low Cost",
-      goal: "Help junior devs showcase live projects to prospective employers/clients without spending hundreds on hosting.",
-      solution: "Guide them through reliable micro-hosting plans and domain registration tools.",
-      ctaText: "HOST PROJECTS ON HOSTINGER",
-      ctaUrl: HOSTINGER_LINK
+      id: 10,
+      title: "How to Use n8n on Hostinger VPS to Automate Your Freelance Admin",
+      angle: "Hostinger VPS + n8n one-click install, automation workflows",
+      format: "Intermediate tutorial"
     }
   ];
 
   const problemSolutions = [
     {
-      problem: "VAs & Freelancers trade time for money and cap their hourly income.",
-      solution: "Teach them to build recurring passive revenue by recommending hosting and business software to clients.",
-      product: "Introduce Impact.com as the main platform to manage and track software/hosting affiliate deals."
+      id: 1,
+      title: "1. 'My Client's Website Keeps Going Down - What's Wrong and How Do I Fix It?'",
+      problem: "Unreliable shared hosting killing client relationships and destroying trust.",
+      solution: "Explain the signs of bad hosting → introduce Hostinger Cloud Hosting with auto-scaling and 99.9% uptime guarantees.",
+      cta: "Here's how I moved my client's site in an afternoon",
+      link: HOSTINGER_LINK
     },
     {
-      problem: "Small businesses overpay $100+/mo for slow, bloated agency web hosting.",
-      solution: "Show them how to set up high-speed, budget hosting for $2-$5/mo with 1-click installer tools.",
-      product: "Recommend reliable budget web hosts (e.g., Hostinger, Namecheap, Bluehost)."
+      id: 2,
+      title: "2. 'I Can't Afford $30/Month for Hosting as a New Freelancer'",
+      problem: "Budget anxiety preventing new VAs and freelancers from launching their web presence.",
+      solution: "Break down what you actually need to start (basic Web Hosting plan), what you don't, and the real transparent math.",
+      cta: "Here's what I'd pick if I was starting from zero today (Hostinger Premium/Business)",
+      link: HOSTINGER_LINK
     },
     {
-      problem: "Beginner affiliate marketers get rejected by traditional ad networks or deal with delayed payouts.",
-      solution: "Explain how to get approved on enterprise affiliate networks with transparent reporting and direct bank deposits.",
-      product: "Position Impact.com as the most reliable, partner-friendly platform with fast payouts."
+      id: 3,
+      title: "3. 'My Client Wants a Website - But I Have No Idea Where to Start'",
+      problem: "VA/freelancer overwhelm when a paying client asks for web hosting and portal setup help.",
+      solution: "Step-by-step decision tree: what type of site → what platform → what host → how to set it up effortlessly.",
+      cta: "Hostinger as the go-to recommendation for 95% of client use cases",
+      link: HOSTINGER_LINK
     },
     {
-      problem: "Developers struggle to showcase live client sites on a centralized dashboard.",
-      solution: "Provide a workflow for managing multiple client domains, cPanels, and hosting tiers efficiently.",
-      product: "Show how to earn host-partner rewards while organizing client hosting."
+      id: 4,
+      title: "4. 'I Set Up a WordPress Site and Now Nothing Works'",
+      problem: "Plugin conflicts, failed updates, broken installs - the classic beginner nightmare.",
+      solution: "Triage checklist, staging environment explanation, and one-click instant site restore.",
+      cta: "Hostinger WordPress Hosting includes staging + auto-backups - show how to use them",
+      link: HOSTINGER_LINK
     },
     {
-      problem: "Freelancers spend days coding simple client sites when clients just need a fast, working MVP.",
-      solution: "Teach rapid deployment using pre-built templates, lightweight CMSs, and instant hosting setups.",
-      product: "Feature budget hosting & domain registrars naturally during site setup."
+      id: 5,
+      title: "5. 'My Emails Are Going to Spam and Clients Think I'm Unprofessional'",
+      problem: "Free email addresses (Gmail, Yahoo) or misconfigured domain DNS triggering spam filters.",
+      solution: "Explain SPF/DKIM/DMARC in plain English, show how to set up proper custom business email.",
+      cta: "Hostinger Business Email - pre-configured deliverability, set up in minutes",
+      link: HOSTINGER_LINK
     }
   ];
 
-  const comparisons = [
+  const viralTitles = [
     {
-      title: "Impact.com vs. Amazon Associates / ShareASale / CJ Affiliate",
-      angle: "Why Modern Content Creators Are Switching to Impact.com for Higher Commissions and Better Tracking.",
-      focus: "Instant brand approvals, clean UI, higher cookie durations, and direct payouts vs. Amazon's low commission rates."
+      title: "🎯 'I Built a Professional VA Portfolio Website for $2.99/Month - Here's Exactly How'",
+      reason: "Specific dollar amount + specific audience + 'here's exactly how' promise = maximum curiosity + utility. Targets 'VA portfolio website' search intent directly."
     },
     {
-      title: "Self-Hosted WordPress ($3/mo) vs. Wix / Squarespace ($16+/mo)",
-      angle: "Stop Overpaying: How Small Businesses Can Save $150+/Year on Website Costs.",
-      focus: "Full ownership, scalability, lower monthly bills vs. closed ecosystem lock-ins."
+      title: "😤 'Stop Using Free Hosting. Here's What It's Actually Costing Your Freelance Business'",
+      reason: "Challenges a common behavior with a consequences angle. Appeals to people who've been burned by GitHub Pages limitations, Wix's branding, or slow free hosts losing them clients."
     },
     {
-      title: "Shared Hosting vs. Cloud Hosting vs. Managed WordPress (For Freelancers)",
-      angle: "Which Hosting Should You Recommend to Your Clients? (Cost, Speed & Security Breakdown).",
-      focus: "Helping freelancers pick the right hosting tier for different client budgets without over-specifying."
-    },
-    {
-      title: "Building Websites for Clients vs. Managing Client Web Tech (Hourly vs. Retainer & Affiliate Income)",
-      angle: "One-Off Projects vs. Monthly Recurring Income: How VAs Can Build Financial Stability.",
-      focus: "Shifting from active work to recurring affiliate payouts and tech retainer fees."
-    },
-    {
-      title: "Impact.com Direct Brand Deals vs. Traditional AdSense Ads",
-      angle: "Why Display Ads Are Dying and How Partnership Marketing Can 10x Your Website Revenue.",
-      focus: "Revenue per 1,000 visitors (RPM) comparisons showing why affiliate partnerships far outperform banner ads."
+      title: "🤯 'The 5 Hosting Mistakes VAs Make That Drive Clients Away (And How to Fix Them)'",
+      reason: "Listicle + fear of professional embarrassment + clear solution promise. High social share rate in VA Facebook groups, LinkedIn, and Pinterest."
     }
   ];
 
-  const faqs = [
+  const prePurchaseFaqs = [
     {
-      q: "Do I need coding skills to build websites or start affiliate marketing?",
-      a: "No! Modern web hosting comes with 1-click WordPress installers and no-code visual builders. Impact.com provides copy-and-paste links and tracking tools, so you can start recommending tools even if you are a complete beginner."
+      q: "Is Hostinger actually reliable or is it just cheap?",
+      a: "Hostinger runs on LiteSpeed servers with NVMe SSD storage and guarantees 99.9% uptime. It's not the absolute fastest host on the market - Kinsta or WP Engine edge it out at premium $30-$100/mo price points - but for the price bracket ($2-$3/mo), the performance is genuinely strong. Thousands of professional client sites run on it without issues."
     },
     {
-      q: "Is Impact.com free to join, and how do I get paid?",
-      a: "Impact.com is 100% free for publishers/affiliates. You get direct payouts via local bank transfer, PayPal, or wire transfer once you hit the low minimum payout threshold."
+      q: "What happens when my intro price ends?",
+      a: "Hostinger's renewal rates are higher than the promotional price - this is true for every major web host. The Premium plan renews around $5-8/month rather than the $2-3 intro rate. It is still cheaper than most mid-tier competitors at full price. Lock in a longer term (2-4 years) upfront to extend the low rate."
     },
     {
-      q: "Is cheap hosting reliable for business clients or real projects?",
-      a: "Cheap doesn't mean bad—it means optimized for initial scale. Modern budget hosts like Hostinger offer 99.9% uptime, free SSL certificates, automated backups, and global CDNs that handle thousands of visitors easily."
+      q: "Will I lose my site if I cancel?",
+      a: "No - your files are yours. Before canceling, export your WordPress database and files (or use the Hostinger 1-click backup download). If you're on Website Builder, export what you can. Never assume any host holds your content - always maintain your own backups regardless of platform."
     },
     {
-      q: "Why should I use Impact.com instead of signing up for individual affiliate programs?",
-      a: "Instead of logging into 20 different websites to check your earnings, Impact.com consolidates top brands (hosting, software, e-commerce) into one dashboard with unified payouts and tax reporting."
+      q: "Can I host multiple client websites on one Hostinger plan?",
+      a: "Yes. The Premium plan and above support multiple websites on one account. For managing client sites professionally with separate access and dashboards, Hostinger Pro (agency hosting) is designed exactly for this - it's worth the upgrade if you're managing more than 2-3 client sites."
     },
     {
-      q: "How long does it take to start making money with affiliate marketing?",
-      a: "It depends on how quickly you help people solve real problems. If you help 5 business clients set up hosting this week, you can see affiliate payouts within your first 30-60 days."
+      q: "Is Hostinger good for WordPress?",
+      a: "Yes - their WordPress Hosting plan includes LiteSpeed Cache (significant speed boost), automatic updates, a staging environment, and a vulnerability scanner. It's a solid managed-adjacent experience without the managed hosting price tag."
+    },
+    {
+      q: "What if something breaks and I need help?",
+      a: "Hostinger offers 24/7 live chat support. Response times are generally fast (under 5 minutes in most cases). There's no phone support - if that's a dealbreaker for you or a client, note it upfront. The knowledge base is extensive and covers most common issues with step-by-step guides."
+    },
+    {
+      q: "Is Hostinger safe for a client's business website?",
+      a: "For most small business sites: yes. It includes free SSL, DDoS protection, and automatic backups on higher plans. For high-traffic e-commerce or regulated industries (healthcare, finance), you'd want to evaluate Cloud or VPS plans with dedicated resources - or discuss a premium managed host."
     }
+  ];
+
+  const priorityOrder = [
+    { p: "Priority 1", title: "VA Portfolio Tutorial", reason: "Core audience, highest search intent match" },
+    { p: "Priority 2", title: "Professional Email Setup Guide", reason: "Quick win, high conversion, solves immediate pain" },
+    { p: "Priority 3", title: "Hostinger vs. GitHub Pages", reason: "Audience-native, speaks directly to site visitors" },
+    { p: "Priority 4", title: "'Stop Using Free Hosting' article", reason: "Viral potential, reshares in VA communities" },
+    { p: "Priority 5", title: "Pre-Purchase FAQ page", reason: "Reduces bounce, increases conversion on all other pages" }
   ];
 
   return (
-    <div className="space-y-10 max-w-7xl mx-auto px-4 py-6 font-mono">
-      
-      {/* HERO SECTION */}
-      <div className="text-center space-y-4 max-w-4xl mx-auto">
-        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/20 via-lime-500/20 to-purple-500/20 border border-cyan-500/40 px-4 py-1.5 rounded-full text-cyan-300 text-xs font-bold uppercase tracking-widest">
-          <Sparkles className="w-4 h-4 text-lime-400 animate-pulse" />
-          <span>VALUE-FIRST AFFILIATE GROWTH MASTERCLASS</span>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* HEADER SECTION */}
+      <div className="text-center mb-10">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--primary-cyan)]/10 border border-[var(--primary-cyan)]/30 text-[var(--primary-cyan)] mb-4">
+          <Award className="w-5 h-5" />
+          <span className="text-xs md:text-sm font-bold tracking-wider uppercase">Official Masterclass Blueprint</span>
         </div>
-        <h1 className="text-3xl md:text-5xl font-black font-rajdhani text-white uppercase tracking-wider">
-          HOW TO BECOME A SUCCESSFUL AFFILIATE MARKETER
+        <h1 className="text-3xl md:text-5xl font-black text-white font-orbitron tracking-wide mb-4">
+          HOW TO BECOME A SUCCESSFUL <span className="cyber-text-gradient">AFFILIATE MARKETER</span>
         </h1>
-        <p className="text-xs md:text-sm text-gray-300 font-sans leading-relaxed">
-          Master the "Help First, Monetize Second" framework tailored for Virtual Assistants, Freelancers, Developers, and Digital Creators to build $1,000+/mo in recurring passive revenue.
+        <p className="text-gray-300 max-w-3xl mx-auto text-sm md:text-base leading-relaxed">
+          Learn how Virtual Assistants, Freelancers, and Digital Creators build high-converting referral channels by solving real problems first.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        
-        {/* MAIN CONTENT COLUMN (3 COLS) */}
-        <div className="lg:col-span-3 space-y-10">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+        {/* MAIN CONTENT AREA */}
+        <div className="lg:col-span-3 space-y-12">
 
-          {/* CORE PHILOSOPHY */}
-          <HUDPanel title="🎯 CORE PHILOSOPHY: 'HELP FIRST, MONETIZE SECOND'">
-            <div className="p-6 space-y-4 font-sans text-xs text-gray-300 leading-relaxed">
-              <div className="bg-gradient-to-r from-lime-950/60 via-black to-cyan-950/60 border border-lime-400/40 p-4 rounded-2xl space-y-2">
-                <h3 className="text-sm font-black font-rajdhani text-white uppercase flex items-center space-x-2">
-                  <Award className="w-5 h-5 text-lime-400" />
-                  <span>THE TRUST-BUILDING REVENUE ENGINE</span>
-                </h3>
-                <p className="text-gray-200">
-                  Instead of pitching affiliate links directly, teach your audience actionable skills (building websites, managing client tech, launching web apps, or creating passive income streams). Naturally introduce <strong className="text-lime-300">Impact.com</strong> as the marketplace where they access top brand affiliate programs (like Hostinger, Lenovo, CapCut, Coursera, NordVPN), and affordable hosting providers as the infrastructure for their projects.
+          {/* SECTION 1: 10 HOSTINGER TUTORIAL CONTENT IDEAS */}
+          <HUDPanel title="📚 10 TUTORIAL CONTENT IDEAS (HOSTINGER NATURALLY INTRODUCED)">
+            <p className="text-gray-300 text-sm mb-6 leading-relaxed">
+              Each tutorial solves a real problem. Hostinger enters naturally at the practical setup step - not as the punchline of a sales pitch.
+            </p>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs md:text-sm text-gray-200 border border-gray-800 rounded-lg overflow-hidden">
+                <thead className="bg-gray-900/80 text-[var(--primary-cyan)] font-orbitron uppercase border-b border-gray-800">
+                  <tr>
+                    <th className="p-3 w-12 text-center">#</th>
+                    <th className="p-3">Title</th>
+                    <th className="p-3">Hostinger Angle</th>
+                    <th className="p-3 w-48">Best Format</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-800/60 bg-gray-950/40">
+                  {hostingerTutorials.map((t) => (
+                    <tr key={t.id} className="hover:bg-gray-900/50 transition-colors">
+                      <td className="p-3 text-center font-mono font-bold text-[var(--primary-lime)]">{t.id}</td>
+                      <td className="p-3 font-semibold text-white">{t.title}</td>
+                      <td className="p-3 text-gray-300">{t.angle}</td>
+                      <td className="p-3 text-gray-400 font-mono text-xs">{t.format}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* PLACEMENT TIP BOX */}
+            <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-yellow-500/5 to-transparent border border-amber-500/30 flex items-start gap-3">
+              <Zap className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-xs font-bold uppercase text-amber-400 tracking-wider">💡 Strategic Placement Tip</h4>
+                <p className="text-xs md:text-sm text-gray-300 mt-1">
+                  Within each tutorial, introduce Hostinger at the <strong>"what do you need?"</strong> setup step - not in the intro. Let the tool earn its recommendation by solving the immediate need!
                 </p>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs text-center pt-2">
-                <div className="bg-black/90 border border-cyan-500/30 p-3 rounded-xl space-y-1">
-                  <span className="text-lime-400 font-bold text-base block">1. EDUCATE</span>
-                  <span className="text-[11px] text-gray-400 block font-sans">Solve real technical problems with step-by-step guides.</span>
-                </div>
-                <div className="bg-black/90 border border-purple-500/30 p-3 rounded-xl space-y-1">
-                  <span className="text-purple-300 font-bold text-base block">2. RECOMMEND</span>
-                  <span className="text-[11px] text-gray-400 block font-sans">Introduce verified partner tools via Impact.com tracking links.</span>
-                </div>
-                <div className="bg-black/90 border border-lime-500/30 p-3 rounded-xl space-y-1">
-                  <span className="text-cyan-300 font-bold text-base block">3. MONETIZE</span>
-                  <span className="text-[11px] text-gray-400 block font-sans">Earn recurring affiliate commissions without selling hard.</span>
-                </div>
-              </div>
             </div>
           </HUDPanel>
 
-          {/* 10 VALUE-FIRST TUTORIAL IDEAS */}
-          <HUDPanel title="📚 10 VALUE-FIRST TUTORIAL BLUEPRINTS FOR VAs & FREELANCERS">
-            <div className="p-6 space-y-4 font-mono text-xs">
-              <p className="text-xs text-gray-300 font-sans leading-relaxed">
-                Use these 10 actionable tutorial concepts to create blog posts, YouTube videos, or client guides that naturally drive high-converting affiliate referrals:
-              </p>
+          {/* SECTION 2: 5 PROBLEM -> SOLUTION CONTENT IDEAS */}
+          <HUDPanel title="🔥 5 PROBLEM → SOLUTION CONTENT IDEAS">
+            <p className="text-gray-300 text-sm mb-6">
+              These target readers at the exact moment of pain - right before they are ready to purchase.
+            </p>
 
-              <div className="space-y-4">
-                {tutorials.map((tut, idx) => (
-                  <div key={idx} className="bg-gradient-to-r from-gray-900 via-black to-cyan-950/40 border border-gray-800 p-4 rounded-2xl space-y-2 hover:border-cyan-400 transition-all">
-                    <h4 className="text-xs font-black text-white font-rajdhani uppercase text-cyan-300">
-                      {tut.title}
-                    </h4>
-                    <p className="text-[11px] text-gray-300 font-sans leading-relaxed">
-                      <strong className="text-white font-mono">Goal:</strong> {tut.goal}
-                    </p>
-                    <p className="text-[11px] text-gray-400 font-sans leading-relaxed">
-                      <strong className="text-lime-300 font-mono">Natural Solution:</strong> {tut.solution}
-                    </p>
-                    <div className="pt-2">
-                      <a
-                        href={tut.ctaUrl}
-                        target="_blank"
-                        rel="sponsored noopener noreferrer"
-                        className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold text-[10px] uppercase rounded-lg hover:opacity-95 transition-all shadow"
-                      >
-                        <span>{tut.ctaText}</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </a>
+            <div className="space-y-6">
+              {problemSolutions.map((ps) => (
+                <div key={ps.id} className="p-5 rounded-xl bg-gray-900/60 border border-gray-800/80 hover:border-[var(--primary-cyan)]/40 transition-all">
+                  <h3 className="text-base font-bold text-white mb-3 flex items-center gap-2 font-orbitron">
+                    <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                    {ps.title}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm mb-4">
+                    <div className="p-3 rounded-lg bg-rose-950/20 border border-rose-900/30">
+                      <span className="font-bold text-rose-400 block mb-1 uppercase tracking-wider">Problem:</span>
+                      <p className="text-gray-300">{ps.problem}</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-emerald-950/20 border border-emerald-900/30">
+                      <span className="font-bold text-emerald-400 block mb-1 uppercase tracking-wider">Solution:</span>
+                      <p className="text-gray-300">{ps.solution}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          </HUDPanel>
-
-          {/* 5 PROBLEM -> SOLUTION IDEAS */}
-          <HUDPanel title="⚡ 5 'PROBLEM → SOLUTION' HIGH-CONVERTING CONTENT IDEAS">
-            <div className="p-6 space-y-4 font-mono text-xs">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse font-sans text-xs">
-                  <thead>
-                    <tr className="bg-black border-b border-cyan-500/40 text-cyan-300 font-mono text-[10px] uppercase">
-                      <th className="p-3">#</th>
-                      <th className="p-3">REAL PAIN POINT (PROBLEM)</th>
-                      <th className="p-3">EDUCATIONAL SOLUTION</th>
-                      <th className="p-3">PRODUCT INTEGRATION</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-800 text-[11px]">
-                    {problemSolutions.map((item, idx) => (
-                      <tr key={idx} className="hover:bg-cyan-950/20 transition-colors">
-                        <td className="p-3 font-mono text-lime-400 font-bold">{idx + 1}</td>
-                        <td className="p-3 text-gray-200">{item.problem}</td>
-                        <td className="p-3 text-gray-300">{item.solution}</td>
-                        <td className="p-3 text-cyan-300 font-mono font-bold">{item.product}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </HUDPanel>
-
-          {/* 5 HIGH-CONVERTING COMPARISON IDEAS */}
-          <HUDPanel title="⚖️ 5 HIGH-CONVERTING COMPARISON BLUEPRINTS">
-            <div className="p-6 space-y-4 font-mono text-xs">
-              <div className="grid grid-cols-1 gap-4">
-                {comparisons.map((comp, idx) => (
-                  <div key={idx} className="bg-black/90 border border-gray-800 p-4 rounded-2xl space-y-2 hover:border-purple-400 transition-all">
-                    <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest block">
-                      COMPARISON #{idx + 1}
-                    </span>
-                    <h4 className="text-xs font-black text-white font-rajdhani uppercase">
-                      {comp.title}
-                    </h4>
-                    <p className="text-[11px] text-cyan-300 font-mono">
-                      <strong>Angle:</strong> "{comp.angle}"
-                    </p>
-                    <p className="text-[11px] text-gray-300 font-sans">
-                      <strong>Focus:</strong> {comp.focus}
-                    </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-gray-800/60">
+                    <span className="text-xs text-[var(--primary-lime)] font-mono">CTA: {ps.cta}</span>
+                    <a
+                      href={ps.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto px-4 py-2 rounded-lg bg-[var(--primary-cyan)] hover:bg-cyan-400 text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md"
+                    >
+                      <span>RECOMMEND HOSTINGER</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
                   </div>
-                ))}
-              </div>
-            </div>
-          </HUDPanel>
-
-          {/* PROMOTION CHANNELS MATRIX */}
-          <HUDPanel title="📢 BEST PROMOTION CHANNELS & FORMATS">
-            <div className="p-6 space-y-4 font-mono text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <div className="bg-black/90 border border-red-500/40 p-4 rounded-2xl space-y-2">
-                  <div className="flex items-center space-x-2 text-red-400">
-                    <Video className="w-5 h-5" />
-                    <span className="font-bold text-xs uppercase font-rajdhani text-white">YOUTUBE & SHORTS</span>
-                  </div>
-                  <p className="text-[11px] text-gray-300 font-sans leading-relaxed">
-                    Highest conversion rate! 10-15 min step-by-step tutorials with affiliate tracking links in description and pinned comment.
-                  </p>
-                </div>
-
-                <div className="bg-black/90 border border-blue-500/40 p-4 rounded-2xl space-y-2">
-                  <div className="flex items-center space-x-2 text-blue-400">
-                    <Globe className="w-5 h-5" />
-                    <span className="font-bold text-xs uppercase font-rajdhani text-white">LINKEDIN B2B</span>
-                  </div>
-                  <p className="text-[11px] text-gray-300 font-sans leading-relaxed">
-                    PDF Carousels ("5 Tech Services Every VA Should Offer in 2026") and text case studies targeting business owners & VAs.
-                  </p>
-                </div>
-
-                <div className="bg-black/90 border border-lime-500/40 p-4 rounded-2xl space-y-2">
-                  <div className="flex items-center space-x-2 text-lime-400">
-                    <BookOpen className="w-5 h-5" />
-                    <span className="font-bold text-xs uppercase font-rajdhani text-white">BLOG / SEO / MEDIUM</span>
-                  </div>
-                  <p className="text-[11px] text-gray-300 font-sans leading-relaxed">
-                    In-depth comparison articles targeting search intent like "best budget hosting for developers" or "how to join Impact.com".
-                  </p>
-                </div>
-
-                <div className="bg-black/90 border border-purple-500/40 p-4 rounded-2xl space-y-2">
-                  <div className="flex items-center space-x-2 text-purple-400">
-                    <MessageSquare className="w-5 h-5" />
-                    <span className="font-bold text-xs uppercase font-rajdhani text-white">FB GROUPS & DISCORD</span>
-                  </div>
-                  <p className="text-[11px] text-gray-300 font-sans leading-relaxed">
-                    Answer community questions with helpful advice first, then share free tutorial guides containing partner referral links.
-                  </p>
-                </div>
-
-              </div>
-            </div>
-          </HUDPanel>
-
-          {/* 3 VIRAL CONTENT TITLES */}
-          <HUDPanel title="🚀 3 VIRAL CONTENT TITLES THAT DRIVE TRAFFIC">
-            <div className="p-6 space-y-3 font-mono text-xs">
-              {[
-                { title: '"I Built a Client Website for $3 and Sold It for $500 (Full Process Uncut)"', why: 'High curiosity, clear monetary value, appeals to freelancers & VAs wanting to make money.' },
-                { title: '"Stop Using Wix! How Small Businesses Are Saving $200/Year With This Simple Tech Swap"', why: 'Strong pattern interrupt, challenges popular beliefs, offers clear cost savings.' },
-                { title: '"How Virtual Assistants Are Making $1,000/Mo in Passive Income (Without Extra Hours)"', why: "Directly targets your audience's desire to break free from hourly billing through smart affiliate partnerships." }
-              ].map((v, idx) => (
-                <div key={idx} className="bg-gradient-to-r from-cyan-950/40 via-black to-lime-950/40 border border-lime-400/40 p-4 rounded-2xl space-y-1">
-                  <h4 className="text-xs font-black text-lime-300 uppercase font-mono">{v.title}</h4>
-                  <p className="text-[11px] text-gray-300 font-sans"><strong>Why it works:</strong> {v.why}</p>
                 </div>
               ))}
             </div>
           </HUDPanel>
 
-          {/* FREQUENTLY ASKED QUESTIONS */}
-          <HUDPanel title="❓ FREQUENTLY ASKED QUESTIONS & CONVERSION ANSWERS">
-            <div className="p-6 space-y-3 font-mono text-xs">
-              {faqs.map((faq, idx) => (
-                <div key={idx} className="bg-black/90 border border-gray-800 rounded-2xl overflow-hidden">
+          {/* SECTION 3: 3 VIRAL STYLE CONTENT TITLES */}
+          <HUDPanel title="💥 3 HIGH-INTEREST, VIRAL-STYLE CONTENT TITLES">
+            <p className="text-gray-300 text-sm mb-6">
+              Designed for high shareability and strong click-through rate in VA communities, Facebook groups, and LinkedIn.
+            </p>
+
+            <div className="grid grid-cols-1 gap-4">
+              {viralTitles.map((vt, idx) => (
+                <div key={idx} className="p-5 rounded-xl bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900 border border-purple-500/30 hover:border-purple-400 transition-all">
+                  <h3 className="text-base font-bold text-white mb-2 font-orbitron">{vt.title}</h3>
+                  <div className="p-3 rounded-lg bg-purple-950/20 border border-purple-900/40 text-xs md:text-sm text-gray-300">
+                    <strong className="text-purple-400 uppercase tracking-wider mr-2">Why it works:</strong>
+                    {vt.reason}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </HUDPanel>
+
+          {/* SECTION 4: COMMON PRE-PURCHASE QUESTIONS & TRUST ANSWERS */}
+          <HUDPanel title="❓ COMMON PRE-PURCHASE QUESTIONS - WITH TRUST-BUILDING ANSWERS">
+            <p className="text-gray-300 text-sm mb-6">
+              Use these as a dedicated FAQ section or embed them within relevant tutorials to handle objections before readers bounce.
+            </p>
+
+            <div className="space-y-4">
+              {prePurchaseFaqs.map((faq, idx) => (
+                <div key={idx} className="rounded-xl bg-gray-900/50 border border-gray-800 overflow-hidden">
                   <button
                     onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                    className="w-full p-4 text-left font-bold text-white uppercase flex justify-between items-center hover:bg-gray-900 transition-colors"
+                    className="w-full text-left p-4 flex items-center justify-between text-sm md:text-base font-bold text-white hover:text-[var(--primary-cyan)] transition-colors"
                   >
-                    <span>Q{idx + 1}: {faq.q}</span>
-                    <span className="text-cyan-400">{activeFaq === idx ? '−' : '+'}</span>
+                    <span className="flex items-center gap-2">
+                      <HelpCircle className="w-4 h-4 text-[var(--primary-lime)] shrink-0" />
+                      {faq.q}
+                    </span>
+                    <span className="text-xs font-mono text-gray-500">{activeFaq === idx ? '[-]' : '[+]'}</span>
                   </button>
                   {activeFaq === idx && (
-                    <div className="p-4 bg-gray-900/60 border-t border-gray-800 text-gray-300 font-sans text-xs leading-relaxed">
+                    <div className="p-4 pt-0 text-xs md:text-sm text-gray-300 border-t border-gray-800/60 leading-relaxed bg-gray-950/40">
                       {faq.a}
                     </div>
                   )}
@@ -390,16 +319,52 @@ export const AffiliateGuide: React.FC = () => {
             </div>
           </HUDPanel>
 
+          {/* SECTION 5: CONTENT PRIORITY ORDER */}
+          <HUDPanel title="🗓️ CONTENT PRIORITY ORDER (START HERE)">
+            <p className="text-gray-300 text-sm mb-6">
+              Follow this strategic rollout roadmap for maximum initial traction and fastest conversion wins.
+            </p>
+
+            <div className="overflow-x-auto mb-6">
+              <table className="w-full text-left text-xs md:text-sm text-gray-200 border border-gray-800 rounded-lg overflow-hidden">
+                <thead className="bg-gray-900/80 text-[var(--primary-lime)] font-orbitron uppercase border-b border-gray-800">
+                  <tr>
+                    <th className="p-3 w-28">Priority</th>
+                    <th className="p-3">Content Piece</th>
+                    <th className="p-3">Why First</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-800/60 bg-gray-950/40">
+                  {priorityOrder.map((po, idx) => (
+                    <tr key={idx} className="hover:bg-gray-900/50 transition-colors">
+                      <td className="p-3 font-mono font-bold text-[var(--primary-cyan)]">{po.p}</td>
+                      <td className="p-3 font-semibold text-white">{po.title}</td>
+                      <td className="p-3 text-gray-300">{po.reason}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* THROUGH-LINE CONCLUSION */}
+            <div className="p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-transparent border border-emerald-500/40">
+              <h4 className="text-xs md:text-sm font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                The Core Strategic Through-Line
+              </h4>
+              <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
+                Every single piece of content helps the reader solve something real. Hostinger earns its placement because it genuinely fits what this audience needs - not because it is the product being pushed. That is what makes affiliate content people actually trust and buy through!
+              </p>
+            </div>
+          </HUDPanel>
+
         </div>
 
-        {/* DEDICATED PROMO ADS SIDEBAR COLUMN */}
-        <aside className="lg:col-span-1 border-t lg:border-t-0 lg:border-l-2 border-cyan-500/40 lg:pl-6 space-y-6 sticky top-24">
+        {/* RIGHT SIDEBAR PROMO COLUMN */}
+        <div className="lg:col-span-1">
           <DynamicAdsSidebar />
-        </aside>
-
+        </div>
       </div>
-
     </div>
   );
 };
-export default AffiliateGuide;
