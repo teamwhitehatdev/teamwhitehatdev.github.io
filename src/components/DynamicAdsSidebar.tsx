@@ -7,14 +7,27 @@ export const DynamicAdsSidebar: React.FC = () => {
 
   const refreshAds = () => {
     const shuffled = [...ALL_AFFILIATE_ADS].sort(() => Math.random() - 0.5);
-    setSidebarAds(shuffled.slice(0, 5));
+    const seenBrands = new Set<string>();
+    const uniqueAds: AffiliateAdItem[] = [];
+
+    for (const ad of shuffled) {
+      // Normalize brand key to guarantee ZERO duplicate ads from the same provider (e.g. TEMU)
+      const brandKey = ad.brand.toLowerCase().replace(/hardware|tech|official|x tiktok|suite/g, '').trim();
+      if (!seenBrands.has(brandKey)) {
+        seenBrands.add(brandKey);
+        uniqueAds.push(ad);
+      }
+      if (uniqueAds.length >= 3) break;
+    }
+
+    setSidebarAds(uniqueAds);
   };
 
   useEffect(() => {
     refreshAds();
     const interval = setInterval(() => {
       refreshAds();
-    }, 12000);
+    }, 15000);
     return () => clearInterval(interval);
   }, []);
 
@@ -23,8 +36,8 @@ export const DynamicAdsSidebar: React.FC = () => {
       
       <div className="flex items-center justify-between bg-black/90 border border-cyan-500/40 p-3 rounded-2xl">
         <span className="text-xs font-bold text-cyan-300 uppercase tracking-widest flex items-center space-x-1.5">
-          <Sparkles className="w-4 h-4 text-lime-400 animate-pulse" />
-          <span>DEDICATED PROMO ADS COLUMN</span>
+          <Sparkles className="w-4 h-4 text-lime-400" />
+          <span>VERIFIED PARTNER DEALS</span>
         </span>
         <button
           onClick={refreshAds}
@@ -32,7 +45,7 @@ export const DynamicAdsSidebar: React.FC = () => {
           title="Refresh Deals"
         >
           <RefreshCw className="w-3.5 h-3.5" />
-          <span>ROTATING (12s)</span>
+          <span>ROTATING</span>
         </button>
       </div>
 
@@ -44,14 +57,9 @@ export const DynamicAdsSidebar: React.FC = () => {
                 <ShoppingBag className="w-3 h-3" />
                 <span>{ad.brand}</span>
               </span>
-              <div className="flex items-center space-x-1">
-                <span className="bg-purple-950/80 text-purple-300 text-[8px] font-bold px-1.5 py-0.5 rounded border border-purple-800 uppercase">
-                  {ad.category} • {ad.sizeType}
-                </span>
-                <span className="bg-black/60 text-cyan-300 text-[9px] font-bold px-1.5 py-0.5 rounded border border-gray-800">
-                  {ad.badge}
-                </span>
-              </div>
+              <span className="bg-black/60 text-cyan-300 text-[9px] font-bold px-1.5 py-0.5 rounded border border-gray-800">
+                {ad.badge}
+              </span>
             </div>
 
             {ad.iframeUrl ? (
@@ -79,7 +87,7 @@ export const DynamicAdsSidebar: React.FC = () => {
               rel="sponsored noopener noreferrer"
               className="w-full py-2 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-black font-rajdhani text-xs uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
             >
-              <span>CLAIM {ad.brand.toUpperCase()} DISCOUNT &rarr;</span>
+              <span>CLAIM DISCOUNT &rarr;</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>

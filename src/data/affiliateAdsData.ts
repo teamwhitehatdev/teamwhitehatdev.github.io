@@ -15,78 +15,24 @@ export interface AffiliateAdItem {
 }
 
 export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
-  // TEMU HARDWARE AFFILIATE AD PLACEMENT
+  // 1. TEMU HARDWARE AFFILIATE DEAL (UNIQUE SINGLE ENTRY)
   {
-    id: 'temu-dvd-burner-hero',
-    brand: 'TEMU Hardware',
-    category: 'hardware',
-    sizeType: 'hero',
-    width: 600,
-    height: 300,
-    clickUrl: 'https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358',
-    imageUrl: 'https://img.kwcdn.com/product/fancy/817dd41d-fdee-491f-982e-63f9589eb14a.jpg',
-    title: 'TEMU External CD/DVD Drive USB 2.0 Slim Portable Burner',
-    description: 'TEMU External Cd Dvd, Usb 2.0 Slim Protable External Cd-rw Dvd-rw Burner For Laptop Notebook Pc Desktop Computer.',
-    badge: 'TEMU HARDWARE DEAL'
-  },
-  {
-    id: 'temu-dvd-burner-medium',
-    brand: 'TEMU Hardware',
+    id: 'temu-dvd-burner-item',
+    brand: 'TEMU',
     category: 'hardware',
     sizeType: 'medium',
     width: 300,
     height: 250,
     clickUrl: 'https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358',
     imageUrl: 'https://img.kwcdn.com/product/fancy/817dd41d-fdee-491f-982e-63f9589eb14a.jpg',
-    title: 'TEMU USB 2.0 Portable CD/DVD-RW Burner',
-    description: 'Plug & Play External CD-RW DVD-RW Burner for Laptop, Notebook, PC & Desktop Computer.',
-    badge: 'TEMU TECH DEAL'
-  },
-  {
-    id: 'temu-dvd-burner-skyscraper',
-    brand: 'TEMU Hardware',
-    category: 'hardware',
-    sizeType: 'skyscraper',
-    width: 160,
-    height: 600,
-    clickUrl: 'https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358',
-    imageUrl: 'https://img.kwcdn.com/product/fancy/817dd41d-fdee-491f-982e-63f9589eb14a.jpg',
-    title: 'TEMU Slim CD/DVD Burner for PC/Laptop',
-    description: 'Slim Portable External CD-RW DVD-RW Burner.',
-    badge: 'HOT DEAL'
+    title: 'TEMU External CD/DVD Drive USB 2.0 Slim Portable Burner',
+    description: 'TEMU External Cd Dvd, Usb 2.0 Slim Protable External Cd-rw Dvd-rw Burner For Laptop Notebook Pc Desktop Computer.',
+    badge: 'HARDWARE DEAL'
   },
 
-  // ATOME CARD OFFICIAL REFERRAL ADS
+  // 2. WONDERSHARE VIRBO CREATIVE SUITE (UNIQUE SINGLE ENTRY)
   {
-    id: 'atome-card-7800-cashback',
-    brand: 'Atome Card',
-    category: 'creative',
-    sizeType: 'hero',
-    width: 600,
-    height: 300,
-    clickUrl: 'https://www.atome.ph/s/cbcqZc5Ak',
-    imageUrl: './images/atome/atome-7800-cashback.jpg',
-    title: 'ATOME CARD - WIN UP TO ₱7,800 CASHBACK!',
-    description: 'Register for Atome Card with our official referral link to get started. Claim instant shopping perks & cashback rewards!',
-    badge: '₱7,800 CASHBACK'
-  },
-  {
-    id: 'atome-tiktok-shop-perk',
-    brand: 'Atome Card x TikTok',
-    category: 'creative',
-    sizeType: 'medium',
-    width: 300,
-    height: 450,
-    clickUrl: 'https://www.atome.ph/s/cbcqZc5Ak',
-    imageUrl: './images/atome/atome-tiktok-shop.png',
-    title: '₱50 OFF FIRST TIKTOK SHOP ORDER WITH ATOME CARD',
-    description: 'Unlock instant perks & ₱50 discount on your first TikTok Shop order when paying with Atome Card!',
-    badge: 'TIKTOK SHOP PERK'
-  },
-
-  // WONDERSHARE FILMORA & CREATIVE SUITE
-  {
-    id: 'wondershare-virbo-65off',
+    id: 'wondershare-virbo-item',
     brand: 'Wondershare',
     category: 'creative',
     sizeType: 'medium',
@@ -96,118 +42,49 @@ export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
     pixelUrl: 'https://imp.pxf.io/i/5024116/2882021/15586',
     title: 'Wondershare Virbo - AI Avatar & Deepfake Generator (65% OFF)',
     description: 'Generate hyper-realistic AI avatar spokesperson videos in 120+ languages. Essential for VAs & video creators.',
-    badge: '65% OFF SPECIAL'
-  },
-  {
-    id: 'wondershare-filmora-300x250',
-    brand: 'Wondershare',
-    category: 'creative',
-    sizeType: 'medium',
-    width: 300,
-    height: 250,
-    clickUrl: 'https://wondersharesoftware.pxf.io/c/5024116/1485636/15586',
-    imageUrl: 'https://a.impactradius-go.com/display-ad/15586-1485636',
-    pixelUrl: 'https://imp.pxf.io/i/5024116/1485636/15586',
-    title: 'Wondershare Filmora 13 AI Video Editor',
-    description: 'Smart AI cutout, motion tracking, auto reframe, & 1000+ templates for YouTube & TikTok reels.',
-    badge: 'OFFICIAL WONDERSHARE'
-  },
-  {
-    id: 'wondershare-video-728x90',
-    brand: 'Wondershare',
-    category: 'creative',
-    sizeType: 'banner',
-    width: 728,
-    height: 90,
-    clickUrl: 'https://wondersharesoftware.pxf.io/c/5024116/1315405/15586',
-    imageUrl: 'https://a.impactradius-go.com/display-ad/15586-1315405',
-    pixelUrl: 'https://imp.pxf.io/i/5024116/1315405/15586',
-    title: 'Wondershare AI Video Creator Suite',
-    description: 'Complete AI video editing, screen recording, & motion graphics toolkit.',
-    badge: 'FEATURED DEAL'
-  },
-  {
-    id: 'wondershare-pdfelement-600x480',
-    brand: 'Wondershare',
-    category: 'creative',
-    sizeType: 'hero',
-    width: 600,
-    height: 480,
-    clickUrl: 'https://wondersharesoftware.pxf.io/c/5024116/3801344/15586',
-    imageUrl: 'https://a.impactradius-go.com/display-ad/15586-3801344',
-    pixelUrl: 'https://imp.pxf.io/i/5024116/3801344/15586',
-    title: 'PDFelement Pro - Document Suite (Up to 42% OFF)',
-    description: 'Edit, sign, OCR, & convert PDF documents effortlessly for Virtual Assistant workflows.',
-    badge: '42% OFF PROMO'
-  },
-  {
-    id: 'wondershare-pdfelement-160x600',
-    brand: 'Wondershare',
-    category: 'creative',
-    sizeType: 'skyscraper',
-    width: 160,
-    height: 600,
-    clickUrl: 'https://wondersharesoftware.pxf.io/c/5024116/3801341/15586',
-    imageUrl: 'https://a.impactradius-go.com/display-ad/15586-3801341',
-    pixelUrl: 'https://imp.pxf.io/i/5024116/3801341/15586',
-    title: 'PDFelement PDF Editor',
-    description: 'All-in-one PDF converter & e-signature solution for remote freelancers.',
-    badge: 'PDF PROMO'
-  },
-  {
-    id: 'wondershare-shopping-portal',
-    brand: 'Wondershare',
-    category: 'creative',
-    sizeType: 'medium',
-    width: 300,
-    height: 250,
-    clickUrl: 'https://wondersharesoftware.pxf.io/c/5024116/1266881/15586',
-    pixelUrl: 'https://imp.pxf.io/i/5024116/1266881/15586',
-    title: 'Wondershare Official Software Store',
-    description: 'Explore Filmora, Virbo, PDFelement, & Media.io with official partner discounts.',
-    badge: 'OFFICIAL STORE'
-  },
-  {
-    id: 'mediaio-photo-30off',
-    brand: 'Media.io',
-    category: 'creative',
-    sizeType: 'medium',
-    width: 300,
-    height: 250,
-    clickUrl: 'https://wondersharesoftware.pxf.io/c/5024116/2135551/15586',
-    pixelUrl: 'https://imp.pxf.io/i/5024116/2135551/15586',
-    title: 'Media.io AI Photo & Passport Studio (30% OFF)',
-    description: 'Generate pro AI corporate headshots & background removal for LinkedIn profiles.',
-    badge: '30% OFF SPECIAL'
+    badge: '65% OFF'
   },
 
-  // LENOVO HARDWARE
+  // 3. HOSTINGER CLOUD HOSTING (UNIQUE SINGLE ENTRY)
   {
-    id: 'lenovo-1200x628',
-    brand: 'Lenovo',
-    category: 'hardware',
-    sizeType: 'hero',
-    width: 1200,
-    height: 628,
-    clickUrl: 'https://lenovo.36c4.net/c/5024116/1003008/4052',
-    imageUrl: 'https://a.impactradius-go.com/display-ad/4052-1003008',
-    pixelUrl: 'https://lenovo.36c4.net/i/5024116/1003008/4052',
-    title: 'LENOVO THINKPAD & YOGA LAPTOPS (VA POWERHOUSES)',
-    description: 'High-performance laptops engineered for Virtual Assistants, developers, and remote workstations.',
-    badge: 'OFFICIAL LENOVO TECH'
-  },
-  {
-    id: 'lenovo-300x250',
-    brand: 'Lenovo',
-    category: 'hardware',
+    id: 'hostinger-cloud-item',
+    brand: 'Hostinger',
+    category: 'hosting',
     sizeType: 'medium',
     width: 300,
     height: 250,
-    clickUrl: 'https://lenovo.36c4.net/c/5024116/242079/4052',
-    imageUrl: 'https://a.impactradius-go.com/display-ad/4052-242079',
-    pixelUrl: 'https://lenovo.36c4.net/i/5024116/242079/4052',
-    title: 'LENOVO OFFICIAL STORE DEALS',
-    description: 'Upgrade your freelancing workstation with high-speed processors & dual monitor setups.',
-    badge: 'OFFICIAL LENOVO'
+    clickUrl: 'https://hostinger.sjv.io/c/6215170/1822851/18485',
+    imageUrl: 'https://assets.sjv.io/1822851/18485/hostinger-banner.png',
+    title: 'Hostinger Cloud Hosting (75% OFF + Code: DPDCABINCEHM)',
+    description: 'Fast, secure LiteSpeed web hosting with free domain, SSL certificates, and unmetered bandwidth.',
+    badge: '75% OFF'
+  },
+
+  // 4. NORDVPN CYBERSECURITY (UNIQUE SINGLE ENTRY)
+  {
+    id: 'nordvpn-security-item',
+    brand: 'NordVPN',
+    category: 'security',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://nordvpn.sjv.io/c/5024116/976014/7452',
+    title: 'NordVPN 256-Bit Workstation Data Protection (68% OFF)',
+    description: 'Shield client data with military-grade AES-256 encryption, malware protection, and double VPN.',
+    badge: '68% OFF'
+  },
+
+  // 5. COURSERA GLOBAL CERTIFICATIONS (UNIQUE SINGLE ENTRY)
+  {
+    id: 'coursera-cert-item',
+    brand: 'Coursera',
+    category: 'education',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://imp.i384100.net/c/5024116/3801376/14726',
+    title: 'Coursera Professional Credentials from Google & Meta',
+    description: 'Acquire accredited certificates in AI, Project Management, and Data Science to command $50+/hr rates.',
+    badge: 'GLOBAL CERT'
   }
 ];

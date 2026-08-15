@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Award, BookOpen, CheckCircle2, Shield, Cpu, Code, Sparkles, ExternalLink, ArrowRight, Star, Layers, RefreshCw, Smartphone, Rocket, Server, Palette, Users, Tag } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
-import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
-import { AffiliateBanners } from '../components/AffiliateBanners';
 import { Link } from 'react-router-dom';
 import { TESTIMONIALS_DATA } from '../data/testimonialsData';
 
