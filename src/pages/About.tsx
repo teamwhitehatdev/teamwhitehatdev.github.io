@@ -28,7 +28,7 @@ export const About: React.FC = () => {
 
       {/* DYNAMIC CMS CONTENT ITEMS */}
       {cmsAboutItems.length > 0 && (
-        <HUDPanel title="⚡ CMS PUBLISHED ANNOUNCEMENTS &amp; UPDATES">
+        <HUDPanel title=" CMS PUBLISHED ANNOUNCEMENTS &amp; UPDATES">
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             {cmsAboutItems.map(item => (
               <div key={item.id} className="bg-black/90 border border-cyan-500/40 p-4 rounded-xl space-y-2">
@@ -60,7 +60,7 @@ export const About: React.FC = () => {
         <div className="lg:col-span-2 space-y-8">
 
           {/* OUR PURPOSE & MISSION */}
-          <HUDPanel title="🎯 OUR PURPOSE &amp; MISSION">
+          <HUDPanel title=" OUR PURPOSE &amp; MISSION">
             <div className="p-5 space-y-4 font-sans text-xs">
               <p className="text-gray-200 leading-relaxed">
                 The primary purpose of <strong className="text-white font-mono">Team WhiteHat Dev</strong> is to empower businesses, remote freelancers, and Virtual Assistants with cutting-edge technology tools, transparent infrastructure guidance, and high-performance digital services.
@@ -90,7 +90,7 @@ export const About: React.FC = () => {
           </HUDPanel>
 
           {/* WHAT IS TEAM WHITEHAT DEV? (4 CORE PILLARS) */}
-          <HUDPanel title="⚙️ WHAT IS TEAM WHITE HAT DEV? (4 CORE PILLARS)">
+          <HUDPanel title=" WHAT IS TEAM WHITE HAT DEV? (4 CORE PILLARS)">
             <div className="p-5 space-y-4 font-sans text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono">
                 
@@ -139,7 +139,7 @@ export const About: React.FC = () => {
           </HUDPanel>
 
           {/* MOTTO & BRAND VISION */}
-          <HUDPanel title="🌟 OUR BRAND MOTTO &amp; VISION">
+          <HUDPanel title=" OUR BRAND MOTTO &amp; VISION">
             <div className="p-5 space-y-3 font-sans text-xs">
               <div className="p-4 bg-gradient-to-r from-cyan-950 via-gray-900 to-purple-950 border border-cyan-500/40 rounded-xl space-y-2 text-center font-mono">
                 <span className="text-lime-400 font-black text-sm tracking-widest block uppercase">

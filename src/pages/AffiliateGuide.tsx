@@ -195,14 +195,14 @@ export const AffiliateGuide: React.FC = () => {
     <div className="-mx-4 sm:-mx-6 lg:-mx-8 -my-6 px-4 sm:px-6 lg:px-8 py-8 bg-slate-100 text-slate-900 font-sans min-h-screen relative z-20 border-t-4 border-indigo-600">
       <div className="max-w-7xl mx-auto space-y-10">
 
-        {/* 📢 REQUIRED FTC AFFILIATE TRANSPARENCY DISCLOSURE BANNER */}
+        {/*  REQUIRED FTC AFFILIATE TRANSPARENCY DISCLOSURE BANNER */}
         <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 md:p-6 shadow-md flex flex-col md:flex-row items-start gap-4">
           <div className="w-10 h-10 rounded-xl bg-amber-200 border border-amber-400 flex items-center justify-center text-amber-800 shrink-0 font-bold">
             <Info className="w-6 h-6" />
           </div>
           <div className="space-y-1 text-xs md:text-sm text-slate-800 font-medium leading-relaxed">
             <h4 className="font-bold text-slate-900 text-sm md:text-base flex items-center gap-2">
-              <span>📢 Affiliate Transparency Disclosure &amp; Reader Commitment</span>
+              <span> Affiliate Transparency Disclosure &amp; Reader Commitment</span>
             </h4>
             <p>
               <strong>Team WhiteHat Dev</strong> is an independent digital development &amp; virtual assistant resource portal. Pages on this website contain affiliate referral links (including Hostinger referral links with coupon code <code className="bg-amber-200/80 px-1.5 py-0.5 rounded font-mono font-bold text-amber-900">DPDCABINCEHM</code> and official CapCut creator links). If you click through and purchase web hosting or software subscriptions, we may receive a referral commission at <strong>zero extra cost to you</strong>. We only recommend hosting tools, video editors, and workflow templates that we actively use to build client websites and automated workflows. This affiliate revenue funds our free tutorials and open-source tools.
@@ -258,7 +258,7 @@ export const AffiliateGuide: React.FC = () => {
                         DYNAMIC CMS BACKEND TOPIC DIVISION
                       </span>
                       <h2 className="text-lg sm:text-2xl font-black font-orbitron uppercase text-white">
-                        ⚡ CMS PUBLISHED GUIDES &amp; RECOMMENDATIONS
+                         CMS PUBLISHED GUIDES &amp; RECOMMENDATIONS
                       </h2>
                     </div>
                   </div>
@@ -330,11 +330,11 @@ export const AffiliateGuide: React.FC = () => {
               {openPanels.hostinger && (
                 <div className="p-6 md:p-8 space-y-8 bg-slate-50/50">
                   
-                  {/* ⚡ PRIMARY CTA BANNER FOR HOSTINGER */}
+                  {/*  PRIMARY CTA BANNER FOR HOSTINGER */}
                   <div className="bg-gradient-to-r from-indigo-900 via-slate-900 to-purple-900 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-indigo-400">
                     <div className="space-y-2 text-center md:text-left">
                       <span className="text-xs font-mono text-lime-400 font-bold uppercase tracking-widest block">
-                        🔥 OFFICIAL HOSTINGER PARTNER OFFER
+                         OFFICIAL HOSTINGER PARTNER OFFER
                       </span>
                       <h3 className="text-xl md:text-2xl font-black font-orbitron text-white">
                         GET UP TO 75% OFF HOSTINGER WEB HOSTING + FREE DOMAIN
@@ -355,7 +355,7 @@ export const AffiliateGuide: React.FC = () => {
                     </a>
                   </div>
 
-                  {/* 🎯 WHO IS HOSTINGER BEST FOR? */}
+                  {/*  WHO IS HOSTINGER BEST FOR? */}
                   <div className="bg-white rounded-xl shadow border border-slate-300 p-6 space-y-4">
                     <h3 className="text-lg font-black text-slate-900 font-orbitron border-b pb-3 flex items-center gap-2">
                       <Award className="w-5 h-5 text-indigo-600" />
@@ -381,7 +381,7 @@ export const AffiliateGuide: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* 📊 HONEST HOSTINGER COMPARISON MATRIX */}
+                  {/*  HONEST HOSTINGER COMPARISON MATRIX */}
                   <div className="bg-white rounded-xl shadow border border-slate-300 p-6 space-y-4">
                     <h3 className="text-lg font-black text-slate-900 font-orbitron border-b pb-3 flex items-center gap-2">
                       <TrendingUp className="w-5 h-5 text-indigo-600" />
@@ -585,7 +585,7 @@ export const AffiliateGuide: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* ⚡ ONE ELEGANT PRIMARY CTA BUTTON FOR CAPCUT (NO BUTTON SPAMMING) */}
+                  {/*  ONE ELEGANT PRIMARY CTA BUTTON FOR CAPCUT (NO BUTTON SPAMMING) */}
                   <div className="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 rounded-2xl p-6 text-white shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-purple-400">
                     <div className="space-y-2 text-center md:text-left">
                       <span className="text-xs font-mono text-purple-300 font-bold uppercase tracking-widest block">

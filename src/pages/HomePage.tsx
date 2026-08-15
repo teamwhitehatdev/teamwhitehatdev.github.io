@@ -6,7 +6,7 @@ import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
 import { AffiliateBanners } from '../components/AffiliateBanners';
 import { Link } from 'react-router-dom';
-import { TESTIMONIALS } from '../data/testimonialsData';
+import { TESTIMONIALS_DATA } from '../data/testimonialsData';
 
 interface HomePageProps {
   onOpenConsultation: (serviceTitle?: string) => void;
@@ -16,10 +16,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
   const ATOME_REFERRAL_LINK = "https://www.atome.ph/s/cbcqZc5Ak";
 
-  const [displayTestimonials, setDisplayTestimonials] = useState(TESTIMONIALS);
+  const [displayTestimonials, setDisplayTestimonials] = useState(TESTIMONIALS_DATA);
 
   useEffect(() => {
-    const shuffled = [...TESTIMONIALS].sort(() => Math.random() - 0.5);
+    const shuffled = [...TESTIMONIALS_DATA].sort(() => Math.random() - 0.5);
     setDisplayTestimonials(shuffled);
   }, []);
 
@@ -41,7 +41,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
             </div>
             <div>
               <span className="text-[10px] font-black text-lime-400 uppercase tracking-widest block font-mono">
-                🔥 NEW DEDICATED GUIDE &amp; MASTERCLASS
+                 NEW DEDICATED GUIDE &amp; MASTERCLASS
               </span>
               <h2 className="text-base sm:text-xl font-black text-white font-rajdhani uppercase leading-tight">
                 HOW TO BECOME A SUCCESSFUL AFFILIATE MARKETER?
@@ -63,8 +63,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         </p>
       </div>
 
-      {/* 💳 OFFICIAL ATOME CARD ₱7,800 CASHBACK & TIKTOK SHOP PERK PROMO SHOWCASE */}
-      <HUDPanel title="💳 OFFICIAL ATOME CARD PERKS — WIN UP TO ₱7,800 CASHBACK">
+      {/*  OFFICIAL ATOME CARD ₱7,800 CASHBACK & TIKTOK SHOP PERK PROMO SHOWCASE */}
+      <HUDPanel title=" OFFICIAL ATOME CARD PERKS — WIN UP TO ₱7,800 CASHBACK">
         <div className="p-5 sm:p-6 space-y-6">
           
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-gray-800 font-sans">
@@ -213,7 +213,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         <div className="lg:col-span-2 space-y-8">
 
           {/* MOVED FROM ABOUT PAGE: ULTIMATE GUIDE TO BECOME SUCCESSFUL VA */}
-          <HUDPanel title="🎓 ULTIMATE GUIDE: HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT">
+          <HUDPanel title=" ULTIMATE GUIDE: HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT">
             <div className="p-4 space-y-4 font-sans text-xs">
               
               {/* VA TOPIC 1 */}
@@ -336,7 +336,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
           </div>
 
           {/* CORE VIRTUAL ASSISTANT PACKAGES */}
-          <HUDPanel title="🛠️ CORE VIRTUAL ASSISTANT PACKAGES">
+          <HUDPanel title=" CORE VIRTUAL ASSISTANT PACKAGES">
             <div className="p-4 space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
                 {[
@@ -361,18 +361,18 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
           </HUDPanel>
 
           {/* MINIMAL VERIFIED REVIEWS & ANIMATED AUTO-SCROLL TICKER */}
-          <HUDPanel title="⭐⭐⭐⭐⭐ VERIFIED CLIENT &amp; VA REVIEWS (MINIMAL SLIDES &amp; TICKER)">
+          <HUDPanel title="5/5 STARS VERIFIED CLIENT &amp; VA REVIEWS (MINIMAL SLIDES &amp; TICKER)">
             <div className="p-4 sm:p-5 space-y-5">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <p className="text-xs text-gray-300 font-sans leading-relaxed">
                   Minimal compact showcase featuring 5 verified client &amp; VA case study reviews (avatar faces removed for ultra-clean minimalist design):
                 </p>
                 <button
-                  onClick={() => setDisplayTestimonials([...TESTIMONIALS].sort(() => Math.random() - 0.5))}
+                  onClick={() => setDisplayTestimonials([...TESTIMONIALS_DATA].sort(() => Math.random() - 0.5))}
                   className="px-3.5 py-1.5 bg-[var(--primary-cyan)]/20 hover:bg-[var(--primary-cyan)]/40 border border-[var(--primary-cyan)] text-[var(--primary-cyan)] font-mono text-xs rounded-lg font-bold flex items-center gap-1.5 transition-all shrink-0 shadow-md"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
-                  <span>🔀 SHUFFLE REVIEWS</span>
+                  <span> SHUFFLE REVIEWS</span>
                 </button>
               </div>
 
@@ -411,12 +411,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
               {/* INFINITE ANIMATED AUTO-SCROLL MARQUEE TICKER (NO AVATARS) */}
               <div className="pt-3 border-t border-gray-800/80 space-y-1.5 overflow-hidden">
                 <span className="text-[10px] text-cyan-400 font-mono uppercase font-bold tracking-widest block text-center">
-                  ⚡ LIVE MARQUEE TICKER (ANIMATED AUTO-SCROLLING REVIEWS):
+                   LIVE MARQUEE TICKER (ANIMATED AUTO-SCROLLING REVIEWS):
                 </span>
 
                 <div className="relative overflow-hidden py-1.5">
                   <div className="flex space-x-3 animate-marqueeSlow whitespace-nowrap hover:[animation-play-state:paused]">
-                    {TESTIMONIALS.concat(TESTIMONIALS).map((t, idx) => (
+                    {TESTIMONIALS_DATA.concat(TESTIMONIALS_DATA).map((t, idx) => (
                       <div
                         key={`ticker_${t.id}_${idx}`}
                         className="inline-flex items-center space-x-2 bg-gray-900/90 border border-gray-800 hover:border-lime-400/50 px-3 py-1.5 rounded-lg flex-shrink-0 text-xs font-mono transition-all shadow-sm"
