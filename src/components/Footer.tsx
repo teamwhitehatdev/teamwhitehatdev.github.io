@@ -55,6 +55,12 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-1.5 text-xs">
               <li>
+                <a href="https://www.atome.ph/s/cbcqZc5Ak" target="_blank" rel="sponsored noopener noreferrer" className="hover:text-yellow-300 transition-colors flex items-center justify-center sm:justify-start space-x-1 py-0.5">
+                  <Sparkles className="w-3 h-3 text-yellow-400" />
+                  <span>Atome Card (₱7,800 Cashback Perk)</span>
+                </a>
+              </li>
+              <li>
                 <a href="https://wondersharesoftware.pxf.io/c/5024116/1266881/15586" target="_blank" rel="sponsored noopener noreferrer" className="hover:text-purple-300 transition-colors flex items-center justify-center sm:justify-start space-x-1 py-0.5">
                   <Sparkles className="w-3 h-3 text-purple-400" />
                   <span>Wondershare AI Creator Suite</span>

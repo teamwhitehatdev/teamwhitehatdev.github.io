@@ -15,6 +15,34 @@ export interface AffiliateAdItem {
 }
 
 export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
+  // ATOME CARD OFFICIAL REFERRAL ADS
+  {
+    id: 'atome-card-7800-cashback',
+    brand: 'Atome Card',
+    category: 'creative',
+    sizeType: 'hero',
+    width: 600,
+    height: 300,
+    clickUrl: 'https://www.atome.ph/s/cbcqZc5Ak',
+    imageUrl: './images/atome/atome-7800-cashback.jpg',
+    title: 'ATOME CARD - WIN UP TO ₱7,800 CASHBACK!',
+    description: 'Register for Atome Card with our official referral link to get started. Claim instant shopping perks & cashback rewards!',
+    badge: '₱7,800 CASHBACK'
+  },
+  {
+    id: 'atome-tiktok-shop-perk',
+    brand: 'Atome Card x TikTok',
+    category: 'creative',
+    sizeType: 'medium',
+    width: 300,
+    height: 450,
+    clickUrl: 'https://www.atome.ph/s/cbcqZc5Ak',
+    imageUrl: './images/atome/atome-tiktok-shop.png',
+    title: '₱50 OFF FIRST TIKTOK SHOP ORDER WITH ATOME CARD',
+    description: 'Unlock instant perks & ₱50 discount on your first TikTok Shop order when paying with Atome Card!',
+    badge: 'TIKTOK SHOP PERK'
+  },
+
   // WONDERSHARE FILMORA & CREATIVE SUITE
   {
     id: 'wondershare-virbo-65off',

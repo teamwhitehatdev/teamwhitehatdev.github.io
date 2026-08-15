@@ -68,6 +68,137 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         </p>
       </div>
 
+
+      {/* 💳 OFFICIAL ATOME CARD ₱7,800 CASHBACK & TIKTOK SHOP PERK PROMO SHOWCASE */}
+      <HUDPanel title="💳 OFFICIAL ATOME CARD PERKS — WIN UP TO ₱7,800 CASHBACK">
+        <div className="p-5 sm:p-6 space-y-6">
+          
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-gray-800 font-sans">
+            <div className="space-y-1">
+              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-yellow-400/20 border border-yellow-400/50 text-yellow-300 text-xs font-mono font-bold uppercase">
+                <Sparkles className="w-3.5 h-3.5 text-yellow-400 animate-pulse" />
+                <span>EXCLUSIVE ATOME CARD PERK</span>
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black font-rajdhani text-white uppercase tracking-wider">
+                CONGRATULATIONS! HERE'S YOUR CHANCE TO WIN UP TO ₱7,800 CASHBACK
+              </h3>
+              <p className="text-xs text-gray-300 leading-relaxed max-w-3xl">
+                Register for Atome Card with our official referral link to get started. It’s super easy! Enjoy instant shopping discounts on TikTok Shop, zero annual fees, and up to ₱7,800 cashback rewards.
+              </p>
+            </div>
+
+            <a
+              href="https://www.atome.ph/s/cbcqZc5Ak"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="px-6 py-3.5 bg-gradient-to-r from-yellow-400 via-lime-400 to-cyan-400 text-black font-black font-rajdhani text-sm uppercase rounded-xl shadow-xl hover:scale-105 transition-all shrink-0 flex items-center space-x-2"
+            >
+              <span>CLAIM ₱7,800 CASHBACK &rarr;</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+
+          {/* TWO CLICKABLE ATOME CARD AD IMAGE BANNER PLACEMENTS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* AD PLACEMENT 1: ATOME CARD ₱7,800 CASHBACK HORIZONTAL BANNER */}
+            <div className="bg-black/90 border-2 border-yellow-400/50 rounded-2xl p-4 space-y-4 shadow-xl hover:border-yellow-400 transition-all flex flex-col justify-between group">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between font-mono">
+                  <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-widest flex items-center space-x-1">
+                    <Tag className="w-3.5 h-3.5 text-lime-400" />
+                    <span>ATOME CARD OFFICIAL</span>
+                  </span>
+                  <span className="bg-yellow-400/20 text-yellow-300 text-[10px] font-bold px-2 py-0.5 rounded border border-yellow-400/40">
+                    ₱7,800 CASHBACK
+                  </span>
+                </div>
+
+                <a
+                  href="https://www.atome.ph/s/cbcqZc5Ak"
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  className="block relative overflow-hidden rounded-xl border border-gray-800 group-hover:border-yellow-400/80 transition-all"
+                >
+                  <img
+                    src="./images/atome/atome-7800-cashback.jpg"
+                    alt="Atome Card ₱7,800 Cashback Promo"
+                    className="w-full h-auto max-h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </a>
+
+                <h4 className="text-sm font-black font-rajdhani text-white uppercase pt-1">
+                  Atome Card — Win Up to ₱7,800 Cashback!
+                </h4>
+
+                <p className="text-xs text-gray-300 font-sans leading-relaxed">
+                  Register, apply, and refer to claim your ₱7,800 cashback rewards. Works worldwide for online shopping, freelancing software, and daily purchases.
+                </p>
+              </div>
+
+              <a
+                href="https://www.atome.ph/s/cbcqZc5Ak"
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="w-full py-3 bg-gradient-to-r from-yellow-400 to-lime-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
+              >
+                <span>REGISTER ATOME CARD NOW</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+
+            {/* AD PLACEMENT 2: TIKTOK SHOP X ATOME CARD VERTICAL POSTER */}
+            <div className="bg-black/90 border-2 border-pink-500/50 rounded-2xl p-4 space-y-4 shadow-xl hover:border-pink-400 transition-all flex flex-col justify-between group">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between font-mono">
+                  <span className="text-[10px] text-pink-400 font-bold uppercase tracking-widest flex items-center space-x-1">
+                    <Tag className="w-3.5 h-3.5 text-pink-400" />
+                    <span>TIKTOK SHOP PERK</span>
+                  </span>
+                  <span className="bg-pink-500/20 text-pink-300 text-[10px] font-bold px-2 py-0.5 rounded border border-pink-500/40">
+                    ₱50 OFF ORDER
+                  </span>
+                </div>
+
+                <a
+                  href="https://www.atome.ph/s/cbcqZc5Ak"
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  className="block relative overflow-hidden rounded-xl border border-gray-800 group-hover:border-pink-400/80 transition-all"
+                >
+                  <img
+                    src="./images/atome/atome-tiktok-shop.png"
+                    alt="TikTok Shop x Atome Card ₱50 Off First Order"
+                    className="w-full h-auto max-h-72 object-contain bg-black group-hover:scale-105 transition-transform duration-300"
+                  />
+                </a>
+
+                <h4 className="text-sm font-black font-rajdhani text-white uppercase pt-1">
+                  ₱50 Off Your First TikTok Shop Order with Atome Card!
+                </h4>
+
+                <p className="text-xs text-gray-300 font-sans leading-relaxed">
+                  Shop on TikTok Shop app, reach a minimum spend of ₱500, and pay using your Atome Card to enjoy instant ₱50 off discount perks!
+                </p>
+              </div>
+
+              <a
+                href="https://www.atome.ph/s/cbcqZc5Ak"
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="w-full py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
+              >
+                <span>CLAIM TIKTOK SHOP ATOME PERK</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      </HUDPanel>
+
+
       {/* HEADLINE: UN-BOXED CLEAN TITLE WITH SUBTITLE */}
       <div className="text-center space-y-3 pt-2">
         <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full text-cyan-300 text-xs font-bold uppercase tracking-widest">
