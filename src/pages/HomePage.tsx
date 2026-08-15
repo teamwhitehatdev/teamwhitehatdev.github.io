@@ -303,55 +303,77 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
 
       </div>
 
-      {/* 100+ RANDOMIZED UNIQUE TESTIMONIALS AT ABSOLUTE BOTTOM */}
-      <HUDPanel title="⭐⭐⭐⭐⭐ 100+ RANDOMIZED VERIFIED CLIENT & VA REVIEWS (ZERO DUPLICATES)">
-        <div className="p-6 space-y-6">
+      {/* 5 MINIMAL VERIFIED REVIEWS & DYNAMIC SMOOTH SCROLL MARQUEE */}
+      <HUDPanel title="⭐⭐⭐⭐⭐ VERIFIED CLIENT & VA REVIEWS (MINIMAL 5 DISPLAY & SCROLL)">
+        <div className="p-5 sm:p-6 space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <p className="text-xs text-gray-300 font-sans leading-relaxed">
-              Every browser refresh or shuffle randomly displays verified 100% unique feedback with distinct non-repeating photos & detailed case study reviews from our 100+ global network of Virtual Assistants, agency CEOs, and digital creators:
+              Minimal showcase featuring 5 verified non-repeating photos & case study reviews from our global network of Virtual Assistants and creators:
             </p>
             <button
               onClick={() => setDisplayTestimonials([...TESTIMONIALS].sort(() => Math.random() - 0.5))}
               className="px-4 py-2 bg-[var(--primary-cyan)]/20 hover:bg-[var(--primary-cyan)]/40 border border-[var(--primary-cyan)] text-[var(--primary-cyan)] font-mono text-xs rounded-lg font-bold flex items-center gap-2 transition-all shrink-0 shadow-md"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span>🔀 SHUFFLE & VIEW MORE UNIQUE REVIEWS</span>
+              <span>🔀 SHUFFLE 5 REVIEWS</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 font-sans text-xs">
-            {displayTestimonials.slice(0, 12).map((t) => (
+          {/* MINIMAL 5 STATIC GRID CARDS */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 font-sans text-xs">
+            {displayTestimonials.slice(0, 5).map((t) => (
               <div key={t.id} className="bg-black/90 border border-gray-800 p-4 rounded-xl space-y-3 hover:border-[var(--primary-cyan)]/60 transition-all flex flex-col justify-between shadow-lg hover:shadow-cyan-500/10">
                 <div className="space-y-2">
                   <div className="flex items-center space-x-1 text-lime-400">
                     {[...Array(t.rating)].map((_, rIdx) => (
-                      <Star key={rIdx} className="w-3.5 h-3.5 fill-lime-400 text-lime-400" />
+                      <Star key={rIdx} className="w-3 h-3 fill-lime-400 text-lime-400" />
                     ))}
-                    <span className="text-[10px] text-lime-400 font-mono font-bold pl-1">✓ VERIFIED CLIENT/VA</span>
+                    <span className="text-[9px] text-lime-400 font-mono font-bold pl-1">✓ VERIFIED</span>
                   </div>
 
-                  <p className="text-gray-200 italic leading-relaxed text-[11px]">
+                  <p className="text-gray-200 italic leading-relaxed text-[11px] line-clamp-4">
                     "{t.text}"
                   </p>
                 </div>
 
-                <div className="flex items-center space-x-3 pt-2.5 border-t border-gray-800/80 mt-2">
+                <div className="flex items-center space-x-2.5 pt-2 border-t border-gray-800/80 mt-2">
                   <img
                     src={t.avatar}
                     alt={t.name}
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=0D9488&color=fff&size=150`;
                     }}
-                    className="w-10 h-10 rounded-full border-2 border-[var(--primary-cyan)]/50 object-cover shrink-0 shadow-md"
+                    className="w-8 h-8 rounded-full border border-[var(--primary-cyan)]/50 object-cover shrink-0 shadow-md"
                   />
                   <div className="truncate">
-                    <div className="font-bold text-white text-[12px] truncate">{t.name}</div>
-                    <div className="text-[10px] text-[var(--primary-lime)] font-mono truncate">{t.role}</div>
+                    <div className="font-bold text-white text-[11px] truncate">{t.name}</div>
+                    <div className="text-[9px] text-[var(--primary-lime)] font-mono truncate">{t.role}</div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* DYNAMIC SCROLLING MARQUEE TICKER */}
+          <div className="overflow-hidden relative bg-black/60 border border-cyan-500/20 rounded-xl p-3">
+            <div className="flex space-x-4 animate-marquee whitespace-nowrap">
+              {displayTestimonials.slice(5, 15).map((t, idx) => (
+                <div key={idx} className="inline-flex items-center space-x-3 bg-gray-900/90 border border-gray-800 px-4 py-2 rounded-lg shrink-0">
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=0D9488&color=fff&size=150`;
+                    }}
+                    className="w-6 h-6 rounded-full border border-lime-400 object-cover"
+                  />
+                  <span className="text-xs font-bold text-white font-mono">{t.name} ({t.location}):</span>
+                  <span className="text-xs text-gray-300 italic font-sans max-w-xs truncate">"{t.text}"</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </HUDPanel>
 
