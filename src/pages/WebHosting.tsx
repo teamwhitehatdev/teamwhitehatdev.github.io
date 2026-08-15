@@ -1,8 +1,11 @@
+import { useApp } from '../context/AppContext';
 import React from 'react';
 import { ExternalLink, Sparkles, Server, Zap, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 
 export const WebHosting: React.FC = () => {
+  const { getPublicPageCMSItems } = useApp();
+  const cmsHostingItems = getPublicPageCMSItems('web-hosting');
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
 
   const hostingerCards = [

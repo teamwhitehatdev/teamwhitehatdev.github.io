@@ -1,3 +1,4 @@
+import { useApp } from '../context/AppContext';
 import React, { useState } from 'react';
 import { ExternalLink, Terminal, Shield, Laptop, ShoppingBag, Sparkles, DollarSign, Award, ArrowRight } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
@@ -9,6 +10,8 @@ export const Showcase: React.FC = () => {
   const PATREON_CREATOR_LINK = "https://www.patreon.com/cw/FuturisticSoftwares";
 
   const [activeTab, setActiveTab] = useState<'all' | 'gui' | 'futuristic' | 'mobile' | 'web'>('all');
+  const { getPublicPageCMSItems } = useApp();
+  const cmsProjects = getPublicPageCMSItems('showcase');
 
   const projects = [
     {

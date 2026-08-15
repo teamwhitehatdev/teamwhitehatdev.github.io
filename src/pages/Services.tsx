@@ -1,9 +1,12 @@
+import { useApp } from '../context/AppContext';
 import React from 'react';
 import { Code, Smartphone, Shield, Cpu, CheckCircle2, ArrowRight } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { SERVICES } from '../utils/initialData';
 
 export const Services: React.FC = () => {
+  const { getPublicPageCMSItems } = useApp();
+  const cmsServices = getPublicPageCMSItems('services');
   return (
     <div className="space-y-12 max-w-6xl mx-auto px-4 py-6">
       <div className="text-center space-y-4">

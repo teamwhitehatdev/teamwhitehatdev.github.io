@@ -1,8 +1,11 @@
+import { useApp } from '../context/AppContext';
 import React, { useState } from 'react';
 import { Award, BookOpen, CheckCircle2, AlertTriangle, Zap, Flame, HelpCircle, ExternalLink, ArrowRight, ShieldCheck, Star, Layers, Sparkles, TrendingUp, ChevronDown, ChevronUp, Check, Info, Calendar, User, Lock, Video, Film, Play, Scissors, Sparkle } from 'lucide-react';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 
 export const AffiliateGuide: React.FC = () => {
+  const { getPublicPageCMSItems } = useApp();
+  const cmsAffiliateItems = getPublicPageCMSItems('affiliate-guide');
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [expandedTutorial, setExpandedTutorial] = useState<number | null>(null);
 

@@ -1,3 +1,4 @@
+import { useApp } from '../context/AppContext';
 import React from 'react';
 import { Terminal, Shield, Cpu, Code, Sparkles, CheckCircle2, ArrowRight, Zap, Globe, Eye, Layers, Atom, Activity, Rocket, ExternalLink, Award, Lock, Server, Palette } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
@@ -5,6 +6,8 @@ import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
 
 export const About: React.FC = () => {
+  const { getPublicPageCMSItems } = useApp();
+  const cmsAboutItems = getPublicPageCMSItems('about');
   return (
     <div className="space-y-10 max-w-7xl mx-auto px-4 py-6 font-mono">
       
