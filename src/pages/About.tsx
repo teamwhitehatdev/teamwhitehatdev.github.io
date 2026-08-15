@@ -1,6 +1,6 @@
 import { useApp } from '../context/AppContext';
 import React from 'react';
-import { Terminal, Shield, Cpu, Code, Sparkles, CheckCircle2, ArrowRight, Zap, Globe, Eye, Layers, Atom, Activity, Rocket, Lock, Server, Users, HelpCircle } from 'lucide-react';
+import { Terminal, Shield, Cpu, Code, Sparkles, CheckCircle2, ArrowRight, Zap, Globe, Eye, Layers, Atom, Activity, Rocket, Lock, Server, Users, HelpCircle, Smartphone } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 
 export const About: React.FC = () => {
