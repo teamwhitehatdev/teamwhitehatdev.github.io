@@ -32,188 +32,40 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
   return (
     <div className="space-y-8 font-mono">
       
-      {/* 🚀 TOP HERO MASTERCLASS BANNER: HOW TO BECOME SUCCESSFUL AFFILIATE MARKETER */}
-      <div className="bg-gradient-to-r from-purple-950 via-black to-cyan-950 border-2 border-lime-400 p-4 sm:p-6 rounded-3xl shadow-2xl space-y-3 relative overflow-hidden group">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-lime-400/20 border border-lime-400 flex items-center justify-center text-lime-400 flex-shrink-0 animate-bounce">
-              <Sparkles className="w-6 h-6" />
+      {/* 🚀 TOP MAIN HERO HEADLINE: FOCUSED 100% ON HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT */}
+      <div className="bg-gradient-to-r from-cyan-950 via-black to-purple-950 border-2 border-cyan-400 p-6 sm:p-8 rounded-3xl shadow-2xl space-y-4 relative overflow-hidden group">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-3xl">
+            <div className="inline-flex items-center space-x-2 bg-lime-400/20 border border-lime-400 px-3 py-1 rounded-full text-lime-300 text-xs font-extrabold uppercase tracking-widest">
+              <Sparkles className="w-4 h-4 text-lime-400 animate-pulse" />
+              <span>ULTIMATE VA CAREER MASTERCLASS</span>
             </div>
-            <div>
-              <span className="text-[10px] font-black text-lime-400 uppercase tracking-widest block font-mono">
-                 NEW DEDICATED GUIDE &amp; MASTERCLASS
-              </span>
-              <h2 className="text-base sm:text-xl font-black text-white font-rajdhani uppercase leading-tight">
-                HOW TO BECOME A SUCCESSFUL AFFILIATE MARKETER?
-              </h2>
-            </div>
+            <h1 className="text-3xl sm:text-5xl font-black text-white font-rajdhani uppercase tracking-wider leading-tight">
+              HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-200 font-sans leading-relaxed">
+              Master high-income remote skills, executive client assistance, workstation cybersecurity, global accredited certifications, and cloud infrastructure with Team WhiteHat Dev.
+            </p>
           </div>
 
           <Link
             to="/affiliate-guide"
-            className="px-5 py-2.5 bg-gradient-to-r from-lime-400 via-cyan-400 to-purple-400 text-black font-black font-rajdhani text-xs uppercase rounded-xl hover:scale-105 transition-all shadow-lg flex items-center space-x-1.5"
+            className="px-6 py-3.5 bg-gradient-to-r from-lime-400 via-cyan-400 to-purple-400 text-black font-black font-rajdhani text-sm uppercase rounded-xl hover:scale-105 transition-all shadow-xl flex items-center justify-center space-x-2 shrink-0"
           >
-            <span>ACCESS COMPLETE AFFILIATE MASTERCLASS &rarr;</span>
+            <span>ACCESS COMPLETE 6-STEP VA BLUEPRINT &rarr;</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-
-        <p className="text-xs text-gray-200 font-sans leading-relaxed">
-          Learn our 10 Value-First Tutorial Blueprints, 5 Problem &rarr; Solution Strategies, Wondershare Filmora 13 AI suite, and Impact.com partner referral monetization tools tailored for Virtual Assistants &amp; Freelancers!
-        </p>
       </div>
 
-      {/*  OFFICIAL ATOME CARD ₱7,800 CASHBACK & TIKTOK SHOP PERK PROMO SHOWCASE */}
-      <HUDPanel title=" OFFICIAL ATOME CARD PERKS — WIN UP TO ₱7,800 CASHBACK">
-        <div className="p-5 sm:p-6 space-y-6">
-          
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-gray-800 font-sans">
-            <div className="space-y-1">
-              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-yellow-400/20 border border-yellow-400/50 text-yellow-300 text-xs font-mono font-bold uppercase">
-                <Sparkles className="w-3.5 h-3.5 text-yellow-400 animate-pulse" />
-                <span>EXCLUSIVE ATOME CARD PERK</span>
-              </span>
-              <h3 className="text-xl sm:text-2xl font-black font-rajdhani text-white uppercase tracking-wider">
-                CONGRATULATIONS! HERE'S YOUR CHANCE TO WIN UP TO ₱7,800 CASHBACK
-              </h3>
-              <p className="text-xs text-gray-300 leading-relaxed max-w-3xl">
-                Register for Atome Card with our official referral link to get started. It’s super easy! Enjoy instant shopping discounts on TikTok Shop, zero annual fees, and up to ₱7,800 cashback rewards.
-              </p>
-            </div>
-
-            <a
-              href={ATOME_REFERRAL_LINK}
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="px-6 py-3.5 bg-gradient-to-r from-yellow-400 via-lime-400 to-cyan-400 text-black font-black font-rajdhani text-sm uppercase rounded-xl shadow-xl hover:scale-105 transition-all shrink-0 flex items-center space-x-2"
-            >
-              <span>CLAIM ₱7,800 CASHBACK &rarr;</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          </div>
-
-          {/* TWO CLICKABLE ATOME CARD AD IMAGE BANNER PLACEMENTS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* AD PLACEMENT 1: ATOME CARD ₱7,800 CASHBACK HORIZONTAL BANNER */}
-            <div className="bg-black/90 border-2 border-yellow-400/50 rounded-2xl p-4 space-y-4 shadow-xl hover:border-yellow-400 transition-all flex flex-col justify-between group">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between font-mono">
-                  <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-widest flex items-center space-x-1">
-                    <Tag className="w-3.5 h-3.5 text-lime-400" />
-                    <span>ATOME CARD OFFICIAL</span>
-                  </span>
-                  <span className="bg-yellow-400/20 text-yellow-300 text-[10px] font-bold px-2 py-0.5 rounded border border-yellow-400/40">
-                    ₱7,800 CASHBACK
-                  </span>
-                </div>
-
-                <a
-                  href={ATOME_REFERRAL_LINK}
-                  target="_blank"
-                  rel="sponsored noopener noreferrer"
-                  className="block relative overflow-hidden rounded-xl border border-gray-800 group-hover:border-yellow-400/80 transition-all"
-                >
-                  <img
-                    src="./images/atome/atome-7800-cashback.jpg"
-                    alt="Atome Card ₱7,800 Cashback Promo"
-                    className="w-full h-auto max-h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </a>
-
-                <h4 className="text-sm font-black font-rajdhani text-white uppercase pt-1">
-                  Atome Card — Win Up to ₱7,800 Cashback!
-                </h4>
-
-                <p className="text-xs text-gray-300 font-sans leading-relaxed">
-                  Register, apply, and refer to claim your ₱7,800 cashback rewards. Works worldwide for online shopping, freelancing software, and daily purchases.
-                </p>
-              </div>
-
-              <a
-                href={ATOME_REFERRAL_LINK}
-                target="_blank"
-                rel="sponsored noopener noreferrer"
-                className="w-full py-3 bg-gradient-to-r from-yellow-400 to-lime-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
-              >
-                <span>REGISTER ATOME CARD NOW</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
-
-            {/* AD PLACEMENT 2: TIKTOK SHOP X ATOME CARD VERTICAL POSTER */}
-            <div className="bg-black/90 border-2 border-pink-500/50 rounded-2xl p-4 space-y-4 shadow-xl hover:border-pink-400 transition-all flex flex-col justify-between group">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between font-mono">
-                  <span className="text-[10px] text-pink-400 font-bold uppercase tracking-widest flex items-center space-x-1">
-                    <Tag className="w-3.5 h-3.5 text-pink-400" />
-                    <span>TIKTOK SHOP PERK</span>
-                  </span>
-                  <span className="bg-pink-500/20 text-pink-300 text-[10px] font-bold px-2 py-0.5 rounded border border-pink-500/40">
-                    ₱50 OFF ORDER
-                  </span>
-                </div>
-
-                <a
-                  href={ATOME_REFERRAL_LINK}
-                  target="_blank"
-                  rel="sponsored noopener noreferrer"
-                  className="block relative overflow-hidden rounded-xl border border-gray-800 group-hover:border-pink-400/80 transition-all"
-                >
-                  <img
-                    src="./images/atome/atome-tiktok-shop.png"
-                    alt="TikTok Shop x Atome Card ₱50 Off First Order"
-                    className="w-full h-auto max-h-72 object-contain bg-black group-hover:scale-105 transition-transform duration-300"
-                  />
-                </a>
-
-                <h4 className="text-sm font-black font-rajdhani text-white uppercase pt-1">
-                  ₱50 Off Your First TikTok Shop Order with Atome Card!
-                </h4>
-
-                <p className="text-xs text-gray-300 font-sans leading-relaxed">
-                  Shop on TikTok Shop app, reach a minimum spend of ₱500, and pay using your Atome Card to enjoy instant ₱50 off discount perks!
-                </p>
-              </div>
-
-              <a
-                href={ATOME_REFERRAL_LINK}
-                target="_blank"
-                rel="sponsored noopener noreferrer"
-                className="w-full py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
-              >
-                <span>CLAIM TIKTOK SHOP ATOME PERK</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
-
-          </div>
-
-        </div>
-      </HUDPanel>
-
-      {/* HEADLINE: UN-BOXED CLEAN TITLE WITH SUBTITLE */}
-      <div className="text-center space-y-3 pt-2">
-        <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full text-cyan-300 text-xs font-bold uppercase tracking-widest">
-          <Code className="w-4 h-4 text-lime-400" />
-          <span>WHITE HAT DEV PORTFOLIO &amp; SERVICES</span>
-        </div>
-        <h1 className="text-3xl md:text-5xl font-black font-rajdhani text-white uppercase tracking-wider">
-          SOFTWARE ENGINEERING, CYBERSECURITY &amp; VIRTUAL ASSISTANCE
-        </h1>
-        <p className="text-xs md:text-sm text-gray-300 font-sans max-w-3xl mx-auto leading-relaxed">
-          High-converting web applications, mobile apps, security audits, and dedicated Virtual Assistant services engineered for business growth.
-        </p>
-      </div>
-
-      {/* MAIN TWO-COLUMN LAYOUT: CONTENT + PROMO ADS SIDEBAR */}
+      {/* MAIN TWO-COLUMN LAYOUT: CONTENT + NON-DUPLICATIVE SIDEBAR */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* MAIN CONTENT COLUMN (2 COLS) */}
         <div className="lg:col-span-2 space-y-8">
 
-          {/* MOVED FROM ABOUT PAGE: ULTIMATE GUIDE TO BECOME SUCCESSFUL VA */}
-          <HUDPanel title=" ULTIMATE GUIDE: HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT">
+          {/* ULTIMATE GUIDE TO BECOME SUCCESSFUL VA (4 CORE TOPICS) */}
+          <HUDPanel title="🎓 ULTIMATE GUIDE: HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT">
             <div className="p-4 space-y-4 font-sans text-xs">
               
               {/* VA TOPIC 1 */}
@@ -326,17 +178,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
             </div>
           </HUDPanel>
 
-          {/* DYNAMIC CATEGORIZED & SIZED AFFILIATE BANNERS SHOWCASE */}
-          <AffiliateBanners />
-
-          {/* DYNAMIC STANDALONE ROTATING AD CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <DynamicAffiliateAd category="hardware" sizeType="hero" />
-            <DynamicAffiliateAd category="creative" sizeType="hero" />
-          </div>
-
           {/* CORE VIRTUAL ASSISTANT PACKAGES */}
-          <HUDPanel title=" CORE VIRTUAL ASSISTANT PACKAGES">
+          <HUDPanel title="🛠️ CORE VIRTUAL ASSISTANT PACKAGES">
             <div className="p-4 space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
                 {[
@@ -361,18 +204,18 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
           </HUDPanel>
 
           {/* MINIMAL VERIFIED REVIEWS & ANIMATED AUTO-SCROLL TICKER */}
-          <HUDPanel title="5/5 STARS VERIFIED CLIENT &amp; VA REVIEWS (MINIMAL SLIDES &amp; TICKER)">
+          <HUDPanel title="VERIFIED CLIENT &amp; VA REVIEWS (MINIMAL SLIDES &amp; TICKER)">
             <div className="p-4 sm:p-5 space-y-5">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <p className="text-xs text-gray-300 font-sans leading-relaxed">
-                  Minimal compact showcase featuring 5 verified client &amp; VA case study reviews (avatar faces removed for ultra-clean minimalist design):
+                  Minimal compact showcase featuring verified client &amp; VA case study reviews (avatar faces removed for ultra-clean minimalist design):
                 </p>
                 <button
                   onClick={() => setDisplayTestimonials([...TESTIMONIALS_DATA].sort(() => Math.random() - 0.5))}
                   className="px-3.5 py-1.5 bg-[var(--primary-cyan)]/20 hover:bg-[var(--primary-cyan)]/40 border border-[var(--primary-cyan)] text-[var(--primary-cyan)] font-mono text-xs rounded-lg font-bold flex items-center gap-1.5 transition-all shrink-0 shadow-md"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
-                  <span> SHUFFLE REVIEWS</span>
+                  <span>SHUFFLE REVIEWS</span>
                 </button>
               </div>
 
@@ -411,7 +254,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
               {/* INFINITE ANIMATED AUTO-SCROLL MARQUEE TICKER (NO AVATARS) */}
               <div className="pt-3 border-t border-gray-800/80 space-y-1.5 overflow-hidden">
                 <span className="text-[10px] text-cyan-400 font-mono uppercase font-bold tracking-widest block text-center">
-                   LIVE MARQUEE TICKER (ANIMATED AUTO-SCROLLING REVIEWS):
+                  LIVE MARQUEE TICKER (ANIMATED AUTO-SCROLLING REVIEWS):
                 </span>
 
                 <div className="relative overflow-hidden py-1.5">
@@ -433,6 +276,135 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                     ))}
                   </div>
                 </div>
+              </div>
+
+            </div>
+          </HUDPanel>
+
+          {/* MOVED TO THE BOTTOM: OFFICIAL ATOME CARD PROMOTION SHOWCASE */}
+          <HUDPanel title="OFFICIAL ATOME CARD PERKS — WIN UP TO P7,800 CASHBACK">
+            <div className="p-5 sm:p-6 space-y-6">
+              
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-gray-800 font-sans">
+                <div className="space-y-1">
+                  <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-yellow-400/20 border border-yellow-400/50 text-yellow-300 text-xs font-mono font-bold uppercase">
+                    <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
+                    <span>EXCLUSIVE ATOME CARD PERK</span>
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-black font-rajdhani text-white uppercase tracking-wider">
+                    CONGRATULATIONS! HERE'S YOUR CHANCE TO WIN UP TO P7,800 CASHBACK
+                  </h3>
+                  <p className="text-xs text-gray-300 leading-relaxed max-w-3xl">
+                    Register for Atome Card with our official referral link to get started. It’s super easy! Enjoy instant shopping discounts on TikTok Shop, zero annual fees, and up to P7,800 cashback rewards.
+                  </p>
+                </div>
+
+                <a
+                  href={ATOME_REFERRAL_LINK}
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  className="px-6 py-3.5 bg-gradient-to-r from-yellow-400 via-lime-400 to-cyan-400 text-black font-black font-rajdhani text-sm uppercase rounded-xl shadow-xl hover:scale-105 transition-all shrink-0 flex items-center space-x-2"
+                >
+                  <span>CLAIM P7,800 CASHBACK &rarr;</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+
+              {/* TWO CLEAN ATOME CARD AD BANNER PLACEMENTS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                {/* AD PLACEMENT 1: ATOME CARD P7,800 CASHBACK HORIZONTAL BANNER */}
+                <div className="bg-black/90 border-2 border-yellow-400/50 rounded-2xl p-4 space-y-4 shadow-xl hover:border-yellow-400 transition-all flex flex-col justify-between group">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between font-mono">
+                      <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-widest flex items-center space-x-1">
+                        <Tag className="w-3.5 h-3.5 text-lime-400" />
+                        <span>ATOME CARD OFFICIAL</span>
+                      </span>
+                      <span className="bg-yellow-400/20 text-yellow-300 text-[10px] font-bold px-2 py-0.5 rounded border border-yellow-400/40">
+                        P7,800 CASHBACK
+                      </span>
+                    </div>
+
+                    <a
+                      href={ATOME_REFERRAL_LINK}
+                      target="_blank"
+                      rel="sponsored noopener noreferrer"
+                      className="block relative overflow-hidden rounded-xl border border-gray-800 group-hover:border-yellow-400/80 transition-all"
+                    >
+                      <img
+                        src="./images/atome/atome-7800-cashback.jpg"
+                        alt="Atome Card P7,800 Cashback Promo"
+                        className="w-full h-auto max-h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </a>
+
+                    <h4 className="text-sm font-black font-rajdhani text-white uppercase pt-1">
+                      Atome Card — Win Up to P7,800 Cashback!
+                    </h4>
+
+                    <p className="text-xs text-gray-300 font-sans leading-relaxed">
+                      Register, apply, and refer to claim your P7,800 cashback rewards. Works worldwide for online shopping, freelancing software, and daily purchases.
+                    </p>
+                  </div>
+
+                  <a
+                    href={ATOME_REFERRAL_LINK}
+                    target="_blank"
+                    rel="sponsored noopener noreferrer"
+                    className="w-full py-3 bg-gradient-to-r from-yellow-400 to-lime-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
+                  >
+                    <span>REGISTER ATOME CARD NOW</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+
+                {/* AD PLACEMENT 2: TIKTOK SHOP X ATOME CARD VERTICAL POSTER */}
+                <div className="bg-black/90 border-2 border-pink-500/50 rounded-2xl p-4 space-y-4 shadow-xl hover:border-pink-400 transition-all flex flex-col justify-between group">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between font-mono">
+                      <span className="text-[10px] text-pink-400 font-bold uppercase tracking-widest flex items-center space-x-1">
+                        <Tag className="w-3.5 h-3.5 text-pink-400" />
+                        <span>TIKTOK SHOP PERK</span>
+                      </span>
+                      <span className="bg-pink-500/20 text-pink-300 text-[10px] font-bold px-2 py-0.5 rounded border border-pink-500/40">
+                        P50 OFF ORDER
+                      </span>
+                    </div>
+
+                    <a
+                      href={ATOME_REFERRAL_LINK}
+                      target="_blank"
+                      rel="sponsored noopener noreferrer"
+                      className="block relative overflow-hidden rounded-xl border border-gray-800 group-hover:border-pink-400/80 transition-all"
+                    >
+                      <img
+                        src="./images/atome/atome-tiktok-shop.png"
+                        alt="TikTok Shop x Atome Card P50 Off First Order"
+                        className="w-full h-auto max-h-72 object-contain bg-black group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </a>
+
+                    <h4 className="text-sm font-black font-rajdhani text-white uppercase pt-1">
+                      P50 Off Your First TikTok Shop Order with Atome Card!
+                    </h4>
+
+                    <p className="text-xs text-gray-300 font-sans leading-relaxed">
+                      Shop on TikTok Shop app, reach a minimum spend of P500, and pay using your Atome Card to enjoy instant P50 off discount perks!
+                    </p>
+                  </div>
+
+                  <a
+                    href={ATOME_REFERRAL_LINK}
+                    target="_blank"
+                    rel="sponsored noopener noreferrer"
+                    className="w-full py-3 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 text-black font-extrabold font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
+                  >
+                    <span>CLAIM TIKTOK SHOP ATOME PERK</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+
               </div>
 
             </div>
