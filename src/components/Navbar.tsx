@@ -17,8 +17,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
     { path: '/web-hosting', label: 'WEB HOSTING' },
     { path: '/services', label: 'SERVICES' },
     { path: '/about', label: 'ABOUT' },
-    { path: '/affiliate-guide', label: '🎓 AFFILIATE MARKETER GUIDE', highlight: true },
-    { path: '/admin', label: '🎛️ CMS ADMIN' }
+    { path: '/affiliate-guide', label: '🎓 AFFILIATE MARKETER GUIDE', highlight: true }
   ];
 
   const isActive = (path: string) => location.pathname === path;

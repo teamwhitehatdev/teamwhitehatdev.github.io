@@ -13,6 +13,19 @@ export const Showcase: React.FC = () => {
   const { getPublicPageCMSItems } = useApp();
   const cmsProjects = getPublicPageCMSItems('showcase');
 
+  const formattedCMSProjects = cmsProjects.map(item => ({
+    id: item.id,
+    title: item.title,
+    category: item.category.toLowerCase().includes('gui') ? 'gui' : item.category.toLowerCase().includes('mobile') ? 'mobile' : 'web',
+    isFuturistic: true,
+    desc: item.description,
+    img: item.mainImage || './media_1786675376512.jpg',
+    gumroadUrl: item.url || GUMROAD_LINK,
+    patreonUrl: PATREON_CREATOR_LINK,
+    earnings: item.metrics || 'CMS FEATURED PROJECT',
+    tags: [item.category, 'CMS Managed']
+  }));
+
   const projects = [
     {
       id: 'net-gui-1',

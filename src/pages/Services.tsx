@@ -7,6 +7,17 @@ import { SERVICES } from '../utils/initialData';
 export const Services: React.FC = () => {
   const { getPublicPageCMSItems } = useApp();
   const cmsServices = getPublicPageCMSItems('services');
+
+  const formattedCMSServices = cmsServices.map(item => ({
+    id: item.id,
+    title: item.title,
+    category: item.category || 'va',
+    price: item.price || '$1,500 / month',
+    description: item.description,
+    features: ['CMS Managed Service', 'Custom Solution', 'Full Support', '24/7 Dedicated Team']
+  }));
+
+  const allServices = [...formattedCMSServices, ...SERVICES];
   return (
     <div className="space-y-12 max-w-6xl mx-auto px-4 py-6">
       <div className="text-center space-y-4">
@@ -21,7 +32,7 @@ export const Services: React.FC = () => {
       {/* Services Grid */}
       <HUDPanel title="ENGINEERING SERVICES">
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {SERVICES.map(s => (
+          {allServices.map(s => (
             <div key={s.id} className="bg-black/50 p-6 rounded-xl border border-gray-800 hover:border-cyan-500/50 transition-all space-y-4">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">

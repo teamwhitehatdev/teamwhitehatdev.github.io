@@ -235,7 +235,7 @@ export const Admin: React.FC = () => {
               type="password"
               value={pinInput}
               onChange={(e) => setPinInput(e.target.value)}
-              placeholder="Enter PIN (anonymousphilippines)"
+              placeholder="Enter Master Access PIN"
               className="w-full px-4 py-3 bg-black border border-cyan-500/40 rounded-xl text-white font-mono text-sm focus:outline-none focus:border-cyan-400"
             />
           </div>
