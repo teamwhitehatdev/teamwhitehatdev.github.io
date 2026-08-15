@@ -106,37 +106,60 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // INQUIRIES STATE
+    // INQUIRIES STATE WITH REALISTIC CLIENT LEADS
   const [inquiries, setInquiries] = useState<ContactInquiry[]>(() => {
     try {
       const saved = localStorage.getItem('wh_inquiries');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
     } catch (e) {}
-    // Seed initial demo inquiries so user sees inquiries in Admin
+    // Seed initial realistic client booking inquiries for CMS admin
     return [
       {
-        id: 'inq-1',
-        name: 'Maria Santos',
-        email: 'maria.santos@agency.com',
+        id: 'inq-101',
+        name: 'Samantha Vance',
+        email: 'samantha.vance@techcorp.us',
         service: 'Executive Virtual Assistance ($15/hr)',
-        message: 'Hi Team WhiteHat! I need a dedicated VA to manage client email scheduling, social media reels editing, and website maintenance.',
-        timestamp: new Date().toLocaleTimeString(),
-        ipAddress: '112.203.45.12',
-        country: 'Philippines 🇵🇭',
+        message: 'Hi Team WhiteHat! We need a full-time executive VA for email triage, calendar management, and client onboarding.',
+        timestamp: new Date(Date.now() - 1000 * 60 * 30).toLocaleString(),
+        ipAddress: '172.56.21.90',
+        country: 'United States 🇺🇸',
         device: 'Desktop'
       },
       {
-        id: 'inq-2',
-        name: 'John Miller',
-        email: 'john@ecombrand.io',
+        id: 'inq-102',
+        name: 'David Reynolds',
+        email: 'david@ukdigitalagency.co.uk',
+        service: 'Full-Stack Web Development ($499/proj)',
+        message: 'Hello! I saw your portfolio. We want to hire your team to build a high-converting Next.js & React web application.',
+        timestamp: new Date(Date.now() - 1000 * 60 * 120).toLocaleString(),
+        ipAddress: '82.165.197.1',
+        country: 'United Kingdom 🇬🇧',
+        device: 'Desktop'
+      },
+      {
+        id: 'inq-103',
+        name: 'Maria Santos',
+        email: 'maria.santos@manilastartup.ph',
         service: 'Hostinger Web Hosting Setup',
-        message: 'Looking for assistance transferring 5 client WordPress stores to Hostinger LiteSpeed hosting using referral code DPDCABINCEHM.',
-        timestamp: new Date().toLocaleTimeString(),
-        ipAddress: '172.56.21.90',
-        country: 'United States 🇺🇸',
+        message: 'Inquiring about web hosting migration to Hostinger LiteSpeed servers using code DPDCABINCEHM.',
+        timestamp: new Date(Date.now() - 1000 * 60 * 360).toLocaleString(),
+        ipAddress: '112.203.45.12',
+        country: 'Philippines 🇵🇭',
         device: 'Mobile'
+      },
+      {
+        id: 'inq-104',
+        name: 'Alexander Wright',
+        email: 'alex@ausventures.com.au',
+        service: 'Mobile App Development ($799/proj)',
+        message: 'Need a cross-platform mobile application for Android & iOS published on Google Play Store.',
+        timestamp: new Date(Date.now() - 1000 * 60 * 720).toLocaleString(),
+        ipAddress: '103.252.200.4',
+        country: 'Australia 🇦🇺',
+        device: 'Tablet'
       }
     ];
   });
