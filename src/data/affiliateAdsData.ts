@@ -15,6 +15,47 @@ export interface AffiliateAdItem {
 }
 
 export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
+  // TEMU HARDWARE AFFILIATE AD PLACEMENT
+  {
+    id: 'temu-dvd-burner-hero',
+    brand: 'TEMU Hardware',
+    category: 'hardware',
+    sizeType: 'hero',
+    width: 600,
+    height: 300,
+    clickUrl: 'https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358',
+    imageUrl: 'https://img.kwcdn.com/product/fancy/817dd41d-fdee-491f-982e-63f9589eb14a.jpg',
+    title: 'TEMU External CD/DVD Drive USB 2.0 Slim Portable Burner',
+    description: 'TEMU External Cd Dvd, Usb 2.0 Slim Protable External Cd-rw Dvd-rw Burner For Laptop Notebook Pc Desktop Computer.',
+    badge: 'TEMU HARDWARE DEAL'
+  },
+  {
+    id: 'temu-dvd-burner-medium',
+    brand: 'TEMU Hardware',
+    category: 'hardware',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358',
+    imageUrl: 'https://img.kwcdn.com/product/fancy/817dd41d-fdee-491f-982e-63f9589eb14a.jpg',
+    title: 'TEMU USB 2.0 Portable CD/DVD-RW Burner',
+    description: 'Plug & Play External CD-RW DVD-RW Burner for Laptop, Notebook, PC & Desktop Computer.',
+    badge: 'TEMU TECH DEAL'
+  },
+  {
+    id: 'temu-dvd-burner-skyscraper',
+    brand: 'TEMU Hardware',
+    category: 'hardware',
+    sizeType: 'skyscraper',
+    width: 160,
+    height: 600,
+    clickUrl: 'https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358',
+    imageUrl: 'https://img.kwcdn.com/product/fancy/817dd41d-fdee-491f-982e-63f9589eb14a.jpg',
+    title: 'TEMU Slim CD/DVD Burner for PC/Laptop',
+    description: 'Slim Portable External CD-RW DVD-RW Burner.',
+    badge: 'HOT DEAL'
+  },
+
   // ATOME CARD OFFICIAL REFERRAL ADS
   {
     id: 'atome-card-7800-cashback',

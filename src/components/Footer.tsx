@@ -61,6 +61,13 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
+                <a href="https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358" target="_blank" rel="sponsored noopener noreferrer" className="hover:text-orange-300 transition-colors flex items-center justify-center sm:justify-start space-x-1 py-0.5">
+                  <Sparkles className="w-3 h-3 text-orange-400" />
+                  <span>TEMU External CD/DVD Burner</span>
+                </a>
+              </li>
+
+              <li>
                 <a href="https://wondersharesoftware.pxf.io/c/5024116/1266881/15586" target="_blank" rel="sponsored noopener noreferrer" className="hover:text-purple-300 transition-colors flex items-center justify-center sm:justify-start space-x-1 py-0.5">
                   <Sparkles className="w-3 h-3 text-purple-400" />
                   <span>Wondershare AI Creator Suite</span>
