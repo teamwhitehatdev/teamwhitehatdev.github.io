@@ -12,7 +12,8 @@ export const AffiliateGuide: React.FC = () => {
   // COLLAPSIBLE PANEL DIVISIONS STATE
   const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({
     hostinger: true,
-    capcut: true
+    capcut: true,
+    wondershare: true
   });
 
   const togglePanel = (key: string) => {
@@ -21,6 +22,14 @@ export const AffiliateGuide: React.FC = () => {
 
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
   const CAPCUT_REFERRAL_LINK = "https://capcutaffiliateprogram.pxf.io/WqmL1e";
+
+  // WONDERSHARE OFFICIAL REFERRAL LINKS & TRACKING CODES
+  const WONDERSHARE_VIRBO_LINK = "https://wondersharesoftware.pxf.io/c/5024116/2882021/15586";
+  const WONDERSHARE_FILMORA_LINK = "https://wondersharesoftware.pxf.io/c/5024116/1485636/15586";
+  const WONDERSHARE_STORE_LINK = "https://wondersharesoftware.pxf.io/c/5024116/1266881/15586";
+  const WONDERSHARE_PDFELEMENT_LINK = "https://wondersharesoftware.pxf.io/c/5024116/3801344/15586";
+  const MEDIAIO_PHOTO_LINK = "https://wondersharesoftware.pxf.io/c/5024116/2135551/15586";
+
 
   const hostingerTutorials = [
     {

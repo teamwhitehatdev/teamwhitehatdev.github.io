@@ -304,73 +304,78 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
       </div>
 
       {/* 5 MINIMAL VERIFIED REVIEWS & DYNAMIC SMOOTH SCROLL MARQUEE */}
-      <HUDPanel title="⭐⭐⭐⭐⭐ VERIFIED CLIENT & VA REVIEWS (MINIMAL 5 DISPLAY & SCROLL)">
-        <div className="p-5 sm:p-6 space-y-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            {/* MINIMAL VERIFIED REVIEWS & ANIMATED AUTO-SCROLL TICKER */}
+      <HUDPanel title="⭐⭐⭐⭐⭐ VERIFIED CLIENT &amp; VA REVIEWS (MINIMAL SLIDES &amp; TICKER)">
+        <div className="p-4 sm:p-5 space-y-5">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="text-xs text-gray-300 font-sans leading-relaxed">
-              Minimal showcase featuring 5 verified non-repeating photos & case study reviews from our global network of Virtual Assistants and creators:
+              Minimal compact showcase featuring 5 verified client &amp; VA case study reviews (avatar faces removed for ultra-clean minimalist design):
             </p>
             <button
               onClick={() => setDisplayTestimonials([...TESTIMONIALS].sort(() => Math.random() - 0.5))}
-              className="px-4 py-2 bg-[var(--primary-cyan)]/20 hover:bg-[var(--primary-cyan)]/40 border border-[var(--primary-cyan)] text-[var(--primary-cyan)] font-mono text-xs rounded-lg font-bold flex items-center gap-2 transition-all shrink-0 shadow-md"
+              className="px-3.5 py-1.5 bg-[var(--primary-cyan)]/20 hover:bg-[var(--primary-cyan)]/40 border border-[var(--primary-cyan)] text-[var(--primary-cyan)] font-mono text-xs rounded-lg font-bold flex items-center gap-1.5 transition-all shrink-0 shadow-md"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span>🔀 SHUFFLE 5 REVIEWS</span>
+              <span>🔀 SHUFFLE REVIEWS</span>
             </button>
           </div>
 
-          {/* MINIMAL 5 STATIC GRID CARDS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 font-sans text-xs">
+          {/* MINIMAL 5 STATIC COMPACT CARDS (NO AVATAR FACES) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 font-sans text-xs">
             {displayTestimonials.slice(0, 5).map((t) => (
-              <div key={t.id} className="bg-black/90 border border-gray-800 p-4 rounded-xl space-y-3 hover:border-[var(--primary-cyan)]/60 transition-all flex flex-col justify-between shadow-lg hover:shadow-cyan-500/10">
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-1 text-lime-400">
-                    {[...Array(t.rating)].map((_, rIdx) => (
-                      <Star key={rIdx} className="w-3 h-3 fill-lime-400 text-lime-400" />
-                    ))}
-                    <span className="text-[9px] text-lime-400 font-mono font-bold pl-1">✓ VERIFIED</span>
+              <div key={t.id} className="bg-black/90 border border-gray-800 p-3 rounded-xl space-y-2 hover:border-[var(--primary-cyan)]/60 transition-all flex flex-col justify-between shadow-md">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-lime-400">
+                    <div className="flex items-center space-x-0.5">
+                      {[...Array(t.rating)].map((_, rIdx) => (
+                        <Star key={rIdx} className="w-3 h-3 fill-lime-400 text-lime-400" />
+                      ))}
+                    </div>
+                    <span className="text-[9px] text-lime-400 font-mono font-bold">VERIFIED</span>
                   </div>
 
-                  <p className="text-gray-200 italic leading-relaxed text-[11px] line-clamp-4">
+                  <p className="text-gray-200 italic leading-relaxed text-[11px] line-clamp-3">
                     "{t.text}"
                   </p>
                 </div>
 
-                <div className="flex items-center space-x-2.5 pt-2 border-t border-gray-800/80 mt-2">
-                  <img
-                    src={t.avatar}
-                    alt={t.name}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=0D9488&color=fff&size=150`;
-                    }}
-                    className="w-8 h-8 rounded-full border border-[var(--primary-cyan)]/50 object-cover shrink-0 shadow-md"
-                  />
-                  <div className="truncate">
-                    <div className="font-bold text-white text-[11px] truncate">{t.name}</div>
-                    <div className="text-[9px] text-[var(--primary-lime)] font-mono truncate">{t.role}</div>
+                <div className="pt-2 border-t border-gray-800/80 mt-1 flex items-center justify-between">
+                  <div>
+                    <h5 className="font-extrabold text-white text-xs font-rajdhani uppercase leading-none">{t.name}</h5>
+                    <p className="text-[9px] text-[var(--primary-cyan)] font-mono font-bold pt-0.5">{t.country} • {t.role}</p>
                   </div>
+                  <span className="w-5 h-5 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 font-mono font-bold text-[9px] shrink-0">
+                    {t.name.charAt(0)}
+                  </span>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* DYNAMIC SCROLLING MARQUEE TICKER */}
-          <div className="overflow-hidden relative bg-black/60 border border-cyan-500/20 rounded-xl p-3">
-            <div className="flex space-x-4 animate-marquee whitespace-nowrap">
-              {displayTestimonials.slice(5, 15).map((t, idx) => (
-                <div key={idx} className="inline-flex items-center space-x-3 bg-gray-900/90 border border-gray-800 px-4 py-2 rounded-lg shrink-0">
-                  <img
-                    src={t.avatar}
-                    alt={t.name}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=0D9488&color=fff&size=150`;
-                    }}
-                    className="w-6 h-6 rounded-full border border-lime-400 object-cover"
-                  />
-                  <span className="text-xs font-bold text-white font-mono">{t.name} ({t.location}):</span>
-                  <span className="text-xs text-gray-300 italic font-sans max-w-xs truncate">"{t.text}"</span>
-                </div>
-              ))}
+          {/* INFINITE ANIMATED AUTO-SCROLL MARQUEE TICKER (NO AVATARS) */}
+          <div className="pt-3 border-t border-gray-800/80 space-y-1.5 overflow-hidden">
+            <span className="text-[10px] text-cyan-400 font-mono uppercase font-bold tracking-widest block text-center">
+              ⚡ LIVE MARQUEE TICKER (ANIMATED AUTO-SCROLLING REVIEWS):
+            </span>
+
+            <div className="relative overflow-hidden py-1.5">
+              <div className="flex space-x-3 animate-marqueeSlow whitespace-nowrap hover:[animation-play-state:paused]">
+                {TESTIMONIALS.concat(TESTIMONIALS).map((t, idx) => (
+                  <div
+                    key={`ticker_${t.id}_${idx}`}
+                    className="inline-flex items-center space-x-2 bg-gray-900/90 border border-gray-800 hover:border-lime-400/50 px-3 py-1.5 rounded-lg flex-shrink-0 text-xs font-mono transition-all shadow-sm"
+                  >
+                    <div className="flex items-center space-x-0.5 text-lime-400">
+                      {[...Array(t.rating)].map((_, rIdx) => (
+                        <Star key={rIdx} className="w-2.5 h-2.5 fill-lime-400 text-lime-400" />
+                      ))}
+                    </div>
+                    <span className="font-extrabold text-white font-rajdhani">{t.name}</span>
+                    <span className="text-gray-400">({t.country})</span>
+                    <span className="text-lime-300 italic font-sans text-[11px]">"{t.text.slice(0, 45)}..."</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
