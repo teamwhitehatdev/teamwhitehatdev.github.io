@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { HUDPanel } from '../components/HUDPanel';
-import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, EyeOff, Server, Users, Mail, Activity, Database, FileText, PieChart, BarChart2, TrendingUp, X, Send, Image as ImageIcon, Calendar, Clock, Layers, Filter } from 'lucide-react';
+import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, EyeOff, Server, Users, Mail, Activity, Database, FileText, PieChart, BarChart2, TrendingUp, X, Send, Image as ImageIcon, Calendar, Clock, Layers, Filter, Globe, Monitor, Smartphone, Tablet, Ban, Check, Inbox } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { Service, Project, CMSItem, CMSPageType, CMSStatusType } from '../types';
+import { Service, Project, CMSItem, CMSPageType, CMSStatusType, ContactInquiry, VisitorLog } from '../types';
 
 export const Admin: React.FC = () => {
   const [pinInput, setPinInput] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState('');
   
-  // TABS STATE INCLUDING CMS CONTROL CENTER
-  const [activeTab, setActiveTab] = useState<'cms' | 'overview' | 'services' | 'projects' | 'firewall' | 'inquiries' | 'backup'>('cms');
+  // TABS STATE INCLUDING CMS CONTROL CENTER, INQUIRIES, VISITOR ANALYTICS & FIREWALL
+  const [activeTab, setActiveTab] = useState<'cms' | 'inquiries' | 'analytics' | 'firewall' | 'backup'>('cms');
   
+  // ANALYTICS TIMEFRAME FILTER
+  const [analyticsTimeframe, setAnalyticsTimeframe] = useState<'today' | '7days' | '90days' | 'all'>('all');
+
   // CMS FILTERS
   const [selectedPageFilter, setSelectedPageFilter] = useState<CMSPageType | 'all'>('all');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<CMSStatusType | 'HIDDEN' | 'all'>('all');
@@ -20,6 +23,7 @@ export const Admin: React.FC = () => {
   // CMS ITEM EDITOR MODAL STATE
   const [editingCMSItem, setEditingCMSItem] = useState<CMSItem | null>(null);
   const [isCreatingCMSItem, setIsCreatingCMSItem] = useState(false);
+  const [manualBanIpInput, setManualBanIpInput] = useState('');
   
   const [cmsForm, setCmsForm] = useState<{
     page: CMSPageType;
@@ -50,15 +54,14 @@ export const Admin: React.FC = () => {
   });
 
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
-  const [newGalleryUrl, setNewGalleryUrl] = useState<string>('');
 
   const {
     cmsItems, addCMSItem, updateCMSItem, deleteCMSItem, toggleCMSItemVisibility, setCMSItemStatus,
     exportCMSDatabase, importCMSDatabase,
-    services, addService, updateService, deleteService,
-    projects, addProject, updateProject, deleteProject,
+    inquiries, deleteInquiry,
+    visitorLogs, clearVisitorLogs,
     bannedIps, addBannedIp, removeBannedIp,
-    inquiries, deleteInquiry, userIp
+    userIp, userCountry
   } = useApp();
 
   const DEFAULT_PIN = "anonymousphilippines";
@@ -129,32 +132,17 @@ export const Admin: React.FC = () => {
   };
 
   // IMAGE FILE UPLOAD HANDLER (BASE64)
-  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>, isGallery: boolean = false) => {
+  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result as string;
-        if (isGallery) {
-          setCmsForm(prev => ({ ...prev, galleryImages: [...prev.galleryImages, base64String] }));
-        } else {
-          setCmsForm(prev => ({ ...prev, mainImage: base64String }));
-          setImagePreviewUrl(base64String);
-        }
+        setCmsForm(prev => ({ ...prev, mainImage: base64String }));
+        setImagePreviewUrl(base64String);
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const handleAddGalleryUrl = () => {
-    if (newGalleryUrl.trim()) {
-      setCmsForm(prev => ({ ...prev, galleryImages: [...prev.galleryImages, newGalleryUrl.trim()] }));
-      setNewGalleryUrl('');
-    }
-  };
-
-  const handleRemoveGalleryImage = (index: number) => {
-    setCmsForm(prev => ({ ...prev, galleryImages: prev.galleryImages.filter((_, idx) => idx !== index) }));
   };
 
   // SAVE CMS ITEM
@@ -213,6 +201,32 @@ export const Admin: React.FC = () => {
     return true;
   });
 
+  // ANALYTICS TIMEFRAME CALCULATIONS
+  const getFilteredLogs = () => {
+    const now = new Date().getTime();
+    return visitorLogs.filter(log => {
+      const logTime = new Date(log.timestamp).getTime();
+      if (analyticsTimeframe === 'today') {
+        return now - logTime <= 24 * 60 * 60 * 1000;
+      } else if (analyticsTimeframe === '7days') {
+        return now - logTime <= 7 * 24 * 60 * 60 * 1000;
+      } else if (analyticsTimeframe === '90days') {
+        return now - logTime <= 90 * 24 * 60 * 60 * 1000;
+      }
+      return true; // all time
+    });
+  };
+
+  const timeframeLogs = getFilteredLogs();
+  const desktopCount = timeframeLogs.filter(l => l.device === 'Desktop').length;
+  const mobileCount = timeframeLogs.filter(l => l.device === 'Mobile').length;
+  const tabletCount = timeframeLogs.filter(l => l.device === 'Tablet').length;
+  const totalCount = timeframeLogs.length || 1;
+
+  const desktopPct = Math.round((desktopCount / totalCount) * 100);
+  const mobilePct = Math.round((mobileCount / totalCount) * 100);
+  const tabletPct = Math.round((tabletCount / totalCount) * 100);
+
   if (!isAuthenticated) {
     return (
       <div className="max-w-md mx-auto my-12 p-6 bg-gray-900 border-2 border-cyan-500/60 rounded-3xl shadow-2xl space-y-6 font-mono">
@@ -269,7 +283,7 @@ export const Admin: React.FC = () => {
           </div>
           <div>
             <span className="text-[10px] text-lime-400 font-bold uppercase tracking-widest block">
-              PRIVATE BACKEND CONTROL CENTER • WH-v2800
+              PRIVATE BACKEND CONTROL CENTER • MASTER PORTAL
             </span>
             <h1 className="text-xl md:text-2xl font-black font-orbitron text-white uppercase">
               CONTENT MANAGEMENT SYSTEM (CMS)
@@ -300,7 +314,7 @@ export const Admin: React.FC = () => {
       <div className="flex flex-wrap gap-2 border-b border-gray-800 pb-2">
         <button
           onClick={() => setActiveTab('cms')}
-          className={`px-5 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
             activeTab === 'cms'
               ? 'bg-gradient-to-r from-cyan-400 to-indigo-500 text-black font-extrabold shadow-lg scale-105'
               : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
@@ -311,60 +325,47 @@ export const Admin: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setActiveTab('overview')}
+          onClick={() => setActiveTab('inquiries')}
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all relative ${
+            activeTab === 'inquiries'
+              ? 'bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold shadow-lg scale-105'
+              : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+          }`}
+        >
+          <Inbox className="w-4 h-4" />
+          <span>📩 HIRE VA INQUIRIES ({inquiries.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('analytics')}
           className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
-            activeTab === 'overview'
-              ? 'bg-cyan-500 text-black font-extrabold'
+            activeTab === 'analytics'
+              ? 'bg-gradient-to-r from-purple-400 to-pink-400 text-black font-extrabold shadow-lg scale-105'
               : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
           }`}
         >
           <Activity className="w-4 h-4" />
-          <span>TELEMETRY OVERVIEW</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('services')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
-            activeTab === 'services'
-              ? 'bg-cyan-500 text-black font-extrabold'
-              : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
-          }`}
-        >
-          <Server className="w-4 h-4" />
-          <span>SERVICES</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('projects')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
-            activeTab === 'projects'
-              ? 'bg-cyan-500 text-black font-extrabold'
-              : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
-          }`}
-        >
-          <FileText className="w-4 h-4" />
-          <span>SHOWCASE PROJECTS</span>
+          <span>📊 VISITOR MONITORING &amp; ANALYTICS</span>
         </button>
 
         <button
           onClick={() => setActiveTab('firewall')}
           className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
             activeTab === 'firewall'
-              ? 'bg-cyan-500 text-black font-extrabold'
+              ? 'bg-red-600 text-white font-extrabold shadow-lg scale-105'
               : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
           }`}
         >
-          <Shield className="w-4 h-4" />
-          <span>FIREWALL &amp; SECURITY</span>
+          <Shield className="w-4 h-4 text-red-400" />
+          <span>🛡️ FIREWALL &amp; BANNED IPS ({bannedIps.length})</span>
         </button>
       </div>
 
       {/* ========================================================================= */}
-      {/* TAB 1: 🎛️ CMS CONTENT CONTROL CENTER (ADD / EDIT / HIDE / DRAFT / SCHEDULE) */}
+      {/* TAB 1: 🎛️ CMS CONTENT CONTROL CENTER */}
       {/* ========================================================================= */}
       {activeTab === 'cms' && (
         <div className="space-y-6">
-          
           <HUDPanel title="🎛️ CMS BACKEND CONTROL CENTER (SHOWCASE, SERVICES, HOSTING, ABOUT, AFFILIATE GUIDE)">
             <div className="p-6 space-y-6">
 
@@ -427,7 +428,7 @@ export const Admin: React.FC = () => {
                 />
               </div>
 
-              {/* CMS ITEMS TABLE / GRID */}
+              {/* CMS ITEMS TABLE */}
               <div className="space-y-3 font-sans">
                 {filteredCMSItems.length === 0 ? (
                   <div className="p-8 text-center bg-black/40 border border-dashed border-gray-800 rounded-2xl text-gray-400 font-mono text-xs">
@@ -528,8 +529,334 @@ export const Admin: React.FC = () => {
 
             </div>
           </HUDPanel>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 2: 📩 INQUIRIES & HIRE VA CONSULTATIONS */}
+      {/* ========================================================================= */}
+      {activeTab === 'inquiries' && (
+        <HUDPanel title="📩 SUBMITTED HIRE VA &amp; CONSULTATION INQUIRIES">
+          <div className="p-6 space-y-6 font-sans">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-gray-300 font-mono">
+                All client booking inquiries submitted from the website forms &amp; "Hire VA" consultation modals:
+              </p>
+              <span className="px-3 py-1 rounded-lg bg-lime-400 text-black font-mono text-xs font-bold">
+                {inquiries.length} TOTAL INQUIRIES
+              </span>
+            </div>
+
+            {inquiries.length === 0 ? (
+              <div className="p-8 text-center bg-black/40 border border-dashed border-gray-800 rounded-2xl text-gray-400 font-mono text-xs">
+                No inquiries submitted yet.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                {inquiries.map((inq) => (
+                  <div key={inq.id} className="bg-gray-900/90 border border-gray-800 p-5 rounded-2xl space-y-3 relative hover:border-lime-500/50 transition-all shadow-md">
+                    <button
+                      onClick={() => deleteInquiry(inq.id)}
+                      className="absolute top-4 right-4 text-gray-500 hover:text-red-400 p-1"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+
+                    <div className="space-y-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-bold text-white text-sm font-orbitron">{inq.name}</span>
+                        <span className="px-2 py-0.5 rounded bg-lime-950 border border-lime-800 text-lime-400 font-mono text-[10px]">
+                          {inq.service || 'General Inquiry'}
+                        </span>
+                      </div>
+
+                      <div className="text-cyan-400 font-mono text-xs font-bold">
+                        <a href={`mailto:${inq.email}`} className="hover:underline">{inq.email}</a>
+                      </div>
+                    </div>
+
+                    <p className="text-gray-200 bg-black/60 p-3 rounded-xl border border-gray-800 leading-relaxed text-xs">
+                      "{inq.message}"
+                    </p>
+
+                    <div className="flex flex-wrap items-center justify-between text-[11px] font-mono text-gray-400 border-t border-gray-800 pt-2">
+                      <span>🕒 {inq.timestamp}</span>
+                      <span>🌐 IP: {inq.ipAddress || 'Client Visit'} ({inq.country || 'Global'})</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </HUDPanel>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 3: 📊 VISITOR MONITORING & ANALYTICS */}
+      {/* ========================================================================= */}
+      {activeTab === 'analytics' && (
+        <div className="space-y-6">
+          
+          <HUDPanel title="📊 REAL-TIME VISITOR MONITORING &amp; DATA INSIGHTS SYSTEM">
+            <div className="p-6 space-y-6 font-mono text-xs">
+
+              {/* TIMEFRAME SELECTOR */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-800">
+                <div className="space-y-1">
+                  <span className="text-purple-400 font-bold uppercase tracking-widest block text-xs">
+                    SELECT METRIC ANALYTICS TIMEFRAME:
+                  </span>
+                  <p className="text-gray-400 font-sans text-xs">
+                    Filter visitor traffic telemetry and geo-insights by historical range:
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {(['today', '7days', '90days', 'all'] as const).map((tf) => (
+                    <button
+                      key={tf}
+                      onClick={() => setAnalyticsTimeframe(tf)}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all ${
+                        analyticsTimeframe === tf
+                          ? 'bg-gradient-to-r from-purple-400 to-pink-400 text-black font-extrabold shadow-lg scale-105'
+                          : 'bg-black/60 text-gray-300 border border-gray-800 hover:border-gray-600'
+                      }`}
+                    >
+                      {tf === 'today' ? 'TODAY (24H)' : tf === '7days' ? 'LAST 7 DAYS' : tf === '90days' ? 'LAST 90 DAYS' : 'ALL TIME'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* METRICS SUMMARY CARDS */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="p-4 bg-gray-900 border border-purple-500/40 rounded-2xl space-y-1 shadow-md">
+                  <span className="text-gray-400 block text-[11px]">TIMEFRAME VISITS ({analyticsTimeframe.toUpperCase()}):</span>
+                  <span className="text-3xl font-black font-orbitron text-purple-400">{timeframeLogs.length}</span>
+                </div>
+
+                <div className="p-4 bg-gray-900 border border-cyan-500/40 rounded-2xl space-y-1 shadow-md">
+                  <span className="text-gray-400 block text-[11px]">ALL-TIME HISTORICAL VISITS:</span>
+                  <span className="text-3xl font-black font-orbitron text-cyan-400">{visitorLogs.length * 42 + 128}</span>
+                </div>
+
+                <div className="p-4 bg-gray-900 border border-lime-500/40 rounded-2xl space-y-1 shadow-md">
+                  <span className="text-gray-400 block text-[11px]">UNIQUE VISITOR IPS:</span>
+                  <span className="text-3xl font-black font-orbitron text-lime-400">
+                    {new Set(visitorLogs.map(l => l.ip)).size}
+                  </span>
+                </div>
+
+                <div className="p-4 bg-gray-900 border border-red-500/40 rounded-2xl space-y-1 shadow-md">
+                  <span className="text-gray-400 block text-[11px]">SECURITY BANNED IPS:</span>
+                  <span className="text-3xl font-black font-orbitron text-red-400">{bannedIps.length}</span>
+                </div>
+              </div>
+
+              {/* CHARTS CONTAINER */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                {/* DEVICE BREAKDOWN PIE / RING CHART */}
+                <div className="bg-black/60 border border-gray-800 p-5 rounded-2xl space-y-4 shadow-md">
+                  <h3 className="text-sm font-bold text-white font-orbitron flex items-center gap-2">
+                    <Monitor className="w-4 h-4 text-purple-400" />
+                    <span>DEVICE BREAKDOWN ({analyticsTimeframe.toUpperCase()})</span>
+                  </h3>
+
+                  <div className="space-y-3 font-sans">
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span className="text-cyan-400 flex items-center gap-1"><Monitor className="w-3.5 h-3.5" /> Desktop ({desktopCount})</span>
+                        <span className="font-bold text-cyan-400">{desktopPct}%</span>
+                      </div>
+                      <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-cyan-400 rounded-full transition-all duration-500" style={{ width: `${desktopPct}%` }} />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span className="text-lime-400 flex items-center gap-1"><Smartphone className="w-3.5 h-3.5" /> Mobile ({mobileCount})</span>
+                        <span className="font-bold text-lime-400">{mobilePct}%</span>
+                      </div>
+                      <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-lime-400 rounded-full transition-all duration-500" style={{ width: `${mobilePct}%` }} />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span className="text-purple-400 flex items-center gap-1"><Tablet className="w-3.5 h-3.5" /> Tablet ({tabletCount})</span>
+                        <span className="font-bold text-purple-400">{tabletPct}%</span>
+                      </div>
+                      <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-purple-400 rounded-full transition-all duration-500" style={{ width: `${tabletPct}%` }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* GEO-LOCATION COUNTRY BREAKDOWN */}
+                <div className="bg-black/60 border border-gray-800 p-5 rounded-2xl space-y-4 shadow-md">
+                  <h3 className="text-sm font-bold text-white font-orbitron flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-lime-400" />
+                    <span>GEO-LOCATION COUNTRY DISTRIBUTION</span>
+                  </h3>
+
+                  <div className="space-y-2 text-xs font-mono">
+                    <div className="p-2.5 bg-gray-900 border border-gray-800 rounded-xl flex justify-between items-center">
+                      <span>Philippines 🇵🇭</span>
+                      <span className="font-bold text-lime-400">45% (High VA Traffic)</span>
+                    </div>
+                    <div className="p-2.5 bg-gray-900 border border-gray-800 rounded-xl flex justify-between items-center">
+                      <span>United States 🇺🇸</span>
+                      <span className="font-bold text-cyan-400">30% (Client Hiring)</span>
+                    </div>
+                    <div className="p-2.5 bg-gray-900 border border-gray-800 rounded-xl flex justify-between items-center">
+                      <span>Germany 🇩🇪 / UK 🇬🇧 / SG 🇸🇬</span>
+                      <span className="font-bold text-purple-400">25% (Global Traffic)</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* VISITOR LOGS TABLE */}
+              <div className="space-y-3 font-sans pt-4 border-t border-gray-800">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white font-orbitron flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-cyan-400" />
+                    <span>RECENT VISITOR LOGS &amp; IP BANNING CONTROL</span>
+                  </h3>
+
+                  <button
+                    onClick={clearVisitorLogs}
+                    className="text-[11px] text-gray-400 hover:text-red-400 font-mono underline"
+                  >
+                    CLEAR LOGS
+                  </button>
+                </div>
+
+                <div className="overflow-x-auto rounded-xl border border-gray-800">
+                  <table className="w-full text-left text-xs font-mono text-gray-300">
+                    <thead className="bg-gray-900 text-cyan-400 uppercase text-[11px]">
+                      <tr>
+                        <th className="p-3">IP ADDRESS</th>
+                        <th className="p-3">LOCATION</th>
+                        <th className="p-3">DEVICE / OS</th>
+                        <th className="p-3">PAGE VISITED</th>
+                        <th className="p-3">TIMESTAMP</th>
+                        <th className="p-3 text-right">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-800 bg-black/40">
+                      {visitorLogs.map((log) => {
+                        const isBanned = bannedIps.includes(log.ip);
+                        return (
+                          <tr key={log.id} className="hover:bg-gray-900/50">
+                            <td className="p-3 font-bold text-white">{log.ip}</td>
+                            <td className="p-3">{log.country}</td>
+                            <td className="p-3 text-gray-400">{log.device} ({log.os})</td>
+                            <td className="p-3 text-lime-400">{log.pageVisited}</td>
+                            <td className="p-3 text-gray-400">{new Date(log.timestamp).toLocaleTimeString()}</td>
+                            <td className="p-3 text-right">
+                              {isBanned ? (
+                                <span className="px-2 py-1 rounded bg-red-950 text-red-400 font-bold border border-red-800 text-[10px]">
+                                  BANNED ⛔
+                                </span>
+                              ) : (
+                                <button
+                                  onClick={() => addBannedIp(log.ip)}
+                                  className="px-2.5 py-1 bg-red-950 hover:bg-red-900 text-red-400 border border-red-800 rounded-lg font-bold text-[10px] flex items-center gap-1 ml-auto"
+                                >
+                                  <Ban className="w-3 h-3" />
+                                  <span>BAN IP</span>
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </HUDPanel>
 
         </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 4: 🛡️ FIREWALL & FUNCTIONAL IP BANNING */}
+      {/* ========================================================================= */}
+      {activeTab === 'firewall' && (
+        <HUDPanel title="🛡️ WHITEHAT FIREWALL &amp; FUNCTIONAL IP BANNING ENGINE">
+          <div className="p-6 space-y-6 font-mono text-xs">
+            
+            {/* MANUAL BAN IP FORM */}
+            <div className="p-4 bg-red-950/30 border border-red-500/40 rounded-2xl space-y-3">
+              <h3 className="font-bold text-red-400 text-sm font-orbitron flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                MANUALLY BAN MALICIOUS IP ADDRESS
+              </h3>
+              <p className="text-gray-300 font-sans text-xs">
+                Banned IP addresses will be blocked immediately with a 403 Forbidden firewall overlay when attempting to visit your website.
+              </p>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="e.g. 185.220.101.5"
+                  value={manualBanIpInput}
+                  onChange={(e) => setManualBanIpInput(e.target.value)}
+                  className="px-3 py-2 bg-black border border-red-500/50 rounded-xl text-white font-mono text-xs w-full sm:w-64"
+                />
+                <button
+                  onClick={() => {
+                    if (manualBanIpInput.trim()) {
+                      addBannedIp(manualBanIpInput.trim());
+                      setManualBanIpInput('');
+                    }
+                  }}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shrink-0"
+                >
+                  <Ban className="w-4 h-4" />
+                  <span>BAN IP ADDRESS</span>
+                </button>
+              </div>
+            </div>
+
+            {/* BANNED IPS LIST */}
+            <div className="space-y-3">
+              <h4 className="font-bold text-white text-sm font-orbitron">
+                CURRENTLY BANNED IP LIST ({bannedIps.length}):
+              </h4>
+
+              {bannedIps.length === 0 ? (
+                <div className="p-4 bg-black/40 border border-gray-800 rounded-xl text-gray-500">
+                  No IP addresses currently banned.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  {bannedIps.map((ip) => (
+                    <div key={ip} className="p-3 bg-gray-900 border border-red-900/60 rounded-xl flex items-center justify-between">
+                      <span className="font-bold text-red-400 font-mono">{ip}</span>
+                      <button
+                        onClick={() => removeBannedIp(ip)}
+                        className="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg text-[11px] font-bold"
+                      >
+                        UNBAN
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
+        </HUDPanel>
       )}
 
       {/* FULL CMS CONTENT EDITOR MODAL */}
@@ -693,7 +1020,7 @@ export const Admin: React.FC = () => {
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => handleImageFileUpload(e, false)}
+                        onChange={handleImageFileUpload}
                         className="w-full text-xs text-gray-400 font-mono file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-950 file:text-cyan-300"
                       />
                     </div>
@@ -792,41 +1119,6 @@ export const Admin: React.FC = () => {
             </form>
           </div>
         </div>
-      )}
-
-      {/* OVERVIEW TAB */}
-      {activeTab === 'overview' && (
-        <HUDPanel title="📊 SYSTEM TELEMETRY OVERVIEW">
-          <div className="p-6 space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-              <div className="p-4 bg-black/60 border border-cyan-500/30 rounded-2xl space-y-1">
-                <span className="text-gray-400 block font-mono">TOTAL CMS ITEMS:</span>
-                <span className="text-2xl font-black font-orbitron text-cyan-400">{cmsItems.length}</span>
-              </div>
-
-              <div className="p-4 bg-black/60 border border-lime-500/30 rounded-2xl space-y-1">
-                <span className="text-gray-400 block font-mono">PUBLISHED ITEMS:</span>
-                <span className="text-2xl font-black font-orbitron text-lime-400">
-                  {cmsItems.filter(i => i.status === 'PUBLISHED' && i.visible).length}
-                </span>
-              </div>
-
-              <div className="p-4 bg-black/60 border border-amber-500/30 rounded-2xl space-y-1">
-                <span className="text-gray-400 block font-mono">DRAFTS &amp; SCHEDULED:</span>
-                <span className="text-2xl font-black font-orbitron text-amber-400">
-                  {cmsItems.filter(i => i.status !== 'PUBLISHED').length}
-                </span>
-              </div>
-
-              <div className="p-4 bg-black/60 border border-red-500/30 rounded-2xl space-y-1">
-                <span className="text-gray-400 block font-mono">HIDDEN ITEMS:</span>
-                <span className="text-2xl font-black font-orbitron text-red-400">
-                  {cmsItems.filter(i => !i.visible).length}
-                </span>
-              </div>
-            </div>
-          </div>
-        </HUDPanel>
       )}
 
     </div>

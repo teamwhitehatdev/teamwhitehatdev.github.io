@@ -44,8 +44,25 @@ export interface ContactInquiry {
   id: string;
   name: string;
   email: string;
+  service?: string;
   message: string;
   timestamp: string;
+  ipAddress?: string;
+  country?: string;
+  device?: string;
+}
+
+// VISITOR TELEMETRY & GEO LOG
+export interface VisitorLog {
+  id: string;
+  ip: string;
+  country: string;
+  city?: string;
+  device: 'Desktop' | 'Mobile' | 'Tablet';
+  browser: string;
+  os: string;
+  pageVisited: string;
+  timestamp: string; // ISO date string
 }
 
 // CMS BACKEND TYPES

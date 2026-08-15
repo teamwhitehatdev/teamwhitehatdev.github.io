@@ -20,7 +20,7 @@ export const AffiliateGuide: React.FC = () => {
   };
 
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
-  const CAPCUT_REFERRAL_LINK = "https://www.capcut.com?referral=teamwhitehatdev";
+  const CAPCUT_REFERRAL_LINK = "https://capcutaffiliateprogram.pxf.io/WqmL1e";
 
   const hostingerTutorials = [
     {
