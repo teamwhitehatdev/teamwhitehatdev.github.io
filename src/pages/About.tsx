@@ -1,16 +1,14 @@
 import { useApp } from '../context/AppContext';
 import React from 'react';
-import { Terminal, Shield, Cpu, Code, Sparkles, CheckCircle2, ArrowRight, Zap, Globe, Eye, Layers, Atom, Activity, Rocket, ExternalLink, Award, Lock, Server, Users, HelpCircle } from 'lucide-react';
+import { Terminal, Shield, Cpu, Code, Sparkles, CheckCircle2, ArrowRight, Zap, Globe, Eye, Layers, Atom, Activity, Rocket, Lock, Server, Users, HelpCircle } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
-import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
-import { DynamicAffiliateAd } from '../components/DynamicAffiliateAd';
 
 export const About: React.FC = () => {
   const { getPublicPageCMSItems } = useApp();
   const cmsAboutItems = getPublicPageCMSItems('about');
 
   return (
-    <div className="space-y-10 max-w-7xl mx-auto px-4 py-6 font-mono">
+    <div className="space-y-10 max-w-5xl mx-auto px-4 py-6 font-mono">
       
       {/* HEADER HERO */}
       <div className="text-center space-y-4 max-w-4xl mx-auto">
@@ -26,145 +24,116 @@ export const About: React.FC = () => {
         </p>
       </div>
 
-      {/* DYNAMIC CMS CONTENT ITEMS */}
+      {/* DYNAMIC CMS ANNOUNCEMENTS */}
       {cmsAboutItems.length > 0 && (
-        <HUDPanel title=" CMS PUBLISHED ANNOUNCEMENTS &amp; UPDATES">
+        <HUDPanel title="⚡ CMS PUBLISHED ANNOUNCEMENTS &amp; UPDATES">
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             {cmsAboutItems.map(item => (
               <div key={item.id} className="bg-black/90 border border-cyan-500/40 p-4 rounded-xl space-y-2">
-                {item.mainImage && (
-                  <img src={item.mainImage} alt={item.title} className="w-full h-40 object-cover rounded-lg border border-gray-800" />
-                )}
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-cyan-400 font-mono font-bold uppercase">{item.category}</span>
-                  <span className="text-[10px] text-lime-400 font-mono font-bold">UPDATED</span>
+                <div className="flex items-center justify-between text-xs text-lime-400 font-bold">
+                  <span>{item.category?.toUpperCase() || 'ANNOUNCEMENT'}</span>
+                  <span className="text-[10px] text-gray-400 font-sans">{new Date(item.createdAt).toLocaleDateString()}</span>
                 </div>
-                <h4 className="text-sm font-bold font-rajdhani text-white uppercase">{item.title}</h4>
+                <h3 className="text-sm font-bold text-white font-rajdhani uppercase">{item.title}</h3>
                 <p className="text-xs text-gray-300 font-sans leading-relaxed">{item.description}</p>
-                {item.url && (
-                  <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 font-mono font-bold hover:underline inline-flex items-center gap-1 pt-1">
-                    <span>EXPLORE LINK</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                )}
               </div>
             ))}
           </div>
         </HUDPanel>
       )}
 
-      {/* MAIN CONTENT LAYOUT WITH SIDEBAR */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* LEFT COLUMN: ABOUT TEAM WHITEHAT DETAILS (2 COLS) */}
-        <div className="lg:col-span-2 space-y-8">
+      {/* PURPOSE & MISSION PANEL */}
+      <HUDPanel title="🎯 OUR PURPOSE &amp; ETHICAL MISSION">
+        <div className="p-6 space-y-4 font-sans text-xs sm:text-sm text-gray-300 leading-relaxed">
+          <div className="bg-black/90 border border-gray-800 p-5 rounded-2xl space-y-3">
+            <h3 className="text-lg font-black font-rajdhani text-white uppercase flex items-center space-x-2">
+              <Shield className="w-5 h-5 text-cyan-400" />
+              <span>TRANSPARENT DIGITAL TOOLS &amp; ETHICAL SECURITY ETHICS</span>
+            </h3>
+            <p>
+              At <strong className="text-white font-mono">Team WhiteHat Dev</strong>, our core purpose is to bridge the gap between high-level software engineering and practical remote work solutions. We believe in providing transparent, reliable digital tools and executive virtual assistant services built on strict WhiteHat security ethics.
+            </p>
+            <p>
+              Whether you are an international business seeking a dedicated virtual assistant, an e-commerce startup building a web application, or a freelancer looking to upskill in remote work technologies, our platform provides authoritative blueprints and verified infrastructure.
+            </p>
+          </div>
+        </div>
+      </HUDPanel>
 
-          {/* OUR PURPOSE & MISSION */}
-          <HUDPanel title=" OUR PURPOSE &amp; MISSION">
-            <div className="p-5 space-y-4 font-sans text-xs">
-              <p className="text-gray-200 leading-relaxed">
-                The primary purpose of <strong className="text-white font-mono">Team WhiteHat Dev</strong> is to empower businesses, remote freelancers, and Virtual Assistants with cutting-edge technology tools, transparent infrastructure guidance, and high-performance digital services.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono">
-                <div className="p-4 bg-black/80 border border-cyan-500/30 rounded-xl space-y-1.5">
-                  <span className="text-cyan-400 font-bold text-xs flex items-center gap-1.5">
-                    <Shield className="w-4 h-4 text-lime-400" />
-                    <span>ETHICAL STANDARDS</span>
-                  </span>
-                  <p className="text-[11px] text-gray-300 font-sans">
-                    We practice WhiteHat security ethics, protecting digital assets against cyber threats with AES-256 telemetry.
-                  </p>
-                </div>
-
-                <div className="p-4 bg-black/80 border border-purple-500/30 rounded-xl space-y-1.5">
-                  <span className="text-purple-400 font-bold text-xs flex items-center gap-1.5">
-                    <Cpu className="w-4 h-4 text-purple-400" />
-                    <span>FUTURE TECH</span>
-                  </span>
-                  <p className="text-[11px] text-gray-300 font-sans">
-                    Integrating AI automation, cloud web hosting, and mobile software architecture for maximum performance.
-                  </p>
-                </div>
+      {/* 4 CORE PILLARS PANEL */}
+      <HUDPanel title="⚙️ WHAT IS TEAM WHITE HAT DEV? (4 CORE PILLARS)">
+        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <div className="bg-black/90 border border-gray-800 p-5 rounded-2xl space-y-2.5 hover:border-cyan-400 transition-all">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/40 text-cyan-400 flex items-center justify-center">
+                <Code className="w-5 h-5" />
               </div>
+              <h3 className="text-base font-black font-rajdhani text-white uppercase">
+                1. FULL-STACK WEB DEVELOPMENT
+              </h3>
             </div>
-          </HUDPanel>
+            <p className="text-xs text-gray-300 font-sans leading-relaxed">
+              We design and build ultra-fast, responsive Single Page Applications (SPAs) using modern web technologies including React, TypeScript, Vite, and Tailwind CSS.
+            </p>
+          </div>
 
-          {/* WHAT IS TEAM WHITEHAT DEV? (4 CORE PILLARS) */}
-          <HUDPanel title=" WHAT IS TEAM WHITE HAT DEV? (4 CORE PILLARS)">
-            <div className="p-5 space-y-4 font-sans text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono">
-                
-                <div className="bg-black/90 border border-gray-800 p-4 rounded-xl space-y-2 hover:border-cyan-500/50 transition-all">
-                  <div className="flex items-center space-x-2 text-cyan-400 font-bold">
-                    <Code className="w-4 h-4" />
-                    <span>1. FULL-STACK WEB DEV</span>
-                  </div>
-                  <p className="text-gray-300 font-sans leading-relaxed text-[11px]">
-                    Custom React, TypeScript, and Vite single-page applications optimized for search engine visibility and zero latency.
-                  </p>
-                </div>
-
-                <div className="bg-black/90 border border-gray-800 p-4 rounded-xl space-y-2 hover:border-lime-500/50 transition-all">
-                  <div className="flex items-center space-x-2 text-lime-400 font-bold">
-                    <Rocket className="w-4 h-4" />
-                    <span>2. MOBILE APP DEV</span>
-                  </div>
-                  <p className="text-gray-300 font-sans leading-relaxed text-[11px]">
-                    Native Android &amp; iOS application development published on Google Play Store with real-time push notifications.
-                  </p>
-                </div>
-
-                <div className="bg-black/90 border border-gray-800 p-4 rounded-xl space-y-2 hover:border-purple-500/50 transition-all">
-                  <div className="flex items-center space-x-2 text-purple-400 font-bold">
-                    <Shield className="w-4 h-4" />
-                    <span>3. CYBERSECURITY</span>
-                  </div>
-                  <p className="text-gray-300 font-sans leading-relaxed text-[11px]">
-                    Vulnerability audits, firewall implementation, SSL encryption verification, and active IP banning telemetry.
-                  </p>
-                </div>
-
-                <div className="bg-black/90 border border-gray-800 p-4 rounded-xl space-y-2 hover:border-pink-500/50 transition-all">
-                  <div className="flex items-center space-x-2 text-pink-400 font-bold">
-                    <Users className="w-4 h-4" />
-                    <span>4. VIRTUAL ASSISTANCE</span>
-                  </div>
-                  <p className="text-gray-300 font-sans leading-relaxed text-[11px]">
-                    Dedicated executive assistant services, email management, social media reels editing, and client appointment booking.
-                  </p>
-                </div>
-
+          <div className="bg-black/90 border border-gray-800 p-5 rounded-2xl space-y-2.5 hover:border-cyan-400 transition-all">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/40 text-purple-400 flex items-center justify-center">
+                <Smartphone className="w-5 h-5" />
               </div>
+              <h3 className="text-base font-black font-rajdhani text-white uppercase">
+                2. MOBILE APP DEVELOPMENT
+              </h3>
             </div>
-          </HUDPanel>
+            <p className="text-xs text-gray-300 font-sans leading-relaxed">
+              Our software engineering team publishes cross-platform Android &amp; iOS mobile applications directly to the official Google Play Console and App Stores.
+            </p>
+          </div>
 
-          {/* MOTTO & BRAND VISION */}
-          <HUDPanel title=" OUR BRAND MOTTO &amp; VISION">
-            <div className="p-5 space-y-3 font-sans text-xs">
-              <div className="p-4 bg-gradient-to-r from-cyan-950 via-gray-900 to-purple-950 border border-cyan-500/40 rounded-xl space-y-2 text-center font-mono">
-                <span className="text-lime-400 font-black text-sm tracking-widest block uppercase">
-                  "LEARN. CREATE. DEVELOP. ASSIST. GROW."
-                </span>
-                <p className="text-xs text-gray-300 font-sans italic max-w-xl mx-auto">
-                  "We don't just build software for today. We explore what software and digital assistance can become tomorrow."
-                </p>
+          <div className="bg-black/90 border border-gray-800 p-5 rounded-2xl space-y-2.5 hover:border-cyan-400 transition-all">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-lime-500/10 border border-lime-500/40 text-lime-400 flex items-center justify-center">
+                <Shield className="w-5 h-5" />
               </div>
+              <h3 className="text-base font-black font-rajdhani text-white uppercase">
+                3. CYBERSECURITY &amp; ACTIVE FIREWALL
+              </h3>
             </div>
-          </HUDPanel>
+            <p className="text-xs text-gray-300 font-sans leading-relaxed">
+              We implement real-time visitor telemetry, AES-256 connection security, and automated IP banning firewall overlays to protect digital assets from unauthorized access.
+            </p>
+          </div>
 
-          {/* DYNAMIC AFFILIATE STANDALONE PLACEMENTS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <DynamicAffiliateAd category="security" sizeType="hero" />
-            <DynamicAffiliateAd category="education" sizeType="hero" />
+          <div className="bg-black/90 border border-gray-800 p-5 rounded-2xl space-y-2.5 hover:border-cyan-400 transition-all">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/40 text-pink-400 flex items-center justify-center">
+                <Users className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-black font-rajdhani text-white uppercase">
+                4. EXECUTIVE VIRTUAL ASSISTANCE
+              </h3>
+            </div>
+            <p className="text-xs text-gray-300 font-sans leading-relaxed">
+              We connect global founders with highly trained Virtual Assistants for executive email triage, calendar scheduling, reels editing, and administrative CRM management.
+            </p>
           </div>
 
         </div>
+      </HUDPanel>
 
-        {/* DEDICATED PROMO ADS COLUMN (1 COL) */}
-        <aside className="lg:col-span-1 border-t lg:border-t-0 lg:border-l-2 border-cyan-500/40 lg:pl-6 space-y-6 sticky top-24">
-          <DynamicAdsSidebar />
-        </aside>
-
+      {/* BRAND MOTTO & VISION */}
+      <div className="bg-gradient-to-r from-cyan-950 via-black to-purple-950 border-2 border-lime-400 p-6 sm:p-8 rounded-3xl text-center space-y-3 shadow-2xl">
+        <span className="text-xs font-bold text-lime-400 uppercase tracking-widest block font-mono">
+          OUR MOTTO &amp; GUIDING VISION
+        </span>
+        <h2 className="text-2xl sm:text-4xl font-black font-rajdhani text-white uppercase tracking-wider">
+          "LEARN. CREATE. DEVELOP. ASSIST. GROW."
+        </h2>
+        <p className="text-xs sm:text-sm text-gray-300 font-sans max-w-2xl mx-auto leading-relaxed">
+          We don't just build software for today. We explore what software, remote assistance, and digital empowerment can become tomorrow.
+        </p>
       </div>
 
     </div>
