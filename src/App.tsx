@@ -79,6 +79,7 @@ export function AppContent() {
                 <Route path="/services" element={<Services onOpenConsultation={(svc) => handleOpenConsultation(svc)} />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/affiliate-guide" element={<AffiliateGuide />} />
+                <Route path="/affiliate-guide/" element={<AffiliateGuide />} />
                 <Route path="/admin" element={<Admin />} />
               </Routes>
             </main>
