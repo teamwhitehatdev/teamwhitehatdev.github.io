@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Terminal, Shield, Zap, Code, CheckCircle2, ArrowRight, ExternalLink, Sparkles, Star, Award, BookOpen, Layers, Play, DollarSign, ShoppingBag } from 'lucide-react';
+import { Terminal, Shield, Zap, Code, CheckCircle2, ArrowRight, ExternalLink, Sparkles, Star, Award, BookOpen, Layers, Play, DollarSign, ShoppingBag, RefreshCw } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { AffiliateBanners } from '../components/AffiliateBanners';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
