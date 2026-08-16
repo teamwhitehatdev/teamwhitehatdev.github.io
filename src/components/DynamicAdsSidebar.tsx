@@ -11,8 +11,7 @@ export const DynamicAdsSidebar: React.FC = () => {
     const uniqueAds: AffiliateAdItem[] = [];
 
     for (const ad of shuffled) {
-      // Normalize brand key to guarantee ZERO duplicate ads from the same provider (e.g. TEMU)
-      const brandKey = ad.brand.toLowerCase().replace(/hardware|tech|official|x tiktok|suite/g, '').trim();
+      const brandKey = ad.brand.toLowerCase().trim();
       if (!seenBrands.has(brandKey)) {
         seenBrands.add(brandKey);
         uniqueAds.push(ad);
@@ -27,7 +26,7 @@ export const DynamicAdsSidebar: React.FC = () => {
     refreshAds();
     const interval = setInterval(() => {
       refreshAds();
-    }, 15000);
+    }, 12000);
     return () => clearInterval(interval);
   }, []);
 
@@ -37,7 +36,7 @@ export const DynamicAdsSidebar: React.FC = () => {
       <div className="flex items-center justify-between bg-black/90 border border-cyan-500/40 p-3 rounded-2xl">
         <span className="text-xs font-bold text-cyan-300 uppercase tracking-widest flex items-center space-x-1.5">
           <Sparkles className="w-4 h-4 text-lime-400" />
-          <span>VERIFIED PARTNER DEALS</span>
+          <span>IMPACT VERIFIED PARTNER BANNERS</span>
         </span>
         <button
           onClick={refreshAds}
@@ -45,7 +44,7 @@ export const DynamicAdsSidebar: React.FC = () => {
           title="Refresh Deals"
         >
           <RefreshCw className="w-3.5 h-3.5" />
-          <span>ROTATING</span>
+          <span>ROTATE BANNERS</span>
         </button>
       </div>
 
@@ -62,16 +61,20 @@ export const DynamicAdsSidebar: React.FC = () => {
               </span>
             </div>
 
-            {ad.iframeUrl ? (
-              <div className="rounded-xl overflow-hidden border border-gray-800 bg-black flex justify-center py-1">
-                <iframe src={ad.iframeUrl} width="100%" height={ad.height} scrolling="no" frameBorder="0" />
-              </div>
-            ) : (
-              <a href={ad.clickUrl} target="_blank" rel="sponsored noopener noreferrer" className="block relative group rounded-xl overflow-hidden border border-gray-800">
-                <img src={ad.imageUrl} alt={ad.title} className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300" />
-                {ad.pixelUrl && <img src={ad.pixelUrl} width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }} alt="" />}
-              </a>
-            )}
+            {/* CLICKABLE IMPACT AFFILIATE IMAGE BANNER */}
+            <a
+              href={ad.clickUrl}
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="block relative group rounded-xl overflow-hidden border border-gray-800 hover:border-cyan-400 transition-all"
+            >
+              <img
+                src={ad.imageUrl}
+                alt={ad.title}
+                className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              {ad.pixelUrl && <img src={ad.pixelUrl} width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }} alt="" />}
+            </a>
 
             <h4 className="text-xs font-black font-rajdhani text-white uppercase leading-tight">
               {ad.title}
@@ -87,7 +90,7 @@ export const DynamicAdsSidebar: React.FC = () => {
               rel="sponsored noopener noreferrer"
               className="w-full py-2 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-black font-rajdhani text-xs uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
             >
-              <span>CLAIM DISCOUNT &rarr;</span>
+              <span>CLAIM {ad.brand.toUpperCase()} DEAL &rarr;</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
