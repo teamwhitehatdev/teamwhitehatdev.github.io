@@ -9,7 +9,7 @@ export const ImpactAffiliateBanners: React.FC = () => {
         <div className="space-y-1">
           <span className="text-xs font-bold text-lime-400 uppercase tracking-widest flex items-center space-x-1.5">
             <Sparkles className="w-4 h-4 text-lime-400 animate-pulse" />
-            <span>VERIFIED IMPACT AFFILIATE PARTNER BANNERS</span>
+            <span>VERIFIED IMPACT.COM AFFILIATE PARTNER BANNERS</span>
           </span>
           <h3 className="text-xl font-black font-rajdhani text-white uppercase tracking-wider">
             HIGH-CONVERTING PARTNER DEALS &amp; SOFTWARE DISCOUNTS
@@ -31,15 +31,21 @@ export const ImpactAffiliateBanners: React.FC = () => {
                 </span>
               </div>
 
+              {/* DIRECT IMPACT AFFILIATE IMAGE BANNER WITH FAILPROOF FALLBACK */}
               <a
                 href={ad.clickUrl}
                 target="_blank"
                 rel="sponsored noopener noreferrer"
-                className="block relative overflow-hidden rounded-xl border border-gray-800 group-hover:border-cyan-400 transition-all"
+                className="block relative overflow-hidden rounded-xl border border-gray-800 group-hover:border-cyan-400 transition-all bg-gray-900"
               >
                 <img
                   src={ad.imageUrl}
                   alt={ad.title}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = `./images/affiliates/${ad.brand.toLowerCase()}-banner.jpg`;
+                  }}
                   className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 {ad.pixelUrl && <img src={ad.pixelUrl} width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }} alt="" />}

@@ -36,7 +36,7 @@ export const DynamicAdsSidebar: React.FC = () => {
       <div className="flex items-center justify-between bg-black/90 border border-cyan-500/40 p-3 rounded-2xl">
         <span className="text-xs font-bold text-cyan-300 uppercase tracking-widest flex items-center space-x-1.5">
           <Sparkles className="w-4 h-4 text-lime-400" />
-          <span>IMPACT VERIFIED PARTNER BANNERS</span>
+          <span>IMPACT.COM PARTNER DEALS</span>
         </span>
         <button
           onClick={refreshAds}
@@ -61,16 +61,21 @@ export const DynamicAdsSidebar: React.FC = () => {
               </span>
             </div>
 
-            {/* CLICKABLE IMPACT AFFILIATE IMAGE BANNER */}
+            {/* DIRECT IMPACT AFFILIATE IMAGE BANNER WITH FAILPROOF FALLBACK */}
             <a
               href={ad.clickUrl}
               target="_blank"
               rel="sponsored noopener noreferrer"
-              className="block relative group rounded-xl overflow-hidden border border-gray-800 hover:border-cyan-400 transition-all"
+              className="block relative group rounded-xl overflow-hidden border border-gray-800 hover:border-cyan-400 transition-all bg-gray-900"
             >
               <img
                 src={ad.imageUrl}
                 alt={ad.title}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = `./images/affiliates/${ad.brand.toLowerCase()}-banner.jpg`;
+                }}
                 className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
               />
               {ad.pixelUrl && <img src={ad.pixelUrl} width="0" height="0" style={{ position: 'absolute', visibility: 'hidden' }} alt="" />}
@@ -90,7 +95,7 @@ export const DynamicAdsSidebar: React.FC = () => {
               rel="sponsored noopener noreferrer"
               className="w-full py-2 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-black font-rajdhani text-xs uppercase rounded-xl text-center shadow hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
             >
-              <span>CLAIM {ad.brand.toUpperCase()} DEAL &rarr;</span>
+              <span>CLAIM {ad.brand.toUpperCase()} OFFER &rarr;</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
