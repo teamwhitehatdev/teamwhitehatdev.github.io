@@ -18,6 +18,7 @@ interface AppContextType {
   // VISITOR LOGS TELEMETRY
   visitorLogs: VisitorLog[];
   clearVisitorLogs: () => void;
+  logVisitorPageNavigation: (pagePath: string) => void;
 
   // CAPTCHA & MODALS
   isCaptchaOpen: boolean;
@@ -308,6 +309,58 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // BANNED IPS FUNCTIONS
+    const logVisitorPageNavigation = (pagePath: string) => {
+    const ua = navigator.userAgent;
+    let dev = 'Desktop';
+    if (/tablet|ipad|playbook|silk/i.test(ua)) dev = 'Tablet';
+    else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated/i.test(ua)) dev = 'Mobile';
+
+    let bro = 'Chrome';
+    if (ua.indexOf('Firefox') > -1) bro = 'Firefox';
+    else if (ua.indexOf('SamsungBrowser') > -1) bro = 'Samsung Browser';
+    else if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) bro = 'Opera';
+    else if (ua.indexOf('Edge') > -1 || ua.indexOf('Edg') > -1) bro = 'Edge';
+    else if (ua.indexOf('Chrome') > -1) bro = 'Chrome';
+    else if (ua.indexOf('Safari') > -1) bro = 'Safari';
+
+    let osName = 'Windows';
+    if (ua.indexOf('Win') > -1) osName = 'Windows';
+    else if (ua.indexOf('Mac') > -1) osName = 'macOS';
+    else if (ua.indexOf('Linux') > -1) osName = 'Linux';
+    else if (ua.indexOf('Android') > -1) osName = 'Android';
+    else if (ua.indexOf('like Mac') > -1) osName = 'iOS';
+
+    const res = window.screen.width + 'x' + window.screen.height;
+    const lang = navigator.language || 'en-US';
+    const ref = document.referrer ? new URL(document.referrer).hostname : 'Direct Traffic';
+    const timeIso = new Date().toISOString();
+
+    const newEntry: VisitorLog = {
+      id: 'v-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+      ip: userIp || '127.0.0.1',
+      country: userCountry || 'Global Visitor 🌐',
+      city: 'Metro Area',
+      region: 'Central Region',
+      org: 'Internet Provider',
+      device: dev,
+      browser: bro,
+      os: osName,
+      page: pagePath || '/',
+      referrer: ref,
+      screenResolution: res,
+      language: lang,
+      timestamp: timeIso,
+      status: bannedIps.includes(userIp) ? 'BANNED ⛔' : 'AUTHORIZED ✅'
+    };
+
+    setVisitorLogs(prev => {
+      if (prev.length > 0 && prev[0].page === pagePath && (new Date().getTime() - new Date(prev[0].timestamp).getTime() < 3000)) {
+        return prev;
+      }
+      return [newEntry, ...prev.slice(0, 250)];
+    });
+  };
+
   const addBannedIp = (ip: string) => {
     if (!bannedIps.includes(ip.trim())) {
       setBannedIps(prev => [...prev, ip.trim()]);
@@ -360,7 +413,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   return (
     <AppContext.Provider value={{
       services, projects, affiliates, testimonials, inquiries, bannedIps, userIp, userCountry, userDevice, isUserBanned,
-      visitorLogs, clearVisitorLogs,
+      visitorLogs, clearVisitorLogs, logVisitorPageNavigation,
       isCaptchaOpen, setIsCaptchaOpen, pendingCheckoutAction, setPendingCheckoutAction,
       cmsItems, addCMSItem, updateCMSItem, deleteCMSItem, toggleCMSItemVisibility, setCMSItemStatus,
       getPublicPageCMSItems, exportCMSDatabase, importCMSDatabase,

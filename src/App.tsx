@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { StockTicker } from './components/StockTicker';
 import { Footer } from './components/Footer';
@@ -21,6 +21,18 @@ import { BannedOverlay } from './components/BannedOverlay';
 import { useSecurityShield } from './components/SecurityEngine';
 import ThemeEngine from './components/ThemeEngine';
 import { AppProvider, useApp } from './context/AppContext';
+
+
+function VisitorPageTracker() {
+  const location = useLocation();
+  const { logVisitorPageNavigation } = useApp();
+
+  useEffect(() => {
+    logVisitorPageNavigation(location.pathname);
+  }, [location.pathname]);
+
+  return null;
+}
 
 export function AppContent() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
@@ -63,6 +75,7 @@ export function AppContent() {
 
   return (
     <Router>
+      <VisitorPageTracker />
       <ThemeEngine>
         <div className="relative min-h-screen bg-gray-950 text-gray-100 flex flex-col font-sans select-none">
           <CyberBackground />
