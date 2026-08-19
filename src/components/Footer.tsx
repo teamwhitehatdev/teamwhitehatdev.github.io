@@ -45,6 +45,18 @@ export const Footer: React.FC = () => {
               <li><a href="#/" className="hover:text-cyan-300 transition-colors">Home Page</a></li>
               <li><a href="#/services" className="hover:text-cyan-300 transition-colors">Services &amp; Pricing</a></li>
               <li><a href="#/about" className="hover:text-cyan-300 transition-colors">About Us</a></li>
+              
+              <li>
+                <a
+                  href="https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae"
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  className="text-cyan-300 hover:text-white transition-colors flex items-center space-x-1 font-bold"
+                >
+                  <span>🎁 Microsoft Rewards (Free Giftcards Link)</span>
+                </a>
+              </li>
+
               <li><a href="#/affiliate-guide" className="hover:text-cyan-300 transition-colors">Affiliate Marketer Guide</a></li>
               <li><a href="#/admin" className="hover:text-cyan-300 transition-colors">Stealth CMS Admin Log</a></li>
             </ul>

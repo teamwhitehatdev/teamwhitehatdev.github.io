@@ -17,6 +17,23 @@ export interface AffiliateAdItem {
 
 export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
   // ==========================================
+  // MICROSOFT REWARDS / EDGE BROWSER REFERRAL
+  // ==========================================
+  {
+    id: 'microsoft-rewards-browser-item',
+    brand: 'Microsoft Rewards',
+    category: 'education',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae',
+    imageUrl: './images/affiliates/coursera-banner.jpg',
+    title: 'Earn Free Gift Cards & Rewards Searching with Microsoft Edge & Bing',
+    description: 'Turn daily internet searches into free gift cards, Xbox credits, and cash vouchers using Microsoft Rewards with your referral bonus.',
+    badge: 'FREE REWARDS'
+  },
+
+  // ==========================================
   // 1. WONDERSHARE VIRBO AI SUITE (IMPACT.COM / pxf.io)
   // ==========================================
   {

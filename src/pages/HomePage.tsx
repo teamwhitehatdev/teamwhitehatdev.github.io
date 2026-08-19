@@ -31,7 +31,44 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
   return (
     <div className="space-y-8 font-mono">
       
-      {/* 🚀 TOP MAIN HERO HEADLINE: FOCUSED 100% ON HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT */}
+      
+        {/* MICROSOFT BROWSER & REWARDS REFERRAL PROMO CARD */}
+        <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border-2 border-blue-500/50 rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
+          <div className="flex items-center space-x-3">
+            <div className="p-3 bg-blue-500/20 border border-blue-400/40 rounded-2xl">
+              <span className="text-2xl">🌐</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest block font-mono">
+                PASSIVE VA EARNING TIP — FREE GIFTCARDS &amp; REWARDS
+              </span>
+              <h3 className="text-lg sm:text-2xl font-black text-white uppercase font-rajdhani">
+                EARN WHILE YOU SEARCH USING MICROSOFT BROWSER &amp; BING
+              </h3>
+            </div>
+          </div>
+
+          <p className="text-xs sm:text-sm text-gray-200 font-sans leading-relaxed">
+            Did you know Virtual Assistants can earn free gift cards, shopping vouchers, and points every single day just by conducting everyday client web research using Microsoft Edge and Bing Search? Sign up using our exclusive referral link to claim bonus start-up points!
+          </p>
+
+          <div className="pt-2 flex flex-wrap items-center gap-3">
+            <a
+              href="https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="inline-flex items-center space-x-2 px-6 py-3.5 bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 text-black font-black font-rajdhani text-xs sm:text-sm uppercase rounded-2xl shadow-xl hover:scale-105 transition-all"
+            >
+              <span>CLAIM MICROSOFT REWARDS REFERRAL BONUS &rarr;</span>
+            </a>
+            <span className="text-[11px] text-cyan-300 font-mono">
+              ★ Recommended for all Virtual Assistants &amp; Web Researchers
+            </span>
+          </div>
+        </div>
+
+
+        {/* 🚀 TOP MAIN HERO HEADLINE: FOCUSED 100% ON HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT */}
       <div className="bg-gradient-to-r from-cyan-950 via-black to-purple-950 border-2 border-cyan-400 p-6 sm:p-8 rounded-3xl shadow-2xl space-y-4 relative overflow-hidden group">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
