@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { INITIAL_CMS_ITEMS } from '../utils/initialData';
 import { UNIQUE_AFFILIATE_ADS, AffiliateAdItem } from '../data/affiliateAdsData';
 
 export type CMSPageType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide' | 'announcements';
@@ -109,7 +110,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
     try {
       const saved = localStorage.getItem('twhd_cms_items');
-      return saved ? JSON.parse(saved) : [];
+      return saved ? JSON.parse(saved) : INITIAL_CMS_ITEMS;
     } catch (e) {
       return [];
     }
@@ -148,7 +149,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>(() => {
     try {
       const saved = localStorage.getItem('twhd_visitor_logs');
-      return saved ? JSON.parse(saved) : [];
+      return saved ? JSON.parse(saved) : INITIAL_CMS_ITEMS;
     } catch (e) {
       return [];
     }
@@ -188,7 +189,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [inquiries, setInquiries] = useState<InquiryItem[]>(() => {
     try {
       const saved = localStorage.getItem('twhd_inquiries');
-      return saved ? JSON.parse(saved) : [];
+      return saved ? JSON.parse(saved) : INITIAL_CMS_ITEMS;
     } catch (e) {
       return [];
     }

@@ -122,3 +122,31 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80'
   }
 ];
+
+export const INITIAL_CMS_ITEMS: any[] = [
+  {
+    id: 'cms-init-1',
+    page: 'showcase',
+    title: 'Cyber Security Operations Platform',
+    category: 'Cyber Security',
+    status: 'PUBLISHED',
+    visible: true,
+    publishDate: new Date().toLocaleDateString(),
+    description: 'Enterprise penetration testing and automated vulnerability assessment dashboard for enterprise clients.',
+    url: 'https://futuristicsoftwares.gumroad.com/l/NETWORKANDDATAINFORMATIONS-GUI-TOOLS?a=815255139',
+    metrics: '$12,500/mo Revenue',
+    mainImage: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000'
+  },
+  {
+    id: 'cms-init-2',
+    page: 'services',
+    title: 'Dedicated VA & Cyber Operations Support',
+    category: 'Virtual Assistant',
+    status: 'PUBLISHED',
+    visible: true,
+    publishDate: new Date().toLocaleDateString(),
+    description: '24/7 Technical Virtual Assistant support for server management, client communications, and admin tasks.',
+    price: '$799/mo',
+    mainImage: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=1000'
+  }
+];
