@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
                   <span>🎁 Microsoft Rewards (Free Giftcards)</span>
                 </a>
               </li>
-              <li><a href="#/affiliate-guide" className="hover:text-cyan-300 transition-colors">Affiliate Marketer Academy</a></li>
+              <li><a href="#/affiliate-guide" className="hover:text-cyan-300 transition-colors">Affiliate Marketer Guide</a></li>
             </ul>
           </div>
 
