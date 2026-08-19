@@ -20,19 +20,7 @@ export const Footer: React.FC = () => {
               Full-Stack Cyber Security Engineering, Web Application Architecture, Virtual Assistant Solutions, and Official Mobile App Development.
             </p>
 
-            {/* Official Google Play Developer Console Link */}
-            <div className="pt-2">
-              <a
-                href="https://play.google.com/store/apps/dev?id=7374638355121114347"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white px-4 py-2.5 rounded-xl text-xs font-extrabold font-rajdhani uppercase tracking-wider shadow-lg hover:shadow-cyan-500/20 transition-all border border-emerald-400/40 group"
-              >
-                <Smartphone className="w-4 h-4 text-lime-300 group-hover:scale-110 transition-transform" />
-                <span>OFFICIAL GOOGLE PLAY DEVELOPER PAGE</span>
-                <ExternalLink className="w-3.5 h-3.5 text-cyan-200" />
-              </a>
-            </div>
+            
           </div>
 
           {/* Navigation Links */}

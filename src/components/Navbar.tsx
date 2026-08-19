@@ -7,6 +7,7 @@ export interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
+  const { themeMode, setThemeMode } = useApp();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const PLAY_STORE_URL = "https://play.google.com/store/apps/dev?id=7374638355121114347";
