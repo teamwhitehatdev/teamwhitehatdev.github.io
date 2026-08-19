@@ -13,7 +13,6 @@ export interface AffiliateAdItem {
 }
 
 export const UNIQUE_AFFILIATE_ADS: AffiliateAdItem[] = [
-  // 1. ANKER POWER BANK 25K 165W (1 UNIQUE HARDWARE AD ONLY)
   {
     id: 'anker-powerbank-25k-165w-hero',
     brand: 'Anker',
@@ -27,8 +26,6 @@ export const UNIQUE_AFFILIATE_ADS: AffiliateAdItem[] = [
     badge: 'RECOMMENDED DAILY HARDWARE',
     size: 'hero'
   },
-
-  // 2. ATOME FINANCIAL & SHOPPING (1 UNIQUE AD ONLY)
   {
     id: 'atome-paylater-banner',
     brand: 'ATOME',
@@ -41,8 +38,6 @@ export const UNIQUE_AFFILIATE_ADS: AffiliateAdItem[] = [
     badge: 'PAYMENT FLEXIBILITY',
     size: 'medium'
   },
-
-  // 3. WONDERSHARE VIRBO AI AVATARS (1 UNIQUE AD ONLY)
   {
     id: 'wondershare-virbo-hero',
     brand: 'Wondershare Virbo',
@@ -54,8 +49,6 @@ export const UNIQUE_AFFILIATE_ADS: AffiliateAdItem[] = [
     badge: 'AI CREATIVE STUDIO',
     size: 'hero'
   },
-
-  // 4. TEMU E-COMMERCE SHOPPING (1 UNIQUE AD ONLY)
   {
     id: 'temu-shopping-banner',
     brand: 'TEMU',
@@ -67,8 +60,6 @@ export const UNIQUE_AFFILIATE_ADS: AffiliateAdItem[] = [
     badge: 'WHOLESALE SAVINGS',
     size: 'medium'
   },
-
-  // 5. HOSTINGER WEB HOSTING (1 UNIQUE AD ONLY)
   {
     id: 'hostinger-cloud-hosting',
     brand: 'Hostinger',
@@ -80,8 +71,6 @@ export const UNIQUE_AFFILIATE_ADS: AffiliateAdItem[] = [
     badge: 'CLOUD INFRASTRUCTURE',
     size: 'banner'
   },
-
-  // 6. NORDVPN CYBERSECURITY (1 UNIQUE AD ONLY)
   {
     id: 'nordvpn-security-sky',
     brand: 'NordVPN',
@@ -93,8 +82,6 @@ export const UNIQUE_AFFILIATE_ADS: AffiliateAdItem[] = [
     badge: 'CYBER ENCRYPTION',
     size: 'skyscraper'
   },
-
-  // 7. COURSERA PROFESSIONAL CERTIFICATIONS (1 UNIQUE AD ONLY)
   {
     id: 'coursera-cyber-cert',
     brand: 'Coursera',
@@ -109,5 +96,4 @@ export const UNIQUE_AFFILIATE_ADS: AffiliateAdItem[] = [
 ];
 
 export const IMPACT_AFFILIATE_ASSETS = UNIQUE_AFFILIATE_ADS;
-
 export const ALL_AFFILIATE_ADS = UNIQUE_AFFILIATE_ADS;

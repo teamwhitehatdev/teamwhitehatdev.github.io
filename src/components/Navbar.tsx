@@ -1,109 +1,119 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Smartphone, Menu, X, Rocket, Sparkles } from 'lucide-react';
+import { Terminal, Shield, Sparkles, Menu, X, Rocket, Sun, Moon, Monitor } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
-export interface NavbarProps {
+interface NavbarProps {
   onOpenConsultation?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
-  const { themeMode, setThemeMode } = useApp();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const PLAY_STORE_URL = "https://play.google.com/store/apps/dev?id=7374638355121114347";
+  const { themeMode, setThemeMode } = useApp();
 
   const navLinks = [
     { path: '/', label: 'HOME' },
-    { path: '/showcase', label: 'SHOWCASE' },
+    { path: '/services', label: 'SERVICES & PRICING' },
     { path: '/web-hosting', label: 'WEB HOSTING' },
-    { path: '/services', label: 'SERVICES' },
-    { path: '/about', label: 'ABOUT' },
-    { path: '/affiliate-guide', label: '🎓 AFFILIATE MARKETER GUIDE', highlight: true }
+    { path: '/showcase', label: 'SHOWCASE' },
+    { path: '/affiliate-guide', label: 'AFFILIATE ACADEMY', highlight: true },
+    { path: '/about', label: 'ABOUT US' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-black/95 border-b-2 border-cyan-500/40 text-gray-100 font-mono sticky top-0 z-50 backdrop-blur-md shadow-2xl">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <nav className="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-cyan-500/30 select-none font-mono">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           
-          {/* BRAND TITLE & SUBTITLE */}
-          <Link to="/" className="flex items-center space-x-2 group shrink-0">
-            <div className="relative">
-              <img src="./favicon.png" alt="WhiteHat Dev Logo" className="w-9 h-9 rounded-full border-2 border-cyan-400 object-cover group-hover:border-lime-400 transition-colors shadow-lg" />
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-lime-400 rounded-full border border-black animate-ping" />
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-400/40 group-hover:border-cyan-400 transition-colors shadow-lg">
+              <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400 group-hover:scale-105 transition-transform" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-black font-rajdhani text-base sm:text-xl text-white tracking-widest leading-none group-hover:text-cyan-400 transition-colors uppercase">
+            <div>
+              <span className="text-base sm:text-xl font-black font-orbitron text-white tracking-wider uppercase block">
                 WHITE HAT DEV
               </span>
-              <span className="text-[8px] sm:text-[9px] text-lime-400 font-mono font-bold tracking-wider leading-tight uppercase pt-0.5">
-                LEARN. CREATE. DEVELOP. ASSIST. GROW.
+              <span className="text-[10px] text-cyan-400 tracking-widest font-mono uppercase block -mt-1">
+                CYBER &amp; FULL-STACK APPS
               </span>
             </div>
           </Link>
 
-          {/* DESKTOP NAV LINKS */}
-          <div className="hidden xl:flex items-center space-x-1.5 text-xs">
+          <div className="hidden xl:flex items-center space-x-1">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-2.5 py-1.5 rounded-lg font-extrabold uppercase transition-all whitespace-nowrap ${
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all uppercase ${
                   isActive(link.path)
-                    ? 'bg-gradient-to-r from-cyan-500/30 to-lime-500/30 text-cyan-300 border border-cyan-400 shadow-md scale-105'
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400 shadow-md'
                     : link.highlight
-                    ? 'bg-gradient-to-r from-purple-900/60 to-pink-900/60 text-lime-300 border border-lime-400/60 hover:border-lime-400 animate-pulse'
-                    : 'text-gray-300 hover:text-white hover:bg-gray-900'
+                    ? 'bg-gradient-to-r from-purple-900 via-indigo-900 to-pink-900 text-lime-300 border border-lime-400/80 font-black animate-pulse'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-800/60'
                 }`}
               >
                 {link.label}
               </Link>
             ))}
+          </div>
 
-            <a
-              href={PLAY_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-2.5 py-1.5 bg-gray-900 border border-cyan-500/40 text-cyan-400 hover:text-lime-300 rounded-lg font-bold flex items-center space-x-1 transition-all whitespace-nowrap"
-            >
-              <Smartphone className="w-3.5 h-3.5" />
-              <span>PLAY STORE</span>
-            </a>
+          <div className="hidden sm:flex items-center space-x-3">
+            <div className="flex items-center space-x-1 bg-gray-900/90 border border-cyan-500/30 p-1 rounded-xl shadow-inner">
+              <button
+                onClick={() => setThemeMode('dark')}
+                title="Dark Cyber Theme (Default)"
+                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
+                  themeMode === 'dark'
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                <Moon className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">DARK</span>
+              </button>
+
+              <button
+                onClick={() => setThemeMode('light')}
+                title="Light Clean Theme"
+                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
+                  themeMode === 'light'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-400'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                <Sun className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">LIGHT</span>
+              </button>
+
+              <button
+                onClick={() => setThemeMode('system')}
+                title="System Preferred Theme"
+                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
+                  themeMode === 'system'
+                    ? 'bg-purple-500/20 text-purple-300 border border-purple-400'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                <Monitor className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">SYS</span>
+              </button>
+            </div>
 
             {onOpenConsultation && (
               <button
                 onClick={onOpenConsultation}
-                className="px-3 py-1.5 bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400 text-black font-black font-rajdhani text-xs uppercase rounded-lg hover:opacity-95 shadow-md flex items-center space-x-1 ml-1 whitespace-nowrap"
+                className="px-4 py-2 bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400 hover:from-cyan-300 hover:to-purple-300 text-black font-black font-rajdhani text-xs uppercase rounded-xl shadow-lg hover:scale-105 transition-all flex items-center space-x-1.5"
               >
-                <Rocket className="w-3.5 h-3.5" />
-                <span>HIRE VA &rarr;</span>
+                <Rocket className="w-4 h-4" />
+                <span>HIRE VA</span>
               </button>
             )}
           </div>
 
-          {/* TABLET / MID-DESKTOP QUICK LINKS */}
-          <div className="hidden md:flex xl:hidden items-center space-x-2 text-xs">
-            <Link
-              to="/affiliate-guide"
-              className="px-3 py-1.5 bg-gradient-to-r from-purple-950 to-pink-950 text-lime-300 border border-lime-400 rounded-lg font-black uppercase text-[11px] flex items-center space-x-1"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-lime-400" />
-              <span>AFFILIATE GUIDE</span>
-            </Link>
-
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-cyan-400 hover:text-white rounded-lg border border-cyan-500/40 bg-gray-900 flex items-center space-x-1 font-bold text-xs"
-            >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              <span>MENU</span>
-            </button>
-          </div>
-
-          {/* MOBILE HAMBURGER TOGGLE */}
-          <div className="md:hidden flex items-center">
+          <div className="xl:hidden flex items-center space-x-2">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 text-cyan-400 hover:text-white rounded-lg border border-cyan-500/40 bg-gray-900"
@@ -115,7 +125,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
         </div>
       </div>
 
-      {/* MOBILE & TABLET EXPANDED MENU */}
       {isOpen && (
         <div className="xl:hidden bg-black/98 border-b-2 border-cyan-500/40 px-4 pt-3 pb-6 space-y-2 text-xs font-mono shadow-2xl">
           {navLinks.map((link) => (
@@ -135,16 +144,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
             </Link>
           ))}
 
-          <a
-            href={PLAY_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setIsOpen(false)}
-            className="block px-3 py-2.5 bg-gray-900 border border-cyan-500/30 text-cyan-400 rounded-xl font-bold flex items-center space-x-2"
-          >
-            <Smartphone className="w-4 h-4" />
-            <span>GOOGLE PLAY STORE APPS</span>
-          </a>
+          <div className="pt-2 flex items-center justify-between bg-gray-900 p-2.5 rounded-xl border border-cyan-500/30">
+            <span className="text-xs text-cyan-300 font-bold">THEME MODE:</span>
+            <div className="flex items-center space-x-1">
+              <button
+                onClick={() => setThemeMode('dark')}
+                className={`px-2 py-1 rounded text-xs font-bold ${themeMode === 'dark' ? 'bg-cyan-500 text-black' : 'text-gray-400'}`}
+              >
+                DARK
+              </button>
+              <button
+                onClick={() => setThemeMode('light')}
+                className={`px-2 py-1 rounded text-xs font-bold ${themeMode === 'light' ? 'bg-amber-400 text-black' : 'text-gray-400'}`}
+              >
+                LIGHT
+              </button>
+              <button
+                onClick={() => setThemeMode('system')}
+                className={`px-2 py-1 rounded text-xs font-bold ${themeMode === 'system' ? 'bg-purple-500 text-white' : 'text-gray-400'}`}
+              >
+                SYS
+              </button>
+            </div>
+          </div>
 
           {onOpenConsultation && (
             <button
@@ -152,7 +174,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
                 setIsOpen(false);
                 onOpenConsultation();
               }}
-              className="w-full py-3 bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400 text-black font-black font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg flex items-center justify-center space-x-1.5"
+              className="w-full py-3 bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400 text-black font-black font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg flex items-center justify-center space-x-1.5 mt-2"
             >
               <Rocket className="w-4 h-4" />
               <span>HIRE VA CONSULTATION</span>
