@@ -17,6 +17,38 @@ export interface AffiliateAdItem {
 
 export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
   // ==========================================
+  // ANKER POWER BANK 25K 165W (RECOMMENDED HARDWARE EQUIPMENT)
+  // ==========================================
+  {
+    id: 'anker-powerbank-25k-165w-hero',
+    brand: 'Anker Power Bank',
+    category: 'hardware',
+    sizeType: 'hero',
+    width: 1200,
+    height: 540,
+    clickUrl: 'https://ankerca.pxf.io/c/5024116/4006963/47963',
+    imageUrl: 'https://cdn.shopify.com/s/files/1/0743/7769/1325/files/A1695H11_richimage_us_v1.png?v=1778667790',
+    pixelUrl: 'https://imp.pxf.io/i/5024116/4006963/47963',
+    rawHtml: '<a rel="sponsored" href="https://ankerca.pxf.io/c/5024116/4006963/47963" target="_top" id="4006963"><img src="//a.impactradius-go.com/display-ad/47963-4006963" border="0" alt="" width="1200" height="540"/></a><img height="0" width="0" src="https://imp.pxf.io/i/5024116/4006963/47963" style="position:absolute;visibility:hidden;" border="0" />',
+    title: 'Anker Power Bank (25K, 165W, Built-In & Retractable Cables)',
+    description: 'Triple 100W USB-C ports for MacBooks & mobile workstations. 25,000mAh capacity, 100W ultra-fast 20-min recharge, flight-approved under 100Wh.',
+    badge: 'MUST-HAVE EQUIPMENT'
+  },
+  {
+    id: 'anker-powerbank-25k-medium',
+    brand: 'Anker',
+    category: 'hardware',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://ankerca.pxf.io/c/5024116/3992012/47963?prodsku=A1695H11&u=https%3A%2F%2Fwww.anker.com%2Fca%2Fproducts%2Fa1695-anker-power-bank-25000mah-165w%3Fvariant%3D47654623871165%26utm_source%3Dimpact%26utm_medium%3Daffiliate&intsrc=PUI2_35743',
+    imageUrl: 'https://cdn.shopify.com/s/files/1/0743/7769/1325/files/A1695H11_richimage_us_v1.png?v=1778667790',
+    title: 'Anker 25,000mAh 165W Portable Charger',
+    description: 'Power laptops and smartphones on the go with dual built-in cables.',
+    badge: '165W ULTRA-FAST'
+  },
+
+  // ==========================================
   // MICROSOFT REWARDS / EDGE BROWSER REFERRAL
   // ==========================================
   {

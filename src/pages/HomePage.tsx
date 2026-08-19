@@ -68,6 +68,89 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         </div>
 
 
+        
+        {/* ⚡ RECOMMENDED DAILY TOOLS & EQUIPMENT: ANKER POWER BANK 25K 165W */}
+        <div className="bg-gradient-to-r from-amber-950 via-black to-slate-900 border-2 border-amber-500/60 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl font-mono">
+          
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-amber-500/30 pb-4">
+            <div className="space-y-1">
+              <span className="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center space-x-1.5">
+                <span className="text-xl">🔋</span>
+                <span>RECOMMENDED DAILY TOOLS &amp; WORKSTATION EQUIPMENT</span>
+              </span>
+              <h3 className="text-xl sm:text-3xl font-black font-rajdhani text-white uppercase tracking-wider">
+                ANKER POWER BANK (25K, 165W, BUILT-IN RETRACTABLE CABLES)
+              </h3>
+            </div>
+            <span className="bg-amber-500/20 text-amber-300 text-xs font-bold px-3 py-1.5 rounded-xl border border-amber-500/40 uppercase tracking-wider font-sans">
+              ★ Essential for Remote VAs &amp; Digital Nomads
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            
+            {/* Left Image Showcase */}
+            <div className="lg:col-span-5 relative group overflow-hidden rounded-2xl border border-amber-500/40 bg-gray-900 shadow-xl">
+              <a href="https://ankerca.pxf.io/c/5024116/4006963/47963" target="_blank" rel="sponsored noopener noreferrer">
+                <img
+                  src="https://cdn.shopify.com/s/files/1/0743/7769/1325/files/A1695H11_richimage_us_v1.png?v=1778667790"
+                  alt="Anker Power Bank 25K 165W"
+                  className="w-full h-72 object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                />
+              </a>
+              <img height="0" width="0" src="https://imp.pxf.io/i/5024116/4006963/47963" style={{ position: 'absolute', visibility: 'hidden' }} alt="" />
+            </div>
+
+            {/* Right Product Specifications & Copy */}
+            <div className="lg:col-span-7 space-y-4 font-sans text-gray-200 text-xs sm:text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono">
+                <div className="bg-black/80 border border-amber-500/30 p-3 rounded-xl space-y-1">
+                  <span className="text-[10px] text-amber-400 font-bold uppercase block">TRIPLE 100W USB-C PORTS</span>
+                  <p className="text-xs text-white font-bold">Power MacBook &amp; devices simultaneously</p>
+                </div>
+                <div className="bg-black/80 border border-amber-500/30 p-3 rounded-xl space-y-1">
+                  <span className="text-[10px] text-amber-400 font-bold uppercase block">25,000mAh CAPACITY</span>
+                  <p className="text-xs text-white font-bold">100W recharge to 30% in 20 mins</p>
+                </div>
+                <div className="bg-black/80 border border-amber-500/30 p-3 rounded-xl space-y-1">
+                  <span className="text-[10px] text-amber-400 font-bold uppercase block">DUAL BUILT-IN CABLES</span>
+                  <p className="text-xs text-white font-bold">2.3 ft retractable + carrying strap cable</p>
+                </div>
+                <div className="bg-black/80 border border-amber-500/30 p-3 rounded-xl space-y-1">
+                  <span className="text-[10px] text-amber-400 font-bold uppercase block">FLIGHT APPROVED (90Wh)</span>
+                  <p className="text-xs text-white font-bold">Complies with airline carry-on under 100Wh</p>
+                </div>
+              </div>
+
+              <p className="text-gray-300 leading-relaxed text-xs">
+                <strong>Charge 4 Devices at Once:</strong> Equipped with dual USB-C cables, a USB-A port, and a USB-C port to power laptops, tablets, and smartphones during blackouts, client travel, or remote work sessions.
+              </p>
+
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <a
+                  href="https://ankerca.pxf.io/c/5024116/4006963/47963"
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  className="px-6 py-3.5 bg-gradient-to-r from-amber-400 via-yellow-400 to-lime-400 text-black font-black font-rajdhani text-sm uppercase rounded-2xl shadow-xl hover:scale-105 transition-all inline-flex items-center space-x-2"
+                >
+                  <span>BUY ANKER 165W POWER BANK (OFFICIAL STORE DEAL) &rarr;</span>
+                </a>
+                <a
+                  href="https://ankerca.pxf.io/c/5024116/3992012/47963?prodsku=A1695H11&u=https%3A%2F%2Fwww.anker.com%2Fca%2Fproducts%2Fa1695-anker-power-bank-25000mah-165w%3Fvariant%3D47654623871165%26utm_source%3Dimpact%26utm_medium%3Daffiliate&intsrc=PUI2_35743"
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  className="px-4 py-3 bg-black/90 border border-amber-500/50 text-amber-300 hover:text-white font-bold font-rajdhani text-xs uppercase rounded-2xl transition-all"
+                >
+                  <span>VIEW SKU: A1695H11 &rarr;</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
         {/* 🚀 TOP MAIN HERO HEADLINE: FOCUSED 100% ON HOW TO BECOME A SUCCESSFUL VIRTUAL ASSISTANT */}
       <div className="bg-gradient-to-r from-cyan-950 via-black to-purple-950 border-2 border-cyan-400 p-6 sm:p-8 rounded-3xl shadow-2xl space-y-4 relative overflow-hidden group">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
