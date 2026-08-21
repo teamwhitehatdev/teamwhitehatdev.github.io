@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Terminal, Shield, Sparkles, Menu, X, Rocket, Sun, Moon, Monitor } from 'lucide-react';
-import { useApp } from '../context/AppContext';
+import { Terminal, Shield, Sparkles, Menu, X, Rocket } from 'lucide-react';
 
 interface NavbarProps {
   onOpenConsultation?: () => void;
@@ -10,14 +9,13 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { themeMode, setThemeMode } = useApp();
 
   const navLinks = [
     { path: '/', label: 'HOME' },
     { path: '/services', label: 'SERVICES & PRICING' },
     { path: '/web-hosting', label: 'WEB HOSTING' },
     { path: '/showcase', label: 'SHOWCASE' },
-    { path: '/affiliate-guide', label: 'AFFILIATE ACADEMY', highlight: true },
+    { path: '/affiliate-guide', label: 'AFFILIATE GUIDE', highlight: true },
     { path: '/about', label: 'ABOUT US' },
   ];
 
@@ -61,47 +59,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
           </div>
 
           <div className="hidden sm:flex items-center space-x-3">
-            <div className="flex items-center space-x-1 bg-gray-900/90 border border-cyan-500/30 p-1 rounded-xl shadow-inner">
-              <button
-                onClick={() => setThemeMode('dark')}
-                title="Dark Cyber Theme (Default)"
-                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
-                  themeMode === 'dark'
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                <Moon className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">DARK</span>
-              </button>
-
-              <button
-                onClick={() => setThemeMode('light')}
-                title="Light Clean Theme"
-                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
-                  themeMode === 'light'
-                    ? 'bg-amber-500/20 text-amber-300 border border-amber-400'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                <Sun className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">LIGHT</span>
-              </button>
-
-              <button
-                onClick={() => setThemeMode('system')}
-                title="System Preferred Theme"
-                className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
-                  themeMode === 'system'
-                    ? 'bg-purple-500/20 text-purple-300 border border-purple-400'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                <Monitor className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">SYS</span>
-              </button>
-            </div>
-
             {onOpenConsultation && (
               <button
                 onClick={onOpenConsultation}
@@ -143,30 +100,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
               {link.label}
             </Link>
           ))}
-
-          <div className="pt-2 flex items-center justify-between bg-gray-900 p-2.5 rounded-xl border border-cyan-500/30">
-            <span className="text-xs text-cyan-300 font-bold">THEME MODE:</span>
-            <div className="flex items-center space-x-1">
-              <button
-                onClick={() => setThemeMode('dark')}
-                className={`px-2 py-1 rounded text-xs font-bold ${themeMode === 'dark' ? 'bg-cyan-500 text-black' : 'text-gray-400'}`}
-              >
-                DARK
-              </button>
-              <button
-                onClick={() => setThemeMode('light')}
-                className={`px-2 py-1 rounded text-xs font-bold ${themeMode === 'light' ? 'bg-amber-400 text-black' : 'text-gray-400'}`}
-              >
-                LIGHT
-              </button>
-              <button
-                onClick={() => setThemeMode('system')}
-                className={`px-2 py-1 rounded text-xs font-bold ${themeMode === 'system' ? 'bg-purple-500 text-white' : 'text-gray-400'}`}
-              >
-                SYS
-              </button>
-            </div>
-          </div>
 
           {onOpenConsultation && (
             <button
