@@ -28,8 +28,16 @@
   <script>window.lemonSqueezyAffiliateConfig = { store: "futuristicsoftwares" };</script>
   <script src="https://lmsqueezy.com/affiliate.js" defer></script>
 
-  <!-- OFFICIAL APP.IMPACT.COM AFFILIATE TRACKING TAG WITH TRANSFORMLINKS & TRACKIMPRESSION -->
-  <script type="text/javascript">(function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/P-A5024116-1495-4f8e-88fd-54d8d32a55be1.js','script','impactStat',document,window);impactStat('transformLinks');impactStat('trackImpression');</script>
+    <!-- SAFE IMPACT.COM AFFILIATE TRACKING TAG -->
+  <script type="text/javascript">
+    try {
+      (function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/P-A5024116-1495-4f8e-88fd-54d8d32a55be1.js','script','impactStat',document,window);
+      if (typeof window.impactStat === 'function') {
+        window.impactStat('transformLinks');
+        window.impactStat('trackImpression');
+      }
+    } catch(e) {}
+  </script>
 
 
 
@@ -81,13 +89,24 @@
 
   
 
-  
+  
+
   
   <script type="module" crossorigin src="./assets/index-BIMlJksU.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-CR7USThJ.css">
 </head>
 <body class="cyber-bg-gradient text-gray-100 antialiased selection:bg-[var(--primary-cyan)] selection:text-black min-h-screen">
-  <div id="root"></div>
+  <div id="root">
+    <div style="min-height: 100vh; background: radial-gradient(circle at 50% 0%, #081a2e 0%, #030712 70%); color: #f3f4f6; font-family: monospace; display: flex; flex-direction: column; items-center: center; justify-content: center; text-align: center; padding: 2rem;">
+      <div style="width: 64px; height: 64px; margin: 0 auto 1.5rem; background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.4); border-radius: 1rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h1 style="font-size: 1.5rem; font-weight: 900; letter-spacing: 0.1em; color: #ffffff; margin-bottom: 0.5rem;">TEAM WHITE HAT DEV</h1>
+      <p style="font-size: 0.75rem; color: #22d3ee; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem;">CYBER &amp; FULL-STACK SOFTWARE ENGINEERING</p>
+      <div style="display: inline-block; width: 32px; height: 32px; border: 3px solid rgba(34, 211, 238, 0.2); border-top-color: #22d3ee; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1.5rem;"></div>
+      <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+    </div>
+  </div>
 
 </body>
 </html>
