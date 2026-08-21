@@ -1,456 +1,280 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
-import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
-import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageType, CMSStatusType, VisitorLog } from '../types';
+import { INITIAL_CMS_ITEMS, INITIAL_LOGS, INITIAL_INQUIRIES } from '../utils/initialData';
+import { UNIQUE_AFFILIATE_ADS, AffiliateAdItem } from '../data/affiliateAdsData';
 
+export type CMSPageType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide' | 'announcements';
+export type CMSStatusType = 'DRAFT' | 'PUBLISHED' | 'SCHEDULED' | 'ARCHIVED';
 export type ThemeMode = 'dark' | 'light' | 'system';
+
+export interface CMSItem {
+  id: string;
+  page: CMSPageType;
+  title: string;
+  category: string;
+  status: CMSStatusType;
+  visible: boolean;
+  publishDate: string;
+  description: string;
+  content?: string;
+  mainImage?: string;
+  author?: string;
+  tags?: string[];
+  metrics?: string;
+  price?: string;
+  url?: string;
+}
+
+export interface VisitorLog {
+  id: string;
+  ip: string;
+  timestamp: string;
+  country: string;
+  region: string;
+  city: string;
+  isp: string;
+  device: string;
+  browser: string;
+  os: string;
+  path: string;
+  referrer: string;
+  status: 'allowed' | 'blocked' | 'flagged';
+  duration?: string;
+  utmSource?: string;
+}
+
+export interface InquiryItem {
+  id: string;
+  timestamp: string;
+  name: string;
+  email: string;
+  service: string;
+  message: string;
+  status: 'NEW' | 'READ' | 'IN PROGRESS' | 'REPLIED' | 'COMPLETED' | 'ARCHIVED';
+  notes?: string;
+}
 
 interface AppContextType {
   themeMode: ThemeMode;
   setThemeMode: (mode: ThemeMode) => void;
-  services: Service[];
-  projects: Project[];
-  affiliates: Affiliate[];
-  testimonials: Testimonial[];
-  inquiries: ContactInquiry[];
-  bannedIps: string[];
-  userIp: string;
-  userCountry: string;
-  userDevice: 'Desktop' | 'Mobile' | 'Tablet';
-  isUserBanned: boolean;
-  
-  // VISITOR LOGS TELEMETRY
-  visitorLogs: VisitorLog[];
-  clearVisitorLogs: () => void;
-  logVisitorPageNavigation: (pagePath: string) => void;
-
-  // CAPTCHA & MODALS
-  isCaptchaOpen: boolean;
-  setIsCaptchaOpen: (open: boolean) => void;
-  pendingCheckoutAction: (() => void) | null;
-  setPendingCheckoutAction: (action: (() => void) | null) => void;
-  
-  // CMS ITEMS MANAGEMENT
   cmsItems: CMSItem[];
-  addCMSItem: (item: Omit<CMSItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateCMSItem: (id: string, updates: Partial<CMSItem>) => void;
+  addCMSItem: (item: Omit<CMSItem, 'id'>) => void;
+  updateCMSItem: (id: string, item: Partial<CMSItem>) => void;
   deleteCMSItem: (id: string) => void;
-  toggleCMSItemVisibility: (id: string) => void;
-  setCMSItemStatus: (id: string, status: CMSStatusType) => void;
+  toggleCMSVisibility: (id: string) => void;
   getPublicPageCMSItems: (page: CMSPageType) => CMSItem[];
-  exportCMSDatabase: () => void;
-  importCMSDatabase: (jsonStr: string) => boolean;
-
-  addService: (service: Omit<Service, 'id'>) => void;
-  updateService: (id: string, service: Partial<Service>) => void;
-  deleteService: (id: string) => void;
   
-  addProject: (project: Omit<Project, 'id'>) => void;
-  updateProject: (id: string, project: Partial<Project>) => void;
-  deleteProject: (id: string) => void;
+  visitorLogs: VisitorLog[];
+  blockedIps: string[];
+  blockIp: (ip: string) => void;
+  unblockIp: (ip: string) => void;
   
-  addBannedIp: (ip: string) => void;
-  removeBannedIp: (ip: string) => void;
+  inquiries: InquiryItem[];
+  addInquiry: (inquiry: Omit<InquiryItem, 'id' | 'timestamp' | 'status'>) => void;
+  updateInquiryStatus: (id: string, status: InquiryItem['status'], notes?: string) => void;
   
-  addInquiry: (inquiry: Omit<ContactInquiry, 'id' | 'timestamp'>) => void;
-  deleteInquiry: (id: string) => void;
+  affiliateAds: AffiliateAdItem[];
+  pinCode: string;
+  isAuthenticated: boolean;
+  login: (pin: string) => boolean;
+  logout: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // USER TELEMETRY STATE
-  const [userIp, setUserIp] = useState<string>('127.0.0.1');
-  const [userCountry, setUserCountry] = useState<string>('United States');
-  const [userDevice, setUserDevice] = useState<'Desktop' | 'Mobile' | 'Tablet'>('Desktop');
-
-  // BANNED IPS STATE
-  const [bannedIps, setBannedIps] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('wh_banned_ips');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) return parsed;
-      }
-    } catch (e) {}
-    return ['185.220.101.5', '198.51.100.42'];
-  });
-
-  // VISITOR LOGS STATE
-  const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>(() => {
-    try {
-      const saved = localStorage.getItem('wh_visitor_logs');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch (e) {}
-    // Seed initial realistic visitor telemetry logs for analytics demo
-    const now = new Date();
-    const mockLogs: VisitorLog[] = [
-      { id: 'v-1', ip: '112.203.45.12', country: 'Philippines 🇵🇭', city: 'Manila', device: 'Desktop', browser: 'Chrome 126', os: 'Windows 11', pageVisited: '/#/affiliate-guide', timestamp: new Date(now.getTime() - 1000 * 60 * 15).toISOString() },
-      { id: 'v-2', ip: '172.56.21.90', country: 'United States 🇺🇸', city: 'Los Angeles', device: 'Mobile', browser: 'Safari Mobile', os: 'iOS 17', pageVisited: '/', timestamp: new Date(now.getTime() - 1000 * 60 * 45).toISOString() },
-      { id: 'v-3', ip: '82.165.197.1', country: 'Germany 🇩🇪', city: 'Berlin', device: 'Desktop', browser: 'Firefox 127', os: 'Linux', pageVisited: '/#/services', timestamp: new Date(now.getTime() - 1000 * 60 * 120).toISOString() },
-      { id: 'v-4', ip: '180.191.88.5', country: 'Philippines 🇵🇭', city: 'Cebu', device: 'Mobile', browser: 'Chrome Mobile', os: 'Android 14', pageVisited: '/#/web-hosting', timestamp: new Date(now.getTime() - 1000 * 60 * 300).toISOString() },
-      { id: 'v-5', ip: '103.252.200.4', country: 'Singapore 🇸🇬', city: 'Singapore', device: 'Tablet', browser: 'Safari Tablet', os: 'iPadOS', pageVisited: '/#/showcase', timestamp: new Date(now.getTime() - 1000 * 60 * 600).toISOString() },
-      { id: 'v-6', ip: '46.101.89.23', country: 'United Kingdom 🇬🇧', city: 'London', device: 'Desktop', browser: 'Edge 126', os: 'Windows 10', pageVisited: '/#/about', timestamp: new Date(now.getTime() - 1000 * 60 * 1400).toISOString() }
-    ];
-    return mockLogs;
-  });
-
-  // CMS ITEMS STATE
-  
   const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
-    return (localStorage.getItem('twhd_theme_mode') as ThemeMode) || 'dark';
+    try {
+      return (localStorage.getItem('twhd_theme_mode') as ThemeMode) || 'dark';
+    } catch (e) {
+      return 'dark';
+    }
   });
 
   const setThemeMode = (mode: ThemeMode) => {
     setThemeModeState(mode);
-    localStorage.setItem('twhd_theme_mode', mode);
+    try {
+      localStorage.setItem('twhd_theme_mode', mode);
+    } catch (e) {}
   };
 
   useEffect(() => {
-    const root = document.documentElement;
-    root.classList.remove('theme-dark', 'theme-light');
-    let active = themeMode;
-    if (themeMode === 'system') {
-      active = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    if (active === 'light') {
-      root.classList.add('theme-light');
-    } else {
-      root.classList.add('theme-dark');
-    }
+    try {
+      const root = document.documentElement;
+      root.classList.remove('theme-dark', 'theme-light');
+      
+      let active = themeMode;
+      if (themeMode === 'system') {
+        active = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      
+      if (active === 'light') {
+        root.classList.add('theme-light');
+      } else {
+        root.classList.add('theme-dark');
+      }
+    } catch (e) {}
   }, [themeMode]);
+
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('twhd_admin_auth') === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const pinCode = 'anonymousphilippines';
+
+  const login = (inputPin: string) => {
+    if (inputPin === pinCode) {
+      setIsAuthenticated(true);
+      try {
+        localStorage.setItem('twhd_admin_auth', 'true');
+      } catch (e) {}
+      return true;
+    }
+    return false;
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    try {
+      localStorage.removeItem('twhd_admin_auth');
+    } catch (e) {}
+  };
 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
     try {
-      const saved = localStorage.getItem('wh_cms_items');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch (e) {}
-    return INITIAL_CMS_ITEMS;
+      const saved = localStorage.getItem('twhd_cms_items');
+      return saved ? JSON.parse(saved) : (INITIAL_CMS_ITEMS || []);
+    } catch (e) {
+      return INITIAL_CMS_ITEMS || [];
+    }
   });
 
-  // INQUIRIES STATE
-    // INQUIRIES STATE WITH REALISTIC CLIENT LEADS
-  const [inquiries, setInquiries] = useState<ContactInquiry[]>(() => {
+  useEffect(() => {
     try {
-      const saved = localStorage.getItem('wh_inquiries');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
+      localStorage.setItem('twhd_cms_items', JSON.stringify(cmsItems));
     } catch (e) {}
-    // Seed initial realistic client booking inquiries for CMS admin
-    return [
-      {
-        id: 'inq-101',
-        name: 'Samantha Vance',
-        email: 'samantha.vance@techcorp.us',
-        service: 'Executive Virtual Assistance ($15/hr)',
-        message: 'Hi Team WhiteHat! We need a full-time executive VA for email triage, calendar management, and client onboarding.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 30).toLocaleString(),
-        ipAddress: '172.56.21.90',
-        country: 'United States 🇺🇸',
-        device: 'Desktop'
-      },
-      {
-        id: 'inq-102',
-        name: 'David Reynolds',
-        email: 'david@ukdigitalagency.co.uk',
-        service: 'Full-Stack Web Development ($499/proj)',
-        message: 'Hello! I saw your portfolio. We want to hire your team to build a high-converting Next.js & React web application.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 120).toLocaleString(),
-        ipAddress: '82.165.197.1',
-        country: 'United Kingdom 🇬🇧',
-        device: 'Desktop'
-      },
-      {
-        id: 'inq-103',
-        name: 'Maria Santos',
-        email: 'maria.santos@manilastartup.ph',
-        service: 'Hostinger Web Hosting Setup',
-        message: 'Inquiring about web hosting migration to Hostinger LiteSpeed servers using code DPDCABINCEHM.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 360).toLocaleString(),
-        ipAddress: '112.203.45.12',
-        country: 'Philippines 🇵🇭',
-        device: 'Mobile'
-      },
-      {
-        id: 'inq-104',
-        name: 'Alexander Wright',
-        email: 'alex@ausventures.com.au',
-        service: 'Mobile App Development ($799/proj)',
-        message: 'Need a cross-platform mobile application for Android & iOS published on Google Play Store.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 720).toLocaleString(),
-        ipAddress: '103.252.200.4',
-        country: 'Australia 🇦🇺',
-        device: 'Tablet'
-      }
-    ];
-  });
-
-  // DETECT DEVICE & IP ON MOUNT
-  useEffect(() => {
-    // Detect Device
-    const ua = navigator.userAgent;
-    let dev: 'Desktop' | 'Mobile' | 'Tablet' = 'Desktop';
-    if (/tablet|ipad|playbook|silk/i.test(ua)) dev = 'Tablet';
-    else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated/i.test(ua)) dev = 'Mobile';
-    setUserDevice(dev);
-
-    // Fetch IP and Geo
-    fetch('https://ipapi.co/json/')
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.ip) {
-          setUserIp(data.ip);
-          const countryStr = `${data.country_name || 'Global'} ${data.country_flag || ''}`.trim();
-          setUserCountry(countryStr);
-          
-          // Log visitor visit
-          const newLog: VisitorLog = {
-            id: `v-${Date.now()}`,
-            ip: data.ip,
-            country: countryStr,
-            city: data.city || 'Unknown',
-            device: dev,
-            browser: 'Web Browser',
-            os: navigator.platform || 'Unknown OS',
-            pageVisited: window.location.hash || '/',
-            timestamp: new Date().toISOString()
-          };
-          
-          setVisitorLogs(prev => {
-            if (prev.some(l => l.ip === data.ip && (new Date().getTime() - new Date(l.timestamp).getTime() < 300000))) {
-              return prev; // don't duplicate within 5 mins
-            }
-            return [newLog, ...prev.slice(0, 100)];
-          });
-        }
-      })
-      .catch(() => {
-        setUserIp('127.0.0.1');
-        setUserCountry('Global 🌐');
-      });
-  }, []);
-
-  // PERSISTENCE EFFECTS
-  useEffect(() => {
-    try { localStorage.setItem('wh_cms_items', JSON.stringify(cmsItems)); } catch (e) {}
   }, [cmsItems]);
 
-  useEffect(() => {
-    try { localStorage.setItem('wh_inquiries', JSON.stringify(inquiries)); } catch (e) {}
-  }, [inquiries]);
-
-  useEffect(() => {
-    try { localStorage.setItem('wh_banned_ips', JSON.stringify(bannedIps)); } catch (e) {}
-  }, [bannedIps]);
-
-  useEffect(() => {
-    try { localStorage.setItem('wh_visitor_logs', JSON.stringify(visitorLogs)); } catch (e) {}
-  }, [visitorLogs]);
-
-  // IS USER BANNED CHECK
-  const isUserBanned = bannedIps.includes(userIp);
-
-  // CMS ITEM FUNCTIONS
-  const addCMSItem = (newItemData: Omit<CMSItem, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newItem: CMSItem = {
-      ...newItemData,
-      id: `cms-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+  const addCMSItem = (newItem: Omit<CMSItem, 'id'>) => {
+    const item: CMSItem = {
+      ...newItem,
+      id: `cms-${Date.now()}`
     };
-    setCmsItems(prev => [newItem, ...prev]);
+    setCmsItems(prev => [item, ...prev]);
   };
 
-  const updateCMSItem = (id: string, updates: Partial<CMSItem>) => {
-    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, ...updates, updatedAt: new Date().toISOString() } : item));
+  const updateCMSItem = (id: string, updated: Partial<CMSItem>) => {
+    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, ...updated } : item));
   };
 
   const deleteCMSItem = (id: string) => {
     setCmsItems(prev => prev.filter(item => item.id !== id));
   };
 
-  const toggleCMSItemVisibility = (id: string) => {
-    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, visible: !item.visible, updatedAt: new Date().toISOString() } : item));
+  const toggleCMSVisibility = (id: string) => {
+    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, visible: !item.visible } : item));
   };
 
-  const setCMSItemStatus = (id: string, status: CMSStatusType) => {
-    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, status, updatedAt: new Date().toISOString() } : item));
+  const getPublicPageCMSItems = (page: CMSPageType) => {
+    return cmsItems.filter(item => item.page === page && item.visible && item.status === 'PUBLISHED');
   };
 
-  const getPublicPageCMSItems = (page: CMSPageType): CMSItem[] => {
-    const now = new Date();
-    return cmsItems.filter(item => {
-      if (item.page !== page) return false;
-      if (!item.visible) return false;
-      if (item.status === 'DRAFT') return false;
-      if (item.status === 'SCHEDULED' && item.publishDate) {
-        if (new Date(item.publishDate) > now) return false;
-      }
-      return true;
-    });
-  };
-
-  const exportCMSDatabase = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cmsItems, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `cmsDatabase_${new Date().toISOString().slice(0, 10)}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-  };
-
-  const importCMSDatabase = (jsonStr: string): boolean => {
+  const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>(() => {
     try {
-      const parsed = JSON.parse(jsonStr);
-      if (Array.isArray(parsed)) {
-        setCmsItems(parsed);
-        return true;
-      }
+      const saved = localStorage.getItem('twhd_visitor_logs');
+      return saved ? JSON.parse(saved) : INITIAL_LOGS;
+    } catch (e) {
+      return INITIAL_LOGS;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('twhd_visitor_logs', JSON.stringify(visitorLogs));
     } catch (e) {}
-    return false;
+  }, [visitorLogs]);
+
+  const [blockedIps, setBlockedIps] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('twhd_blocked_ips');
+      return saved ? JSON.parse(saved) : ['185.220.101.5', '193.239.147.23'];
+    } catch (e) {
+      return ['185.220.101.5', '193.239.147.23'];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('twhd_blocked_ips', JSON.stringify(blockedIps));
+    } catch (e) {}
+  }, [blockedIps]);
+
+  const blockIp = (ip: string) => {
+    if (!blockedIps.includes(ip)) {
+      setBlockedIps(prev => [...prev, ip]);
+    }
   };
 
-  // INQUIRIES FUNCTIONS
-  const addInquiry = (inquiryData: Omit<ContactInquiry, 'id' | 'timestamp'>) => {
-    const newInquiry: ContactInquiry = {
-      ...inquiryData,
+  const unblockIp = (ipToUnblock: string) => {
+    setBlockedIps(prev => prev.filter(ip => ip !== ipToUnblock));
+  };
+
+  const [inquiries, setInquiries] = useState<InquiryItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('twhd_inquiries');
+      return saved ? JSON.parse(saved) : INITIAL_INQUIRIES;
+    } catch (e) {
+      return INITIAL_INQUIRIES;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('twhd_inquiries', JSON.stringify(inquiries));
+    } catch (e) {}
+  }, [inquiries]);
+
+  const addInquiry = (inquiry: Omit<InquiryItem, 'id' | 'timestamp' | 'status'>) => {
+    const newInquiry: InquiryItem = {
+      ...inquiry,
       id: `inq-${Date.now()}`,
       timestamp: new Date().toLocaleString(),
-      ipAddress: userIp,
-      country: userCountry,
-      device: userDevice
+      status: 'NEW'
     };
     setInquiries(prev => [newInquiry, ...prev]);
   };
 
-  const deleteInquiry = (id: string) => {
-    setInquiries(prev => prev.filter(i => i.id !== id));
+  const updateInquiryStatus = (id: string, status: InquiryItem['status'], notes?: string) => {
+    setInquiries(prev => prev.map(inq => inq.id === id ? { ...inq, status, ...(notes !== undefined ? { notes } : {}) } : inq));
   };
 
-  // BANNED IPS FUNCTIONS
-    const logVisitorPageNavigation = (pagePath: string) => {
-    const ua = navigator.userAgent;
-    let dev = 'Desktop';
-    if (/tablet|ipad|playbook|silk/i.test(ua)) dev = 'Tablet';
-    else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated/i.test(ua)) dev = 'Mobile';
-
-    let bro = 'Chrome';
-    if (ua.indexOf('Firefox') > -1) bro = 'Firefox';
-    else if (ua.indexOf('SamsungBrowser') > -1) bro = 'Samsung Browser';
-    else if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) bro = 'Opera';
-    else if (ua.indexOf('Edge') > -1 || ua.indexOf('Edg') > -1) bro = 'Edge';
-    else if (ua.indexOf('Chrome') > -1) bro = 'Chrome';
-    else if (ua.indexOf('Safari') > -1) bro = 'Safari';
-
-    let osName = 'Windows';
-    if (ua.indexOf('Win') > -1) osName = 'Windows';
-    else if (ua.indexOf('Mac') > -1) osName = 'macOS';
-    else if (ua.indexOf('Linux') > -1) osName = 'Linux';
-    else if (ua.indexOf('Android') > -1) osName = 'Android';
-    else if (ua.indexOf('like Mac') > -1) osName = 'iOS';
-
-    const res = window.screen.width + 'x' + window.screen.height;
-    const lang = navigator.language || 'en-US';
-    const ref = document.referrer ? new URL(document.referrer).hostname : 'Direct Traffic';
-    const timeIso = new Date().toISOString();
-
-    const newEntry: VisitorLog = {
-      id: 'v-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
-      ip: userIp || '127.0.0.1',
-      country: userCountry || 'Global Visitor 🌐',
-      city: 'Metro Area',
-      region: 'Central Region',
-      org: 'Internet Provider',
-      device: dev,
-      browser: bro,
-      os: osName,
-      page: pagePath || '/',
-      referrer: ref,
-      screenResolution: res,
-      language: lang,
-      timestamp: timeIso,
-      status: bannedIps.includes(userIp) ? 'BANNED ⛔' : 'AUTHORIZED ✅'
-    };
-
-    setVisitorLogs(prev => {
-      if (prev.length > 0 && prev[0].page === pagePath && (new Date().getTime() - new Date(prev[0].timestamp).getTime() < 3000)) {
-        return prev;
-      }
-      return [newEntry, ...prev.slice(0, 250)];
-    });
-  };
-
-  const addBannedIp = (ip: string) => {
-    if (!bannedIps.includes(ip.trim())) {
-      setBannedIps(prev => [...prev, ip.trim()]);
-    }
-  };
-
-  const removeBannedIp = (ip: string) => {
-    setBannedIps(prev => prev.filter(item => item !== ip));
-  };
-
-  const clearVisitorLogs = () => {
-    setVisitorLogs([]);
-  };
-
-  // SERVICES & PROJECTS STATE
-  const [services, setServices] = useState<Service[]>(SERVICES as any);
-  const [projects, setProjects] = useState<Project[]>(PROJECTS as any);
-  const [affiliates] = useState<Affiliate[]>([]);
-  const [testimonials] = useState<Testimonial[]>(INITIAL_TESTIMONIALS as any);
-
-  const [isCaptchaOpen, setIsCaptchaOpen] = useState(false);
-  const [pendingCheckoutAction, setPendingCheckoutAction] = useState<(() => void) | null>(null);
-
-  const addService = (serviceData: Omit<Service, 'id'>) => {
-    const newService: Service = { ...serviceData, id: `svc-${Date.now()}` };
-    setServices(prev => [newService, ...prev]);
-  };
-
-  const updateService = (id: string, updatedData: Partial<Service>) => {
-    setServices(prev => prev.map(s => s.id === id ? { ...s, ...updatedData } : s));
-  };
-
-  const deleteService = (id: string) => {
-    setServices(prev => prev.filter(s => s.id !== id));
-  };
-
-  const addProject = (projectData: Omit<Project, 'id'>) => {
-    const newProject: Project = { ...projectData, id: `proj-${Date.now()}` };
-    setProjects(prev => [newProject, ...prev]);
-  };
-
-  const updateProject = (id: string, updatedData: Partial<Project>) => {
-    setProjects(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
-  };
-
-  const deleteProject = (id: string) => {
-    setProjects(prev => prev.filter(p => p.id !== id));
-  };
+  const affiliateAds = UNIQUE_AFFILIATE_ADS;
 
   return (
     <AppContext.Provider value={{
-      services, projects, affiliates, testimonials, inquiries, bannedIps, userIp, userCountry, userDevice, isUserBanned,
-      visitorLogs, clearVisitorLogs, logVisitorPageNavigation,
-      isCaptchaOpen, setIsCaptchaOpen, pendingCheckoutAction, setPendingCheckoutAction,
-      cmsItems, addCMSItem, updateCMSItem, deleteCMSItem, toggleCMSItemVisibility, setCMSItemStatus,
+      themeMode,
+      setThemeMode,
+      cmsItems,
+      addCMSItem,
+      updateCMSItem,
+      deleteCMSItem,
+      toggleCMSVisibility,
       getPublicPageCMSItems,
-        themeMode,
-        setThemeMode, exportCMSDatabase, importCMSDatabase,
-      addService, updateService, deleteService,
-      addProject, updateProject, deleteProject,
-      addBannedIp, removeBannedIp,
-      addInquiry, deleteInquiry
+      visitorLogs,
+      blockedIps,
+      blockIp,
+      unblockIp,
+      inquiries,
+      addInquiry,
+      updateInquiryStatus,
+      affiliateAds,
+      pinCode,
+      isAuthenticated,
+      login,
+      logout
     }}>
       {children}
     </AppContext.Provider>
