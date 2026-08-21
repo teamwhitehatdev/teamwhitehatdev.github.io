@@ -18,18 +18,20 @@ import { StickyConversionBar } from './components/StickyConversionBar';
 import { LiveActivityTicker } from './components/LiveActivityTicker';
 import { CyberBackground } from './components/CyberBackground';
 import { BannedOverlay } from './components/BannedOverlay';
-// Safe security shield hook fallback
 import ThemeEngine from './components/ThemeEngine';
 import { AppProvider, useApp } from './context/AppContext';
-
 
 function VisitorPageTracker() {
   const location = useLocation();
   const { logVisitorPageNavigation } = useApp();
 
   useEffect(() => {
-    logVisitorPageNavigation(location.pathname);
-  }, [location.pathname]);
+    try {
+      if (typeof logVisitorPageNavigation === 'function') {
+        logVisitorPageNavigation(location.pathname);
+      }
+    } catch (e) {}
+  }, [location.pathname, logVisitorPageNavigation]);
 
   return null;
 }
@@ -41,35 +43,21 @@ export function AppContent() {
   const [showGumroadModal, setShowGumroadModal] = useState(false);
   const [showElevenLabsModal, setShowElevenLabsModal] = useState(false);
 
-  const { userIp, bannedIps } = useApp();
+  const appContext = useApp();
+  const userIp = appContext?.userIp;
+  const bannedIps = appContext?.bannedIps;
 
-  // Security engine active
-
-  useEffect(() => {
-    const flashGumroad = Math.random() < 0.60;
-    if (flashGumroad) {
-      setShowGumroadModal(true);
-      setShowElevenLabsModal(false);
-    } else {
-      setShowGumroadModal(false);
-      const timer = setTimeout(() => {
-        setShowElevenLabsModal(true);
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  const handleOpenConsultation = (serviceTitle?: string) => {
+  const handleOpenConsultation = useCallback((serviceTitle?: string) => {
     setSelectedService(serviceTitle);
     setIsConsultationOpen(true);
-  };
+  }, []);
 
   const handleGumroadComplete = useCallback(() => {
     setShowGumroadModal(false);
-    setShowElevenLabsModal(true);
   }, []);
 
-  if (userIp && bannedIps.includes(userIp)) {
+  // Safe Banned IP Check
+  if (userIp && Array.isArray(bannedIps) && bannedIps.includes(userIp)) {
     return <BannedOverlay userIp={userIp} />;
   }
 
