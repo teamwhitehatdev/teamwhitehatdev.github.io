@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { StockTicker } from './components/StockTicker';
@@ -64,10 +64,10 @@ export function AppContent() {
     setIsConsultationOpen(true);
   };
 
-  const handleGumroadComplete = () => {
+  const handleGumroadComplete = useCallback(() => {
     setShowGumroadModal(false);
     setShowElevenLabsModal(true);
-  };
+  }, []);
 
   if (userIp && bannedIps.includes(userIp)) {
     return <BannedOverlay userIp={userIp} />;
