@@ -3,9 +3,11 @@ import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
 import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
 import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageType, CMSStatusType, VisitorLog } from '../types';
 
+export type ThemeMode = 'dark' | 'light' | 'system';
+
 interface AppContextType {
-  themeMode?: 'dark' | 'light' | 'system';
-  setThemeMode?: (mode: 'dark' | 'light' | 'system') => void;
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
   services: Service[];
   projects: Project[];
   affiliates: Affiliate[];
@@ -97,6 +99,30 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // CMS ITEMS STATE
+  
+  const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
+    return (localStorage.getItem('twhd_theme_mode') as ThemeMode) || 'dark';
+  });
+
+  const setThemeMode = (mode: ThemeMode) => {
+    setThemeModeState(mode);
+    localStorage.setItem('twhd_theme_mode', mode);
+  };
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.remove('theme-dark', 'theme-light');
+    let active = themeMode;
+    if (themeMode === 'system') {
+      active = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    if (active === 'light') {
+      root.classList.add('theme-light');
+    } else {
+      root.classList.add('theme-dark');
+    }
+  }, [themeMode]);
+
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
     try {
       const saved = localStorage.getItem('wh_cms_items');
@@ -418,7 +444,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       visitorLogs, clearVisitorLogs, logVisitorPageNavigation,
       isCaptchaOpen, setIsCaptchaOpen, pendingCheckoutAction, setPendingCheckoutAction,
       cmsItems, addCMSItem, updateCMSItem, deleteCMSItem, toggleCMSItemVisibility, setCMSItemStatus,
-      getPublicPageCMSItems, exportCMSDatabase, importCMSDatabase,
+      getPublicPageCMSItems,
+        themeMode,
+        setThemeMode, exportCMSDatabase, importCMSDatabase,
       addService, updateService, deleteService,
       addProject, updateProject, deleteProject,
       addBannedIp, removeBannedIp,
