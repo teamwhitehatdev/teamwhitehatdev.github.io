@@ -54,6 +54,9 @@ export interface InquiryItem {
 }
 
 interface AppContextType {
+  userIp?: string;
+  bannedIps: string[];
+  logVisitorPageNavigation: (path: string) => void;
   themeMode: ThemeMode;
   setThemeMode: (mode: ThemeMode) => void;
   cmsItems: CMSItem[];
@@ -82,6 +85,15 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [userIp] = useState<string>('127.0.0.1');
+  const bannedIps = blockedIps;
+
+  const logVisitorPageNavigation = (path: string) => {
+    try {
+      console.log(`[Telemetry] Visitor navigated to: ${path}`);
+    } catch (e) {}
+  };
+
   const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
     try {
       return (localStorage.getItem('twhd_theme_mode') as ThemeMode) || 'dark';
@@ -271,6 +283,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addInquiry,
       updateInquiryStatus,
       affiliateAds,
+      userIp,
+      bannedIps,
+      logVisitorPageNavigation,
       pinCode,
       isAuthenticated,
       login,
