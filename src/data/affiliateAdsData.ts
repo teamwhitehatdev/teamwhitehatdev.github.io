@@ -1,99 +1,285 @@
 export interface AffiliateAdItem {
   id: string;
   brand: string;
-  category: 'hardware' | 'creative' | 'education' | 'security' | 'hosting' | 'lifestyle' | 'shopping' | 'financial';
-  title: string;
-  description: string;
+  category: 'hardware' | 'creative' | 'education' | 'webdev' | 'security' | 'hosting';
+  sizeType: 'hero' | 'medium' | 'skyscraper' | 'banner' | 'square' | 'mobile';
+  width: number;
+  height: number;
   clickUrl: string;
   imageUrl: string;
   pixelUrl?: string;
+  iframeUrl?: string;
   rawHtml?: string;
-  badge?: string;
-  size?: 'hero' | 'medium' | 'skyscraper' | 'banner';
+  title: string;
+  description: string;
+  badge: string;
 }
 
-export const UNIQUE_AFFILIATE_ADS: AffiliateAdItem[] = [
+export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
+  // ==========================================
+  // ANKER POWER BANK 25K 165W (RECOMMENDED HARDWARE EQUIPMENT)
+  // ==========================================
   {
     id: 'anker-powerbank-25k-165w-hero',
-    brand: 'Anker',
+    brand: 'Anker Power Bank',
     category: 'hardware',
-    title: 'Anker Power Bank (25K, 165W, Built-In & Retractable Cables)',
-    description: 'Triple 100W USB-C ports for multi-device laptop & mobile charging with 25,000mAh capacity & 100W ultra-fast 20-min recharge.',
+    sizeType: 'hero',
+    width: 1200,
+    height: 540,
     clickUrl: 'https://ankerca.pxf.io/c/5024116/4006963/47963',
     imageUrl: 'https://cdn.shopify.com/s/files/1/0743/7769/1325/files/A1695H11_richimage_us_v1.png?v=1778667790',
     pixelUrl: 'https://imp.pxf.io/i/5024116/4006963/47963',
     rawHtml: '<a rel="sponsored" href="https://ankerca.pxf.io/c/5024116/4006963/47963" target="_top" id="4006963"><img src="//a.impactradius-go.com/display-ad/47963-4006963" border="0" alt="" width="1200" height="540"/></a><img height="0" width="0" src="https://imp.pxf.io/i/5024116/4006963/47963" style="position:absolute;visibility:hidden;" border="0" />',
-    badge: 'RECOMMENDED DAILY HARDWARE',
-    size: 'hero'
+    title: 'Anker Power Bank (25K, 165W, Built-In & Retractable Cables)',
+    description: 'Triple 100W USB-C ports for MacBooks & mobile workstations. 25,000mAh capacity, 100W ultra-fast 20-min recharge, flight-approved under 100Wh.',
+    badge: 'MUST-HAVE EQUIPMENT'
   },
   {
-    id: 'atome-paylater-banner',
-    brand: 'ATOME',
-    category: 'financial',
-    title: 'ATOME Buy Now Pay Later (0% Interest)',
-    description: 'Split your purchases into 3 interest-free monthly payments with zero hidden fees at thousands of partner stores.',
-    clickUrl: 'https://atome.pxf.io/c/5024116/1897213/21805',
-    imageUrl: './atome_ads_official_referral.png',
-    pixelUrl: 'https://imp.pxf.io/i/5024116/1897213/21805',
-    badge: 'PAYMENT FLEXIBILITY',
-    size: 'medium'
+    id: 'anker-powerbank-25k-medium',
+    brand: 'Anker',
+    category: 'hardware',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://ankerca.pxf.io/c/5024116/3992012/47963?prodsku=A1695H11&u=https%3A%2F%2Fwww.anker.com%2Fca%2Fproducts%2Fa1695-anker-power-bank-25000mah-165w%3Fvariant%3D47654623871165%26utm_source%3Dimpact%26utm_medium%3Daffiliate&intsrc=PUI2_35743',
+    imageUrl: 'https://cdn.shopify.com/s/files/1/0743/7769/1325/files/A1695H11_richimage_us_v1.png?v=1778667790',
+    title: 'Anker 25,000mAh 165W Portable Charger',
+    description: 'Power laptops and smartphones on the go with dual built-in cables.',
+    badge: '165W ULTRA-FAST'
   },
+
+  // ==========================================
+  // MICROSOFT REWARDS / EDGE BROWSER REFERRAL
+  // ==========================================
+  {
+    id: 'microsoft-rewards-browser-item',
+    brand: 'Microsoft Rewards',
+    category: 'education',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae',
+    imageUrl: './images/affiliates/coursera-banner.jpg',
+    title: 'Earn Free Gift Cards & Rewards Searching with Microsoft Edge & Bing',
+    description: 'Turn daily internet searches into free gift cards, Xbox credits, and cash vouchers using Microsoft Rewards with your referral bonus.',
+    badge: 'FREE REWARDS'
+  },
+
+  // ==========================================
+  // 1. WONDERSHARE VIRBO AI SUITE (IMPACT.COM / pxf.io)
+  // ==========================================
   {
     id: 'wondershare-virbo-hero',
     brand: 'Wondershare Virbo',
     category: 'creative',
-    title: 'Wondershare Virbo AI Avatar Generator',
-    description: 'Create realistic AI spokesperson video avatars in 120+ languages for YouTube, Marketing & Social Media.',
-    clickUrl: 'https://virbo.wondershare.com/?aff=5024116',
-    imageUrl: 'https://cc-download.wondershare.com/store/virbo-banner-1200x628.png',
-    badge: 'AI CREATIVE STUDIO',
-    size: 'hero'
+    sizeType: 'hero',
+    width: 1200,
+    height: 628,
+    clickUrl: 'https://wondersharesoftware.pxf.io/c/5024116/2882021/15586',
+    imageUrl: './images/affiliates/wondershare-virbo-banner.jpg',
+    pixelUrl: 'https://imp.pxf.io/i/5024116/2882021/15586',
+    rawHtml: '<h3 id="2882021"><a rel="sponsored" href="https://wondersharesoftware.pxf.io/c/5024116/2882021/15586">Wondershare Virbo - Deepfake Maker Yearly 65% OFF</a></h3><img height="0" width="0" src="https://imp.pxf.io/i/5024116/2882021/15586" style="position:absolute;visibility:hidden;" border="0" />',
+    title: 'Wondershare Virbo — AI Avatar & Spokesperson Generator (65% OFF)',
+    description: 'Generate hyper-realistic AI spokesperson videos in 120+ languages for YouTube, TikTok, and corporate training.',
+    badge: '65% OFF YEARLY'
   },
   {
-    id: 'temu-shopping-banner',
-    brand: 'TEMU',
-    category: 'shopping',
-    title: 'TEMU Global Direct Marketplace',
-    description: 'Shop wholesale prices directly on electronics, workstation tools, and lifestyle equipment with free shipping.',
-    clickUrl: 'https://temu.to/m/u1000000000',
-    imageUrl: 'https://img.kwcdn.com/product/open/2023-11-20/1700472000000-banner.jpg',
-    badge: 'WHOLESALE SAVINGS',
-    size: 'medium'
+    id: 'wondershare-virbo-medium',
+    brand: 'Wondershare Virbo',
+    category: 'creative',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://wondersharesoftware.pxf.io/c/5024116/2882021/15586',
+    imageUrl: './images/affiliates/wondershare-virbo-banner.jpg',
+    pixelUrl: 'https://imp.pxf.io/i/5024116/2882021/15586',
+    title: 'Wondershare Virbo AI Video Suite',
+    description: 'Text-to-video AI script generator & realistic avatar presenter.',
+    badge: 'EXCLUSIVE DEAL'
+  },
+
+  // ==========================================
+  // 2. TEMU HARDWARE & ELECTRONICS (IMPACT.COM / pxf.io)
+  // ==========================================
+  {
+    id: 'temu-dvd-burner-hero',
+    brand: 'TEMU Hardware',
+    category: 'hardware',
+    sizeType: 'hero',
+    width: 1200,
+    height: 628,
+    clickUrl: 'https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358',
+    imageUrl: 'https://img.kwcdn.com/product/fancy/817dd41d-fdee-491f-982e-63f9589eb14a.jpg',
+    rawHtml: '<a id="17592404914587" href="https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358" target="_top"><img src="https://img.kwcdn.com/product/fancy/817dd41d-fdee-491f-982e-63f9589eb14a.jpg" border="0" alt=""/></a>',
+    title: 'TEMU External CD/DVD Drive USB 2.0 Slim Portable Burner',
+    description: 'Slim portable optical burner for laptops, notebooks, desktop PCs, and work stations.',
+    badge: 'HARDWARE PROMO'
   },
   {
-    id: 'hostinger-cloud-hosting',
+    id: 'temu-dvd-burner-medium',
+    brand: 'TEMU Hardware',
+    category: 'hardware',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://temuaffiliateprogram.pxf.io/c/5024116/2039016/18350?prodsku=17592404914587&u=https%3A%2F%2Fwww.temu.com%2Fmy%2Fgoods.html%3F_bg_fs%3D1%26_p_jump_id%3D651%26_x_vst_scene%3Dadg%26goods_id%3D601099562958380%26sku_id%3D17592404914587%26_oak_adg_ctx%3Da-b1741b47%26_x_ns_catalog_id%3D17358%26_x_ns_gid%3D601099562958380%26_x_ns_product_id%3D17592404914587%26_x_ns_site_id%3D126&intsrc=PUI2_17358',
+    imageUrl: 'https://img.kwcdn.com/product/fancy/817dd41d-fdee-491f-982e-63f9589eb14a.jpg',
+    title: 'TEMU USB 2.0 External Burner',
+    description: 'Plug-and-play USB 2.0 CD-RW DVD-RW optical drive.',
+    badge: 'BEST SELLER'
+  },
+
+  // ==========================================
+  // 3. HOSTINGER CLOUD HOSTING (IMPACT.COM / sjv.io)
+  // ==========================================
+  {
+    id: 'hostinger-cloud-hero',
     brand: 'Hostinger',
     category: 'hosting',
-    title: 'Hostinger High-Performance Cloud & VPS Hosting',
-    description: '99.9% Uptime, Free NVMe Storage, Unlimited SSL Certificates & Free Domain for Web Developers.',
-    clickUrl: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
-    imageUrl: 'https://assets.hostinger.com/images/affiliate/banners/728x90.png',
-    badge: 'CLOUD INFRASTRUCTURE',
-    size: 'banner'
+    sizeType: 'hero',
+    width: 1200,
+    height: 628,
+    clickUrl: 'https://hostinger.sjv.io/c/6215170/1822851/18485',
+    imageUrl: './images/affiliates/hostinger-banner.jpg',
+    title: 'Hostinger Cloud Hosting — 75% OFF + Code: DPDCABINCEHM',
+    description: 'Fast, secure LiteSpeed web hosting with free SSL, unmetered bandwidth, free domain, and 24/7 priority support.',
+    badge: '75% OFF + CODE'
   },
   {
-    id: 'nordvpn-security-sky',
+    id: 'hostinger-cloud-medium',
+    brand: 'Hostinger',
+    category: 'hosting',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://hostinger.sjv.io/c/6215170/1822851/18485',
+    imageUrl: './images/affiliates/hostinger-banner.jpg',
+    title: 'Hostinger Cloud Web Hosting',
+    description: 'LiteSpeed infrastructure with free custom domain registration.',
+    badge: '75% DISCOUNT'
+  },
+  {
+    id: 'hostinger-cloud-banner',
+    brand: 'Hostinger',
+    category: 'hosting',
+    sizeType: 'banner',
+    width: 728,
+    height: 90,
+    clickUrl: 'https://hostinger.sjv.io/c/6215170/1822851/18485',
+    imageUrl: './images/affiliates/hostinger-banner.jpg',
+    title: 'Hostinger Web Hosting (75% OFF)',
+    description: 'Claim Hostinger Cloud hosting starting at $2.99/mo.',
+    badge: 'SPECIAL PROMO'
+  },
+
+  // ==========================================
+  // 4. NORDVPN CYBERSECURITY (IMPACT.COM / sjv.io)
+  // ==========================================
+  {
+    id: 'nordvpn-security-hero',
     brand: 'NordVPN',
     category: 'security',
-    title: 'NordVPN Next-Gen Cyber Security & Encrypted Tunneling',
-    description: 'Protect your IP address, bypass ISP throttling, and secure confidential developer credentials with double VPN encryption.',
-    clickUrl: 'https://nordvpn.com?aff=5024116',
-    imageUrl: 'https://s1.nordcdn.com/nordvpn/media/1.2054.0/images/global/banners/300x600.png',
-    badge: 'CYBER ENCRYPTION',
-    size: 'skyscraper'
+    sizeType: 'hero',
+    width: 1200,
+    height: 628,
+    clickUrl: 'https://nordvpn.sjv.io/c/5024116/976014/7452',
+    imageUrl: './images/affiliates/nordvpn-banner.jpg',
+    title: 'NordVPN 256-Bit Cyber Security (68% OFF + 3 Months Free)',
+    description: 'Shield client data with military-grade AES-256 encryption, malware protection, Threat Protection, and double VPN.',
+    badge: '68% OFF PROMO'
   },
   {
-    id: 'coursera-cyber-cert',
+    id: 'nordvpn-security-medium',
+    brand: 'NordVPN',
+    category: 'security',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://nordvpn.sjv.io/c/5024116/976014/7452',
+    imageUrl: './images/affiliates/nordvpn-banner.jpg',
+    title: 'NordVPN Workstation Protection',
+    description: 'Secure passwords, files, and remote client connections.',
+    badge: '68% DISCOUNT'
+  },
+
+  // ==========================================
+  // 5. COURSERA GLOBAL CERTIFICATIONS (IMPACT.COM / imp.i384100.net)
+  // ==========================================
+  {
+    id: 'coursera-cert-hero',
     brand: 'Coursera',
     category: 'education',
-    title: 'Coursera Professional Google & IBM Tech Degrees',
-    description: 'Master Cybersecurity, Full-Stack Software Engineering, and AI Development with accredited university certifications.',
-    clickUrl: 'https://coursera.pxf.io/c/5024116/123456/7890',
-    imageUrl: 'https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://images.ctfassets.net/wp1lc52y8v71/learning-banner-728x90.png',
-    badge: 'CAREER ACCELERATION',
-    size: 'banner'
+    sizeType: 'hero',
+    width: 1200,
+    height: 628,
+    clickUrl: 'https://imp.i384100.net/c/5024116/3801376/14726',
+    imageUrl: './images/affiliates/coursera-banner.jpg',
+    title: 'Coursera Accredited Professional Credentials (Google & Meta)',
+    description: 'Acquire accredited certificates in AI, Project Management, and Data Science to command $50+/hr rates.',
+    badge: 'GLOBAL CERT'
+  },
+  {
+    id: 'coursera-cert-medium',
+    brand: 'Coursera',
+    category: 'education',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://imp.i384100.net/c/5024116/3801376/14726',
+    imageUrl: './images/affiliates/coursera-banner.jpg',
+    title: 'Coursera Tech & Business Credentials',
+    description: '7,000+ courses from Google, IBM, Stanford, and Meta.',
+    badge: 'UP-SKILL NOW'
+  },
+
+  // ==========================================
+  // 6. COREL DRAW GRAPHICS SUITE (IMPACT.COM / sjv.io)
+  // ==========================================
+  {
+    id: 'coreldraw-graphics-hero',
+    brand: 'CorelDraw',
+    category: 'creative',
+    sizeType: 'hero',
+    width: 1200,
+    height: 628,
+    clickUrl: 'https://corel.sjv.io/c/5024116/3809733/20119',
+    imageUrl: './images/affiliates/coreldraw-banner.jpg',
+    title: 'CorelDraw Graphics Suite — Vector Illustration & Typography',
+    description: 'Professional vector illustration, layout, photo editing, and typography software suite for creative freelancers.',
+    badge: 'PRO SUITE'
+  },
+
+  // ==========================================
+  // 7. ENVATO THEMEFOREST TEMPLATES (IMPACT.COM / 1.envato.market)
+  // ==========================================
+  {
+    id: 'envato-themeforest-hero',
+    brand: 'Envato',
+    category: 'webdev',
+    sizeType: 'hero',
+    width: 1200,
+    height: 628,
+    clickUrl: 'https://1.envato.market/c/5024116/805521/4415',
+    imageUrl: './images/affiliates/envato-banner.jpg',
+    title: 'Envato ThemeForest — 50,000+ Premium Web Templates',
+    description: 'World-class WordPress themes, HTML5 templates, landing page designs, and web UI components.',
+    badge: '50K+ TEMPLATES'
+  },
+
+  // ==========================================
+  // 8. CAPCUT VIDEO EDITOR (IMPACT.COM / pxf.io)
+  // ==========================================
+  {
+    id: 'capcut-editor-hero',
+    brand: 'CapCut Pro',
+    category: 'creative',
+    sizeType: 'hero',
+    width: 1200,
+    height: 628,
+    clickUrl: 'https://capcutaffiliateprogram.pxf.io/WqmL1e',
+    imageUrl: './images/affiliates/wondershare-virbo-banner.jpg',
+    title: 'CapCut Video Editor — Short-Form Video & Auto Captions',
+    description: 'Industry-standard video editor for TikToks, Reels, YouTube Shorts, auto-captions, and AI background removal.',
+    badge: 'FREE CREATOR TOOL'
   }
 ];
-
-export const IMPACT_AFFILIATE_ASSETS = UNIQUE_AFFILIATE_ADS;
-export const ALL_AFFILIATE_ADS = UNIQUE_AFFILIATE_ADS;
