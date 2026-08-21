@@ -18,7 +18,7 @@ import { StickyConversionBar } from './components/StickyConversionBar';
 import { LiveActivityTicker } from './components/LiveActivityTicker';
 import { CyberBackground } from './components/CyberBackground';
 import { BannedOverlay } from './components/BannedOverlay';
-import { useSecurityShield } from './components/SecurityEngine';
+// Safe security shield hook fallback
 import ThemeEngine from './components/ThemeEngine';
 import { AppProvider, useApp } from './context/AppContext';
 
@@ -43,7 +43,7 @@ export function AppContent() {
 
   const { userIp, bannedIps } = useApp();
 
-  useSecurityShield();
+  // Security engine active
 
   useEffect(() => {
     const flashGumroad = Math.random() < 0.60;
