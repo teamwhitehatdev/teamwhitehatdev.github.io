@@ -8,7 +8,6 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     assetsDir: 'assets',
-    target: 'es2018',
-    cssTarget: 'safari12'
+    target: ['es2018', 'safari12', 'ios12']
   }
 });

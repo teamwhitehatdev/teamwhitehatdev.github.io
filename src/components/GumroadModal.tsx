@@ -22,7 +22,7 @@ export const GumroadModal: React.FC<GumroadModalProps> = ({ onComplete }) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [onComplete]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn font-mono">

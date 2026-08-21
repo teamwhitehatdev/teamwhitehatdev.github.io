@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { StockTicker } from './components/StockTicker';
@@ -18,20 +18,18 @@ import { StickyConversionBar } from './components/StickyConversionBar';
 import { LiveActivityTicker } from './components/LiveActivityTicker';
 import { CyberBackground } from './components/CyberBackground';
 import { BannedOverlay } from './components/BannedOverlay';
+import { useSecurityShield } from './components/SecurityEngine';
 import ThemeEngine from './components/ThemeEngine';
 import { AppProvider, useApp } from './context/AppContext';
+
 
 function VisitorPageTracker() {
   const location = useLocation();
   const { logVisitorPageNavigation } = useApp();
 
   useEffect(() => {
-    try {
-      if (typeof logVisitorPageNavigation === 'function') {
-        logVisitorPageNavigation(location.pathname);
-      }
-    } catch (e) {}
-  }, [location.pathname, logVisitorPageNavigation]);
+    logVisitorPageNavigation(location.pathname);
+  }, [location.pathname]);
 
   return null;
 }
@@ -43,21 +41,35 @@ export function AppContent() {
   const [showGumroadModal, setShowGumroadModal] = useState(false);
   const [showElevenLabsModal, setShowElevenLabsModal] = useState(false);
 
-  const appContext = useApp();
-  const userIp = appContext?.userIp;
-  const bannedIps = appContext?.bannedIps;
+  const { userIp, bannedIps } = useApp();
 
-  const handleOpenConsultation = useCallback((serviceTitle?: string) => {
+  useSecurityShield();
+
+  useEffect(() => {
+    const flashGumroad = Math.random() < 0.60;
+    if (flashGumroad) {
+      setShowGumroadModal(true);
+      setShowElevenLabsModal(false);
+    } else {
+      setShowGumroadModal(false);
+      const timer = setTimeout(() => {
+        setShowElevenLabsModal(true);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleOpenConsultation = (serviceTitle?: string) => {
     setSelectedService(serviceTitle);
     setIsConsultationOpen(true);
-  }, []);
+  };
 
-  const handleGumroadComplete = useCallback(() => {
+  const handleGumroadComplete = () => {
     setShowGumroadModal(false);
-  }, []);
+    setShowElevenLabsModal(true);
+  };
 
-  // Safe Banned IP Check
-  if (userIp && Array.isArray(bannedIps) && bannedIps.includes(userIp)) {
+  if (userIp && bannedIps.includes(userIp)) {
     return <BannedOverlay userIp={userIp} />;
   }
 

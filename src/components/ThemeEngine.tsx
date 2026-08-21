@@ -144,25 +144,18 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-    const [currentTheme, setCurrentTheme] = useState<ThemeName>(() => {
-    try {
-      const saved = localStorage.getItem('whitehat_theme') as ThemeName;
-      return (saved && THEMES[saved]) ? saved : 'cyberpunk_net';
-    } catch (e) {
-      return 'cyberpunk_net';
-    }
+  const [currentTheme, setCurrentTheme] = useState<ThemeName>(() => {
+    return (localStorage.getItem('whitehat_theme') as ThemeName) || 'cyberpunk_net';
   });
 
   const setTheme = (theme: ThemeName) => {
     if (THEMES[theme]) {
       setCurrentTheme(theme);
-      try {
-        localStorage.setItem('whitehat_theme', theme);
-      } catch (e) {}
+      localStorage.setItem('whitehat_theme', theme);
     }
   };
 
-  const themeConfig = THEMES[currentTheme] || THEMES.cyberpunk_net;
+  const themeConfig = THEMES[currentTheme];
 
   useEffect(() => {
     const root = document.documentElement;
