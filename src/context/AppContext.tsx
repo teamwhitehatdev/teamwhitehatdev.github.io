@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
 import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
+import { INITIAL_PROMO_ITEMS } from '../utils/initialPromoData';
 import { ALL_AFFILIATE_ADS } from '../data/affiliateAdsData';
-import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageOwnerType, CMSContentType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType } from '../types';
+import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageOwnerType, CMSContentType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType, PromoItem, PromoPlacementType } from '../types';
 
 interface AppContextType {
   services: Service[];
@@ -28,7 +29,7 @@ interface AppContextType {
   pendingCheckoutAction: (() => void) | null;
   setPendingCheckoutAction: (action: (() => void) | null) => void;
 
-  // CMS ITEMS MANAGEMENT
+  // CMS ITEMS MANAGEMENT (EDUCATIONAL)
   cmsItems: CMSItem[];
   cmsCategories: string[];
   addCMSCategory: (category: string) => void;
@@ -42,6 +43,14 @@ interface AppContextType {
   getHomeFeaturedCMSItems: () => CMSItem[];
   exportCMSDatabase: () => void;
   importCMSDatabase: (jsonStr: string) => boolean;
+
+  // CMS PROMOTIONS & ADVERTISEMENTS MANAGEMENT (PARTNER DEALS & PROMO)
+  promoItems: PromoItem[];
+  addPromoItem: (item: Omit<PromoItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  updatePromoItem: (id: string, updates: Partial<PromoItem>) => void;
+  deletePromoItem: (id: string) => void;
+  togglePromoItemVisibility: (id: string) => void;
+  getPublicPromoItems: (placement: PromoPlacementType) => PromoItem[];
 
   // HIRE VA INQUIRIES MANAGEMENT
   addHireVaInquiry: (inquiry: Omit<HireVaInquiry, 'id' | 'timestamp' | 'status'>) => void;
@@ -140,7 +149,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
   });
 
-  // CMS BACKEND ITEMS STATE WITH NORMALIZATION FOR PAGE OWNER & HOME FEATURED
+  // CMS BACKEND EDUCATIONAL ITEMS STATE
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
     const saved = localStorage.getItem('wh_cms_items');
     if (saved) {
@@ -159,6 +168,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     }
     return INITIAL_CMS_ITEMS;
+  });
+
+  // CMS PROMOTIONAL & ADVERTISEMENTS ITEMS STATE (PARTNER DEALS & PROMO)
+  const [promoItems, setPromoItems] = useState<PromoItem[]>(() => {
+    const saved = localStorage.getItem('wh_promo_items');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      } catch (e) {
+        console.error('Failed to parse saved Promo items:', e);
+      }
+    }
+    return INITIAL_PROMO_ITEMS;
   });
 
   // DETECT USER IP & DEVICE ON MOUNT
@@ -210,6 +235,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsItems]);
 
   useEffect(() => {
+    localStorage.setItem('wh_promo_items', JSON.stringify(promoItems));
+  }, [promoItems]);
+
+  useEffect(() => {
     localStorage.setItem('wh_visitor_logs', JSON.stringify(visitorLogs.slice(-100)));
   }, [visitorLogs]);
 
@@ -230,7 +259,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const clearVisitorLogs = () => setVisitorLogs([]);
 
-  // CMS ACTIONS
+  // CMS EDUCATIONAL ACTIONS
   const addCMSCategory = (category: string) => {
     const trimmed = category.trim();
     if (trimmed && !cmsCategories.includes(trimmed)) {
@@ -297,8 +326,39 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
   }, [cmsItems]);
 
+  // CMS PROMOTIONAL ACTIONS (PARTNER DEALS & PROMO)
+  const addPromoItem = (item: Omit<PromoItem, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const newPromo: PromoItem = {
+      ...item,
+      id: 'promo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    setPromoItems(prev => [newPromo, ...prev]);
+  };
+
+  const updatePromoItem = (id: string, updates: Partial<PromoItem>) => {
+    setPromoItems(prev => prev.map(item => item.id === id ? { ...item, ...updates, updatedAt: new Date().toISOString() } : item));
+  };
+
+  const deletePromoItem = (id: string) => {
+    setPromoItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const togglePromoItemVisibility = (id: string) => {
+    setPromoItems(prev => prev.map(item => item.id === id ? { ...item, visible: !item.visible, updatedAt: new Date().toISOString() } : item));
+  };
+
+  const getPublicPromoItems = useCallback((targetPlacement: PromoPlacementType) => {
+    const targetKey = targetPlacement.toLowerCase().trim();
+    return promoItems.filter(item => {
+      if (!item.visible || item.status !== 'PUBLISHED') return false;
+      return item.placement.toLowerCase().trim() === targetKey;
+    }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+  }, [promoItems]);
+
   const exportCMSDatabase = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cmsItems, null, 2));
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ cmsItems, promoItems }, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
     downloadAnchor.setAttribute("download", `cms_database_backup_${new Date().toISOString().split('T')[0]}.json`);
@@ -310,7 +370,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const importCMSDatabase = (jsonStr: string): boolean => {
     try {
       const parsed = JSON.parse(jsonStr);
-      if (Array.isArray(parsed)) {
+      if (parsed.cmsItems && Array.isArray(parsed.cmsItems)) {
+        setCmsItems(parsed.cmsItems);
+        if (parsed.promoItems && Array.isArray(parsed.promoItems)) {
+          setPromoItems(parsed.promoItems);
+        }
+        return true;
+      } else if (Array.isArray(parsed)) {
         setCmsItems(parsed);
         return true;
       }
@@ -430,6 +496,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setCMSItemStatus,
         getPublicPageCMSItems,
         getHomeFeaturedCMSItems,
+        promoItems,
+        addPromoItem,
+        updatePromoItem,
+        deletePromoItem,
+        togglePromoItemVisibility,
+        getPublicPromoItems,
         exportCMSDatabase,
         importCMSDatabase,
         addHireVaInquiry,

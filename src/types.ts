@@ -85,7 +85,7 @@ export interface VisitorLog {
   timestamp: string; // ISO date string
 }
 
-// CMS BACKEND TYPES
+// CMS BACKEND EDUCATIONAL TYPES
 export type CMSPageOwnerType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide';
 export type CMSContentType = 'Tutorial' | 'Guide' | 'Article' | 'Resource' | 'Service' | 'Showcase' | 'Affiliate' | 'Discussion';
 export type CMSPageType = CMSPageOwnerType | 'home' | 'va-hub' | 'freelancing' | 'affiliate-learning';
@@ -121,4 +121,29 @@ export interface CMSItem {
   // Backward-compatibility aliases
   page?: CMSPageType;
   featured?: boolean;
+}
+
+// CMS PROMOTIONAL & ADVERTISEMENTS TYPES (PARTNER DEALS & PROMO)
+export type PromoPlacementType = 'partner-deals' | 'promo';
+
+export interface PromoItem {
+  id: string;
+  title: string;
+  placement: PromoPlacementType; // 'partner-deals' | 'promo'
+  description: string;
+  fullDescription?: string;
+  imageUrl?: string;
+  destinationUrl: string;
+  buttonText: string;
+  badge?: string;
+  promotionLabel?: string;
+  status: CMSStatusType;        // 'DRAFT' | 'PUBLISHED' | 'SCHEDULED'
+  visible: boolean;             // true / false
+  startDate?: string;
+  endDate?: string;
+  sortOrder?: number;
+  openNewTab?: boolean;
+  disclosureNote?: string;
+  createdAt: string;
+  updatedAt: string;
 }
