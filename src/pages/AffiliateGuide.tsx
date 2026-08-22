@@ -208,21 +208,6 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
     <div className="-mx-4 sm:-mx-6 lg:-mx-8 -my-6 px-4 sm:px-6 lg:px-8 py-8 bg-slate-100 text-slate-900 font-sans min-h-screen relative z-20 border-t-4 border-indigo-600">
       <div className="max-w-7xl mx-auto space-y-10">
 
-        {/*  REQUIRED FTC AFFILIATE TRANSPARENCY DISCLOSURE BANNER */}
-        <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 md:p-6 shadow-md flex flex-col md:flex-row items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-amber-200 border border-amber-400 flex items-center justify-center text-amber-800 shrink-0 font-bold">
-            <Info className="w-6 h-6" />
-          </div>
-          <div className="space-y-1 text-xs md:text-sm text-slate-800 font-medium leading-relaxed">
-            <h4 className="font-bold text-slate-900 text-sm md:text-base flex items-center gap-2">
-              <span> Affiliate Transparency Disclosure &amp; Reader Commitment</span>
-            </h4>
-            <p>
-              <strong>Team WhiteHat Dev</strong> is an independent digital development &amp; virtual assistant resource portal. Pages on this website contain affiliate referral links (including Hostinger referral links with coupon code <code className="bg-amber-200/80 px-1.5 py-0.5 rounded font-mono font-bold text-amber-900">DPDCABINCEHM</code> and official CapCut creator links). If you click through and purchase web hosting or software subscriptions, we may receive a referral commission at <strong>zero extra cost to you</strong>. We only recommend hosting tools, video editors, and workflow templates that we actively use to build client websites and automated workflows. This affiliate revenue funds our free tutorials and open-source tools.
-            </p>
-          </div>
-        </div>
-
         {/* EDITORIAL TRUST HEADER */}
         <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/80 border border-slate-300/80 p-6 md:p-10 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200">
@@ -1091,6 +1076,22 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
             </div>
           </div>
 
+        </div>
+
+        {/*  REQUIRED FTC AFFILIATE TRANSPARENCY DISCLOSURE BANNER (MOVED TO BOTTOM) */}
+{/*  REQUIRED FTC AFFILIATE TRANSPARENCY DISCLOSURE BANNER */}
+        <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 md:p-6 shadow-md flex flex-col md:flex-row items-start gap-4">
+          <div className="w-10 h-10 rounded-xl bg-amber-200 border border-amber-400 flex items-center justify-center text-amber-800 shrink-0 font-bold">
+            <Info className="w-6 h-6" />
+          </div>
+          <div className="space-y-1 text-xs md:text-sm text-slate-800 font-medium leading-relaxed">
+            <h4 className="font-bold text-slate-900 text-sm md:text-base flex items-center gap-2">
+              <span> Affiliate Transparency Disclosure &amp; Reader Commitment</span>
+            </h4>
+            <p>
+              <strong>Team WhiteHat Dev</strong> is an independent digital development &amp; virtual assistant resource portal. Pages on this website contain affiliate referral links (including Hostinger referral links with coupon code <code className="bg-amber-200/80 px-1.5 py-0.5 rounded font-mono font-bold text-amber-900">DPDCABINCEHM</code> and official CapCut creator links). If you click through and purchase web hosting or software subscriptions, we may receive a referral commission at <strong>zero extra cost to you</strong>. We only recommend hosting tools, video editors, and workflow templates that we actively use to build client websites and automated workflows. This affiliate revenue funds our free tutorials and open-source tools.
+            </p>
+          </div>
         </div>
 
       </div>

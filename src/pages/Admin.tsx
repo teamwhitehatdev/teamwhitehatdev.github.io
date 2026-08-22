@@ -62,6 +62,8 @@ export const Admin: React.FC = () => {
     mainImage: string;
     galleryImages: string[];
     url: string;
+    buttonText: string;
+    badge: string;
     price: string;
     metrics: string;
   }>({
@@ -77,6 +79,8 @@ export const Admin: React.FC = () => {
     mainImage: '',
     galleryImages: [],
     url: '',
+    buttonText: 'EXPLORE THIS DEAL →',
+    badge: '',
     price: '',
     metrics: ''
   });
@@ -153,6 +157,8 @@ export const Admin: React.FC = () => {
       mainImage: '',
       galleryImages: [],
       url: '',
+      buttonText: 'EXPLORE THIS DEAL →',
+      badge: '',
       price: '',
       metrics: ''
     });
@@ -172,9 +178,11 @@ export const Admin: React.FC = () => {
       visible: item.visible,
       publishDate: item.publishDate || '',
       description: item.description,
-      mainImage: item.mainImage || '',
+      mainImage: item.mainImage || (item as any).imageUrl || '',
       galleryImages: item.galleryImages || [],
-      url: item.url || '',
+      url: item.url || (item as any).destinationUrl || '',
+      buttonText: (item as any).buttonText || 'EXPLORE THIS DEAL →',
+      badge: (item as any).badge || '',
       price: item.price || '',
       metrics: item.metrics || ''
     });
@@ -979,22 +987,29 @@ export const Admin: React.FC = () => {
         </div>
       )}
 
-      {/* CMS EDUCATIONAL ITEM MODAL */}
+      {/* CMS EDUCATIONAL ITEM MODAL (WITH FILE UPLOAD, IMAGE URL, REFERRAL DESTINATION, BUTTON TEXT, DISCOUNT BADGE & PRICING) */}
       {(editingCMSItem || isCreatingCMSItem) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md font-sans">
-          <div className="bg-slate-900 border-2 border-cyan-500/80 rounded-3xl p-6 max-w-2xl w-full space-y-5 shadow-2xl relative">
+          <div className="bg-slate-900 border-2 border-cyan-500/80 rounded-3xl p-6 max-w-2xl w-full space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => { setEditingCMSItem(null); setIsCreatingCMSItem(false); }}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white"
+              className="absolute top-5 right-5 text-slate-400 hover:text-white cursor-pointer"
             >
               <X className="w-6 h-6" />
             </button>
-            <h2 className="text-xl font-black font-orbitron text-white uppercase">
-              {editingCMSItem ? 'EDIT CMS CONTENT ITEM' : 'CREATE NEW CMS CONTENT ITEM'}
-            </h2>
+            <div className="border-b border-slate-800 pb-2">
+              <span className="text-xs text-cyan-400 font-mono font-bold uppercase tracking-widest block">
+                BACKEND CONTENT CONTROL CENTER
+              </span>
+              <h2 className="text-xl font-black font-orbitron text-white uppercase">
+                {editingCMSItem ? `EDIT CONTENT: ${editingCMSItem.title}` : 'CREATE NEW CMS CONTENT ITEM'}
+              </h2>
+            </div>
 
             <form onSubmit={handleSaveCMSItem} className="space-y-4 font-sans text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              
+              {/* PAGE OWNER, HOME FEATURED & CONTENT TYPE */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="text-cyan-300 font-mono block pb-1 font-bold">1. PAGE OWNER:</label>
                   <select
@@ -1002,11 +1017,11 @@ export const Admin: React.FC = () => {
                     onChange={(e) => setCmsForm({ ...cmsForm, pageOwner: e.target.value as CMSPageOwnerType })}
                     className="w-full px-3 py-2 bg-black border border-cyan-500/50 rounded-xl text-white font-mono uppercase text-xs font-bold"
                   >
-                    <option value="showcase">SHOWCASE</option>
-                    <option value="services">SERVICES</option>
-                    <option value="web-hosting">WEB HOSTING</option>
-                    <option value="about">ABOUT</option>
-                    <option value="affiliate-guide">AFFILIATE GUIDE</option>
+                    <option value="showcase">SHOWCASE (/#/showcase)</option>
+                    <option value="services">SERVICES (/#/services)</option>
+                    <option value="web-hosting">WEB HOSTING (/#/web-hosting)</option>
+                    <option value="about">ABOUT (/#/about)</option>
+                    <option value="affiliate-guide">AFFILIATE GUIDE (/#/affiliate-guide)</option>
                   </select>
                 </div>
 
@@ -1041,15 +1056,30 @@ export const Admin: React.FC = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="text-cyan-400 font-mono block pb-1 font-bold">TITLE:</label>
-                <input
-                  type="text"
-                  value={cmsForm.title}
-                  onChange={(e) => setCmsForm({ ...cmsForm, title: e.target.value })}
-                  required
-                  className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
-                />
+              {/* TITLE & CATEGORY */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-cyan-400 font-mono block pb-1 font-bold">TITLE / HEADING:</label>
+                  <input
+                    type="text"
+                    value={cmsForm.title}
+                    onChange={(e) => setCmsForm({ ...cmsForm, title: e.target.value })}
+                    required
+                    placeholder="Enter item heading title..."
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-slate-300 font-mono block pb-1 font-bold">CATEGORY / SUB-LABEL:</label>
+                  <input
+                    type="text"
+                    value={cmsForm.category}
+                    onChange={(e) => setCmsForm({ ...cmsForm, category: e.target.value })}
+                    placeholder="e.g. Web Development or AI Tools"
+                    className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-mono"
+                  />
+                </div>
               </div>
 
               {/* 🖼️ MAIN IMAGE UPLOAD FROM COMPUTER OR IMAGE URL */}
@@ -1100,40 +1130,81 @@ export const Admin: React.FC = () => {
                 )}
               </div>
 
-              {/* TARGET / REFERRAL URL */}
-              <div>
-                <label className="text-cyan-300 font-mono block pb-1 font-bold">REFERRAL LINK / TARGET URL:</label>
-                <input
-                  type="text"
-                  value={cmsForm.url}
-                  onChange={(e) => setCmsForm({ ...cmsForm, url: e.target.value })}
-                  placeholder="https://..."
-                  className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
-                />
+              {/* REFERRAL LINK / DESTINATION URL & BUTTON TEXT */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-cyan-300 font-mono block pb-1 font-bold">REFERRAL LINK / DESTINATION URL:</label>
+                  <input
+                    type="text"
+                    value={cmsForm.url}
+                    onChange={(e) => setCmsForm({ ...cmsForm, url: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-cyan-300 font-mono block pb-1 font-bold">BUTTON CTA TEXT:</label>
+                  <input
+                    type="text"
+                    value={cmsForm.buttonText}
+                    onChange={(e) => setCmsForm({ ...cmsForm, buttonText: e.target.value })}
+                    placeholder="e.g. CLAIM PROMO →, EXPLORE DEAL →"
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                  />
+                </div>
               </div>
 
+              {/* DISCOUNT BADGE & PRICING */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-lime-400 font-mono block pb-1 font-bold">DISCOUNT / BADGE TEXT:</label>
+                  <input
+                    type="text"
+                    value={cmsForm.badge}
+                    onChange={(e) => setCmsForm({ ...cmsForm, badge: e.target.value })}
+                    placeholder="e.g. 75% OFF, ₱7,800 CASHBACK, 50,000+ THEMES"
+                    className="w-full px-3 py-2 bg-black border border-lime-500/40 rounded-xl text-white font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-slate-300 font-mono block pb-1 font-bold">PRICING / COST METRIC:</label>
+                  <input
+                    type="text"
+                    value={cmsForm.price}
+                    onChange={(e) => setCmsForm({ ...cmsForm, price: e.target.value })}
+                    placeholder="e.g. Free, $49/mo, or ₱1,500/project"
+                    className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-mono"
+                  />
+                </div>
+              </div>
+
+              {/* DESCRIPTION / FULL CONTENT COPY */}
               <div>
-                <label className="text-slate-300 font-mono block pb-1 font-bold">DESCRIPTION / CONTENT:</label>
+                <label className="text-slate-300 font-mono block pb-1 font-bold">DESCRIPTION / FULL CONTENT COPY:</label>
                 <textarea
-                  rows={4}
+                  rows={3}
                   value={cmsForm.description}
                   onChange={(e) => setCmsForm({ ...cmsForm, description: e.target.value })}
                   required
+                  placeholder="Enter content details or topic copy..."
                   className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-sans"
                 />
               </div>
 
+              {/* ACTION BUTTONS */}
               <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
                 <button
                   type="button"
                   onClick={() => { setEditingCMSItem(null); setIsCreatingCMSItem(false); }}
-                  className="px-4 py-2 bg-slate-800 text-white rounded-xl font-mono"
+                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-mono cursor-pointer"
                 >
                   CANCEL
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-cyan-500 text-black font-black font-orbitron text-xs rounded-xl"
+                  className="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-black font-black font-orbitron text-xs rounded-xl shadow-lg cursor-pointer"
                 >
                   SAVE CONTENT ITEM
                 </button>
