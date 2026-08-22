@@ -147,7 +147,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                   SUBMIT CLIENT INQUIRY TO BACK-END CMS
                 </h3>
                 <p className="text-xs text-gray-300">
-                  Fill out the form below. All submitted inquiries are instantly stored in our back-end CMS Admin panel for response.
+                  Fill out the form below. All submitted inquiries are instantly stored in our secure system for response.
                 </p>
               </div>
 
