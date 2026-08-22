@@ -10,7 +10,7 @@ export const Admin: React.FC = () => {
   const [authError, setAuthError] = useState('');
   
   // TABS STATE INCLUDING CMS CONTROL CENTER, INQUIRIES, VISITOR ANALYTICS & FIREWALL
-  const [activeTab, setActiveTab] = useState<'cms' | 'inquiries' | 'analytics' | 'firewall' | 'backup'>('cms');
+  const [activeTab, setActiveTab] = useState<'cms' | 'hire-va' | 'inquiries' | 'analytics' | 'firewall' | 'backup'>('cms');
   
   // ANALYTICS TIMEFRAME FILTER
   const [analyticsTimeframe, setAnalyticsTimeframe] = useState<'today' | '7days' | '90days' | 'all'>('all');
@@ -56,7 +56,8 @@ export const Admin: React.FC = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
 
   const {
-    cmsItems, addCMSItem, updateCMSItem, deleteCMSItem, toggleCMSItemVisibility, setCMSItemStatus,
+    cmsItems, cmsCategories, addCMSCategory, addCMSItem, updateCMSItem, deleteCMSItem, toggleCMSItemVisibility, setCMSItemStatus,
+    hireVaInquiries, updateHireVaInquiryStatus, deleteHireVaInquiry,
     exportCMSDatabase, importCMSDatabase,
     inquiries, deleteInquiry,
     visitorLogs, clearVisitorLogs,
@@ -535,6 +536,106 @@ export const Admin: React.FC = () => {
       {/* ========================================================================= */}
       {/* TAB 2: 📩 INQUIRIES & HIRE VA CONSULTATIONS */}
       {/* ========================================================================= */}
+            {/* HIRE VA INQUIRIES BACKEND MANAGEMENT PANEL */}
+      {activeTab === 'hire-va' && (
+        <div className="space-y-6 animate-fadeIn font-sans">
+          <div className="bg-slate-900 border border-lime-500/40 rounded-2xl p-6 shadow-xl space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+              <div>
+                <span className="text-xs font-mono font-bold text-lime-400 uppercase tracking-widest block">
+                  BACKEND INQUIRY MANAGEMENT SYSTEM
+                </span>
+                <h3 className="text-xl font-black font-orbitron text-white">
+                  📋 HIRE VA &amp; CLIENT PROJECT INQUIRIES ({hireVaInquiries.length})
+                </h3>
+                <p className="text-xs text-slate-400 font-sans mt-0.5">
+                  Review incoming client requests. Administrators maintain complete authority over project acceptance, pricing, and responses.
+                </p>
+              </div>
+            </div>
+
+            {hireVaInquiries.length === 0 ? (
+              <div className="p-8 text-center bg-slate-950 border border-slate-800 rounded-xl space-y-2 text-xs font-mono text-slate-400">
+                <CheckCircle className="w-8 h-8 text-lime-400 mx-auto" />
+                <p>No client inquiries currently logged.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {hireVaInquiries.map((inq) => (
+                  <div key={inq.id} className="bg-slate-950 border border-slate-800 hover:border-lime-500/50 rounded-xl p-5 space-y-4 transition-all">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-bold text-white text-sm font-orbitron">{inq.name}</h4>
+                          <span className="px-2.5 py-0.5 bg-lime-500/20 text-lime-300 border border-lime-500/40 text-[10px] font-mono font-bold uppercase rounded-full">
+                            STATUS: {inq.status}
+                          </span>
+                        </div>
+                        <p className="text-xs text-cyan-300 font-mono pt-0.5">{inq.email} • Required: {inq.serviceRequested}</p>
+                      </div>
+
+                      <div className="text-right text-[11px] font-mono text-slate-400">
+                        <span>{new Date(inq.timestamp).toLocaleString()}</span>
+                        {inq.sourcePage && <span className="block text-[10px] text-slate-500">Source: {inq.sourcePage}</span>}
+                      </div>
+                    </div>
+
+                    <div className="p-3.5 bg-slate-900 rounded-lg text-xs text-slate-200 font-sans leading-relaxed border border-slate-800">
+                      "{inq.message}"
+                    </div>
+
+                    {/* STATUS CHANGE ACTIONS */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+                        <span className="text-slate-400 text-[11px]">ADMIN ACTIONS:</span>
+                        <button
+                          onClick={() => updateHireVaInquiryStatus(inq.id, 'ACCEPTED')}
+                          className="px-3 py-1 bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/40 rounded text-[11px] font-bold"
+                        >
+                          ACCEPT
+                        </button>
+                        <button
+                          onClick={() => updateHireVaInquiryStatus(inq.id, 'CONTACTED')}
+                          className="px-3 py-1 bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 border border-cyan-500/40 rounded text-[11px] font-bold"
+                        >
+                          CONTACT
+                        </button>
+                        <button
+                          onClick={() => updateHireVaInquiryStatus(inq.id, 'REVIEWING')}
+                          className="px-3 py-1 bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 border border-amber-500/40 rounded text-[11px] font-bold"
+                        >
+                          REVIEW
+                        </button>
+                        <button
+                          onClick={() => updateHireVaInquiryStatus(inq.id, 'DECLINED')}
+                          className="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 border border-rose-500/40 rounded text-[11px] font-bold"
+                        >
+                          DECLINE
+                        </button>
+                        <button
+                          onClick={() => updateHireVaInquiryStatus(inq.id, 'ARCHIVED')}
+                          className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
+                        >
+                          ARCHIVE
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={() => deleteHireVaInquiry(inq.id)}
+                        className="px-2.5 py-1 bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800 rounded text-[11px] flex items-center gap-1"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>DELETE</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {activeTab === 'inquiries' && (
         <HUDPanel title="📩 SUBMITTED HIRE VA &amp; CONSULTATION INQUIRIES">
           <div className="p-6 space-y-6 font-sans">

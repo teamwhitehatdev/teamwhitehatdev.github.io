@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
 import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
-import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageType, CMSStatusType, VisitorLog } from '../types';
+import { ALL_AFFILIATE_ADS } from '../data/affiliateAdsData';
+import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType } from '../types';
 
 interface AppContextType {
   services: Service[];
@@ -9,12 +10,13 @@ interface AppContextType {
   affiliates: Affiliate[];
   testimonials: Testimonial[];
   inquiries: ContactInquiry[];
+  hireVaInquiries: HireVaInquiry[];
   bannedIps: string[];
   userIp: string;
   userCountry: string;
   userDevice: 'Desktop' | 'Mobile' | 'Tablet';
   isUserBanned: boolean;
-  
+
   // VISITOR LOGS TELEMETRY
   visitorLogs: VisitorLog[];
   clearVisitorLogs: () => void;
@@ -25,216 +27,212 @@ interface AppContextType {
   setIsCaptchaOpen: (open: boolean) => void;
   pendingCheckoutAction: (() => void) | null;
   setPendingCheckoutAction: (action: (() => void) | null) => void;
-  
+
   // CMS ITEMS MANAGEMENT
   cmsItems: CMSItem[];
+  cmsCategories: string[];
+  addCMSCategory: (category: string) => void;
   addCMSItem: (item: Omit<CMSItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateCMSItem: (id: string, updates: Partial<CMSItem>) => void;
   deleteCMSItem: (id: string) => void;
   toggleCMSItemVisibility: (id: string) => void;
   setCMSItemStatus: (id: string, status: CMSStatusType) => void;
-  getPublicPageCMSItems: (page: CMSPageType) => CMSItem[];
+  getPublicPageCMSItems: (page: string) => CMSItem[];
   exportCMSDatabase: () => void;
   importCMSDatabase: (jsonStr: string) => boolean;
+
+  // HIRE VA INQUIRIES MANAGEMENT
+  addHireVaInquiry: (inquiry: Omit<HireVaInquiry, 'id' | 'timestamp' | 'status'>) => void;
+  updateHireVaInquiryStatus: (id: string, status: HireVaStatusType, notes?: string) => void;
+  deleteHireVaInquiry: (id: string) => void;
 
   addService: (service: Omit<Service, 'id'>) => void;
   updateService: (id: string, service: Partial<Service>) => void;
   deleteService: (id: string) => void;
-  
+
   addProject: (project: Omit<Project, 'id'>) => void;
   updateProject: (id: string, project: Partial<Project>) => void;
   deleteProject: (id: string) => void;
-  
+
   addBannedIp: (ip: string) => void;
   removeBannedIp: (ip: string) => void;
-  
+
   addInquiry: (inquiry: Omit<ContactInquiry, 'id' | 'timestamp'>) => void;
   deleteInquiry: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+const DEFAULT_CATEGORIES = [
+  'Virtual Assistant',
+  'VA Fundamentals',
+  'Admin Skills',
+  'Communication',
+  'Digital Skills',
+  'Freelancing',
+  'Affiliate Marketing',
+  'Content Strategy',
+  'Web Development',
+  'Graphic Design',
+  'Video Editing',
+  'Productivity',
+  'Automation',
+  'AI Tools',
+  'Social Media',
+  'Online Business',
+  'Web Hosting',
+  'Services',
+  'Showcase',
+  'Guides',
+  'Tutorials',
+  'Resources'
+];
+
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // USER TELEMETRY STATE
   const [userIp, setUserIp] = useState<string>('127.0.0.1');
   const [userCountry, setUserCountry] = useState<string>('United States');
   const [userDevice, setUserDevice] = useState<'Desktop' | 'Mobile' | 'Tablet'>('Desktop');
-
-  // BANNED IPS STATE
   const [bannedIps, setBannedIps] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('wh_banned_ips');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) return parsed;
-      }
-    } catch (e) {}
-    return ['185.220.101.5', '198.51.100.42'];
+    const saved = localStorage.getItem('wh_banned_ips');
+    return saved ? JSON.parse(saved) : ['192.168.1.100'];
   });
 
-  // VISITOR LOGS STATE
+  // VISITOR NAVIGATION TELEMETRY LOGS
   const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>(() => {
-    try {
-      const saved = localStorage.getItem('wh_visitor_logs');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch (e) {}
-    // Seed initial realistic visitor telemetry logs for analytics demo
-    const now = new Date();
-    const mockLogs: VisitorLog[] = [
-      { id: 'v-1', ip: '112.203.45.12', country: 'Philippines 🇵🇭', city: 'Manila', device: 'Desktop', browser: 'Chrome 126', os: 'Windows 11', pageVisited: '/#/affiliate-guide', timestamp: new Date(now.getTime() - 1000 * 60 * 15).toISOString() },
-      { id: 'v-2', ip: '172.56.21.90', country: 'United States 🇺🇸', city: 'Los Angeles', device: 'Mobile', browser: 'Safari Mobile', os: 'iOS 17', pageVisited: '/', timestamp: new Date(now.getTime() - 1000 * 60 * 45).toISOString() },
-      { id: 'v-3', ip: '82.165.197.1', country: 'Germany 🇩🇪', city: 'Berlin', device: 'Desktop', browser: 'Firefox 127', os: 'Linux', pageVisited: '/#/services', timestamp: new Date(now.getTime() - 1000 * 60 * 120).toISOString() },
-      { id: 'v-4', ip: '180.191.88.5', country: 'Philippines 🇵🇭', city: 'Cebu', device: 'Mobile', browser: 'Chrome Mobile', os: 'Android 14', pageVisited: '/#/web-hosting', timestamp: new Date(now.getTime() - 1000 * 60 * 300).toISOString() },
-      { id: 'v-5', ip: '103.252.200.4', country: 'Singapore 🇸🇬', city: 'Singapore', device: 'Tablet', browser: 'Safari Tablet', os: 'iPadOS', pageVisited: '/#/showcase', timestamp: new Date(now.getTime() - 1000 * 60 * 600).toISOString() },
-      { id: 'v-6', ip: '46.101.89.23', country: 'United Kingdom 🇬🇧', city: 'London', device: 'Desktop', browser: 'Edge 126', os: 'Windows 10', pageVisited: '/#/about', timestamp: new Date(now.getTime() - 1000 * 60 * 1400).toISOString() }
-    ];
-    return mockLogs;
+    const saved = localStorage.getItem('wh_visitor_logs');
+    return saved ? JSON.parse(saved) : [];
   });
 
-  // CMS ITEMS STATE
+  // CAPTCHA STATE
+  const [isCaptchaOpen, setIsCaptchaOpen] = useState<boolean>(false);
+  const [pendingCheckoutAction, setPendingCheckoutAction] = useState<(() => void) | null>(null);
+
+  // CORE DATA STATES
+  const [services, setServices] = useState<Service[]>(() => {
+    const saved = localStorage.getItem('wh_services');
+    return saved ? JSON.parse(saved) : SERVICES;
+  });
+
+  const [projects, setProjects] = useState<Project[]>(() => {
+    const saved = localStorage.getItem('wh_projects');
+    return saved ? JSON.parse(saved) : PROJECTS;
+  });
+
+  const [testimonials] = useState<Testimonial[]>(INITIAL_TESTIMONIALS);
+
+  const [inquiries, setInquiries] = useState<ContactInquiry[]>(() => {
+    const saved = localStorage.getItem('wh_inquiries');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // HIRE VA INQUIRIES STATE
+  const [hireVaInquiries, setHireVaInquiries] = useState<HireVaInquiry[]>(() => {
+    const saved = localStorage.getItem('wh_hire_va_inquiries');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // CMS CATEGORIES
+  const [cmsCategories, setCmsCategories] = useState<string[]>(() => {
+    const saved = localStorage.getItem('wh_cms_categories');
+    return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
+  });
+
+  // CMS BACKEND ITEMS STATE WITH INITIAL CMS ITEMS FALLBACK
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
-    try {
-      const saved = localStorage.getItem('wh_cms_items');
-      if (saved) {
+    const saved = localStorage.getItem('wh_cms_items');
+    if (saved) {
+      try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {
+        console.error('Failed to parse saved CMS items:', e);
       }
-    } catch (e) {}
+    }
     return INITIAL_CMS_ITEMS;
   });
 
-  // INQUIRIES STATE
-    // INQUIRIES STATE WITH REALISTIC CLIENT LEADS
-  const [inquiries, setInquiries] = useState<ContactInquiry[]>(() => {
-    try {
-      const saved = localStorage.getItem('wh_inquiries');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch (e) {}
-    // Seed initial realistic client booking inquiries for CMS admin
-    return [
-      {
-        id: 'inq-101',
-        name: 'Samantha Vance',
-        email: 'samantha.vance@techcorp.us',
-        service: 'Executive Virtual Assistance ($15/hr)',
-        message: 'Hi Team WhiteHat! We need a full-time executive VA for email triage, calendar management, and client onboarding.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 30).toLocaleString(),
-        ipAddress: '172.56.21.90',
-        country: 'United States 🇺🇸',
-        device: 'Desktop'
-      },
-      {
-        id: 'inq-102',
-        name: 'David Reynolds',
-        email: 'david@ukdigitalagency.co.uk',
-        service: 'Full-Stack Web Development ($499/proj)',
-        message: 'Hello! I saw your portfolio. We want to hire your team to build a high-converting Next.js & React web application.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 120).toLocaleString(),
-        ipAddress: '82.165.197.1',
-        country: 'United Kingdom 🇬🇧',
-        device: 'Desktop'
-      },
-      {
-        id: 'inq-103',
-        name: 'Maria Santos',
-        email: 'maria.santos@manilastartup.ph',
-        service: 'Hostinger Web Hosting Setup',
-        message: 'Inquiring about web hosting migration to Hostinger LiteSpeed servers using code DPDCABINCEHM.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 360).toLocaleString(),
-        ipAddress: '112.203.45.12',
-        country: 'Philippines 🇵🇭',
-        device: 'Mobile'
-      },
-      {
-        id: 'inq-104',
-        name: 'Alexander Wright',
-        email: 'alex@ausventures.com.au',
-        service: 'Mobile App Development ($799/proj)',
-        message: 'Need a cross-platform mobile application for Android & iOS published on Google Play Store.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 720).toLocaleString(),
-        ipAddress: '103.252.200.4',
-        country: 'Australia 🇦🇺',
-        device: 'Tablet'
-      }
-    ];
-  });
-
-  // DETECT DEVICE & IP ON MOUNT
+  // DETECT USER IP & DEVICE ON MOUNT
   useEffect(() => {
-    // Detect Device
     const ua = navigator.userAgent;
-    let dev: 'Desktop' | 'Mobile' | 'Tablet' = 'Desktop';
-    if (/tablet|ipad|playbook|silk/i.test(ua)) dev = 'Tablet';
-    else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated/i.test(ua)) dev = 'Mobile';
-    setUserDevice(dev);
+    if (/Mobi|Android|iPhone/i.test(ua)) {
+      setUserDevice('Mobile');
+    } else if (/Tablet|iPad/i.test(ua)) {
+      setUserDevice('Tablet');
+    } else {
+      setUserDevice('Desktop');
+    }
 
-    // Fetch IP and Geo
-    fetch('https://ipapi.co/json/')
+    fetch('https://api.ipify.org?format=json')
       .then(res => res.json())
       .then(data => {
-        if (data && data.ip) {
-          setUserIp(data.ip);
-          const countryStr = `${data.country_name || 'Global'} ${data.country_flag || ''}`.trim();
-          setUserCountry(countryStr);
-          
-          // Log visitor visit
-          const newLog: VisitorLog = {
-            id: `v-${Date.now()}`,
-            ip: data.ip,
-            country: countryStr,
-            city: data.city || 'Unknown',
-            device: dev,
-            browser: 'Web Browser',
-            os: navigator.platform || 'Unknown OS',
-            pageVisited: window.location.hash || '/',
-            timestamp: new Date().toISOString()
-          };
-          
-          setVisitorLogs(prev => {
-            if (prev.some(l => l.ip === data.ip && (new Date().getTime() - new Date(l.timestamp).getTime() < 300000))) {
-              return prev; // don't duplicate within 5 mins
-            }
-            return [newLog, ...prev.slice(0, 100)];
-          });
-        }
+        if (data.ip) setUserIp(data.ip);
       })
-      .catch(() => {
-        setUserIp('127.0.0.1');
-        setUserCountry('Global 🌐');
-      });
+      .catch(() => setUserIp('185.220.101.5'));
   }, []);
 
-  // PERSISTENCE EFFECTS
+  // PERSIST LOCALSTORAGE
   useEffect(() => {
-    try { localStorage.setItem('wh_cms_items', JSON.stringify(cmsItems)); } catch (e) {}
-  }, [cmsItems]);
-
-  useEffect(() => {
-    try { localStorage.setItem('wh_inquiries', JSON.stringify(inquiries)); } catch (e) {}
-  }, [inquiries]);
-
-  useEffect(() => {
-    try { localStorage.setItem('wh_banned_ips', JSON.stringify(bannedIps)); } catch (e) {}
+    localStorage.setItem('wh_banned_ips', JSON.stringify(bannedIps));
   }, [bannedIps]);
 
   useEffect(() => {
-    try { localStorage.setItem('wh_visitor_logs', JSON.stringify(visitorLogs)); } catch (e) {}
+    localStorage.setItem('wh_services', JSON.stringify(services));
+  }, [services]);
+
+  useEffect(() => {
+    localStorage.setItem('wh_projects', JSON.stringify(projects));
+  }, [projects]);
+
+  useEffect(() => {
+    localStorage.setItem('wh_inquiries', JSON.stringify(inquiries));
+  }, [inquiries]);
+
+  useEffect(() => {
+    localStorage.setItem('wh_hire_va_inquiries', JSON.stringify(hireVaInquiries));
+  }, [hireVaInquiries]);
+
+  useEffect(() => {
+    localStorage.setItem('wh_cms_categories', JSON.stringify(cmsCategories));
+  }, [cmsCategories]);
+
+  useEffect(() => {
+    localStorage.setItem('wh_cms_items', JSON.stringify(cmsItems));
+  }, [cmsItems]);
+
+  useEffect(() => {
+    localStorage.setItem('wh_visitor_logs', JSON.stringify(visitorLogs.slice(-100)));
   }, [visitorLogs]);
 
-  // IS USER BANNED CHECK
-  const isUserBanned = bannedIps.includes(userIp);
+  // LOG VISITOR NAVIGATION
+  const logVisitorPageNavigation = useCallback((pagePath: string) => {
+    const newLog: VisitorLog = {
+      id: 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+      ip: userIp,
+      country: userCountry,
+      device: userDevice,
+      browser: navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Browser',
+      os: navigator.platform,
+      pageVisited: pagePath,
+      timestamp: new Date().toISOString()
+    };
+    setVisitorLogs(prev => [newLog, ...prev.slice(0, 99)]);
+  }, [userIp, userCountry, userDevice]);
 
-  // CMS ITEM FUNCTIONS
-  const addCMSItem = (newItemData: Omit<CMSItem, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const clearVisitorLogs = () => setVisitorLogs([]);
+
+  // CMS ACTIONS
+  const addCMSCategory = (category: string) => {
+    const trimmed = category.trim();
+    if (trimmed && !cmsCategories.includes(trimmed)) {
+      setCmsCategories(prev => [...prev, trimmed]);
+    }
+  };
+
+  const addCMSItem = (item: Omit<CMSItem, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newItem: CMSItem = {
-      ...newItemData,
-      id: `cms-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      ...item,
+      id: 'cms_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -257,24 +255,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems(prev => prev.map(item => item.id === id ? { ...item, status, updatedAt: new Date().toISOString() } : item));
   };
 
-  const getPublicPageCMSItems = (page: CMSPageType): CMSItem[] => {
-    const now = new Date();
+  const getPublicPageCMSItems = useCallback((pageOrCategory: string) => {
+    const key = pageOrCategory.toLowerCase().trim();
     return cmsItems.filter(item => {
-      if (item.page !== page) return false;
-      if (!item.visible) return false;
-      if (item.status === 'DRAFT') return false;
-      if (item.status === 'SCHEDULED' && item.publishDate) {
-        if (new Date(item.publishDate) > now) return false;
-      }
-      return true;
-    });
-  };
+      if (!item.visible || item.status !== 'PUBLISHED') return false;
+      if (item.page === key || key === 'all' || key === 'home') return true;
+      if (item.category && item.category.toLowerCase().includes(key)) return true;
+      if (item.title && item.title.toLowerCase().includes(key)) return true;
+      return false;
+    }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+  }, [cmsItems]);
 
   const exportCMSDatabase = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cmsItems, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `cmsDatabase_${new Date().toISOString().slice(0, 10)}.json`);
+    downloadAnchor.setAttribute("download", `cms_database_backup_${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -287,16 +283,76 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setCmsItems(parsed);
         return true;
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('Import failed:', e);
+    }
     return false;
   };
 
-  // INQUIRIES FUNCTIONS
-  const addInquiry = (inquiryData: Omit<ContactInquiry, 'id' | 'timestamp'>) => {
-    const newInquiry: ContactInquiry = {
-      ...inquiryData,
-      id: `inq-${Date.now()}`,
-      timestamp: new Date().toLocaleString(),
+  // HIRE VA INQUIRIES ACTIONS
+  const addHireVaInquiry = (inquiry: Omit<HireVaInquiry, 'id' | 'timestamp' | 'status'>) => {
+    const newInquiry: HireVaInquiry = {
+      ...inquiry,
+      id: 'hva_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+      timestamp: new Date().toISOString(),
+      status: 'NEW',
+      ipAddress: userIp,
+      country: userCountry,
+      device: userDevice
+    };
+    setHireVaInquiries(prev => [newInquiry, ...prev]);
+  };
+
+  const updateHireVaInquiryStatus = (id: string, status: HireVaStatusType, notes?: string) => {
+    setHireVaInquiries(prev => prev.map(item => item.id === id ? { ...item, status, adminNotes: notes !== undefined ? notes : item.adminNotes } : item));
+  };
+
+  const deleteHireVaInquiry = (id: string) => {
+    setHireVaInquiries(prev => prev.filter(item => item.id !== id));
+  };
+
+  // SERVICE & PROJECT ACTIONS
+  const addService = (service: Omit<Service, 'id'>) => {
+    const newService = { ...service, id: 'svc_' + Date.now() };
+    setServices(prev => [...prev, newService]);
+  };
+
+  const updateService = (id: string, service: Partial<Service>) => {
+    setServices(prev => prev.map(s => s.id === id ? { ...s, ...service } : s));
+  };
+
+  const deleteService = (id: string) => {
+    setServices(prev => prev.filter(s => s.id !== id));
+  };
+
+  const addProject = (project: Omit<Project, 'id'>) => {
+    const newProj = { ...project, id: 'proj_' + Date.now() };
+    setProjects(prev => [...prev, newProj]);
+  };
+
+  const updateProject = (id: string, project: Partial<Project>) => {
+    setProjects(prev => prev.map(p => p.id === id ? { ...p, ...project } : p));
+  };
+
+  const deleteProject = (id: string) => {
+    setProjects(prev => prev.filter(p => p.id !== id));
+  };
+
+  const addBannedIp = (ip: string) => {
+    if (ip && !bannedIps.includes(ip)) {
+      setBannedIps(prev => [...prev, ip]);
+    }
+  };
+
+  const removeBannedIp = (ip: string) => {
+    setBannedIps(prev => prev.filter(i => i !== ip));
+  };
+
+  const addInquiry = (inquiry: Omit<ContactInquiry, 'id' | 'timestamp'>) => {
+    const newInquiry = {
+      ...inquiry,
+      id: 'inq_' + Date.now(),
+      timestamp: new Date().toISOString(),
       ipAddress: userIp,
       country: userCountry,
       device: userDevice
@@ -308,120 +364,56 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setInquiries(prev => prev.filter(i => i.id !== id));
   };
 
-  // BANNED IPS FUNCTIONS
-    const logVisitorPageNavigation = (pagePath: string) => {
-    const ua = navigator.userAgent;
-    let dev = 'Desktop';
-    if (/tablet|ipad|playbook|silk/i.test(ua)) dev = 'Tablet';
-    else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated/i.test(ua)) dev = 'Mobile';
-
-    let bro = 'Chrome';
-    if (ua.indexOf('Firefox') > -1) bro = 'Firefox';
-    else if (ua.indexOf('SamsungBrowser') > -1) bro = 'Samsung Browser';
-    else if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) bro = 'Opera';
-    else if (ua.indexOf('Edge') > -1 || ua.indexOf('Edg') > -1) bro = 'Edge';
-    else if (ua.indexOf('Chrome') > -1) bro = 'Chrome';
-    else if (ua.indexOf('Safari') > -1) bro = 'Safari';
-
-    let osName = 'Windows';
-    if (ua.indexOf('Win') > -1) osName = 'Windows';
-    else if (ua.indexOf('Mac') > -1) osName = 'macOS';
-    else if (ua.indexOf('Linux') > -1) osName = 'Linux';
-    else if (ua.indexOf('Android') > -1) osName = 'Android';
-    else if (ua.indexOf('like Mac') > -1) osName = 'iOS';
-
-    const res = window.screen.width + 'x' + window.screen.height;
-    const lang = navigator.language || 'en-US';
-    const ref = document.referrer ? new URL(document.referrer).hostname : 'Direct Traffic';
-    const timeIso = new Date().toISOString();
-
-    const newEntry: VisitorLog = {
-      id: 'v-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
-      ip: userIp || '127.0.0.1',
-      country: userCountry || 'Global Visitor 🌐',
-      city: 'Metro Area',
-      region: 'Central Region',
-      org: 'Internet Provider',
-      device: dev,
-      browser: bro,
-      os: osName,
-      page: pagePath || '/',
-      referrer: ref,
-      screenResolution: res,
-      language: lang,
-      timestamp: timeIso,
-      status: bannedIps.includes(userIp) ? 'BANNED ⛔' : 'AUTHORIZED ✅'
-    };
-
-    setVisitorLogs(prev => {
-      if (prev.length > 0 && prev[0].page === pagePath && (new Date().getTime() - new Date(prev[0].timestamp).getTime() < 3000)) {
-        return prev;
-      }
-      return [newEntry, ...prev.slice(0, 250)];
-    });
-  };
-
-  const addBannedIp = (ip: string) => {
-    if (!bannedIps.includes(ip.trim())) {
-      setBannedIps(prev => [...prev, ip.trim()]);
-    }
-  };
-
-  const removeBannedIp = (ip: string) => {
-    setBannedIps(prev => prev.filter(item => item !== ip));
-  };
-
-  const clearVisitorLogs = () => {
-    setVisitorLogs([]);
-  };
-
-  // SERVICES & PROJECTS STATE
-  const [services, setServices] = useState<Service[]>(SERVICES as any);
-  const [projects, setProjects] = useState<Project[]>(PROJECTS as any);
-  const [affiliates] = useState<Affiliate[]>([]);
-  const [testimonials] = useState<Testimonial[]>(INITIAL_TESTIMONIALS as any);
-
-  const [isCaptchaOpen, setIsCaptchaOpen] = useState(false);
-  const [pendingCheckoutAction, setPendingCheckoutAction] = useState<(() => void) | null>(null);
-
-  const addService = (serviceData: Omit<Service, 'id'>) => {
-    const newService: Service = { ...serviceData, id: `svc-${Date.now()}` };
-    setServices(prev => [newService, ...prev]);
-  };
-
-  const updateService = (id: string, updatedData: Partial<Service>) => {
-    setServices(prev => prev.map(s => s.id === id ? { ...s, ...updatedData } : s));
-  };
-
-  const deleteService = (id: string) => {
-    setServices(prev => prev.filter(s => s.id !== id));
-  };
-
-  const addProject = (projectData: Omit<Project, 'id'>) => {
-    const newProject: Project = { ...projectData, id: `proj-${Date.now()}` };
-    setProjects(prev => [newProject, ...prev]);
-  };
-
-  const updateProject = (id: string, updatedData: Partial<Project>) => {
-    setProjects(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
-  };
-
-  const deleteProject = (id: string) => {
-    setProjects(prev => prev.filter(p => p.id !== id));
-  };
+  const isUserBanned = bannedIps.includes(userIp);
 
   return (
-    <AppContext.Provider value={{
-      services, projects, affiliates, testimonials, inquiries, bannedIps, userIp, userCountry, userDevice, isUserBanned,
-      visitorLogs, clearVisitorLogs, logVisitorPageNavigation,
-      isCaptchaOpen, setIsCaptchaOpen, pendingCheckoutAction, setPendingCheckoutAction,
-      cmsItems, addCMSItem, updateCMSItem, deleteCMSItem, toggleCMSItemVisibility, setCMSItemStatus,
-      getPublicPageCMSItems, exportCMSDatabase, importCMSDatabase,
-      addService, updateService, deleteService,
-      addProject, updateProject, deleteProject,
-      addBannedIp, removeBannedIp,
-      addInquiry, deleteInquiry
-    }}>
+    <AppContext.Provider
+      value={{
+        services,
+        projects,
+        affiliates: [],
+        affiliateAds: ALL_AFFILIATE_ADS,
+        testimonials,
+        inquiries,
+        hireVaInquiries,
+        bannedIps,
+        userIp,
+        userCountry,
+        userDevice,
+        isUserBanned,
+        visitorLogs,
+        clearVisitorLogs,
+        logVisitorPageNavigation,
+        isCaptchaOpen,
+        setIsCaptchaOpen,
+        pendingCheckoutAction,
+        setPendingCheckoutAction,
+        cmsItems,
+        cmsCategories,
+        addCMSCategory,
+        addCMSItem,
+        updateCMSItem,
+        deleteCMSItem,
+        toggleCMSItemVisibility,
+        setCMSItemStatus,
+        getPublicPageCMSItems,
+        exportCMSDatabase,
+        importCMSDatabase,
+        addHireVaInquiry,
+        updateHireVaInquiryStatus,
+        deleteHireVaInquiry,
+        addService,
+        updateService,
+        deleteService,
+        addProject,
+        updateProject,
+        deleteProject,
+        addBannedIp,
+        removeBannedIp,
+        addInquiry,
+        deleteInquiry
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
@@ -429,6 +421,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
 export const useApp = () => {
   const context = useContext(AppContext);
-  if (!context) throw new Error('useApp must be used within an AppProvider');
+  if (!context) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
   return context;
 };

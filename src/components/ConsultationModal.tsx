@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Send, Sparkles, CheckCircle2, Calendar, Mail, User, MessageSquare } from 'lucide-react';
+import { X, Send, Sparkles, CheckCircle2, Calendar, Mail, User, MessageSquare, ShieldCheck } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 interface ConsultationModalProps {
@@ -13,10 +13,11 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   onClose,
   initialServiceTitle = 'Executive Virtual Assistance'
 }) => {
-  const { addInquiry } = useApp();
+  const { addInquiry, addHireVaInquiry } = useApp();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [contactInfo, setContactInfo] = useState('');
   const [service, setService] = useState(initialServiceTitle);
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -26,27 +27,42 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim() && email.trim() && message.trim()) {
+      // 1. Log to ContactInquiries
       addInquiry({
         name: name.trim(),
         email: email.trim(),
         service: service,
         message: message.trim()
       });
+
+      // 2. Log to HireVaInquiries backend system
+      if (typeof addHireVaInquiry === 'function') {
+        addHireVaInquiry({
+          name: name.trim(),
+          email: email.trim(),
+          contactInfo: contactInfo.trim() || undefined,
+          serviceRequested: service,
+          message: message.trim(),
+          sourcePage: window.location.hash || 'HomePage'
+        });
+      }
+
       setSubmitted(true);
       setTimeout(() => {
         setSubmitted(false);
         setName('');
         setEmail('');
+        setContactInfo('');
         setMessage('');
         onClose();
-      }, 2500);
+      }, 3000);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn font-mono">
-      <div className="bg-gradient-to-b from-gray-900 via-black to-cyan-950/90 border-2 border-cyan-500/60 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-2xl relative">
-        
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn select-none">
+      <div className="bg-gradient-to-b from-gray-900 via-black to-cyan-950/90 border-2 border-cyan-500/60 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
+
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white bg-black/60 p-1.5 rounded-full border border-gray-800"
@@ -60,28 +76,32 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               <CheckCircle2 className="w-10 h-10 animate-bounce" />
             </div>
             <h3 className="text-2xl font-black font-rajdhani text-white uppercase">
-              BOOKING APPOINTMENT RECEIVED!
+              INQUIRY LOGGED SECURELY!
             </h3>
-            <p className="text-xs text-gray-300">
-              Thank you, <span className="text-lime-400 font-bold">{name}</span>! Your consultation booking has been routed to our Master Admin Inbox. Our team will contact you at <span className="text-cyan-400 font-bold">{email}</span> within 2 hours.
+            <p className="text-xs text-gray-300 leading-relaxed max-w-md mx-auto">
+              Thank you, <span className="text-lime-400 font-bold">{name}</span>! Your project inquiry has been securely logged for administrator review. Our team will evaluate your requirements before following up.
             </p>
+            <div className="p-3 bg-black/60 border border-cyan-500/30 rounded-xl text-[11px] font-mono text-cyan-300 flex items-center justify-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-lime-400" />
+              <span>ADMINISTRATOR REVIEW PENDING</span>
+            </div>
           </div>
         ) : (
           <>
             <div className="space-y-2">
-              <div className="inline-flex items-center space-x-1 text-xs text-cyan-400 bg-cyan-500/20 px-2.5 py-0.5 rounded border border-cyan-500/40 font-bold">
+              <div className="inline-flex items-center space-x-1 text-xs text-cyan-400 bg-cyan-500/20 px-2.5 py-0.5 rounded-full border border-cyan-400/40 font-mono">
                 <Sparkles className="w-3.5 h-3.5 text-lime-400" />
-                <span>BOOK AN APPOINTMENT (20% OFF DISCOUNT)</span>
+                <span>HIRE VA &amp; PROJECT INQUIRY</span>
               </div>
               <h3 className="text-2xl font-black font-rajdhani text-white uppercase tracking-wider">
-                HIRE VA & CONSULTATION INQUIRY
+                SUBMIT CLIENT PROJECT INQUIRY
               </h3>
               <p className="text-xs text-gray-300 font-sans">
-                Schedule a consultation appointment with our executive Virtual Assistants or full-stack developers.
+                Submit your project details or Virtual Assistant requirements for administrator review.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">
+            <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans pt-2">
               <div>
                 <label className="text-cyan-400 font-mono font-bold block pb-1 flex items-center space-x-1">
                   <User className="w-3.5 h-3.5" />
@@ -123,17 +143,17 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                   className="w-full px-4 py-2.5 bg-black border border-cyan-500/40 rounded-xl text-white font-mono focus:outline-none focus:border-cyan-400"
                 >
                   <option value="Executive Virtual Assistance">Executive Virtual Assistance ($15/hr)</option>
-                  <option value="Full-Stack Web Development">Full-Stack Web Development ($499/proj)</option>
+                  <option value="Full-Stack Web Development">Full-Stack Web Development ($2,500/proj)</option>
                   <option value="Mobile App Development">Mobile App Development ($799/proj)</option>
                   <option value="Hostinger Web Hosting Setup">Hostinger Web Hosting Setup (Code: DPDCABINCEHM)</option>
-                  <option value="Graphic Design & Branding">Graphic Design & Branding ($250)</option>
+                  <option value="Graphic Design & Branding">Graphic Design & Branding ($250/pack)</option>
                 </select>
               </div>
 
               <div>
                 <label className="text-cyan-400 font-mono font-bold block pb-1 flex items-center space-x-1">
                   <MessageSquare className="w-3.5 h-3.5" />
-                  <span>PROJECT DETAILS & MESSAGE:</span>
+                  <span>PROJECT DETAILS &amp; REQUIREMENTS:</span>
                 </label>
                 <textarea
                   rows={3}
@@ -147,9 +167,9 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3.5 bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400 text-black font-extrabold font-rajdhani text-sm uppercase rounded-xl shadow-xl hover:opacity-95 transition-all flex items-center justify-center space-x-2"
+                className="w-full py-3.5 bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400 text-black font-extrabold font-rajdhani text-sm uppercase rounded-xl shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center space-x-2"
               >
-                <span>SUBMIT CONSULTATION INQUIRY</span>
+                <span>SUBMIT INQUIRY FOR REVIEW</span>
                 <Send className="w-4 h-4" />
               </button>
             </form>

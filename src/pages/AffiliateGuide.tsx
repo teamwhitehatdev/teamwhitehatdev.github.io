@@ -17,6 +17,11 @@ export const AffiliateGuide: React.FC = () => {
     capcut: true,
     microsoft: true,
   graphics: true,
+    fundamentals: true,
+    gettingStarted: true,
+    contentStrategy: true,
+    trafficBuilding: true,
+    networksDirectory: true,
     wondershare: true
   });
 
@@ -298,13 +303,141 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
               </div>
             )}
 
-        {/* MAIN TWO-COLUMN CONTAINER LAYOUT */}
+              {/* 🛡️ RESPONSIBLE AFFILIATE DISCLOSURE BANNER */}
+      <div className="bg-slate-900 border border-amber-500/40 rounded-2xl p-5 shadow-xl space-y-2 text-xs font-sans text-slate-300">
+        <div className="flex items-center gap-2 text-amber-400 font-bold font-orbitron">
+          <ShieldCheck className="w-4 h-4" />
+          <span>OFFICIAL AFFILIATE DISCLOSURE &amp; TRANSPARENCY NOTICE</span>
+        </div>
+        <p className="leading-relaxed">
+          Some links on Team WhiteHat Dev are referral/affiliate links (such as Hostinger, CapCut, Microsoft Rewards, Vecteezy, and Envato). If you click through and sign up or make a purchase, we may receive a referral commission at zero additional cost to you. We only recommend software tools and services that we believe provide genuine utility to Virtual Assistants and freelancers.
+        </p>
+      </div>
+
+      {/* MAIN TWO-COLUMN CONTAINER LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           
           {/* LEFT 3-COLUMNS TOPIC PANELS */}
           <div className="lg:col-span-3 space-y-8">
 
             {/* ========================================================================= */}
+                        {/* ========================================================================= */}
+            {/* 📚 CMS COLLAPSIBLE CATEGORY: AFFILIATE MARKETING FUNDAMENTALS */}
+            {/* ========================================================================= */}
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
+              <button
+                onClick={() => togglePanel('fundamentals')}
+                className="w-full p-6 bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
+                    <BookOpen className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-cyan-300 uppercase tracking-widest font-bold block">
+                      CMS EDUCATIONAL CATEGORY 1
+                    </span>
+                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
+                      ▼ AFFILIATE MARKETING FUNDAMENTALS &amp; TERMINOLOGY
+                    </h2>
+                    <p className="text-xs text-cyan-200 font-sans mt-0.5">
+                      Understanding affiliate links, cookies, tracking parameters, merchant commissions, and network platforms.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-cyan-300 shrink-0">
+                  <span>{openPanels.fundamentals ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
+                  {openPanels.fundamentals ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </button>
+
+              {openPanels.fundamentals && (
+                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans">
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">What Is Affiliate Marketing?</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        Affiliate marketing is a performance-based system where creators recommend relevant software tools to their audience and earn a commission on qualified referral purchases.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Tracking Cookies &amp; Links</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        When a visitor clicks a referral link, a tracking cookie stored in their browser credits the referring affiliate if a signup occurs within the cookie window (e.g. 30-90 days).
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Commission Structures</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        Commissions can be one-off flat fees (CPA), percentage sales commissions, or recurring monthly software subcriptions.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Affiliate Networks</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        Platforms like Impact.com, Lemon Squeezy, and Involve Asia handle tracking reliability, reporting analytics, and monthly payouts.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ========================================================================= */}
+            {/* 🚀 CMS COLLAPSIBLE CATEGORY: GETTING STARTED & NICHE SELECTION */}
+            {/* ========================================================================= */}
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
+              <button
+                onClick={() => togglePanel('gettingStarted')}
+                className="w-full p-6 bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 shrink-0 font-bold">
+                    <TrendingUp className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-purple-300 uppercase tracking-widest font-bold block">
+                      CMS EDUCATIONAL CATEGORY 2
+                    </span>
+                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
+                      ▼ GETTING STARTED &amp; RESPONSIBLE NICHE SELECTION
+                    </h2>
+                    <p className="text-xs text-purple-200 font-sans mt-0.5">
+                      Finding reliable affiliate programs, evaluating product quality, and targeting the right audience.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-purple-300 shrink-0">
+                  <span>{openPanels.gettingStarted ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
+                  {openPanels.gettingStarted ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </button>
+
+              {openPanels.gettingStarted && (
+                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-sans">
+                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
+                      <div className="font-bold text-purple-950 font-orbitron text-sm">1. Choose a Niche</div>
+                      <p className="text-slate-600 text-xs">Focus on a specific area you understand, such as VA productivity, video editing, or web hosting.</p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
+                      <div className="font-bold text-purple-950 font-orbitron text-sm">2. Evaluate Products</div>
+                      <p className="text-slate-600 text-xs">Only recommend tools with proven reliability, good customer support, and fair refund policies.</p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
+                      <div className="font-bold text-purple-950 font-orbitron text-sm">3. Review Program Terms</div>
+                      <p className="text-slate-600 text-xs">Read merchant terms to ensure compliance with search engine guidelines and disclosure requirements.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* 🌐 COLLAPSIBLE TOPIC 1: WEB HOSTING & DOMAIN INFRASTRUCTURE (HOSTINGER) */}
             {/* ========================================================================= */}
             <div className="bg-white rounded-2xl shadow-xl border-2 border-indigo-200 overflow-hidden">
