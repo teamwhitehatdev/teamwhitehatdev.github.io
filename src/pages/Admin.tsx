@@ -46,7 +46,7 @@ export const Admin: React.FC = () => {
   const [analyticsTimeframe, setAnalyticsTimeframe] = useState<'today' | '7days' | '90days' | 'all'>('today');
   const [manualBanIpInput, setManualBanIpInput] = useState('');
 
-  // CMS ITEM MODAL FORM STATE
+  // CMS ITEM MODAL FORM STATE (ALL 11 FIELDS)
   const [editingCMSItem, setEditingCMSItem] = useState<CMSItem | null>(null);
   const [isCreatingCMSItem, setIsCreatingCMSItem] = useState(false);
   const [cmsForm, setCmsForm] = useState<{
@@ -142,6 +142,22 @@ export const Admin: React.FC = () => {
     sessionStorage.removeItem('wh_admin_auth');
   };
 
+  // COMPUTER FILE UPLOAD HANDLER (CONVERTS LOCAL IMAGE FILE TO BASE64 DATA URL)
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'cms' | 'promo') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Data = reader.result as string;
+      if (target === 'cms') {
+        setCmsForm(prev => ({ ...prev, mainImage: base64Data }));
+      } else {
+        setPromoForm(prev => ({ ...prev, imageUrl: base64Data }));
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   // CMS ITEM ACTIONS
   const handleOpenCreateCMS = (defaultPage: CMSPageOwnerType = 'showcase') => {
     setCmsForm({
@@ -187,23 +203,6 @@ export const Admin: React.FC = () => {
       metrics: item.metrics || ''
     });
     setIsCreatingCMSItem(false);
-  };
-
-  
-  // COMPUTER FILE UPLOAD HANDLER (CONVERTS LOCAL IMAGE FILE TO BASE64 DATA URL)
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'cms' | 'promo') => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64Data = reader.result as string;
-      if (target === 'cms') {
-        setCmsForm(prev => ({ ...prev, mainImage: base64Data }));
-      } else {
-        setPromoForm(prev => ({ ...prev, imageUrl: base64Data }));
-      }
-    };
-    reader.readAsDataURL(file);
   };
 
   const handleSaveCMSItem = (e: React.FormEvent) => {
@@ -611,9 +610,9 @@ export const Admin: React.FC = () => {
                           </td>
                           <td className="p-3">
                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                              item.status === 'PUBLISHED' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                              item.status === 'PUBLISHED' && item.visible ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
                             }`}>
-                              {item.status} ({item.visible ? 'VISIBLE' : 'HIDDEN'})
+                              {item.visible && item.status === 'PUBLISHED' ? 'VISIBLE (LIVE)' : 'HIDDEN'}
                             </span>
                           </td>
                           <td className="p-3 text-right space-x-2">
@@ -627,7 +626,7 @@ export const Admin: React.FC = () => {
                               onClick={() => toggleCMSItemVisibility(item.id)}
                               className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
                             >
-                              {item.visible ? 'HIDE' : 'UNHIDE'}
+                              {item.visible && item.status === 'PUBLISHED' ? 'HIDE' : 'UNHIDE'}
                             </button>
                             <button
                               onClick={() => deleteCMSItem(item.id)}
@@ -721,9 +720,9 @@ export const Admin: React.FC = () => {
                         <td className="p-3 text-lime-400 font-bold">{item.badge || 'N/A'}</td>
                         <td className="p-3">
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                            item.status === 'PUBLISHED' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                            item.status === 'PUBLISHED' && item.visible ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
                           }`}>
-                            {item.status} ({item.visible ? 'VISIBLE' : 'HIDDEN'})
+                            {item.visible && item.status === 'PUBLISHED' ? 'VISIBLE (LIVE)' : 'HIDDEN'}
                           </span>
                         </td>
                         <td className="p-3 text-xs text-slate-400 max-w-xs truncate">{item.destinationUrl}</td>
@@ -738,7 +737,7 @@ export const Admin: React.FC = () => {
                             onClick={() => togglePromoItemVisibility(item.id)}
                             className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]"
                           >
-                            {item.visible ? 'HIDE' : 'UNHIDE'}
+                            {item.visible && item.status === 'PUBLISHED' ? 'HIDE' : 'UNHIDE'}
                           </button>
                           <button
                             onClick={() => deletePromoItem(item.id)}
@@ -1214,22 +1213,29 @@ export const Admin: React.FC = () => {
         </div>
       )}
 
-      {/* PROMOTION / ADVERTISEMENT MODAL */}
+      {/* PROMOTION / ADVERTISEMENT MODAL (WITH FILE UPLOAD & IMAGE URL) */}
       {(editingPromoItem || isCreatingPromoItem) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md font-sans">
-          <div className="bg-slate-900 border-2 border-purple-500/80 rounded-3xl p-6 max-w-2xl w-full space-y-5 shadow-2xl relative">
+          <div className="bg-slate-900 border-2 border-purple-500/80 rounded-3xl p-6 max-w-2xl w-full space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => { setEditingPromoItem(null); setIsCreatingPromoItem(false); }}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white"
+              className="absolute top-5 right-5 text-slate-400 hover:text-white cursor-pointer"
             >
               <X className="w-6 h-6" />
             </button>
-            <h2 className="text-xl font-black font-orbitron text-white uppercase">
-              {editingPromoItem ? 'EDIT PROMOTION / AD' : 'CREATE PROMOTION / AD'}
-            </h2>
+            <div className="border-b border-slate-800 pb-2">
+              <span className="text-xs text-purple-400 font-mono font-bold uppercase tracking-widest block">
+                BACKEND PROMOTION / AD EDITOR
+              </span>
+              <h2 className="text-xl font-black font-orbitron text-white uppercase">
+                {editingPromoItem ? `EDIT PROMOTION: ${editingPromoItem.title}` : 'CREATE NEW PROMOTION / AD'}
+              </h2>
+            </div>
 
             <form onSubmit={handleSavePromoItem} className="space-y-4 font-sans text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
+              {/* PLACEMENT & STATUS */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-purple-300 font-mono block pb-1 font-bold">1. PLACEMENT SECTION:</label>
                   <select
@@ -1243,7 +1249,7 @@ export const Admin: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-cyan-400 font-mono block pb-1 font-bold">2. STATUS:</label>
+                  <label className="text-cyan-400 font-mono block pb-1 font-bold">2. PUBLICATION STATUS:</label>
                   <select
                     value={promoForm.status}
                     onChange={(e) => setPromoForm({ ...promoForm, status: e.target.value as CMSStatusType })}
@@ -1256,15 +1262,30 @@ export const Admin: React.FC = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="text-purple-300 font-mono block pb-1 font-bold">PROMOTION TITLE:</label>
-                <input
-                  type="text"
-                  value={promoForm.title}
-                  onChange={(e) => setPromoForm({ ...promoForm, title: e.target.value })}
-                  required
-                  className="w-full px-3 py-2 bg-black border border-purple-500/40 rounded-xl text-white font-mono"
-                />
+              {/* TITLE & BADGE */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-purple-300 font-mono block pb-1 font-bold">PROMOTION TITLE:</label>
+                  <input
+                    type="text"
+                    value={promoForm.title}
+                    onChange={(e) => setPromoForm({ ...promoForm, title: e.target.value })}
+                    required
+                    placeholder="e.g. Hostinger 75% OFF Cloud Server Deal"
+                    className="w-full px-3 py-2 bg-black border border-purple-500/40 rounded-xl text-white font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-lime-400 font-mono block pb-1 font-bold">BADGE / DISCOUNT TEXT:</label>
+                  <input
+                    type="text"
+                    value={promoForm.badge}
+                    onChange={(e) => setPromoForm({ ...promoForm, badge: e.target.value })}
+                    placeholder="e.g. 75% OFF or ₱7,800 CASHBACK"
+                    className="w-full px-3 py-2 bg-black border border-lime-500/40 rounded-xl text-white font-mono"
+                  />
+                </div>
               </div>
 
               {/* 🖼️ PROMO IMAGE UPLOAD FROM COMPUTER OR IMAGE URL */}
@@ -1315,18 +1336,34 @@ export const Admin: React.FC = () => {
                 )}
               </div>
 
-              <div>
-                <label className="text-cyan-300 font-mono block pb-1 font-bold">DESTINATION / REFERRAL URL:</label>
-                <input
-                  type="text"
-                  value={promoForm.destinationUrl}
-                  onChange={(e) => setPromoForm({ ...promoForm, destinationUrl: e.target.value })}
-                  required
-                  placeholder="https://..."
-                  className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
-                />
+              {/* DESTINATION URL & BUTTON TEXT */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-cyan-300 font-mono block pb-1 font-bold">DESTINATION / REFERRAL URL:</label>
+                  <input
+                    type="text"
+                    value={promoForm.destinationUrl}
+                    onChange={(e) => setPromoForm({ ...promoForm, destinationUrl: e.target.value })}
+                    required
+                    placeholder="https://..."
+                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-slate-300 font-mono block pb-1 font-bold">BUTTON TEXT:</label>
+                  <input
+                    type="text"
+                    value={promoForm.buttonText}
+                    onChange={(e) => setPromoForm({ ...promoForm, buttonText: e.target.value })}
+                    required
+                    placeholder="e.g. CLAIM PROMO →"
+                    className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-mono"
+                  />
+                </div>
               </div>
 
+              {/* DESCRIPTION */}
               <div>
                 <label className="text-slate-300 font-mono block pb-1 font-bold">SHORT DESCRIPTION:</label>
                 <textarea
@@ -1334,21 +1371,23 @@ export const Admin: React.FC = () => {
                   value={promoForm.description}
                   onChange={(e) => setPromoForm({ ...promoForm, description: e.target.value })}
                   required
+                  placeholder="Enter promotion description..."
                   className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-sans"
                 />
               </div>
 
+              {/* ACTION BUTTONS */}
               <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
                 <button
                   type="button"
                   onClick={() => { setEditingPromoItem(null); setIsCreatingPromoItem(false); }}
-                  className="px-4 py-2 bg-slate-800 text-white rounded-xl font-mono"
+                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-mono cursor-pointer"
                 >
                   CANCEL
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-purple-500 text-white font-black font-orbitron text-xs rounded-xl"
+                  className="px-6 py-2 bg-purple-500 hover:bg-purple-400 text-white font-black font-orbitron text-xs rounded-xl shadow-lg cursor-pointer"
                 >
                   SAVE PROMOTION
                 </button>
