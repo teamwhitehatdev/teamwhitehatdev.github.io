@@ -297,7 +297,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const toggleCMSItemVisibility = (id: string) => {
-    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, visible: !item.visible, updatedAt: new Date().toISOString() } : item));
+    setCmsItems(prev => prev.map(item => {
+      if (item.id === id) {
+        const nextVisible = !item.visible;
+        return {
+          ...item,
+          visible: nextVisible,
+          status: nextVisible ? 'PUBLISHED' : item.status,
+          updatedAt: new Date().toISOString()
+        };
+      }
+      return item;
+    }));
   };
 
   const toggleCMSItemHomeFeatured = (id: string) => {
@@ -346,7 +357,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const togglePromoItemVisibility = (id: string) => {
-    setPromoItems(prev => prev.map(item => item.id === id ? { ...item, visible: !item.visible, updatedAt: new Date().toISOString() } : item));
+    setPromoItems(prev => prev.map(item => {
+      if (item.id === id) {
+        const nextVisible = !item.visible;
+        return {
+          ...item,
+          visible: nextVisible,
+          status: nextVisible ? 'PUBLISHED' : item.status,
+          updatedAt: new Date().toISOString()
+        };
+      }
+      return item;
+    }));
   };
 
   const getPublicPromoItems = useCallback((targetPlacement: PromoPlacementType) => {
