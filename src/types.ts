@@ -110,6 +110,8 @@ export interface CMSItem {
   galleryImages?: string[];
   url?: string;                // Affiliate / Referral / Target URL
   buttonText?: string;
+  badge?: string;
+  discount?: string;
   price?: string;
   metrics?: string;
   seoTitle?: string;
