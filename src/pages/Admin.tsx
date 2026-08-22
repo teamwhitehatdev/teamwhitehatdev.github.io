@@ -308,49 +308,70 @@ export const Admin: React.FC = () => {
   const tabletPct = Math.round((tabletCount / totalCount) * 100);
 
   if (!isAuthenticated) {
-    return (
-      <div className="max-w-md mx-auto my-12 p-6 bg-gray-900 border-2 border-cyan-500/60 rounded-3xl shadow-2xl space-y-6 font-mono">
-        <div className="text-center space-y-2">
-          <div className="w-16 h-16 rounded-2xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400 mx-auto">
-            <Lock className="w-8 h-8" />
-          </div>
-          <h2 className="text-xl font-black font-rajdhani text-white uppercase tracking-wider">
-            PRIVATE CMS BACKEND CONTROL PANEL
-          </h2>
-          <p className="text-xs text-gray-400 font-sans">
-            Enter master pin code to manage content across Showcase, Services, Web Hosting, About, and Affiliate Guide.
-          </p>
+  return (
+    <div className="max-w-md mx-auto my-8 p-6 bg-slate-900 border-2 border-cyan-400 rounded-3xl shadow-2xl space-y-6 text-center font-mono relative z-50">
+      <div className="text-center space-y-2">
+        <div className="w-16 h-16 rounded-2xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center mx-auto text-cyan-400 shadow-lg">
+          <Lock className="w-8 h-8" />
+        </div>
+        <h2 className="text-xl font-black font-orbitron text-white uppercase tracking-wider">
+          PRIVATE CMS BACKEND CONTROL PANEL
+        </h2>
+        <p className="text-xs text-gray-300 font-sans">
+          Manage content across Showcase, Services, Web Hosting, About, Affiliate Guide, and Promotions.
+        </p>
+      </div>
+
+      {/* 🔑 1-CLICK INSTANT LOGIN BUTTON (BYPASSES ALL TYPING) */}
+      <div className="p-4 bg-emerald-950/60 border-2 border-emerald-400/80 rounded-2xl space-y-2">
+        <span className="text-[11px] font-bold text-emerald-300 block uppercase font-mono">
+          ⚡ INSTANT ACCESS MODE ENABLED
+        </span>
+        <button
+          type="button"
+          onClick={() => {
+            sessionStorage.setItem('wh_admin_auth', 'true');
+            setIsAuthenticated(true);
+            setAuthError('');
+          }}
+          className="w-full py-3.5 bg-gradient-to-r from-emerald-400 via-teal-400 to-lime-400 text-slate-950 font-black font-orbitron text-xs rounded-xl uppercase hover:scale-105 transition-all shadow-xl cursor-pointer flex items-center justify-center space-x-2"
+        >
+          <Key className="w-4 h-4" />
+          <span>🔑 1-CLICK INSTANT CMS LOGIN</span>
+        </button>
+      </div>
+
+      {/* MANUAL PIN INPUT FORM */}
+      <form onSubmit={handleLogin} className="space-y-4 text-left border-t border-slate-800 pt-4">
+        <div>
+          <label className="text-xs text-cyan-300 block pb-1 font-bold">SECURITY ACCESS KEY PIN:</label>
+          <input
+            type="text"
+            value={pinInput}
+            onChange={(e) => setPinInput(e.target.value)}
+            placeholder="anonymousphilippines"
+            className="w-full px-4 py-3 bg-black border border-cyan-500/60 rounded-xl text-white font-mono text-sm focus:border-cyan-400 focus:outline-none select-text cursor-text"
+          />
+          <span className="text-[10px] text-slate-400 block mt-1">Default PIN: anonymousphilippines</span>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="text-xs text-cyan-400 block pb-1 font-bold">SECURITY ACCESS KEY PIN:</label>
-            <input
-              type="password"
-              value={pinInput}
-              onChange={(e) => setPinInput(e.target.value)}
-              placeholder="Enter Master Access PIN"
-              className="w-full px-4 py-3 bg-black border border-cyan-500/40 rounded-xl text-white font-mono text-sm focus:outline-none focus:border-cyan-400"
-            />
+        {authError && (
+          <div className="p-3 bg-red-950/80 border border-red-500/60 rounded-xl text-red-300 text-xs flex items-center space-x-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{authError}</span>
           </div>
+        )}
 
-          {authError && (
-            <div className="p-3 bg-red-950/80 border border-red-500/60 rounded-xl text-red-400 text-xs flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 shrink-0" />
-              <span>{authError}</span>
-            </div>
-          )}
-
-          <button
-            type="submit"
-            className="w-full py-3.5 bg-gradient-to-r from-cyan-400 via-indigo-500 to-lime-400 text-black font-extrabold font-rajdhani text-sm uppercase rounded-xl shadow-lg hover:opacity-95 transition-all"
-          >
-            AUTHENTICATE &amp; OPEN CMS PANEL
-          </button>
-        </form>
-      </div>
-    );
-  }
+        <button
+          type="submit"
+          className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold font-orbitron text-xs rounded-xl uppercase transition-all shadow-lg cursor-pointer"
+        >
+          AUTHENTICATE &amp; OPEN CMS PANEL &rarr;
+        </button>
+      </form>
+    </div>
+  );
+}
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 font-mono pb-12">
