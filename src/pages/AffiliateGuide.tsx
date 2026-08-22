@@ -741,6 +741,7 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
 
             </div>
 
+          </div>
 
           {/* RIGHT SIDEBAR PROMO COLUMN */}
           <div className="lg:col-span-1">
