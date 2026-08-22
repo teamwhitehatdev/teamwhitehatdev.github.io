@@ -619,7 +619,6 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
 
             </div>
 
-          </div>
 
           
             {/* 🎁 COLLAPSIBLE TOPIC 3: HOW TO EARN FREE TECH REWARDS & GIFT CARDS (MICROSOFT REWARDS) */}
