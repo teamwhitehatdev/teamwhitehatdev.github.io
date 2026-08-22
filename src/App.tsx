@@ -1,4 +1,4 @@
-// BUILD TIMESTAMP: 1787411257
+// BUILD TIMESTAMP: 1787413254
 // TIMESTAMP: 1787390921
 // LAST BUILD TIMESTAMP: 1787390148
 import React, { useState, useEffect } from 'react';
@@ -48,18 +48,10 @@ export function AppContent() {
 
   useSecurityShield();
 
+  // Disable aggressive auto-popups on load so Admin & public navigation are never blocked
   useEffect(() => {
-    const flashGumroad = Math.random() < 0.60;
-    if (flashGumroad) {
-      setShowGumroadModal(true);
-      setShowElevenLabsModal(false);
-    } else {
-      setShowGumroadModal(false);
-      const timer = setTimeout(() => {
-        setShowElevenLabsModal(true);
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
+    setShowGumroadModal(false);
+    setShowElevenLabsModal(false);
   }, []);
 
   const handleOpenConsultation = (serviceTitle?: string) => {
