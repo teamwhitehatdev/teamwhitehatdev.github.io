@@ -391,53 +391,77 @@ export const Admin: React.FC = () => {
       </div>
 
       {/* NAVIGATION TABS */}
-      <div className="flex flex-wrap gap-2 border-b border-gray-800 pb-2">
+      <div className="flex flex-wrap gap-2 border-b border-gray-800 pb-3 font-mono">
         <button
           onClick={() => setActiveTab('cms')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'cms'
               ? 'bg-gradient-to-r from-cyan-400 to-indigo-500 text-black font-extrabold shadow-lg scale-105'
               : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
           }`}
         >
           <Layers className="w-4 h-4" />
-          <span>🎛️ CMS CONTENT CONTROL CENTER</span>
+          <span>🎛️ CMS CONTENT CONTROL</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('promotions')}
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
+            activeTab === 'promotions'
+              ? 'bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 text-black font-extrabold shadow-lg scale-105'
+              : 'bg-gray-900 text-purple-300 hover:text-white border border-purple-800/80'
+          }`}
+        >
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span>📢 PROMOTIONS &amp; ADS CONTROL ({promoItems ? promoItems.length : 0})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('hire-va')}
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
+            activeTab === 'hire-va'
+              ? 'bg-gradient-to-r from-lime-400 to-emerald-400 text-black font-extrabold shadow-lg scale-105'
+              : 'bg-gray-900 text-lime-300 hover:text-white border border-lime-800/80'
+          }`}
+        >
+          <CheckCircle className="w-4 h-4 text-lime-400" />
+          <span>📋 HIRE VA INQUIRIES ({hireVaInquiries ? hireVaInquiries.length : 0})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('inquiries')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all relative ${
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'inquiries'
-              ? 'bg-gradient-to-r from-lime-400 to-cyan-400 text-black font-extrabold shadow-lg scale-105'
+              ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-extrabold shadow-lg scale-105'
               : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
           }`}
         >
           <Inbox className="w-4 h-4" />
-          <span>📩 HIRE VA INQUIRIES ({inquiries.length})</span>
+          <span>📩 CONTACT INQUIRIES ({inquiries.length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('analytics')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'analytics'
               ? 'bg-gradient-to-r from-purple-400 to-pink-400 text-black font-extrabold shadow-lg scale-105'
               : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
           }`}
         >
           <Activity className="w-4 h-4" />
-          <span>📊 VISITOR MONITORING &amp; ANALYTICS</span>
+          <span>📊 VISITOR ANALYTICS</span>
         </button>
 
         <button
           onClick={() => setActiveTab('firewall')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
+          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'firewall'
               ? 'bg-red-600 text-white font-extrabold shadow-lg scale-105'
-              : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+              : 'bg-gray-900 text-red-400 hover:text-white border border-red-900/80'
           }`}
         >
           <Shield className="w-4 h-4 text-red-400" />
-          <span>🛡️ FIREWALL &amp; BANNED IPS ({bannedIps.length})</span>
+          <span>🛡️ FIREWALL ({bannedIps.length})</span>
         </button>
       </div>
 
