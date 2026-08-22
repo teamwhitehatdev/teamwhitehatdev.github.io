@@ -233,4 +233,22 @@ export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
     description: 'Industry-standard video editor for TikToks, Reels, YouTube Shorts, auto-captions, and AI background removal.',
     badge: 'FREE CREATOR TOOL'
   }
+
+  // ==========================================
+  // 9. VECTEEZY GRAPHICS ASSETS (IMPACT.COM)
+  // ==========================================
+  {
+    id: 'vecteezy-graphics-sidebar',
+    brand: 'Vecteezy',
+    category: 'creative',
+    sizeType: 'medium',
+    width: 336,
+    height: 200,
+    clickUrl: 'https://a.impactradius-go.com/gen-ad-code/5024116/4016678/12240/',
+    imageUrl: 'https://a.impactradius-go.com/gen-ad-code/5024116/4016678/12240/',
+    iframeUrl: '//a.impactradius-go.com/gen-ad-code/5024116/4016678/12240/',
+    title: 'Vecteezy Graphics Assets',
+    description: 'Millions of royalty-free vectors, stock photos, icons & 4K video clips.',
+    badge: 'VECTOR ASSETS'
+  }
 ];

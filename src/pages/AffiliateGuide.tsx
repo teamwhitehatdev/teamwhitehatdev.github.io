@@ -16,6 +16,7 @@ export const AffiliateGuide: React.FC = () => {
     hostinger: true,
     capcut: true,
     microsoft: true,
+  graphics: true,
     wondershare: true
   });
 
@@ -26,6 +27,7 @@ export const AffiliateGuide: React.FC = () => {
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
   const CAPCUT_REFERRAL_LINK = "https://capcutaffiliateprogram.pxf.io/WqmL1e";
 const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae";
+  const VECTEEZY_REFERRAL_LINK = "https://a.impactradius-go.com/gen-ad-code/5024116/4016678/12240/";
 
   // WONDERSHARE OFFICIAL REFERRAL LINKS & TRACKING CODES
   const WONDERSHARE_VIRBO_LINK = "https://wondersharesoftware.pxf.io/c/5024116/2882021/15586";
@@ -742,6 +744,119 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
             </div>
 
           </div>
+
+          
+            {/* 🎨 COLLAPSIBLE TOPIC 4: GRAPHICS DESIGN & MULTIMEDIA SUITES (VECTEEZY GRAPHICS ASSETS) */}
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
+
+              {/* TOPIC HEADER BAR */}
+              <button
+                onClick={() => togglePanel('graphics')}
+                className="w-full p-6 bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 shrink-0 font-bold">
+                    <Sparkles className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-emerald-300 uppercase tracking-widest font-bold block">
+                      DIVISION 4: CREATIVE MULTIMEDIA &amp; GRAPHICS ASSETS
+                    </span>
+                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
+                      TOPIC 4: GRAPHICS DESIGN &amp; MULTIMEDIA SUITES
+                    </h2>
+                    <p className="text-xs text-emerald-200 font-sans mt-0.5">
+                      Royalty-free vectors, stock photos, icons, and 4K video clips for content creators, designers &amp; virtual assistants.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-emerald-300 shrink-0">
+                  <span>{openPanels.graphics ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
+                  {openPanels.graphics ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </button>
+
+              {/* PANEL BODY CONTENT */}
+              {openPanels.graphics && (
+                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
+
+                  {/* GRAPHICS ASSETS DIVISION PANEL */}
+                  <div className="bg-white rounded-xl shadow border border-emerald-200 p-6 space-y-4">
+                    <h3 className="text-lg font-black text-slate-900 font-orbitron border-b pb-3 flex items-center gap-2 text-emerald-900">
+                      🎨 Graphics Assets Division Panel (Vecteezy Impact Deal)
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
+                      <strong>Vecteezy</strong> is a premier creative digital asset platform providing millions of high-quality vector illustrations, SVG icons, stock photos, 4K stock video footage, and UI templates. Freelancers and Virtual Assistants use Vecteezy to create client pitch decks, social media banners, brand logos, and marketing collateral with full commercial licensing rights.
+                    </p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-sans pt-2">
+                      <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
+                        <div className="font-bold text-emerald-950 font-orbitron text-sm">1. Vector Graphics &amp; SVGs</div>
+                        <p className="text-slate-600 text-xs">Fully editable vector files, scalable icons, and typography templates for Illustrator &amp; Figma.</p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
+                        <div className="font-bold text-emerald-950 font-orbitron text-sm">2. 4K Stock Video &amp; B-Roll</div>
+                        <p className="text-slate-600 text-xs">HD and 4K motion graphics, video overlays, and cinematic B-roll footage for YouTube &amp; Reels.</p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
+                        <div className="font-bold text-emerald-950 font-orbitron text-sm">3. Commercial License</div>
+                        <p className="text-slate-600 text-xs">Full commercial licensing protections for client work, print-on-demand, and digital advertising.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* EMBEDDED OFFICIAL IMPACT AD IFRAME */}
+                  <div className="bg-white rounded-xl shadow border border-emerald-200 p-6 space-y-4 text-center">
+                    <h4 className="text-sm font-bold text-slate-900 font-orbitron uppercase tracking-wider text-emerald-800">
+                      OFFICIAL VECTEEZY IMPACT PROMOTIONAL BANNER
+                    </h4>
+                    <div className="flex justify-center overflow-hidden py-2">
+                      <iframe
+                        id="iframe_313"
+                        src="//a.impactradius-go.com/gen-ad-code/5024116/4016678/12240/"
+                        width="336"
+                        height="200"
+                        scrolling="no"
+                        frameBorder="0"
+                        marginHeight={0}
+                        marginWidth={0}
+                        className="rounded-xl shadow-md border border-slate-200"
+                      />
+                    </div>
+                  </div>
+
+                  {/* ELEGANT PRIMARY CTA BUTTON FOR VECTEEZY */}
+                  <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 rounded-2xl p-6 text-white shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-emerald-400">
+                    <div className="space-y-2 text-center md:text-left">
+                      <span className="text-xs font-mono text-emerald-300 font-bold uppercase tracking-widest block">
+                        🎨 VECTEEZY GRAPHICS ASSETS &amp; VECTOR LIBRARIES
+                      </span>
+                      <h3 className="text-xl md:text-2xl font-black font-orbitron text-white">
+                        EXPLORE MILLIONS OF VECTORS &amp; STOCK ASSETS
+                      </h3>
+                      <p className="text-xs md:text-sm text-slate-300 max-w-2xl font-sans">
+                        Access royalty-free vector illustrations, stock photography, and 4K footage with commercial licensing.
+                      </p>
+                    </div>
+
+                    <a
+                      href={VECTEEZY_REFERRAL_LINK}
+                      target="_blank"
+                      rel="sponsored noopener noreferrer"
+                      className="px-6 py-4 bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 text-black font-black font-orbitron text-xs md:text-sm uppercase rounded-xl shadow-xl hover:scale-105 transition-all shrink-0 flex items-center gap-2 border border-white/40 cursor-pointer"
+                    >
+                      <span>EXPLORE VECTEEZY ASSETS &rarr;</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+
+                </div>
+              )}
+
+            </div>
+
 
           {/* RIGHT SIDEBAR PROMO COLUMN */}
           <div className="lg:col-span-1">
