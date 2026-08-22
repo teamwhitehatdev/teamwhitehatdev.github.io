@@ -86,26 +86,29 @@ export interface VisitorLog {
 }
 
 // CMS BACKEND TYPES
-export type CMSPageType = 'home' | 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide' | 'va-hub' | 'freelancing' | 'affiliate-learning';
+export type CMSPageOwnerType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide';
+export type CMSContentType = 'Tutorial' | 'Guide' | 'Article' | 'Resource' | 'Service' | 'Showcase' | 'Affiliate' | 'Discussion';
+export type CMSPageType = CMSPageOwnerType | 'home' | 'va-hub' | 'freelancing' | 'affiliate-learning';
 export type CMSStatusType = 'DRAFT' | 'PUBLISHED' | 'SCHEDULED';
 export type CMSVisibilityType = 'PUBLIC' | 'HIDDEN';
 
 export interface CMSItem {
   id: string;
-  page: CMSPageType;
+  pageOwner: CMSPageOwnerType; // Primary Destination Page Owner
+  homeFeatured: boolean;       // Independent Home Page Promotion Toggle
+  contentType: CMSContentType; // Content Type (Tutorial, Guide, Article, etc.)
   title: string;
-  category: string; // E.g., 'VA Fundamentals', 'Admin Skills', 'Freelancing', 'Affiliate Marketing', 'Digital Skills', 'Web Hosting'
-  status: CMSStatusType;
-  visible: boolean;
-  featured?: boolean;
+  category: string;            // Category within page
+  status: CMSStatusType;       // 'DRAFT' | 'PUBLISHED' | 'SCHEDULED'
+  visible: boolean;            // true / false
   publishDate?: string;
   scheduleDate?: string;
   summary?: string;
-  fullContent?: string; // Rich article markdown / HTML / long text content
+  fullContent?: string;        // Rich article text
   description: string;
   mainImage?: string;
   galleryImages?: string[];
-  url?: string; // Affiliate or referral URL
+  url?: string;                // Affiliate / Referral / Target URL
   buttonText?: string;
   price?: string;
   metrics?: string;
@@ -114,4 +117,8 @@ export interface CMSItem {
   sortOrder?: number;
   createdAt: string;
   updatedAt: string;
+
+  // Backward-compatibility aliases
+  page?: CMSPageType;
+  featured?: boolean;
 }

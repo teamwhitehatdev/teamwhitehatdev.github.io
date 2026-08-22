@@ -82,18 +82,10 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar with Year Established & Mission Statement */}
-        <div className="border-t border-gray-900 pt-6 flex flex-col md:flex-row items-center justify-between text-xs text-gray-400 gap-4 text-center md:text-left leading-relaxed">
-          <div className="space-y-1">
-            <p className="font-mono text-[11px] text-gray-300 font-bold">
-              teamwhitehatdev 2016 - 2026. &nbsp;&nbsp;|&nbsp;&nbsp; Our mission is to turn innovative ideas into functional digital experiences that can help individuals, creators, professionals, and businesses. &nbsp;&nbsp;|&nbsp;&nbsp; Learn. Create. Develop. Assist. Innovate.
-            </p>
-          </div>
-
-          <div className="flex items-center space-x-1 shrink-0 text-[11px] text-gray-400">
-            <span>Built with</span>
-            <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" />
-            <span>in Philippines 🇵🇭</span>
-          </div>
+        <div className="border-t border-gray-900 pt-6 text-center text-xs text-gray-400 leading-relaxed">
+          <p className="font-mono text-xs text-gray-300 font-bold max-w-5xl mx-auto">
+            teamwhitehatdev 2016 - 2026. &nbsp;&nbsp;|&nbsp;&nbsp; Our mission is to turn innovative ideas into functional digital experiences that can help individuals, creators, professionals, and businesses. &nbsp;&nbsp;|&nbsp;&nbsp; Learn. Create. Develop. Assist. Innovate.
+          </p>
         </div>
 
       </div>

@@ -2,16 +2,19 @@ import { CMSItem } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
   // =========================================================================
-  // 🎓 HOME & VA LEARNING HUB — FEATURED EDUCATIONAL ARTICLES
+  // 💼 SERVICES PAGE OWNER (PROMOTED TO HOME FEATURED TUTORIALS)
   // =========================================================================
   {
     id: 'cms-va-fund-1',
-    page: 'home',
+    pageOwner: 'services',
+    homeFeatured: true,
+    contentType: 'Tutorial',
+    page: 'services',
+    featured: true,
     title: 'What Is a Virtual Assistant & How Does Remote Assistance Work?',
     category: 'VA Fundamentals',
     status: 'PUBLISHED',
     visible: true,
-    featured: true,
     sortOrder: 1,
     summary: 'A comprehensive beginner guide to understanding the role of a Virtual Assistant, core administrative responsibilities, and how remote client workflows operate.',
     description: 'Learn the fundamentals of virtual assistance: inbox triage, calendar scheduling, client communication, and tool management.',
@@ -37,12 +40,15 @@ Success as a Virtual Assistant requires continuous learning, skill development, 
   },
   {
     id: 'cms-va-admin-1',
-    page: 'home',
+    pageOwner: 'services',
+    homeFeatured: true,
+    contentType: 'Guide',
+    page: 'services',
+    featured: true,
     title: 'Top 10 Essential Administrative & Digital Skills Every Beginner VA Should Develop',
     category: 'Admin Skills',
     status: 'PUBLISHED',
     visible: true,
-    featured: true,
     sortOrder: 2,
     summary: 'Discover the top 10 practical administrative and software skills requested by global founders, from professional email writing to spreadsheet organization.',
     description: 'Master email triage, calendar coordination, Canva graphic design basics, and AI productivity tools to increase your client retention.',
@@ -67,12 +73,15 @@ Success as a Virtual Assistant requires continuous learning, skill development, 
   },
   {
     id: 'cms-freelance-1',
-    page: 'home',
+    pageOwner: 'services',
+    homeFeatured: true,
+    contentType: 'Guide',
+    page: 'services',
+    featured: true,
     title: 'Beginner Freelancer Guide: How to Find Clients & Write Winning Proposals',
     category: 'Freelancing',
     status: 'PUBLISHED',
     visible: true,
-    featured: true,
     sortOrder: 3,
     summary: 'Learn responsible strategies for client acquisition, writing tailored proposal cover letters, setting rates, and protecting your work from online scams.',
     description: 'Step-by-step guide to finding freelance clients, conducting interview calls, and establishing recurring retainer packages.',
@@ -96,16 +105,19 @@ Finding clients as a remote Virtual Assistant or freelancer requires consistent 
   },
 
   // =========================================================================
-  // 💡 RESPONSIBLE AFFILIATE MARKETING LEARNING ARTICLES
+  // 🔗 AFFILIATE GUIDE PAGE OWNER (PROMOTED TO HOME FEATURED TUTORIALS)
   // =========================================================================
   {
     id: 'cms-affiliate-edu-1',
+    pageOwner: 'affiliate-guide',
+    homeFeatured: true,
+    contentType: 'Tutorial',
     page: 'affiliate-guide',
+    featured: true,
     title: 'How Affiliate Marketing Works: A Realistic & Responsible Educational Guide',
     category: 'Affiliate Marketing',
     status: 'PUBLISHED',
     visible: true,
-    featured: true,
     sortOrder: 4,
     summary: 'Understand the mechanics of affiliate links, tracking cookies, merchant commission structures, and how to build additional online income streams responsibly.',
     description: 'Learn how affiliate networks operate, how unique tracking parameters work, and why audience trust is critical for long-term sustainability.',
@@ -130,12 +142,15 @@ Affiliate marketing is NOT get-rich-quick. Income is NOT guaranteed. Results dep
   },
   {
     id: 'cms-affiliate-edu-2',
+    pageOwner: 'affiliate-guide',
+    homeFeatured: true,
+    contentType: 'Guide',
     page: 'affiliate-guide',
+    featured: true,
     title: 'Choosing a Niche & Building High-Value Educational Resource Pages',
     category: 'Content Strategy',
     status: 'PUBLISHED',
     visible: true,
-    featured: true,
     sortOrder: 5,
     summary: 'Learn how to recommend relevant software tools and infrastructure that solve genuine client problems instead of pushing aggressive spam.',
     description: 'Discover how to create tutorials, product comparisons, and resource pages that provide genuine utility to your readers.',
@@ -156,11 +171,15 @@ Successful affiliate content creators focus on solving problems first. When you 
   },
 
   // =========================================================================
-  // 💻 SHOWCASE, SERVICES, & WEB HOSTING CONTENT
+  // 💻 SHOWCASE PAGE OWNER ONLY (homeFeatured = false)
   // =========================================================================
   {
     id: 'cms-showcase-1',
+    pageOwner: 'showcase',
+    homeFeatured: false,
+    contentType: 'Showcase',
     page: 'showcase',
+    featured: false,
     title: 'Cyberpunk Portfolio & Security Hub',
     category: 'Web App',
     status: 'PUBLISHED',
@@ -176,9 +195,17 @@ Successful affiliate content creators focus on solving problems first. When you 
     createdAt: '2026-08-01T00:00:00Z',
     updatedAt: '2026-08-15T00:00:00Z'
   },
+
+  // =========================================================================
+  // 🛠️ SERVICES PAGE OWNER ONLY (homeFeatured = false)
+  // =========================================================================
   {
     id: 'cms-services-1',
+    pageOwner: 'services',
+    homeFeatured: false,
+    contentType: 'Service',
     page: 'services',
+    featured: false,
     title: 'Executive Virtual Assistant Retainer',
     category: 'Virtual Assistance',
     status: 'PUBLISHED',
@@ -190,9 +217,17 @@ Successful affiliate content creators focus on solving problems first. When you 
     createdAt: '2026-08-01T00:00:00Z',
     updatedAt: '2026-08-15T00:00:00Z'
   },
+
+  // =========================================================================
+  // 🌐 WEB HOSTING PAGE OWNER ONLY (homeFeatured = false)
+  // =========================================================================
   {
     id: 'cms-webhosting-1',
+    pageOwner: 'web-hosting',
+    homeFeatured: false,
+    contentType: 'Resource',
     page: 'web-hosting',
+    featured: false,
     title: 'Hostinger Premium Cloud Web Hosting Plan',
     category: 'Hosting & Domain',
     status: 'PUBLISHED',
@@ -201,6 +236,27 @@ Successful affiliate content creators focus on solving problems first. When you 
     mainImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80',
     price: '$2.99 / month (75% OFF)',
     url: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-15T00:00:00Z'
+  },
+
+  // =========================================================================
+  // ℹ️ ABOUT PAGE OWNER ONLY (homeFeatured = false)
+  // =========================================================================
+  {
+    id: 'cms-about-1',
+    pageOwner: 'about',
+    homeFeatured: false,
+    contentType: 'Article',
+    page: 'about',
+    featured: false,
+    title: 'About Team WhiteHat Dev',
+    category: 'Company Profile',
+    status: 'PUBLISHED',
+    visible: true,
+    description: 'We are an elite collective of full-stack developers, security engineers, and executive virtual assistant mentors empowering digital creators worldwide.',
+    mainImage: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80',
+    url: 'https://teamwhitehatdev.github.io/#/about',
     createdAt: '2026-08-01T00:00:00Z',
     updatedAt: '2026-08-15T00:00:00Z'
   }

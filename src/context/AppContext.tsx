@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
 import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
 import { ALL_AFFILIATE_ADS } from '../data/affiliateAdsData';
-import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType } from '../types';
+import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageOwnerType, CMSContentType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType } from '../types';
 
 interface AppContextType {
   services: Service[];
@@ -36,8 +36,10 @@ interface AppContextType {
   updateCMSItem: (id: string, updates: Partial<CMSItem>) => void;
   deleteCMSItem: (id: string) => void;
   toggleCMSItemVisibility: (id: string) => void;
+  toggleCMSItemHomeFeatured: (id: string) => void;
   setCMSItemStatus: (id: string, status: CMSStatusType) => void;
-  getPublicPageCMSItems: (page: string) => CMSItem[];
+  getPublicPageCMSItems: (pageOwner: string) => CMSItem[];
+  getHomeFeaturedCMSItems: () => CMSItem[];
   exportCMSDatabase: () => void;
   importCMSDatabase: (jsonStr: string) => boolean;
 
@@ -138,13 +140,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
   });
 
-  // CMS BACKEND ITEMS STATE WITH INITIAL CMS ITEMS FALLBACK
+  // CMS BACKEND ITEMS STATE WITH NORMALIZATION FOR PAGE OWNER & HOME FEATURED
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
     const saved = localStorage.getItem('wh_cms_items');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((item: any) => ({
+            ...item,
+            pageOwner: item.pageOwner || item.page || 'showcase',
+            homeFeatured: item.homeFeatured !== undefined ? item.homeFeatured : (item.featured || false),
+            contentType: item.contentType || 'Tutorial'
+          }));
+        }
       } catch (e) {
         console.error('Failed to parse saved CMS items:', e);
       }
@@ -233,6 +242,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newItem: CMSItem = {
       ...item,
       id: 'cms_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+      pageOwner: item.pageOwner || (item.page as CMSPageOwnerType) || 'showcase',
+      homeFeatured: item.homeFeatured !== undefined ? item.homeFeatured : (item.featured || false),
+      contentType: item.contentType || 'Tutorial',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -240,7 +252,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const updateCMSItem = (id: string, updates: Partial<CMSItem>) => {
-    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, ...updates, updatedAt: new Date().toISOString() } : item));
+    setCmsItems(prev => prev.map(item => {
+      if (item.id === id) {
+        const updated = { ...item, ...updates, updatedAt: new Date().toISOString() };
+        if (updates.pageOwner) updated.page = updates.pageOwner;
+        if (updates.homeFeatured !== undefined) updated.featured = updates.homeFeatured;
+        return updated;
+      }
+      return item;
+    }));
   };
 
   const deleteCMSItem = (id: string) => {
@@ -251,18 +271,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems(prev => prev.map(item => item.id === id ? { ...item, visible: !item.visible, updatedAt: new Date().toISOString() } : item));
   };
 
+  const toggleCMSItemHomeFeatured = (id: string) => {
+    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, homeFeatured: !item.homeFeatured, featured: !item.homeFeatured, updatedAt: new Date().toISOString() } : item));
+  };
+
   const setCMSItemStatus = (id: string, status: CMSStatusType) => {
     setCmsItems(prev => prev.map(item => item.id === id ? { ...item, status, updatedAt: new Date().toISOString() } : item));
   };
 
-  const getPublicPageCMSItems = useCallback((pageOrCategory: string) => {
-    const key = pageOrCategory.toLowerCase().trim();
+  // STRICT PAGE OWNER QUERY LOGIC
+  const getPublicPageCMSItems = useCallback((targetPageOwner: string) => {
+    const targetKey = targetPageOwner.toLowerCase().trim();
     return cmsItems.filter(item => {
       if (!item.visible || item.status !== 'PUBLISHED') return false;
-      if (item.page === key || key === 'all' || key === 'home') return true;
-      if (item.category && item.category.toLowerCase().includes(key)) return true;
-      if (item.title && item.title.toLowerCase().includes(key)) return true;
-      return false;
+      const owner = (item.pageOwner || item.page || '').toLowerCase().trim();
+      return owner === targetKey;
+    }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+  }, [cmsItems]);
+
+  // EXPLICIT HOME FEATURED PROMOTION QUERY LOGIC
+  const getHomeFeaturedCMSItems = useCallback(() => {
+    return cmsItems.filter(item => {
+      if (!item.visible || item.status !== 'PUBLISHED') return false;
+      return item.homeFeatured === true || item.featured === true;
     }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
   }, [cmsItems]);
 
@@ -395,8 +426,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateCMSItem,
         deleteCMSItem,
         toggleCMSItemVisibility,
+        toggleCMSItemHomeFeatured,
         setCMSItemStatus,
         getPublicPageCMSItems,
+        getHomeFeaturedCMSItems,
         exportCMSDatabase,
         importCMSDatabase,
         addHireVaInquiry,

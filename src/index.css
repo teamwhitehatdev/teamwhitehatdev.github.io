@@ -65,3 +65,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .animate-marqueeSlow:hover {
   animation-play-state: paused;
 }
+
+
+/* ENHANCED READABILITY FONT SIZING ACROSS ALL DEVICES */
+html {
+  font-size: 16px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16.5px;
+  }
+}
+
+p, span, li, button, input, select, textarea {
+  letter-spacing: 0.01em;
+}

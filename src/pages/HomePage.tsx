@@ -13,12 +13,12 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
-  const { getPublicPageCMSItems } = useApp();
+  const { getHomeFeaturedCMSItems } = useApp();
   const [displayTestimonials, setDisplayTestimonials] = useState(TESTIMONIALS_DATA);
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [selectedArticle, setSelectedArticle] = useState<CMSItem | null>(null);
 
-  const homeCmsItems = getPublicPageCMSItems('home');
+  const homeCmsItems = typeof getHomeFeaturedCMSItems === 'function' ? getHomeFeaturedCMSItems() : [];
 
   const handleConsult = (serviceTitle?: string) => {
     if (onOpenConsultation) {
