@@ -1,241 +1,224 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { UNIQUE_AFFILIATE_ADS, AffiliateAdItem } from '../data/affiliateAdsData';
-
-export type CMSPageType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide' | 'announcements';
-export type CMSStatusType = 'DRAFT' | 'PUBLISHED' | 'SCHEDULED' | 'ARCHIVED';
-
-export interface CMSItem {
-  id: string;
-  page: CMSPageType;
-  title: string;
-  category: string;
-  status: CMSStatusType;
-  visible: boolean;
-  publishDate: string;
-  description: string;
-  content?: string;
-  mainImage?: string;
-  author?: string;
-  tags?: string[];
-  metrics?: string;
-  price?: string;
-  url?: string;
-}
-
-export interface VisitorLog {
-  id: string;
-  ip: string;
-  timestamp: string;
-  country: string;
-  region: string;
-  city: string;
-  isp: string;
-  device: string;
-  browser: string;
-  os: string;
-  path: string;
-  referrer: string;
-  status: 'allowed' | 'blocked' | 'flagged';
-  duration?: string;
-  utmSource?: string;
-}
-
-export interface InquiryItem {
-  id: string;
-  timestamp: string;
-  name: string;
-  email: string;
-  service: string;
-  message: string;
-  status: 'NEW' | 'READ' | 'IN PROGRESS' | 'REPLIED' | 'COMPLETED' | 'ARCHIVED';
-  notes?: string;
-}
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { ThemeName, THEMES, ThemeMode } from '../components/ThemeEngine';
+import { CMSItem, VisitorLog, InquiryItem, AffiliateAd } from '../types';
+import { INITIAL_CMS_ITEMS } from '../data/initialData';
+import { INITIAL_INQUIRIES } from '../data/initialInquiries';
+import { AFFILIATE_ADS } from '../data/affiliateAdsData';
 
 interface AppContextType {
+  currentTheme: ThemeName;
+  setTheme: (theme: ThemeName) => void;
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
+  adminAuth: boolean;
+  loginAdmin: (pin: string) => boolean;
+  logoutAdmin: () => void;
   cmsItems: CMSItem[];
   addCMSItem: (item: Omit<CMSItem, 'id'>) => void;
   updateCMSItem: (id: string, item: Partial<CMSItem>) => void;
   deleteCMSItem: (id: string) => void;
-  toggleCMSVisibility: (id: string) => void;
-  getPublicPageCMSItems: (page: CMSPageType) => CMSItem[];
-  
   visitorLogs: VisitorLog[];
+  logVisitor: (details?: Partial<VisitorLog>) => void;
+  logVisitorPageNavigation: (pagePath: string) => void;
+  userIp: string;
+  bannedIps: string[];
   blockedIps: string[];
   blockIp: (ip: string) => void;
   unblockIp: (ip: string) => void;
-  
   inquiries: InquiryItem[];
-  addInquiry: (inquiry: Omit<InquiryItem, 'id' | 'timestamp' | 'status'>) => void;
-  updateInquiryStatus: (id: string, status: InquiryItem['status'], notes?: string) => void;
-  
-  affiliateAds: AffiliateAdItem[];
-  pinCode: string;
-  isAuthenticated: boolean;
-  login: (pin: string) => boolean;
-  logout: () => void;
+  addInquiry: (inquiry: Omit<InquiryItem, 'id' | 'dateSubmitted' | 'status'>) => void;
+  updateInquiryStatus: (id: string, status: InquiryItem['status']) => void;
+  affiliateAds: AffiliateAd[];
+  isHireModalOpen: boolean;
+  setIsHireModalOpen: (open: boolean) => void;
+  isConsultationModalOpen: boolean;
+  setIsConsultationModalOpen: (open: boolean) => void;
+  selectedServiceForModal: string | null;
+  setSelectedServiceForModal: (serviceTitle: string | null) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+  const [currentTheme, setCurrentThemeState] = useState<ThemeName>('cyberpunk_net');
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('dark');
+  const [adminAuth, setAdminAuth] = useState<boolean>(() => {
     try {
-      return localStorage.getItem('twhd_admin_auth') === 'true';
-    } catch (e) {
+      return localStorage.getItem('whitehat_admin_auth') === 'true';
+    } catch {
       return false;
     }
   });
 
-  const pinCode = 'anonymousphilippines';
-
-  const login = (inputPin: string) => {
-    if (inputPin === pinCode) {
-      setIsAuthenticated(true);
-      try {
-        localStorage.setItem('twhd_admin_auth', 'true');
-      } catch (e) {}
-      return true;
-    }
-    return false;
-  };
-
-  const logout = () => {
-    setIsAuthenticated(false);
-    try {
-      localStorage.removeItem('twhd_admin_auth');
-    } catch (e) {}
-  };
-
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
     try {
-      const saved = localStorage.getItem('twhd_cms_items');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
+      const saved = localStorage.getItem('whitehat_cms_items');
+      return saved ? JSON.parse(saved) : INITIAL_CMS_ITEMS;
+    } catch {
+      return INITIAL_CMS_ITEMS;
     }
   });
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('twhd_cms_items', JSON.stringify(cmsItems));
-    } catch (e) {}
-  }, [cmsItems]);
-
-  const addCMSItem = (newItem: Omit<CMSItem, 'id'>) => {
-    const item: CMSItem = {
-      ...newItem,
-      id: `cms-${Date.now()}`
-    };
-    setCmsItems(prev => [item, ...prev]);
-  };
-
-  const updateCMSItem = (id: string, updated: Partial<CMSItem>) => {
-    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, ...updated } : item));
-  };
-
-  const deleteCMSItem = (id: string) => {
-    setCmsItems(prev => prev.filter(item => item.id !== id));
-  };
-
-  const toggleCMSVisibility = (id: string) => {
-    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, visible: !item.visible } : item));
-  };
-
-  const getPublicPageCMSItems = (page: CMSPageType) => {
-    return cmsItems.filter(item => item.page === page && item.visible && item.status === 'PUBLISHED');
-  };
-
-  const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>(() => {
-    try {
-      const saved = localStorage.getItem('twhd_visitor_logs');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('twhd_visitor_logs', JSON.stringify(visitorLogs));
-    } catch (e) {}
-  }, [visitorLogs]);
-
+  const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>([]);
+  const [userIp, setUserIp] = useState<string>('127.0.0.1');
   const [blockedIps, setBlockedIps] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('twhd_blocked_ips');
-      return saved ? JSON.parse(saved) : ['185.220.101.5', '193.239.147.23'];
-    } catch (e) {
-      return ['185.220.101.5', '193.239.147.23'];
+      const saved = localStorage.getItem('whitehat_blocked_ips');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
     }
   });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('twhd_blocked_ips', JSON.stringify(blockedIps));
-    } catch (e) {}
-  }, [blockedIps]);
-
-  const blockIp = (ip: string) => {
-    if (!blockedIps.includes(ip)) {
-      setBlockedIps(prev => [...prev, ip]);
-    }
-  };
-
-  const unblockIp = (ipToUnblock: string) => {
-    setBlockedIps(prev => prev.filter(ip => ip !== ipToUnblock));
-  };
 
   const [inquiries, setInquiries] = useState<InquiryItem[]>(() => {
     try {
-      const saved = localStorage.getItem('twhd_inquiries');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
+      const saved = localStorage.getItem('whitehat_inquiries');
+      return saved ? JSON.parse(saved) : INITIAL_INQUIRIES;
+    } catch {
+      return INITIAL_INQUIRIES;
     }
   });
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('twhd_inquiries', JSON.stringify(inquiries));
-    } catch (e) {}
-  }, [inquiries]);
+  const [isHireModalOpen, setIsHireModalOpen] = useState(false);
+  const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
+  const [selectedServiceForModal, setSelectedServiceForModal] = useState<string | null>(null);
 
-  const addInquiry = (inquiry: Omit<InquiryItem, 'id' | 'timestamp' | 'status'>) => {
+  const setTheme = useCallback((theme: ThemeName) => {
+    setCurrentThemeState(theme);
+  }, []);
+
+  const setThemeMode = useCallback((mode: ThemeMode) => {
+    setThemeModeState(mode);
+  }, []);
+
+  const loginAdmin = useCallback((pin: string) => {
+    if (pin === 'anonymousphilippines') {
+      setAdminAuth(true);
+      try {
+        localStorage.setItem('whitehat_admin_auth', 'true');
+      } catch {}
+      return true;
+    }
+    return false;
+  }, []);
+
+  const logoutAdmin = useCallback(() => {
+    setAdminAuth(false);
+    try {
+      localStorage.removeItem('whitehat_admin_auth');
+    } catch {}
+  }, []);
+
+  const addCMSItem = useCallback((item: Omit<CMSItem, 'id'>) => {
+    const newItem: CMSItem = { ...item, id: `cms-${Date.now()}` };
+    setCmsItems(prev => {
+      const updated = [newItem, ...prev];
+      try { localStorage.setItem('whitehat_cms_items', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  }, []);
+
+  const updateCMSItem = useCallback((id: string, updatedFields: Partial<CMSItem>) => {
+    setCmsItems(prev => {
+      const updated = prev.map(i => i.id === id ? { ...i, ...updatedFields } : i);
+      try { localStorage.setItem('whitehat_cms_items', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  }, []);
+
+  const deleteCMSItem = useCallback((id: string) => {
+    setCmsItems(prev => {
+      const updated = prev.filter(i => i.id !== id);
+      try { localStorage.setItem('whitehat_cms_items', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  }, []);
+
+  const logVisitor = useCallback((details?: Partial<VisitorLog>) => {
+    const newLog: VisitorLog = {
+      id: `log-${Date.now()}`,
+      ip: details?.ip || userIp,
+      timestamp: new Date().toISOString(),
+      pageVisited: details?.pageVisited || window.location.hash || '/',
+      userAgent: navigator.userAgent,
+      referrer: document.referrer || 'Direct'
+    };
+    setVisitorLogs(prev => [newLog, ...prev.slice(0, 99)]);
+  }, [userIp]);
+
+  const logVisitorPageNavigation = useCallback((pagePath: string) => {
+    logVisitor({ pageVisited: pagePath });
+  }, [logVisitor]);
+
+  const blockIp = useCallback((ip: string) => {
+    setBlockedIps(prev => {
+      const updated = Array.from(new Set([...prev, ip]));
+      try { localStorage.setItem('whitehat_blocked_ips', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  }, []);
+
+  const unblockIp = useCallback((ip: string) => {
+    setBlockedIps(prev => {
+      const updated = prev.filter(i => i !== ip);
+      try { localStorage.setItem('whitehat_blocked_ips', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  }, []);
+
+  const addInquiry = useCallback((inquiry: Omit<InquiryItem, 'id' | 'dateSubmitted' | 'status'>) => {
     const newInquiry: InquiryItem = {
       ...inquiry,
       id: `inq-${Date.now()}`,
-      timestamp: new Date().toLocaleString(),
+      dateSubmitted: new Date().toISOString().split('T')[0],
       status: 'NEW'
     };
-    setInquiries(prev => [newInquiry, ...prev]);
-  };
+    setInquiries(prev => {
+      const updated = [newInquiry, ...prev];
+      try { localStorage.setItem('whitehat_inquiries', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  }, []);
 
-  const updateInquiryStatus = (id: string, status: InquiryItem['status'], notes?: string) => {
-    setInquiries(prev => prev.map(inq => inq.id === id ? { ...inq, status, ...(notes !== undefined ? { notes } : {}) } : inq));
-  };
-
-  const affiliateAds = UNIQUE_AFFILIATE_ADS;
+  const updateInquiryStatus = useCallback((id: string, status: InquiryItem['status']) => {
+    setInquiries(prev => {
+      const updated = prev.map(i => i.id === id ? { ...i, status } : i);
+      try { localStorage.setItem('whitehat_inquiries', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  }, []);
 
   return (
     <AppContext.Provider value={{
+      currentTheme,
+      setTheme,
+      themeMode,
+      setThemeMode,
+      adminAuth,
+      loginAdmin,
+      logoutAdmin,
       cmsItems,
       addCMSItem,
       updateCMSItem,
       deleteCMSItem,
-      toggleCMSVisibility,
-      getPublicPageCMSItems,
       visitorLogs,
+      logVisitor,
+      logVisitorPageNavigation,
+      userIp,
+      bannedIps: blockedIps,
       blockedIps,
       blockIp,
       unblockIp,
       inquiries,
       addInquiry,
       updateInquiryStatus,
-      affiliateAds,
-      pinCode,
-      isAuthenticated,
-      login,
-      logout
+      affiliateAds: AFFILIATE_ADS,
+      isHireModalOpen,
+      setIsHireModalOpen,
+      isConsultationModalOpen,
+      setIsConsultationModalOpen,
+      selectedServiceForModal,
+      setSelectedServiceForModal
     }}>
       {children}
     </AppContext.Provider>
@@ -244,6 +227,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
 export const useApp = () => {
   const context = useContext(AppContext);
-  if (!context) throw new Error('useApp must be used within an AppProvider');
+  if (!context) {
+    throw new Error('useApp must be used within AppProvider');
+  }
   return context;
 };
+
+export default AppProvider;
