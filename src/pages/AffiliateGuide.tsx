@@ -628,33 +628,6 @@ export const AffiliateGuide: React.FC = () => {
         </div>
 
       </div>
-    
-      {/* MICROSOFT REWARDS REFERRAL DIVISION PANEL */}
-      <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-cyan-950 border border-blue-500/40 rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-500/10 border border-blue-500/30 rounded-full text-xs text-blue-400 font-bold uppercase">
-              <span>SPECIAL REFERRAL OFFER</span>
-            </div>
-            <h3 className="text-xl font-bold font-rajdhani text-white uppercase">
-              EARN FREE REWARDS WITH MICROSOFT EDGE & BING
-            </h3>
-            <p className="text-xs text-gray-300 font-sans max-w-2xl">
-              Join Microsoft Rewards via our official invitation link to collect points on search, web browsing, and daily quests redeemable for Xbox Game Pass, Amazon gift cards, and tech vouchers.
-            </p>
-          </div>
-          <a
-            href="https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae"
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 text-black font-extrabold text-xs font-rajdhani uppercase rounded-xl shadow-lg hover:brightness-110 transition-all flex items-center space-x-2 shrink-0 cursor-pointer"
-          >
-            <span>JOIN MICROSOFT REWARDS</span>
-            <ExternalLink className="w-4 h-4" />
-          </a>
-        </div>
-      </div>
-
     </div>
   );
 };
