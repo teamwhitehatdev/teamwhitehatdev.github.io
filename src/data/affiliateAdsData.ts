@@ -232,7 +232,7 @@ export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
     title: 'CapCut Video Editor — Short-Form Video & Auto Captions',
     description: 'Industry-standard video editor for TikToks, Reels, YouTube Shorts, auto-captions, and AI background removal.',
     badge: 'FREE CREATOR TOOL'
-  }
+  },
 
   // ==========================================
   // 9. VECTEEZY GRAPHICS ASSETS (IMPACT.COM)
