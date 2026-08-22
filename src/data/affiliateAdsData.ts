@@ -251,4 +251,19 @@ export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
     description: 'Millions of royalty-free vectors, stock photos, icons & 4K video clips.',
     badge: 'VECTOR ASSETS'
   }
+,
+  {
+    id: 'envato-market-281-sidebar',
+    brand: 'Envato Market',
+    category: 'creative',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://1.envato.market/c/5024116/462704/4415?subId1=https%3A%2F%2Fteamwhitehatdev.github.io&sharedid=https%3A%2F%2Fteamwhitehatdev.github.io&partnerpropertyid=8727735',
+    imageUrl: 'https://1.envato.market/c/5024116/462704/4415',
+    iframeUrl: '//a.impactradius-go.com/gen-ad-code/5024116/462704/4415/?subId1=https%3A%2F%2Fteamwhitehatdev.github.io&sharedid=https%3A%2F%2Fteamwhitehatdev.github.io&partnerpropertyid=8727735',
+    title: 'Envato Market Digital Ecosystem',
+    description: 'Direct partner property deals, digital web assets, and UI components.',
+    badge: 'PARTNER DEAL'
+  }
 ];

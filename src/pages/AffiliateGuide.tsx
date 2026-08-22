@@ -29,6 +29,7 @@ export const AffiliateGuide: React.FC = () => {
 const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae";
   const VECTEEZY_REFERRAL_LINK = "https://a.impactradius-go.com/gen-ad-code/5024116/4016678/12240/";
   const ENVATO_REFERRAL_LINK = "https://1.envato.market/c/5024116/805521/4415?subId1=https%3A%2F%2Fteamwhitehatdev.github.io";
+  const ENVATO_281_LINK = "https://1.envato.market/c/5024116/462704/4415?subId1=https%3A%2F%2Fteamwhitehatdev.github.io&sharedid=https%3A%2F%2Fteamwhitehatdev.github.io&partnerpropertyid=8727735";
 
   // WONDERSHARE OFFICIAL REFERRAL LINKS & TRACKING CODES
   const WONDERSHARE_VIRBO_LINK = "https://wondersharesoftware.pxf.io/c/5024116/2882021/15586";
@@ -818,7 +819,7 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
                       </h4>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start justify-items-center pt-2">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start justify-items-center pt-2">
 
                       {/* OPTION 1: VECTEEZY GRAPHICS ASSETS BANNER */}
                       <div className="w-full bg-slate-50 border border-emerald-200 rounded-2xl p-5 space-y-3 flex flex-col items-center shadow-sm">
@@ -880,6 +881,36 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
                           className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow"
                         >
                           <span>EXPLORE ENVATO ELEMENTS &rarr;</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
+                      {/* OPTION 3: ENVATO MARKET ECOSYSTEM & PARTNER ASSETS (IFRAME_281) */}
+                      <div className="w-full bg-slate-50 border border-emerald-200 rounded-2xl p-5 space-y-3 flex flex-col items-center shadow-sm">
+                        <span className="px-3 py-1 bg-emerald-100 text-emerald-900 font-mono font-bold text-[11px] rounded-full uppercase">
+                          OPTION C: ENVATO MARKET &amp; PARTNER NETWORK
+                        </span>
+                        <p className="text-xs text-slate-600 font-sans max-w-xs">
+                          Direct partner property deals, digital assets, and Web UI components.
+                        </p>
+                        <div className="flex justify-center overflow-hidden py-2 w-full">
+                          <iframe
+                            id="iframe_281"
+                            src="//a.impactradius-go.com/gen-ad-code/5024116/462704/4415/?subId1=https%3A%2F%2Fteamwhitehatdev.github.io&amp;sharedid=https%3A%2F%2Fteamwhitehatdev.github.io&amp;partnerpropertyid=8727735"
+                            scrolling="yes"
+                            frameBorder="0"
+                            marginHeight={0}
+                            marginWidth={0}
+                            className="rounded-xl shadow-md border border-slate-300 max-w-full w-full min-h-[400px]"
+                          />
+                        </div>
+                        <a
+                          href={ENVATO_281_LINK}
+                          target="_blank"
+                          rel="sponsored noopener noreferrer"
+                          className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow"
+                        >
+                          <span>ACCESS ENVATO MARKET &rarr;</span>
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       </div>
