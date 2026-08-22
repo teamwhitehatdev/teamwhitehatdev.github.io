@@ -28,6 +28,7 @@ export const AffiliateGuide: React.FC = () => {
   const CAPCUT_REFERRAL_LINK = "https://capcutaffiliateprogram.pxf.io/WqmL1e";
 const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae";
   const VECTEEZY_REFERRAL_LINK = "https://a.impactradius-go.com/gen-ad-code/5024116/4016678/12240/";
+  const ENVATO_REFERRAL_LINK = "https://1.envato.market/c/5024116/805521/4415?subId1=https%3A%2F%2Fteamwhitehatdev.github.io";
 
   // WONDERSHARE OFFICIAL REFERRAL LINKS & TRACKING CODES
   const WONDERSHARE_VIRBO_LINK = "https://wondersharesoftware.pxf.io/c/5024116/2882021/15586";
@@ -806,23 +807,83 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
                     </div>
                   </div>
 
-                  {/* EMBEDDED OFFICIAL IMPACT AD IFRAME */}
-                  <div className="bg-white rounded-xl shadow border border-emerald-200 p-6 space-y-4 text-center">
-                    <h4 className="text-sm font-bold text-slate-900 font-orbitron uppercase tracking-wider text-emerald-800">
-                      OFFICIAL VECTEEZY IMPACT PROMOTIONAL BANNER
-                    </h4>
-                    <div className="flex justify-center overflow-hidden py-2">
-                      <iframe
-                        id="iframe_313"
-                        src="//a.impactradius-go.com/gen-ad-code/5024116/4016678/12240/"
-                        width="336"
-                        height="200"
-                        scrolling="no"
-                        frameBorder="0"
-                        marginHeight={0}
-                        marginWidth={0}
-                        className="rounded-xl shadow-md border border-slate-200"
-                      />
+                  {/* EMBEDDED OFFICIAL IMPACT AD IFRAMES (CREATIVE CHOICES & OPTIONS) */}
+                  <div className="bg-white rounded-xl shadow border border-emerald-200 p-6 space-y-6 text-center">
+                    <div className="space-y-1">
+                      <span className="text-xs font-mono font-bold text-emerald-600 uppercase tracking-widest block">
+                        ⚡ CREATIVE SUITE OPTIONS &amp; PROMOTIONAL BANNERS
+                      </span>
+                      <h4 className="text-base sm:text-lg font-bold text-slate-900 font-orbitron uppercase tracking-wider text-emerald-900">
+                        SELECT YOUR PREFERRED CREATIVE ASSET PLATFORM
+                      </h4>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start justify-items-center pt-2">
+
+                      {/* OPTION 1: VECTEEZY GRAPHICS ASSETS BANNER */}
+                      <div className="w-full bg-slate-50 border border-emerald-200 rounded-2xl p-5 space-y-3 flex flex-col items-center shadow-sm">
+                        <span className="px-3 py-1 bg-emerald-100 text-emerald-900 font-mono font-bold text-[11px] rounded-full uppercase">
+                          OPTION A: VECTEEZY VECTOR &amp; STOCK ASSETS
+                        </span>
+                        <p className="text-xs text-slate-600 font-sans max-w-xs">
+                          Royalty-free vector graphics, scalable SVGs, stock photography, and 4K footage.
+                        </p>
+                        <div className="flex justify-center overflow-hidden py-2 w-full">
+                          <iframe
+                            id="iframe_313"
+                            src="//a.impactradius-go.com/gen-ad-code/5024116/4016678/12240/"
+                            width="336"
+                            height="200"
+                            scrolling="no"
+                            frameBorder="0"
+                            marginHeight={0}
+                            marginWidth={0}
+                            className="rounded-xl shadow-md border border-slate-300 max-w-full"
+                          />
+                        </div>
+                        <a
+                          href={VECTEEZY_REFERRAL_LINK}
+                          target="_blank"
+                          rel="sponsored noopener noreferrer"
+                          className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow"
+                        >
+                          <span>GET VECTEEZY ASSETS &rarr;</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
+                      {/* OPTION 2: ENVATO THEMEFOREST & CREATIVE ELEMENTS BANNER */}
+                      <div className="w-full bg-slate-50 border border-emerald-200 rounded-2xl p-5 space-y-3 flex flex-col items-center shadow-sm">
+                        <span className="px-3 py-1 bg-emerald-100 text-emerald-900 font-mono font-bold text-[11px] rounded-full uppercase">
+                          OPTION B: ENVATO THEMEFOREST &amp; CREATIVE KITS
+                        </span>
+                        <p className="text-xs text-slate-600 font-sans max-w-xs">
+                          50,000+ premium web themes, UI kits, code scripts, and digital creative elements.
+                        </p>
+                        <div className="flex justify-center overflow-hidden py-2 w-full">
+                          <iframe
+                            id="iframe_465"
+                            src="//a.impactradius-go.com/gen-ad-code/5024116/805521/4415/?subId1=https%3A%2F%2Fteamwhitehatdev.github.io"
+                            width="300"
+                            height="600"
+                            scrolling="no"
+                            frameBorder="0"
+                            marginHeight={0}
+                            marginWidth={0}
+                            className="rounded-xl shadow-md border border-slate-300 max-w-full"
+                          />
+                        </div>
+                        <a
+                          href={ENVATO_REFERRAL_LINK}
+                          target="_blank"
+                          rel="sponsored noopener noreferrer"
+                          className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow"
+                        >
+                          <span>EXPLORE ENVATO ELEMENTS &rarr;</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
                     </div>
                   </div>
 
