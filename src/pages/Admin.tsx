@@ -181,6 +181,23 @@ export const Admin: React.FC = () => {
     setIsCreatingCMSItem(false);
   };
 
+  
+  // COMPUTER FILE UPLOAD HANDLER (CONVERTS LOCAL IMAGE FILE TO BASE64 DATA URL)
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'cms' | 'promo') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Data = reader.result as string;
+      if (target === 'cms') {
+        setCmsForm(prev => ({ ...prev, mainImage: base64Data }));
+      } else {
+        setPromoForm(prev => ({ ...prev, imageUrl: base64Data }));
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSaveCMSItem = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingCMSItem) {
@@ -1035,6 +1052,66 @@ export const Admin: React.FC = () => {
                 />
               </div>
 
+              {/* 🖼️ MAIN IMAGE UPLOAD FROM COMPUTER OR IMAGE URL */}
+              <div className="p-3 bg-slate-950 border border-cyan-500/40 rounded-2xl space-y-2">
+                <label className="text-cyan-300 font-mono block font-bold">MAIN IMAGE MANAGEMENT (UPLOAD FROM COMPUTER OR URL):</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+                  <div>
+                    <label className="text-[11px] text-slate-400 block pb-1 font-mono">A. UPLOAD FROM COMPUTER:</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileUpload(e, 'cms')}
+                      className="w-full px-2 py-1 bg-black border border-cyan-500/30 rounded-xl text-slate-300 font-mono text-[11px] file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:bg-cyan-500/20 file:text-cyan-300 font-bold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] text-slate-400 block pb-1 font-mono">B. OR ENTER IMAGE URL / PATH:</label>
+                    <input
+                      type="text"
+                      value={cmsForm.mainImage}
+                      onChange={(e) => setCmsForm({ ...cmsForm, mainImage: e.target.value })}
+                      placeholder="https://... or ./images/..."
+                      className="w-full px-3 py-2 bg-black border border-cyan-500/30 rounded-xl text-white font-mono text-xs"
+                    />
+                  </div>
+                </div>
+
+                {cmsForm.mainImage && (
+                  <div className="flex items-center space-x-3 pt-2 border-t border-slate-900">
+                    <img
+                      src={cmsForm.mainImage}
+                      alt="Preview"
+                      className="w-16 h-12 object-cover rounded-lg border border-cyan-500/50"
+                    />
+                    <div className="flex-grow space-y-0.5 font-mono text-[10px]">
+                      <span className="text-lime-400 font-bold block">✓ Image Loaded</span>
+                      <span className="text-slate-400 block truncate max-w-xs">{cmsForm.mainImage.substring(0, 50)}...</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setCmsForm({ ...cmsForm, mainImage: '' })}
+                      className="px-2.5 py-1 bg-rose-950/80 hover:bg-rose-900 text-rose-300 rounded text-[10px] font-bold cursor-pointer"
+                    >
+                      REMOVE IMAGE
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* TARGET / REFERRAL URL */}
+              <div>
+                <label className="text-cyan-300 font-mono block pb-1 font-bold">REFERRAL LINK / TARGET URL:</label>
+                <input
+                  type="text"
+                  value={cmsForm.url}
+                  onChange={(e) => setCmsForm({ ...cmsForm, url: e.target.value })}
+                  placeholder="https://..."
+                  className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                />
+              </div>
+
               <div>
                 <label className="text-slate-300 font-mono block pb-1 font-bold">DESCRIPTION / CONTENT:</label>
                 <textarea
@@ -1119,27 +1196,64 @@ export const Admin: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-cyan-300 font-mono block pb-1 font-bold">DESTINATION URL:</label>
-                  <input
-                    type="text"
-                    value={promoForm.destinationUrl}
-                    onChange={(e) => setPromoForm({ ...promoForm, destinationUrl: e.target.value })}
-                    required
-                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
-                  />
+              {/* 🖼️ PROMO IMAGE UPLOAD FROM COMPUTER OR IMAGE URL */}
+              <div className="p-3 bg-slate-950 border border-purple-500/40 rounded-2xl space-y-2">
+                <label className="text-purple-300 font-mono block font-bold">PROMOTION IMAGE MANAGEMENT (UPLOAD FROM COMPUTER OR URL):</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+                  <div>
+                    <label className="text-[11px] text-slate-400 block pb-1 font-mono">A. UPLOAD FROM COMPUTER:</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileUpload(e, 'promo')}
+                      className="w-full px-2 py-1 bg-black border border-purple-500/30 rounded-xl text-slate-300 font-mono text-[11px] file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:bg-purple-500/20 file:text-purple-300 font-bold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] text-slate-400 block pb-1 font-mono">B. OR ENTER IMAGE URL / PATH:</label>
+                    <input
+                      type="text"
+                      value={promoForm.imageUrl}
+                      onChange={(e) => setPromoForm({ ...promoForm, imageUrl: e.target.value })}
+                      placeholder="https://... or ./images/..."
+                      className="w-full px-3 py-2 bg-black border border-purple-500/30 rounded-xl text-white font-mono text-xs"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="text-cyan-300 font-mono block pb-1 font-bold">IMAGE URL:</label>
-                  <input
-                    type="text"
-                    value={promoForm.imageUrl}
-                    onChange={(e) => setPromoForm({ ...promoForm, imageUrl: e.target.value })}
-                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
-                  />
-                </div>
+                {promoForm.imageUrl && (
+                  <div className="flex items-center space-x-3 pt-2 border-t border-slate-900">
+                    <img
+                      src={promoForm.imageUrl}
+                      alt="Preview"
+                      className="w-16 h-12 object-cover rounded-lg border border-purple-500/50"
+                    />
+                    <div className="flex-grow space-y-0.5 font-mono text-[10px]">
+                      <span className="text-lime-400 font-bold block">✓ Image Loaded</span>
+                      <span className="text-slate-400 block truncate max-w-xs">{promoForm.imageUrl.substring(0, 50)}...</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPromoForm({ ...promoForm, imageUrl: '' })}
+                      className="px-2.5 py-1 bg-rose-950/80 hover:bg-rose-900 text-rose-300 rounded text-[10px] font-bold cursor-pointer"
+                    >
+                      REMOVE IMAGE
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="text-cyan-300 font-mono block pb-1 font-bold">DESTINATION / REFERRAL URL:</label>
+                <input
+                  type="text"
+                  value={promoForm.destinationUrl}
+                  onChange={(e) => setPromoForm({ ...promoForm, destinationUrl: e.target.value })}
+                  required
+                  placeholder="https://..."
+                  className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                />
               </div>
 
               <div>
