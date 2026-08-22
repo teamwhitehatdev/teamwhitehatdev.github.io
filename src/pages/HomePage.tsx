@@ -112,15 +112,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
       </HUDPanel>
 
       {/* ========================================================================= */}
-      {/* 🚀 SECTION 2: 13-STEP LEARNING & CAREER PROGRESSION PATH */}
+      {/* 🚀 SECTION 2: 13-STEP LEARNING & CAREER PROGRESSION PATH (WHITE HIGH-CONTRAST PANEL) */}
       {/* ========================================================================= */}
       <HUDPanel title="🚀 13-STEP VA &amp; FREELANCER CAREER PROGRESSION PATH">
-        <div className="p-5 space-y-4">
-          <p className="text-xs text-gray-300 font-sans leading-relaxed">
-            Follow this logical progression path to build your skills, establish a professional profile, and land long-term clients:
+        <div className="p-6 space-y-5 bg-white text-slate-900 rounded-2xl border-2 border-emerald-400 shadow-2xl">
+          <p className="text-sm font-bold text-slate-800 font-sans leading-relaxed">
+            Follow this logical 13-step progression path to build your skills, establish a professional profile, and land long-term clients clearly and effectively:
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-sans text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 font-sans">
             {[
               { step: 'STEP 01', title: 'Learn VA Fundamentals', desc: 'Understand the role, remote workflows, and administrative expectations.' },
               { step: 'STEP 02', title: 'Identify Your Strengths', desc: 'Assess your existing skills in writing, organization, design, or tech.' },
@@ -136,12 +136,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
               { step: 'STEP 12', title: 'Recommend Tools Responsibly', desc: 'Create useful resource pages and recommend tools you actually trust.' },
               { step: 'STEP 13', title: 'Continuous Growth', desc: 'Keep learning, updating your skills, and adapting to industry trends.' },
             ].map((st, idx) => (
-              <div key={idx} className="p-3.5 bg-black/90 border border-gray-800 rounded-xl space-y-1 hover:border-cyan-400 transition-all">
-                <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-300 font-mono font-bold text-[10px] rounded">
+              <div key={idx} className="p-4 bg-slate-50 border-2 border-slate-200 rounded-xl space-y-1.5 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all">
+                <span className="px-2.5 py-1 bg-emerald-600 text-white font-mono font-black text-xs rounded-md shadow-sm inline-block">
                   {st.step}
                 </span>
-                <h4 className="font-extrabold text-white font-rajdhani text-xs pt-1">{st.title}</h4>
-                <p className="text-[11px] text-gray-400 leading-tight">{st.desc}</p>
+                <h4 className="font-black text-slate-900 font-orbitron text-sm pt-1">{st.title}</h4>
+                <p className="text-xs font-medium text-slate-700 leading-normal">{st.desc}</p>
               </div>
             ))}
           </div>
@@ -256,22 +256,24 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         
         <div className="lg:col-span-2 space-y-8">
 
-          {/* CORE VIRTUAL ASSISTANT PACKAGES */}
+          {/* CORE VIRTUAL ASSISTANT PACKAGES (WHITE HIGH-CONTRAST PANEL) */}
           <HUDPanel title="🛠️ CORE VIRTUAL ASSISTANT PACKAGES">
-            <div className="p-4 space-y-3">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+            <div className="p-6 space-y-4 bg-white text-slate-900 rounded-2xl border-2 border-emerald-400 shadow-2xl">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans">
                 {[
-                  { title: 'Executive Virtual Assistance', desc: 'Calendar management, inbox triage, CRM entry.', price: '$1,500 / mo' },
-                  { title: 'Full-Stack Web Development', desc: 'React, TypeScript, Next.js web applications.', price: '$2,500 / project' },
-                  { title: 'Mobile App Development', desc: 'Android & iOS apps published on Play Store.', price: '$799 / app' },
-                  { title: 'Graphic Design & Branding', desc: 'Social media assets, logos, and UI mockups.', price: '$250 / pack' },
+                  { title: 'Executive Virtual Assistance', desc: 'Calendar management, inbox triage, CRM entry, and client support.', price: '$1,500 / mo' },
+                  { title: 'Full-Stack Web Development', desc: 'React, TypeScript, Next.js web applications & CMS integrations.', price: '$2,500 / project' },
+                  { title: 'Mobile App Development', desc: 'Android & iOS apps published on Google Play & App Store.', price: '$799 / app' },
+                  { title: 'Graphic Design & Branding', desc: 'Social media assets, logos, pitch decks, and UI mockups.', price: '$250 / pack' },
                 ].map((svc, idx) => (
-                  <div key={idx} className="bg-black/90 border border-gray-800 p-3.5 rounded-xl space-y-1.5 hover:border-[var(--primary-cyan)] transition-all">
-                    <h4 className="text-xs font-bold text-white font-rajdhani uppercase">{svc.title}</h4>
-                    <p className="text-[11px] text-gray-400 font-sans leading-tight">{svc.desc}</p>
-                    <div className="flex justify-between items-center pt-1">
-                      <span className="text-lime-400 font-bold text-xs">{svc.price}</span>
-                      <button onClick={() => handleConsult(svc.title)} className="text-cyan-400 text-[10px] font-bold hover:underline">
+                  <div key={idx} className="bg-slate-50 border-2 border-slate-200 p-4 rounded-xl space-y-2 hover:border-emerald-500 shadow-sm transition-all flex flex-col justify-between">
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-black text-slate-900 font-orbitron uppercase">{svc.title}</h4>
+                      <p className="text-xs text-slate-700 leading-snug">{svc.desc}</p>
+                    </div>
+                    <div className="flex justify-between items-center pt-2 border-t border-slate-200 mt-2">
+                      <span className="text-emerald-700 font-extrabold font-mono text-sm">{svc.price}</span>
+                      <button onClick={() => handleConsult(svc.title)} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold font-mono rounded-lg transition-all shadow">
                         BOOK &rarr;
                       </button>
                     </div>
