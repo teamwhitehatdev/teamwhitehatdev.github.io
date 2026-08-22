@@ -31,32 +31,6 @@ export const WebHosting: React.FC = () => {
 
   return (
     <div className="space-y-10 font-mono max-w-7xl mx-auto pb-10">
-
-      {/* DYNAMIC CMS HOSTING ANNOUNCEMENTS & CUSTOM PLANS */}
-      {cmsHostingItems.length > 0 && (
-        <div className="bg-gradient-to-r from-purple-950 via-black to-slate-900 border-2 border-purple-500/60 rounded-3xl p-6 space-y-4 shadow-2xl">
-          <span className="text-xs font-bold text-purple-400 uppercase tracking-widest block font-mono">
-            ★ CMS FEATURED WEB HOSTING PROMOTIONS
-          </span>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {cmsHostingItems.map(item => (
-              <div key={item.id} className="bg-black/90 border border-purple-500/40 rounded-2xl p-5 space-y-3 hover:border-purple-400 transition-all">
-                <span className="bg-purple-500/20 text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded border border-purple-500/40 uppercase">
-                  {item.category || 'HOSTING DEAL'}
-                </span>
-                <h4 className="text-base font-black text-white font-rajdhani uppercase">{item.title}</h4>
-                <p className="text-xs text-gray-300 font-sans leading-relaxed">{item.description}</p>
-                {item.url && (
-                  <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center space-x-1.5 text-xs font-bold text-cyan-400 hover:text-white pt-2">
-                    <span>VIEW PLAN DETAILS &rarr;</span>
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       
       {/* HERO BANNER */}
       <div className="bg-gradient-to-r from-gray-950 via-black to-lime-950/80 border border-lime-500/40 rounded-3xl p-6 sm:p-10 space-y-6 shadow-2xl relative overflow-hidden">
