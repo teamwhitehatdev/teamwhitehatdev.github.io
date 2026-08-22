@@ -14,6 +14,7 @@ export const AffiliateGuide: React.FC = () => {
   const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({
     hostinger: true,
     capcut: true,
+    microsoft: true,
     wondershare: true
   });
 
@@ -23,6 +24,7 @@ export const AffiliateGuide: React.FC = () => {
 
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
   const CAPCUT_REFERRAL_LINK = "https://capcutaffiliateprogram.pxf.io/WqmL1e";
+const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae";
 
   // WONDERSHARE OFFICIAL REFERRAL LINKS & TRACKING CODES
   const WONDERSHARE_VIRBO_LINK = "https://wondersharesoftware.pxf.io/c/5024116/2882021/15586";
@@ -617,6 +619,128 @@ export const AffiliateGuide: React.FC = () => {
             </div>
 
           </div>
+
+          
+            {/* 🎁 COLLAPSIBLE TOPIC 3: HOW TO EARN FREE TECH REWARDS & GIFT CARDS (MICROSOFT REWARDS) */}
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
+              
+              {/* TOPIC HEADER BAR */}
+              <button
+                onClick={() => togglePanel('microsoft')}
+                className="w-full bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 p-5 md:p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:brightness-110 transition-all border-b border-blue-800/50"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-400 font-bold shrink-0">
+                    🎁
+                  </div>
+                  <div>
+                    <h2 className="text-base md:text-xl font-black font-orbitron text-white uppercase tracking-wide">
+                      HOW TO EARN FREE TECH REWARDS & GIFT CARDS FOR YOUR WORKSTATION (MICROSOFT REWARDS)
+                    </h2>
+                    <p className="text-xs text-blue-200 font-sans mt-0.5">
+                      Earn Amazon gift cards, Xbox Game Pass, and tech vouchers just by searching with Bing and browsing on Microsoft Edge.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-blue-300 shrink-0">
+                  <span>{openPanels.microsoft ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
+                  {openPanels.microsoft ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </button>
+
+              {/* PANEL BODY CONTENT */}
+              {openPanels.microsoft && (
+                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
+                  
+                  <div className="bg-white rounded-xl shadow border border-blue-200 p-6 space-y-4">
+                    <h3 className="text-lg font-black text-slate-900 font-orbitron border-b pb-3 flex items-center gap-2 text-blue-900">
+                      🎁 Why Virtual Assistants & Creators Use Microsoft Rewards
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
+                      Microsoft Rewards is an official loyalty program that gives you points for daily search queries on Bing, completing quick daily quizzes, and using the Microsoft Edge browser. Virtual Assistants and freelancers accumulate points passive during client research to redeem free <strong>Amazon Gift Cards, Xbox Game Pass, and Tech Vouchers</strong> to offset monthly software costs.
+                    </p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-sans pt-2">
+                      <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 space-y-1">
+                        <div className="font-bold text-blue-950 font-orbitron text-sm">1. Passive Daily Points</div>
+                        <p className="text-slate-600 text-xs">Earn points on every Bing search while doing client research, content curation, and web browsing.</p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 space-y-1">
+                        <div className="font-bold text-blue-950 font-orbitron text-sm">2. Free Gift Cards</div>
+                        <p className="text-slate-600 text-xs">Redeem points directly for Amazon, Microsoft Store, Target, and digital gaming vouchers.</p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 space-y-1">
+                        <div className="font-bold text-blue-950 font-orbitron text-sm">3. 100% Free Signup</div>
+                        <p className="text-slate-600 text-xs">No credit card or payment required. Get instant welcome bonus points through our invitation link.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3 PRACTICAL MICROSOFT REWARDS TIPS */}
+                  <div className="bg-white rounded-xl shadow border border-blue-200 p-6 space-y-6">
+                    <h3 className="text-lg font-black text-slate-900 font-orbitron border-b pb-3 flex items-center gap-2 text-blue-900">
+                      ⚡ 3 Quick Ways VAs Maximize Daily Microsoft Rewards
+                    </h3>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm font-sans">
+                      <div className="p-5 rounded-xl bg-slate-50 border border-slate-300 space-y-2 hover:border-blue-400 transition-all">
+                        <span className="px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 font-mono font-bold text-[11px]">STEP 1</span>
+                        <h4 className="font-bold text-slate-900 text-sm font-orbitron">Set Bing as Your Default Search Engine</h4>
+                        <p className="text-slate-600 text-xs leading-relaxed">
+                          Conduct daily client research on Bing to automatically rack up 150+ search points every single day.
+                        </p>
+                      </div>
+
+                      <div className="p-5 rounded-xl bg-slate-50 border border-slate-300 space-y-2 hover:border-blue-400 transition-all">
+                        <span className="px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 font-mono font-bold text-[11px]">STEP 2</span>
+                        <h4 className="font-bold text-slate-900 text-sm font-orbitron">Complete 2-Minute Daily Quests</h4>
+                        <p className="text-slate-600 text-xs leading-relaxed">
+                          Click the 3 daily trivia quizzes on the Microsoft Rewards dashboard to build multi-day streak bonuses.
+                        </p>
+                      </div>
+
+                      <div className="p-5 rounded-xl bg-slate-50 border border-slate-300 space-y-2 hover:border-blue-400 transition-all">
+                        <span className="px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 font-mono font-bold text-[11px]">STEP 3</span>
+                        <h4 className="font-bold text-slate-900 text-sm font-orbitron">Browse with Microsoft Edge</h4>
+                        <p className="text-slate-600 text-xs leading-relaxed">
+                          Earn extra bonus points on desktop and mobile by using Microsoft Edge for daily client work.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ELEGANT PRIMARY CTA BUTTON FOR MICROSOFT REWARDS */}
+                  <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 rounded-2xl p-6 text-white shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-blue-400">
+                    <div className="space-y-2 text-center md:text-left">
+                      <span className="text-xs font-mono text-blue-300 font-bold uppercase tracking-widest block">
+                        🎁 OFFICIAL MICROSOFT REWARDS INVITATION OFFER
+                      </span>
+                      <h3 className="text-xl md:text-2xl font-black font-orbitron text-white">
+                        JOIN MICROSOFT REWARDS & CLAIM BONUS POINTS
+                      </h3>
+                      <p className="text-xs md:text-sm text-slate-300 max-w-2xl font-sans">
+                        Start earning gift cards and workstation tech rewards passively. Click below to sign up through our official invitation link.
+                      </p>
+                    </div>
+
+                    <a
+                      href={MICROSOFT_REFERRAL_LINK}
+                      target="_blank"
+                      rel="sponsored noopener noreferrer"
+                      className="px-6 py-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-300 text-black font-black font-orbitron text-xs md:text-sm uppercase rounded-xl shadow-xl hover:scale-105 transition-all shrink-0 flex items-center gap-2 border border-white/40 cursor-pointer"
+                    >
+                      <span>JOIN MICROSOFT REWARDS &rarr;</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+
+                </div>
+              )}
+
+            </div>
+
 
           {/* RIGHT SIDEBAR PROMO COLUMN */}
           <div className="lg:col-span-1">
