@@ -1,4 +1,4 @@
-// BUILD TIMESTAMP: 1787409714
+// BUILD TIMESTAMP: 1787411257
 // TIMESTAMP: 1787390921
 // LAST BUILD TIMESTAMP: 1787390148
 import React, { useState, useEffect } from 'react';
@@ -80,7 +80,7 @@ export function AppContent() {
     <Router>
       <VisitorPageTracker />
       <ThemeEngine>
-        <div className="relative min-h-screen bg-gray-950 text-gray-100 flex flex-col font-sans select-none">
+        <div className="relative min-h-screen bg-gray-950 text-gray-100 flex flex-col font-sans">
           <CyberBackground />
           
           <div className="relative z-10 flex flex-col min-h-screen">

@@ -31,7 +31,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
     : homeCmsItems.filter(item => item.category.toUpperCase().includes(selectedCategory));
 
   return (
-    <div className="space-y-8 select-none">
+    <div className="space-y-8">
       
       {/* ========================================================================= */}
       {/* 🎓 SECTION 1: PLATFORM MISSION & CLEAR LEARNING PURPOSE */}

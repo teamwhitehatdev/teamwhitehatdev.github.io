@@ -1180,7 +1180,7 @@ export const Admin: React.FC = () => {
       
       {/* PROMOTION / ADVERTISEMENT EDITOR MODAL */}
       {(editingPromoItem || isCreatingPromoItem) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn select-none font-sans">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn font-sans">
           <div className="bg-slate-900 border-2 border-purple-500/80 rounded-3xl p-6 max-w-2xl w-full space-y-6 shadow-2xl relative">
             <button
               onClick={() => { setEditingPromoItem(null); setIsCreatingPromoItem(false); }}
