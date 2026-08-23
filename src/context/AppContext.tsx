@@ -39,6 +39,8 @@ interface AppContextType {
   toggleCMSItemVisibility: (id: string) => void;
   toggleCMSItemHomeFeatured: (id: string) => void;
   setCMSItemStatus: (id: string, status: CMSStatusType) => void;
+  moveCMSItemOrder: (id: string, direction: 'up' | 'down') => void;
+  setCMSItemSortOrder: (id: string, newOrder: number) => void;
   getPublicPageCMSItems: (pageOwner: string) => CMSItem[];
   getHomeFeaturedCMSItems: () => CMSItem[];
   exportCMSDatabase: () => void;
@@ -50,6 +52,8 @@ interface AppContextType {
   updatePromoItem: (id: string, updates: Partial<PromoItem>) => void;
   deletePromoItem: (id: string) => void;
   togglePromoItemVisibility: (id: string) => void;
+  movePromoItemOrder: (id: string, direction: 'up' | 'down') => void;
+  setPromoItemSortOrder: (id: string, newOrder: number) => void;
   getPublicPromoItems: (placement: PromoPlacementType) => PromoItem[];
 
   // HIRE VA INQUIRIES MANAGEMENT
@@ -239,7 +243,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [promoItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_visitor_logs', JSON.stringify(visitorLogs.slice(-100)));
+    localStorage.setItem('wh_visitor_logs', JSON.stringify(visitorLogs.slice(0, 2000)));
   }, [visitorLogs]);
 
   // LOG VISITOR NAVIGATION
@@ -254,7 +258,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       pageVisited: pagePath,
       timestamp: new Date().toISOString()
     };
-    setVisitorLogs(prev => [newLog, ...prev.slice(0, 99)]);
+    setVisitorLogs(prev => [newLog, ...prev.slice(0, 4999)]);
   }, [userIp, userCountry, userDevice]);
 
   const clearVisitorLogs = () => setVisitorLogs([]);
@@ -320,6 +324,69 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // STRICT PAGE OWNER QUERY LOGIC
+  
+  // CMS CONTENT ITEM REORDERING METHODS (MOVE UP / DOWN / EXACT RANK)
+  const moveCMSItemOrder = (id: string, direction: 'up' | 'down') => {
+    setCmsItems(prev => {
+      const list = [...prev];
+      const index = list.findIndex(item => item.id === id);
+      if (index === -1) return prev;
+      
+      const targetIndex = direction === 'up' ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= list.length) return prev;
+
+      // Swap items
+      const temp = list[index];
+      list[index] = list[targetIndex];
+      list[targetIndex] = temp;
+
+      // Update sortOrder values explicitly
+      return list.map((item, idx) => ({
+        ...item,
+        sortOrder: idx + 1,
+        updatedAt: new Date().toISOString()
+      }));
+    });
+  };
+
+  const setCMSItemSortOrder = (id: string, newOrder: number) => {
+    setCmsItems(prev => {
+      return prev.map(item => item.id === id ? { ...item, sortOrder: newOrder, updatedAt: new Date().toISOString() } : item)
+        .sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999));
+    });
+  };
+
+  // PROMO / AD REORDERING METHODS (MOVE UP / DOWN / EXACT RANK)
+  const movePromoItemOrder = (id: string, direction: 'up' | 'down') => {
+    setPromoItems(prev => {
+      const list = [...prev];
+      const index = list.findIndex(item => item.id === id);
+      if (index === -1) return prev;
+      
+      const targetIndex = direction === 'up' ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= list.length) return prev;
+
+      // Swap items
+      const temp = list[index];
+      list[index] = list[targetIndex];
+      list[targetIndex] = temp;
+
+      // Update sortOrder values explicitly
+      return list.map((item, idx) => ({
+        ...item,
+        sortOrder: idx + 1,
+        updatedAt: new Date().toISOString()
+      }));
+    });
+  };
+
+  const setPromoItemSortOrder = (id: string, newOrder: number) => {
+    setPromoItems(prev => {
+      return prev.map(item => item.id === id ? { ...item, sortOrder: newOrder, updatedAt: new Date().toISOString() } : item)
+        .sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999));
+    });
+  };
+
   const getPublicPageCMSItems = useCallback((targetPageOwner: string) => {
     const targetKey = targetPageOwner.toLowerCase().trim();
     return cmsItems.filter(item => {
@@ -516,6 +583,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleCMSItemVisibility,
         toggleCMSItemHomeFeatured,
         setCMSItemStatus,
+        moveCMSItemOrder,
+        setCMSItemSortOrder,
         getPublicPageCMSItems,
         getHomeFeaturedCMSItems,
         promoItems,
@@ -523,6 +592,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updatePromoItem,
         deletePromoItem,
         togglePromoItemVisibility,
+        movePromoItemOrder,
+        setPromoItemSortOrder,
         getPublicPromoItems,
         exportCMSDatabase,
         importCMSDatabase,
