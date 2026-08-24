@@ -163,3 +163,82 @@ export interface SectionConfig {
   visible: boolean;
   status: CMSStatusType;
 }
+
+
+// ============================================================================
+// REAL-TIME TELEMETRY ENGINE & VISITOR INSIGHTS TYPES
+// ============================================================================
+export type TelemetryEventType =
+  | 'PAGE_VIEW'
+  | 'BUTTON_CLICK'
+  | 'CTA_CLICK'
+  | 'EXTERNAL_LINK'
+  | 'FORM_START'
+  | 'FORM_SUBMIT'
+  | 'DOWNLOAD'
+  | 'AFFILIATE_CLICK'
+  | 'NAVIGATE';
+
+export interface TelemetryEvent {
+  id: string;
+  sessionId: string;
+  visitorId: string;
+  type: TelemetryEventType;
+  label: string;
+  pagePath: string;
+  timestamp: string; // ISO date string
+  country?: string;
+  city?: string;
+  region?: string;
+  device?: 'Desktop' | 'Mobile' | 'Tablet';
+  browser?: string;
+  os?: string;
+  referrer?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  durationSeconds?: number;
+}
+
+export interface WebPerfTelemetry {
+  pagePath: string;
+  ttfb: number; // ms
+  fcp: number;  // First Contentful Paint
+  lcp: number;  // Largest Contentful Paint
+  cls: number;  // Cumulative Layout Shift
+  domLoad: number;
+  jsErrorsCount: number;
+  timestamp: string;
+}
+
+export interface LiveVisitorSession {
+  id: string;
+  sessionId: string;
+  visitorId: string;
+  ip: string;
+  country: string;
+  city: string;
+  region: string;
+  device: 'Desktop' | 'Mobile' | 'Tablet';
+  browser: string;
+  os: string;
+  currentPage: string;
+  entryPage: string;
+  referrer: string;
+  utmSource?: string;
+  utmCampaign?: string;
+  startTime: number; // Epoch timestamp
+  lastActive: number; // Epoch timestamp
+  durationSeconds: number;
+  isActive: boolean;
+  eventsCount: number;
+  events: TelemetryEvent[];
+  isBot?: boolean;
+}
+
+export interface PrivacyConfig {
+  privacyMode: 'full' | 'privacy_enhanced' | 'minimal';
+  dataRetentionDays: 1 | 7 | 30 | 90 | 365;
+  anonymizeIp: boolean;
+  enableConsentBanner: boolean;
+}
