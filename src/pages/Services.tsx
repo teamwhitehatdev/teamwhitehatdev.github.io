@@ -33,7 +33,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
   }));
 
   // COMBINE CMS SERVICES WITH FALLBACK DATA (CMS items display first in exact sortOrder)
-  const allServices = formattedCMSServices.length > 0 ? formattedCMSServices : SERVICES;
+  const allServices = [...formattedCMSServices, ...SERVICES];
 
   const handleSubmitInquiry = (e: React.FormEvent) => {
     e.preventDefault();

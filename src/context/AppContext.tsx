@@ -312,6 +312,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       pageOwner: item.pageOwner || (item.page as CMSPageOwnerType) || 'showcase',
       homeFeatured: item.homeFeatured !== undefined ? item.homeFeatured : (item.featured || false),
       contentType: item.contentType || 'Tutorial',
+      status: item.status || 'PUBLISHED',
+      visible: item.visible !== false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -424,9 +426,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const getPublicPageCMSItems = useCallback((targetPageOwner: string) => {
     const targetKey = targetPageOwner.toLowerCase().trim();
     return cmsItems.filter(item => {
-      if (!item.visible || item.status !== 'PUBLISHED') return false;
+      if (item.visible === false) return false;
+      if (item.status && item.status !== 'PUBLISHED') return false;
       const owner = (item.pageOwner || item.page || '').toLowerCase().trim();
-      return owner === targetKey;
+      return owner === targetKey || (targetKey === 'home' && (item.homeFeatured || owner === 'home'));
     }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
   }, [cmsItems]);
 

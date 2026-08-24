@@ -1118,6 +1118,7 @@ export const Admin: React.FC = () => {
                     onChange={(e) => setCmsForm({ ...cmsForm, pageOwner: e.target.value as CMSPageOwnerType })}
                     className="w-full px-3 py-2 bg-black border border-cyan-500/50 rounded-xl text-white font-mono uppercase text-xs font-bold"
                   >
+                    <option value="home">HOME (/#/)</option>
                     <option value="showcase">SHOWCASE (/#/showcase)</option>
                     <option value="services">SERVICES (/#/services)</option>
                     <option value="ai">AI LEARNING (/#/ai)</option>
