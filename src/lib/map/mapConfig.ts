@@ -35,7 +35,7 @@ export const locationsToGeoJSON = (locations: LocationMarker[]) => {
   };
 };
 
-// MAPLIBRE BASE STYLE SPECIFICATION BUILDER (WITH ZERO UNNECESSARY POIS OR ROADS)
+// MAPLIBRE BASE STYLE SPECIFICATION BUILDER
 export const buildMapLibreStyle = (theme: 'dark' | 'light') => {
   const isDark = theme === 'dark';
   const bgColor = isDark ? '#11171D' : '#F3F6F8';
@@ -48,7 +48,7 @@ export const buildMapLibreStyle = (theme: 'dark' | 'light') => {
     sources: {
       'world-countries': {
         type: 'geojson' as const,
-        data: 'https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson'
+        data: './worldCountries.json'
       }
     },
     layers: [
