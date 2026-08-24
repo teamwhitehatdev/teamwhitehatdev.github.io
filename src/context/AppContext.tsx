@@ -148,24 +148,58 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // CMS CATEGORIES
+  // CMS CATEGORIES (COMPREHENSIVE ALL-SECTOR CATEGORY MATRIX)
   const [cmsCategories, setCmsCategories] = useState<string[]>(() => {
+    const defaultCategories = [
+      'ALL',
+      'AI FUNDAMENTALS',
+      'AI ERA',
+      'AI AUTOMATION',
+      'AI FOR VIRTUAL ASSISTANTS',
+      'AI FOR FREELANCERS',
+      'AI INFLUENCE',
+      'AI SAFETY',
+      'DIGITAL TRANSFORMATION',
+      'VIRTUAL ASSISTANT CAREER',
+      'FREELANCING MASTERY',
+      'DIGITAL SKILLS',
+      'DEVELOPMENT',
+      'WEB DESIGN',
+      'AUTOMATION',
+      'CYBERSECURITY',
+      'NETWORKING',
+      'AFFILIATE MARKETING'
+    ];
     const saved = localStorage.getItem('wh_cms_categories');
-    return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return Array.from(new Set([...defaultCategories, ...parsed]));
+        }
+      } catch (e) {
+        console.error('Failed to parse saved CMS categories:', e);
+      }
+    }
+    return defaultCategories;
   });
 
   // CMS BACKEND EDUCATIONAL ITEMS STATE
+  // CMS BACKEND EDUCATIONAL ITEMS STATE (AUTO-MERGING NEW SYSTEM ITEMS)
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
     const saved = localStorage.getItem('wh_cms_items');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed.map((item: any) => ({
-            ...item,
-            pageOwner: item.pageOwner || item.page || 'showcase',
-            homeFeatured: item.homeFeatured !== undefined ? item.homeFeatured : (item.featured || false),
-            contentType: item.contentType || 'Tutorial'
-          }));
+          // Merge newly added system items (such as all AI modules and VA tutorials) that don't exist yet in saved cache
+          const existingIds = new Set(parsed.map((item: any) => item.id));
+          const missingItems = INITIAL_CMS_ITEMS.filter(item => !existingIds.has(item.id));
+          if (missingItems.length > 0) {
+            const merged = [...missingItems, ...parsed];
+            return merged;
+          }
+          return parsed;
         }
       } catch (e) {
         console.error('Failed to parse saved CMS items:', e);

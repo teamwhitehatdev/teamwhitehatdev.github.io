@@ -1,15 +1,12 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import * as maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
+import React, { useState, useCallback } from 'react';
 import { WorldMapProps, LocationMarker } from '../../types/map';
-import { MAP_THEMES } from '../../lib/map/mapStyles';
-import { buildMapLibreStyle, INITIAL_VIEWPORT, locationsToGeoJSON } from '../../lib/map/mapConfig';
-import { ZoomIn, ZoomOut, RotateCcw, Globe } from 'lucide-react';
+import { PRECALCULATED_WORLD_PATHS } from '../../data/worldMapSvgPaths';
+import { ZoomIn, ZoomOut, RotateCcw, Globe, MapPin } from 'lucide-react';
 
-// MERCATOR PROJECTION (1000x500 VIEWBOX)
+// MERCATOR GEO TO SVG COORDINATE CONVERTER (1000x500 VIEWBOX)
 const geoToSvg = (lat: number, lng: number): [number, number] => {
-  const x = Math.round(((lng + 180) * 1000) / 360);
-  const y = Math.round(((90 - lat) * 500) / 180);
+  const x = Math.round(((lng + 180) * 1000) / 360 * 10) / 10;
+  const y = Math.round(((90 - lat) * 500) / 180 * 10) / 10;
   return [x, y];
 };
 
@@ -28,12 +25,25 @@ export const WorldMap: React.FC<WorldMapProps> = ({
   onMarkerHover,
   className = ''
 }) => {
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<maplibregl.Map | null>(null);
-  const [mapLibreLoaded, setMapLibreLoaded] = useState(false);
-  const [geoJsonData, setGeoJsonData] = useState<any>(null);
+  const isDark = theme === 'dark';
 
-  // VECTOR CANVAS PAN & ZOOM STATE
+  // HIGH-CONTRAST COLORS THAT GUARANTEE VISIBILITY IN BOTH DARK AND LIGHT THEMES
+  const themeConfig = {
+    ocean: isDark ? '#0B0F15' : '#E2E8F0',
+    mapBackground: isDark ? '#111827' : '#F1F5F9',
+    countryFill: isDark ? '#2D3748' : '#94A3B8',
+    countryHover: isDark ? '#4A5568' : '#64748B',
+    countryBorder: isDark ? '#4A5568' : '#64748B',
+    primaryMarker: isDark ? '#38BDF8' : '#0284C7',
+    brightMarker: isDark ? '#7DD3FC' : '#0369A1',
+    markerGlow: isDark ? 'rgba(56, 189, 248, 0.35)' : 'rgba(2, 132, 199, 0.35)',
+    primaryText: isDark ? '#F8FAFC' : '#0F172A',
+    secondaryText: isDark ? '#94A3B8' : '#475569',
+    tooltipBg: isDark ? '#1E293B' : '#FFFFFF',
+    tooltipBorder: isDark ? '#334155' : '#CBD5E1'
+  };
+
+  // PAN & ZOOM STATE
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [panOffset, setPanOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -45,91 +55,6 @@ export const WorldMap: React.FC<WorldMapProps> = ({
     y: number;
   } | null>(null);
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
-
-  const themeConfig = MAP_THEMES[theme];
-
-  // FETCH REAL WORLD GEOJSON ON MOUNT
-  useEffect(() => {
-    let isMounted = true;
-    fetch('./worldCountries.json')
-      .then(res => res.json())
-      .then(data => {
-        if (isMounted) setGeoJsonData(data);
-      })
-      .catch(err => {
-        console.warn('Failed to load local worldCountries.json, using fallback:', err);
-      });
-    return () => { isMounted = false; };
-  }, []);
-
-  // CONVERT GEOJSON FEATURES INTO SVG PATH STRINGS
-  const countrySvgPaths = useMemo(() => {
-    if (!geoJsonData?.features) return [];
-    return geoJsonData.features.map((feat: any, idx: number) => {
-      const name = feat.properties?.name || feat.properties?.ADMIN || `Country ${idx}`;
-      const geom = feat.geometry;
-      if (!geom) return null;
-
-      let pathData = '';
-      if (geom.type === 'Polygon') {
-        geom.coordinates.forEach((ring: number[][]) => {
-          ring.forEach(([lng, lat], i) => {
-            const [x, y] = geoToSvg(lat, lng);
-            pathData += i === 0 ? `M ${x} ${y} ` : `L ${x} ${y} `;
-          });
-          pathData += 'Z ';
-        });
-      } else if (geom.type === 'MultiPolygon') {
-        geom.coordinates.forEach((poly: number[][][]) => {
-          poly.forEach((ring: number[][]) => {
-            ring.forEach(([lng, lat], i) => {
-              const [x, y] = geoToSvg(lat, lng);
-              pathData += i === 0 ? `M ${x} ${y} ` : `L ${x} ${y} `;
-            });
-            pathData += 'Z ';
-          });
-        });
-      }
-
-      return {
-        id: feat.id || idx,
-        name,
-        pathData
-      };
-    }).filter(Boolean);
-  }, [geoJsonData]);
-
-  // INITIALIZE MAPLIBRE GL
-  useEffect(() => {
-    if (!mapContainerRef.current) return;
-
-    try {
-      const map = new maplibregl.Map({
-        container: mapContainerRef.current,
-        style: buildMapLibreStyle(theme) as any,
-        center: [INITIAL_VIEWPORT.lng, INITIAL_VIEWPORT.lat],
-        zoom: INITIAL_VIEWPORT.zoom,
-        minZoom: INITIAL_VIEWPORT.minZoom,
-        maxZoom: INITIAL_VIEWPORT.maxZoom,
-        attributionControl: false,
-        dragRotate: false,
-        pitchWithRotate: false
-      });
-
-      mapRef.current = map;
-
-      map.on('load', () => {
-        setMapLibreLoaded(true);
-      });
-
-      return () => {
-        map.remove();
-        mapRef.current = null;
-      };
-    } catch (e) {
-      console.warn('MapLibre GL init:', e);
-    }
-  }, [theme]);
 
   // ZOOM / PAN HANDLERS
   const handleZoomIn = useCallback(() => {
@@ -167,16 +92,16 @@ export const WorldMap: React.FC<WorldMapProps> = ({
       className={`relative w-full h-[480px] rounded-3xl overflow-hidden border select-none transition-colors ${className}`}
       style={{
         backgroundColor: themeConfig.ocean,
-        borderColor: themeConfig.secondaryBorder
+        borderColor: themeConfig.countryBorder
       }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
-      {/* REAL GEOGRAPHIC VECTOR PROJECTION CANVAS */}
+      {/* SVG REAL WORLD CONTINENTAL & COUNTRY VECTOR MAP */}
       <div
-        className="w-full h-full absolute inset-0 z-10 flex items-center justify-center transition-transform duration-100"
+        className="w-full h-full absolute inset-0 z-10 flex items-center justify-center transition-transform duration-75"
         style={{
           transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoomLevel})`,
           transformOrigin: 'center center',
@@ -188,22 +113,25 @@ export const WorldMap: React.FC<WorldMapProps> = ({
           className="w-full h-full drop-shadow-2xl"
           preserveAspectRatio="xMidYMid meet"
         >
-          {/* REAL GEOGRAPHIC COUNTRIES FROM REAL WORLD GEOJSON */}
-          <g id="world-countries-group">
-            {countrySvgPaths.map((item: any) => {
+          {/* BACKGROUND RECT */}
+          <rect width="1000" height="500" fill={themeConfig.ocean} />
+
+          {/* ALL 258 REAL COUNTRIES & CONTINENTS */}
+          <g id="precalculated-countries-layer">
+            {PRECALCULATED_WORLD_PATHS.map((item) => {
               const isHovered = hoveredCountry === item.name;
               return (
                 <path
                   key={item.id}
-                  d={item.pathData}
+                  d={item.d}
                   fill={isHovered ? themeConfig.countryHover : themeConfig.countryFill}
                   stroke={themeConfig.countryBorder}
                   strokeWidth="0.75"
-                  strokeOpacity="0.85"
+                  strokeOpacity="0.9"
                   className="transition-colors duration-150 cursor-pointer"
                   onMouseEnter={() => setHoveredCountry(item.name)}
                   onMouseLeave={() => setHoveredCountry(null)}
-                  onClick={() => onCountryClick && onCountryClick({ name: item.name, id: String(item.id) })}
+                  onClick={() => onCountryClick && onCountryClick({ name: item.name, id: item.id })}
                 >
                   <title>{item.name}</title>
                 </path>
@@ -211,11 +139,11 @@ export const WorldMap: React.FC<WorldMapProps> = ({
             })}
           </g>
 
-          {/* REAL VISITOR ACTIVITY BUBBLES */}
-          <g id="visitor-markers-group">
+          {/* VISITOR ACTIVITY BUBBLE OVERLAYS */}
+          <g id="visitor-markers-layer">
             {locations.map((loc) => {
               const [cx, cy] = geoToSvg(loc.latitude, loc.longitude);
-              const rBase = Math.min(Math.max(Math.sqrt(loc.value) * 3.8 + 5, 8), 34);
+              const rBase = Math.min(Math.max(Math.sqrt(loc.value) * 3.8 + 6, 9), 36);
               const rGlow = rBase * 1.6;
 
               return (
@@ -237,29 +165,29 @@ export const WorldMap: React.FC<WorldMapProps> = ({
                   }}
                   onClick={() => onMarkerClick && onMarkerClick(loc)}
                 >
-                  {/* PULSING GLOW HALO */}
+                  {/* 1. PULSING OUTER GLOW */}
                   <circle
                     cx={cx}
                     cy={cy}
                     r={rGlow}
                     fill={themeConfig.primaryMarker}
-                    opacity="0.22"
+                    opacity="0.30"
                     className="animate-pulse"
                   />
 
-                  {/* TRANSLUCENT BLUE CIRCLE */}
+                  {/* 2. TRANSLUCENT BLUE CIRCLE WITH CRISP BORDER */}
                   <circle
                     cx={cx}
                     cy={cy}
                     r={rBase}
                     fill={themeConfig.primaryMarker}
-                    fillOpacity="0.45"
+                    fillOpacity="0.55"
                     stroke={themeConfig.brightMarker}
-                    strokeWidth="1.5"
+                    strokeWidth="2"
                     className="group-hover:stroke-white transition-all"
                   />
 
-                  {/* INNER SOLID CORE */}
+                  {/* 3. SOLID CORE HIGHLIGHT */}
                   <circle
                     cx={cx}
                     cy={cy}
@@ -268,17 +196,17 @@ export const WorldMap: React.FC<WorldMapProps> = ({
                     opacity="0.95"
                   />
 
-                  {/* NUMERIC VALUE LABEL */}
+                  {/* 4. NUMERIC VALUE LABEL */}
                   {loc.value > 0 && (
                     <text
                       x={cx}
                       y={cy + 3.5}
                       textAnchor="middle"
                       fill="#FFFFFF"
-                      fontSize={Math.max(rBase * 0.75, 9)}
+                      fontSize={Math.max(rBase * 0.75, 10)}
                       fontWeight="bold"
                       fontFamily="monospace"
-                      className="pointer-events-none drop-shadow"
+                      className="pointer-events-none drop-shadow-md"
                     >
                       {loc.value}
                     </text>
@@ -295,7 +223,7 @@ export const WorldMap: React.FC<WorldMapProps> = ({
         <div
           className="absolute bottom-4 left-4 z-20 flex flex-col rounded-2xl overflow-hidden shadow-2xl border backdrop-blur-md"
           style={{
-            backgroundColor: themeConfig.tooltipBackground,
+            backgroundColor: themeConfig.tooltipBg,
             borderColor: themeConfig.tooltipBorder
           }}
         >
@@ -303,7 +231,7 @@ export const WorldMap: React.FC<WorldMapProps> = ({
             onClick={handleZoomIn}
             aria-label="Zoom in"
             title="Zoom In"
-            className="p-2.5 hover:bg-slate-700/50 transition-colors text-cyan-400 cursor-pointer border-b"
+            className="p-2.5 hover:bg-slate-700/40 transition-colors text-cyan-400 cursor-pointer border-b"
             style={{ borderColor: themeConfig.tooltipBorder }}
           >
             <ZoomIn className="w-4 h-4" />
@@ -312,7 +240,7 @@ export const WorldMap: React.FC<WorldMapProps> = ({
             onClick={handleZoomOut}
             aria-label="Zoom out"
             title="Zoom Out"
-            className="p-2.5 hover:bg-slate-700/50 transition-colors text-cyan-400 cursor-pointer border-b"
+            className="p-2.5 hover:bg-slate-700/40 transition-colors text-cyan-400 cursor-pointer border-b"
             style={{ borderColor: themeConfig.tooltipBorder }}
           >
             <ZoomOut className="w-4 h-4" />
@@ -321,7 +249,7 @@ export const WorldMap: React.FC<WorldMapProps> = ({
             onClick={handleReset}
             aria-label="Reset map"
             title="Reset to World View"
-            className="p-2.5 hover:bg-slate-700/50 transition-colors text-slate-400 hover:text-white cursor-pointer"
+            className="p-2.5 hover:bg-slate-700/40 transition-colors text-slate-400 hover:text-white cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -335,31 +263,31 @@ export const WorldMap: React.FC<WorldMapProps> = ({
           style={{
             left: `${Math.min(Math.max(activeTooltip.x - 200, 20), 450)}px`,
             top: `${Math.min(Math.max(activeTooltip.y - 100, 20), 320)}px`,
-            backgroundColor: themeConfig.tooltipBackground,
+            backgroundColor: themeConfig.tooltipBg,
             borderColor: themeConfig.tooltipBorder,
             color: themeConfig.primaryText
           }}
         >
           <div className="flex items-center space-x-2 font-bold">
             <span className="text-base">{activeTooltip.location.flag || '📍'}</span>
-            <span className="text-white font-orbitron">{activeTooltip.location.name}</span>
+            <span className="font-orbitron" style={{ color: themeConfig.primaryText }}>{activeTooltip.location.name}</span>
           </div>
           <div className="flex items-baseline space-x-2">
-            <span className="text-cyan-400 font-bold text-sm">{activeTooltip.location.value}</span>
-            <span className="text-[10px] text-slate-400">real hits / sessions</span>
+            <span className="font-bold text-sm" style={{ color: themeConfig.primaryMarker }}>{activeTooltip.location.value}</span>
+            <span className="text-[10px]" style={{ color: themeConfig.secondaryText }}>real hits / sessions</span>
           </div>
           {activeTooltip.location.city && (
-            <span className="text-[10px] text-slate-400 block">
+            <span className="text-[10px] block" style={{ color: themeConfig.secondaryText }}>
               📍 Locality: {activeTooltip.location.city}, {activeTooltip.location.region}
             </span>
           )}
         </div>
       )}
 
-      {/* REAL WORLD ENGINE BADGE */}
+      {/* FOOTER BADGE */}
       <div className="absolute bottom-2 right-4 z-10 text-[10px] font-mono text-slate-500 pointer-events-none flex items-center space-x-1.5">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-        <span>Real Geographic Vector Engine &bull; {countrySvgPaths.length || '258'} Countries</span>
+        <span>Real Geographic Vector Engine &bull; {PRECALCULATED_WORLD_PATHS.length} Countries</span>
       </div>
 
     </div>
