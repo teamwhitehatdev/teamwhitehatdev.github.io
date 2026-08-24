@@ -1,4 +1,4 @@
-// BUILD TIMESTAMP: 1787576314
+// BUILD TIMESTAMP: 1787578372
 // TIMESTAMP: 1787390921
 // LAST BUILD TIMESTAMP: 1787390148
 import React, { useState, useEffect } from 'react';
@@ -86,6 +86,9 @@ export function AppContent() {
                 <Route path="/showcase" element={<Showcase />} />
                 <Route path="/web-hosting" element={<WebHosting />} />
                 <Route path="/services" element={<Services onOpenConsultation={(svc) => handleOpenConsultation(svc)} />} />
+                <Route path="/ai" element={<AILearning />} />
+                <Route path="/ai/" element={<AILearning />} />
+                <Route path="/ai-learning" element={<AILearning />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/affiliate-guide" element={<AffiliateGuide />} />
                 <Route path="/affiliate-guide/" element={<AffiliateGuide />} />
