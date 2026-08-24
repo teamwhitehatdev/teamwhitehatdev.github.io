@@ -289,23 +289,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Update any items in saved cache with fresh images from INITIAL_CMS_ITEMS if missing
+          // Update any system items in saved cache with fresh images, videoUrls, and CTAs from INITIAL_CMS_ITEMS
           const initialMap = new Map(INITIAL_CMS_ITEMS.map(item => [item.id, item]));
           const updatedParsed = parsed.map((item: any) => {
             const defaultItem = initialMap.get(item.id);
-            if (defaultItem && (!item.mainImage || item.mainImage === '')) {
-              return { ...item, mainImage: defaultItem.mainImage, pageOwner: defaultItem.pageOwner || item.pageOwner };
+            if (defaultItem) {
+              return {
+                ...item,
+                mainImage: defaultItem.mainImage || item.mainImage,
+                videoUrl: defaultItem.videoUrl || item.videoUrl,
+                url: defaultItem.url || item.url,
+                buttonText: defaultItem.buttonText || item.buttonText,
+                referralCta: defaultItem.referralCta || item.referralCta,
+                pageOwner: defaultItem.pageOwner || item.pageOwner,
+                homeFeatured: defaultItem.homeFeatured ?? item.homeFeatured
+              };
             }
             return item;
           });
 
           // Merge newly added system items that don't exist yet in saved cache
           const existingIds = new Set(updatedParsed.map((item: any) => item.id));
-          const missingItems = INITIAL_CMS_ITEMS.filter(item => !existingIds.has(item.id));
-          return [...missingItems, ...updatedParsed];
+          const missingSystemItems = INITIAL_CMS_ITEMS.filter(item => !existingIds.has(item.id));
+          return [...updatedParsed, ...missingSystemItems];
         }
       } catch (e) {
-        console.error('Failed to parse saved CMS items:', e);
+        console.error('Error loading saved CMS items:', e);
       }
     }
     return INITIAL_CMS_ITEMS;

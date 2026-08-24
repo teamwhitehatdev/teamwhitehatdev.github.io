@@ -4,7 +4,6 @@ import { CMSItem } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
   ...COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS,
-  ...INITIAL_AI_ITEMS,
   // =========================================================================
   // 💼 SERVICES PAGE OWNER (PROMOTED TO HOME FEATURED TUTORIALS)
   // =========================================================================

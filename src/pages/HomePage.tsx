@@ -31,230 +31,226 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
     : homeCmsItems.filter(item => item.category.toUpperCase().includes(selectedCategory));
 
   return (
-    <div className="space-y-8">
-      
-      {/* ========================================================================= */}
-      {/* 🎓 SECTION 1: PLATFORM MISSION & CLEAR LEARNING PURPOSE */}
-      {/* ========================================================================= */}
-      <HUDPanel title="🎓 VIRTUAL ASSISTANT, FREELANCING & DIGITAL SKILLS LEARNING HUB">
-        <div className="p-5 sm:p-6 space-y-6">
-          
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 border border-cyan-400/30 rounded-full text-cyan-300 font-mono text-xs font-bold uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-lime-400" />
-              <span>EDUCATIONAL RESOURCE &amp; CAREER PLATFORM</span>
-            </div>
-            
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-black font-orbitron text-white leading-tight">
-              EMPWOERING VIRTUAL ASSISTANTS, FREELANCERS &amp; REMOTE WORKERS WORLDWIDE
-            </h2>
-            
-            <p className="text-xs sm:text-sm text-gray-300 font-sans leading-relaxed">
-              This platform is created to help Virtual Assistants, aspiring VAs, freelancers, and remote workers learn practical administrative strategies, digital skills, software tools, and responsible online income opportunities.
-            </p>
-          </div>
-
-          {/* 4 CORE LEARNING PILLARS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 font-sans text-xs">
-            <div className="p-4 bg-black/80 border border-cyan-500/30 rounded-xl space-y-2 hover:border-cyan-400 transition-all">
-              <div className="flex items-center gap-2 text-cyan-300 font-bold font-orbitron">
-                <Briefcase className="w-4 h-4 text-lime-400" />
-                <span>1. Virtual Assistance</span>
-              </div>
-              <p className="text-gray-400 text-[11px] leading-relaxed">
-                Master inbox triage, calendar scheduling, spreadsheet management, and executive client support.
-              </p>
-            </div>
-
-            <div className="p-4 bg-black/80 border border-cyan-500/30 rounded-xl space-y-2 hover:border-cyan-400 transition-all">
-              <div className="flex items-center gap-2 text-cyan-300 font-bold font-orbitron">
-                <UserCheck className="w-4 h-4 text-lime-400" />
-                <span>2. Freelancing</span>
-              </div>
-              <p className="text-gray-400 text-[11px] leading-relaxed">
-                Learn proposal writing, portfolio building, client onboarding, and recurring retainer packages.
-              </p>
-            </div>
-
-            <div className="p-4 bg-black/80 border border-cyan-500/30 rounded-xl space-y-2 hover:border-cyan-400 transition-all">
-              <div className="flex items-center gap-2 text-cyan-300 font-bold font-orbitron">
-                <Video className="w-4 h-4 text-lime-400" />
-                <span>3. Digital Skills</span>
-              </div>
-              <p className="text-gray-400 text-[11px] leading-relaxed">
-                Develop in-demand skills in Canva graphic design, CapCut short-form video editing, and AI tools.
-              </p>
-            </div>
-
-            <div className="p-4 bg-black/80 border border-cyan-500/30 rounded-xl space-y-2 hover:border-cyan-400 transition-all">
-              <div className="flex items-center gap-2 text-cyan-300 font-bold font-orbitron">
-                <Globe className="w-4 h-4 text-lime-400" />
-                <span>4. Affiliate Education</span>
-              </div>
-              <p className="text-gray-400 text-[11px] leading-relaxed">
-                Understand how referral links work to responsibly build additional online income streams.
-              </p>
-            </div>
-          </div>
-
-          {/* RESPONSIBLE FINANCIAL DISCLAIMER BOX */}
-          <div className="p-4 bg-gray-900/90 border border-amber-500/40 rounded-xl space-y-1.5 font-mono text-xs">
-            <div className="flex items-center gap-2 text-amber-400 font-bold">
-              <ShieldCheck className="w-4 h-4" />
-              <span>RESPONSIBLE EDUCATION &amp; REALISTIC RESULTS DISCLAIMER</span>
-            </div>
-            <p className="text-gray-300 text-[11px] font-sans leading-relaxed">
-              We do NOT promise guaranteed income or easy riches. Your results depend on your learning, consistency, skill development, client outreach effort, and responsible business practices.
-            </p>
-          </div>
-
-        </div>
-      </HUDPanel>
+    <div className="space-y-8 animate-fadeIn max-w-7xl mx-auto pb-12">
 
       {/* ========================================================================= */}
-      {/* 🚀 SECTION 2: 13-STEP LEARNING & CAREER PROGRESSION PATH (WHITE HIGH-CONTRAST PANEL) */}
+      {/* 🚀 SECTION 1: MASTER PLATFORM OVERVIEW (CYBER ACCELERATOR BANNER) */}
       {/* ========================================================================= */}
-      <HUDPanel title="🚀 13-STEP VA &amp; FREELANCER CAREER PROGRESSION PATH">
-        <div className="p-6 space-y-5 bg-white text-slate-900 rounded-2xl border-2 border-emerald-400 shadow-2xl">
-          <p className="text-sm font-bold text-slate-800 font-sans leading-relaxed">
-            Follow this logical 13-step progression path to build your skills, establish a professional profile, and land long-term clients clearly and effectively:
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 font-sans">
-            {[
-              { step: 'STEP 01', title: 'Learn VA Fundamentals', desc: 'Understand the role, remote workflows, and administrative expectations.' },
-              { step: 'STEP 02', title: 'Identify Your Strengths', desc: 'Assess your existing skills in writing, organization, design, or tech.' },
-              { step: 'STEP 03', title: 'Choose a Specific Niche', desc: 'Specialize in executive assistance, video editing, or web management.' },
-              { step: 'STEP 04', title: 'Master Digital Tools', desc: 'Learn Canva, CapCut, Google Workspace, Hostinger, and AI tools.' },
-              { step: 'STEP 05', title: 'Build Your Portfolio', desc: 'Create sample case studies, mock client templates, and portfolio PDFs.' },
-              { step: 'STEP 06', title: 'Package Service Offers', desc: 'Define hourly rates ($15-$60/hr) and monthly recurring retainers.' },
-              { step: 'STEP 07', title: 'Find Potential Clients', desc: 'Prospect on Upwork, LinkedIn, direct outreach, and VA communities.' },
-              { step: 'STEP 08', title: 'Write Winning Proposals', desc: 'Draft custom pitch letters that address the client&apos;s exact pain points.' },
-              { step: 'STEP 09', title: 'Client Onboarding', desc: 'Set up clear contracts, communication protocols, and task tracking.' },
-              { step: 'STEP 10', title: 'Build Client Retention', desc: 'Deliver work ahead of deadlines to build long-term recurring clients.' },
-              { step: 'STEP 11', title: 'Explore Affiliate Income', desc: 'Learn how affiliate links work as an additional online income stream.' },
-              { step: 'STEP 12', title: 'Recommend Tools Responsibly', desc: 'Create useful resource pages and recommend tools you actually trust.' },
-              { step: 'STEP 13', title: 'Continuous Growth', desc: 'Keep learning, updating your skills, and adapting to industry trends.' },
-            ].map((st, idx) => (
-              <div key={idx} className="p-4 bg-slate-50 border-2 border-slate-200 rounded-xl space-y-1.5 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all">
-                <span className="px-2.5 py-1 bg-emerald-600 text-white font-mono font-black text-xs rounded-md shadow-sm inline-block">
-                  {st.step}
+      <HUDPanel title="🌐 SYSTEM OVERVIEW • AUTONOMOUS DEV &amp; VIRTUAL ASSISTANT ACCELERATOR">
+        <div className="p-6 space-y-6">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-gray-800">
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <span className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
+                <span className="text-xs font-mono text-emerald-400 font-bold tracking-widest uppercase">
+                  ENTERPRISE SERVICES &amp; EDUCATIONAL KNOWLEDGE PORTAL
                 </span>
-                <h4 className="font-black text-slate-900 font-orbitron text-sm pt-1">{st.title}</h4>
-                <p className="text-xs font-medium text-slate-700 leading-normal">{st.desc}</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </HUDPanel>
-
-      {/* ========================================================================= */}
-      {/* 📚 SECTION 3: CMS-MANAGED EDUCATIONAL ARTICLES & TUTORIALS */}
-      {/* ========================================================================= */}
-      <HUDPanel title="📚 FEATURED VA, FREELANCE &amp; DIGITAL SKILLS TUTORIALS">
-        <div className="p-5 space-y-5">
-          
-          {/* CATEGORY FILTER TABS */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 font-mono text-xs">
-            {['ALL', 'VA FUNDAMENTALS', 'ADMIN SKILLS', 'FREELANCING', 'AFFILIATE MARKETING'].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-lg border font-bold transition-all text-[11px] ${
-                  selectedCategory === cat
-                    ? 'bg-cyan-500/30 text-cyan-300 border-cyan-400 shadow-md'
-                    : 'bg-gray-900/80 text-gray-400 border-gray-800 hover:text-white hover:border-gray-700'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* CMS TUTORIAL CARDS GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans text-xs">
-            {filteredCmsItems.map((item) => (
-              <div
-                key={item.id}
-                className="bg-black/90 border border-gray-800 hover:border-cyan-400 rounded-xl p-4 flex flex-col justify-between space-y-4 transition-all shadow-lg group"
-              >
-                <div className="space-y-3">
-                  {item.mainImage && (
-                    <div className="relative h-36 rounded-lg overflow-hidden border border-gray-800">
-                      <img src={item.mainImage} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
-                      <span className="absolute top-2 left-2 px-2.5 py-0.5 bg-black/80 backdrop-blur text-cyan-300 font-mono text-[10px] font-bold border border-cyan-400/40 rounded-full">
-                        {item.category}
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="space-y-1.5">
-                    <h3 className="font-extrabold text-white text-sm font-rajdhani group-hover:text-cyan-300 transition-colors leading-snug">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-400 text-[11px] leading-relaxed line-clamp-3">
-                      {item.summary || item.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-gray-800 flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-lime-400 font-bold">EDUCATIONAL GUIDE</span>
-                  <button
-                    onClick={() => setSelectedArticle(item)}
-                    className="px-3 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/40 border border-cyan-400/50 text-cyan-300 rounded-lg text-[11px] font-bold font-mono transition-all flex items-center gap-1 cursor-pointer"
-                  >
-                    <span>READ TUTORIAL</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </HUDPanel>
-
-      {/* ========================================================================= */}
-      {/* 🔄 SECTION 4: CONTINUOUS LEARNING CONCEPT */}
-      {/* ========================================================================= */}
-      <HUDPanel title="🔄 CONTINUOUS LEARNING &amp; EXPANDING RESOURCES">
-        <div className="p-5 space-y-4">
-          <div className="p-4 bg-gradient-to-r from-cyan-950 via-slate-900 to-indigo-950 border border-cyan-400/40 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="space-y-1.5 text-center md:text-left font-sans">
-              <span className="text-xs font-mono font-bold text-lime-400 uppercase tracking-widest block">
-                "KEEP LEARNING. KEEP IMPROVING. KEEP BUILDING."
-              </span>
-              <h3 className="text-lg md:text-xl font-black font-orbitron text-white">
-                NEW TUTORIALS &amp; RESOURCES ADDED REGULARLY
-              </h3>
-              <p className="text-xs text-gray-300 max-w-xl">
-                We continuously update this platform with new articles, software guides, client management tools, and digital skill tutorials managed dynamically through our CMS.
+              <h1 className="text-2xl sm:text-4xl font-black font-orbitron tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-300 to-lime-400">
+                WHITE HAT DEV PLATFORM
+              </h1>
+              <p className="text-sm sm:text-base text-gray-300 font-sans max-w-3xl leading-relaxed">
+                Empowering businesses and developers with full-stack digital development, specialized remote Virtual Assistant solutions, high-yield monetization blueprints, and continuous learning resources.
               </p>
             </div>
 
-            <a
-              href="#/affiliate-guide"
-              className="px-6 py-3.5 bg-gradient-to-r from-lime-400 via-cyan-400 to-emerald-300 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:scale-105 transition-all shrink-0 flex items-center gap-2 shadow-lg"
-            >
-              <span>EXPLORE ALL GUIDES &rarr;</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <button
+                onClick={() => handleConsult('General Platform Consultation')}
+                className="px-5 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold font-orbitron text-xs uppercase rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] flex items-center space-x-2"
+              >
+                <span>FREE TECH CONSULTATION</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <a
+                href="#/affiliate-guide"
+                className="px-5 py-3 bg-gray-900 border border-lime-400/50 hover:border-lime-400 text-lime-400 font-bold font-orbitron text-xs uppercase rounded-xl transition-all flex items-center space-x-2"
+              >
+                <span>AFFILIATE GUIDE</span>
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* 4 CORE VALUE PILLARS */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 font-sans text-xs">
+            <div className="p-4 rounded-xl bg-black/60 border border-cyan-500/30 space-y-1.5 hover:border-cyan-400 transition-all">
+              <div className="flex items-center space-x-2 text-cyan-400 font-bold font-mono">
+                <Code className="w-4 h-4 text-cyan-400" />
+                <span>DEV &amp; APPS</span>
+              </div>
+              <h4 className="text-sm font-black text-white font-rajdhani">CUSTOM WEB &amp; SOFTWARE</h4>
+              <p className="text-gray-400 leading-snug">Full-stack React, TypeScript, Next.js, and Android/iOS application development.</p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-black/60 border border-emerald-500/30 space-y-1.5 hover:border-emerald-400 transition-all">
+              <div className="flex items-center space-x-2 text-emerald-400 font-bold font-mono">
+                <Briefcase className="w-4 h-4 text-emerald-400" />
+                <span>VA SERVICES</span>
+              </div>
+              <h4 className="text-sm font-black text-white font-rajdhani">VIRTUAL ASSISTANCE</h4>
+              <p className="text-gray-400 leading-snug">Executive administrative, technical, CRM, data entry, and marketing virtual assistants.</p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-black/60 border border-lime-500/30 space-y-1.5 hover:border-lime-400 transition-all">
+              <div className="flex items-center space-x-2 text-lime-400 font-bold font-mono">
+                <Globe className="w-4 h-4 text-lime-400" />
+                <span>HOSTING &amp; CLOUD</span>
+              </div>
+              <h4 className="text-sm font-black text-white font-rajdhani">WEB HOSTING &amp; DOMAINS</h4>
+              <p className="text-gray-400 leading-snug">Ultra-fast NVMe cloud hosting with 99.9% uptime and 24/7 technical monitoring.</p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-black/60 border border-yellow-500/30 space-y-1.5 hover:border-yellow-400 transition-all">
+              <div className="flex items-center space-x-2 text-yellow-400 font-bold font-mono">
+                <Award className="w-4 h-4 text-yellow-400" />
+                <span>LEARNING HUB</span>
+              </div>
+              <h4 className="text-sm font-black text-white font-rajdhani">AFFILIATE &amp; CAREER</h4>
+              <p className="text-gray-400 leading-snug">Step-by-step guides, monetization blueprints, and software review tutorials.</p>
+            </div>
           </div>
         </div>
       </HUDPanel>
 
-      {/* ARTICLE READER MODAL */}
-      <ArticleModal
-        article={selectedArticle}
-        isOpen={!!selectedArticle}
-        onClose={() => setSelectedArticle(null)}
-      />
+      {/* ========================================================================= */}
+      {/* 🌟 MAIN 2-COLUMN GRID: CONTENT (LEFT 2/3) + PROMOTIONS & ADS (RIGHT 1/3) */}
+      {/* ========================================================================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-      {/* MAIN TWO-COLUMN SECTION FOR PACKAGES & REVIEWS */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+        {/* 📚 LEFT 2/3 COLUMN: TUTORIALS, GUIDES, PACKAGES & REVIEWS */}
         <div className="lg:col-span-2 space-y-8">
+
+          {/* 🎛️ CMS CONTENT ITEMS (FEATURED EDUCATIONAL TOPICS & GUIDES) */}
+          <HUDPanel title="📚 FEATURED TOPICS, GUIDES &amp; TUTORIALS">
+            <div className="p-5 space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-800">
+                <div>
+                  <h3 className="text-base sm:text-lg font-black font-orbitron text-white flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-cyan-400" />
+                    <span>CURATED LEARNING &amp; SERVICE SPOTLIGHTS</span>
+                  </h3>
+                  <p className="text-xs text-gray-400 font-sans">
+                    Read in-depth guides, software tutorials, and digital development insights.
+                  </p>
+                </div>
+
+                {/* CATEGORY FILTER BUTTONS */}
+                <div className="flex flex-wrap items-center gap-1.5 bg-black/60 p-1.5 rounded-xl border border-gray-800 font-mono text-[10px]">
+                  {['ALL', 'AI', 'VA', 'AFFILIATE', 'HOSTING', 'DEV'].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                        selectedCategory === cat
+                          ? 'bg-cyan-500 text-black shadow'
+                          : 'text-gray-400 hover:text-white hover:bg-gray-800/60'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* TUTORIALS / ARTICLES GRID */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-sans text-xs">
+                {filteredCmsItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-black/80 border border-gray-800 hover:border-cyan-400/80 rounded-xl overflow-hidden flex flex-col justify-between transition-all group hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]"
+                  >
+                    {item.mainImage && (
+                      <div className="h-36 w-full relative overflow-hidden border-b border-gray-800/80">
+                        <img
+                          src={item.mainImage}
+                          alt={item.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80';
+                          }}
+                        />
+                        <span className="absolute top-2 left-2 px-2 py-0.5 bg-black/80 backdrop-blur text-cyan-300 font-mono text-[9px] font-bold rounded border border-cyan-500/40 uppercase">
+                          {item.category}
+                        </span>
+                        {item.badge && (
+                          <span className="absolute top-2 right-2 px-2 py-0.5 bg-lime-400/90 text-black font-mono text-[9px] font-black rounded uppercase shadow">
+                            {item.badge}
+                          </span>
+                        )}
+                        {item.videoUrl && (
+                          <span className="absolute bottom-2 right-2 px-2 py-0.5 bg-red-600/90 text-white font-mono text-[9px] font-bold rounded flex items-center gap-1 shadow">
+                            <Video className="w-3 h-3" />
+                            <span>VIDEO</span>
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                      <div className="space-y-1.5">
+                        <h4 className="text-sm font-black font-orbitron text-white group-hover:text-cyan-300 transition-colors line-clamp-2">
+                          {item.title}
+                        </h4>
+                        <p className="text-gray-300 text-[11px] leading-relaxed line-clamp-3">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-gray-800/80 flex items-center justify-between gap-2 mt-2">
+                        <button
+                          onClick={() => setSelectedArticle(item)}
+                          className="px-3 py-1.5 bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 font-mono font-bold text-[11px] rounded-lg transition-all flex items-center gap-1.5"
+                        >
+                          <BookOpen className="w-3 h-3" />
+                          <span>READ TUTORIAL</span>
+                        </button>
+
+                        {(item.url || item.referralUrl) && (
+                          <a
+                            href={item.url || item.referralUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-2.5 py-1.5 bg-lime-400/20 hover:bg-lime-400/30 border border-lime-400/50 text-lime-300 font-mono font-bold text-[10px] rounded-lg transition-all flex items-center gap-1 shrink-0"
+                          >
+                            <span>{item.buttonText ? item.buttonText.split('(')[0].trim().slice(0, 18) : 'VISIT LINK'}</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </HUDPanel>
+
+          {/* 🔄 CONTINUOUS LEARNING CONCEPT */}
+          <HUDPanel title="🔄 CONTINUOUS LEARNING &amp; EXPANDING RESOURCES">
+            <div className="p-5 space-y-4">
+              <div className="p-4 bg-gradient-to-r from-cyan-950 via-slate-900 to-indigo-950 border border-cyan-400/40 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="space-y-1.5 text-center md:text-left font-sans">
+                  <span className="text-xs font-mono font-bold text-lime-400 uppercase tracking-widest block">
+                    "KEEP LEARNING. KEEP IMPROVING. KEEP BUILDING."
+                  </span>
+                  <h3 className="text-lg md:text-xl font-black font-orbitron text-white">
+                    NEW TUTORIALS &amp; RESOURCES ADDED REGULARLY
+                  </h3>
+                  <p className="text-xs text-gray-300 max-w-xl">
+                    We continuously update this platform with new articles, software guides, client management tools, and digital skill tutorials managed dynamically through our CMS.
+                  </p>
+                </div>
+
+                <a
+                  href="#/ai"
+                  className="px-6 py-3.5 bg-gradient-to-r from-lime-400 via-cyan-400 to-emerald-300 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:scale-105 transition-all shrink-0 flex items-center gap-2 shadow-lg"
+                >
+                  <span>EXPLORE ALL AI TOPICS &rarr;</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </HUDPanel>
 
           {/* CORE VIRTUAL ASSISTANT PACKAGES (WHITE HIGH-CONTRAST PANEL) */}
           <HUDPanel title="🛠️ CORE VIRTUAL ASSISTANT PACKAGES">
@@ -299,8 +295,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 font-sans text-xs">
-                {displayTestimonials.slice(0, 5).map((t) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-sans text-xs">
+                {displayTestimonials.slice(0, 6).map((t) => (
                   <div key={t.id} className="bg-black/90 border border-gray-800 p-3 rounded-xl space-y-2 hover:border-[var(--primary-cyan)] transition-all">
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between text-lime-400">
@@ -332,13 +328,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
 
         </div>
 
-        {/* DEDICATED RIGHT COLUMN DIVISION SECTION PANELS */}
-        <aside className="lg:col-span-1 border-t lg:border-t-0 lg:border-l-2 border-yellow-400/40 lg:pl-6 space-y-8 sticky top-20 self-start">
+        {/* 🚀 RIGHT 1/3 COLUMN: DEDICATED PROMOTIONS & ADS (ALIGNED FROM THE TOP) */}
+        <aside className="lg:col-span-1 space-y-8 sticky top-20 self-start">
           <AtomeCardPanel />
           <DynamicAdsSidebar />
         </aside>
 
       </div>
+
+      {/* ARTICLE READER MODAL */}
+      <ArticleModal
+        article={selectedArticle}
+        isOpen={!!selectedArticle}
+        onClose={() => setSelectedArticle(null)}
+      />
 
     </div>
   );

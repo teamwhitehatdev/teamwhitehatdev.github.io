@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, BookOpen, Clock, Calendar, Tag, ExternalLink, ShieldCheck, Sparkles, AlertCircle } from 'lucide-react';
+import { X, Calendar, ExternalLink, Video, Sparkles, BookOpen, ArrowRight } from 'lucide-react';
 import { CMSItem } from '../types';
 
 interface ArticleModalProps {
@@ -11,128 +11,250 @@ interface ArticleModalProps {
 export const ArticleModal: React.FC<ArticleModalProps> = ({ article, isOpen, onClose }) => {
   if (!isOpen || !article) return null;
 
+  // Helper to extract YouTube embed URL if standard watch URL is provided
+  const getEmbedUrl = (url?: string) => {
+    if (!url) return '';
+    if (url.includes('youtube.com/embed/')) return url;
+    if (url.includes('youtube.com/watch?v=')) {
+      const videoId = url.split('watch?v=')[1]?.split('&')[0];
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+    if (url.includes('youtu.be/')) {
+      const videoId = url.split('youtu.be/')[1]?.split('?')[0];
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+    return url;
+  };
+
+  const embedUrl = getEmbedUrl(article.videoUrl);
+
+  // High-performance Native Markdown Renderer without external package dependencies
+  const renderFormattedMarkdown = (content: string) => {
+    if (!content) return null;
+    const lines = content.split('\n');
+    let inCodeBlock = false;
+    let codeBlockContent: string[] = [];
+
+    return lines.map((line, idx) => {
+      // Code blocks ```
+      if (line.trim().startsWith('```')) {
+        if (inCodeBlock) {
+          inCodeBlock = false;
+          const code = codeBlockContent.join('\n');
+          codeBlockContent = [];
+          return (
+            <pre key={idx} className="bg-black/90 border border-cyan-500/30 p-4 rounded-xl text-emerald-300 font-mono text-xs overflow-x-auto my-3">
+              <code>{code}</code>
+            </pre>
+          );
+        } else {
+          inCodeBlock = true;
+          return null;
+        }
+      }
+
+      if (inCodeBlock) {
+        codeBlockContent.push(line);
+        return null;
+      }
+
+      // Headings
+      if (line.startsWith('# ')) {
+        return <h1 key={idx} className="text-xl sm:text-2xl font-black font-orbitron text-cyan-300 pt-4 pb-2 border-b border-cyan-500/20">{line.replace('# ', '')}</h1>;
+      }
+      if (line.startsWith('## ')) {
+        return <h2 key={idx} className="text-lg sm:text-xl font-bold font-orbitron text-emerald-300 pt-4 pb-1">{line.replace('## ', '')}</h2>;
+      }
+      if (line.startsWith('### ')) {
+        return <h3 key={idx} className="text-base font-bold font-orbitron text-lime-300 pt-3 pb-1">{line.replace('### ', '')}</h3>;
+      }
+
+      // Horizontal rules
+      if (line.trim() === '---' || line.trim() === '***') {
+        return <hr key={idx} className="border-gray-800 my-4" />;
+      }
+
+      // Bullet points
+      if (line.trim().startsWith('* ') || line.trim().startsWith('- ')) {
+        const bulletText = line.trim().substring(2);
+        return (
+          <li key={idx} className="ml-5 list-disc text-gray-300 py-0.5 text-xs sm:text-sm leading-relaxed">
+            <span dangerouslySetInnerHTML={{ __html: formatInlineMarkdown(bulletText) }} />
+          </li>
+        );
+      }
+
+      // Numbered lists
+      if (/^\d+\.\s/.test(line.trim())) {
+        const itemText = line.trim().replace(/^\d+\.\s/, '');
+        return (
+          <li key={idx} className="ml-5 list-decimal text-gray-300 py-0.5 text-xs sm:text-sm leading-relaxed">
+            <span dangerouslySetInnerHTML={{ __html: formatInlineMarkdown(itemText) }} />
+          </li>
+        );
+      }
+
+      // Tables (simple markdown table row)
+      if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
+        if (line.includes('---')) return null; // Table divider
+        const cells = line.split('|').filter((_, cIdx, arr) => cIdx > 0 && cIdx < arr.length - 1);
+        return (
+          <div key={idx} className="grid grid-cols-3 sm:grid-cols-4 gap-2 bg-black/40 border border-gray-800 p-2 text-xs font-mono my-1 rounded">
+            {cells.map((c, cIdx) => (
+              <span key={cIdx} className="text-gray-300 font-medium" dangerouslySetInnerHTML={{ __html: formatInlineMarkdown(c.trim()) }} />
+            ))}
+          </div>
+        );
+      }
+
+      // Blank line
+      if (line.trim() === '') {
+        return <div key={idx} className="h-2" />;
+      }
+
+      // Standard paragraph
+      return (
+        <p key={idx} className="text-gray-300 text-xs sm:text-sm leading-relaxed py-1" dangerouslySetInnerHTML={{ __html: formatInlineMarkdown(line) }} />
+      );
+    });
+  };
+
+  const formatInlineMarkdown = (text: string) => {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
+      .replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 bg-black border border-cyan-500/40 text-cyan-300 font-mono text-xs rounded">$1</code>');
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto animate-fadeIn select-none font-sans">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
       <div 
-        className="relative w-full max-w-4xl bg-slate-900 border-2 border-cyan-500/40 rounded-2xl shadow-2xl overflow-hidden my-8"
+        className="relative bg-slate-900 border-2 border-cyan-500/50 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-[0_0_50px_rgba(6,182,212,0.3)] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* MODAL HEADER BAR */}
-        <div className="p-6 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border-b border-cyan-500/30 flex items-start justify-between gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 rounded-full font-mono text-[11px] font-bold uppercase flex items-center gap-1">
-                <Tag className="w-3 h-3" />
+        {/* MODAL HEADER */}
+        <div className="p-6 border-b border-cyan-500/30 flex items-start justify-between bg-black/50">
+          <div className="space-y-2 pr-6">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1 bg-cyan-500/20 text-cyan-300 font-mono text-xs font-bold rounded-lg border border-cyan-500/40 uppercase">
                 {article.category}
               </span>
-              {article.featured && (
-                <span className="px-2.5 py-0.5 bg-lime-500/20 text-lime-300 border border-lime-400/40 rounded-full font-mono text-[10px] font-bold uppercase flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-lime-400" />
-                  FEATURED GUIDE
+              {article.badge && (
+                <span className="px-3 py-1 bg-lime-400 text-black font-mono text-xs font-black rounded-lg uppercase shadow">
+                  {article.badge}
+                </span>
+              )}
+              {article.publishDate && (
+                <span className="flex items-center gap-1.5 text-xs text-gray-400 font-mono">
+                  <Calendar className="w-3.5 h-3.5 text-gray-500" />
+                  <span>{article.publishDate}</span>
                 </span>
               )}
             </div>
 
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-black font-orbitron text-white leading-tight">
+            <h2 className="text-xl sm:text-2xl font-black font-orbitron text-white leading-tight">
               {article.title}
             </h2>
-
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-400">
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-                {article.createdAt ? new Date(article.createdAt).toLocaleDateString() : 'Updated 2026'}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-cyan-400" />
-                5 Min Read • Practical Guide
-              </span>
-            </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 rounded-xl border border-slate-700 transition-all shrink-0"
+            className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+            aria-label="Close"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* MODAL BODY */}
-        <div className="p-6 md:p-8 space-y-6 max-h-[75vh] overflow-y-auto text-slate-200">
-          
-          {/* MAIN IMAGE BANNER IF PRESENT */}
-          {article.mainImage && (
-            <div className="relative rounded-xl overflow-hidden border border-slate-800 shadow-xl max-h-72">
+        <div className="p-6 overflow-y-auto space-y-6 flex-1 text-gray-200 font-sans text-sm leading-relaxed">
+
+          {/* VIDEO PLAYER EMBED (IF PRESENT) */}
+          {embedUrl && (
+            <div className="rounded-xl overflow-hidden border border-red-500/40 shadow-lg bg-black aspect-video w-full">
+              {embedUrl.startsWith('http') && embedUrl.includes('embed') ? (
+                <iframe
+                  src={embedUrl}
+                  title={article.title}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  src={embedUrl}
+                  controls
+                  className="w-full h-full object-contain"
+                />
+              )}
+            </div>
+          )}
+
+          {/* HERO COVER IMAGE (IF PRESENT AND NO VIDEO) */}
+          {article.mainImage && !embedUrl && (
+            <div className="w-full h-64 sm:h-80 rounded-xl overflow-hidden border border-cyan-500/30">
               <img
                 src={article.mainImage}
                 alt={article.title}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80';
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
             </div>
           )}
 
-          {/* SUMMARY BOX */}
-          {article.summary && (
-            <div className="p-4 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-cyan-200 text-sm leading-relaxed font-sans italic">
-              "{article.summary}"
+          {/* SHORT SUMMARY CALLOUT */}
+          {article.description && (
+            <div className="p-4 bg-cyan-950/40 border-l-4 border-cyan-400 rounded-r-xl text-cyan-100 text-xs font-mono">
+              <p className="font-semibold">{article.description}</p>
             </div>
           )}
 
-          {/* ARTICLE CONTENT BODY */}
-          <div className="space-y-4 text-xs sm:text-sm leading-relaxed text-slate-300 font-sans whitespace-pre-line">
-            {article.fullContent || article.description}
+          {/* NATIVE FORMATTED MARKDOWN CONTENT */}
+          <div className="space-y-1 font-sans">
+            {renderFormattedMarkdown(article.fullContent || article.description)}
           </div>
 
-          {/* RESPONSIBLE AFFILIATE & FINANCIAL DISCLAIMER */}
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-400 space-y-2 font-mono">
-            <div className="flex items-center gap-2 text-amber-400 font-bold">
-              <AlertCircle className="w-4 h-4" />
-              <span>RESPONSIBLE EDUCATION & FINANCIAL DISCLAIMER</span>
-            </div>
-            <p className="text-[11px] leading-relaxed">
-              This article is provided for educational and skill development purposes. Team WhiteHat Dev does NOT guarantee specific income levels, client bookings, or financial results. Success in virtual assistance, freelancing, and affiliate marketing depends on your commitment, skills, strategy, client acquisition, and continuous effort.
-            </p>
-          </div>
-
-          {/* CTA LINK IF PRESENT */}
-          {article.url && (
-            <div className="p-5 rounded-2xl bg-gradient-to-r from-cyan-950 via-slate-900 to-indigo-950 border border-cyan-400/40 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="space-y-1 text-center sm:text-left">
-                <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-widest block">
-                  RECOMMENDED RESOURCE &amp; TOOL
-                </span>
-                <h4 className="text-sm font-bold font-orbitron text-white">
-                  Explore {article.title}
-                </h4>
+          {/* FEATURED RESOURCE & ACTION CALLOUT BANNER */}
+          {(article.url || article.referralUrl) && (
+            <div className="p-5 bg-gradient-to-r from-emerald-950 via-slate-900 to-cyan-950 border-2 border-lime-400/50 rounded-2xl space-y-3 mt-8 shadow-xl">
+              <div className="flex items-center gap-2 text-lime-400 font-mono text-xs font-bold uppercase tracking-wider">
+                <Sparkles className="w-4 h-4 text-lime-400" />
+                <span>RECOMMENDED RESOURCE &amp; EXCLUSIVE OFFER</span>
               </div>
-
-              <a
-                href={article.url}
-                target="_blank"
-                rel="sponsored noopener noreferrer"
-                className="px-5 py-3 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:scale-105 transition-all flex items-center gap-2 shrink-0 shadow-lg cursor-pointer"
-              >
-                <span>{article.buttonText || 'EXPLORE RESOURCE'} &rarr;</span>
-                <ExternalLink className="w-4 h-4" />
-              </a>
+              <p className="text-xs text-gray-200">
+                {article.referralCta || 'Access official resources, special discounted software tools, or hire verified technical developers & virtual assistants directly.'}
+              </p>
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <a
+                  href={article.url || article.referralUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-3 bg-gradient-to-r from-lime-400 via-emerald-400 to-cyan-400 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:scale-105 transition-all shadow-lg flex items-center gap-2"
+                >
+                  <span>{article.buttonText || 'VISIT OFFICIAL PARTNER LINK →'}</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
             </div>
           )}
 
         </div>
 
         {/* MODAL FOOTER */}
-        <div className="p-4 bg-slate-950 border-t border-slate-800 flex justify-between items-center text-xs font-mono text-slate-400">
-          <span>TEAM WHITEHAT DEV • LEARNING &amp; RESOURCE HUB</span>
+        <div className="p-4 border-t border-cyan-500/30 bg-black/60 flex items-center justify-between">
+          <span className="text-xs text-gray-400 font-mono">
+            WHITE HAT DEV CMS READER • ID: {article.id}
+          </span>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-all"
+            className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-xs font-mono font-bold rounded-lg transition-all"
           >
-            CLOSE ARTICLE
+            CLOSE READER
           </button>
         </div>
-
       </div>
     </div>
   );
 };
+export default ArticleModal;
