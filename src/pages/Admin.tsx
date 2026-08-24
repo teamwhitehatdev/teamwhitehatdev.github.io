@@ -1,3 +1,4 @@
+import { VerticalVisitorIPLogs } from '../components/VerticalVisitorIPLogs';
 import React, { useState, useEffect, useMemo } from 'react';
 import { HUDPanel } from '../components/HUDPanel';
 import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, Layers, Inbox, Activity, Sparkles, X, Filter, Search, Globe, Laptop, Smartphone, Tablet, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, BarChart2, PieChart, Cpu, BookOpen, Layers3 } from 'lucide-react';
@@ -648,7 +649,8 @@ export const Admin: React.FC = () => {
                 <table className="w-full text-left border-collapse text-xs font-mono">
                   <thead>
                     <tr className="bg-black text-cyan-400 border-b border-gray-800 uppercase">
-                      <th className="p-3 w-32">POSITION / RANK</th>
+                      <th className="p-3 w-28">ORDER</th>
+                      <th className="p-3 w-20">THUMBNAIL</th>
                       <th className="p-3">TITLE &amp; TYPE</th>
                       <th className="p-3">PAGE OWNER</th>
                       <th className="p-3">HOME FEATURED</th>
@@ -659,7 +661,7 @@ export const Admin: React.FC = () => {
                   <tbody className="divide-y divide-gray-800 text-gray-300">
                     {filteredCMSItems.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="p-6 text-center text-gray-500">
+                        <td colSpan={7} className="p-6 text-center text-gray-500">
                           No CMS content items match your selected filters.
                         </td>
                       </tr>
@@ -698,9 +700,26 @@ export const Admin: React.FC = () => {
                                 type="number"
                                 value={item.sortOrder || idx + 1}
                                 onChange={(e) => setCMSItemSortOrder(item.id, parseInt(e.target.value) || 1)}
-                                className="w-12 px-1 py-0.5 bg-black border border-cyan-500/40 rounded text-center text-cyan-300 font-bold font-mono text-[11px]"
+                                className="w-10 px-1 py-0.5 bg-black border border-cyan-500/40 rounded text-center text-cyan-300 font-bold font-mono text-[11px]"
                                 title="Direct numeric order rank"
                               />
+                            </div>
+                          </td>
+
+                          {/* 🖼️ SMALL THUMBNAIL IMAGE */}
+                          <td className="p-3">
+                            <div className="w-14 h-10 rounded-lg overflow-hidden border border-cyan-500/40 bg-black/80 shrink-0 relative group">
+                              {item.mainImage ? (
+                                <img
+                                  src={item.mainImage}
+                                  alt={item.title}
+                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-slate-900 text-slate-500 text-[9px] font-mono font-bold text-center">
+                                  NO IMG
+                                </div>
+                              )}
                             </div>
                           </td>
 
@@ -1038,6 +1057,7 @@ export const Admin: React.FC = () => {
       {activeTab === 'analytics' && (
         <div className="space-y-6">
           <TelemetryDashboard />
+          <VerticalVisitorIPLogs />
         </div>
       )}
 

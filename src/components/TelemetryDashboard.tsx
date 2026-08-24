@@ -1,3 +1,4 @@
+import { VerticalVisitorIPLogs } from './VerticalVisitorIPLogs';
 import { RealWorldMap } from './RealWorldMap';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
@@ -766,7 +767,11 @@ export const TelemetryDashboard: React.FC = () => {
         </div>
       )}
 
-    </div>
+    
+
+      {/* 📋 VERTICAL VISITOR IP TELEMETRY AUDIT STREAM */}
+      <VerticalVisitorIPLogs />
+</div>
   );
 };
 export default TelemetryDashboard;

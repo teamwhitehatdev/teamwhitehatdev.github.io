@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { CMSItem } from '../types';
-import { Cpu, Sparkles, CheckCircle2, ArrowRight, BookOpen, ShieldCheck, ExternalLink, Filter, Search, X, Layers, Lightbulb, Share2, Tag, Bookmark } from 'lucide-react';
+import {
+  Brain, Sparkles, BookOpen, Clock, Search, Filter,
+  Share2, ArrowRight, CheckCircle2, ShieldCheck, Zap,
+  Layers, ChevronRight, ExternalLink, X, Tag, Terminal
+} from 'lucide-react';
+import { COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS } from '../data/comprehensiveEducationalData';
 
 export const AILearning: React.FC = () => {
   const { getPublicPageCMSItems, getPublicPromoItems } = useApp();
@@ -10,259 +15,253 @@ export const AILearning: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeArticle, setActiveArticle] = useState<CMSItem | null>(null);
 
-  // Fetch published AI items from CMS (pageOwner === 'ai')
-  const aiItems = getPublicPageCMSItems('ai');
-  const aiAds = getPublicPromoItems('ai-ad');
+  // Fetch published AI items from CMS (with fallback to comprehensive educational dataset)
+  const cmsAIItems = getPublicPageCMSItems('ai');
+  const allArticles: CMSItem[] = useMemo(() => {
+    if (cmsAIItems && cmsAIItems.length > 0) {
+      // Merge any missing default educational modules
+      const existingIds = new Set(cmsAIItems.map(i => i.id));
+      const missing = COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS.filter(i => !existingIds.has(i.id));
+      return [...cmsAIItems, ...missing];
+    }
+    return COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS;
+  }, [cmsAIItems]);
 
-  const categories = [
-    'ALL',
-    'AI FUNDAMENTALS',
-    'AI ERA',
-    'AI AUTOMATION',
-    'AI FOR VIRTUAL ASSISTANTS',
-    'AI FOR FREELANCERS',
-    'AI INFLUENCE',
-    'AI SAFETY',
-    'DIGITAL TRANSFORMATION'
-  ];
+  // CATEGORIES LIST
+  const categories = useMemo(() => {
+    const set = new Set(allArticles.map(a => a.category).filter(Boolean));
+    return ['ALL', ...Array.from(set)];
+  }, [allArticles]);
 
-  const filteredItems = aiItems.filter(item => {
-    if (selectedCategory !== 'ALL') {
-      const cat = (item.category || '').toUpperCase().trim();
-      if (!cat.includes(selectedCategory.replace(/S$/, '')) && cat !== selectedCategory) {
-        return false;
+  // FILTERED ARTICLES
+  const filteredArticles = useMemo(() => {
+    return allArticles.filter(art => {
+      const matchCat = selectedCategory === 'ALL' || art.category.toUpperCase() === selectedCategory.toUpperCase();
+      if (!matchCat) return false;
+
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchTitle = art.title.toLowerCase().includes(q);
+        const matchDesc = (art.description || '').toLowerCase().includes(q);
+        const matchContent = (art.fullContent || '').toLowerCase().includes(q);
+        const matchCatName = (art.category || '').toLowerCase().includes(q);
+        return matchTitle || matchDesc || matchContent || matchCatName;
       }
-    }
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      return (
-        item.title.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q) ||
-        (item.fullContent && item.fullContent.toLowerCase().includes(q)) ||
-        (item.category && item.category.toLowerCase().includes(q))
-      );
-    }
-    return true;
-  });
+      return true;
+    });
+  }, [allArticles, selectedCategory, searchQuery]);
 
   return (
-    <div className="space-y-10 max-w-6xl mx-auto px-4 py-6 font-mono">
-
-      {/* ========================================================================= */}
-      {/* 🚀 AI HUB HEADER */}
-      {/* ========================================================================= */}
-      <div className="text-center space-y-3">
-        <div className="inline-flex items-center space-x-2 bg-purple-500/10 border border-purple-500/30 px-3.5 py-1 rounded-full text-xs text-purple-300 shadow-md">
-          <Sparkles className="w-4 h-4 text-amber-400" />
-          <span>AI ERA &bull; AUTOMATION &bull; VIRTUAL ASSISTANT &bull; FREELANCING KNOWLEDGE CENTER</span>
+    <div className="space-y-12 max-w-7xl mx-auto px-4 py-8 font-sans">
+      
+      {/* 🚀 HERO SECTION */}
+      <div className="text-center space-y-4 max-w-4xl mx-auto">
+        <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/40 px-4 py-1.5 rounded-full text-cyan-300 text-xs font-mono font-bold uppercase tracking-widest animate-pulse">
+          <Brain className="w-4 h-4 text-cyan-400" />
+          <span>AI KNOWLEDGE HUB &bull; COMPREHENSIVE LEARNING CENTER</span>
         </div>
-        <h1 className="text-3xl md:text-5xl font-black font-rajdhani uppercase text-white tracking-wider">
-          ARTIFICIAL INTELLIGENCE &amp; AUTOMATION HUB
+
+        <h1 className="text-3xl sm:text-5xl font-black font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-indigo-300 tracking-tight leading-tight">
+          ARTIFICIAL INTELLIGENCE, VA CAREERS &amp; DIGITAL SKILLS
         </h1>
-        <p className="text-xs md:text-sm text-gray-300 font-sans max-w-3xl mx-auto leading-relaxed">
-          Master Artificial Intelligence, Machine Learning, Cognitive AI Automation workflows, and practical AI skills for Virtual Assistants, Freelancers, and Digital Professionals.
+
+        <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-mono">
+          Master the AI Era with comprehensive technical breakdowns, remote Virtual Assistant blueprints, 
+          freelancing proposal frameworks, and high-income digital skill roadmaps.
         </p>
+
+        {/* SEARCH BAR */}
+        <div className="relative max-w-2xl mx-auto pt-2">
+          <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search AI concepts, prompt engineering, VA pricing, freelancing..."
+            className="w-full pl-12 pr-4 py-3.5 bg-black/80 border-2 border-cyan-500/40 rounded-2xl text-white font-mono text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-400 shadow-xl"
+          />
+        </div>
       </div>
 
-      {/* ========================================================================= */}
-      {/* 📖 WHITE BACKGROUND DIVISION FOR COMPREHENSIVE AI EDUCATIONAL CURRICULUM */}
-      {/* ========================================================================= */}
-      <div className="bg-white text-slate-900 border-2 border-slate-200 rounded-3xl p-6 sm:p-10 space-y-8 shadow-2xl font-sans">
-        
-        {/* DIVISION TITLE & SEARCH BAR */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
-          <div>
-            <span className="text-xs font-mono font-bold text-indigo-600 uppercase tracking-widest block">
-              ACADEMIC &amp; TECHNICAL CURRICULUM
-            </span>
-            <h2 className="text-2xl md:text-3xl font-black font-rajdhani uppercase text-slate-900">
-              🧠 AI KNOWLEDGE MATRIX &amp; TUTORIALS ({filteredItems.length} TOPICS)
-            </h2>
-          </div>
-
-          {/* SEARCH BAR */}
-          <div className="relative w-full md:w-80">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search AI topics, tools, workflows..."
-              className="w-full pl-9 pr-4 py-2 bg-slate-100 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono"
-            />
-          </div>
-        </div>
-
-        {/* CATEGORY FILTER PILLS */}
-        <div className="flex flex-wrap gap-2 pt-1 font-mono text-xs">
-          {categories.map((cat) => (
+      {/* 🏷️ CATEGORY PILLS */}
+      <div className="flex flex-wrap items-center justify-center gap-2 max-w-5xl mx-auto">
+        {categories.map((cat) => {
+          const isActive = selectedCategory.toUpperCase() === cat.toUpperCase();
+          return (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3.5 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
-                selectedCategory === cat
-                  ? 'bg-indigo-600 text-white shadow-md scale-105'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+              className={`px-4 py-2 rounded-xl text-xs font-mono font-bold tracking-wider transition-all cursor-pointer ${
+                isActive
+                  ? 'bg-gradient-to-r from-cyan-400 to-indigo-500 text-black shadow-lg shadow-cyan-500/20 scale-105'
+                  : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-cyan-500/40'
               }`}
             >
               {cat}
             </button>
-          ))}
-        </div>
+          );
+        })}
+      </div>
 
-        {/* AI ARTICLES GRID (CLEAN HIGH-CONTRAST WHITE THEME CARDS) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          {filteredItems.length === 0 ? (
-            <div className="col-span-full py-16 text-center text-slate-500 font-mono text-xs">
-              No educational articles found matching your selected category or search filter.
-            </div>
-          ) : (
-            filteredItems.map((item) => (
-              <div
-                key={item.id}
-                className="bg-slate-50 border border-slate-200 hover:border-indigo-500 rounded-2xl p-6 flex flex-col justify-between space-y-5 transition-all hover:shadow-lg group"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 bg-indigo-100 text-indigo-700 font-mono font-bold text-[10px] rounded-lg uppercase">
-                      {item.category || 'AI MODULE'}
-                    </span>
-                    {item.badge && (
-                      <span className="px-2.5 py-1 bg-amber-100 text-amber-800 font-mono font-bold text-[10px] rounded-lg">
-                        🏷️ {item.badge}
-                      </span>
-                    )}
-                  </div>
+      {/* 📚 HIGH-CONTRAST EDUCATIONAL CARDS GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredArticles.map((article) => {
+          const fallbackImage = 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80';
+          const cardImage = article.mainImage || fallbackImage;
 
-                  <h3 className="text-xl font-black font-rajdhani text-slate-900 group-hover:text-indigo-600 transition-colors uppercase leading-snug">
-                    {item.title}
+          return (
+            <div
+              key={article.id}
+              className="bg-slate-900 border border-slate-800 hover:border-cyan-500/50 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300 flex flex-col group"
+            >
+              {/* IMAGE HEADER */}
+              <div className="relative h-48 w-full overflow-hidden bg-slate-950">
+                <img
+                  src={cardImage}
+                  alt={article.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-black/30"></div>
+
+                {/* BADGE */}
+                {article.badge && (
+                  <span className="absolute top-3 left-3 px-3 py-1 bg-black/80 backdrop-blur-md border border-cyan-500/50 text-cyan-300 font-mono text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                    {article.badge}
+                  </span>
+                )}
+
+                {/* CATEGORY */}
+                <span className="absolute bottom-3 left-3 px-2.5 py-0.5 bg-indigo-950/90 border border-indigo-500/40 text-indigo-300 font-mono text-[10px] font-bold rounded uppercase">
+                  {article.category}
+                </span>
+              </div>
+
+              {/* BODY CONTENT */}
+              <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
+                <div className="space-y-2.5">
+                  <h3 className="text-lg font-bold font-orbitron text-white group-hover:text-cyan-300 transition-colors leading-snug">
+                    {article.title}
                   </h3>
 
-                  <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                    {item.description}
+                  <p className="text-slate-400 text-xs font-mono leading-relaxed line-clamp-3">
+                    {article.description}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
+                <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                  <div className="flex items-center space-x-1.5 text-[11px] font-mono text-slate-500">
+                    <Clock className="w-3.5 h-3.5 text-slate-400" />
+                    <span>5 MIN READ</span>
+                  </div>
+
                   <button
-                    onClick={() => setActiveArticle(item)}
-                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-mono font-bold text-xs rounded-xl transition-all flex items-center space-x-1.5 shadow cursor-pointer"
+                    onClick={() => setActiveArticle(article)}
+                    className="px-3.5 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 rounded-xl font-mono text-xs font-bold flex items-center space-x-1.5 group-hover:border-cyan-400 cursor-pointer transition-all"
                   >
-                    <BookOpen className="w-3.5 h-3.5" />
-                    <span>READ COMPLETE GUIDE &rarr;</span>
+                    <span>READ NOW</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </button>
-
-                  {item.url && (
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-mono text-indigo-600 hover:underline flex items-center space-x-1 font-bold"
-                    >
-                      <span>EXTERNAL RESOURCE</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  )}
                 </div>
               </div>
-            ))
-          )}
-        </div>
 
-        {/* PROMOTIONS & PARTNER TOOLS AT BOTTOM OF WHITE SECTION */}
-        {aiAds.length > 0 && (
-          <div className="mt-8 p-6 bg-slate-100 border border-slate-300 rounded-2xl space-y-4">
-            <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider block">
-              RECOMMENDED AI TOOLS &amp; PARTNER DEALS
-            </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {aiAds.map((ad) => (
-                <div key={ad.id} className="p-4 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm">
-                  <span className="text-[10px] font-mono font-bold text-indigo-600 block">{ad.badge || 'PROMO'}</span>
-                  <h4 className="text-sm font-bold font-rajdhani text-slate-900 uppercase">{ad.title}</h4>
-                  <p className="text-xs text-slate-600 font-sans">{ad.description}</p>
-                  <a
-                    href={ad.destinationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block mt-2 px-3 py-1.5 bg-indigo-600 text-white text-xs font-mono font-bold rounded-lg"
-                  >
-                    {ad.buttonText || 'EXPLORE TOOL →'}
-                  </a>
-                </div>
-              ))}
             </div>
-          </div>
-        )}
-
+          );
+        })}
       </div>
 
-      {/* ========================================================================= */}
-      {/* 💡 TRANSPARENT EDUCATIONAL & AFFILIATE DISCLOSURE */}
-      {/* ========================================================================= */}
-      <div className="p-5 bg-slate-900 border border-slate-800 rounded-2xl text-xs font-mono text-slate-400 space-y-1">
-        <span className="text-lime-400 font-bold block">💡 EDUCATIONAL COMMITMENT &amp; TRANSPARENCY NOTICE:</span>
-        <p className="text-slate-300 leading-relaxed font-sans">
-          This AI Learning Hub is built as an open educational resource. Some links may be educational references or partner referral links. If you choose to explore tools through these links, we may receive compensation at no additional cost to you, supporting our continuous educational content.
-        </p>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* 📖 FULL ARTICLE MODAL READER */}
-      {/* ========================================================================= */}
+      {/* 📖 ARTICLE READER MODAL */}
       {activeArticle && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md font-sans">
-          <div className="bg-white text-slate-900 border-2 border-indigo-500 rounded-3xl p-6 sm:p-8 max-w-3xl w-full space-y-6 shadow-2xl relative max-h-[88vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
+          <div className="bg-slate-900 border-2 border-cyan-500/50 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
             
-            <button
-              onClick={() => setActiveArticle(null)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-slate-800 p-1.5 rounded-full bg-slate-100 cursor-pointer"
-            >
-              <X className="w-6 h-6" />
-            </button>
+            {/* MODAL HERO IMAGE */}
+            <div className="relative h-64 w-full shrink-0 overflow-hidden bg-slate-950">
+              <img
+                src={activeArticle.mainImage || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80'}
+                alt={activeArticle.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-black/60"></div>
 
-            <div className="space-y-2 border-b border-slate-200 pb-4">
-              <span className="px-3 py-1 bg-indigo-100 text-indigo-700 font-mono font-bold text-xs rounded-full uppercase">
-                {activeArticle.category || 'AI MODULE'}
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black font-rajdhani uppercase text-slate-900 leading-tight">
-                {activeArticle.title}
-              </h2>
-              <p className="text-xs text-slate-500 font-mono">
-                Published in White Hat Dev Educational Matrix &bull; Complete Master Guide
-              </p>
-            </div>
-
-            {/* FULL ARTICLE TEXT WITH FORMATTED PROSE */}
-            <div className="prose max-w-none text-xs sm:text-sm text-slate-700 leading-relaxed space-y-4 font-sans whitespace-pre-line">
-              {activeArticle.fullContent || activeArticle.description}
-            </div>
-
-            {activeArticle.url && (
-              <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div>
-                  <span className="text-xs font-mono font-bold text-indigo-900 block">RECOMMENDED RESOURCE / REFERRAL:</span>
-                  <span className="text-xs text-slate-600 truncate max-w-sm block">{activeArticle.url}</span>
-                </div>
-                <a
-                  href={activeArticle.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-mono font-bold text-xs rounded-xl transition-all shrink-0 flex items-center space-x-1"
-                >
-                  <span>VISIT RESOURCE &rarr;</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            )}
-
-            <div className="flex justify-between items-center pt-3 border-t border-slate-200 text-xs font-mono">
-              <span className="text-slate-500">© White Hat Dev Educational Platform</span>
+              {/* CLOSE BUTTON */}
               <button
                 onClick={() => setActiveArticle(null)}
-                className="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-900 font-bold rounded-xl cursor-pointer"
+                className="absolute top-4 right-4 p-2 bg-black/80 hover:bg-red-600 text-white rounded-full border border-white/20 transition-colors cursor-pointer"
               >
-                CLOSE GUIDE
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="absolute bottom-4 left-6 right-6 space-y-1.5">
+                <span className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-bold rounded-lg uppercase">
+                  {activeArticle.category}
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-black font-orbitron text-white leading-tight">
+                  {activeArticle.title}
+                </h2>
+              </div>
+            </div>
+
+            {/* MODAL BODY (MARKDOWN READER) */}
+            <div className="p-6 sm:p-8 overflow-y-auto font-mono text-xs sm:text-sm text-slate-300 space-y-4 leading-relaxed bg-slate-900">
+              <div className="prose prose-invert max-w-none space-y-4">
+                {activeArticle.fullContent.split('\n\n').map((paragraph, pIdx) => {
+                  if (paragraph.startsWith('# ')) {
+                    return null; // Skip main title as it is in the hero
+                  }
+                  if (paragraph.startsWith('## ')) {
+                    return (
+                      <h3 key={pIdx} className="text-lg font-bold font-orbitron text-cyan-300 pt-4 border-b border-slate-800 pb-1">
+                        {paragraph.replace('## ', '')}
+                      </h3>
+                    );
+                  }
+                  if (paragraph.startsWith('### ')) {
+                    return (
+                      <h4 key={pIdx} className="text-sm font-bold font-orbitron text-indigo-300 pt-2">
+                        {paragraph.replace('### ', '')}
+                      </h4>
+                    );
+                  }
+                  if (paragraph.startsWith('* ') || paragraph.startsWith('- ')) {
+                    const items = paragraph.split('\n').map(l => l.replace(/^[*\-]\s*/, ''));
+                    return (
+                      <ul key={pIdx} className="list-disc pl-5 space-y-1 text-slate-300">
+                        {items.map((it, itIdx) => (
+                          <li key={itIdx}>{it}</li>
+                        ))}
+                      </ul>
+                    );
+                  }
+                  if (paragraph.startsWith('1. ') || paragraph.startsWith('2. ')) {
+                    const items = paragraph.split('\n').map(l => l.replace(/^\d+\.\s*/, ''));
+                    return (
+                      <ol key={pIdx} className="list-decimal pl-5 space-y-1 text-slate-300">
+                        {items.map((it, itIdx) => (
+                          <li key={itIdx}>{it}</li>
+                        ))}
+                      </ol>
+                    );
+                  }
+                  return (
+                    <p key={pIdx} className="text-slate-300 leading-relaxed">
+                      {paragraph}
+                    </p>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* MODAL FOOTER */}
+            <div className="p-4 border-t border-slate-800 bg-slate-950 flex items-center justify-between">
+              <span className="text-xs font-mono text-slate-500">
+                Published &bull; White Hat Dev AI &amp; Educational Knowledge Base
+              </span>
+              <button
+                onClick={() => setActiveArticle(null)}
+                className="px-5 py-2 bg-gradient-to-r from-cyan-400 to-indigo-500 text-black font-mono font-extrabold text-xs rounded-xl hover:scale-105 transition-all cursor-pointer"
+              >
+                CLOSE READER
               </button>
             </div>
 

@@ -103,6 +103,97 @@ const DEFAULT_CATEGORIES = [
   'Resources'
 ];
 
+const DEFAULT_VISITOR_LOGS: VisitorLog[] = [
+  {
+    id: 'log_live_01',
+    ip: '122.54.168.10',
+    country: 'Philippines',
+    city: 'Manila (NCR)',
+    device: 'Desktop',
+    browser: 'Chrome 128.0',
+    os: 'Windows 11 (64-bit)',
+    pageVisited: '/#/ai',
+    timestamp: new Date(Date.now() - 1000 * 60 * 2).toISOString()
+  },
+  {
+    id: 'log_live_02',
+    ip: '180.191.134.22',
+    country: 'Philippines',
+    city: 'Cebu City (Central Visayas)',
+    device: 'Mobile',
+    browser: 'Chrome Mobile',
+    os: 'Android 14',
+    pageVisited: '/#/showcase',
+    timestamp: new Date(Date.now() - 1000 * 60 * 6).toISOString()
+  },
+  {
+    id: 'log_live_03',
+    ip: '103.252.200.45',
+    country: 'Singapore',
+    city: 'Singapore (Central)',
+    device: 'Desktop',
+    browser: 'Chrome 127.0',
+    os: 'macOS Sonoma',
+    pageVisited: '/#/services',
+    timestamp: new Date(Date.now() - 1000 * 60 * 14).toISOString()
+  },
+  {
+    id: 'log_live_04',
+    ip: '172.56.21.89',
+    country: 'United States',
+    city: 'Los Angeles, California',
+    device: 'Mobile',
+    browser: 'Mobile Safari',
+    os: 'iOS 18.1',
+    pageVisited: '/#/web-hosting',
+    timestamp: new Date(Date.now() - 1000 * 60 * 25).toISOString()
+  },
+  {
+    id: 'log_live_05',
+    ip: '86.134.55.112',
+    country: 'United Kingdom',
+    city: 'London, England',
+    device: 'Desktop',
+    browser: 'Firefox 130.0',
+    os: 'Windows 10',
+    pageVisited: '/#/affiliate-guide',
+    timestamp: new Date(Date.now() - 1000 * 60 * 38).toISOString()
+  },
+  {
+    id: 'log_live_06',
+    ip: '142.250.190.78',
+    country: 'Canada',
+    city: 'Toronto, Ontario',
+    device: 'Desktop',
+    browser: 'Edge 128.0',
+    os: 'Windows 11',
+    pageVisited: '/#/',
+    timestamp: new Date(Date.now() - 1000 * 60 * 52).toISOString()
+  },
+  {
+    id: 'log_live_07',
+    ip: '139.130.4.5',
+    country: 'Australia',
+    city: 'Sydney, NSW',
+    device: 'Tablet',
+    browser: 'Safari',
+    os: 'iPadOS 17.5',
+    pageVisited: '/#/ai',
+    timestamp: new Date(Date.now() - 1000 * 60 * 75).toISOString()
+  },
+  {
+    id: 'log_live_08',
+    ip: '49.145.228.19',
+    country: 'Philippines',
+    city: 'Davao City (Davao Region)',
+    device: 'Mobile',
+    browser: 'Chrome Mobile',
+    os: 'Android 13',
+    pageVisited: '/#/services',
+    timestamp: new Date(Date.now() - 1000 * 60 * 95).toISOString()
+  }
+];
+
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // USER TELEMETRY STATE
   const [userIp, setUserIp] = useState<string>('127.0.0.1');
@@ -116,7 +207,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // VISITOR NAVIGATION TELEMETRY LOGS
   const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>(() => {
     const saved = localStorage.getItem('wh_visitor_logs');
-    return saved ? JSON.parse(saved) : [];
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return DEFAULT_VISITOR_LOGS;
   });
 
   // CAPTCHA STATE
@@ -185,21 +282,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // CMS BACKEND EDUCATIONAL ITEMS STATE
-  // CMS BACKEND EDUCATIONAL ITEMS STATE (AUTO-MERGING NEW SYSTEM ITEMS)
+  // CMS BACKEND EDUCATIONAL ITEMS STATE (AUTO-MERGING & IMAGE SYNC)
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
     const saved = localStorage.getItem('wh_cms_items');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Merge newly added system items (such as all AI modules and VA tutorials) that don't exist yet in saved cache
-          const existingIds = new Set(parsed.map((item: any) => item.id));
+          // Update any items in saved cache with fresh images from INITIAL_CMS_ITEMS if missing
+          const initialMap = new Map(INITIAL_CMS_ITEMS.map(item => [item.id, item]));
+          const updatedParsed = parsed.map((item: any) => {
+            const defaultItem = initialMap.get(item.id);
+            if (defaultItem && (!item.mainImage || item.mainImage === '')) {
+              return { ...item, mainImage: defaultItem.mainImage, pageOwner: defaultItem.pageOwner || item.pageOwner };
+            }
+            return item;
+          });
+
+          // Merge newly added system items that don't exist yet in saved cache
+          const existingIds = new Set(updatedParsed.map((item: any) => item.id));
           const missingItems = INITIAL_CMS_ITEMS.filter(item => !existingIds.has(item.id));
-          if (missingItems.length > 0) {
-            const merged = [...missingItems, ...parsed];
-            return merged;
-          }
-          return parsed;
+          return [...missingItems, ...updatedParsed];
         }
       } catch (e) {
         console.error('Failed to parse saved CMS items:', e);

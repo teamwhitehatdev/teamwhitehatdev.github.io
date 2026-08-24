@@ -1,8 +1,9 @@
-import { COMPREHENSIVE_EDUCATIONAL_ITEMS } from '../data/comprehensiveEducationalData';
+import { COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS } from '../data/comprehensiveEducationalData';
 import { INITIAL_AI_ITEMS } from '../data/initialAIData';
 import { CMSItem } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
+  ...COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS,
   ...COMPREHENSIVE_EDUCATIONAL_ITEMS,
   ...INITIAL_AI_ITEMS,
   // =========================================================================
