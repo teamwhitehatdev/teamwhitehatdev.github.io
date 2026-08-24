@@ -429,23 +429,41 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
-    setCmsItems(prev => [newItem, ...prev]);
+    setCmsItems(prev => {
+      const updated = [newItem, ...prev];
+      try {
+        localStorage.setItem('wh_cms_items', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
   };
 
   const updateCMSItem = (id: string, updates: Partial<CMSItem>) => {
-    setCmsItems(prev => prev.map(item => {
-      if (item.id === id) {
-        const updated = { ...item, ...updates, updatedAt: new Date().toISOString() };
-        if (updates.pageOwner) updated.page = updates.pageOwner;
-        if (updates.homeFeatured !== undefined) updated.featured = updates.homeFeatured;
-        return updated;
-      }
-      return item;
-    }));
+    setCmsItems(prev => {
+      const updated = prev.map(item => {
+        if (item.id === id) {
+          const u = { ...item, ...updates, updatedAt: new Date().toISOString() };
+          if (updates.pageOwner) u.page = updates.pageOwner;
+          if (updates.homeFeatured !== undefined) u.featured = updates.homeFeatured;
+          return u;
+        }
+        return item;
+      });
+      try {
+        localStorage.setItem('wh_cms_items', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
   };
 
   const deleteCMSItem = (id: string) => {
-    setCmsItems(prev => prev.filter(item => item.id !== id));
+    setCmsItems(prev => {
+      const updated = prev.filter(item => item.id !== id);
+      try {
+        localStorage.setItem('wh_cms_items', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
   };
 
   const toggleCMSItemVisibility = (id: string) => {
@@ -548,8 +566,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // EXPLICIT HOME FEATURED PROMOTION QUERY LOGIC
   const getHomeFeaturedCMSItems = useCallback(() => {
     return cmsItems.filter(item => {
-      if (!item.visible || item.status !== 'PUBLISHED') return false;
-      return item.homeFeatured === true || item.featured === true;
+      if (item.visible === false) return false;
+      if (item.status && item.status !== 'PUBLISHED') return false;
+      return item.homeFeatured === true || item.featured === true || item.pageOwner === 'home' || item.page === 'home';
     }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
   }, [cmsItems]);
 

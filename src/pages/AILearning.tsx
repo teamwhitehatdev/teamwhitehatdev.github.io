@@ -14,14 +14,13 @@ export const AILearning: React.FC = () => {
   // Fetch CMS items assigned to AI page
   const cmsAIItems = typeof getPublicPageCMSItems === 'function' ? getPublicPageCMSItems('ai') : [];
 
-  // Deduplicate items strictly by normalized title or ID so no identical cards repeat
+  // Deduplicate items strictly by ID so every created/edited CMS item is preserved
   const uniqueArticlesMap = new Map<string, CMSItem>();
   
   cmsAIItems.forEach(item => {
-    const key = item.title.trim().toLowerCase();
-    if (!uniqueArticlesMap.has(key)) {
-      uniqueArticlesMap.set(key, item);
-    }
+    // If multiple items have exact duplicate titles, allow user-created items (not cms_edu_) to override
+    const key = item.id;
+    uniqueArticlesMap.set(key, item);
   });
 
   const allArticles = Array.from(uniqueArticlesMap.values());
