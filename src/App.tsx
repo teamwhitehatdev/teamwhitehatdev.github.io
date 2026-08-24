@@ -1,4 +1,4 @@
-// BUILD TIMESTAMP: 1787553723
+// BUILD TIMESTAMP: 1787556105
 // TIMESTAMP: 1787390921
 // LAST BUILD TIMESTAMP: 1787390148
 import React, { useState, useEffect } from 'react';
@@ -11,6 +11,7 @@ import { About } from './pages/About';
 import { WebHosting } from './pages/WebHosting';
 import { Showcase } from './pages/Showcase';
 import { Services } from './pages/Services';
+import { AILearning } from './pages/AILearning';
 import { AffiliateGuide } from './pages/AffiliateGuide';
 import { Admin } from './pages/Admin';
 import { ConsultationModal } from './components/ConsultationModal';

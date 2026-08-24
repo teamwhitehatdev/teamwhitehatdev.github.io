@@ -86,7 +86,7 @@ export interface VisitorLog {
 }
 
 // CMS BACKEND EDUCATIONAL TYPES
-export type CMSPageOwnerType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide';
+export type CMSPageOwnerType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide' | 'ai' | 'home';
 export type CMSContentType = 'Tutorial' | 'Guide' | 'Article' | 'Resource' | 'Service' | 'Showcase' | 'Affiliate' | 'Discussion';
 export type CMSPageType = CMSPageOwnerType | 'home' | 'va-hub' | 'freelancing' | 'affiliate-learning';
 export type CMSStatusType = 'DRAFT' | 'PUBLISHED' | 'SCHEDULED';
@@ -126,7 +126,7 @@ export interface CMSItem {
 }
 
 // CMS PROMOTIONAL & ADVERTISEMENTS TYPES (PARTNER DEALS & PROMO)
-export type PromoPlacementType = 'partner-deals' | 'promo';
+export type PromoPlacementType = 'partner-deals' | 'promo' | 'showcase-ad' | 'ai-ad';
 
 export interface PromoItem {
   id: string;
@@ -148,4 +148,18 @@ export interface PromoItem {
   disclosureNote?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+// GLOBAL SECTION / DIVISION POSITION MANAGER TYPES
+export type SectionPositionType = 'TOP' | 'UPPER' | 'UPPER-MIDDLE' | 'MIDDLE' | 'LOWER-MIDDLE' | 'LOWER' | 'BOTTOM';
+
+export interface SectionConfig {
+  id: string;
+  page: string; // 'home' | 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide' | 'ai'
+  title: string;
+  description?: string;
+  position: SectionPositionType;
+  sortOrder: number;
+  visible: boolean;
+  status: CMSStatusType;
 }

@@ -1,6 +1,6 @@
 import { useApp } from '../context/AppContext';
 import React, { useState } from 'react';
-import { ExternalLink, Terminal, Shield, Laptop, ShoppingBag, Sparkles, DollarSign, Award, ArrowRight } from 'lucide-react';
+import { ExternalLink, Terminal, Shield, Laptop, ShoppingBag, Sparkles, DollarSign, Award, ArrowRight, Tag, Image as ImageIcon } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 
 export const Showcase: React.FC = () => {
@@ -9,244 +9,255 @@ export const Showcase: React.FC = () => {
   const PATREON_POST_LINK = "https://www.patreon.com/FuturisticSoftwares/posts/futuristic-gui-166644782";
   const PATREON_CREATOR_LINK = "https://www.patreon.com/cw/FuturisticSoftwares";
 
-  const [activeTab, setActiveTab] = useState<'all' | 'gui' | 'futuristic' | 'mobile' | 'web'>('all');
-  const { getPublicPageCMSItems } = useApp();
-  const cmsProjects = getPublicPageCMSItems('showcase');
+  const [activeCategory, setActiveCategory] = useState<string>('ALL PROJECTS');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
+  const { getPublicPageCMSItems, getPublicPromoItems } = useApp();
+
+  // Fetch published CMS showcase items & showcase ads
+  const cmsProjects = getPublicPageCMSItems('showcase');
+  const showcaseAds = getPublicPromoItems('showcase-ad');
+  const partnerDeals = getPublicPromoItems('partner-deals');
+
+  const categories = [
+    'ALL PROJECTS',
+    'WEB DEVELOPMENT',
+    'APPLICATION DEVELOPMENT',
+    'MOBILE APPLICATIONS',
+    'SOFTWARE',
+    'PYTHON PROJECTS',
+    'AUTOMATION',
+    'AI & AI AUTOMATION',
+    'CYBERSECURITY',
+    'NETWORKING',
+    'VIRTUAL ASSISTANT TOOLS',
+    'GRAPHIC DESIGN',
+    'DIGITAL PRODUCTS',
+    'CLIENT PROJECTS'
+  ];
+
+  const defaultProjects = [
+    {
+      id: 'net-gui-1',
+      title: 'NETWORK AND DATA INFORMATIONS GUI TOOLS',
+      category: 'SOFTWARE',
+      isFuturistic: true,
+      desc: 'High-performance desktop & web network diagnostic GUI suite featuring live telemetry monitoring, IP analysis, and security tools.',
+      img: './media_1786675376512.jpg',
+      gumroadUrl: GUI_TOOL_LINK,
+      patreonUrl: PATREON_POST_LINK,
+      earnings: '$1,200+ REVENUE',
+      tags: ['GUI Suite', 'Networking', 'Security']
+    },
+    {
+      id: 'futuristic-gui-2',
+      title: 'FUTURISTIC SOFTWARE GRAPHICAL INTERFACE',
+      category: 'APPLICATION DEVELOPMENT',
+      isFuturistic: true,
+      desc: 'Cyberpunk HUD interface design system built for web applications, data dashboards, and autonomous AI agents.',
+      img: './media_1786675549040.jpg',
+      gumroadUrl: GUMROAD_LINK,
+      patreonUrl: PATREON_CREATOR_LINK,
+      earnings: '$850+ REVENUE',
+      tags: ['Cyber UI', 'React', 'TypeScript']
+    },
+    {
+      id: 'cyber-va-3',
+      title: 'EXECUTIVE VA AUTOMATION PLATFORM',
+      category: 'AUTOMATION',
+      isFuturistic: false,
+      desc: 'Automated executive workflow tool managing client inquiries, calendar sync, and automated reporting.',
+      img: './media_1786675376512.jpg',
+      gumroadUrl: GUMROAD_LINK,
+      patreonUrl: PATREON_CREATOR_LINK,
+      earnings: 'ACTIVE CLIENT PROJ',
+      tags: ['Virtual Assistant', 'Automation', 'Python']
+    }
+  ];
+
+  // Map CMS Items to Showcase format
   const formattedCMSProjects = cmsProjects.map(item => ({
     id: item.id,
     title: item.title,
-    category: item.category.toLowerCase().includes('gui') ? 'gui' : item.category.toLowerCase().includes('mobile') ? 'mobile' : 'web',
+    category: (item.category || 'WEB DEVELOPMENT').toUpperCase(),
     isFuturistic: true,
     desc: item.description,
     img: item.mainImage || './media_1786675376512.jpg',
     gumroadUrl: item.url || GUMROAD_LINK,
     patreonUrl: PATREON_CREATOR_LINK,
-    earnings: item.metrics || 'CMS FEATURED PROJECT',
-    tags: [item.category, 'CMS Managed']
+    earnings: item.metrics || item.badge || 'CMS FEATURED',
+    tags: [item.category || 'CMS Item', item.badge || 'Featured']
   }));
 
-  const projects = [
-    {
-      id: 'net-gui-1',
-      title: 'NETWORK AND DATA INFORMATIONS - GUI TOOLS',
-      category: 'gui',
-      isFuturistic: true,
-      desc: 'Enterprise GUI desktop software suite for network telemetry monitoring, bandwidth diagnostics, packet inspection, and system data analysis.',
-      img: './media_1786675376512.jpg',
-      gumroadUrl: GUI_TOOL_LINK,
-      patreonUrl: PATREON_POST_LINK,
-      earnings: 'GENERATED $12,450+ ON GUMROAD & PATREON',
-      tags: ['Desktop GUI', 'Network Analytics', 'Python/Tkinter', 'Enterprise']
-    },
-    {
-      id: 'cyber-sentinel-2',
-      title: 'WHITEHAT SENTINEL FIREWALL ENGINE',
-      category: 'futuristic',
-      isFuturistic: true,
-      desc: 'Autonomous cybersecurity firewall engine performing AES-256 threat packet filtering, IP rate-limiting, and intruder detection.',
-      img: './network_gui_tool.png',
-      gumroadUrl: GUMROAD_LINK,
-      patreonUrl: PATREON_CREATOR_LINK,
-      earnings: 'TOP CREATOR ASSET ON DIGITAL STORES',
-      tags: ['Security', 'AES-256 Firewall', 'Threat Protection']
-    },
-    {
-      id: 'va-task-3',
-      title: 'VA TASK ACCELERATOR & CLIENT CRM',
-      category: 'web',
-      isFuturistic: false,
-      desc: 'Full-stack React dashboard designed for Virtual Assistants to manage client retainers, track task deadlines, and automate invoicing.',
-      img: './media_1786193306890.png',
-      gumroadUrl: GUMROAD_LINK,
-      patreonUrl: PATREON_CREATOR_LINK,
-      earnings: 'HIGH-CONVERTING CLIENT TOOLKIT',
-      tags: ['React', 'TypeScript', 'CRM Dashboard']
-    }
-  ];
+  const allProjects = [...formattedCMSProjects, ...defaultProjects];
 
-  const filteredProjects = activeTab === 'all' 
-    ? projects 
-    : activeTab === 'futuristic' 
-      ? projects.filter(p => p.isFuturistic)
-      : projects.filter(p => p.category === activeTab);
+  const filteredProjects = allProjects.filter(p => {
+    if (activeCategory !== 'ALL PROJECTS') {
+      const pCat = p.category.toUpperCase();
+      if (!pCat.includes(activeCategory.replace(/S$/, '')) && activeCategory !== 'ALL PROJECTS') {
+        // Soft match check
+        if (activeCategory === 'WEB DEVELOPMENT' && !pCat.includes('WEB')) return false;
+        if (activeCategory === 'MOBILE APPLICATIONS' && !pCat.includes('MOBILE')) return false;
+        if (activeCategory === 'SOFTWARE' && !pCat.includes('SOFT') && !pCat.includes('GUI')) return false;
+        if (activeCategory === 'AUTOMATION' && !pCat.includes('AUTO') && !pCat.includes('VA')) return false;
+      }
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      return p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+    }
+    return true;
+  });
 
   return (
-    <div className="space-y-10 font-mono max-w-7xl mx-auto pb-10">
-      
-      {/* HEADER HERO */}
-      <div className="bg-gradient-to-r from-gray-950 via-black to-purple-950/80 border border-purple-500/40 rounded-3xl p-6 sm:p-10 space-y-6 shadow-2xl">
-        <div className="inline-flex items-center space-x-2 bg-purple-500/20 border border-purple-500/40 text-purple-300 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
-          <Sparkles className="w-4 h-4 text-pink-400 animate-pulse" />
-          <span>FUTURISTIC SOFTWARES &amp; COMPUTER APPLICATIONS SHOWCASE</span>
+    <div className="space-y-12 max-w-6xl mx-auto px-4 py-6 font-mono">
+
+      {/* PAGE HEADLINE */}
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 rounded-full text-xs text-cyan-300">
+          <Sparkles className="w-4 h-4 text-lime-400" />
+          <span>WHITE HAT DEV PORTFOLIO &amp; PRODUCT SHOWCASE</span>
         </div>
-
-        <h1 className="text-3xl sm:text-5xl font-black font-rajdhani text-white uppercase tracking-wide leading-tight">
-          EXPLORE OUR <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400">HIGH-PROFIT COMPUTER APPLICATIONS</span>
+        <h1 className="text-3xl md:text-5xl font-black font-rajdhani uppercase text-white tracking-wider">
+          PROJECTS, APPS &amp; DIGITAL ASSETS
         </h1>
-
-        <p className="text-sm sm:text-base text-gray-200 leading-relaxed font-sans max-w-4xl">
-          Discover how our <strong>Futuristic Softwares</strong> desktop applications generate significant revenue on global digital marketplaces like <strong>Gumroad</strong> and <strong>Patreon</strong>. Start selling your own digital tools, software scripts, and creator assets today!
+        <p className="text-xs md:text-sm text-gray-300 font-sans max-w-3xl mx-auto leading-relaxed">
+          Explore our portfolio of custom web applications, mobile tools, cybersecurity software, and commercial digital products managed dynamically via CMS.
         </p>
+      </div>
 
-        {/* PATREON & GUMROAD DISCOVERY CALLOUT */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-          
-          {/* PATREON BANNER */}
-          <a
-            href={PATREON_CREATOR_LINK}
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            className="bg-gradient-to-r from-red-950/80 via-black to-orange-950/80 border-2 border-orange-500/60 p-4 rounded-2xl flex items-center space-x-4 hover:border-orange-400 transition-all shadow-xl group"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-500/50 flex items-center justify-center text-orange-400 flex-shrink-0 group-hover:scale-110 transition-transform">
-              <span className="font-black text-xl font-rajdhani">P</span>
-            </div>
-            <div>
-              <span className="text-[10px] font-extrabold text-orange-400 uppercase tracking-widest block">OFFICIAL PATREON COMMUNITY</span>
-              <span className="text-xs font-bold text-white font-rajdhani block">JOIN FUTURISTIC SOFTWARES ON PATREON &rarr;</span>
-            </div>
-          </a>
-
-          {/* GUMROAD BANNER */}
-          <a
-            href={GUMROAD_LINK}
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            className="bg-gradient-to-r from-pink-950/80 via-black to-purple-950/80 border-2 border-pink-500/60 p-4 rounded-2xl flex items-center space-x-4 hover:border-pink-400 transition-all shadow-xl group"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-pink-500/20 border border-pink-500/50 flex items-center justify-center text-pink-400 flex-shrink-0 group-hover:scale-110 transition-transform">
-              <ShoppingBag className="w-6 h-6 text-pink-400" />
-            </div>
-            <div>
-              <span className="text-[10px] font-extrabold text-pink-400 uppercase tracking-widest block">OFFICIAL GUMROAD STORE</span>
-              <span className="text-xs font-bold text-white font-rajdhani block">START SELLING ON GUMROAD TODAY &rarr;</span>
-            </div>
-          </a>
-
+      {/* CATEGORY SELECTOR & FILTER SYSTEM */}
+      <div className="space-y-3">
+        <div className="flex flex-wrap gap-2 justify-center text-xs">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-3 py-1.5 rounded-xl font-bold uppercase transition-all cursor-pointer ${
+                activeCategory === cat
+                  ? 'bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold shadow-lg scale-105'
+                  : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* DEDICATED COLUMN: FUTURISTIC SOFTWARES (SHOWCASING REVENUE-GENERATING PROJECTS) */}
-      <HUDPanel title="🚀 DEDICATED COLUMN: FUTURISTIC SOFTWARES & DIGITAL PRODUCT SUCCESS STORIES">
-        <div className="p-6 space-y-6">
-          
-          <div className="bg-gradient-to-r from-gray-900 via-black to-purple-950/90 border-2 border-cyan-500/50 p-6 rounded-2xl space-y-4">
-            <div className="flex items-center space-x-2 text-lime-400 font-bold text-xs">
-              <DollarSign className="w-5 h-5 text-lime-400 flex-shrink-0" />
-              <span>HOW OUR SOFTWARE APPLICATIONS GENERATE HIGH REVENUE ON GUMROAD &amp; PATREON</span>
+      {/* PROJECTS GRID */}
+      <HUDPanel title={`🚀 FEATURED SHOWCASE PROJECTS (${filteredProjects.length})`}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+          {filteredProjects.length === 0 ? (
+            <div className="col-span-full py-12 text-center text-gray-500">
+              No projects found matching category "{activeCategory}".
             </div>
-
-            <p className="text-xs text-gray-200 font-sans leading-relaxed">
-              Our flagship software project, <strong className="text-cyan-300">NETWORK AND DATA INFORMATIONS - GUI TOOLS</strong>, has generated thousands of dollars in profit by offering automated diagnostic desktop software directly to global clients via <strong>Gumroad</strong> and <strong>Patreon</strong>.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              <a
-                href={GUI_TOOL_LINK}
-                target="_blank"
-                rel="sponsored noopener noreferrer"
-                className="px-5 py-2.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-black font-rajdhani text-xs uppercase rounded-xl hover:opacity-95 transition-all shadow-md flex items-center space-x-1.5"
+          ) : (
+            filteredProjects.map((p) => (
+              <div
+                key={p.id}
+                className="bg-black/90 border border-cyan-500/30 hover:border-cyan-400 rounded-2xl overflow-hidden flex flex-col justify-between space-y-4 transition-all hover:scale-[1.02] shadow-xl group"
               >
-                <ShoppingBag className="w-4 h-4" />
-                <span>BUY ON GUMROAD ($14.99)</span>
-              </a>
-
-              <a
-                href={PATREON_POST_LINK}
-                target="_blank"
-                rel="sponsored noopener noreferrer"
-                className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-black font-rajdhani text-xs uppercase rounded-xl hover:opacity-95 transition-all shadow-md flex items-center space-x-1.5"
-              >
-                <Award className="w-4 h-4" />
-                <span>VIEW PATREON POST &rarr;</span>
-              </a>
-            </div>
-          </div>
-
-          {/* FILTER NAVIGATION TABS */}
-          <div className="flex flex-wrap gap-2 pt-2">
-            {[
-              { id: 'all', label: 'ALL PROJECTS' },
-              { id: 'futuristic', label: '🚀 FUTURISTIC SOFTWARES' },
-              { id: 'gui', label: '💻 COMPUTER APPLICATIONS' },
-              { id: 'web', label: '🌐 WEB APPLICATIONS' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all ${
-                  activeTab === tab.id
-                    ? 'bg-gradient-to-r from-cyan-400 to-lime-400 text-black shadow-lg'
-                    : 'bg-gray-900 border border-gray-800 text-gray-300 hover:text-white hover:border-gray-700'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* PROJECTS GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((p) => (
-              <div key={p.id} className="bg-gradient-to-b from-gray-900 via-black to-cyan-950/40 border-2 border-cyan-500/40 rounded-2xl p-4 space-y-4 shadow-xl flex flex-col justify-between hover:border-cyan-400 transition-all">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-extrabold text-lime-400 uppercase tracking-widest flex items-center space-x-1">
-                      <Terminal className="w-3.5 h-3.5" />
-                      <span>{p.earnings}</span>
-                    </span>
+                {/* PROJECT THUMBNAIL WITH FALLBACK IMAGE PROTECTION */}
+                <div className="relative h-48 bg-slate-950 overflow-hidden border-b border-gray-800">
+                  <img
+                    src={p.img}
+                    alt={p.title}
+                    onError={(e) => {
+                      // Safe fallback if image fails to load
+                      (e.target as HTMLImageElement).src = './media_1786675376512.jpg';
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 bg-black/80 backdrop-blur-md border border-cyan-500/50 rounded-lg text-[10px] font-bold text-cyan-300 uppercase">
+                    {p.category}
                   </div>
-
-                  <div className="rounded-xl overflow-hidden border border-gray-800 relative group">
-                    <img src={p.img} alt={p.title} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className="absolute top-3 right-3 px-2.5 py-1 bg-lime-500/20 backdrop-blur-md border border-lime-400/50 rounded-lg text-[10px] font-bold text-lime-300">
+                    {p.earnings}
                   </div>
+                </div>
 
-                  <h3 className="text-sm font-black font-rajdhani text-white uppercase">
+                {/* CONTENT */}
+                <div className="px-5 space-y-3">
+                  <h3 className="text-base font-bold font-rajdhani text-white uppercase group-hover:text-cyan-400 transition-colors leading-snug">
                     {p.title}
                   </h3>
-
-                  <p className="text-xs text-gray-300 font-sans leading-relaxed">
+                  <p className="text-xs text-gray-300 font-sans line-clamp-3 leading-relaxed">
                     {p.desc}
                   </p>
 
                   <div className="flex flex-wrap gap-1.5 pt-1">
-                    {p.tags.map((t, idx) => (
-                      <span key={idx} className="bg-gray-900 border border-gray-800 text-cyan-300 text-[9px] px-2 py-0.5 rounded font-mono">
+                    {p.tags.map((t, i) => (
+                      <span key={i} className="text-[9px] font-bold bg-gray-900 text-gray-400 px-2 py-0.5 rounded border border-gray-800">
                         #{t}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="space-y-2 pt-2">
+                {/* ACTION BUTTONS */}
+                <div className="p-5 pt-0 space-y-2">
                   <a
                     href={p.gumroadUrl}
                     target="_blank"
-                    rel="sponsored noopener noreferrer"
-                    className="w-full py-2.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black font-rajdhani text-xs uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 bg-gradient-to-r from-cyan-400 to-lime-400 text-black font-extrabold text-xs rounded-xl uppercase hover:brightness-110 transition-all flex items-center justify-center space-x-1.5 shadow-md"
                   >
-                    <span>BUY / REGISTER ON GUMROAD</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-
-                  <a
-                    href={p.patreonUrl}
-                    target="_blank"
-                    rel="sponsored noopener noreferrer"
-                    className="w-full py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white font-black font-rajdhani text-[11px] uppercase rounded-xl text-center shadow-lg hover:opacity-95 transition-all flex items-center justify-center space-x-1.5"
-                  >
-                    <span>VIEW ON PATREON</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>PURCHASE / EXPLORE PROJECT &rarr;</span>
                   </a>
                 </div>
-
               </div>
-            ))}
-          </div>
-
+            ))
+          )}
         </div>
       </HUDPanel>
+
+      {/* ========================================================================= */}
+      {/* SHOWCASE ADVERTISEMENT DIVISION (WHITE BACKGROUND AS REQUESTED) */}
+      {/* ========================================================================= */}
+      <div className="bg-white text-slate-900 border-2 border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl font-sans">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+          <div>
+            <span className="text-xs font-mono font-bold text-indigo-600 uppercase tracking-widest block">
+              SPONSORED PROMOTIONS &amp; PARTNER DEALS
+            </span>
+            <h3 className="text-xl md:text-2xl font-black font-rajdhani uppercase text-slate-900">
+              📢 RECOMMENDED SOFTWARE, TOOLS &amp; OFFERS
+            </h3>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {(showcaseAds.length > 0 ? showcaseAds : partnerDeals).map((ad) => (
+            <div
+              key={ad.id}
+              className="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="space-y-2">
+                <span className="px-2.5 py-1 bg-indigo-100 text-indigo-700 font-mono font-bold text-[10px] rounded-lg uppercase">
+                  {ad.badge || 'PARTNER DEAL'}
+                </span>
+                <h4 className="text-lg font-bold font-rajdhani text-slate-900 uppercase">
+                  {ad.title}
+                </h4>
+                <p className="text-xs text-slate-600 font-sans leading-relaxed">
+                  {ad.description}
+                </p>
+              </div>
+
+              <a
+                href={ad.destinationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-mono font-bold text-xs rounded-xl uppercase text-center transition-all shadow cursor-pointer block"
+              >
+                {ad.buttonText || 'CLAIM EXCLUSIVE OFFER →'}
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
 
     </div>
   );

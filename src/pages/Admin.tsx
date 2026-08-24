@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { HUDPanel } from '../components/HUDPanel';
-import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, Layers, Inbox, Activity, Sparkles, X, Filter, Search, Globe, Laptop, Smartphone, Tablet, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, BarChart2, PieChart } from 'lucide-react';
+import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, Layers, Inbox, Activity, Sparkles, X, Filter, Search, Globe, Laptop, Smartphone, Tablet, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, BarChart2, PieChart, Cpu, BookOpen, Layers3 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { Service, Project, CMSItem, CMSPageType, CMSStatusType, ContactInquiry, VisitorLog, HireVaInquiry, HireVaStatusType, PromoItem, PromoPlacementType, CMSPageOwnerType, CMSContentType } from '../types';
 
@@ -22,12 +22,8 @@ export const Admin: React.FC = () => {
   const [pinInput, setPinInput] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     try {
-      const hash = window.location.hash || '';
-      const search = window.location.search || '';
-      const isPinInUrl = hash.includes('pin=anonymousphilippines') || search.includes('pin=anonymousphilippines');
       const isSessionAuth = sessionStorage.getItem('wh_admin_auth') === 'true';
-      if (isPinInUrl || isSessionAuth) {
-        sessionStorage.setItem('wh_admin_auth', 'true');
+      if (isSessionAuth) {
         return true;
       }
     } catch (e) {
@@ -54,7 +50,7 @@ export const Admin: React.FC = () => {
   const [logsCurrentPage, setLogsCurrentPage] = useState(1);
   const [logsPerPage, setLogsPerPage] = useState(100);
 
-  // CMS ITEM MODAL FORM STATE (ALL 11 FIELDS)
+  // CMS ITEM MODAL FORM STATE (ALL 11 FIELDS + ADVANCED PROJECT & AI FIELDS)
   const [editingCMSItem, setEditingCMSItem] = useState<CMSItem | null>(null);
   const [isCreatingCMSItem, setIsCreatingCMSItem] = useState(false);
   const [cmsForm, setCmsForm] = useState<{
@@ -67,6 +63,7 @@ export const Admin: React.FC = () => {
     visible: boolean;
     publishDate: string;
     description: string;
+    fullContent: string;
     mainImage: string;
     galleryImages: string[];
     url: string;
@@ -85,6 +82,7 @@ export const Admin: React.FC = () => {
     visible: true,
     publishDate: '',
     description: '',
+    fullContent: '',
     mainImage: '',
     galleryImages: [],
     url: '',
@@ -138,12 +136,12 @@ export const Admin: React.FC = () => {
     const inputClean = pinInput.trim().toLowerCase();
     const validPins = [DEFAULT_PIN.toLowerCase(), 'anonymousphilippines', 'admin', 'admin123', 'whitehatdev', 'teamwhitehatdev'];
     
-    if (validPins.includes(inputClean) || inputClean.length === 0) {
+    if (validPins.includes(inputClean)) {
       setIsAuthenticated(true);
       sessionStorage.setItem('wh_admin_auth', 'true');
       setAuthError('');
     } else {
-      setAuthError('INVALID ACCESS SECURITY KEY PIN. Enter: anonymousphilippines');
+      setAuthError('INVALID SECURITY ACCESS KEY PIN. ACCESS DENIED.');
     }
   };
 
@@ -180,6 +178,7 @@ export const Admin: React.FC = () => {
       visible: true,
       publishDate: '',
       description: '',
+      fullContent: '',
       mainImage: '',
       galleryImages: [],
       url: '',
@@ -205,6 +204,7 @@ export const Admin: React.FC = () => {
       visible: item.visible,
       publishDate: item.publishDate || '',
       description: item.description,
+      fullContent: item.fullContent || '',
       mainImage: item.mainImage || (item as any).imageUrl || '',
       galleryImages: item.galleryImages || [],
       url: item.url || (item as any).destinationUrl || '',
@@ -405,7 +405,7 @@ export const Admin: React.FC = () => {
   // UNAUTHENTICATED LOGIN SCREEN
   if (!isAuthenticated) {
     return (
-      <div className="max-w-md mx-auto my-8 p-6 bg-slate-900 border-2 border-cyan-400 rounded-3xl shadow-2xl space-y-6 text-center font-mono relative z-50">
+      <div className="max-w-md mx-auto my-12 p-6 bg-slate-900 border-2 border-cyan-500/50 rounded-3xl shadow-2xl space-y-6 text-center font-mono relative z-50">
         <div className="text-center space-y-2">
           <div className="w-16 h-16 rounded-2xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center mx-auto text-cyan-400 shadow-lg">
             <Lock className="w-8 h-8" />
@@ -414,53 +414,34 @@ export const Admin: React.FC = () => {
             PRIVATE CMS BACKEND CONTROL PANEL
           </h2>
           <p className="text-xs text-gray-300 font-sans">
-            Manage content across Showcase, Services, Web Hosting, About, Affiliate Guide, and Promotions.
+            Authentication Required. Enter your administrator security key PIN below.
           </p>
         </div>
 
-        {/* 🔑 1-CLICK INSTANT LOGIN BUTTON */}
-        <div className="p-4 bg-emerald-950/60 border-2 border-emerald-400/80 rounded-2xl space-y-2">
-          <span className="text-[11px] font-bold text-emerald-300 block uppercase font-mono">
-            ⚡ INSTANT ACCESS MODE ENABLED
-          </span>
-          <button
-            type="button"
-            onClick={() => {
-              sessionStorage.setItem('wh_admin_auth', 'true');
-              setIsAuthenticated(true);
-              setAuthError('');
-            }}
-            className="w-full py-3.5 bg-gradient-to-r from-emerald-400 via-teal-400 to-lime-400 text-slate-950 font-black font-orbitron text-xs rounded-xl uppercase hover:scale-105 transition-all shadow-xl cursor-pointer flex items-center justify-center space-x-2"
-          >
-            <Key className="w-4 h-4" />
-            <span>🔑 1-CLICK INSTANT CMS LOGIN</span>
-          </button>
-        </div>
-
-        {/* MANUAL PIN INPUT FORM */}
+        {/* MANUAL PIN INPUT FORM (SECURE PASSWORD FIELD) */}
         <form onSubmit={handleLogin} className="space-y-4 text-left border-t border-slate-800 pt-4">
           <div>
-            <label className="text-xs text-cyan-300 block pb-1 font-bold">SECURITY ACCESS KEY PIN:</label>
+            <label className="text-xs text-cyan-300 block pb-1 font-bold uppercase tracking-wider">SECURITY ACCESS KEY PIN:</label>
             <input
-              type="text"
+              type="password"
               value={pinInput}
               onChange={(e) => setPinInput(e.target.value)}
-              placeholder="anonymousphilippines"
-              className="w-full px-4 py-3 bg-black border border-cyan-500/60 rounded-xl text-white font-mono text-sm focus:border-cyan-400 focus:outline-none select-text cursor-text"
+              placeholder="••••••••••••"
+              className="w-full px-4 py-3 bg-black border border-cyan-500/60 rounded-xl text-white font-mono text-sm focus:border-cyan-400 focus:outline-none"
+              autoFocus
             />
-            <span className="text-[10px] text-slate-400 block mt-1">Default PIN: anonymousphilippines</span>
           </div>
 
           {authError && (
             <div className="p-3 bg-red-950/80 border border-red-500/60 rounded-xl text-red-300 text-xs flex items-center space-x-2">
-              <AlertTriangle className="w-4 h-4 shrink-0" />
+              <AlertTriangle className="w-4 h-4 shrink-0 text-red-400" />
               <span>{authError}</span>
             </div>
           )}
 
           <button
             type="submit"
-            className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold font-orbitron text-xs rounded-xl uppercase transition-all shadow-lg cursor-pointer"
+            className="w-full py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold font-orbitron text-xs rounded-xl uppercase transition-all shadow-lg cursor-pointer"
           >
             AUTHENTICATE &amp; OPEN CMS PANEL &rarr;
           </button>
@@ -492,7 +473,7 @@ export const Admin: React.FC = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={exportCMSDatabase}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/40 text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5"
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/40 text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>EXPORT CMS JSON</span>
@@ -500,7 +481,7 @@ export const Admin: React.FC = () => {
 
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-red-950/60 hover:bg-red-900 text-red-400 border border-red-500/40 text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5"
+            className="px-4 py-2 bg-red-950/60 hover:bg-red-900 text-red-400 border border-red-500/40 text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer"
           >
             <Lock className="w-3.5 h-3.5" />
             <span>LOCK BACKEND</span>
@@ -588,7 +569,7 @@ export const Admin: React.FC = () => {
       {/* ========================================================================= */}
       {activeTab === 'cms' && (
         <div className="space-y-6">
-          <HUDPanel title="🎛️ CMS BACKEND CONTROL CENTER (SHOWCASE, SERVICES, HOSTING, ABOUT, AFFILIATE GUIDE)">
+          <HUDPanel title="🎛️ CMS BACKEND CONTROL CENTER (SHOWCASE, SERVICES, HOSTING, ABOUT, AFFILIATE GUIDE, AI)">
             <div className="p-6 space-y-6">
 
               {/* BAR & FILTERS */}
@@ -602,11 +583,12 @@ export const Admin: React.FC = () => {
                       className="px-3 py-1.5 bg-black border border-cyan-500/40 rounded-xl text-white font-mono uppercase"
                     >
                       <option value="all">ALL DESTINATIONS</option>
-                      <option value="showcase">SHOWCASE</option>
-                      <option value="services">SERVICES</option>
-                      <option value="web-hosting">WEB HOSTING</option>
-                      <option value="about">ABOUT</option>
-                      <option value="affiliate-guide">AFFILIATE GUIDE</option>
+                      <option value="showcase">SHOWCASE (/#/showcase)</option>
+                      <option value="services">SERVICES (/#/services)</option>
+                      <option value="ai">AI LEARNING (/#/ai)</option>
+                      <option value="web-hosting">WEB HOSTING (/#/web-hosting)</option>
+                      <option value="about">ABOUT (/#/about)</option>
+                      <option value="affiliate-guide">AFFILIATE GUIDE (/#/affiliate-guide)</option>
                     </select>
                   </div>
 
@@ -641,7 +623,7 @@ export const Admin: React.FC = () => {
 
                 <button
                   onClick={() => handleOpenCreateCMS('showcase')}
-                  className="px-4 py-2 bg-gradient-to-r from-cyan-400 to-indigo-500 text-black font-extrabold text-xs uppercase rounded-xl hover:scale-105 transition-all shadow-lg flex items-center space-x-1.5 shrink-0"
+                  className="px-4 py-2 bg-gradient-to-r from-cyan-400 to-indigo-500 text-black font-extrabold text-xs uppercase rounded-xl hover:scale-105 transition-all shadow-lg flex items-center space-x-1.5 shrink-0 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>+ CREATE CONTENT ITEM</span>
@@ -665,7 +647,7 @@ export const Admin: React.FC = () => {
                 <table className="w-full text-left border-collapse text-xs font-mono">
                   <thead>
                     <tr className="bg-black text-cyan-400 border-b border-gray-800 uppercase">
-                      <th className="p-3 w-32">POSITION / ARRANGEMENT</th>
+                      <th className="p-3 w-32">POSITION / RANK</th>
                       <th className="p-3">TITLE &amp; TYPE</th>
                       <th className="p-3">PAGE OWNER</th>
                       <th className="p-3">HOME FEATURED</th>
@@ -808,6 +790,8 @@ export const Admin: React.FC = () => {
                     <option value="all">ALL PLACEMENTS</option>
                     <option value="partner-deals">PARTNER DEALS</option>
                     <option value="promo">PROMO</option>
+                    <option value="showcase-ad">SHOWCASE BOTTOM ADS</option>
+                    <option value="ai-ad">AI HUB ADS</option>
                   </select>
                 </div>
 
@@ -880,12 +864,8 @@ export const Admin: React.FC = () => {
                         <span className="text-[10px] text-purple-400 block">{item.promotionLabel || 'PROMO'}</span>
                       </td>
                       <td className="p-3">
-                        <span className={`px-2.5 py-1 rounded font-bold text-[10px] uppercase border ${
-                          item.placement === 'partner-deals'
-                            ? 'bg-cyan-500/20 text-cyan-300 border-cyan-400/40'
-                            : 'bg-yellow-500/20 text-yellow-300 border-yellow-400/40'
-                        }`}>
-                          {item.placement === 'partner-deals' ? 'PARTNER DEALS' : 'PROMO'}
+                        <span className="px-2.5 py-1 bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 rounded font-bold text-[10px] uppercase">
+                          {item.placement}
                         </span>
                       </td>
                       <td className="p-3 text-lime-400 font-bold">{item.badge || 'N/A'}</td>
@@ -1428,6 +1408,7 @@ export const Admin: React.FC = () => {
                   >
                     <option value="showcase">SHOWCASE (/#/showcase)</option>
                     <option value="services">SERVICES (/#/services)</option>
+                    <option value="ai">AI LEARNING (/#/ai)</option>
                     <option value="web-hosting">WEB HOSTING (/#/web-hosting)</option>
                     <option value="about">ABOUT (/#/about)</option>
                     <option value="affiliate-guide">AFFILIATE GUIDE (/#/affiliate-guide)</option>
@@ -1485,7 +1466,7 @@ export const Admin: React.FC = () => {
                     type="text"
                     value={cmsForm.category}
                     onChange={(e) => setCmsForm({ ...cmsForm, category: e.target.value })}
-                    placeholder="e.g. Web Development or AI Tools"
+                    placeholder="e.g. Web Development, AI Tools, Automation"
                     className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-mono"
                   />
                 </div>
@@ -1600,16 +1581,28 @@ export const Admin: React.FC = () => {
                 </div>
               </div>
 
-              {/* DESCRIPTION / FULL CONTENT COPY */}
+              {/* SHORT SUMMARY */}
               <div>
-                <label className="text-slate-300 font-mono block pb-1 font-bold">DESCRIPTION / FULL CONTENT COPY:</label>
+                <label className="text-slate-300 font-mono block pb-1 font-bold">SHORT SUMMARY / DESCRIPTION:</label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={cmsForm.description}
                   onChange={(e) => setCmsForm({ ...cmsForm, description: e.target.value })}
                   required
-                  placeholder="Enter content details or topic copy..."
+                  placeholder="Enter content summary..."
                   className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-sans"
+                />
+              </div>
+
+              {/* FULL RICH CONTENT / ARTICLE COPY */}
+              <div>
+                <label className="text-purple-300 font-mono block pb-1 font-bold">FULL ARTICLE / RICH TEXT COPY (OPTIONAL):</label>
+                <textarea
+                  rows={5}
+                  value={cmsForm.fullContent}
+                  onChange={(e) => setCmsForm({ ...cmsForm, fullContent: e.target.value })}
+                  placeholder="Enter detailed article text, step-by-step instructions, and markdown formatting..."
+                  className="w-full px-3 py-2 bg-black border border-purple-500/40 rounded-xl text-white font-sans"
                 />
               </div>
 
@@ -1666,6 +1659,8 @@ export const Admin: React.FC = () => {
                   >
                     <option value="partner-deals">PARTNER DEALS</option>
                     <option value="promo">PROMO</option>
+                    <option value="showcase-ad">SHOWCASE BOTTOM ADS</option>
+                    <option value="ai-ad">AI HUB ADS</option>
                   </select>
                 </div>
 

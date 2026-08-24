@@ -16,6 +16,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenConsultation }) => {
     { path: '/showcase', label: 'SHOWCASE' },
     { path: '/web-hosting', label: 'WEB HOSTING' },
     { path: '/services', label: 'SERVICES' },
+    { path: '/ai', label: '🤖 AI' },
     { path: '/about', label: 'ABOUT' },
     { path: '/affiliate-guide', label: '🎓 AFFILIATE MARKETER GUIDE', highlight: true }
   ];

@@ -1,6 +1,8 @@
+import { INITIAL_AI_ITEMS } from '../data/initialAIData';
 import { CMSItem } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
+  ...INITIAL_AI_ITEMS,
   // =========================================================================
   // 💼 SERVICES PAGE OWNER (PROMOTED TO HOME FEATURED TUTORIALS)
   // =========================================================================
