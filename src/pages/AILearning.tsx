@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { HUDPanel } from '../components/HUDPanel';
 import { CMSItem } from '../types';
-import { Cpu, Sparkles, CheckCircle2, ArrowRight, BookOpen, ShieldCheck, ExternalLink, Filter, Search, X } from 'lucide-react';
+import { Cpu, Sparkles, CheckCircle2, ArrowRight, BookOpen, ShieldCheck, ExternalLink, Filter, Search, X, Layers, Lightbulb, Share2, Tag, Bookmark } from 'lucide-react';
 
 export const AILearning: React.FC = () => {
   const { getPublicPageCMSItems, getPublicPromoItems } = useApp();
@@ -23,20 +22,24 @@ export const AILearning: React.FC = () => {
     'AI FOR VIRTUAL ASSISTANTS',
     'AI FOR FREELANCERS',
     'AI INFLUENCE',
-    'AI SAFETY'
+    'AI SAFETY',
+    'DIGITAL TRANSFORMATION'
   ];
 
   const filteredItems = aiItems.filter(item => {
     if (selectedCategory !== 'ALL') {
       const cat = (item.category || '').toUpperCase().trim();
-      if (cat !== selectedCategory) return false;
+      if (!cat.includes(selectedCategory.replace(/S$/, '')) && cat !== selectedCategory) {
+        return false;
+      }
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       return (
         item.title.toLowerCase().includes(q) ||
         item.description.toLowerCase().includes(q) ||
-        (item.fullContent && item.fullContent.toLowerCase().includes(q))
+        (item.fullContent && item.fullContent.toLowerCase().includes(q)) ||
+        (item.category && item.category.toLowerCase().includes(q))
       );
     }
     return true;
@@ -45,48 +48,52 @@ export const AILearning: React.FC = () => {
   return (
     <div className="space-y-10 max-w-6xl mx-auto px-4 py-6 font-mono">
 
-      {/* PAGE HEADER */}
+      {/* ========================================================================= */}
+      {/* 🚀 AI HUB HEADER */}
+      {/* ========================================================================= */}
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center space-x-2 bg-purple-500/10 border border-purple-500/30 px-3 py-1 rounded-full text-xs text-purple-300">
+        <div className="inline-flex items-center space-x-2 bg-purple-500/10 border border-purple-500/30 px-3.5 py-1 rounded-full text-xs text-purple-300 shadow-md">
           <Sparkles className="w-4 h-4 text-amber-400" />
-          <span>AI ERA • AUTOMATION &amp; FUTURE SKILLS LEARNING CENTER</span>
+          <span>AI ERA &bull; AUTOMATION &bull; VIRTUAL ASSISTANT &bull; FREELANCING KNOWLEDGE CENTER</span>
         </div>
         <h1 className="text-3xl md:text-5xl font-black font-rajdhani uppercase text-white tracking-wider">
           ARTIFICIAL INTELLIGENCE &amp; AUTOMATION HUB
         </h1>
         <p className="text-xs md:text-sm text-gray-300 font-sans max-w-3xl mx-auto leading-relaxed">
-          Master Artificial Intelligence, Generative AI tools, AI Automation workflows, and responsible AI practices designed for Virtual Assistants, Freelancers, and Digital Professionals.
+          Master Artificial Intelligence, Machine Learning, Cognitive AI Automation workflows, and practical AI skills for Virtual Assistants, Freelancers, and Digital Professionals.
         </p>
       </div>
 
-      {/* WHITE BACKGROUND DIVISION FOR RICH AI EDUCATIONAL CONTENT */}
+      {/* ========================================================================= */}
+      {/* 📖 WHITE BACKGROUND DIVISION FOR COMPREHENSIVE AI EDUCATIONAL CURRICULUM */}
+      {/* ========================================================================= */}
       <div className="bg-white text-slate-900 border-2 border-slate-200 rounded-3xl p-6 sm:p-10 space-y-8 shadow-2xl font-sans">
         
-        {/* DIVISION TITLE & SEARCH */}
+        {/* DIVISION TITLE & SEARCH BAR */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
             <span className="text-xs font-mono font-bold text-indigo-600 uppercase tracking-widest block">
               ACADEMIC &amp; TECHNICAL CURRICULUM
             </span>
             <h2 className="text-2xl md:text-3xl font-black font-rajdhani uppercase text-slate-900">
-              🧠 AI KNOWLEDGE MATRIX &amp; TUTORIALS
+              🧠 AI KNOWLEDGE MATRIX &amp; TUTORIALS ({filteredItems.length} TOPICS)
             </h2>
           </div>
 
           {/* SEARCH BAR */}
-          <div className="relative w-full md:w-72">
+          <div className="relative w-full md:w-80">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search AI topics, tools, automation..."
+              placeholder="Search AI topics, tools, workflows..."
               className="w-full pl-9 pr-4 py-2 bg-slate-100 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono"
             />
           </div>
         </div>
 
-        {/* CATEGORY PILLS */}
+        {/* CATEGORY FILTER PILLS */}
         <div className="flex flex-wrap gap-2 pt-1 font-mono text-xs">
           {categories.map((cat) => (
             <button
@@ -103,11 +110,11 @@ export const AILearning: React.FC = () => {
           ))}
         </div>
 
-        {/* AI ARTICLES GRID (WHITE BACKGROUND CARDS WITH CLEAN CONTRAST) */}
+        {/* AI ARTICLES GRID (CLEAN HIGH-CONTRAST WHITE THEME CARDS) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           {filteredItems.length === 0 ? (
-            <div className="col-span-full py-12 text-center text-slate-500 font-mono text-xs">
-              No AI educational articles match your selected filter or search query.
+            <div className="col-span-full py-16 text-center text-slate-500 font-mono text-xs">
+              No educational articles found matching your selected category or search filter.
             </div>
           ) : (
             filteredItems.map((item) => (
@@ -136,12 +143,13 @@ export const AILearning: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
+                <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
                   <button
                     onClick={() => setActiveArticle(item)}
                     className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-mono font-bold text-xs rounded-xl transition-all flex items-center space-x-1.5 shadow cursor-pointer"
                   >
-                    <span>{item.buttonText || 'READ FULL ARTICLE →'}</span>
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>READ COMPLETE GUIDE &rarr;</span>
                   </button>
 
                   {item.url && (
@@ -151,7 +159,7 @@ export const AILearning: React.FC = () => {
                       rel="noopener noreferrer"
                       className="text-xs font-mono text-indigo-600 hover:underline flex items-center space-x-1 font-bold"
                     >
-                      <span>EXTERNAL LINK</span>
+                      <span>EXTERNAL RESOURCE</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   )}
@@ -161,11 +169,11 @@ export const AILearning: React.FC = () => {
           )}
         </div>
 
-        {/* AI ADS / PROMOTIONS DIVISION AT BOTTOM OF WHITE SECTION */}
+        {/* PROMOTIONS & PARTNER TOOLS AT BOTTOM OF WHITE SECTION */}
         {aiAds.length > 0 && (
           <div className="mt-8 p-6 bg-slate-100 border border-slate-300 rounded-2xl space-y-4">
             <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider block">
-              PARTNER PROMOTIONS &amp; RECOMMENDED AI TOOLS
+              RECOMMENDED AI TOOLS &amp; PARTNER DEALS
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {aiAds.map((ad) => (
@@ -179,7 +187,7 @@ export const AILearning: React.FC = () => {
                     rel="noopener noreferrer"
                     className="inline-block mt-2 px-3 py-1.5 bg-indigo-600 text-white text-xs font-mono font-bold rounded-lg"
                   >
-                    {ad.buttonText || 'EXPLORE DEAL →'}
+                    {ad.buttonText || 'EXPLORE TOOL →'}
                   </a>
                 </div>
               ))}
@@ -189,18 +197,22 @@ export const AILearning: React.FC = () => {
 
       </div>
 
-      {/* TRANSPARENT AFFILIATE & DISCLOSURE BANNER AT BOTTOM */}
+      {/* ========================================================================= */}
+      {/* 💡 TRANSPARENT EDUCATIONAL & AFFILIATE DISCLOSURE */}
+      {/* ========================================================================= */}
       <div className="p-5 bg-slate-900 border border-slate-800 rounded-2xl text-xs font-mono text-slate-400 space-y-1">
-        <span className="text-lime-400 font-bold block">💡 EDUCATIONAL TRANSPARENCY NOTICE:</span>
+        <span className="text-lime-400 font-bold block">💡 EDUCATIONAL COMMITMENT &amp; TRANSPARENCY NOTICE:</span>
         <p className="text-slate-300 leading-relaxed font-sans">
-          Some links on this AI hub may contain referral or affiliate URLs. If you choose to purchase or try a tool through these links, we may receive compensation at no additional cost to you.
+          This AI Learning Hub is built as an open educational resource. Some links may be educational references or partner referral links. If you choose to explore tools through these links, we may receive compensation at no additional cost to you, supporting our continuous educational content.
         </p>
       </div>
 
-      {/* FULL ARTICLE MODAL */}
+      {/* ========================================================================= */}
+      {/* 📖 FULL ARTICLE MODAL READER */}
+      {/* ========================================================================= */}
       {activeArticle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md font-sans">
-          <div className="bg-white text-slate-900 border-2 border-indigo-500 rounded-3xl p-6 sm:p-8 max-w-3xl w-full space-y-6 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+          <div className="bg-white text-slate-900 border-2 border-indigo-500 rounded-3xl p-6 sm:p-8 max-w-3xl w-full space-y-6 shadow-2xl relative max-h-[88vh] overflow-y-auto">
             
             <button
               onClick={() => setActiveArticle(null)}
@@ -213,20 +225,21 @@ export const AILearning: React.FC = () => {
               <span className="px-3 py-1 bg-indigo-100 text-indigo-700 font-mono font-bold text-xs rounded-full uppercase">
                 {activeArticle.category || 'AI MODULE'}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black font-rajdhani uppercase text-slate-900">
+              <h2 className="text-2xl sm:text-3xl font-black font-rajdhani uppercase text-slate-900 leading-tight">
                 {activeArticle.title}
               </h2>
               <p className="text-xs text-slate-500 font-mono">
-                Published in White Hat Dev AI Matrix
+                Published in White Hat Dev Educational Matrix &bull; Complete Master Guide
               </p>
             </div>
 
+            {/* FULL ARTICLE TEXT WITH FORMATTED PROSE */}
             <div className="prose max-w-none text-xs sm:text-sm text-slate-700 leading-relaxed space-y-4 font-sans whitespace-pre-line">
               {activeArticle.fullContent || activeArticle.description}
             </div>
 
             {activeArticle.url && (
-              <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-2xl flex items-center justify-between">
+              <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
                   <span className="text-xs font-mono font-bold text-indigo-900 block">RECOMMENDED RESOURCE / REFERRAL:</span>
                   <span className="text-xs text-slate-600 truncate max-w-sm block">{activeArticle.url}</span>
@@ -237,18 +250,19 @@ export const AILearning: React.FC = () => {
                   rel="noopener noreferrer"
                   className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-mono font-bold text-xs rounded-xl transition-all shrink-0 flex items-center space-x-1"
                 >
-                  <span>VISIT TOOL →</span>
+                  <span>VISIT RESOURCE &rarr;</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             )}
 
-            <div className="flex justify-end pt-2">
+            <div className="flex justify-between items-center pt-3 border-t border-slate-200 text-xs font-mono">
+              <span className="text-slate-500">© White Hat Dev Educational Platform</span>
               <button
                 onClick={() => setActiveArticle(null)}
-                className="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-900 font-mono font-bold text-xs rounded-xl cursor-pointer"
+                className="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-900 font-bold rounded-xl cursor-pointer"
               >
-                CLOSE ARTICLE
+                CLOSE GUIDE
               </button>
             </div>
 

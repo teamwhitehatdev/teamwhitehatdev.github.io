@@ -1,7 +1,9 @@
+import { COMPREHENSIVE_EDUCATIONAL_ITEMS } from '../data/comprehensiveEducationalData';
 import { INITIAL_AI_ITEMS } from '../data/initialAIData';
 import { CMSItem } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
+  ...COMPREHENSIVE_EDUCATIONAL_ITEMS,
   ...INITIAL_AI_ITEMS,
   // =========================================================================
   // 💼 SERVICES PAGE OWNER (PROMOTED TO HOME FEATURED TUTORIALS)
