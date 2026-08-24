@@ -1,3 +1,4 @@
+import { validateEmailAndAntiBot, recordSuccessfulSubmission } from '../utils/emailValidator';
 import React, { useState } from 'react';
 import { Terminal, Mail, Send,    Globe, PhoneCall } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
@@ -17,6 +18,8 @@ export const Contact: React.FC = () => {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const [validationError, setValidationError] = useState('');
 
   const handleCommand = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +47,13 @@ export const Contact: React.FC = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationError('');
+    const validation = validateEmailAndAntiBot(formData.email, honeypot);
+    if (!validation.isValid) {
+      setValidationError(validation.error || 'Invalid email or bot activity detected.');
+      return;
+    }
+    recordSuccessfulSubmission();
     audioEngine.playSuccess();
     setSubmitted(true);
   };
@@ -97,6 +107,20 @@ export const Contact: React.FC = () => {
             </div>
           ) : (
             <form onSubmit={handleFormSubmit} className="space-y-4 text-xs">
+              <input
+                type="text"
+                name="website_hp_check"
+                style={{ display: 'none' }}
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={e => setHoneypot(e.target.value)}
+              />
+              {validationError && (
+                <div className="p-3 bg-rose-950/80 border border-rose-500/60 rounded text-rose-300 text-xs font-mono">
+                  ⚠️ {validationError}
+                </div>
+              )}
               <div>
                 <label className="text-gray-400 block mb-1">YOUR NAME / ORGANIZATION:</label>
                 <input

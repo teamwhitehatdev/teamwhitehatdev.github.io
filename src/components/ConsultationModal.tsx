@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, Send, Sparkles, CheckCircle2, Calendar, Mail, User, MessageSquare, ShieldCheck } from 'lucide-react';
+import { X, Send, Sparkles, CheckCircle2, Calendar, Mail, User, MessageSquare, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { validateEmailAndAntiBot, recordSuccessfulSubmission } from '../utils/emailValidator';
 
 interface ConsultationModalProps {
   isOpen: boolean;
@@ -20,12 +21,23 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   const [contactInfo, setContactInfo] = useState('');
   const [service, setService] = useState(initialServiceTitle);
   const [message, setMessage] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [validationError, setValidationError] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationError('');
+
+    // EMAIL SYNTAX, DOMAIN, DISPOSABLE & ANTI-BOT VALIDATION
+    const validation = validateEmailAndAntiBot(email, honeypot);
+    if (!validation.isValid) {
+      setValidationError(validation.error || 'Invalid email or submission detected.');
+      return;
+    }
+
     if (name.trim() && email.trim() && message.trim()) {
       // 1. Log to ContactInquiries
       addInquiry({
@@ -47,6 +59,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
         });
       }
 
+      recordSuccessfulSubmission();
       setSubmitted(true);
       setTimeout(() => {
         setSubmitted(false);
@@ -54,18 +67,19 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
         setEmail('');
         setContactInfo('');
         setMessage('');
+        setHoneypot('');
         onClose();
       }, 3000);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn select-none">
-      <div className="bg-gradient-to-b from-gray-900 via-black to-cyan-950/90 border-2 border-cyan-500/60 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+      <div className="bg-gradient-to-b from-gray-900 via-black to-cyan-950/90 border-2 border-cyan-500/60 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-2xl relative">
 
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white bg-black/60 p-1.5 rounded-full border border-gray-800"
+          className="absolute top-4 right-4 text-gray-400 hover:text-white bg-black/60 p-1.5 rounded-full border border-cyan-500/30 transition-all"
         >
           <X className="w-5 h-5" />
         </button>
@@ -79,9 +93,9 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               INQUIRY LOGGED SECURELY!
             </h3>
             <p className="text-xs text-gray-300 leading-relaxed max-w-md mx-auto">
-              Thank you, <span className="text-lime-400 font-bold">{name}</span>! Your project inquiry has been securely logged for administrator review. Our team will evaluate your requirements before following up.
+              Thank you, <span className="text-lime-400 font-bold">{name}</span>! Your project inquiry has been securely verified and submitted to our admin team.
             </p>
-            <div className="p-3 bg-black/60 border border-cyan-500/30 rounded-xl text-[11px] font-mono text-cyan-300 flex items-center justify-center gap-1.5">
+            <div className="p-3 bg-black/60 border border-cyan-500/30 rounded-xl text-[11px] font-mono text-cyan-300 flex items-center justify-center space-x-2">
               <ShieldCheck className="w-4 h-4 text-lime-400" />
               <span>ADMINISTRATOR REVIEW PENDING</span>
             </div>
@@ -89,7 +103,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
         ) : (
           <>
             <div className="space-y-2">
-              <div className="inline-flex items-center space-x-1 text-xs text-cyan-400 bg-cyan-500/20 px-2.5 py-0.5 rounded-full border border-cyan-400/40 font-mono">
+              <div className="inline-flex items-center space-x-1 text-xs text-cyan-400 bg-cyan-500/20 px-2.5 py-0.5 rounded-full border border-cyan-500/40 font-mono">
                 <Sparkles className="w-3.5 h-3.5 text-lime-400" />
                 <span>HIRE VA &amp; PROJECT INQUIRY</span>
               </div>
@@ -101,7 +115,27 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               </p>
             </div>
 
+            {/* INLINE VALIDATION ERROR NOTICE */}
+            {validationError && (
+              <div className="p-3 bg-rose-950/80 border border-rose-500/60 rounded-xl text-rose-300 text-xs flex items-center space-x-2 font-mono">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
+                <span>{validationError}</span>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans pt-2">
+              
+              {/* HIDDEN HONEYPOT FIELD FOR ANTI-BOT PROTECTION */}
+              <input
+                type="text"
+                name="website_hp_check"
+                style={{ display: 'none' }}
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+
               <div>
                 <label className="text-cyan-400 font-mono font-bold block pb-1 flex items-center space-x-1">
                   <User className="w-3.5 h-3.5" />
@@ -111,7 +145,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                   type="text"
                   placeholder="Enter your full name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => { setName(e.target.value); setValidationError(''); }}
                   required
                   className="w-full px-4 py-2.5 bg-black border border-cyan-500/40 rounded-xl text-white font-mono focus:outline-none focus:border-cyan-400"
                 />
@@ -124,9 +158,9 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                 </label>
                 <input
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder="name@example.com (e.g. Gmail, Outlook, Business)"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => { setEmail(e.target.value); setValidationError(''); }}
                   required
                   className="w-full px-4 py-2.5 bg-black border border-cyan-500/40 rounded-xl text-white font-mono focus:outline-none focus:border-cyan-400"
                 />
@@ -161,13 +195,13 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
-                  className="w-full px-4 py-2.5 bg-black border border-cyan-500/40 rounded-xl text-white focus:outline-none focus:border-cyan-400"
+                  className="w-full px-4 py-2.5 bg-black border border-cyan-500/40 rounded-xl text-white focus:outline-none focus:border-cyan-400 font-sans"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400 text-black font-extrabold font-rajdhani text-sm uppercase rounded-xl shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center space-x-2"
+                className="w-full py-3.5 bg-gradient-to-r from-cyan-400 via-lime-400 to-purple-400 text-black font-extrabold font-orbitron text-xs rounded-xl uppercase hover:brightness-110 transition-all flex items-center justify-center space-x-2 shadow-lg cursor-pointer"
               >
                 <span>SUBMIT INQUIRY FOR REVIEW</span>
                 <Send className="w-4 h-4" />
