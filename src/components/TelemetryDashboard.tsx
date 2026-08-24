@@ -1,3 +1,4 @@
+import { RealWorldMap } from './RealWorldMap';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Activity, Globe, Laptop, Smartphone, Tablet, Search, Download, RefreshCw,
@@ -447,113 +448,16 @@ export const TelemetryDashboard: React.FC = () => {
       </div>
 
       {/* ========================================================================= */}
-      {/* 🌎 SECTION 1 & 18: GLOBAL TRAFFIC INTELLIGENCE MAP & LAYER MODES */}
+      {/* 🌎 SECTION 1 & 18: REAL GEOGRAPHIC WORLD MAP & LAYER MODES */}
       {/* ========================================================================= */}
       <div className={`p-6 rounded-3xl border shadow-xl space-y-5 ${themeCardBg}`}>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b pb-4 border-inherit">
-          <div>
-            <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest block">
-              GEOGRAPHIC TRAFFIC INTELLIGENCE
-            </span>
-            <h3 className="text-lg sm:text-xl font-black font-orbitron uppercase">
-              🌎 GLOBAL TRAFFIC INTELLIGENCE MAP
-            </h3>
-          </div>
-
-          {/* MAP LAYER MODES SWITCHER */}
-          <div className={`p-1 rounded-2xl border flex flex-wrap gap-1 text-xs font-bold ${isDark ? 'bg-black border-slate-700' : 'bg-slate-100 border-slate-300'}`}>
-            <button
-              onClick={() => setMapLayerMode('intensity')}
-              className={`px-3 py-1 rounded-xl transition-all cursor-pointer ${
-                mapLayerMode === 'intensity' ? 'bg-cyan-500 text-black shadow' : 'text-slate-400'
-              }`}
-            >
-              MODE A: INTENSITY
-            </button>
-            <button
-              onClick={() => setMapLayerMode('dots')}
-              className={`px-3 py-1 rounded-xl transition-all cursor-pointer ${
-                mapLayerMode === 'dots' ? 'bg-lime-400 text-black shadow' : 'text-slate-400'
-              }`}
-            >
-              MODE B: LIVE DOTS
-            </button>
-            <button
-              onClick={() => setMapLayerMode('heatmap')}
-              className={`px-3 py-1 rounded-xl transition-all cursor-pointer ${
-                mapLayerMode === 'heatmap' ? 'bg-purple-500 text-white shadow' : 'text-slate-400'
-              }`}
-            >
-              MODE C: HEATMAP
-            </button>
-            <button
-              onClick={() => setMapLayerMode('flow')}
-              className={`px-3 py-1 rounded-xl transition-all cursor-pointer ${
-                mapLayerMode === 'flow' ? 'bg-amber-400 text-black shadow' : 'text-slate-400'
-              }`}
-            >
-              MODE D: TRAFFIC FLOW
-            </button>
-          </div>
-        </div>
-
-        {/* INTERACTIVE SVG WORLD MAP VIEW */}
-        <div className={`p-4 rounded-2xl border relative overflow-hidden flex flex-col items-center justify-center min-h-[260px] ${themePanelBg}`}>
-          <div className="w-full max-w-2xl text-center space-y-4">
-            
-            {/* SVG WORLD MAP SCHEMATIC */}
-            <svg viewBox="0 0 800 400" className="w-full h-auto max-h-64 opacity-85">
-              {/* World Continents Schematics */}
-              <path d="M150,120 Q180,80 240,90 Q300,120 280,180 Q220,220 160,180 Z" fill={isDark ? "#1e293b" : "#cbd5e1"} stroke="#06b6d4" strokeWidth="1" />
-              <path d="M220,220 Q260,240 280,310 Q240,360 210,310 Z" fill={isDark ? "#1e293b" : "#cbd5e1"} stroke="#06b6d4" strokeWidth="1" />
-              <path d="M400,100 Q450,70 520,90 Q500,160 440,170 Z" fill={isDark ? "#1e293b" : "#cbd5e1"} stroke="#06b6d4" strokeWidth="1" />
-              <path d="M420,180 Q480,190 490,270 Q440,320 410,260 Z" fill={isDark ? "#1e293b" : "#cbd5e1"} stroke="#06b6d4" strokeWidth="1" />
-              <path d="M520,90 Q650,80 720,140 Q680,230 580,200 Z" fill={isDark ? "#1e293b" : "#cbd5e1"} stroke="#06b6d4" strokeWidth="1" />
-              <path d="M640,260 Q700,250 720,310 Q660,340 630,300 Z" fill={isDark ? "#1e293b" : "#cbd5e1"} stroke="#06b6d4" strokeWidth="1" />
-
-              {/* LIVE VISITOR PULSE BEACONS (PHILIPPINES, US, SG, UK, AUSTRALIA) */}
-              <circle cx="660" cy="200" r="9" fill="#a3e635" className="animate-ping opacity-75" />
-              <circle cx="660" cy="200" r="5" fill="#84cc16" />
-              <text x="670" y="205" fill={isDark ? "#fff" : "#0f172a"} fontSize="11" fontWeight="bold">🇵🇭 PH (1,248)</text>
-
-              <circle cx="210" cy="140" r="8" fill="#38bdf8" className="animate-ping opacity-75" />
-              <circle cx="210" cy="140" r="4" fill="#0284c7" />
-              <text x="220" y="145" fill={isDark ? "#fff" : "#0f172a"} fontSize="11" fontWeight="bold">🇺🇸 US (426)</text>
-
-              <circle cx="610" cy="220" r="7" fill="#c084fc" className="animate-ping opacity-75" />
-              <circle cx="610" cy="220" r="4" fill="#9333ea" />
-              <text x="540" y="240" fill={isDark ? "#fff" : "#0f172a"} fontSize="11" fontWeight="bold">🇸🇬 SG (173)</text>
-
-              <circle cx="440" cy="110" r="6" fill="#f43f5e" className="animate-ping opacity-75" />
-              <circle cx="440" cy="110" r="3" fill="#e11d48" />
-              <text x="450" y="115" fill={isDark ? "#fff" : "#0f172a"} fontSize="11" fontWeight="bold">🇬🇧 UK (91)</text>
-            </svg>
-
-            <span className={`text-[11px] block font-sans ${themeSecondaryText}`}>
-              📍 Approximate location &bull; IP-derived geolocation with zero invasive physical tracking.
-            </span>
-          </div>
-        </div>
-
-        {/* COUNTRY RANKING MATRIX */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 text-xs">
-          {countryDistribution.map((item, idx) => (
-            <div
-              key={item.country}
-              onClick={() => setSelectedCountryFilter(item.country === selectedCountryFilter ? 'ALL' : item.country)}
-              className={`p-3 rounded-2xl border space-y-1 transition-all cursor-pointer hover:scale-105 shadow-sm ${
-                selectedCountryFilter === item.country ? 'border-cyan-400 bg-cyan-500/20' : themePanelBg
-              }`}
-            >
-              <div className="flex items-center justify-between text-base">
-                <span>{item.flag}</span>
-                <span className="text-[10px] font-bold text-slate-500">#{idx + 1}</span>
-              </div>
-              <span className="font-bold block truncate">{item.country}</span>
-              <span className="text-cyan-400 font-black font-orbitron block">{item.count} hits</span>
-            </div>
-          ))}
-        </div>
+        <RealWorldMap
+          isDark={isDark}
+          sessions={telemetryData.sessions}
+          events={filteredEvents}
+          selectedCountry={selectedCountryFilter}
+          onSelectCountry={(c) => setSelectedCountryFilter(c === selectedCountryFilter ? 'ALL' : c)}
+        />
       </div>
 
       {/* ========================================================================= */}
