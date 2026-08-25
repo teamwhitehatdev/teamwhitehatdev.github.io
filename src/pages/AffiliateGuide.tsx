@@ -1291,12 +1291,8 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
 
             </div>
 
-
-
-          </div>
-
-          {/* RIGHT SIDEBAR PROMO COLUMN */}
-          {/* 🛒 COLLAPSIBLE TOPIC 6: GUMROAD — DIGITAL MARKETPLACE & CREATOR PLATFORM */}
+            {/* ========================================================================= */}
+            {/* 🛒 COLLAPSIBLE TOPIC 6: GUMROAD — DIGITAL MARKETPLACE & CREATOR PLATFORM */}
             {/* ========================================================================= */}
             <div className="bg-white rounded-2xl shadow-xl border-2 border-pink-400/80 overflow-hidden transition-all">
 
@@ -1627,12 +1623,17 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
               </div>
             )}
 
-              {/* 🛡️ RESPONSIBLE AFFILIATE DISCLOSURE BANNER */}
-      <div className="bg-slate-900 border border-amber-500/40 rounded-2xl p-5 shadow-xl space-y-2 text-xs font-sans text-slate-300">
-        <div className="flex items-center gap-2 text-amber-400 font-bold font-orbitron">
-          <ShieldCheck className="w-4 h-4" />
-          <span>OFFICIAL AFFILIATE DISCLOSURE &amp; TRANSPARENCY NOTICE</span>
-        </div>
+            {/* 🛡️ RESPONSIBLE AFFILIATE DISCLOSURE BANNER */}
+            <div className="bg-slate-900 border border-amber-500/40 rounded-2xl p-5 shadow-xl space-y-2 text-xs font-sans text-slate-300">
+              <div className="flex items-center gap-2 text-amber-400 font-bold font-orbitron">
+                <ShieldCheck className="w-4 h-4" />
+                <span>OFFICIAL AFFILIATE DISCLOSURE &amp; TRANSPARENCY NOTICE</span>
+              </div>
+              <p className="leading-relaxed">
+                Some links on Team WhiteHat Dev are referral/affiliate links (such as Hostinger, CapCut, Microsoft Rewards, Vecteezy, Envato, ElevenLabs, and Gumroad). If you click through and sign up or make a purchase, we may receive a referral commission at zero additional cost to you. We only recommend software tools and services that we believe provide genuine utility to Virtual Assistants, creators, and freelancers.
+              </p>
+            </div>
+
           </div>
 
           {/* RIGHT SIDEBAR PROMO COLUMN */}
