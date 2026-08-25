@@ -47,10 +47,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                 </span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-black font-orbitron tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-300 to-lime-400">
-                WHITE HAT DEV PLATFORM
+                VIRTUAL ASSISTANTS, FREELANCERS &amp; DIGITAL CONTENT HUB
               </h1>
               <p className="text-sm sm:text-base text-gray-300 font-sans max-w-3xl leading-relaxed">
-                Empowering businesses and developers with full-stack digital development, specialized remote Virtual Assistant solutions, high-yield monetization blueprints, and continuous learning resources.
+                Empowering Virtual Assistants, Freelancers, and Digital Creators with high-income remote skills, automated client workflows, viral video production recipes, and dedicated executive assistance packages.
               </p>
             </div>
 

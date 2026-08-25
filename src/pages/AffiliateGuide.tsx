@@ -13,6 +13,7 @@ export const AffiliateGuide: React.FC = () => {
 
   // COLLAPSIBLE PANEL DIVISIONS STATE
   const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({
+    gumroad: true,
     elevenlabs: true,
     hostinger: true,
     capcut: true,
@@ -30,6 +31,7 @@ export const AffiliateGuide: React.FC = () => {
     setOpenPanels(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
+  const GUMROAD_AFFILIATE_LINK = "https://gumroad.com/discover?a=815255139";
   const ELEVENLABS_REFERRAL_LINK = "https://try.elevenlabs.io/e5xwigkl9igv";
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
   const CAPCUT_REFERRAL_LINK = "https://capcutaffiliateprogram.pxf.io/WqmL1e";
@@ -245,186 +247,6 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
         </div>
 
         
-            {/* 📝 DYNAMIC CMS MANAGED TOPIC DIVISION */}
-            {cmsAffiliateItems.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-xl border-2 border-emerald-300 overflow-hidden">
-                <div className="p-6 bg-gradient-to-r from-slate-900 via-emerald-950 to-indigo-950 text-white flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-300 font-bold">
-                      <Sparkles className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <span className="text-[11px] font-mono text-emerald-300 font-bold uppercase tracking-wider block">
-                        DYNAMIC CMS BACKEND TOPIC DIVISION
-                      </span>
-                      <h2 className="text-lg sm:text-2xl font-black font-orbitron uppercase text-white">
-                         CMS PUBLISHED GUIDES &amp; RECOMMENDATIONS
-                      </h2>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm font-sans">
-                    {cmsAffiliateItems.map((item) => (
-                      <div key={item.id} className="p-5 rounded-xl bg-white border border-slate-300 space-y-3 hover:border-emerald-500 transition-all shadow-sm">
-                        <span className="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-bold text-[11px] uppercase">
-                          {item.category || 'CMS GUIDE'}
-                        </span>
-                        <h4 className="font-bold text-slate-900 text-sm font-orbitron">{item.title}</h4>
-                        <p className="text-slate-600 text-xs leading-relaxed">{item.description}</p>
-                        {item.url && (
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="sponsored noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white font-bold text-xs uppercase rounded-lg shadow hover:bg-emerald-700"
-                          >
-                            <span>EXPLORE THIS GUIDE &rarr;</span>
-                          </a>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-              {/* 🛡️ RESPONSIBLE AFFILIATE DISCLOSURE BANNER */}
-      <div className="bg-slate-900 border border-amber-500/40 rounded-2xl p-5 shadow-xl space-y-2 text-xs font-sans text-slate-300">
-        <div className="flex items-center gap-2 text-amber-400 font-bold font-orbitron">
-          <ShieldCheck className="w-4 h-4" />
-          <span>OFFICIAL AFFILIATE DISCLOSURE &amp; TRANSPARENCY NOTICE</span>
-        </div>
-        <p className="leading-relaxed">
-          Some links on Team WhiteHat Dev are referral/affiliate links (such as Hostinger, CapCut, Microsoft Rewards, Vecteezy, and Envato). If you click through and sign up or make a purchase, we may receive a referral commission at zero additional cost to you. We only recommend software tools and services that we believe provide genuine utility to Virtual Assistants and freelancers.
-        </p>
-      </div>
-
-      {/* MAIN TWO-COLUMN CONTAINER LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          
-          {/* LEFT 3-COLUMNS TOPIC PANELS */}
-          <div className="lg:col-span-3 space-y-8">
-
-            {/* ========================================================================= */}
-                        {/* ========================================================================= */}
-            {/* 📚 CMS COLLAPSIBLE CATEGORY: AFFILIATE MARKETING FUNDAMENTALS */}
-            {/* ========================================================================= */}
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
-              <button
-                onClick={() => togglePanel('fundamentals')}
-                className="w-full p-6 bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
-                    <BookOpen className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-mono text-cyan-300 uppercase tracking-widest font-bold block">
-                      CMS EDUCATIONAL CATEGORY 1
-                    </span>
-                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
-                      ▼ AFFILIATE MARKETING FUNDAMENTALS &amp; TERMINOLOGY
-                    </h2>
-                    <p className="text-xs text-cyan-200 font-sans mt-0.5">
-                      Understanding affiliate links, cookies, tracking parameters, merchant commissions, and network platforms.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-cyan-300 shrink-0">
-                  <span>{openPanels.fundamentals ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
-                  {openPanels.fundamentals ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </div>
-              </button>
-
-              {openPanels.fundamentals && (
-                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans">
-                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
-                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">What Is Affiliate Marketing?</h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        Affiliate marketing is a performance-based system where creators recommend relevant software tools to their audience and earn a commission on qualified referral purchases.
-                      </p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
-                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Tracking Cookies &amp; Links</h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        When a visitor clicks a referral link, a tracking cookie stored in their browser credits the referring affiliate if a signup occurs within the cookie window (e.g. 30-90 days).
-                      </p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
-                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Commission Structures</h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        Commissions can be one-off flat fees (CPA), percentage sales commissions, or recurring monthly software subcriptions.
-                      </p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
-                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Affiliate Networks</h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        Platforms like Impact.com, Lemon Squeezy, and Involve Asia handle tracking reliability, reporting analytics, and monthly payouts.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* ========================================================================= */}
-            {/* 🚀 CMS COLLAPSIBLE CATEGORY: GETTING STARTED & NICHE SELECTION */}
-            {/* ========================================================================= */}
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
-              <button
-                onClick={() => togglePanel('gettingStarted')}
-                className="w-full p-6 bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 shrink-0 font-bold">
-                    <TrendingUp className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-mono text-purple-300 uppercase tracking-widest font-bold block">
-                      CMS EDUCATIONAL CATEGORY 2
-                    </span>
-                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
-                      ▼ GETTING STARTED &amp; RESPONSIBLE NICHE SELECTION
-                    </h2>
-                    <p className="text-xs text-purple-200 font-sans mt-0.5">
-                      Finding reliable affiliate programs, evaluating product quality, and targeting the right audience.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-purple-300 shrink-0">
-                  <span>{openPanels.gettingStarted ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
-                  {openPanels.gettingStarted ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </div>
-              </button>
-
-              {openPanels.gettingStarted && (
-                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-sans">
-                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
-                      <div className="font-bold text-purple-950 font-orbitron text-sm">1. Choose a Niche</div>
-                      <p className="text-slate-600 text-xs">Focus on a specific area you understand, such as VA productivity, video editing, or web hosting.</p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
-                      <div className="font-bold text-purple-950 font-orbitron text-sm">2. Evaluate Products</div>
-                      <p className="text-slate-600 text-xs">Only recommend tools with proven reliability, good customer support, and fair refund policies.</p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
-                      <div className="font-bold text-purple-950 font-orbitron text-sm">3. Review Program Terms</div>
-                      <p className="text-slate-600 text-xs">Read merchant terms to ensure compliance with search engine guidelines and disclosure requirements.</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
             {/* 🌐 COLLAPSIBLE TOPIC 1: WEB HOSTING & DOMAIN INFRASTRUCTURE (HOSTINGER) */}
             {/* ========================================================================= */}
             <div className="bg-white rounded-2xl shadow-xl border-2 border-indigo-200 overflow-hidden">
@@ -440,7 +262,7 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
                   </div>
                   <div>
                     <span className="text-[11px] font-mono text-lime-400 font-bold uppercase tracking-wider block">
-                      TOPIC 1 DIVISION • WEB HOSTING &amp; DOMAIN INFRASTRUCTURE
+                      TOPIC 1: WEB HOSTING &amp; CLOUD INFRASTRUCTURE
                     </span>
                     <h2 className="text-lg sm:text-2xl font-black font-orbitron uppercase text-white">
                       🌐 HOW TO MAKE DOMAIN &amp; HOSTINGER WEB HOSTING WORKFLOWS?
@@ -625,7 +447,7 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
                   </div>
                   <div>
                     <span className="text-[11px] font-mono text-purple-300 font-bold uppercase tracking-wider block">
-                      TOPIC 2 DIVISION • ESSENTIAL CREATIVE SOFTWARE &amp; VIDEO EDITING
+                      TOPIC 2: VIDEO EDITING &amp; VIRAL CONTENT CREATION
                     </span>
                     <h2 className="text-lg sm:text-2xl font-black font-orbitron uppercase text-white">
                       🎬 WHAT IS THE BEST VIDEO EDITING SOFTWARE FOR VIRTUAL ASSISTANTS &amp; CREATORS? (CAPCUT)
@@ -881,7 +703,7 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
                   </div>
                   <div>
                     <span className="text-[10px] font-mono text-emerald-300 uppercase tracking-widest font-bold block">
-                      DIVISION 4: CREATIVE MULTIMEDIA &amp; GRAPHICS ASSETS
+                      TOPIC 4: CREATIVE MULTIMEDIA &amp; GRAPHICS ASSETS
                     </span>
                     <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
                       TOPIC 4: GRAPHICS DESIGN &amp; MULTIMEDIA SUITES
@@ -1085,7 +907,7 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
                   </div>
                   <div>
                     <span className="text-[10px] font-mono text-purple-300 uppercase tracking-widest font-bold block">
-                      DIVISION 5: GENERATIVE AI AUDIO &amp; CONVERSATIONAL VOICE MODELS
+                      TOPIC 5: GENERATIVE AI AUDIO &amp; CONVERSATIONAL VOICE MODELS
                     </span>
                     <h2 className="text-base sm:text-xl font-black font-orbitron text-white flex items-center gap-2 flex-wrap">
                       <span>TOPIC 5: ELEVENLABS AI VOICE SYNTHESIS &amp; VOICE CLONING</span>
@@ -1350,7 +1172,482 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
 
 
 
-          </div>
+          
+
+
+            {/* ========================================================================= */}
+            {/* 🛒 COLLAPSIBLE TOPIC 6: GUMROAD — DIGITAL MARKETPLACE & CREATOR PLATFORM */}
+            {/* ========================================================================= */}
+            <div className="bg-white rounded-2xl shadow-xl border-2 border-pink-400/80 overflow-hidden transition-all">
+
+              {/* TOPIC HEADER BAR */}
+              <button
+                onClick={() => togglePanel('gumroad')}
+                className="w-full p-6 bg-gradient-to-r from-pink-950 via-slate-900 to-rose-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all select-none"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-400 flex items-center justify-center text-pink-300 shrink-0 font-bold text-lg">
+                    🛍️
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-pink-300 uppercase tracking-widest font-bold block">
+                      TOPIC 6: DIGITAL COMMERCE &amp; CREATOR MONETIZATION
+                    </span>
+                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white flex items-center gap-2 flex-wrap">
+                      <span>TOPIC 6: GUMROAD — SELL DIGITAL PRODUCTS &amp; ASSETS</span>
+                      <span className="px-2 py-0.5 rounded bg-pink-400 text-black font-mono font-black text-[10px] uppercase">
+                        CREATOR MARKETPLACE
+                      </span>
+                    </h2>
+                    <p className="text-xs text-pink-200 font-sans mt-0.5">
+                      Launch your digital store, sell brushes, templates, code &amp; ebooks, and reach millions of buyers worldwide.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-pink-300 font-mono text-xs shrink-0">
+                  <span>{openPanels.gumroad ? 'COLLAPSE' : 'EXPAND'}</span>
+                  {openPanels.gumroad ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5 text-pink-400" />}
+                </div>
+              </button>
+
+              {/* TOPIC CONTENT BODY */}
+              {openPanels.gumroad && (
+                <div className="p-6 sm:p-8 space-y-8 text-slate-800 font-sans leading-relaxed">
+                  
+                  {/* UPLOADED GUMROAD COMIC HERO BANNER */}
+                  <div className="space-y-2">
+                    <div className="overflow-hidden rounded-2xl border-2 border-pink-500/40 shadow-2xl relative group">
+                      <img
+                        src="./media_1787655285154.png"
+                        alt="Gumroad - New Sale! Start selling digital products online"
+                        className="w-full h-auto object-cover group-hover:scale-[1.01] transition-all duration-300"
+                        onError={(e) => { (e.target as HTMLImageElement).src = './media_1786678717227.png'; }}
+                      />
+                      <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-pink-400 text-[11px] font-mono text-pink-300 font-bold uppercase">
+                        🚀 OFFICIAL GUMROAD DIGITAL MARKETPLACE
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* PROMOTIONAL HERO BANNER */}
+                  <div className="p-6 rounded-2xl bg-gradient-to-r from-pink-900 via-rose-900 to-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border border-pink-500/40">
+                    <div className="space-y-2 text-center md:text-left">
+                      <span className="px-3 py-1 bg-pink-500/30 text-pink-300 font-mono text-xs font-bold rounded-lg border border-pink-400/50 uppercase">
+                        OFFICIAL PARTNER INVITATION
+                      </span>
+                      <h4 className="text-xl sm:text-2xl font-black font-orbitron text-white">
+                        TURN YOUR DIGITAL SKILLS INTO PASSIVE INCOME ON GUMROAD
+                      </h4>
+                      <p className="text-xs sm:text-sm text-pink-100 max-w-2xl leading-relaxed">
+                        Join hundreds of thousands of creators selling digital brushes, Notion templates, code snippets, presets, courses, and design kits with zero upfront fees.
+                      </p>
+                    </div>
+
+                    <a
+                      href={GUMROAD_AFFILIATE_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-6 py-4 bg-gradient-to-r from-pink-400 via-rose-400 to-amber-300 hover:from-pink-300 hover:to-amber-200 text-black font-black font-orbitron text-xs sm:text-sm uppercase rounded-xl transition-all shadow-[0_0_25px_rgba(244,114,182,0.5)] shrink-0 flex items-center gap-2 hover:scale-105"
+                    >
+                      <span>START SELLING ON GUMROAD &rarr;</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+
+                  {/* CREATOR SUCCESS STORIES WITH UPLOADED IMAGES */}
+                  <div className="space-y-4">
+                    <div className="border-b-2 border-pink-200 pb-2">
+                      <span className="text-xs font-mono font-bold text-pink-600 uppercase tracking-widest block">
+                        🌟 PROVEN CASE STUDIES &amp; REAL CREATOR EARNINGS
+                      </span>
+                      <h3 className="text-lg sm:text-xl font-black font-orbitron text-pink-950 uppercase">
+                        HOW TOP CREATORS BUILT MILLION-DOLLAR BUSINESSES ON GUMROAD
+                      </h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                      
+                      {/* CASE STUDY 1: JINGSKETCH BRUSHES */}
+                      <div className="bg-pink-50/90 border-2 border-pink-300 rounded-2xl overflow-hidden shadow-md flex flex-col justify-between hover:border-pink-500 transition-all">
+                        <div className="space-y-4">
+                          <img
+                            src="./media_1787655287026.png"
+                            alt="Jingsketch - I made these brushes for myself, now over a million artists use them"
+                            className="w-full h-auto object-cover border-b border-pink-200"
+                            onError={(e) => { (e.target as HTMLImageElement).src = './media_1786675376512.jpg'; }}
+                          />
+                          <div className="p-5 space-y-2.5">
+                            <span className="px-2.5 py-0.5 bg-pink-200 text-pink-900 font-mono font-bold text-[10px] rounded uppercase">
+                              DIGITAL ASSET MONETIZATION
+                            </span>
+                            <h4 className="text-base font-black font-orbitron text-slate-900">
+                              Jingsketch: 1,000,000+ Digital Artists
+                            </h4>
+                            <p className="text-xs text-slate-700 leading-relaxed">
+                              Started by creating digital Procreate and Photoshop brushes for personal use. By listing them on Gumroad with pay-what-you-want and premium bundles, Jingsketch scaled to over 1,000,000 artist downloads worldwide.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="p-5 pt-0">
+                          <a
+                            href={GUMROAD_AFFILIATE_LINK}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-2.5 bg-pink-600 hover:bg-pink-700 text-white font-bold font-orbitron text-xs uppercase rounded-xl text-center shadow transition-all block"
+                          >
+                            DISCOVER DIGITAL PRODUCTS &rarr;
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* CASE STUDY 2: KYLE T WEBSTER */}
+                      <div className="bg-purple-50/90 border-2 border-purple-300 rounded-2xl overflow-hidden shadow-md flex flex-col justify-between hover:border-purple-500 transition-all">
+                        <div className="space-y-4">
+                          <img
+                            src="./media_1787655287101.png"
+                            alt="Kyle T Webster - How selling brushes on Gumroad led to partnerships with Pixar, Disney, and Adobe"
+                            className="w-full h-auto object-cover border-b border-purple-200"
+                            onError={(e) => { (e.target as HTMLImageElement).src = './media_1786675376512.jpg'; }}
+                          />
+                          <div className="p-5 space-y-2.5">
+                            <span className="px-2.5 py-0.5 bg-purple-200 text-purple-900 font-mono font-bold text-[10px] rounded uppercase">
+                              INDUSTRY PARTNERSHIP MILESTONE
+                            </span>
+                            <h4 className="text-base font-black font-orbitron text-slate-900">
+                              Kyle T Webster: Pixar, Disney &amp; Adobe
+                            </h4>
+                            <p className="text-xs text-slate-700 leading-relaxed">
+                              Selling specialized digital illustration brushes on Gumroad gave Kyle global distribution, direct creator equity, and eventually led to high-profile industry partnerships with Disney, Pixar, and an acquisition by Adobe!
+                            </p>
+                          </div>
+                        </div>
+                        <div className="p-5 pt-0">
+                          <a
+                            href={GUMROAD_AFFILIATE_LINK}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold font-orbitron text-xs uppercase rounded-xl text-center shadow transition-all block"
+                          >
+                            JOIN GUMROAD CREATORS &rarr;
+                          </a>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* TAX CENTER & GLOBAL PAYOUTS WITH UPLOADED IMAGE */}
+                  <div className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-md">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                      <div className="space-y-2 max-w-xl">
+                        <span className="px-3 py-1 bg-emerald-100 text-emerald-900 font-mono font-bold text-xs rounded-full uppercase">
+                          🏦 BUILT-IN FINANCIAL INFRASTRUCTURE
+                        </span>
+                        <h4 className="text-xl sm:text-2xl font-black font-orbitron text-slate-900">
+                          GUMROAD TAX CENTER &amp; AUTOMATED PAYOUTS
+                        </h4>
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                          Gumroad functions as your merchant of record: they collect and remit sales tax and EU VAT automatically, process global credit cards &amp; PayPal, and generate your 1099 tax documents in one centralized dashboard.
+                        </p>
+                      </div>
+
+                      <a
+                        href={GUMROAD_AFFILIATE_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold font-orbitron text-xs uppercase rounded-xl shadow transition-all shrink-0 text-center"
+                      >
+                        LEARN ABOUT TAX CENTER &rarr;
+                      </a>
+                    </div>
+
+                    <div className="overflow-hidden rounded-2xl border-2 border-slate-300 shadow-lg">
+                      <img
+                        src="./media_1787655286908.png"
+                        alt="Gumroad Tax Center - One place for all your Gumroad tax documents and payouts"
+                        className="w-full h-auto object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).src = './media_1786678717227.png'; }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* 5 REASONS WHY VAS & FREELANCERS SHOULD SELL ON GUMROAD */}
+                  <div className="space-y-4">
+                    <h4 className="text-base sm:text-lg font-black font-orbitron text-pink-950 uppercase border-b-2 border-pink-200 pb-2">
+                      💡 WHAT VIRTUAL ASSISTANTS &amp; DEVELOPERS CAN SELL ON GUMROAD
+                    </h4>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs font-sans">
+                      <div className="p-4 rounded-xl bg-pink-50 border border-pink-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-pink-950 font-orbitron text-sm">1. 📋 Notion &amp; Excel Templates</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Package your client onboarding systems, CRM dashboards, and task trackers into ready-to-use Notion templates.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-pink-50 border border-pink-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-pink-950 font-orbitron text-sm">2. 🎨 Design Kits &amp; Brushes</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Sell Photoshop brushes, Figma UI components, Canva templates, icon packs, and social media media kits.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-pink-50 border border-pink-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-pink-950 font-orbitron text-sm">3. 💻 Code Snippets &amp; Scripts</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Monetize Python automation bots, web scraping scripts, WordPress plugins, and full-stack starter templates.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-pink-50 border border-pink-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-pink-950 font-orbitron text-sm">4. 📚 Ebooks &amp; Skill Guides</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Publish PDF playbooks teaching specialized VA workflows, remote client acquisition, or AI prompt engineering.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-pink-50 border border-pink-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-pink-950 font-orbitron text-sm">5. 🔄 Recurring Memberships</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Set up monthly retainer subscriptions, premium Discord communities, and continuous asset drops.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-pink-900 text-white space-y-1.5 flex flex-col justify-between shadow-sm border border-pink-700">
+                        <div>
+                          <div className="font-bold font-orbitron text-sm text-pink-200">🚀 Zero Upfront Cost</div>
+                          <p className="text-pink-100 text-[11px] leading-relaxed">
+                            Gumroad only takes a small fee when you make a sale. No monthly software hosting fees.
+                          </p>
+                        </div>
+                        <a
+                          href={GUMROAD_AFFILIATE_LINK}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold font-mono text-[11px] text-center rounded-lg shadow transition-all block mt-2"
+                        >
+                          CREATE YOUR STORE &rarr;
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BOTTOM PROMOTIONAL CTA BANNER */}
+                  <div className="bg-gradient-to-r from-pink-950 via-slate-900 to-rose-950 rounded-2xl p-6 text-white shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-pink-400">
+                    <div className="space-y-2 text-center md:text-left">
+                      <span className="text-xs font-mono text-pink-300 font-bold uppercase tracking-widest block">
+                        🛍️ OFFICIAL GUMROAD CREATOR INVITATION
+                      </span>
+                      <h3 className="text-xl md:text-2xl font-black font-orbitron text-white">
+                        START SELLING YOUR FIRST DIGITAL PRODUCT TODAY
+                      </h3>
+                      <p className="text-xs md:text-sm text-slate-300 max-w-2xl font-sans">
+                        Sign up through our official affiliate link, upload your digital asset or template, set your price, and start receiving payments.
+                      </p>
+                    </div>
+
+                    <a
+                      href={GUMROAD_AFFILIATE_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-6 py-4 bg-gradient-to-r from-pink-400 via-rose-400 to-amber-300 text-black font-black font-orbitron text-xs md:text-sm uppercase rounded-xl shadow-xl hover:scale-105 transition-all shrink-0 flex items-center gap-2 border border-white/40 cursor-pointer"
+                    >
+                      <span>START FREE ON GUMROAD &rarr;</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+
+                </div>
+              )}
+
+            </div>
+
+
+            {/* 📝 DYNAMIC CMS MANAGED TOPIC DIVISION */}
+            {cmsAffiliateItems.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-xl border-2 border-emerald-300 overflow-hidden">
+                <div className="p-6 bg-gradient-to-r from-slate-900 via-emerald-950 to-indigo-950 text-white flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-300 font-bold">
+                      <Sparkles className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-mono text-emerald-300 font-bold uppercase tracking-wider block">
+                        DYNAMIC CMS BACKEND TOPIC DIVISION
+                      </span>
+                      <h2 className="text-lg sm:text-2xl font-black font-orbitron uppercase text-white">
+                         CMS PUBLISHED GUIDES &amp; RECOMMENDATIONS
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm font-sans">
+                    {cmsAffiliateItems.map((item) => (
+                      <div key={item.id} className="p-5 rounded-xl bg-white border border-slate-300 space-y-3 hover:border-emerald-500 transition-all shadow-sm">
+                        <span className="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-bold text-[11px] uppercase">
+                          {item.category || 'CMS GUIDE'}
+                        </span>
+                        <h4 className="font-bold text-slate-900 text-sm font-orbitron">{item.title}</h4>
+                        <p className="text-slate-600 text-xs leading-relaxed">{item.description}</p>
+                        {item.url && (
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="sponsored noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white font-bold text-xs uppercase rounded-lg shadow hover:bg-emerald-700"
+                          >
+                            <span>EXPLORE THIS GUIDE &rarr;</span>
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+              {/* 🛡️ RESPONSIBLE AFFILIATE DISCLOSURE BANNER */}
+      <div className="bg-slate-900 border border-amber-500/40 rounded-2xl p-5 shadow-xl space-y-2 text-xs font-sans text-slate-300">
+        <div className="flex items-center gap-2 text-amber-400 font-bold font-orbitron">
+          <ShieldCheck className="w-4 h-4" />
+          <span>OFFICIAL AFFILIATE DISCLOSURE &amp; TRANSPARENCY NOTICE</span>
+        </div>
+        <p className="leading-relaxed">
+          Some links on Team WhiteHat Dev are referral/affiliate links (such as Hostinger, CapCut, Microsoft Rewards, Vecteezy, and Envato). If you click through and sign up or make a purchase, we may receive a referral commission at zero additional cost to you. We only recommend software tools and services that we believe provide genuine utility to Virtual Assistants and freelancers.
+        </p>
+      </div>
+
+      {/* MAIN TWO-COLUMN CONTAINER LAYOUT */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          
+          {/* LEFT 3-COLUMNS TOPIC PANELS */}
+          <div className="lg:col-span-3 space-y-8">
+
+            {/* ========================================================================= */}
+                        {/* ========================================================================= */}
+            {/* 📚 CMS COLLAPSIBLE CATEGORY: AFFILIATE MARKETING FUNDAMENTALS */}
+            {/* ========================================================================= */}
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
+              <button
+                onClick={() => togglePanel('fundamentals')}
+                className="w-full p-6 bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
+                    <BookOpen className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-cyan-300 uppercase tracking-widest font-bold block">
+                      CMS EDUCATIONAL CATEGORY 1
+                    </span>
+                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
+                      ▼ AFFILIATE MARKETING FUNDAMENTALS &amp; TERMINOLOGY
+                    </h2>
+                    <p className="text-xs text-cyan-200 font-sans mt-0.5">
+                      Understanding affiliate links, cookies, tracking parameters, merchant commissions, and network platforms.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-cyan-300 shrink-0">
+                  <span>{openPanels.fundamentals ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
+                  {openPanels.fundamentals ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </button>
+
+              {openPanels.fundamentals && (
+                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans">
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">What Is Affiliate Marketing?</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        Affiliate marketing is a performance-based system where creators recommend relevant software tools to their audience and earn a commission on qualified referral purchases.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Tracking Cookies &amp; Links</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        When a visitor clicks a referral link, a tracking cookie stored in their browser credits the referring affiliate if a signup occurs within the cookie window (e.g. 30-90 days).
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Commission Structures</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        Commissions can be one-off flat fees (CPA), percentage sales commissions, or recurring monthly software subcriptions.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Affiliate Networks</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        Platforms like Impact.com, Lemon Squeezy, and Involve Asia handle tracking reliability, reporting analytics, and monthly payouts.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ========================================================================= */}
+            {/* 🚀 CMS COLLAPSIBLE CATEGORY: GETTING STARTED & NICHE SELECTION */}
+            {/* ========================================================================= */}
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
+              <button
+                onClick={() => togglePanel('gettingStarted')}
+                className="w-full p-6 bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 shrink-0 font-bold">
+                    <TrendingUp className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-purple-300 uppercase tracking-widest font-bold block">
+                      CMS EDUCATIONAL CATEGORY 2
+                    </span>
+                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
+                      ▼ GETTING STARTED &amp; RESPONSIBLE NICHE SELECTION
+                    </h2>
+                    <p className="text-xs text-purple-200 font-sans mt-0.5">
+                      Finding reliable affiliate programs, evaluating product quality, and targeting the right audience.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-purple-300 shrink-0">
+                  <span>{openPanels.gettingStarted ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
+                  {openPanels.gettingStarted ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </button>
+
+              {openPanels.gettingStarted && (
+                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-sans">
+                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
+                      <div className="font-bold text-purple-950 font-orbitron text-sm">1. Choose a Niche</div>
+                      <p className="text-slate-600 text-xs">Focus on a specific area you understand, such as VA productivity, video editing, or web hosting.</p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
+                      <div className="font-bold text-purple-950 font-orbitron text-sm">2. Evaluate Products</div>
+                      <p className="text-slate-600 text-xs">Only recommend tools with proven reliability, good customer support, and fair refund policies.</p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
+                      <div className="font-bold text-purple-950 font-orbitron text-sm">3. Review Program Terms</div>
+                      <p className="text-slate-600 text-xs">Read merchant terms to ensure compliance with search engine guidelines and disclosure requirements.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            
+
+
+
+</div>
 
           {/* RIGHT SIDEBAR PROMO COLUMN */}
           <div className="lg:col-span-1">
