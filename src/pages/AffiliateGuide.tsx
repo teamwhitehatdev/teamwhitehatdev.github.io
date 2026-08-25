@@ -247,6 +247,127 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
         </div>
 
         
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+
+          {/* LEFT COLUMN: Educational Categories, Topics 1-6 & CMS Section */}
+          <div className="lg:col-span-2 space-y-8">
+            
+            {/* 📚 CMS COLLAPSIBLE CATEGORY: AFFILIATE MARKETING FUNDAMENTALS */}
+            {/* ========================================================================= */}
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
+              <button
+                onClick={() => togglePanel('fundamentals')}
+                className="w-full p-6 bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
+                    <BookOpen className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-cyan-300 uppercase tracking-widest font-bold block">
+                      CMS EDUCATIONAL CATEGORY 1
+                    </span>
+                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
+                      ▼ AFFILIATE MARKETING FUNDAMENTALS &amp; TERMINOLOGY
+                    </h2>
+                    <p className="text-xs text-cyan-200 font-sans mt-0.5">
+                      Understanding affiliate links, cookies, tracking parameters, merchant commissions, and network platforms.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-cyan-300 shrink-0">
+                  <span>{openPanels.fundamentals ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
+                  {openPanels.fundamentals ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </button>
+
+              {openPanels.fundamentals && (
+                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans">
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">What Is Affiliate Marketing?</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        Affiliate marketing is a performance-based system where creators recommend relevant software tools to their audience and earn a commission on qualified referral purchases.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Tracking Cookies &amp; Links</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        When a visitor clicks a referral link, a tracking cookie stored in their browser credits the referring affiliate if a signup occurs within the cookie window (e.g. 30-90 days).
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Commission Structures</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        Commissions can be one-off flat fees (CPA), percentage sales commissions, or recurring monthly software subcriptions.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
+                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Affiliate Networks</h4>
+                      <p className="text-slate-600 leading-relaxed">
+                        Platforms like Impact.com, Lemon Squeezy, and Involve Asia handle tracking reliability, reporting analytics, and monthly payouts.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ========================================================================= */}
+            {/* 🚀 CMS COLLAPSIBLE CATEGORY: GETTING STARTED & NICHE SELECTION */}
+            {/* ========================================================================= */}
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
+              <button
+                onClick={() => togglePanel('gettingStarted')}
+                className="w-full p-6 bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 shrink-0 font-bold">
+                    <TrendingUp className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-purple-300 uppercase tracking-widest font-bold block">
+                      CMS EDUCATIONAL CATEGORY 2
+                    </span>
+                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
+                      ▼ GETTING STARTED &amp; RESPONSIBLE NICHE SELECTION
+                    </h2>
+                    <p className="text-xs text-purple-200 font-sans mt-0.5">
+                      Finding reliable affiliate programs, evaluating product quality, and targeting the right audience.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-purple-300 shrink-0">
+                  <span>{openPanels.gettingStarted ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
+                  {openPanels.gettingStarted ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </button>
+
+              {openPanels.gettingStarted && (
+                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-sans">
+                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
+                      <div className="font-bold text-purple-950 font-orbitron text-sm">1. Choose a Niche</div>
+                      <p className="text-slate-600 text-xs">Focus on a specific area you understand, such as VA productivity, video editing, or web hosting.</p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
+                      <div className="font-bold text-purple-950 font-orbitron text-sm">2. Evaluate Products</div>
+                      <p className="text-slate-600 text-xs">Only recommend tools with proven reliability, good customer support, and fair refund policies.</p>
+                    </div>
+
+                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
+                      <div className="font-bold text-purple-950 font-orbitron text-sm">3. Review Program Terms</div>
+                      <p className="text-slate-600 text-xs">Read merchant terms to ensure compliance with search engine guidelines and disclosure requirements.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* 🌐 COLLAPSIBLE TOPIC 1: WEB HOSTING & DOMAIN INFRASTRUCTURE (HOSTINGER) */}
             {/* ========================================================================= */}
             <div className="bg-white rounded-2xl shadow-xl border-2 border-indigo-200 overflow-hidden">
@@ -1172,11 +1293,10 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
 
 
 
-          
+          </div>
 
-
-            {/* ========================================================================= */}
-            {/* 🛒 COLLAPSIBLE TOPIC 6: GUMROAD — DIGITAL MARKETPLACE & CREATOR PLATFORM */}
+          {/* RIGHT SIDEBAR PROMO COLUMN */}
+          {/* 🛒 COLLAPSIBLE TOPIC 6: GUMROAD — DIGITAL MARKETPLACE & CREATOR PLATFORM */}
             {/* ========================================================================= */}
             <div className="bg-white rounded-2xl shadow-xl border-2 border-pink-400/80 overflow-hidden transition-all">
 
@@ -1462,7 +1582,6 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
 
             </div>
 
-
             {/* 📝 DYNAMIC CMS MANAGED TOPIC DIVISION */}
             {cmsAffiliateItems.length > 0 && (
               <div className="bg-white rounded-2xl shadow-xl border-2 border-emerald-300 overflow-hidden">
@@ -1514,152 +1633,18 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
           <ShieldCheck className="w-4 h-4" />
           <span>OFFICIAL AFFILIATE DISCLOSURE &amp; TRANSPARENCY NOTICE</span>
         </div>
-        <p className="leading-relaxed">
-          Some links on Team WhiteHat Dev are referral/affiliate links (such as Hostinger, CapCut, Microsoft Rewards, Vecteezy, and Envato). If you click through and sign up or make a purchase, we may receive a referral commission at zero additional cost to you. We only recommend software tools and services that we believe provide genuine utility to Virtual Assistants and freelancers.
-        </p>
-      </div>
-
-      {/* MAIN TWO-COLUMN CONTAINER LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          
-          {/* LEFT 3-COLUMNS TOPIC PANELS */}
-          <div className="lg:col-span-3 space-y-8">
-
-            {/* ========================================================================= */}
-                        {/* ========================================================================= */}
-            {/* 📚 CMS COLLAPSIBLE CATEGORY: AFFILIATE MARKETING FUNDAMENTALS */}
-            {/* ========================================================================= */}
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
-              <button
-                onClick={() => togglePanel('fundamentals')}
-                className="w-full p-6 bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400 shrink-0 font-bold">
-                    <BookOpen className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-mono text-cyan-300 uppercase tracking-widest font-bold block">
-                      CMS EDUCATIONAL CATEGORY 1
-                    </span>
-                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
-                      ▼ AFFILIATE MARKETING FUNDAMENTALS &amp; TERMINOLOGY
-                    </h2>
-                    <p className="text-xs text-cyan-200 font-sans mt-0.5">
-                      Understanding affiliate links, cookies, tracking parameters, merchant commissions, and network platforms.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-cyan-300 shrink-0">
-                  <span>{openPanels.fundamentals ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
-                  {openPanels.fundamentals ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </div>
-              </button>
-
-              {openPanels.fundamentals && (
-                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans">
-                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
-                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">What Is Affiliate Marketing?</h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        Affiliate marketing is a performance-based system where creators recommend relevant software tools to their audience and earn a commission on qualified referral purchases.
-                      </p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
-                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Tracking Cookies &amp; Links</h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        When a visitor clicks a referral link, a tracking cookie stored in their browser credits the referring affiliate if a signup occurs within the cookie window (e.g. 30-90 days).
-                      </p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
-                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Commission Structures</h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        Commissions can be one-off flat fees (CPA), percentage sales commissions, or recurring monthly software subcriptions.
-                      </p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-slate-200 space-y-2 shadow-sm">
-                      <h4 className="font-bold text-slate-900 text-sm font-orbitron text-cyan-900">Affiliate Networks</h4>
-                      <p className="text-slate-600 leading-relaxed">
-                        Platforms like Impact.com, Lemon Squeezy, and Involve Asia handle tracking reliability, reporting analytics, and monthly payouts.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* ========================================================================= */}
-            {/* 🚀 CMS COLLAPSIBLE CATEGORY: GETTING STARTED & NICHE SELECTION */}
-            {/* ========================================================================= */}
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-300 overflow-hidden transition-all">
-              <button
-                onClick={() => togglePanel('gettingStarted')}
-                className="w-full p-6 bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 shrink-0 font-bold">
-                    <TrendingUp className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-mono text-purple-300 uppercase tracking-widest font-bold block">
-                      CMS EDUCATIONAL CATEGORY 2
-                    </span>
-                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white">
-                      ▼ GETTING STARTED &amp; RESPONSIBLE NICHE SELECTION
-                    </h2>
-                    <p className="text-xs text-purple-200 font-sans mt-0.5">
-                      Finding reliable affiliate programs, evaluating product quality, and targeting the right audience.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2 text-xs font-mono font-bold text-purple-300 shrink-0">
-                  <span>{openPanels.gettingStarted ? 'COLLAPSE PANEL [-]' : 'EXPAND PANEL [+]'}</span>
-                  {openPanels.gettingStarted ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </div>
-              </button>
-
-              {openPanels.gettingStarted && (
-                <div className="p-6 md:p-8 space-y-6 bg-slate-50/50">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-sans">
-                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
-                      <div className="font-bold text-purple-950 font-orbitron text-sm">1. Choose a Niche</div>
-                      <p className="text-slate-600 text-xs">Focus on a specific area you understand, such as VA productivity, video editing, or web hosting.</p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
-                      <div className="font-bold text-purple-950 font-orbitron text-sm">2. Evaluate Products</div>
-                      <p className="text-slate-600 text-xs">Only recommend tools with proven reliability, good customer support, and fair refund policies.</p>
-                    </div>
-
-                    <div className="p-4 bg-white rounded-xl border border-purple-200 space-y-1">
-                      <div className="font-bold text-purple-950 font-orbitron text-sm">3. Review Program Terms</div>
-                      <p className="text-slate-600 text-xs">Read merchant terms to ensure compliance with search engine guidelines and disclosure requirements.</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            
-
-
-
-</div>
+          </div>
 
           {/* RIGHT SIDEBAR PROMO COLUMN */}
           <div className="lg:col-span-1">
-            <div className="sticky top-20 bg-white p-4 rounded-2xl shadow-xl border border-slate-300">
+            <div className="sticky top-24 bg-white p-5 rounded-2xl shadow-xl border border-slate-300">
               <DynamicAdsSidebar />
             </div>
           </div>
 
         </div>
 
-        {/*  REQUIRED FTC AFFILIATE TRANSPARENCY DISCLOSURE BANNER (MOVED TO BOTTOM) */}
-{/*  REQUIRED FTC AFFILIATE TRANSPARENCY DISCLOSURE BANNER */}
+        {/* 📋 REQUIRED FTC AFFILIATE TRANSPARENCY DISCLOSURE BANNER */}
         <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 md:p-6 shadow-md flex flex-col md:flex-row items-start gap-4">
           <div className="w-10 h-10 rounded-xl bg-amber-200 border border-amber-400 flex items-center justify-center text-amber-800 shrink-0 font-bold">
             <Info className="w-6 h-6" />
@@ -1669,7 +1654,7 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
               <span> Affiliate Transparency Disclosure &amp; Reader Commitment</span>
             </h4>
             <p>
-              <strong>Team WhiteHat Dev</strong> is an independent digital development &amp; virtual assistant resource portal. Pages on this website contain affiliate referral links (including Hostinger referral links with coupon code <code className="bg-amber-200/80 px-1.5 py-0.5 rounded font-mono font-bold text-amber-900">DPDCABINCEHM</code> and official CapCut creator links). If you click through and purchase web hosting or software subscriptions, we may receive a referral commission at <strong>zero extra cost to you</strong>. We only recommend hosting tools, video editors, and workflow templates that we actively use to build client websites and automated workflows. This affiliate revenue funds our free tutorials and open-source tools.
+              <strong>Team WhiteHat Dev</strong> is an independent digital development &amp; virtual assistant resource portal. Pages on this website contain affiliate referral links (including Hostinger referral links with coupon code <code className="bg-amber-200/80 px-1.5 py-0.5 rounded font-mono font-bold text-amber-900">DPDCABINCEHM</code>, official CapCut creator links, ElevenLabs, and Gumroad partner links). If you click through and purchase web hosting or software subscriptions, we may receive a referral commission at <strong>zero extra cost to you</strong>. We only recommend hosting tools, video editors, and workflow templates that we actively use to build client websites and automated workflows. This affiliate revenue funds our free tutorials and open-source tools.
             </p>
           </div>
         </div>
