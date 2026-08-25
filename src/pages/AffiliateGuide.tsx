@@ -1069,6 +1069,287 @@ const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref
             </div>
 
 
+            {/* ========================================================================= */}
+            {/* 🎙️ COLLAPSIBLE TOPIC 5: ELEVENLABS AI VOICE SYNTHESIS & VOICE CLONING SUITE */}
+            {/* ========================================================================= */}
+            <div className="bg-white rounded-2xl shadow-xl border-2 border-purple-400/80 overflow-hidden transition-all">
+
+              {/* TOPIC HEADER BAR */}
+              <button
+                onClick={() => togglePanel('elevenlabs')}
+                className="w-full p-6 bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between text-left hover:opacity-95 transition-all select-none"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 shrink-0 font-bold">
+                    🎙️
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-purple-300 uppercase tracking-widest font-bold block">
+                      DIVISION 5: GENERATIVE AI AUDIO &amp; CONVERSATIONAL VOICE MODELS
+                    </span>
+                    <h2 className="text-base sm:text-xl font-black font-orbitron text-white flex items-center gap-2 flex-wrap">
+                      <span>TOPIC 5: ELEVENLABS AI VOICE SYNTHESIS &amp; VOICE CLONING</span>
+                      <span className="px-2 py-0.5 rounded bg-purple-400 text-black font-mono font-black text-[10px] uppercase">
+                        FEATURED PARTNER
+                      </span>
+                    </h2>
+                    <p className="text-xs text-purple-200 font-sans mt-0.5">
+                      The best AI audio models, voice cloning &amp; multilingual video dubbing in one unified editor.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-purple-300 font-mono text-xs shrink-0">
+                  <span>{openPanels.elevenlabs ? 'COLLAPSE' : 'EXPAND'}</span>
+                  {openPanels.elevenlabs ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5 text-purple-400" />}
+                </div>
+              </button>
+
+              {/* TOPIC CONTENT BODY */}
+              {openPanels.elevenlabs && (
+                <div className="p-6 sm:p-8 space-y-8 text-slate-800 font-sans leading-relaxed">
+                  
+                  {/* UPLOADED OFFICIAL ELEVENLABS BANNER IMAGE */}
+                  <div className="space-y-2">
+                    <div className="overflow-hidden rounded-2xl border-2 border-purple-500/40 shadow-2xl relative group">
+                      <img
+                        src="./media_1787649227371.webp"
+                        alt="ElevenLabs - The best AI audio models, now in one editor"
+                        className="w-full h-auto object-cover group-hover:scale-[1.01] transition-all duration-300"
+                        onError={(e) => { (e.target as HTMLImageElement).src = './media_1786678717227.png'; }}
+                      />
+                      <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-purple-400 text-[11px] font-mono text-purple-300 font-bold uppercase">
+                        🎙️ OFFICIAL ELEVENLABS AI AUDIO EDITOR
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* PROMOTIONAL HERO BANNER */}
+                  <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border border-purple-500/40">
+                    <div className="space-y-2 text-center md:text-left">
+                      <span className="px-3 py-1 bg-purple-500/30 text-purple-300 font-mono text-xs font-bold rounded-lg border border-purple-400/50 uppercase">
+                        SPECIAL AFFILIATE INVITATION &amp; FREE CREDITS
+                      </span>
+                      <h4 className="text-xl sm:text-2xl font-black font-orbitron text-white">
+                        TRANSFORM ANY SCRIPT INTO ULTRA-REALISTIC HUMAN VOICE
+                      </h4>
+                      <p className="text-xs sm:text-sm text-purple-100 max-w-2xl leading-relaxed">
+                        Generate expressive, natural AI voiceovers, voice clones, and automated audiobooks in seconds. Perfect for Freelancers, Virtual Assistants, YouTubers, and Affiliate Marketers.
+                      </p>
+                    </div>
+
+                    <a
+                      href={ELEVENLABS_REFERRAL_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-6 py-4 bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 hover:from-purple-300 hover:to-amber-200 text-black font-black font-orbitron text-xs sm:text-sm uppercase rounded-xl transition-all shadow-[0_0_25px_rgba(192,132,252,0.5)] shrink-0 flex items-center gap-2 hover:scale-105"
+                    >
+                      <span>CLAIM ELEVENLABS CREDITS &rarr;</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+
+                  {/* ELEVENLABS PREMIUM PLANS OVERVIEW */}
+                  <div className="space-y-4">
+                    <div className="border-b-2 border-purple-200 pb-2">
+                      <span className="text-xs font-mono font-bold text-purple-600 uppercase tracking-widest block">
+                        ⚡ HIGH-CONVERTING TIERS FOR TECH ENTHUSIASTS &amp; CREATORS
+                      </span>
+                      <h3 className="text-lg sm:text-xl font-black font-orbitron text-purple-950 uppercase">
+                        ELEVENLABS PLANS: STARTER VS. CREATOR
+                      </h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                      
+                      {/* STARTER PLAN ($5/MONTH) */}
+                      <div className="bg-purple-50/80 border-2 border-purple-200 rounded-2xl p-6 space-y-4 shadow-sm hover:border-purple-400 transition-all flex flex-col justify-between">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="px-3 py-1 bg-purple-200 text-purple-900 font-mono font-black text-xs rounded-full uppercase">
+                              STARTER PLAN
+                            </span>
+                            <span className="text-2xl font-black font-orbitron text-purple-900">$5 <span className="text-xs font-normal text-slate-600 font-sans">/ month</span></span>
+                          </div>
+
+                          <h4 className="text-base font-black font-orbitron text-slate-900">
+                            Instant Voice Cloning &amp; Extended Characters
+                          </h4>
+
+                          <p className="text-xs text-slate-700 leading-relaxed">
+                            One benefit of the starter plan is the extended amount of characters and the option to generate more custom voices. This allows you to get more out of basic features without being limited in audio output.
+                          </p>
+
+                          <div className="p-3.5 bg-white rounded-xl border border-purple-200 space-y-1.5 text-xs text-slate-800">
+                            <div className="font-bold text-purple-900 font-orbitron">🚀 Instant Voice Cloning:</div>
+                            <p className="text-[11px] text-slate-600 leading-snug">
+                              Within mere minutes, create your own voice clone. All you need is a short audio sample of about a minute — ElevenLabs handles the rest!
+                            </p>
+                          </div>
+
+                          <div className="space-y-1 text-xs text-slate-700">
+                            <div className="font-bold text-purple-950 font-mono text-[11px] uppercase">Who should try Starter:</div>
+                            <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-600">
+                              <li>Creators who want to cut voiceover production time</li>
+                              <li>Creators who can't afford expensive audio gear or voice actors</li>
+                              <li>Everyone exploring the future of generative voice AI</li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <a
+                          href={ELEVENLABS_REFERRAL_LINK}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold font-orbitron text-xs uppercase rounded-xl text-center shadow transition-all block mt-4"
+                        >
+                          START WITH STARTER PLAN ($5) &rarr;
+                        </a>
+                      </div>
+
+                      {/* CREATOR PLAN ($22/MONTH) */}
+                      <div className="bg-gradient-to-br from-purple-100/90 via-indigo-50 to-purple-50 border-2 border-purple-400 rounded-2xl p-6 space-y-4 shadow-md hover:border-purple-600 transition-all flex flex-col justify-between relative overflow-hidden">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="px-3 py-1 bg-purple-600 text-white font-mono font-black text-xs rounded-full uppercase">
+                                CREATOR PLAN
+                              </span>
+                              <span className="px-2 py-0.5 bg-amber-300 text-black font-mono font-black text-[10px] rounded uppercase">
+                                MOST POPULAR
+                              </span>
+                            </div>
+                            <span className="text-2xl font-black font-orbitron text-purple-900">$22 <span className="text-xs font-normal text-slate-600 font-sans">/ month</span></span>
+                          </div>
+
+                          <h4 className="text-base font-black font-orbitron text-slate-900">
+                            Professional Voice Cloning &amp; Long-Form Projects
+                          </h4>
+
+                          <p className="text-xs text-slate-700 leading-relaxed">
+                            Perfect for content creators who value cost-efficiency and high-quality results. Takes voice AI to an indistinguishable, studio-grade level.
+                          </p>
+
+                          <div className="p-3.5 bg-white rounded-xl border border-purple-200 space-y-1.5 text-xs text-slate-800">
+                            <div className="font-bold text-purple-900 font-orbitron">🧬 Professional Voice Cloning (PVC):</div>
+                            <p className="text-[11px] text-slate-600 leading-snug">
+                              Based on longer voice samples, ElevenLabs trains your unique voice clone to be almost indistinguishable from your natural voice.
+                            </p>
+                          </div>
+
+                          <div className="p-3.5 bg-white rounded-xl border border-purple-200 space-y-1.5 text-xs text-slate-800">
+                            <div className="font-bold text-purple-900 font-orbitron">📚 Dedicated "Projects" Feature:</div>
+                            <p className="text-[11px] text-slate-600 leading-snug">
+                              Upload entire scripts and convert them into multi-speaker audio with 1 click. Perfect for audiobooks, podcasts, or long YouTube video voiceovers.
+                            </p>
+                          </div>
+                        </div>
+
+                        <a
+                          href={ELEVENLABS_REFERRAL_LINK}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full py-3 bg-gradient-to-r from-purple-700 via-indigo-700 to-purple-800 hover:brightness-110 text-white font-bold font-orbitron text-xs uppercase rounded-xl text-center shadow-lg transition-all block mt-4"
+                        >
+                          UPGRADE TO CREATOR PLAN ($22) &rarr;
+                        </a>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* 5 VALUE PILLARS FOR FREELANCERS & VAS */}
+                  <div className="space-y-4">
+                    <h4 className="text-base sm:text-lg font-black font-orbitron text-purple-950 uppercase border-b-2 border-purple-200 pb-2">
+                      💡 WHY FREELANCERS, VAS &amp; AFFILIATES NEED ELEVENLABS
+                    </h4>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs font-sans">
+                      <div className="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-purple-950 font-orbitron text-sm">1. 🎬 Faceless Video Channels</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Pump out daily TikToks, YouTube Shorts, and Reels with hyper-realistic human voiceovers without recording.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-purple-950 font-orbitron text-sm">2. 🌐 29+ Multilingual AI Dubbing</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Translate and auto-dub content into Spanish, German, Japanese, Tagalog, and French with emotion preserved.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-purple-950 font-orbitron text-sm">3. 💼 High-Ticket VA Services</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Virtual Assistants charge $30 - $60/hr offering audiobook narration, podcast post-production &amp; voice setups.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-purple-950 font-orbitron text-sm">4. 💰 High-Converting Ad Hooks</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Affiliate marketers test 10+ voiceover angles daily on Meta &amp; TikTok ads to maximize return on ad spend.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-1.5 shadow-sm">
+                        <div className="font-bold text-purple-950 font-orbitron text-sm">5. ⚡ 10x Content Velocity</div>
+                        <p className="text-slate-600 leading-relaxed">
+                          Combine ElevenLabs audio with CapCut video editing to generate weeks of content in a single afternoon.
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-purple-900 text-white space-y-1.5 flex flex-col justify-between shadow-sm border border-purple-700">
+                        <div>
+                          <div className="font-bold font-orbitron text-sm text-purple-200">🚀 Explore Resources</div>
+                          <p className="text-purple-100 text-[11px] leading-relaxed">
+                            Check out the Idea Hub in the Resources tab for full tier guides and workflow recipes.
+                          </p>
+                        </div>
+                        <a
+                          href={ELEVENLABS_REFERRAL_LINK}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold font-mono text-[11px] text-center rounded-lg shadow transition-all block mt-2"
+                        >
+                          EXPLORE IDEA HUB &rarr;
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BOTTOM PROMOTIONAL CTA BANNER */}
+                  <div className="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 rounded-2xl p-6 text-white shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-purple-400">
+                    <div className="space-y-2 text-center md:text-left">
+                      <span className="text-xs font-mono text-purple-300 font-bold uppercase tracking-widest block">
+                        🎙️ ELEVENLABS OFFICIAL PARTNER INVITATION
+                      </span>
+                      <h3 className="text-xl md:text-2xl font-black font-orbitron text-white">
+                        READY TO ELEVATE YOUR CONTENT WITH AI AUDIO?
+                      </h3>
+                      <p className="text-xs md:text-sm text-slate-300 max-w-2xl font-sans">
+                        Sign up through our official partner link to access instant voice cloning, multi-speaker project tools, and free credits.
+                      </p>
+                    </div>
+
+                    <a
+                      href={ELEVENLABS_REFERRAL_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-6 py-4 bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 text-black font-black font-orbitron text-xs md:text-sm uppercase rounded-xl shadow-xl hover:scale-105 transition-all shrink-0 flex items-center gap-2 border border-white/40 cursor-pointer"
+                    >
+                      <span>TRY ELEVENLABS FREE &rarr;</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+
+                </div>
+              )}
+
+            </div>
+
+
+
           </div>
 
           {/* RIGHT SIDEBAR PROMO COLUMN */}
