@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { HUDPanel } from '../components/HUDPanel';
 import { TESTIMONIALS_DATA } from '../data/testimonialsData';
-import { Star, RefreshCw, BookOpen, Sparkles, CheckCircle2, ShieldCheck, ArrowRight, ExternalLink, Award, Zap, Flame, HelpCircle, Layers, TrendingUp, UserCheck, Briefcase, Code, Video, Globe } from 'lucide-react';
+import { Music, Star, RefreshCw, BookOpen, Sparkles, CheckCircle2, ShieldCheck, ArrowRight, ExternalLink, Award, Zap, Flame, HelpCircle, Layers, TrendingUp, UserCheck, Briefcase, Code, Video, Globe } from 'lucide-react';
 import { AtomeCardPanel } from '../components/AtomeCardPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { useApp } from '../context/AppContext';
@@ -335,6 +335,70 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         </aside>
 
       </div>
+
+      
+      {/* 🎵 MINIMAL SUNO AI MUSIC CREATION ADVERTISEMENT DIVISION PANEL */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-950 via-slate-900 to-rose-950 border-2 border-orange-500/50 p-6 md:p-8 shadow-2xl space-y-6">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+          
+          {/* LEFT: LOGO & DETAILS */}
+          <div className="flex items-start gap-4 max-w-2xl">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-orange-400/80 shrink-0 shadow-lg bg-black">
+              <img
+                src="./media_1787666146962.jpg"
+                alt="Suno AI Music Generation Logo"
+                className="w-full h-full object-cover"
+                onError={(e) => { (e.target as HTMLImageElement).src = './media_1786678717227.png'; }}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-400/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1">
+                  <Music className="w-3 h-3" />
+                  <span>OFFICIAL SUNO AI PARTNER INVITATION</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono text-[9px] font-bold uppercase">
+                  FREE SIGNUP CREDITS
+                </span>
+              </div>
+              <h3 className="text-lg sm:text-2xl font-black font-orbitron text-white">
+                CREATE ORIGINAL RADIO-READY SONGS WITH SUNO AI
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
+                Suno is the world's leading generative AI music studio. Transform simple text prompts into full-length broadcast-quality songs with realistic vocals, harmonies, and custom genres in seconds.
+              </p>
+            </div>
+          </div>
+
+          {/* RIGHT: CTA BUTTON */}
+          <div className="shrink-0 w-full lg:w-auto flex flex-col items-center lg:items-end gap-2">
+            <a
+              href="https://suno.com/invite/@chillvibemusics"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full lg:w-auto px-6 py-4 bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-400 hover:to-pink-400 text-white font-black font-orbitron text-xs sm:text-sm uppercase rounded-xl transition-all shadow-[0_0_25px_rgba(249,115,22,0.5)] flex items-center justify-center gap-2 hover:scale-105"
+            >
+              <span>CLAIM FREE INVITE ON SUNO &rarr;</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+            <span className="text-[10px] font-mono text-orange-200/70">
+              Direct Invite: @chillvibemusics
+            </span>
+          </div>
+
+        </div>
+
+        {/* MINIMAL SHOWCASE GALLERY STRIP */}
+        <div className="overflow-hidden rounded-2xl border border-orange-500/30 shadow-inner">
+          <img
+            src="./media_1787666146964.jpg"
+            alt="Suno AI Music Showcase and Playlists"
+            className="w-full h-24 sm:h-32 object-cover object-center"
+            onError={(e) => { (e.target as HTMLImageElement).src = './media_1786678717227.png'; }}
+          />
+        </div>
+      </section>
+
 
       {/* ARTICLE READER MODAL */}
       <ArticleModal
