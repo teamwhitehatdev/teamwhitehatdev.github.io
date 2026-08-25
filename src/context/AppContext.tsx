@@ -556,10 +556,36 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const getPublicPageCMSItems = useCallback((targetPageOwner: string) => {
     const targetKey = targetPageOwner.toLowerCase().trim();
     return cmsItems.filter(item => {
+      // Visibility check
       if (item.visible === false) return false;
-      if (item.status && item.status !== 'PUBLISHED') return false;
-      const owner = (item.pageOwner || item.page || '').toLowerCase().trim();
-      return owner === targetKey || (targetKey === 'home' && (item.homeFeatured || owner === 'home'));
+      if (item.status && item.status.toUpperCase() !== 'PUBLISHED') return false;
+
+      const rawOwner = (item.pageOwner || item.page || 'showcase').toLowerCase().trim();
+      
+      // Normalized matching across route aliases
+      if (targetKey === 'home') {
+        return item.homeFeatured === true || item.featured === true || rawOwner === 'home';
+      }
+      if (targetKey === 'ai' || targetKey === 'ai-learning') {
+        return rawOwner === 'ai' || rawOwner === 'ai-learning';
+      }
+      if (targetKey === 'web-hosting' || targetKey === 'hosting') {
+        return rawOwner === 'web-hosting' || rawOwner === 'hosting';
+      }
+      if (targetKey === 'affiliate-guide' || targetKey === 'affiliate') {
+        return rawOwner === 'affiliate-guide' || rawOwner === 'affiliate';
+      }
+      if (targetKey === 'services') {
+        return rawOwner === 'services';
+      }
+      if (targetKey === 'showcase') {
+        return rawOwner === 'showcase';
+      }
+      if (targetKey === 'about') {
+        return rawOwner === 'about';
+      }
+
+      return rawOwner === targetKey;
     }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
   }, [cmsItems]);
 

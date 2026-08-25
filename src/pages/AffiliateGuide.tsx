@@ -13,10 +13,11 @@ export const AffiliateGuide: React.FC = () => {
 
   // COLLAPSIBLE PANEL DIVISIONS STATE
   const [openPanels, setOpenPanels] = useState<Record<string, boolean>>({
+    elevenlabs: true,
     hostinger: true,
     capcut: true,
     microsoft: true,
-  graphics: true,
+    graphics: true,
     fundamentals: true,
     gettingStarted: true,
     contentStrategy: true,
@@ -29,6 +30,7 @@ export const AffiliateGuide: React.FC = () => {
     setOpenPanels(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
+  const ELEVENLABS_REFERRAL_LINK = "https://try.elevenlabs.io/e5xwigkl9igv";
   const HOSTINGER_LINK = "https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM";
   const CAPCUT_REFERRAL_LINK = "https://capcutaffiliateprogram.pxf.io/WqmL1e";
 const MICROSOFT_REFERRAL_LINK = "https://rewards.bing.com/welcome?rh=57A3288&ref=rafsrchae";

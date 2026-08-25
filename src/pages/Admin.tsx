@@ -221,11 +221,15 @@ export const Admin: React.FC = () => {
 
   const handleSaveCMSItem = (e: React.FormEvent) => {
     e.preventDefault();
+    const targetOwner = cmsForm.pageOwner || 'showcase';
     if (editingCMSItem) {
       updateCMSItem(editingCMSItem.id, { ...cmsForm });
+      setToast(`✅ Updated & Published to /#/${targetOwner}!`);
     } else {
-      addCMSItem({ ...cmsForm });
+      addCMSItem({ ...cmsForm, status: 'PUBLISHED', visible: true });
+      setToast(`🎉 Created & Published to /#/${targetOwner}!`);
     }
+    setTimeout(() => setToast(null), 4000);
     setEditingCMSItem(null);
     setIsCreatingCMSItem(false);
   };
