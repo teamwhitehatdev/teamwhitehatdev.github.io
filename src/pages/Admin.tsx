@@ -8,6 +8,13 @@ import { Service, Project, CMSItem, CMSPageType, CMSStatusType, ContactInquiry, 
 
 export const Admin: React.FC = () => {
   const {
+    affiliateTopics,
+    addAffiliateTopic,
+    updateAffiliateTopic,
+    deleteAffiliateTopic,
+    toggleAffiliateTopicVisibility,
+    moveAffiliateTopicOrder,
+    resetAffiliateTopicsToDefault,
     cmsItems, cmsCategories, addCMSCategory, addCMSItem, updateCMSItem, deleteCMSItem,
     toggleCMSItemVisibility, toggleCMSItemHomeFeatured, setCMSItemStatus,
     moveCMSItemOrder, setCMSItemSortOrder,
@@ -36,7 +43,7 @@ export const Admin: React.FC = () => {
   const [authError, setAuthError] = useState('');
 
   // TABS STATE: 'cms' | 'promotions' | 'hire-va' | 'inquiries' | 'analytics' | 'firewall'
-  const [activeTab, setActiveTab] = useState<'cms' | 'promotions' | 'hire-va' | 'inquiries' | 'analytics' | 'firewall'>('cms');
+  const [activeTab, setActiveTab] = useState<'cms' | 'affiliate-topics' | 'promotions' | 'hire-va' | 'inquiries' | 'analytics' | 'firewall'>('cms');
 
   // FILTERS
   const [selectedPageFilter, setSelectedPageFilter] = useState<CMSPageOwnerType | 'all'>('all');
@@ -94,6 +101,120 @@ export const Admin: React.FC = () => {
     metrics: '',
     sortOrder: 1
   });
+
+  
+  // COLLAPSIBLE TOPICS CMS MODAL & FORM STATE
+  const [editingTopic, setEditingTopic] = useState<AffiliateCollapsibleTopic | null>(null);
+  const [isCreatingTopic, setIsCreatingTopic] = useState(false);
+  const [topicForm, setTopicForm] = useState<{
+    topicNumber: string;
+    categoryBadge: string;
+    title: string;
+    subtitle: string;
+    iconEmoji: string;
+    themeColor: TopicThemeColor;
+    headerBannerImage: string;
+    videoUrl: string;
+    referralUrl: string;
+    primaryCtaText: string;
+    secondaryCtaText: string;
+    secondaryCtaUrl: string;
+    couponCode: string;
+    discountBadgeText: string;
+    markdownContent: string;
+    isVisible: boolean;
+    isDefaultOpen: boolean;
+  }>({
+    topicNumber: 'TOPIC 7',
+    categoryBadge: 'TOPIC 7: DIGITAL TOOLKIT',
+    title: 'TOPIC 7: NEW DIGITAL WORKSPACE & TOOL',
+    subtitle: 'Streamline your freelance workflow and automate client tasks.',
+    iconEmoji: '⚡',
+    themeColor: 'cyan',
+    headerBannerImage: '',
+    videoUrl: '',
+    referralUrl: '',
+    primaryCtaText: 'GET STARTED NOW →',
+    secondaryCtaText: '',
+    secondaryCtaUrl: '',
+    couponCode: '',
+    discountBadgeText: 'EXCLUSIVE PARTNER DISCOUNT',
+    markdownContent: '',
+    isVisible: true,
+    isDefaultOpen: true
+  });
+
+  const handleOpenCreateTopic = () => {
+    setEditingTopic(null);
+    setTopicForm({
+      topicNumber: `TOPIC ${(affiliateTopics?.length || 6) + 1}`,
+      categoryBadge: `TOPIC ${(affiliateTopics?.length || 6) + 1}: DIGITAL AUTOMATION & WORKSPACE`,
+      title: `TOPIC ${(affiliateTopics?.length || 6) + 1}: NOTION WORKSPACE OS & CRM`,
+      subtitle: 'Streamline client onboarding, project tracking, and automated SOP workflows.',
+      iconEmoji: '⚡',
+      themeColor: 'purple',
+      headerBannerImage: '',
+      videoUrl: '',
+      referralUrl: 'https://',
+      primaryCtaText: 'EXPLORE TOOLKIT NOW →',
+      secondaryCtaText: '',
+      secondaryCtaUrl: '',
+      couponCode: '',
+      discountBadgeText: 'VERIFIED PARTNER OFFER',
+      markdownContent: 'Comprehensive guide and tutorial on setting up and optimizing this tool for remote Virtual Assistants and freelancers.',
+      isVisible: true,
+      isDefaultOpen: true
+    });
+    setIsCreatingTopic(true);
+  };
+
+  const handleOpenEditTopic = (topic: AffiliateCollapsibleTopic) => {
+    setEditingTopic(topic);
+    setTopicForm({
+      topicNumber: topic.topicNumber || '',
+      categoryBadge: topic.categoryBadge || '',
+      title: topic.title || '',
+      subtitle: topic.subtitle || '',
+      iconEmoji: topic.iconEmoji || '⚡',
+      themeColor: topic.themeColor || 'indigo',
+      headerBannerImage: topic.headerBannerImage || '',
+      videoUrl: topic.videoUrl || '',
+      referralUrl: topic.referralUrl || '',
+      primaryCtaText: topic.primaryCtaText || '',
+      secondaryCtaText: topic.secondaryCtaText || '',
+      secondaryCtaUrl: topic.secondaryCtaUrl || '',
+      couponCode: topic.couponCode || '',
+      discountBadgeText: topic.discountBadgeText || '',
+      markdownContent: topic.markdownContent || '',
+      isVisible: topic.isVisible ?? true,
+      isDefaultOpen: topic.isDefaultOpen ?? true
+    });
+    setIsCreatingTopic(true);
+  };
+
+  const handleSaveTopic = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!topicForm.title.trim() || !topicForm.topicNumber.trim()) {
+      alert('Please provide Topic Number and Title.');
+      return;
+    }
+
+    if (editingTopic) {
+      updateAffiliateTopic(editingTopic.id, {
+        ...topicForm
+      });
+      showToast(`✅ Updated "${topicForm.title}" successfully!`);
+    } else {
+      addAffiliateTopic({
+        ...topicForm,
+        sortOrder: (affiliateTopics?.length || 0) + 1
+      });
+      showToast(`🎉 Created new Collapsible Topic "${topicForm.title}"!`);
+    }
+
+    setIsCreatingTopic(false);
+    setEditingTopic(null);
+  };
 
   // PROMO ITEM MODAL FORM STATE
   const [editingPromoItem, setEditingPromoItem] = useState<PromoItem | null>(null);
@@ -509,7 +630,20 @@ export const Admin: React.FC = () => {
           <span>🎛️ CMS CONTENT CONTROL</span>
         </button>
 
-        <button
+                    {/* COLLAPSIBLE TOPICS CMS TAB */}
+            <button
+              onClick={() => setActiveTab('affiliate-topics')}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-orbitron text-xs uppercase tracking-wider font-bold transition-all ${
+                activeTab === 'affiliate-topics'
+                  ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-[0_0_20px_rgba(244,114,182,0.5)]'
+                  : 'bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800/80 border border-slate-800'
+              }`}
+            >
+              <ShoppingBag className="w-4 h-4 text-pink-400" />
+              <span>COLLAPSIBLE TOPICS CMS ({affiliateTopics?.length || 0})</span>
+            </button>
+
+            <button
           onClick={() => setActiveTab('promotions')}
           className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'promotions'
@@ -1561,6 +1695,242 @@ export const Admin: React.FC = () => {
         </div>
       )}
 
-    </div>
+    
+      {/* ========================================================================= */}
+      {/* 🛍️ COLLAPSIBLE TOPIC CREATE / EDIT MODAL */}
+      {/* ========================================================================= */}
+      {isCreatingTopic && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-slate-900 border-2 border-pink-500 rounded-3xl w-full max-w-4xl p-6 sm:p-8 space-y-6 text-white shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
+            
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-400 flex items-center justify-center text-pink-300 font-bold text-lg">
+                  {topicForm.iconEmoji || '⚡'}
+                </div>
+                <div>
+                  <h3 className="text-lg sm:text-xl font-black font-orbitron text-white">
+                    {editingTopic ? 'EDIT COLLAPSIBLE TOPIC' : 'CREATE NEW COLLAPSIBLE TOPIC'}
+                  </h3>
+                  <p className="text-xs text-pink-200 font-sans">
+                    Configure all details, referral links, coupon discounts, banner images &amp; video tutorials.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => { setIsCreatingTopic(false); setEditingTopic(null); }}
+                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveTopic} className="space-y-6 font-sans text-xs">
+              
+              {/* ROW 1: Topic Number, Theme Color, Icon Emoji */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">TOPIC NUMBER / LABEL *</label>
+                  <input
+                    type="text"
+                    required
+                    value={topicForm.topicNumber}
+                    onChange={(e) => setTopicForm({ ...topicForm, topicNumber: e.target.value })}
+                    placeholder="e.g. TOPIC 7, TOPIC 8, CATEGORY 3"
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">COLOR THEME</label>
+                  <select
+                    value={topicForm.themeColor}
+                    onChange={(e) => setTopicForm({ ...topicForm, themeColor: e.target.value as TopicThemeColor })}
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  >
+                    <option value="pink">Pink / Rose (Creative &amp; Commerce)</option>
+                    <option value="purple">Purple / Indigo (AI &amp; Software)</option>
+                    <option value="cyan">Cyan / Blue (Cloud &amp; Tech)</option>
+                    <option value="emerald">Emerald / Green (Finance &amp; Growth)</option>
+                    <option value="amber">Amber / Orange (Deals &amp; Media)</option>
+                    <option value="indigo">Indigo / Violet (Default Hosting)</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">ICON / EMOJI</label>
+                  <input
+                    type="text"
+                    value={topicForm.iconEmoji}
+                    onChange={(e) => setTopicForm({ ...topicForm, iconEmoji: e.target.value })}
+                    placeholder="e.g. 🛍️, 🎙️, 🌐, 🎬, 🎁, 🎨, ⚡"
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* ROW 2: Category Badge & Topic Title */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">CATEGORY BADGE / TOP BAR TEXT</label>
+                  <input
+                    type="text"
+                    value={topicForm.categoryBadge}
+                    onChange={(e) => setTopicForm({ ...topicForm, categoryBadge: e.target.value })}
+                    placeholder="e.g. TOPIC 7: NO-CODE AUTOMATION & WORKSPACE"
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">MAIN TOPIC TITLE *</label>
+                  <input
+                    type="text"
+                    required
+                    value={topicForm.title}
+                    onChange={(e) => setTopicForm({ ...topicForm, title: e.target.value })}
+                    placeholder="e.g. TOPIC 7: NOTION — ALL-IN-ONE WORKSPACE OS"
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* ROW 3: Subtitle / Tagline */}
+              <div className="space-y-1.5">
+                <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">SUBTITLE / SHORT DESCRIPTION</label>
+                <input
+                  type="text"
+                  value={topicForm.subtitle}
+                  onChange={(e) => setTopicForm({ ...topicForm, subtitle: e.target.value })}
+                  placeholder="e.g. Streamline client onboarding, team wiki documentation, and task boards."
+                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                />
+              </div>
+
+              {/* ROW 4: Referral URL & Primary CTA Button Text */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">AFFILIATE / REFERRAL URL</label>
+                  <input
+                    type="text"
+                    value={topicForm.referralUrl}
+                    onChange={(e) => setTopicForm({ ...topicForm, referralUrl: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">PRIMARY CTA BUTTON TEXT</label>
+                  <input
+                    type="text"
+                    value={topicForm.primaryCtaText}
+                    onChange={(e) => setTopicForm({ ...topicForm, primaryCtaText: e.target.value })}
+                    placeholder="e.g. START SELLING ON GUMROAD →"
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* ROW 5: Coupon Code & Discount Text */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">COUPON CODE (OPTIONAL)</label>
+                  <input
+                    type="text"
+                    value={topicForm.couponCode}
+                    onChange={(e) => setTopicForm({ ...topicForm, couponCode: e.target.value })}
+                    placeholder="e.g. DPDCABINCEHM"
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">DISCOUNT BADGE TEXT</label>
+                  <input
+                    type="text"
+                    value={topicForm.discountBadgeText}
+                    onChange={(e) => setTopicForm({ ...topicForm, discountBadgeText: e.target.value })}
+                    placeholder="e.g. UP TO 75% OFF + 3 MONTHS FREE"
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* ROW 6: Header Banner Image & Video URL */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">HEADER BANNER IMAGE URL / PATH</label>
+                  <input
+                    type="text"
+                    value={topicForm.headerBannerImage}
+                    onChange={(e) => setTopicForm({ ...topicForm, headerBannerImage: e.target.value })}
+                    placeholder="e.g. ./media_1787655285154.png or https://..."
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">VIDEO URL (YOUTUBE / MP4 STREAM)</label>
+                  <input
+                    type="text"
+                    value={topicForm.videoUrl}
+                    onChange={(e) => setTopicForm({ ...topicForm, videoUrl: e.target.value })}
+                    placeholder="e.g. https://www.youtube.com/watch?v=..."
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* ROW 7: In-depth Educational / Markdown Content */}
+              <div className="space-y-1.5">
+                <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">IN-DEPTH TUTORIAL &amp; GUIDE CONTENT</label>
+                <textarea
+                  rows={4}
+                  value={topicForm.markdownContent}
+                  onChange={(e) => setTopicForm({ ...topicForm, markdownContent: e.target.value })}
+                  placeholder="Enter detailed learnings, instructions, workflow advice, and steps..."
+                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                />
+              </div>
+
+              {/* VISIBILITY TOGGLE */}
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-950 border border-slate-800">
+                <input
+                  type="checkbox"
+                  id="topicVisible"
+                  checked={topicForm.isVisible}
+                  onChange={(e) => setTopicForm({ ...topicForm, isVisible: e.target.checked })}
+                  className="w-4 h-4 accent-pink-500"
+                />
+                <label htmlFor="topicVisible" className="font-mono text-xs text-white font-bold cursor-pointer">
+                  PUBLISH TOPIC IMMEDIATELY (VISIBLE ON LIVE AFFILIATE GUIDE)
+                </label>
+              </div>
+
+              {/* MODAL FOOTER BUTTONS */}
+              <div className="flex items-center justify-end gap-4 border-t border-slate-800 pt-4">
+                <button
+                  type="button"
+                  onClick={() => { setIsCreatingTopic(false); setEditingTopic(null); }}
+                  className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs uppercase font-bold"
+                >
+                  CANCEL
+                </button>
+
+                <button
+                  type="submit"
+                  className="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white font-black font-orbitron text-xs uppercase rounded-xl shadow-[0_0_20px_rgba(244,114,182,0.5)] transition-all"
+                >
+                  {editingTopic ? 'SAVE TOPIC CHANGES' : 'CREATE TOPIC'}
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
+</div>
   );
 };

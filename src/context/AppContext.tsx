@@ -2,8 +2,9 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
 import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
 import { INITIAL_PROMO_ITEMS } from '../utils/initialPromoData';
+import { INITIAL_AFFILIATE_TOPICS } from '../utils/initialAffiliateTopics';
 import { ALL_AFFILIATE_ADS } from '../data/affiliateAdsData';
-import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageOwnerType, CMSContentType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType, PromoItem, PromoPlacementType } from '../types';
+import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageOwnerType, CMSContentType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType, PromoItem, PromoPlacementType, AffiliateCollapsibleTopic } from '../types';
 
 interface AppContextType {
   services: Service[];
@@ -28,6 +29,15 @@ interface AppContextType {
   setIsCaptchaOpen: (open: boolean) => void;
   pendingCheckoutAction: (() => void) | null;
   setPendingCheckoutAction: (action: (() => void) | null) => void;
+
+    // COLLAPSIBLE TOPICS MANAGEMENT (AFFILIATE GUIDE)
+  affiliateTopics: AffiliateCollapsibleTopic[];
+  addAffiliateTopic: (topic: Omit<AffiliateCollapsibleTopic, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  updateAffiliateTopic: (id: string, updates: Partial<AffiliateCollapsibleTopic>) => void;
+  deleteAffiliateTopic: (id: string) => void;
+  toggleAffiliateTopicVisibility: (id: string) => void;
+  moveAffiliateTopicOrder: (id: string, direction: 'up' | 'down') => void;
+  resetAffiliateTopicsToDefault: () => void;
 
   // CMS ITEMS MANAGEMENT (EDUCATIONAL)
   cmsItems: CMSItem[];
@@ -283,6 +293,105 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // CMS BACKEND EDUCATIONAL ITEMS STATE
   // CMS BACKEND EDUCATIONAL ITEMS STATE (AUTO-MERGING & IMAGE SYNC)
+    // ==========================================
+  // COLLAPSIBLE TOPICS CMS STATE (AFFILIATE GUIDE)
+  // ==========================================
+  const [affiliateTopics, setAffiliateTopics] = useState<AffiliateCollapsibleTopic[]>(() => {
+    try {
+      const saved = localStorage.getItem('wh_affiliate_topics_v5688');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Merge any missing default items
+          const existingIds = new Set(parsed.map((item: AffiliateCollapsibleTopic) => item.id));
+          const missing = INITIAL_AFFILIATE_TOPICS.filter(item => !existingIds.has(item.id));
+          return [...parsed, ...missing];
+        }
+      }
+    } catch (e) {
+      console.error('Error loading affiliate topics from localStorage:', e);
+    }
+    return INITIAL_AFFILIATE_TOPICS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('wh_affiliate_topics_v5688', JSON.stringify(affiliateTopics));
+    } catch (e) {
+      console.error('Error saving affiliate topics to localStorage:', e);
+    }
+  }, [affiliateTopics]);
+
+  const addAffiliateTopic = useCallback((topic: Omit<AffiliateCollapsibleTopic, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const newTopic: AffiliateCollapsibleTopic = {
+      ...topic,
+      id: `topic_custom_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      sortOrder: topic.sortOrder ?? (affiliateTopics.length + 1)
+    };
+    setAffiliateTopics(prev => [...prev, newTopic]);
+  }, [affiliateTopics.length]);
+
+  const updateAffiliateTopic = useCallback((id: string, updates: Partial<AffiliateCollapsibleTopic>) => {
+    setAffiliateTopics(prev => prev.map(topic => {
+      if (topic.id === id) {
+        return {
+          ...topic,
+          ...updates,
+          updatedAt: new Date().toISOString()
+        };
+      }
+      return topic;
+    }));
+  }, []);
+
+  const deleteAffiliateTopic = useCallback((id: string) => {
+    setAffiliateTopics(prev => prev.filter(topic => topic.id !== id));
+  }, []);
+
+  const toggleAffiliateTopicVisibility = useCallback((id: string) => {
+    setAffiliateTopics(prev => prev.map(topic => {
+      if (topic.id === id) {
+        return {
+          ...topic,
+          isVisible: !topic.isVisible,
+          updatedAt: new Date().toISOString()
+        };
+      }
+      return topic;
+    }));
+  }, []);
+
+  const moveAffiliateTopicOrder = useCallback((id: string, direction: 'up' | 'down') => {
+    setAffiliateTopics(prev => {
+      const sorted = [...prev].sort((a, b) => a.sortOrder - b.sortOrder);
+      const index = sorted.findIndex(t => t.id === id);
+      if (index === -1) return prev;
+
+      const targetIndex = direction === 'up' ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= sorted.length) return prev;
+
+      // Swap
+      const current = sorted[index];
+      const target = sorted[targetIndex];
+      const tempOrder = current.sortOrder;
+      current.sortOrder = target.sortOrder;
+      target.sortOrder = tempOrder;
+
+      return [...sorted];
+    });
+  }, []);
+
+  const resetAffiliateTopicsToDefault = useCallback(() => {
+    setAffiliateTopics(INITIAL_AFFILIATE_TOPICS);
+    try {
+      localStorage.setItem('wh_affiliate_topics_v5688', JSON.stringify(INITIAL_AFFILIATE_TOPICS));
+    } catch (e) {
+      console.error('Error resetting affiliate topics to default:', e);
+    }
+  }, []);
+
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
     const saved = localStorage.getItem('wh_cms_items');
     if (saved) {
@@ -768,6 +877,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setIsCaptchaOpen,
         pendingCheckoutAction,
         setPendingCheckoutAction,
+        affiliateTopics,
+        addAffiliateTopic,
+        updateAffiliateTopic,
+        deleteAffiliateTopic,
+        toggleAffiliateTopicVisibility,
+        moveAffiliateTopicOrder,
+        resetAffiliateTopicsToDefault,
         cmsItems,
         cmsCategories,
         addCMSCategory,
