@@ -14,27 +14,23 @@ export const HUDPanel: React.FC<HUDPanelProps> = ({
   badge
 }) => {
   return (
-    <div className={`relative group p-6 rounded-lg backdrop-blur-md bg-[var(--panel-bg)] border border-[var(--primary-color)]/30 hover:border-[var(--primary-color)] transition-all duration-500 shadow-[0_4px_25px_rgba(0,0,0,0.5),0_0_15px_var(--glow-color)] ${className}`}>
-      {/* Sci-Fi HUD Corner Brackets */}
-      <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[var(--primary-color)] transition-all group-hover:w-5 group-hover:h-5"></div>
-      <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[var(--primary-color)] transition-all group-hover:w-5 group-hover:h-5"></div>
-      <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[var(--primary-color)] transition-all group-hover:w-5 group-hover:h-5"></div>
-      <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[var(--primary-color)] transition-all group-hover:w-5 group-hover:h-5"></div>
-
-      {/* Decorative HUD Scan Line Accent */}
-      <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-color)] to-transparent opacity-40 group-hover:opacity-100 transition-opacity"></div>
+    <div
+      className={`relative group p-6 rounded-2xl bg-white border border-slate-200/90 hover:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md text-slate-800 ${className}`}
+    >
+      {/* Subtle Top Accent Bar */}
+      <div className="absolute top-0 left-6 right-6 h-[2px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
       {/* Header Bar if Title or Badge present */}
       {(title || badge) && (
-        <div className="flex items-center justify-between border-b border-[var(--primary-color)]/20 pb-3 mb-4 font-mono">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-5">
           {title && (
-            <span className="font-orbitron font-bold text-sm tracking-wider text-white flex items-center space-x-2">
-              <span className="w-2 h-2 rounded-full bg-[var(--primary-color)] animate-ping inline-block"></span>
+            <span className="font-bold text-sm tracking-tight text-slate-900 flex items-center space-x-2.5">
+              <span className="w-2 h-2 rounded-full bg-blue-600 inline-block"></span>
               <span>{title}</span>
             </span>
           )}
           {badge && (
-            <span className="text-[10px] uppercase font-bold text-[var(--secondary-color)] border border-[var(--secondary-color)]/40 px-2 py-0.5 rounded backdrop-blur-sm bg-black/40">
+            <span className="text-[11px] uppercase font-semibold text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-0.5 rounded-full">
               {badge}
             </span>
           )}

@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type ThemeName = 
+export type ThemeName =
   | 'cyberpunk_net'
-  | 'hackthebox' 
-  | 'cyberpunk' 
-  | 'cyberpunk2077_neon' 
-  | 'cybernotes' 
-  | 'matrix' 
-  | 'tron' 
-  | 'retrowave' 
+  | 'hackthebox'
+  | 'cyberpunk'
+  | 'cyberpunk2077_neon'
+  | 'cybernotes'
+  | 'matrix'
+  | 'tron'
+  | 'retrowave'
   | 'quantum';
 
 export interface ThemeConfig {
@@ -24,114 +24,74 @@ export interface ThemeConfig {
   description: string;
 }
 
+const LIGHT_MINIMAL_THEME: Omit<ThemeConfig, 'name' | 'label' | 'description'> = {
+  primary: '#2563eb',        // Professional Royal Blue
+  secondary: '#059669',      // Crisp Emerald Green
+  accent: '#7c3aed',         // Modern Violet Accent
+  bg: '#f8fafc',             // Clean Alabaster / Slate-50 Light Background
+  panel: '#ffffff',          // Pure White Minimalist Card Surface
+  glow: 'rgba(37, 99, 235, 0.08)',
+  bgPattern: 'radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.04) 0%, rgba(248, 250, 252, 1) 75%)'
+};
+
 export const THEMES: Record<ThemeName, ThemeConfig> = {
   cyberpunk_net: {
     name: 'cyberpunk_net',
-    label: 'CYBERPUNK.NET OFFICIAL',
-    primary: '#fcee0a',        // Iconic Cyberpunk 2077 Yellow
-    secondary: '#00f0ff',      // Night City Electric Cyan
-    accent: '#ff0055',         // Arasaka Hot Pink
-    bg: '#080a10',             // Deep Night City Darkness
-    panel: 'rgba(15, 23, 42, 0.75)', // Glassmorphic Translucent Cyber Card
-    glow: 'rgba(252, 238, 10, 0.55)',
-    bgPattern: 'radial-gradient(circle at 50% 50%, rgba(252, 238, 10, 0.08) 0%, rgba(8, 10, 16, 0.95) 70%), linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px)',
-    description: 'Official Cyberpunk.net Night City aesthetic with iconic bright yellow, electric cyan, and translucent glass panels.'
+    label: 'PROFESSIONAL LIGHT (DEFAULT)',
+    ...LIGHT_MINIMAL_THEME,
+    description: 'Clean, modern minimalistic light portfolio theme designed for maximum readability and zero eye strain.'
   },
   hackthebox: {
     name: 'hackthebox',
-    label: 'HACK THE BOX (HTB)',
-    primary: '#9fef00',        // Official HTB Toxic Lime Green
-    secondary: '#22d3ee',      // Official HTB Cyan
-    accent: '#ffaf00',         // HTB Alert Orange
-    bg: '#0b1120',             // HTB Deep Space Dark Navy
-    panel: 'rgba(17, 24, 39, 0.75)', // Glassmorphic Carbon Panel
-    glow: 'rgba(159, 239, 0, 0.5)',
-    bgPattern: 'radial-gradient(circle at 50% 50%, rgba(159, 239, 0, 0.06) 0%, rgba(11, 17, 32, 0.95) 70%), linear-gradient(rgba(159, 239, 0, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(159, 239, 0, 0.04) 1px, transparent 1px)',
-    description: 'Authentic Hack The Box official theme with toxic lime green & deep space dark carbon.'
+    label: 'EMERALD STUDIO LIGHT',
+    ...LIGHT_MINIMAL_THEME,
+    primary: '#059669',
+    secondary: '#2563eb',
+    description: 'Minimalist white studio aesthetic with emerald and royal blue accents.'
   },
   cyberpunk: {
     name: 'cyberpunk',
-    label: 'CYBERPUNK 2077 HUD',
-    primary: '#00f0ff',
-    secondary: '#fcee0a',
-    accent: '#ff0055',
-    bg: '#0d0f18',
-    panel: 'rgba(18, 22, 36, 0.75)',
-    glow: 'rgba(0, 240, 255, 0.5)',
-    bgPattern: 'radial-gradient(circle at 50% 20%, rgba(0, 240, 255, 0.08) 0%, rgba(13, 15, 24, 0.95) 80%), linear-gradient(rgba(252, 238, 10, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(252, 238, 10, 0.04) 1px, transparent 1px)',
-    description: 'High contrast yellow, neon cyan and pink dark futuristic theme.'
+    label: 'ROYAL BLUE PORTFOLIO',
+    ...LIGHT_MINIMAL_THEME,
+    description: 'Crisp executive light theme for Virtual Assistants, Freelancers, and AI Architects.'
   },
   cyberpunk2077_neon: {
     name: 'cyberpunk2077_neon',
-    label: 'CYBERPUNK NEON GLITCH',
-    primary: '#fcee0a',
-    secondary: '#ff0055',
-    accent: '#00f0ff',
-    bg: '#05070f',
-    panel: 'rgba(25, 18, 38, 0.8)',
-    glow: 'rgba(252, 238, 10, 0.6)',
-    bgPattern: 'radial-gradient(circle at 80% 20%, rgba(255, 0, 85, 0.1) 0%, rgba(5, 7, 15, 0.95) 75%)',
-    description: 'Ultra bright Cyberpunk 2077 yellow, electric hot pink and cyan glow.'
+    label: 'INDIGO MINIMAL LIGHT',
+    ...LIGHT_MINIMAL_THEME,
+    primary: '#4f46e5',
+    description: 'Modern SaaS documentation and minimalist portfolio light theme.'
   },
   cybernotes: {
     name: 'cybernotes',
-    label: 'CYBERNOTES.APK',
-    primary: '#00ff66',
-    secondary: '#a3ff00',
-    accent: '#00f0ff',
-    bg: '#090d0b',
-    panel: 'rgba(14, 28, 20, 0.75)',
-    glow: 'rgba(0, 255, 102, 0.5)',
-    bgPattern: 'radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.07) 0%, rgba(9, 13, 11, 0.95) 75%), linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px)',
-    description: 'Inspired by Cybernotes.apk - Emerald green cyber HUD vectors.'
+    label: 'ACADEMY PAPER LIGHT',
+    ...LIGHT_MINIMAL_THEME,
+    description: 'High-contrast editorial light theme built for reading free tutorials and guides.'
   },
   matrix: {
     name: 'matrix',
-    label: 'MATRIX HACKER',
-    primary: '#00ff41',
-    secondary: '#003b00',
-    accent: '#008f11',
-    bg: '#040804',
-    panel: 'rgba(10, 25, 12, 0.8)',
-    glow: 'rgba(0, 255, 65, 0.5)',
-    bgPattern: 'radial-gradient(circle at 50% 50%, rgba(0, 255, 65, 0.06) 0%, rgba(4, 8, 4, 0.95) 75%)',
-    description: 'Classic green digital rain & pure terminal hacker aesthetic.'
+    label: 'CLEAN TECH LIGHT',
+    ...LIGHT_MINIMAL_THEME,
+    description: 'Minimalistic developer & VA academy light theme.'
   },
   tron: {
     name: 'tron',
-    label: 'TRON LEGACY',
-    primary: '#00d8ff',
-    secondary: '#ffffff',
-    accent: '#ff9900',
-    bg: '#050b18',
-    panel: 'rgba(12, 24, 48, 0.75)',
-    glow: 'rgba(0, 216, 255, 0.6)',
-    bgPattern: 'radial-gradient(circle at 50% 30%, rgba(0, 216, 255, 0.1) 0%, rgba(5, 11, 24, 0.95) 80%), linear-gradient(rgba(0, 216, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 216, 255, 0.05) 1px, transparent 1px)',
-    description: 'Deep grid electric neon blue and pure white photon lines.'
+    label: 'ARCHITECT WHITE',
+    ...LIGHT_MINIMAL_THEME,
+    description: 'Pure white architectural grid with subtle slate borders.'
   },
   retrowave: {
     name: 'retrowave',
-    label: 'SYNTHWAVE 80S',
-    primary: '#ff007f',
-    secondary: '#ffaa00',
-    accent: '#9d4edd',
-    bg: '#160026',
-    panel: 'rgba(40, 10, 70, 0.75)',
-    glow: 'rgba(255, 0, 127, 0.5)',
-    bgPattern: 'radial-gradient(circle at 50% 80%, rgba(255, 0, 127, 0.15) 0%, rgba(22, 0, 38, 0.95) 75%)',
-    description: '80s Synthwave neon purple grid with glowing sunset pink.'
+    label: 'CREATIVE STUDIO LIGHT',
+    ...LIGHT_MINIMAL_THEME,
+    primary: '#7c3aed',
+    description: 'Clean creative studio theme in light mode.'
   },
   quantum: {
     name: 'quantum',
-    label: 'QUANTUM WHITE HAT',
-    primary: '#38bdf8',
-    secondary: '#818cf8',
-    accent: '#f43f5e',
-    bg: '#0f172a',
-    panel: 'rgba(30, 41, 59, 0.75)',
-    glow: 'rgba(56, 189, 248, 0.5)',
-    bgPattern: 'radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08) 0%, rgba(15, 23, 42, 0.95) 75%)',
-    description: 'High-precision white hat defense security platform.'
+    label: 'EXECUTIVE SLATE LIGHT',
+    ...LIGHT_MINIMAL_THEME,
+    description: 'High-precision minimalist portfolio & educational hub.'
   }
 };
 
@@ -144,9 +104,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState<ThemeName>(() => {
-    return (localStorage.getItem('whitehat_theme') as ThemeName) || 'cyberpunk_net';
-  });
+  const [currentTheme, setCurrentTheme] = useState<ThemeName>('cyberpunk_net');
 
   const setTheme = (theme: ThemeName) => {
     if (THEMES[theme]) {
@@ -155,7 +113,7 @@ export const ThemeProvider: React.FC<{ children?: React.ReactNode }> = ({ childr
     }
   };
 
-  const themeConfig = THEMES[currentTheme];
+  const themeConfig = THEMES[currentTheme] || THEMES.cyberpunk_net;
 
   useEffect(() => {
     const root = document.documentElement;

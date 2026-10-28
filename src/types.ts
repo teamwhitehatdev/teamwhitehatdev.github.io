@@ -114,6 +114,9 @@ export interface CMSItem {
   discount?: string;
   price?: string;
   metrics?: string;
+  videoUrl?: string;         // Video URL for tutorials/articles
+  referralUrl?: string;      // Affiliate referral link
+  referralCta?: string;      // Referral CTA button text
   seoTitle?: string;
   seoDescription?: string;
   sortOrder?: number;
@@ -241,4 +244,56 @@ export interface PrivacyConfig {
   dataRetentionDays: 1 | 7 | 30 | 90 | 365;
   anonymizeIp: boolean;
   enableConsentBanner: boolean;
+}
+
+// ============================================================================
+// AFFILIATE GUIDE COLLAPSIBLE TOPIC TYPES
+// ============================================================================
+export interface TopicSubItem {
+  id: string;
+  title: string;
+  description: string;
+  tag?: string;
+  imageUrl?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+}
+
+export interface TopicPricingPlan {
+  id: string;
+  name: string;
+  price: string;
+  period: string;
+  popular?: boolean;
+  features: string[];
+  ctaText: string;
+  ctaUrl: string;
+}
+
+export type TopicThemeColor = 'blue' | 'purple' | 'pink' | 'emerald' | 'cyan' | 'amber' | 'rose' | 'indigo' | 'slate';
+
+export interface AffiliateCollapsibleTopic {
+  id: string;
+  topicNumber: string;
+  categoryBadge: string;
+  title: string;
+  subtitle: string;
+  iconEmoji: string;
+  themeColor: TopicThemeColor;
+  headerBannerImage?: string;
+  videoUrl?: string;
+  referralUrl: string;
+  primaryCtaText: string;
+  secondaryCtaText?: string;
+  secondaryCtaUrl?: string;
+  couponCode?: string;
+  discountBadgeText?: string;
+  markdownContent?: string;
+  subItems?: TopicSubItem[];
+  pricingPlans?: TopicPricingPlan[];
+  sortOrder: number;
+  isVisible: boolean;
+  isDefaultOpen: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

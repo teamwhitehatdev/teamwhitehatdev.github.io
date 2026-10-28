@@ -1,9 +1,9 @@
-import { ServiceItem, Project, AffiliateLink, Testimonial } from '../types';
+import { Service, Project, Affiliate, Testimonial } from '../types';
 
 export const PLAY_STORE_URL = 'https://play.google.com/store/apps/dev?id=7374638355121114347';
 export const GUMROAD_GUI_LINK = 'https://futuristicsoftwares.gumroad.com/l/NETWORKANDDATAINFORMATIONS-GUI-TOOLS?a=815255139';
 
-export const SERVICES: ServiceItem[] = [
+export const SERVICES: Service[] = [
   {
     id: 's1',
     title: 'Executive Virtual Assistance',
@@ -38,11 +38,11 @@ export const SERVICES: ServiceItem[] = [
   }
 ];
 
-export const PROJECTS: Project[] = [
+export const PROJECTS: any[] = [
   {
     id: 'p0',
     title: 'NETWORK & DATA INFORMATIONS - GUI',
-    category: 'Computer Applications',
+    category: 'security',
     description: 'Real-time holographic diagnostic dashboard designed to monitor network interface traffic, detect active VPN/VPS tunnels, classify public egress IP addresses, inspect system hardware performance & storage drives, and ensure ISP masking & online privacy.',
     image: './network_gui_tool.png',
     tags: ['Cybersecurity', 'Python GUI', 'VPN Diagnostics', 'Gumroad Software'],
@@ -53,7 +53,7 @@ export const PROJECTS: Project[] = [
   {
     id: 'p1',
     title: 'Cyberpunk Portfolio & CMS Platform',
-    category: 'Web App',
+    category: 'web',
     description: 'Ultra-fast responsive portfolio platform equipped with AES-256 IP sentinel firewall, stealth back-end CMS, and live trading ticker.',
     image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80',
     tags: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
@@ -64,7 +64,7 @@ export const PROJECTS: Project[] = [
   {
     id: 'p2',
     title: 'Android Mobile Utility Suite',
-    category: 'Mobile App',
+    category: 'mobile',
     description: 'Published suite of Android mobile productivity utilities and developer tools on Google Play Store.',
     image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=80',
     tags: ['Android', 'Kotlin', 'Google Play', 'Mobile'],
@@ -75,7 +75,7 @@ export const PROJECTS: Project[] = [
   {
     id: 'p3',
     title: 'Hostinger Cloud Web Accelerator',
-    category: 'Web App',
+    category: 'web',
     description: 'Cloud hosting integration engine optimizing NVMe web servers and custom domains for Virtual Assistant portfolios.',
     image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80',
     tags: ['Hostinger', 'NVMe Cloud', 'DNS Management', 'SSL'],
@@ -85,7 +85,7 @@ export const PROJECTS: Project[] = [
   }
 ];
 
-export const AFFILIATE_LINKS: AffiliateLink[] = [
+export const AFFILIATE_LINKS: any[] = [
   {
     id: 'a1',
     name: 'Hostinger Cloud Hosting',
@@ -116,9 +116,11 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
   {
     id: 't1',
     name: 'Sarah L.',
-    role: 'E-commerce Founder (USA)',
-    text: 'Team WhiteHat Dev provided exceptional Virtual Assistant support. Our sales increased 40% in 60 days!',
-    rating: 5,
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80'
+    role: 'E-commerce Founder',
+    company: 'USA Online Store',
+    country: 'USA',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
+    content: 'Team WhiteHat Dev provided exceptional Virtual Assistant support. Our sales increased 40% in 60 days!',
+    rating: 5
   }
 ];

@@ -150,7 +150,7 @@ export const AffiliateGuide: React.FC = () => {
 
   // Dynamic CMS items specifically assigned to Affiliate Guide
   const cmsAffiliateItems = (cmsItems || []).filter(
-    item => item.pageOwner === 'AFFILIATE_GUIDE' && item.status === 'PUBLISHED' && item.isVisible
+    item => item.pageOwner === 'affiliate-guide' && item.status === 'PUBLISHED' && item.visible
   );
 
   return (

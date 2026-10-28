@@ -265,5 +265,34 @@ export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
     title: 'Envato Market Digital Ecosystem',
     description: 'Direct partner property deals, digital web assets, and UI components.',
     badge: 'PARTNER DEAL'
+  }  ,
+  // ==========================================
+  // MESHY AI 3D MODEL GENERATOR (REFERRAL)
+  // ==========================================
+  {
+    id: 'meshy-ai-3d-hero',
+    brand: 'Meshy AI',
+    category: 'creative',
+    sizeType: 'hero',
+    width: 1200,
+    height: 628,
+    clickUrl: 'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
+    imageUrl: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1200&q=80',
+    title: 'Meshy AI - Generate 3D Models from Text & Images',
+    description: 'Create stunning, production-ready 3D models from a simple text prompt or reference image in seconds. No 3D skills required.',
+    badge: 'FREE 3D AI TOOL'
+  },
+  {
+    id: 'meshy-ai-3d-medium',
+    brand: 'Meshy AI',
+    category: 'creative',
+    sizeType: 'medium',
+    width: 300,
+    height: 250,
+    clickUrl: 'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
+    imageUrl: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=600&q=80',
+    title: 'Meshy AI 3D Generator',
+    description: 'Text-to-3D and Image-to-3D in seconds. Export to Blender, Unity, Unreal Engine.',
+    badge: 'TRY FREE'
   }
 ];

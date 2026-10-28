@@ -2,6 +2,384 @@ import { CMSItem } from '../types';
 
 export const COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS: CMSItem[] = [
   // ==========================================
+  // FEATURED PARTNER & AI 3D REFERRAL SPOTLIGHT
+  // ==========================================
+  {
+    id: 'cms_edu_ai_meshy_3d_generator',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Resource',
+    title: 'AI 3D Model Generator: Create 3D from Text & Images | Meshy',
+    category: 'AI CAPABILITIES',
+    status: 'PUBLISHED',
+    visible: true,
+    publishDate: '2026-10-28',
+    badge: 'FREE 3D AI REFERRAL',
+    mainImage: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1200&q=80',
+    description: 'Meshy is the world-class AI 3D model generator — create textured, production-ready 3D models from text prompts or 2D reference images in seconds. Zero 3D modeling experience required.',
+    fullContent: `# AI 3D Model Generator: Create 3D from Text & Images | Meshy
+
+Meshy AI is the leading generative 3D platform empowering Virtual Assistants, digital creators, web designers, and indie game developers to create studio-quality 3D assets in seconds.
+
+---
+
+## 1. How Meshy AI 3D Generation Works (Real Workflow)
+
+\`\`\`
+[Input: Text Prompt OR 2D Reference Image]
+                     ↓
+[Meshy AI Neural 3D Reconstruction Engine (15-60s)]
+                     ↓
+[AI PBR Texture & Material Synthesis (Albedo, Roughness, Metallic)]
+                     ↓
+[Export: .GLB / .OBJ / .FBX / .USDZ for Web, Blender, Unity & AR]
+\`\`\`
+
+---
+
+## 2. Core Capabilities of Meshy AI
+
+* **Text-to-3D:** Type any natural language prompt (e.g., *"minimalist ergonomic office chair"*, *"futuristic sci-fi drone"*, *"isometric coffee shop icon"*) and receive four 3D mesh variations in under a minute.
+* **Image-to-3D:** Upload a single product photograph, brand mascot sketch, or UI illustration and convert it into a full 360-degree 3D model.
+* **AI Texturing & PBR Maps:** Automatically generate Physically Based Rendering (PBR) texture maps including Diffuse, Normal, Roughness, and Metallic channels.
+* **Universal Export Formats:** Export directly to **.glb**, **.fbx**, **.obj**, **.stl**, and **.usdz** for immediate embedding in Three.js websites, Shopify 3D product viewers, Blender, or Unreal Engine.
+
+---
+
+## 3. How Virtual Assistants & Freelancers Monetize Meshy AI
+
+1. **E-Commerce 3D Product Viewers ($300 - $800/project):** Convert flat 2D product photos for Shopify and Amazon clients into interactive 3D models.
+2. **Interactive 3D Website Hero Assets ($500 - $1,500/site):** Pair Meshy **.glb** exports with Spline or Three.js to build modern 3D portfolio websites.
+3. **Marketing & Social Media 3D Mockups:** Create custom 3D brand icons and product animations for client Reels and TikTok campaigns.`,
+    buttonText: 'TRY MESHY AI FREE →',
+    url: 'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
+    referralUrl: 'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
+    referralCta: 'Claim free Meshy AI 3D generation credits using our official partner referral link below.',
+    sortOrder: 1,
+    createdAt: '2026-09-11T00:00:00Z',
+    updatedAt: '2026-10-28T00:00:00Z'
+  },
+
+  // ==========================================
+  // NEW: AI CAPABILITIES & AI AUTOMATION REAL FLOW GUIDES
+  // ==========================================
+  {
+    id: 'cms_edu_ai_capabilities_2026',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Tutorial',
+    title: 'AI & Its Capabilities: The Complete Free Guide to Modern Artificial Intelligence',
+    category: 'AI CAPABILITIES',
+    status: 'PUBLISHED',
+    visible: true,
+    publishDate: '2026-10-28',
+    badge: '100% FREE GUIDE',
+    mainImage: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80',
+    description: 'Understand the 6 core capabilities of modern AI — from Large Language Models and Computer Vision to Voice Synthesis, 3D Generation, Data Analytics, and Autonomous Agents.',
+    fullContent: `# AI & Its Capabilities: The Complete Free Guide (2026 Edition)
+
+Artificial Intelligence is no longer limited to simple text chat. Today's multimodal AI models can read, write, see, speak, compose music, generate 3D objects, analyze spreadsheets, and execute multi-step software workflows autonomously.
+
+---
+
+## 1. The 6 Core Capabilities Map of Modern AI
+
+\`\`\`
+                    ┌─────────────────────────────────────────┐
+                    │      MODERN MULTIMODAL AI ENGINE        │
+                    └────────────────────┬────────────────────┘
+        ┌───────────────┬────────────────┼────────────────┬───────────────┐
+        ▼               ▼                ▼                ▼               ▼
+  [1. TEXT &      [2. VISION &     [3. AUDIO &      [4. 3D & VIDEO  [5. AGENTIC
+   REASONING]      DESIGN AI]       VOICE AI]        SYNTHESIS]      AUTOMATION]
+  • Copywriting   • Image Gen      • Voice Clone    • Meshy 3D      • API Webhooks
+  • Code & SQL    • OCR Extraction • Suno Music     • AI Avatars    • Inbox Triage
+  • Summarization • UI Mockups     • Transcription  • Auto-Reels    • CRM Updates
+\`\`\`
+
+---
+
+## 2. Deep Dive into Each AI Capability for VAs & Freelancers
+
+### Capability 1: Natural Language Reasoning & Synthesis (LLMs)
+* **What it does:** Drafts executive emails, summarizes 100-page PDFs, translates between 95+ languages, writes Python/JavaScript code, and creates SOPs.
+* **Best Free/Freemium Tools:** ChatGPT, Claude, Google Gemini, Perplexity.
+* **VA Use Case:** Turn a messy 45-minute Zoom meeting transcript into a structured executive brief with bulleted action items in 15 seconds.
+
+### Capability 2: Computer Vision & Visual Document Understanding
+* **What it does:** Reads screenshots, extracts tables from scanned PDFs/receipts (OCR), analyzes charts, and generates brand illustrations.
+* **VA Use Case:** Upload 50 photographed expense receipts and have AI automatically extract Date, Vendor, Tax, and Total into a clean CSV table.
+
+### Capability 3: Neural Voice Synthesis & AI Music Generation
+* **What it does:** Converts text scripts into lifelike human voiceovers (**ElevenLabs**) and generates royalty-free background music or full vocal tracks (**Suno AI**).
+* **VA Use Case:** Produce faceless YouTube videos, podcast intros, and multilingual training modules for clients without studio equipment.
+
+### Capability 4: 3D Asset & Spatial Generation
+* **What it does:** Turns text prompts or 2D product photos into textured 3D meshes (**Meshy AI**).
+* **VA Use Case:** Build interactive 3D e-commerce product previews and modern web design assets in minutes.
+
+### Capability 5: Data Analysis & Spreadsheet Intelligence
+* **What it does:** Cleans messy CSV spreadsheets, writes complex Excel/Google Sheets formulas (**XLOOKUP**, **QUERY**, **ARRAYFORMULA**), and plots visual KPI charts.
+* **VA Use Case:** Audit a client's 10,000-row CRM database to remove duplicates and segment high-value leads automatically.
+
+### Capability 6: Tool Use & Autonomous Workflow Execution
+* **What it does:** Connects to external apps via APIs (Make.com, Zapier, n8n) to trigger actions across Gmail, Slack, Notion, HubSpot, and Stripe without human intervention.`,
+    buttonText: 'READ AI CAPABILITIES →',
+    sortOrder: 2,
+    createdAt: '2026-10-28T00:00:00Z',
+    updatedAt: '2026-10-28T00:00:00Z'
+  },
+  {
+    id: 'cms_edu_ai_automation_diagrams_guide',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Tutorial',
+    title: 'AI Automations Masterclass: Real Workflow Diagrams & Step-by-Step Blueprints',
+    category: 'AI AUTOMATION',
+    status: 'PUBLISHED',
+    visible: true,
+    publishDate: '2026-10-28',
+    badge: 'VISUAL DIAGRAMS',
+    mainImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+    description: 'Visual architecture diagrams and step-by-step guides showing how real AI automation flows work — from Trigger Webhooks and LLM Processing Nodes to Routers, CRMs, and Auto-Responders.',
+    fullContent: `# AI Automations Masterclass: Real Workflow Diagrams & Step-by-Step Blueprints
+
+Understanding **AI Automation** is the #1 skill that separates a $7/hr beginner Virtual Assistant from a $35+/hr AI Operations Specialist. This free guide illustrates the exact architecture of real-world AI automation pipelines.
+
+---
+
+## 1. How an AI Automation Flow Works (The 5-Stage Pipeline)
+
+Every real-world AI automation follows a deterministic 5-stage data flow:
+
+\`\`\`
+┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+│  STAGE 1: EVENT  │    │ STAGE 2: CONTEXT │    │ STAGE 3: AI BRAIN│    │ STAGE 4: ROUTER  │    │ STAGE 5: ACTION  │
+│     TRIGGER      │───▶│   ENRICHMENT     │───▶│  (LLM PROMPT +   │───▶│  (IF / ELSE      │───▶│  EXECUTION &     │
+│                  │    │                  │    │   JSON SCHEMA)   │    │   FILTER LOGIC)  │    │  NOTIFICATION    │
+└──────────────────┘    └──────────────────┘    └──────────────────┘    └──────────────────┘    └──────────────────┘
+ • New Email Arrives     • Lookup Contact        • Classify Intent       • Score >= 80?          • Update Notion CRM
+ • Typeform Submitted    • Scrape Website        • Summarize Key Ask     • Urgent Support?       • Send Gmail Reply
+ • Stripe Payment        • Fetch Past Orders     • Draft Custom Reply    • Spam Detected?        • Ping Slack Channel
+\`\`\`
+
+---
+
+## 2. Real Workflow Diagram #1: Autonomous Client Lead Qualification & Instant Proposal Flow
+
+**Goal:** Respond to new website inquiries within 30 seconds, score lead quality using AI, log to Notion/HubSpot CRM, and send a personalized calendar booking email.
+
+\`\`\`
+[1. Webhook Trigger: Website Contact Form Submitted]
+                        │
+                        ▼
+[2. HTTP Enrichment: Fetch Prospect Company Website Text]
+                        │
+                        ▼
+[3. OpenAI / Claude Node: Analyze Inquiry & Output Structured JSON]
+    ├─► "leadScore": 92
+    ├─► "serviceCategory": "Executive VA + Automation"
+    ├─► "personalizedHook": "Saw your agency is scaling..."
+    └─► "estimatedBudget": "$2,000/mo"
+                        │
+                        ▼
+[4. Conditional Router (Filter by leadScore)]
+    ├───► IF Score >= 70 (High-Value Lead):
+    │       ├─► [5A. Notion / Airtable: Create VIP Deal Record]
+    │       ├─► [5B. Gmail: Send Personalized Proposal + Calendly Link]
+    │       └─► [5C. Slack / Telegram: Instant VIP Lead Alert to Founder]
+    │
+    └───► IF Score < 70 (General Inquiry):
+            ├─► [6A. Google Sheets: Log to Nurture List]
+            └─► [6B. Gmail: Send Helpful Free Resource Guide]
+\`\`\`
+
+---
+
+## 3. Real Workflow Diagram #2: 24/7 Executive Inbox Triage & Meeting Prep Automation
+
+**Goal:** Save executives 10+ hours/week by automatically categorizing incoming emails, drafting replies in the founder's voice, and archiving noise.
+
+\`\`\`
+[1. Gmail Watch Trigger: New Incoming Email]
+                        │
+                        ▼
+[2. AI Classifier Node (System Prompt: Executive Gatekeeper)]
+    • Output JSON: { "category": "URGENT_CLIENT" | "MEETING_REQUEST" | "INVOICE" | "NEWSLETTER", "summary": "..." }
+                        │
+                        ▼
+[3. Multi-Branch Router]
+    ├─► Branch 1 (URGENT_CLIENT): Query Knowledge Base (RAG) ──► Create Gmail Draft Reply ──► Star Email
+    ├─► Branch 2 (MEETING_REQUEST): Check Google Calendar Free Slots ──► Draft 3 Time Options
+    ├─► Branch 3 (INVOICE): Extract PDF Attachment ──► Save to Google Drive /Finance ──► Log Row in Sheets
+    └─► Branch 4 (NEWSLETTER): Summarize Top 3 Bullet Points into Daily Digest ──► Auto-Archive
+\`\`\`
+
+---
+
+## 4. Real Workflow Diagram #3: Omnichannel Content Repurposing Engine
+
+**Goal:** Turn 1 long-form video or voice note into 10+ pieces of social media content automatically.
+
+\`\`\`
+[Google Drive: Upload MP4/MP3] ──► [Whisper AI: Transcript] ──► [LLM: Generate 5 LinkedIn Posts + 3 Reels Scripts + 1 Newsletter] ──► [Notion Content Calendar] ──► [Buffer Auto-Scheduler]
+\`\`\`
+
+---
+
+## 5. Free Tools to Practice Building AI Automations Today
+
+1. **Make.com (Free Forever Tier):** 1,000 free operations/month with visual drag-and-drop circular nodes.
+2. **n8n (Free Self-Hosted / Community Edition):** Open-source node-based workflow automation with native AI Agent & Vector Store nodes.
+3. **Zapier (Free Tier):** Easy 2-step automations connecting 6,000+ web apps.
+4. **Google Apps Script (100% Free):** Write simple JavaScript inside Google Sheets & Gmail to run unlimited free automations!`,
+    buttonText: 'STUDY WORKFLOW DIAGRAMS →',
+    sortOrder: 3,
+    createdAt: '2026-10-28T00:00:00Z',
+    updatedAt: '2026-10-28T00:00:00Z'
+  },
+  {
+    id: 'cms_edu_va_free_zero_to_pro_blueprint',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Guide',
+    title: 'FREE Complete Guide: How to Become a Successful Virtual Assistant (Zero Experience to $2,500/Mo)',
+    category: 'VIRTUAL ASSISTANT CAREER',
+    status: 'PUBLISHED',
+    visible: true,
+    publishDate: '2026-10-28',
+    badge: 'FREE VA MASTERCLASS',
+    mainImage: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80',
+    description: '100% free step-by-step blueprint for aspiring Virtual Assistants and freelancers: what skills to learn first, how to build a portfolio with zero experience, where to find clients, and how to pass interviews.',
+    fullContent: `# FREE Complete Guide: How to Become a Successful Virtual Assistant (Zero Experience to $2,500+/Month)
+
+Welcome! This guide is **100% free** and designed specifically for aspiring Virtual Assistants (VAs), career-switchers, students, and freelancers who want a clear, honest, step-by-step roadmap to earning a sustainable remote income online.
+
+---
+
+## 1. The 30-Day Zero-to-Hired Action Plan
+
+\`\`\`
+WEEK 1: Core Tool Mastery       ──► Google Workspace, Notion, Canva, CapCut, ChatGPT & Zoom
+WEEK 2: Build 3 Proof Samples   ──► Sample Inbox Triage SOP, 5 Canva/CapCut Designs, 1 Notion Tracker
+WEEK 3: Portfolio & Profiles    ──► Optimize OnlineJobs.ph, Upwork, LinkedIn & Personal Portfolio Site
+WEEK 4: Daily Targeted Outreach ──► Send 10 Personalized Proposals + 3 Loom Video Audits Every Day
+\`\`\`
+
+---
+
+## 2. How to Build a Portfolio When You Have ZERO Previous Clients
+
+Clients do not hire resumes — they hire **proof of capability**. Even if you have never had a paying client, you can create 3 "Mock Client Projects" this week:
+
+1. **Sample 1 — Executive Calendar & Travel Itinerary:** Create a clean 5-day business trip itinerary (flights, hotel, meeting blocks, timezone conversions) in Notion or Google Docs and take a high-resolution screenshot.
+2. **Sample 2 — Social Media & Short-Form Video Pack:** Design 5 cohesive Instagram/LinkedIn carousel graphics in Canva and edit one 30-second captioned vertical video in CapCut.
+3. **Sample 3 — AI-Automated Lead Tracker:** Build a Google Sheet or Notion CRM table with 20 researched B2B leads (Company Name, Website, Decision Maker, LinkedIn URL, Personalized Icebreaker).
+
+---
+
+## 3. Top 7 Legitimate Websites to Find Remote VA & Freelance Jobs (Free to Join)
+
+* **OnlineJobs.ph:** The largest direct-hire marketplace connecting Filipino VAs with US, UK, and Australian business owners (no platform commission taken from your salary!).
+* **Upwork:** Global freelance platform ideal for specialized project contracts and hourly retainers.
+* **LinkedIn Jobs & Direct Outreach:** Search *"Remote Executive Assistant"* or *"Virtual Assistant"* and connect directly with startup founders and agency owners.
+* **Wellfound (formerly AngelList Talent):** Remote operations and support roles at funded tech startups.
+* **Fiverr:** Package specific deliverables (e.g., *"I will set up your Notion workspace"* or *"I will edit 10 TikTok Reels"*).
+* **Remote.co & WeWorkRemotely:** Curated remote customer support, admin, and operations positions.
+
+---
+
+## 4. The Exact Discovery Call Script That Wins Clients
+
+When a client invites you to a 15-minute Zoom interview, follow this 4-step structure:
+
+1. **Warm Rapport (2 mins):** *"Thank you for taking the time to meet today! I reviewed your website/social channels before our call and loved what you're building with [specific detail]."*
+2. **Diagnose the Bottleneck (5 mins):** *"What is the #1 repetitive task on your plate right now that is taking you away from growing the business?"*
+3. **Present Your System (5 mins):** Share your screen and show your sample Notion tracker, SOP checklist, or AI workflow: *"Here is the exact workflow I use to handle that so you never have to worry about it."*
+4. **Propose a Low-Risk Trial (3 mins):** *"I'd love to start with a 1-week trial task or a 20-hour starter package so you can experience my communication speed and quality firsthand."*`,
+    buttonText: 'READ FREE VA BLUEPRINT →',
+    sortOrder: 4,
+    createdAt: '2026-10-28T00:00:00Z',
+    updatedAt: '2026-10-28T00:00:00Z'
+  },
+  {
+    id: 'cms_edu_va_free_outreach_scripts_2026',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Guide',
+    title: 'FREE Freelancer Toolkit: Copy-Paste Proposal Templates, Cold Emails & Daily VA Checklists',
+    category: 'FREELANCING MASTERY',
+    status: 'PUBLISHED',
+    visible: true,
+    publishDate: '2026-10-28',
+    badge: 'FREE TEMPLATES',
+    mainImage: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1200&q=80',
+    description: 'Copy-and-paste proposal templates, End-of-Day (EOD) reporting formats, and free productivity checklists that help beginner VAs stand out immediately.',
+    fullContent: `# FREE Freelancer Toolkit: Copy-Paste Proposal Templates & Daily VA Checklists
+
+Save this guide! Below are proven, ready-to-use templates you can copy and customize for free to land clients and manage daily Virtual Assistant operations like a seasoned professional.
+
+---
+
+## 1. High-Converting Upwork / OnlineJobs.ph Proposal Template
+
+\`\`\`
+Hi [Client First Name],
+
+I noticed you're looking for a reliable [Role: e.g., Executive Virtual Assistant / AI Automation Specialist] to help manage [Specific Task mentioned in job post, e.g., inbox triage and social media scheduling] so you can focus on scaling [Client Company Name].
+
+In my workflow, here is how I would support you in the first 7 days:
+1. Audit & Organize: Set up a clean Notion/Google Sheet tracker and organize your priority inbox labels.
+2. Streamline Execution: Implement a repeatable checklist for [Specific Deliverable] with zero micromanagement needed.
+3. Daily Visibility: Send a concise 3-bullet End-of-Day (EOD) progress report every shift.
+
+I put together a quick 60-second sample/walkthrough specifically for your job post here: [Insert Link to Portfolio / Loom / Google Drive Sample].
+
+Are you open to a quick 10-minute chat this week to discuss how we can get started?
+
+Best regards,
+[Your Name]
+\`\`\`
+
+---
+
+## 2. The Professional End-of-Day (EOD) Client Report Template
+
+Sending this 2-minute message at the end of every shift builds massive client trust and guarantees long-term retention:
+
+\`\`\`
+📋 DAILY EOD SUMMARY — [Date]
+
+✅ COMPLETED TODAY:
+• Responded to 18 customer support tickets (Inbox at 0 pending).
+• Scheduled 5 LinkedIn posts and edited 2 short-form Reels for next week.
+• Updated CRM pipeline with 12 new qualified leads.
+
+🔄 IN PROGRESS (FOR TOMORROW):
+• Finalizing monthly expense spreadsheet reconciliation.
+• Drafting newsletter copy for Friday's campaign.
+
+⚠️ NEEDS YOUR QUICK INPUT / APPROVAL:
+• Please approve the 2 graphic drafts in Notion folder [Link] when you have 2 minutes.
+\`\`\`
+
+---
+
+## 3. The 100% Free Software Stack for Every Beginner VA
+
+* **Task & SOP Management:** Notion (Free Personal Plan) or Trello
+* **Communication:** Slack, Zoom, Google Meet, WhatsApp Business
+* **Screen Recording (Async Updates):** Loom or OBS Studio (Free)
+* **Design & Video:** Canva (Free), CapCut (Free), Meshy AI (Free 3D Assets)
+* **AI Writing & Research:** ChatGPT, Claude, Google Gemini
+* **Time Tracking:** Clockify or Toggl Track (100% Free)`,
+    buttonText: 'COPY FREE TEMPLATES →',
+    sortOrder: 5,
+    createdAt: '2026-10-28T00:00:00Z',
+    updatedAt: '2026-10-28T00:00:00Z'
+  },
+
+  // ==========================================
   // SECTION 1: ARTIFICIAL INTELLIGENCE & LLM MASTERY
   // ==========================================
   {
@@ -49,7 +427,9 @@ Modern AI systems operate primarily on deep neural networks trained on vast corp
 * **Finance & Commerce:** Real-time algorithmic trading, automated credit risk modeling, and predictive consumer analytics.
 * **Business Automation:** Autonomous customer support, synthetic media creation, and dynamic supply chain optimization.`,
     buttonText: 'READ FULL GUIDE →',
-    sortOrder: 1
+    sortOrder: 6,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_ai_02_era_future',
@@ -89,7 +469,9 @@ In the traditional economy, scaling business output required scaling headcount l
 | **Content Marketing** | 4 hours per blog post | 20 minutes AI generation + human editorial polish |
 | **Customer Support** | Tier 1 human call centers | Autonomous conversational AI with human escalation |`,
     buttonText: 'EXPLORE THE AI ERA →',
-    sortOrder: 2
+    sortOrder: 7,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_ai_03_automation',
@@ -136,7 +518,9 @@ AI becomes truly transformative when it moves beyond conversational chat boxes i
 * **AI Task:** Transcribe audio, extract key actionable takeaways, and synthesize a LinkedIn carousel, Twitter/X thread, and newsletter draft.
 * **Action:** Draft social posts in Buffer/Hootsuite for 1-click human editorial approval.`,
     buttonText: 'LEARN AUTOMATION →',
-    sortOrder: 3
+    sortOrder: 8,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_ai_04_influence',
@@ -177,7 +561,9 @@ Artificial Intelligence is the most powerful behavioral influence engine ever co
 * **Deepfakes & Disinformation:** Synthetic video and voice cloning eroding institutional trust.
 * **Cognitive Over-Reliance:** Outsourcing basic reasoning to AI without verification.`,
     buttonText: 'READ ETHICAL ANALYSIS →',
-    sortOrder: 4
+    sortOrder: 9,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_ai_05_safety',
@@ -213,7 +599,9 @@ As businesses integrate AI into customer-facing products and internal databases,
 2. **Deterministic Output Validation:** Employ JSON schemas and regex filters.
 3. **Human-in-the-Loop Safeguards:** High-stakes actions require human approval.`,
     buttonText: 'VIEW SAFETY PROTOCOLS →',
-    sortOrder: 5
+    sortOrder: 10,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_ai_06_prompt_mastery',
@@ -250,7 +638,9 @@ Prompt engineering is the art and science of directing foundation models to prod
 * **Self-Consistency:** Prompting the model multiple times and selecting the majority answer for arithmetic precision.
 * **ReAct (Reason + Act):** Interleaving reasoning traces with tool execution calls.`,
     buttonText: 'MASTER PROMPTING →',
-    sortOrder: 6
+    sortOrder: 11,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_ai_07_autonomous_agents',
@@ -279,7 +669,9 @@ Unlike static chatbots that require prompt-by-prompt guidance, autonomous AI age
 * **Memory Layer:** Short-term context memory paired with long-term vector database storage.
 * **Reflection & Error Recovery:** Inspecting tool errors and autonomously adjusting approach.`,
     buttonText: 'DISCOVER AI AGENTS →',
-    sortOrder: 7
+    sortOrder: 12,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_ai_08_top_tools',
@@ -306,16 +698,19 @@ Leveraging the right AI tools allows a single professional to operate with the c
 * **v0 by Vercel:** Instant generative React component UI creation.
 
 ## 2. Creative & Multimedia AI
-* **Midjourney v6 & Flux:** Photorealistic graphic design and brand asset synthesis.
+* **Meshy AI:** Text-to-3D and Image-to-3D asset generation in seconds.
+* **Suno AI:** Studio-quality full song and vocal music generation.
 * **ElevenLabs:** Hyper-realistic multilingual voice cloning and speech synthesis.
-* **CapCut & Runway Gen-3:** AI video background removal, auto-captions, and generative video clips.
+* **CapCut & Runway:** AI video background removal, auto-captions, and generative video clips.
 
 ## 3. Productivity & Operations
 * **Perplexity Pro:** Deep web research with inline scientific and academic citations.
 * **Notion AI:** Document synthesis, project roadmaps, and meeting transcription summaries.
-* **Make.com & Zapier AI:** Autonomous webhook and data synchronization pipelines.`,
+* **Make.com, n8n & Zapier AI:** Autonomous webhook and data synchronization pipelines.`,
     buttonText: 'EXPLORE TOOL DIRECTORY →',
-    sortOrder: 8
+    sortOrder: 13,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
 
   // ==========================================
@@ -355,7 +750,9 @@ The Virtual Assistant (VA) profession is one of the fastest-growing pathways to 
 4. **Lead Generation & CRM:** Cold outreach and Hubspot CRM data entry.
 5. **Technical & AI Automation:** Webflow maintenance and Zapier workflows.`,
     buttonText: 'START VA ROADMAP →',
-    sortOrder: 9
+    sortOrder: 14,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_va_02_pricing',
@@ -390,7 +787,9 @@ The biggest mistake beginner virtual assistants make is competing on price. To b
 * **Income Predictability:** Guaranteed revenue on the 1st of every month.
 * **Efficiency Rewards:** When you use AI tools to finish tasks faster, your effective hourly rate increases.`,
     buttonText: 'LEARN PRICING STRATEGIES →',
-    sortOrder: 10
+    sortOrder: 15,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_va_03_specializations',
@@ -418,7 +817,9 @@ Specialized Virtual Assistants command 3x to 5x higher compensation because they
 4. **E-Commerce & Amazon FBA Specialist ($15 - $30/hr):** Amazon PPC and product listing optimization.
 5. **Funnel & Web Operations VA ($20 - $40/hr):** GoHighLevel, WordPress, and Shopify funnel maintenance.`,
     buttonText: 'CHOOSE YOUR NICHE →',
-    sortOrder: 11
+    sortOrder: 16,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_va_04_inbox_zero',
@@ -452,7 +853,9 @@ Busy CEOs and founders receive 200+ emails per day. As an executive virtual assi
 * Implement 15-minute buffer blocks between high-stakes client calls.
 * Protect CEO deep-work focus mornings by restricting external bookings to afternoons.`,
     buttonText: 'MASTER INBOX ZERO →',
-    sortOrder: 12
+    sortOrder: 17,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_va_05_client_onboarding',
@@ -480,7 +883,9 @@ The first 14 days of a client engagement determine whether they retain your serv
 4. **Communication Cadence:** Establish daily Slack check-ins (EOD summaries) and weekly 15-minute alignment syncs.
 5. **First 72-Hour Quick Win:** Complete one high-visibility task immediately to build trust and momentum.`,
     buttonText: 'VIEW ONBOARDING GUIDE →',
-    sortOrder: 13
+    sortOrder: 18,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_va_06_ai_assisted_va',
@@ -507,7 +912,9 @@ AI will not replace virtual assistants; but virtual assistants who master AI wil
 * **Lead Research & Enrichment:** Feed prospect URLs into Perplexity/ChatGPT to extract decision-maker names, emails, and pain points.
 * **Social Media Batching:** Generate 30 LinkedIn post drafts and Canva carousel outlines in under an hour.`,
     buttonText: 'BECOME A SUPER-VA →',
-    sortOrder: 14
+    sortOrder: 19,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
 
   // ==========================================
@@ -545,7 +952,9 @@ Freelancing is not merely a job; it is running an independent service agency of 
 * **Part 3: Relevant Proof:** Link to a live sample or demo.
 * **Part 4: Low-Friction Call to Action:** Offer a brief 10-minute discovery chat.`,
     buttonText: 'MASTER PROPOSALS →',
-    sortOrder: 15
+    sortOrder: 20,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_free_02_skills',
@@ -572,7 +981,9 @@ In the global market, high-income skills are defined by revenue leverage and mar
 * **UI/UX & High-Converting Landing Page Design:** $1,000 - $3,500 per landing page.
 * **Short-Form Video Editing (CapCut, Premiere):** $1,500 - $3,000/mo retainer per client.`,
     buttonText: 'LEARN DIGITAL SKILLS →',
-    sortOrder: 16
+    sortOrder: 21,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_free_03_contracts',
@@ -599,7 +1010,9 @@ Securing a client is only half the battle; maintaining profitable, stress-free c
 * **Payment Terms:** 50% upfront deposit before commencing work, 50% upon completion prior to final code/asset release.
 * **Kill Fee / Cancellation Clause:** 25-50% cancellation compensation if the client cancels project mid-development.`,
     buttonText: 'READ CONTRACT GUIDE →',
-    sortOrder: 17
+    sortOrder: 22,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_free_04_branding',
@@ -626,7 +1039,9 @@ In a crowded global tech market, your personal brand is your greatest asset. A p
 * **Case Study Structure:** Problem → Proposed Solution → Tech Stack Used → Measurable Business Results.
 * **Direct Call to Action:** Prominent Contact button and Calendly booking embed for instant scheduling.`,
     buttonText: 'BUILD YOUR BRAND →',
-    sortOrder: 18
+    sortOrder: 23,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_free_05_python_auto',
@@ -652,7 +1067,9 @@ You do not need a computer science degree to harness the power of Python for dai
 * **Web Scraping:** Extract competitor product prices, real estate listings, and business directories with BeautifulSoup.
 * **Automated Email Reporting:** Send daily performance PDF reports to clients automatically at 8:00 AM every morning.`,
     buttonText: 'START PYTHON GUIDE →',
-    sortOrder: 19
+    sortOrder: 24,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   },
   {
     id: 'cms_edu_free_06_cybersecurity',
@@ -680,7 +1097,9 @@ As a remote developer or virtual assistant with access to client databases, serv
 4. **Phishing Awareness:** Always verify sender email domains before clicking invoice links or downloading attachments.
 5. **Secure Device Locking:** Set computer screen to lock automatically after 2 minutes of inactivity.`,
     buttonText: 'VIEW CYBER PROTOCOLS →',
-    sortOrder: 20
+    sortOrder: 25,
+    createdAt: '2026-08-24T00:00:00Z',
+    updatedAt: '2026-08-24T00:00:00Z'
   }
 ];
 

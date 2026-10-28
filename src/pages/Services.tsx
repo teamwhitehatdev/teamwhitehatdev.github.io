@@ -128,7 +128,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                 <div className="space-y-2 pt-2 border-t border-gray-800/80">
                   <h4 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">KEY FEATURES:</h4>
                   <div className="grid grid-cols-2 gap-2 text-xs font-mono text-gray-300">
-                    {s.features.map((feat, idx) => (
+                    {(s.features || []).map((feat: string, idx: number) => (
                       <div key={idx} className="flex items-center space-x-1 text-cyan-400">
                         <CheckCircle2 className="w-3.5 h-3.5 text-lime-400 shrink-0" />
                         <span>{feat}</span>

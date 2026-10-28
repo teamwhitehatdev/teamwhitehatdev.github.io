@@ -1,6 +1,4 @@
-// BUILD TIMESTAMP: 1787666620
-// TIMESTAMP: 1787390921
-// LAST BUILD TIMESTAMP: 1787390148
+// BUILD TIMESTAMP: 1787670000
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -26,13 +24,13 @@ import { useSecurityShield } from './components/SecurityEngine';
 import ThemeEngine from './components/ThemeEngine';
 import { AppProvider, useApp } from './context/AppContext';
 
-
 function VisitorPageTracker() {
   const location = useLocation();
   const { logVisitorPageNavigation } = useApp();
 
   useEffect(() => {
     logVisitorPageNavigation(location.pathname);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
   return null;
@@ -41,7 +39,7 @@ function VisitorPageTracker() {
 export function AppContent() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<string | undefined>(undefined);
-  
+
   const [showGumroadModal, setShowGumroadModal] = useState(false);
   const [showElevenLabsModal, setShowElevenLabsModal] = useState(false);
 
@@ -49,7 +47,6 @@ export function AppContent() {
 
   useSecurityShield();
 
-  // Disable aggressive auto-popups on load so Admin & public navigation are never blocked
   useEffect(() => {
     setShowGumroadModal(false);
     setShowElevenLabsModal(false);
@@ -73,14 +70,14 @@ export function AppContent() {
     <Router>
       <VisitorPageTracker />
       <ThemeEngine>
-        <div className="relative min-h-screen bg-gray-950 text-gray-100 flex flex-col font-sans">
+        <div className="relative min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans pb-16">
           <CyberBackground />
-          
+
           <div className="relative z-10 flex flex-col min-h-screen">
             <Navbar onOpenConsultation={() => handleOpenConsultation()} />
             <StockTicker />
-            
-            <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+            <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
               <Routes>
                 <Route path="/" element={<HomePage onOpenConsultation={(svc?: string) => handleOpenConsultation(svc)} />} />
                 <Route path="/showcase" element={<Showcase />} />
@@ -93,6 +90,7 @@ export function AppContent() {
                 <Route path="/affiliate-guide" element={<AffiliateGuide />} />
                 <Route path="/affiliate-guide/" element={<AffiliateGuide />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/admin/" element={<Admin />} />
               </Routes>
             </main>
 
@@ -102,12 +100,12 @@ export function AppContent() {
           <ConsultationModal
             isOpen={isConsultationOpen}
             onClose={() => setIsConsultationOpen(false)}
-            selectedService={selectedService}
+            initialServiceTitle={selectedService}
           />
-          
+
           {showGumroadModal && <GumroadModal onComplete={handleGumroadComplete} />}
           {showElevenLabsModal && <ElevenLabsModal isOpen={showElevenLabsModal} onClose={() => setShowElevenLabsModal(false)} />}
-          
+
           <StickyConversionBar onOpenConsultation={() => handleOpenConsultation()} />
           <LiveActivityTicker />
           <PlayStoreModal />

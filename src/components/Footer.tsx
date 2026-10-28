@@ -1,93 +1,113 @@
 import React from 'react';
-import { Shield, Smartphone, Heart, Sparkles, ExternalLink, Code } from 'lucide-react';
+import { Shield, Smartphone, Sparkles, ExternalLink, Code, Box, Lock } from 'lucide-react';
+
+const MESHY_URL =
+  'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-black/95 border-t border-cyan-500/30 text-gray-400 py-10 font-mono select-none">
+    <footer className="bg-white border-t border-slate-200 text-slate-600 py-12 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-
           {/* Brand Info */}
           <div className="space-y-3 md:col-span-2">
-            <div className="flex items-center space-x-2">
-              <Shield className="w-6 h-6 text-cyan-400" />
-              <span className="text-lg font-black font-orbitron text-white uppercase tracking-wider">
-                TEAM WHITEHAT DEV
+            <div className="flex items-center space-x-2.5">
+              <div className="p-2 rounded-xl bg-blue-50 border border-blue-100">
+                <Shield className="w-5 h-5 text-blue-600" />
+              </div>
+              <span className="text-lg font-extrabold text-slate-900 tracking-tight">
+                Team WhiteHat Dev
               </span>
             </div>
-            
-            {/* TAGLINE UNDERNEATH LOGO */}
-            <p className="text-xs font-mono font-bold text-cyan-300 tracking-wide uppercase">
-              Next-Generation Software • AI • Development • Automation • Digital Innovation
+
+            <p className="text-xs font-semibold text-blue-600 tracking-wide uppercase">
+              Free Virtual Assistant Academy • AI Automations • Software &amp; Digital Innovation
             </p>
 
-            <p className="text-xs text-gray-300 font-sans leading-relaxed max-w-md pt-1">
-              Full-Stack Cyber Security Engineering, Web Application Architecture, Virtual Assistant Solutions, and Official Google Play App Publishing.
+            <p className="text-xs text-slate-600 leading-relaxed max-w-md pt-1">
+              Empowering aspiring Virtual Assistants (VAs), freelancers, creators, and modern businesses with 100% free step-by-step tutorials, real AI automation workflow blueprints, and full-stack digital engineering.
             </p>
+
+            {/* Featured Partner Referral Link */}
+            <div className="pt-2">
+              <a
+                href={MESHY_URL}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="inline-flex items-center space-x-2 text-xs font-semibold text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200 px-3 py-1.5 rounded-lg transition-colors"
+              >
+                <Box className="w-3.5 h-3.5 text-violet-600" />
+                <span>AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
           </div>
 
           {/* Navigation Links */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-cyan-300 uppercase tracking-widest font-orbitron flex items-center space-x-1.5">
-              <Code className="w-4 h-4 text-lime-400" />
-              <span>NAVIGATE</span>
+            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
+              <Code className="w-4 h-4 text-blue-600" />
+              <span>Free Resources &amp; Pages</span>
             </h4>
-            <ul className="space-y-2 text-xs font-sans">
-              <li><a href="#/" className="hover:text-cyan-300 transition-colors">Home Page</a></li>
-              <li><a href="#/services" className="hover:text-cyan-300 transition-colors">Services &amp; Pricing</a></li>
-              <li><a href="#/about" className="hover:text-cyan-300 transition-colors">About Us</a></li>
-              <li><a href="#/affiliate-guide" className="hover:text-cyan-300 transition-colors">Affiliate Marketer Guide</a></li>
-              <li><a href="#/showcase" className="hover:text-cyan-300 transition-colors">Software &amp; Showcase</a></li>
-              <li><a href="#/web-hosting" className="hover:text-cyan-300 transition-colors">Web Hosting Deals</a></li>
+            <ul className="space-y-2 text-xs">
+              <li><a href="#/" className="hover:text-blue-600 transition-colors">Home &amp; Free VA Academy</a></li>
+              <li><a href="#/ai" className="hover:text-blue-600 transition-colors font-semibold text-slate-800">AI Capabilities &amp; Automation Diagrams</a></li>
+              <li><a href="#/affiliate-guide" className="hover:text-blue-600 transition-colors font-semibold text-emerald-700">Free VA &amp; Freelancer Master Guide</a></li>
+              <li><a href="#/services" className="hover:text-blue-600 transition-colors">VA Services &amp; Pricing</a></li>
+              <li><a href="#/showcase" className="hover:text-blue-600 transition-colors">Portfolio &amp; Showcase</a></li>
+              <li><a href="#/web-hosting" className="hover:text-blue-600 transition-colors">Web Hosting Deals</a></li>
+              <li><a href="#/about" className="hover:text-blue-600 transition-colors">About Our Team</a></li>
+              <li>
+                <a href="#/admin" className="inline-flex items-center space-x-1 text-slate-500 hover:text-blue-600 transition-colors pt-1">
+                  <Lock className="w-3 h-3" />
+                  <span>Admin CMS Dashboard</span>
+                </a>
+              </li>
             </ul>
           </div>
 
-          {/* Developer Profile Section (With Official Google Play Developer Page link underneath) */}
+          {/* Developer Profile Section */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-cyan-300 uppercase tracking-widest font-orbitron flex items-center space-x-1.5">
-              <Sparkles className="w-4 h-4 text-lime-400" />
-              <span>DEVELOPER PROFILE</span>
+            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
+              <Sparkles className="w-4 h-4 text-emerald-600" />
+              <span>Developer Profile</span>
             </h4>
-            
-            <div className="space-y-2 text-xs font-sans">
-              <p className="text-gray-300">
+
+            <div className="space-y-1.5 text-xs">
+              <p className="text-slate-600">
                 Verified Google Play Store App Developer:
               </p>
               <a
                 href="https://play.google.com/store/apps/dev?id=7374638355121114347"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-emerald-400 hover:text-emerald-300 underline font-mono text-[11px] block break-all font-bold"
+                className="text-blue-600 hover:text-blue-700 underline font-mono text-[11px] block break-all font-semibold"
               >
                 ID: 7374638355121114347
               </a>
             </div>
 
-            {/* Official Google Play Developer Page button placed underneath DEVELOPER PROFILE */}
             <div className="pt-2">
               <a
                 href="https://play.google.com/store/apps/dev?id=7374638355121114347"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-[11px] font-bold font-orbitron px-3.5 py-2 rounded-xl border border-emerald-400/50 shadow-md transition-all group hover:scale-[1.02]"
+                className="inline-flex items-center space-x-2 bg-slate-900 hover:bg-blue-600 text-white text-xs font-semibold px-3.5 py-2.5 rounded-xl shadow-xs transition-all"
               >
-                <Smartphone className="w-4 h-4 text-lime-300 group-hover:scale-110 transition-transform" />
-                <span>OFFICIAL GOOGLE PLAY DEVELOPER PAGE</span>
-                <ExternalLink className="w-3 h-3 text-cyan-200" />
+                <Smartphone className="w-4 h-4 text-emerald-400" />
+                <span>Official Google Play Developer Page</span>
+                <ExternalLink className="w-3 h-3 opacity-80" />
               </a>
             </div>
           </div>
-
         </div>
 
-        {/* Bottom Bar with Year Established & Mission Statement */}
-        <div className="border-t border-gray-900 pt-6 text-center text-xs text-gray-400 leading-relaxed">
-          <p className="font-mono text-xs text-gray-300 font-bold max-w-5xl mx-auto">
-            teamwhitehatdev 2016 - 2026. &nbsp;&nbsp;|&nbsp;&nbsp; Our mission is to turn innovative ideas into functional digital experiences that can help individuals, creators, professionals, and businesses. &nbsp;&nbsp;|&nbsp;&nbsp; Learn. Create. Develop. Assist. Innovate.
+        {/* Bottom Bar */}
+        <div className="border-t border-slate-200 pt-6 text-center text-xs text-slate-500 leading-relaxed">
+          <p className="max-w-5xl mx-auto">
+            Team WhiteHat Dev (2016 – 2026) &nbsp;•&nbsp; Empowering aspiring Virtual Assistants, freelancers, and businesses with 100% free tutorials, AI automation guides, and modern web engineering.
           </p>
         </div>
-
       </div>
     </footer>
   );

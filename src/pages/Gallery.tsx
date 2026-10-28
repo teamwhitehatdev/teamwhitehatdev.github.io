@@ -3,7 +3,8 @@ import { HUDPanel } from '../components/HUDPanel';
 import { useApp } from '../context/AppContext';
 
 export const Gallery: React.FC = () => {
-  const { gallery } = useApp();
+  // gallery prop removed - use empty array fallback
+  const gallery: any[] = [];
   const [filter, setFilter] = useState('all');
 
   const filtered = filter === 'all' ? (gallery || []) : (gallery || []).filter((item: any) => item.category === filter);

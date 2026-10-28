@@ -1,16 +1,39 @@
 import React, { useState } from 'react';
 import { HUDPanel } from '../components/HUDPanel';
 import { TESTIMONIALS_DATA } from '../data/testimonialsData';
-import { Music, Star, RefreshCw, BookOpen, Sparkles, CheckCircle2, ShieldCheck, ArrowRight, ExternalLink, Award, Zap, Flame, HelpCircle, Layers, TrendingUp, UserCheck, Briefcase, Code, Video, Globe } from 'lucide-react';
+import {
+  Music,
+  Star,
+  RefreshCw,
+  BookOpen,
+  Sparkles,
+  CheckCircle2,
+  ArrowRight,
+  ExternalLink,
+  Award,
+  Briefcase,
+  Code,
+  Video,
+  Globe,
+  Box,
+  GraduationCap,
+  Workflow,
+  Cpu
+} from 'lucide-react';
 import { AtomeCardPanel } from '../components/AtomeCardPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { useApp } from '../context/AppContext';
 import { ArticleModal } from '../components/ArticleModal';
+import { AIAutomationDiagrams } from '../components/AIAutomationDiagrams';
 import { CMSItem } from '../types';
+import { Link } from 'react-router-dom';
 
 interface HomePageProps {
   onOpenConsultation?: (serviceTitle?: string) => void;
 }
+
+const MESHY_REFERRAL_URL =
+  'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends';
 
 export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
   const { getHomeFeaturedCMSItems } = useApp();
@@ -26,184 +49,340 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
     }
   };
 
-  const filteredCmsItems = selectedCategory === 'ALL'
-    ? homeCmsItems
-    : homeCmsItems.filter(item => item.category.toUpperCase().includes(selectedCategory));
+  const filteredCmsItems =
+    selectedCategory === 'ALL'
+      ? homeCmsItems
+      : homeCmsItems.filter((item) => item.category.toUpperCase().includes(selectedCategory));
 
   return (
-    <div className="space-y-8 animate-fadeIn max-w-7xl mx-auto pb-12">
-
+    <div className="space-y-12 max-w-7xl mx-auto pb-12">
       {/* ========================================================================= */}
-      {/* 🚀 SECTION 1: MASTER PLATFORM OVERVIEW (CYBER ACCELERATOR BANNER) */}
+      {/* 🚀 SECTION 1: CLEAN MINIMALIST PORTFOLIO & FREE VA ACADEMY HERO           */}
       {/* ========================================================================= */}
-      <HUDPanel title="🌐 SYSTEM OVERVIEW • AUTONOMOUS DEV &amp; VIRTUAL ASSISTANT ACCELERATOR">
-        <div className="p-6 space-y-6">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-gray-800">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <span className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
-                <span className="text-xs font-mono text-emerald-400 font-bold tracking-widest uppercase">
-                  ENTERPRISE SERVICES &amp; EDUCATIONAL KNOWLEDGE PORTAL
-                </span>
-              </div>
-              <h1 className="text-2xl sm:text-4xl font-black font-orbitron tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-300 to-lime-400">
-                VIRTUAL ASSISTANTS, FREELANCERS &amp; DIGITAL CONTENT HUB
-              </h1>
-              <p className="text-sm sm:text-base text-gray-300 font-sans max-w-3xl leading-relaxed">
-                Empowering Virtual Assistants, Freelancers, and Digital Creators with high-income remote skills, automated client workflows, viral video production recipes, and dedicated executive assistance packages.
-              </p>
+      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm space-y-8">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pb-8 border-b border-slate-100">
+          <div className="space-y-4 max-w-3xl">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-xs font-bold uppercase tracking-wider">
+              <GraduationCap className="w-4 h-4 text-emerald-600" />
+              <span>100% Free VA Academy • AI Automation Blueprints • Digital Portfolio</span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <button
-                onClick={() => handleConsult('General Platform Consultation')}
-                className="px-5 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold font-orbitron text-xs uppercase rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] flex items-center space-x-2"
-              >
-                <span>FREE TECH CONSULTATION</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <a
-                href="#/affiliate-guide"
-                className="px-5 py-3 bg-gray-900 border border-lime-400/50 hover:border-lime-400 text-lime-400 font-bold font-orbitron text-xs uppercase rounded-xl transition-all flex items-center space-x-2"
-              >
-                <span>AFFILIATE GUIDE</span>
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
+            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+              Free Tutorials, AI Automation Diagrams &amp; Career Guides for{' '}
+              <span className="text-blue-600">Virtual Assistants &amp; Freelancers</span>
+            </h1>
+
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+              Learn how to become a high-earning Virtual Assistant or Freelancer at <strong className="text-slate-900">zero cost</strong>. Explore step-by-step career blueprints, copy-paste client proposal templates, and visual <strong className="text-slate-900">AI Automation Workflow Diagrams</strong>—or hire our dedicated engineering &amp; VA team.
+            </p>
           </div>
 
-          {/* 4 CORE VALUE PILLARS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 font-sans text-xs">
-            <div className="p-4 rounded-xl bg-black/60 border border-cyan-500/30 space-y-1.5 hover:border-cyan-400 transition-all">
-              <div className="flex items-center space-x-2 text-cyan-400 font-bold font-mono">
-                <Code className="w-4 h-4 text-cyan-400" />
-                <span>DEV &amp; APPS</span>
-              </div>
-              <h4 className="text-sm font-black text-white font-rajdhani">CUSTOM WEB &amp; SOFTWARE</h4>
-              <p className="text-gray-400 leading-snug">Full-stack React, TypeScript, Next.js, and Android/iOS application development.</p>
-            </div>
+          <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 w-full sm:w-auto">
+            <Link
+              to="/ai"
+              className="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all shadow-sm flex items-center justify-center space-x-2"
+            >
+              <Workflow className="w-4 h-4" />
+              <span>Explore AI Automation Diagrams</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
 
-            <div className="p-4 rounded-xl bg-black/60 border border-emerald-500/30 space-y-1.5 hover:border-emerald-400 transition-all">
-              <div className="flex items-center space-x-2 text-emerald-400 font-bold font-mono">
-                <Briefcase className="w-4 h-4 text-emerald-400" />
-                <span>VA SERVICES</span>
-              </div>
-              <h4 className="text-sm font-black text-white font-rajdhani">VIRTUAL ASSISTANCE</h4>
-              <p className="text-gray-400 leading-snug">Executive administrative, technical, CRM, data entry, and marketing virtual assistants.</p>
-            </div>
+            <Link
+              to="/affiliate-guide"
+              className="px-6 py-3.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-semibold text-sm rounded-xl transition-all flex items-center justify-center space-x-2"
+            >
+              <BookOpen className="w-4 h-4 text-emerald-600" />
+              <span>Free VA &amp; Freelancer Guide</span>
+            </Link>
 
-            <div className="p-4 rounded-xl bg-black/60 border border-lime-500/30 space-y-1.5 hover:border-lime-400 transition-all">
-              <div className="flex items-center space-x-2 text-lime-400 font-bold font-mono">
-                <Globe className="w-4 h-4 text-lime-400" />
-                <span>HOSTING &amp; CLOUD</span>
-              </div>
-              <h4 className="text-sm font-black text-white font-rajdhani">WEB HOSTING &amp; DOMAINS</h4>
-              <p className="text-gray-400 leading-snug">Ultra-fast NVMe cloud hosting with 99.9% uptime and 24/7 technical monitoring.</p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-black/60 border border-yellow-500/30 space-y-1.5 hover:border-yellow-400 transition-all">
-              <div className="flex items-center space-x-2 text-yellow-400 font-bold font-mono">
-                <Award className="w-4 h-4 text-yellow-400" />
-                <span>LEARNING HUB</span>
-              </div>
-              <h4 className="text-sm font-black text-white font-rajdhani">AFFILIATE &amp; CAREER</h4>
-              <p className="text-gray-400 leading-snug">Step-by-step guides, monetization blueprints, and software review tutorials.</p>
-            </div>
+            <button
+              onClick={() => handleConsult('Executive VA & AI Automation Consultation')}
+              className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5"
+            >
+              <span>Hire Our VA / Dev Team</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
-      </HUDPanel>
+
+        {/* 4 CORE VALUE PILLARS */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 hover:border-blue-300 transition-all">
+            <div className="flex items-center space-x-2 text-blue-600 font-bold uppercase tracking-wider">
+              <GraduationCap className="w-4 h-4" />
+              <span>100% Free VA Academy</span>
+            </div>
+            <h3 className="text-sm font-bold text-slate-900">Zero-to-Pro Freelancer Guides</h3>
+            <p className="text-slate-600 leading-relaxed">
+              Free step-by-step roadmaps, Upwork/OnlineJobs.ph proposal scripts, and daily VA checklists.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 hover:border-violet-300 transition-all">
+            <div className="flex items-center space-x-2 text-violet-600 font-bold uppercase tracking-wider">
+              <Workflow className="w-4 h-4" />
+              <span>Real AI Flows</span>
+            </div>
+            <h3 className="text-sm font-bold text-slate-900">Visual Automation Diagrams</h3>
+            <p className="text-slate-600 leading-relaxed">
+              Interactive node-by-node diagrams showing how Webhooks, LLMs, Routers, and CRMs work together.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 hover:border-emerald-300 transition-all">
+            <div className="flex items-center space-x-2 text-emerald-600 font-bold uppercase tracking-wider">
+              <Briefcase className="w-4 h-4" />
+              <span>Executive VAs</span>
+            </div>
+            <h3 className="text-sm font-bold text-slate-900">Dedicated Remote Talent</h3>
+            <p className="text-slate-600 leading-relaxed">
+              Trained Executive Virtual Assistants, CRM specialists, and technical support operators.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 hover:border-indigo-300 transition-all">
+            <div className="flex items-center space-x-2 text-indigo-600 font-bold uppercase tracking-wider">
+              <Code className="w-4 h-4" />
+              <span>Full-Stack Studio</span>
+            </div>
+            <h3 className="text-sm font-bold text-slate-900">Web, Apps &amp; 3D AI</h3>
+            <p className="text-slate-600 leading-relaxed">
+              Custom React/TypeScript web platforms, Google Play mobile apps, and AI 3D asset pipelines.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* ========================================================================= */}
-      {/* 🌟 MAIN 2-COLUMN GRID: CONTENT (LEFT 2/3) + PROMOTIONS & ADS (RIGHT 1/3) */}
+      {/* 🎵 & 🧊 SIDE-BY-SIDE DIVISIONS: SUNO AI MUSIC + MESHY AI 3D GENERATOR      */}
+      {/* ========================================================================= */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+        {/* DIVISION 1: SUNO AI MUSIC STUDIO */}
+        <div className="rounded-3xl bg-white border-2 border-orange-200 hover:border-orange-300 p-6 sm:p-7 shadow-sm flex flex-col justify-between space-y-5 transition-all">
+          <div className="space-y-4">
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden border border-orange-200 shrink-0 shadow-xs bg-orange-50">
+                <img
+                  src="./media_1787666146962.jpg"
+                  alt="Suno AI Music Generation Logo"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = './media_1786678717227.png';
+                  }}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2.5 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                    <Music className="w-3 h-3 text-orange-600" />
+                    <span>SUNO AI DIVISION</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-semibold">
+                    Free Signup Credits
+                  </span>
+                </div>
+                <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+                  Create Original Radio-Ready Songs with Suno AI
+                </h2>
+              </div>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Suno is the leading generative AI music studio. Transform simple text prompts into full-length broadcast-quality songs with realistic vocals, harmonies, and custom background tracks for client videos.
+            </p>
+
+            <div className="overflow-hidden rounded-xl border border-slate-200 h-28">
+              <img
+                src="./media_1787666146964.jpg"
+                alt="Suno AI Music Showcase"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = './media_1786678717227.png';
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
+            <span className="text-xs text-slate-500 font-medium">Official Creator: @chillvibemusics</span>
+            <a
+              href="https://suno.com/@chillvibemusics"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-5 py-3 bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white font-semibold text-xs rounded-xl transition-all shadow-xs flex items-center justify-center gap-2"
+            >
+              <span>Explore Suno AI Music Studio</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+
+        {/* DIVISION 2 (NEXT TO SUNO): MESHY AI 3D MODEL GENERATOR REFERRAL */}
+        <div className="rounded-3xl bg-white border-2 border-violet-200 hover:border-violet-400 p-6 sm:p-7 shadow-sm flex flex-col justify-between space-y-5 transition-all">
+          <div className="space-y-4">
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden border border-violet-200 shrink-0 shadow-xs bg-violet-600 text-white flex flex-col items-center justify-center">
+                <Box className="w-7 h-7" />
+                <span className="text-[10px] font-extrabold tracking-tight">MESHY 3D</span>
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2.5 py-0.5 rounded-full bg-violet-50 text-violet-700 border border-violet-200 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-violet-600" />
+                    <span>MESHY AI 3D DIVISION • OFFICIAL REFERRAL</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-semibold">
+                    Free Bonus Credits
+                  </span>
+                </div>
+                <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+                  <a
+                    href={MESHY_REFERRAL_URL}
+                    target="_blank"
+                    rel="sponsored noopener noreferrer"
+                    className="hover:text-violet-600 transition-colors"
+                  >
+                    AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy
+                  </a>
+                </h2>
+              </div>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Generate production-ready 3D models and PBR textures from simple text prompts or reference photos in under 60 seconds. Export in <code className="px-1.5 py-0.5 bg-slate-100 rounded text-violet-700 text-xs">.GLB</code>, <code className="px-1.5 py-0.5 bg-slate-100 rounded text-violet-700 text-xs">.FBX</code>, <code className="px-1.5 py-0.5 bg-slate-100 rounded text-violet-700 text-xs">.OBJ</code>, or <code className="px-1.5 py-0.5 bg-slate-100 rounded text-violet-700 text-xs">.USDZ</code> for web design, e-commerce, Blender, Unity, and Unreal Engine.
+            </p>
+
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                'Text to 3D',
+                'Image to 3D',
+                'AI PBR Texturing',
+                'GLB / FBX / OBJ Export',
+                'No 3D Experience Needed'
+              ].map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2.5 py-1 rounded-lg bg-violet-50 border border-violet-200/80 text-violet-800 text-[11px] font-semibold"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
+            <span className="text-xs text-slate-500 font-medium">Partner Code: ER3M3J (Invite Friends)</span>
+            <a
+              href={MESHY_REFERRAL_URL}
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="w-full sm:w-auto px-5 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold text-xs rounded-xl transition-all shadow-xs flex items-center justify-center gap-2"
+            >
+              <span>AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy</span>
+              <ExternalLink className="w-4 h-4 shrink-0" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 🤖 SECTION 2: VISUAL AI AUTOMATION DIAGRAMS & FREE VA TOOLKIT             */}
+      {/* ========================================================================= */}
+      <AIAutomationDiagrams />
+
+      {/* ========================================================================= */}
+      {/* 🌟 SECTION 3: 2-COLUMN GRID: FREE TUTORIALS (LEFT 2/3) + ADS (RIGHT 1/3)  */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
-        {/* 📚 LEFT 2/3 COLUMN: TUTORIALS, GUIDES, PACKAGES & REVIEWS */}
+        {/* 📚 LEFT 2/3 COLUMN: FREE TUTORIALS, GUIDES, PACKAGES & REVIEWS */}
         <div className="lg:col-span-2 space-y-8">
-
           {/* 🎛️ CMS CONTENT ITEMS (FEATURED EDUCATIONAL TOPICS & GUIDES) */}
-          <HUDPanel title="📚 FEATURED TOPICS, GUIDES &amp; TUTORIALS">
-            <div className="p-5 space-y-6">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-800">
+          <HUDPanel title="📚 Free Tutorials, VA Career Guides &amp; AI Masterclasses" badge="100% Free Access">
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                 <div>
-                  <h3 className="text-base sm:text-lg font-black font-orbitron text-white flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-cyan-400" />
-                    <span>CURATED LEARNING &amp; SERVICE SPOTLIGHTS</span>
+                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-blue-600" />
+                    <span>Step-by-Step Guides for Virtual Assistants &amp; Freelancers</span>
                   </h3>
-                  <p className="text-xs text-gray-400 font-sans">
-                    Read in-depth guides, software tutorials, and digital development insights.
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Click any tutorial card below to read the complete guide, checklists, and workflow steps for free.
                   </p>
                 </div>
 
                 {/* CATEGORY FILTER BUTTONS */}
-                <div className="flex flex-wrap items-center gap-1.5 bg-black/60 p-1.5 rounded-xl border border-gray-800 font-mono text-[10px]">
-                  {['ALL', 'AI', 'VA', 'AFFILIATE', 'HOSTING', 'DEV'].map((cat) => (
+                <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 text-xs">
+                  {['ALL', 'AI', 'VA', 'FREELANC', 'AUTOMATION', 'DEV'].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
-                      className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                      className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
                         selectedCategory === cat
-                          ? 'bg-cyan-500 text-black shadow'
-                          : 'text-gray-400 hover:text-white hover:bg-gray-800/60'
+                          ? 'bg-blue-600 text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-white'
                       }`}
                     >
-                      {cat}
+                      {cat === 'FREELANC' ? 'FREELANCE' : cat}
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* TUTORIALS / ARTICLES GRID */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-sans text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {filteredCmsItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-black/80 border border-gray-800 hover:border-cyan-400/80 rounded-xl overflow-hidden flex flex-col justify-between transition-all group hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]"
+                    className="bg-white border border-slate-200 hover:border-blue-300 rounded-2xl overflow-hidden flex flex-col justify-between transition-all group shadow-xs hover:shadow-md"
                   >
                     {item.mainImage && (
-                      <div className="h-36 w-full relative overflow-hidden border-b border-gray-800/80">
+                      <div className="h-40 w-full relative overflow-hidden border-b border-slate-100 bg-slate-100">
                         <img
                           src={item.mainImage}
                           alt={item.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80';
+                            (e.target as HTMLImageElement).src =
+                              'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80';
                           }}
                         />
-                        <span className="absolute top-2 left-2 px-2 py-0.5 bg-black/80 backdrop-blur text-cyan-300 font-mono text-[9px] font-bold rounded border border-cyan-500/40 uppercase">
+                        <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 bg-white/95 backdrop-blur-xs text-blue-700 text-[10px] font-bold rounded-full border border-blue-200 uppercase shadow-xs">
                           {item.category}
                         </span>
                         {item.badge && (
-                          <span className="absolute top-2 right-2 px-2 py-0.5 bg-lime-400/90 text-black font-mono text-[9px] font-black rounded uppercase shadow">
+                          <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 bg-emerald-600 text-white text-[10px] font-bold rounded-full uppercase shadow-xs">
                             {item.badge}
                           </span>
                         )}
                         {item.videoUrl && (
-                          <span className="absolute bottom-2 right-2 px-2 py-0.5 bg-red-600/90 text-white font-mono text-[9px] font-bold rounded flex items-center gap-1 shadow">
+                          <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center gap-1 shadow-xs">
                             <Video className="w-3 h-3" />
-                            <span>VIDEO</span>
+                            <span>Video</span>
                           </span>
                         )}
                       </div>
                     )}
 
-                    <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                    <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
                       <div className="space-y-1.5">
-                        <h4 className="text-sm font-black font-orbitron text-white group-hover:text-cyan-300 transition-colors line-clamp-2">
+                        <h4
+                          onClick={() => setSelectedArticle(item)}
+                          className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 cursor-pointer"
+                        >
                           {item.title}
                         </h4>
-                        <p className="text-gray-300 text-[11px] leading-relaxed line-clamp-3">
+                        <p className="text-slate-600 text-xs leading-relaxed line-clamp-3">
                           {item.description}
                         </p>
                       </div>
 
-                      <div className="pt-3 border-t border-gray-800/80 flex items-center justify-between gap-2 mt-2">
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 mt-2">
                         <button
                           onClick={() => setSelectedArticle(item)}
-                          className="px-3 py-1.5 bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 font-mono font-bold text-[11px] rounded-lg transition-all flex items-center gap-1.5"
+                          className="px-3 py-1.5 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5"
                         >
-                          <BookOpen className="w-3 h-3" />
-                          <span>READ TUTORIAL</span>
+                          <BookOpen className="w-3.5 h-3.5" />
+                          <span>Read Free Guide</span>
                         </button>
 
                         {(item.url || item.referralUrl) && (
@@ -211,9 +390,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
                             href={item.url || item.referralUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-2.5 py-1.5 bg-lime-400/20 hover:bg-lime-400/30 border border-lime-400/50 text-lime-300 font-mono font-bold text-[10px] rounded-lg transition-all flex items-center gap-1 shrink-0"
+                            className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-[11px] rounded-lg transition-all flex items-center gap-1 shrink-0"
                           >
-                            <span>{item.buttonText ? item.buttonText.split('(')[0].trim().slice(0, 18) : 'VISIT LINK'}</span>
+                            <span>
+                              {item.buttonText
+                                ? item.buttonText.split('(')[0].trim().slice(0, 18)
+                                : 'Open Tool'}
+                            </span>
                             <ExternalLink className="w-3 h-3" />
                           </a>
                         )}
@@ -225,98 +408,98 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
             </div>
           </HUDPanel>
 
-          {/* 🔄 CONTINUOUS LEARNING CONCEPT */}
-          <HUDPanel title="🔄 CONTINUOUS LEARNING &amp; EXPANDING RESOURCES">
-            <div className="p-5 space-y-4">
-              <div className="p-4 bg-gradient-to-r from-cyan-950 via-slate-900 to-indigo-950 border border-cyan-400/40 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="space-y-1.5 text-center md:text-left font-sans">
-                  <span className="text-xs font-mono font-bold text-lime-400 uppercase tracking-widest block">
-                    "KEEP LEARNING. KEEP IMPROVING. KEEP BUILDING."
-                  </span>
-                  <h3 className="text-lg md:text-xl font-black font-orbitron text-white">
-                    NEW TUTORIALS &amp; RESOURCES ADDED REGULARLY
-                  </h3>
-                  <p className="text-xs text-gray-300 max-w-xl">
-                    We continuously update this platform with new articles, software guides, client management tools, and digital skill tutorials managed dynamically through our CMS.
-                  </p>
-                </div>
-
-                <a
-                  href="#/ai"
-                  className="px-6 py-3.5 bg-gradient-to-r from-lime-400 via-cyan-400 to-emerald-300 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:scale-105 transition-all shrink-0 flex items-center gap-2 shadow-lg"
+          {/* CORE VIRTUAL ASSISTANT & ENGINEERING PACKAGES */}
+          <HUDPanel title="🛠️ Need Done-For-You Support? Dedicated VA &amp; Engineering Packages" badge="For Businesses">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              {[
+                {
+                  title: 'Executive Virtual Assistant',
+                  desc: 'Calendar management, smart inbox triage, Notion/HubSpot CRM updates, and daily client operations.',
+                  price: '$1,500 / mo'
+                },
+                {
+                  title: 'AI Workflow Automation Setup',
+                  desc: 'Custom Make.com, n8n, or Zapier pipelines connecting your forms, AI LLMs, CRM, and Slack.',
+                  price: '$750 / setup'
+                },
+                {
+                  title: 'Full-Stack Web & CMS Platform',
+                  desc: 'Modern, fast React, TypeScript, and Next.js websites with custom CMS dashboards.',
+                  price: '$2,500 / project'
+                },
+                {
+                  title: 'Mobile App Publishing',
+                  desc: 'Android & iOS applications built and published on Google Play & App Store.',
+                  price: '$799 / app'
+                }
+              ].map((svc, idx) => (
+                <div
+                  key={idx}
+                  className="bg-slate-50 border border-slate-200 p-5 rounded-2xl space-y-3 hover:border-blue-300 transition-all flex flex-col justify-between"
                 >
-                  <span>EXPLORE ALL AI TOPICS &rarr;</span>
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-          </HUDPanel>
-
-          {/* CORE VIRTUAL ASSISTANT PACKAGES (WHITE HIGH-CONTRAST PANEL) */}
-          <HUDPanel title="🛠️ CORE VIRTUAL ASSISTANT PACKAGES">
-            <div className="p-6 space-y-4 bg-white text-slate-900 rounded-2xl border-2 border-emerald-400 shadow-2xl">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans">
-                {[
-                  { title: 'Executive Virtual Assistance', desc: 'Calendar management, inbox triage, CRM entry, and client support.', price: '$1,500 / mo' },
-                  { title: 'Full-Stack Web Development', desc: 'React, TypeScript, Next.js web applications & CMS integrations.', price: '$2,500 / project' },
-                  { title: 'Mobile App Development', desc: 'Android & iOS apps published on Google Play & App Store.', price: '$799 / app' },
-                  { title: 'Graphic Design & Branding', desc: 'Social media assets, logos, pitch decks, and UI mockups.', price: '$250 / pack' },
-                ].map((svc, idx) => (
-                  <div key={idx} className="bg-slate-50 border-2 border-slate-200 p-4 rounded-xl space-y-2 hover:border-emerald-500 shadow-sm transition-all flex flex-col justify-between">
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-black text-slate-900 font-orbitron uppercase">{svc.title}</h4>
-                      <p className="text-xs text-slate-700 leading-snug">{svc.desc}</p>
-                    </div>
-                    <div className="flex justify-between items-center pt-2 border-t border-slate-200 mt-2">
-                      <span className="text-emerald-700 font-extrabold font-mono text-sm">{svc.price}</span>
-                      <button onClick={() => handleConsult(svc.title)} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold font-mono rounded-lg transition-all shadow">
-                        BOOK &rarr;
-                      </button>
-                    </div>
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-bold text-slate-900">{svc.title}</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed">{svc.desc}</p>
                   </div>
-                ))}
-              </div>
+                  <div className="flex justify-between items-center pt-3 border-t border-slate-200/80">
+                    <span className="text-blue-700 font-extrabold text-sm">{svc.price}</span>
+                    <button
+                      onClick={() => handleConsult(svc.title)}
+                      className="px-3.5 py-1.5 bg-slate-900 hover:bg-blue-600 text-white text-xs font-semibold rounded-lg transition-all"
+                    >
+                      Book Consultation &rarr;
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </HUDPanel>
 
-          {/* MINIMAL VERIFIED REVIEWS */}
-          <HUDPanel title="VERIFIED CLIENT &amp; VA REVIEWS">
-            <div className="p-4 sm:p-5 space-y-5">
+          {/* VERIFIED REVIEWS */}
+          <HUDPanel title="⭐ Verified Student, Freelancer &amp; Client Reviews" badge="Community Feedback">
+            <div className="space-y-5">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <p className="text-xs text-gray-300 font-sans leading-relaxed">
-                  Verified client &amp; VA case study reviews.
+                <p className="text-xs text-slate-600">
+                  Real feedback from Virtual Assistants, freelancers, and business owners using our guides and services.
                 </p>
                 <button
-                  onClick={() => setDisplayTestimonials([...TESTIMONIALS_DATA].sort(() => Math.random() - 0.5))}
-                  className="px-3.5 py-1.5 bg-[var(--primary-cyan)]/20 hover:bg-[var(--primary-cyan)]/40 border border-[var(--primary-cyan)]/40 text-[var(--primary-cyan)] rounded-lg text-xs font-mono transition-all flex items-center space-x-1.5"
+                  onClick={() =>
+                    setDisplayTestimonials([...TESTIMONIALS_DATA].sort(() => Math.random() - 0.5))
+                  }
+                  className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
-                  <span>SHUFFLE REVIEWS</span>
+                  <span>Shuffle Reviews</span>
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-sans text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
                 {displayTestimonials.slice(0, 6).map((t) => (
-                  <div key={t.id} className="bg-black/90 border border-gray-800 p-3 rounded-xl space-y-2 hover:border-[var(--primary-cyan)] transition-all">
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-lime-400">
-                        <div className="flex items-center space-x-0.5">
+                  <div
+                    key={t.id}
+                    className="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-2.5 flex flex-col justify-between"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-0.5 text-amber-400">
                           {[...Array(t.rating)].map((_, rIdx) => (
-                            <Star key={rIdx} className="w-3 h-3 fill-lime-400 text-lime-400" />
+                            <Star key={rIdx} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                           ))}
                         </div>
-                        <span className="text-[9px] text-lime-400 font-mono font-bold">VERIFIED</span>
+                        <span className="text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full font-semibold">
+                          Verified
+                        </span>
                       </div>
-                      <p className="text-gray-200 italic leading-relaxed text-[11px] line-clamp-3">
+                      <p className="text-slate-700 italic leading-relaxed text-xs line-clamp-3">
                         "{t.text}"
                       </p>
                     </div>
-                    <div className="pt-2 border-t border-gray-800/80 mt-1 flex items-center justify-between">
+                    <div className="pt-2.5 border-t border-slate-200/80 flex items-center justify-between">
                       <div>
-                        <h5 className="font-extrabold text-white text-xs font-rajdhani uppercase leading-none">{t.name}</h5>
-                        <p className="text-[9px] text-[var(--primary-cyan)] font-mono font-bold pt-0.5">{t.country}</p>
+                        <h5 className="font-bold text-slate-900 text-xs">{t.name}</h5>
+                        <p className="text-[10px] text-slate-500">{t.location || t.role}</p>
                       </div>
-                      <span className="w-5 h-5 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 font-mono text-[9px] font-bold">
+                      <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[11px] font-bold">
                         {t.name.charAt(0)}
                       </span>
                     </div>
@@ -325,80 +508,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
               </div>
             </div>
           </HUDPanel>
-
         </div>
 
-        {/* 🚀 RIGHT 1/3 COLUMN: DEDICATED PROMOTIONS & ADS (ALIGNED FROM THE TOP) */}
-        <aside className="lg:col-span-1 space-y-8 sticky top-20 self-start">
+        {/* 🚀 RIGHT 1/3 COLUMN: DEDICATED PROMOTIONS & ADS */}
+        <aside className="lg:col-span-1 space-y-6 sticky top-20 self-start">
           <AtomeCardPanel />
           <DynamicAdsSidebar />
         </aside>
-
       </div>
-
-      
-      {/* 🎵 MINIMAL SUNO AI MUSIC CREATION ADVERTISEMENT DIVISION PANEL */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-950 via-slate-900 to-rose-950 border-2 border-orange-500/50 p-6 md:p-8 shadow-2xl space-y-6">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-          
-          {/* LEFT: LOGO & DETAILS */}
-          <div className="flex items-start gap-4 max-w-2xl">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-orange-400/80 shrink-0 shadow-lg bg-black">
-              <img
-                src="./media_1787666146962.jpg"
-                alt="Suno AI Music Generation Logo"
-                className="w-full h-full object-cover"
-                onError={(e) => { (e.target as HTMLImageElement).src = './media_1786678717227.png'; }}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-400/40 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1">
-                  <Music className="w-3 h-3" />
-                  <span>OFFICIAL SUNO AI PARTNER INVITATION</span>
-                </span>
-                <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono text-[9px] font-bold uppercase">
-                  FREE SIGNUP CREDITS
-                </span>
-              </div>
-              <h3 className="text-lg sm:text-2xl font-black font-orbitron text-white">
-                CREATE ORIGINAL RADIO-READY SONGS WITH SUNO AI
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
-                Suno is the world's leading generative AI music studio. Transform simple text prompts into full-length broadcast-quality songs with realistic vocals, harmonies, and custom genres in seconds.
-              </p>
-            </div>
-          </div>
-
-          {/* RIGHT: CTA BUTTON */}
-          <div className="shrink-0 w-full lg:w-auto flex flex-col items-center lg:items-end gap-2">
-            <a
-              href="https://suno.com/invite/@chillvibemusics"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full lg:w-auto px-6 py-4 bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 hover:from-orange-400 hover:to-pink-400 text-white font-black font-orbitron text-xs sm:text-sm uppercase rounded-xl transition-all shadow-[0_0_25px_rgba(249,115,22,0.5)] flex items-center justify-center gap-2 hover:scale-105"
-            >
-              <span>CLAIM FREE INVITE ON SUNO &rarr;</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
-            <span className="text-[10px] font-mono text-orange-200/70">
-              Direct Invite: @chillvibemusics
-            </span>
-          </div>
-
-        </div>
-
-        {/* MINIMAL SHOWCASE GALLERY STRIP */}
-        <div className="overflow-hidden rounded-2xl border border-orange-500/30 shadow-inner">
-          <img
-            src="./media_1787666146964.jpg"
-            alt="Suno AI Music Showcase and Playlists"
-            className="w-full h-24 sm:h-32 object-cover object-center"
-            onError={(e) => { (e.target as HTMLImageElement).src = './media_1786678717227.png'; }}
-          />
-        </div>
-      </section>
-
 
       {/* ARTICLE READER MODAL */}
       <ArticleModal
@@ -406,7 +523,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
         isOpen={!!selectedArticle}
         onClose={() => setSelectedArticle(null)}
       />
-
     </div>
   );
 };

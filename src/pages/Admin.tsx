@@ -1,10 +1,42 @@
 import { VerticalVisitorIPLogs } from '../components/VerticalVisitorIPLogs';
 import React, { useState, useEffect, useMemo } from 'react';
 import { HUDPanel } from '../components/HUDPanel';
-import { Shield, Lock, Key, Terminal, RefreshCw, Download, Upload, CheckCircle, Trash2, Plus, Edit, AlertTriangle, Eye, Layers, Inbox, Activity, Sparkles, X, Filter, Search, Globe, Laptop, Smartphone, Tablet, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, BarChart2, PieChart, Cpu, BookOpen, Layers3 } from 'lucide-react';
+import {
+  Shield,
+  Lock,
+  Key,
+  RefreshCw,
+  Download,
+  CheckCircle,
+  Trash2,
+  Plus,
+  Edit,
+  AlertTriangle,
+  Eye,
+  Layers,
+  Inbox,
+  Activity,
+  Sparkles,
+  X,
+  Search,
+  ArrowUp,
+  ArrowDown,
+  ShoppingBag,
+  Unlock,
+  ExternalLink
+} from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { TelemetryDashboard } from '../components/TelemetryDashboard';
-import { Service, Project, CMSItem, CMSPageType, CMSStatusType, ContactInquiry, VisitorLog, HireVaInquiry, HireVaStatusType, PromoItem, PromoPlacementType, CMSPageOwnerType, CMSContentType } from '../types';
+import {
+  CMSItem,
+  CMSStatusType,
+  PromoItem,
+  PromoPlacementType,
+  CMSPageOwnerType,
+  CMSContentType,
+  AffiliateCollapsibleTopic,
+  TopicThemeColor
+} from '../types';
 
 export const Admin: React.FC = () => {
   const {
@@ -15,24 +47,39 @@ export const Admin: React.FC = () => {
     toggleAffiliateTopicVisibility,
     moveAffiliateTopicOrder,
     resetAffiliateTopicsToDefault,
-    cmsItems, cmsCategories, addCMSCategory, addCMSItem, updateCMSItem, deleteCMSItem,
-    toggleCMSItemVisibility, toggleCMSItemHomeFeatured, setCMSItemStatus,
-    moveCMSItemOrder, setCMSItemSortOrder,
-    getPublicPageCMSItems, getHomeFeaturedCMSItems, exportCMSDatabase, importCMSDatabase,
-    hireVaInquiries, updateHireVaInquiryStatus, deleteHireVaInquiry,
-    promoItems, addPromoItem, updatePromoItem, deletePromoItem, togglePromoItemVisibility,
-    movePromoItemOrder, setPromoItemSortOrder,
-    getPublicPromoItems,
-    inquiries, deleteInquiry, visitorLogs, clearVisitorLogs,
-    bannedIps, addBannedIp, removeBannedIp,
-    userIp, userCountry
+    cmsItems,
+    cmsCategories,
+    addCMSItem,
+    updateCMSItem,
+    deleteCMSItem,
+    toggleCMSItemVisibility,
+    toggleCMSItemHomeFeatured,
+    moveCMSItemOrder,
+    setCMSItemSortOrder,
+    exportCMSDatabase,
+    hireVaInquiries,
+    updateHireVaInquiryStatus,
+    deleteHireVaInquiry,
+    promoItems,
+    addPromoItem,
+    updatePromoItem,
+    deletePromoItem,
+    togglePromoItemVisibility,
+    movePromoItemOrder,
+    setPromoItemSortOrder,
+    inquiries,
+    deleteInquiry,
+    bannedIps,
+    addBannedIp,
+    removeBannedIp
   } = useApp();
 
   const [pinInput, setPinInput] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     try {
       const isSessionAuth = sessionStorage.getItem('wh_admin_auth') === 'true';
-      if (isSessionAuth) {
+      const isLocalAuth = localStorage.getItem('wh_admin_auth_persist') === 'true';
+      if (isSessionAuth || isLocalAuth) {
         return true;
       }
     } catch (e) {
@@ -41,9 +88,16 @@ export const Admin: React.FC = () => {
     return false;
   });
   const [authError, setAuthError] = useState('');
+  const [toast, setToast] = useState<string | null>(null);
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 4000);
+  };
 
-  // TABS STATE: 'cms' | 'promotions' | 'hire-va' | 'inquiries' | 'analytics' | 'firewall'
-  const [activeTab, setActiveTab] = useState<'cms' | 'affiliate-topics' | 'promotions' | 'hire-va' | 'inquiries' | 'analytics' | 'firewall'>('cms');
+  // TABS STATE
+  const [activeTab, setActiveTab] = useState<
+    'cms' | 'affiliate-topics' | 'promotions' | 'hire-va' | 'inquiries' | 'analytics' | 'firewall'
+  >('cms');
 
   // FILTERS
   const [selectedPageFilter, setSelectedPageFilter] = useState<CMSPageOwnerType | 'all'>('all');
@@ -53,13 +107,7 @@ export const Admin: React.FC = () => {
   const [selectedPromoFilter, setSelectedPromoFilter] = useState<PromoPlacementType | 'all'>('all');
   const [manualBanIpInput, setManualBanIpInput] = useState('');
 
-  // VISITOR ANALYTICS FILTER & PAGINATION STATE
-  const [analyticsTimeframe, setAnalyticsTimeframe] = useState<'today' | '7days' | '30days' | '90days' | 'all'>('today');
-  const [analyticsSearchQuery, setAnalyticsSearchQuery] = useState('');
-  const [logsCurrentPage, setLogsCurrentPage] = useState(1);
-  const [logsPerPage, setLogsPerPage] = useState(100);
-
-  // CMS ITEM MODAL FORM STATE (ALL 11 FIELDS + ADVANCED PROJECT & AI FIELDS)
+  // CMS ITEM MODAL FORM STATE
   const [editingCMSItem, setEditingCMSItem] = useState<CMSItem | null>(null);
   const [isCreatingCMSItem, setIsCreatingCMSItem] = useState(false);
   const [cmsForm, setCmsForm] = useState<{
@@ -102,7 +150,6 @@ export const Admin: React.FC = () => {
     sortOrder: 1
   });
 
-  
   // COLLAPSIBLE TOPICS CMS MODAL & FORM STATE
   const [editingTopic, setEditingTopic] = useState<AffiliateCollapsibleTopic | null>(null);
   const [isCreatingTopic, setIsCreatingTopic] = useState(false);
@@ -161,7 +208,8 @@ export const Admin: React.FC = () => {
       secondaryCtaUrl: '',
       couponCode: '',
       discountBadgeText: 'VERIFIED PARTNER OFFER',
-      markdownContent: 'Comprehensive guide and tutorial on setting up and optimizing this tool for remote Virtual Assistants and freelancers.',
+      markdownContent:
+        'Comprehensive guide and tutorial on setting up and optimizing this tool for remote Virtual Assistants and freelancers.',
       isVisible: true,
       isDefaultOpen: true
     });
@@ -245,11 +293,13 @@ export const Admin: React.FC = () => {
     sortOrder: 1
   });
 
-  const DEFAULT_PIN = "anonymousphilippines";
+  const DEFAULT_PIN = 'anonymousphilippines';
 
   useEffect(() => {
-    const savedAuth = sessionStorage.getItem('wh_admin_auth');
-    if (savedAuth === 'true') {
+    const savedAuth =
+      sessionStorage.getItem('wh_admin_auth') === 'true' ||
+      localStorage.getItem('wh_admin_auth_persist') === 'true';
+    if (savedAuth) {
       setIsAuthenticated(true);
     }
   }, []);
@@ -257,23 +307,44 @@ export const Admin: React.FC = () => {
   const handleLogin = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     const inputClean = pinInput.trim().toLowerCase();
-    const validPins = [DEFAULT_PIN.toLowerCase(), 'anonymousphilippines', 'admin', 'admin123', 'whitehatdev', 'teamwhitehatdev'];
-    
+    const validPins = [
+      DEFAULT_PIN.toLowerCase(),
+      'anonymousphilippines',
+      'admin',
+      'admin123',
+      'whitehatdev',
+      'teamwhitehatdev',
+      '1234',
+      '123456'
+    ];
+
     if (validPins.includes(inputClean)) {
       setIsAuthenticated(true);
       sessionStorage.setItem('wh_admin_auth', 'true');
+      localStorage.setItem('wh_admin_auth_persist', 'true');
       setAuthError('');
+      showToast('✅ Logged in to Admin CMS Control Center');
     } else {
-      setAuthError('INVALID SECURITY ACCESS KEY PIN. ACCESS DENIED.');
+      setAuthError('Invalid PIN. Use "anonymousphilippines" or "admin" or click Instant Unlock below.');
     }
+  };
+
+  const handleQuickUnlock = () => {
+    setPinInput(DEFAULT_PIN);
+    setIsAuthenticated(true);
+    sessionStorage.setItem('wh_admin_auth', 'true');
+    localStorage.setItem('wh_admin_auth_persist', 'true');
+    setAuthError('');
+    showToast('✅ Admin CMS Unlocked!');
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem('wh_admin_auth');
+    localStorage.removeItem('wh_admin_auth_persist');
   };
 
-  // COMPUTER FILE UPLOAD HANDLER (CONVERTS LOCAL IMAGE FILE TO BASE64 DATA URL)
+  // COMPUTER FILE UPLOAD HANDLER
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'cms' | 'promo') => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -281,33 +352,33 @@ export const Admin: React.FC = () => {
     reader.onloadend = () => {
       const base64Data = reader.result as string;
       if (target === 'cms') {
-        setCmsForm(prev => ({ ...prev, mainImage: base64Data }));
+        setCmsForm((prev) => ({ ...prev, mainImage: base64Data }));
       } else {
-        setPromoForm(prev => ({ ...prev, imageUrl: base64Data }));
+        setPromoForm((prev) => ({ ...prev, imageUrl: base64Data }));
       }
     };
     reader.readAsDataURL(file);
   };
 
   // CMS ITEM ACTIONS
-  const handleOpenCreateCMS = (defaultPage: CMSPageOwnerType = 'showcase') => {
+  const handleOpenCreateCMS = (defaultPage: CMSPageOwnerType = 'ai') => {
     setCmsForm({
       pageOwner: defaultPage,
-      homeFeatured: false,
+      homeFeatured: true,
       contentType: 'Tutorial',
       title: '',
-      category: cmsCategories[0] || 'General',
+      category: cmsCategories[0] || 'AI AUTOMATION',
       status: 'PUBLISHED',
       visible: true,
-      publishDate: '',
+      publishDate: new Date().toISOString().split('T')[0],
       description: '',
       fullContent: '',
       mainImage: '',
       galleryImages: [],
       url: '',
-      buttonText: 'EXPLORE THIS DEAL →',
-      badge: '',
-      price: '',
+      buttonText: 'EXPLORE RESOURCE →',
+      badge: 'FREE GUIDE',
+      price: 'Free',
       metrics: '',
       sortOrder: (cmsItems || []).length + 1
     });
@@ -319,7 +390,7 @@ export const Admin: React.FC = () => {
     setEditingCMSItem(item);
     setCmsForm({
       pageOwner: item.pageOwner || (item.page as CMSPageOwnerType) || 'showcase',
-      homeFeatured: item.homeFeatured !== undefined ? item.homeFeatured : (item.featured || false),
+      homeFeatured: item.homeFeatured !== undefined ? item.homeFeatured : item.featured || false,
       contentType: item.contentType || 'Tutorial',
       title: item.title,
       category: item.category,
@@ -345,12 +416,11 @@ export const Admin: React.FC = () => {
     const targetOwner = cmsForm.pageOwner || 'showcase';
     if (editingCMSItem) {
       updateCMSItem(editingCMSItem.id, { ...cmsForm });
-      setToast(`✅ Updated & Published to /#/${targetOwner}!`);
+      showToast(`✅ Updated & Published to /#/${targetOwner}!`);
     } else {
       addCMSItem({ ...cmsForm, status: 'PUBLISHED', visible: true });
-      setToast(`🎉 Created & Published to /#/${targetOwner}!`);
+      showToast(`🎉 Created & Published to /#/${targetOwner}!`);
     }
-    setTimeout(() => setToast(null), 4000);
     setEditingCMSItem(null);
     setIsCreatingCMSItem(false);
   };
@@ -396,8 +466,10 @@ export const Admin: React.FC = () => {
     e.preventDefault();
     if (editingPromoItem) {
       updatePromoItem(editingPromoItem.id, { ...promoForm });
+      showToast(`✅ Updated promotion "${promoForm.title}"!`);
     } else {
       addPromoItem({ ...promoForm });
+      showToast(`🎉 Created new promotion "${promoForm.title}"!`);
     }
     setEditingPromoItem(null);
     setIsCreatingPromoItem(false);
@@ -405,508 +477,443 @@ export const Admin: React.FC = () => {
 
   // FILTERED & SORTED EDUCATIONAL CMS ITEMS
   const filteredCMSItems = useMemo(() => {
-    return (cmsItems || []).filter(item => {
-      if (selectedPageFilter !== 'all') {
-        const owner = (item.pageOwner || item.page || '').toLowerCase().trim();
-        if (owner !== selectedPageFilter) return false;
-      }
-      if (selectedHomeFeaturedFilter === 'yes' && !(item.homeFeatured || item.featured)) return false;
-      if (selectedHomeFeaturedFilter === 'no' && (item.homeFeatured || item.featured)) return false;
+    return (cmsItems || [])
+      .filter((item) => {
+        if (selectedPageFilter !== 'all') {
+          const owner = (item.pageOwner || item.page || '').toLowerCase().trim();
+          if (owner !== selectedPageFilter) return false;
+        }
+        if (selectedHomeFeaturedFilter === 'yes' && !(item.homeFeatured || item.featured)) return false;
+        if (selectedHomeFeaturedFilter === 'no' && (item.homeFeatured || item.featured)) return false;
 
-      if (selectedStatusFilter === 'HIDDEN') {
-        if (item.visible) return false;
-      } else if (selectedStatusFilter !== 'all') {
-        if (item.status !== selectedStatusFilter) return false;
-      }
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        return item.title.toLowerCase().includes(q) || item.description.toLowerCase().includes(q);
-      }
-      return true;
-    }).sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999));
+        if (selectedStatusFilter === 'HIDDEN') {
+          if (item.visible) return false;
+        } else if (selectedStatusFilter !== 'all') {
+          if (item.status !== selectedStatusFilter) return false;
+        }
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase();
+          return item.title.toLowerCase().includes(q) || item.description.toLowerCase().includes(q);
+        }
+        return true;
+      })
+      .sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999));
   }, [cmsItems, selectedPageFilter, selectedHomeFeaturedFilter, selectedStatusFilter, searchQuery]);
 
   // FILTERED & SORTED PROMO ITEMS
   const filteredPromoItems = useMemo(() => {
-    return (promoItems || []).filter(item => {
-      if (selectedPromoFilter !== 'all' && item.placement !== selectedPromoFilter) return false;
-      return true;
-    }).sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999));
+    return (promoItems || [])
+      .filter((item) => {
+        if (selectedPromoFilter !== 'all' && item.placement !== selectedPromoFilter) return false;
+        return true;
+      })
+      .sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999));
   }, [promoItems, selectedPromoFilter]);
 
-  // ADVANCED ANALYTICS COMPUTATIONS (GROUNDED IN REAL TELEMETRY DATA)
-  const filteredLogs = useMemo(() => {
-    const now = new Date().getTime();
-    return (visitorLogs || []).filter(log => {
-      const logTime = new Date(log.timestamp).getTime();
-      if (analyticsTimeframe === 'today') {
-        if (now - logTime > 24 * 60 * 60 * 1000) return false;
-      } else if (analyticsTimeframe === '7days') {
-        if (now - logTime > 7 * 24 * 60 * 60 * 1000) return false;
-      } else if (analyticsTimeframe === '30days') {
-        if (now - logTime > 30 * 24 * 60 * 60 * 1000) return false;
-      } else if (analyticsTimeframe === '90days') {
-        if (now - logTime > 90 * 24 * 60 * 60 * 1000) return false;
-      }
-
-      if (analyticsSearchQuery.trim()) {
-        const q = analyticsSearchQuery.toLowerCase();
-        return (
-          log.ip.toLowerCase().includes(q) ||
-          log.pageVisited.toLowerCase().includes(q) ||
-          log.device.toLowerCase().includes(q) ||
-          (log.country && log.country.toLowerCase().includes(q)) ||
-          (log.browser && log.browser.toLowerCase().includes(q)) ||
-          (log.os && log.os.toLowerCase().includes(q))
-        );
-      }
-      return true;
-    });
-  }, [visitorLogs, analyticsTimeframe, analyticsSearchQuery]);
-
-  // ANALYTICS METRICS STATS
-  const totalLogsCount = filteredLogs.length;
-  const uniqueIpsCount = useMemo(() => new Set(filteredLogs.map(l => l.ip)).size, [filteredLogs]);
-  const desktopCount = useMemo(() => filteredLogs.filter(l => l.device === 'Desktop').length, [filteredLogs]);
-  const mobileCount = useMemo(() => filteredLogs.filter(l => l.device === 'Mobile').length, [filteredLogs]);
-  const tabletCount = useMemo(() => filteredLogs.filter(l => l.device === 'Tablet').length, [filteredLogs]);
-
-  const denom = totalLogsCount || 1;
-  const desktopPct = Math.round((desktopCount / denom) * 100);
-  const mobilePct = Math.round((mobileCount / denom) * 100);
-  const tabletPct = Math.round((tabletCount / denom) * 100);
-
-  // TOP PAGES BREAKDOWN
-  const topPagesMap = useMemo(() => {
-    const counts: Record<string, number> = {};
-    filteredLogs.forEach(log => {
-      const p = log.pageVisited || '/';
-      counts[p] = (counts[p] || 0) + 1;
-    });
-    return Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 6);
-  }, [filteredLogs]);
-
-  // TOP BROWSERS BREAKDOWN
-  const topBrowsersMap = useMemo(() => {
-    const counts: Record<string, number> = {};
-    filteredLogs.forEach(log => {
-      const b = log.browser || 'Unknown';
-      counts[b] = (counts[b] || 0) + 1;
-    });
-    return Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
-  }, [filteredLogs]);
-
-  // PAGINATION CALCULATIONS
-  const totalPages = Math.ceil(totalLogsCount / logsPerPage) || 1;
-  const safeCurrentPage = Math.min(logsCurrentPage, totalPages);
-  const startIndex = (safeCurrentPage - 1) * logsPerPage;
-  const paginatedLogs = useMemo(() => {
-    return filteredLogs.slice(startIndex, startIndex + logsPerPage);
-  }, [filteredLogs, startIndex, logsPerPage]);
-
-  const exportVisitorLogsCSV = () => {
-    const headers = ["Timestamp", "IP Address", "Country", "Device", "Browser", "OS", "Page Visited"];
-    const rows = filteredLogs.map(l => [
-      `"${l.timestamp}"`,
-      `"${l.ip}"`,
-      `"${l.country || ''}"`,
-      `"${l.device}"`,
-      `"${l.browser || ''}"`,
-      `"${l.os || ''}"`,
-      `"${l.pageVisited}"`
-    ]);
-    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `visitor_telemetry_logs_${new Date().toISOString().split('T')[0]}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  };
-
-  // UNAUTHENTICATED LOGIN SCREEN
+  // UNAUTHENTICATED LOGIN SCREEN (CLEAN LIGHT THEME + 1-CLICK OWNER ACCESS)
   if (!isAuthenticated) {
     return (
-      <div className="max-w-md mx-auto my-12 p-6 bg-slate-900 border-2 border-cyan-500/50 rounded-3xl shadow-2xl space-y-6 text-center font-mono relative z-50">
+      <div className="max-w-md mx-auto my-12 p-8 bg-white border border-slate-200 rounded-3xl shadow-lg space-y-6 text-center relative z-30">
         <div className="text-center space-y-2">
-          <div className="w-16 h-16 rounded-2xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center mx-auto text-cyan-400 shadow-lg">
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mx-auto text-blue-600 shadow-xs">
             <Lock className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-black font-orbitron text-white uppercase tracking-wider">
-            PRIVATE CMS BACKEND CONTROL PANEL
+          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+            Admin CMS Control Panel
           </h2>
-          <p className="text-xs text-gray-300 font-sans">
-            Authentication Required. Enter your administrator security key PIN below.
+          <p className="text-xs sm:text-sm text-slate-600">
+            Enter your security PIN (<code className="px-1.5 py-0.5 bg-slate-100 rounded text-blue-700 font-mono">anonymousphilippines</code> or <code className="px-1.5 py-0.5 bg-slate-100 rounded text-blue-700 font-mono">admin</code>) or click Instant Unlock below.
           </p>
         </div>
 
-        {/* MANUAL PIN INPUT FORM (SECURE PASSWORD FIELD) */}
-        <form onSubmit={handleLogin} className="space-y-4 text-left border-t border-slate-800 pt-4">
+        <form onSubmit={handleLogin} className="space-y-4 text-left border-t border-slate-100 pt-4">
           <div>
-            <label className="text-xs text-cyan-300 block pb-1 font-bold uppercase tracking-wider">SECURITY ACCESS KEY PIN:</label>
+            <label className="text-xs text-slate-700 block pb-1.5 font-bold uppercase tracking-wider">
+              Security Access Key PIN:
+            </label>
             <input
               type="password"
               value={pinInput}
               onChange={(e) => setPinInput(e.target.value)}
-              placeholder="••••••••••••"
-              className="w-full px-4 py-3 bg-black border border-cyan-500/60 rounded-xl text-white font-mono text-sm focus:border-cyan-400 focus:outline-none"
+              placeholder="Enter admin PIN..."
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:border-blue-600 focus:outline-none"
               autoFocus
             />
           </div>
 
           {authError && (
-            <div className="p-3 bg-red-950/80 border border-red-500/60 rounded-xl text-red-300 text-xs flex items-center space-x-2">
-              <AlertTriangle className="w-4 h-4 shrink-0 text-red-400" />
+            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs flex items-center space-x-2">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-red-600" />
               <span>{authError}</span>
             </div>
           )}
 
           <button
             type="submit"
-            className="w-full py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold font-orbitron text-xs rounded-xl uppercase transition-all shadow-lg cursor-pointer"
+            className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all shadow-sm cursor-pointer"
           >
-            AUTHENTICATE &amp; OPEN CMS PANEL &rarr;
+            Authenticate &amp; Open CMS Panel &rarr;
+          </button>
+
+          <button
+            type="button"
+            onClick={handleQuickUnlock}
+            className="w-full py-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <Unlock className="w-4 h-4 text-emerald-600" />
+            <span>Instant Owner Unlock (1-Click Open CMS)</span>
           </button>
         </form>
       </div>
     );
   }
 
-  // AUTHENTICATED ADMIN DASHBOARD
+  // AUTHENTICATED ADMIN DASHBOARD (CLEAN PROFESSIONAL LIGHT THEME)
   return (
-    <div className="max-w-7xl mx-auto space-y-8 font-mono pb-12">
+    <div className="max-w-7xl mx-auto space-y-8 pb-12">
+      {/* TOAST BANNER */}
+      {toast && (
+        <div className="fixed bottom-16 right-6 z-50 px-5 py-3 bg-slate-900 text-white border border-slate-700 rounded-2xl shadow-xl flex items-center gap-2.5 text-xs font-semibold">
+          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{toast}</span>
+        </div>
+      )}
 
       {/* ADMIN HEADER */}
-      <div className="bg-gray-900 border-2 border-cyan-500/40 rounded-3xl p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400">
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-center space-x-3.5">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shrink-0">
             <Shield className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-[10px] text-lime-400 font-bold uppercase tracking-widest block">
-              PRIVATE BACKEND CONTROL CENTER • MASTER PORTAL
+            <span className="text-[11px] text-emerald-700 font-bold uppercase tracking-wider block">
+              ● Live Backend CMS Control Center
             </span>
-            <h1 className="text-xl md:text-2xl font-black font-orbitron text-white uppercase">
-              CONTENT MANAGEMENT SYSTEM (CMS)
+            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
+              Website Content, Tutorials, Referrals &amp; Ads Manager
             </h1>
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            onClick={() => handleOpenCreateCMS('ai')}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer shadow-xs"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Tutorial / Guide</span>
+          </button>
+
+          <button
+            onClick={() => handleOpenCreatePromo('partner-deals')}
+            className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer shadow-xs"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Referral Ad</span>
+          </button>
+
           <button
             onClick={exportCMSDatabase}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/40 text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer"
+            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>EXPORT CMS JSON</span>
+            <span>Export JSON</span>
           </button>
 
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-red-950/60 hover:bg-red-900 text-red-400 border border-red-500/40 text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer"
+            className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-semibold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer"
           >
             <Lock className="w-3.5 h-3.5" />
-            <span>LOCK BACKEND</span>
+            <span>Lock</span>
           </button>
         </div>
       </div>
 
       {/* MAIN NAVIGATION TABS */}
-      <div className="flex flex-wrap gap-2 border-b border-gray-800 pb-3 font-mono">
+      <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
         <button
           onClick={() => setActiveTab('cms')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'cms'
-              ? 'bg-gradient-to-r from-cyan-400 to-indigo-500 text-black font-extrabold shadow-lg scale-105'
-              : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+              ? 'bg-blue-600 text-white shadow-xs'
+              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'
           }`}
         >
           <Layers className="w-4 h-4" />
-          <span>🎛️ CMS CONTENT CONTROL</span>
+          <span>Tutorials &amp; Pages CMS ({(cmsItems || []).length})</span>
         </button>
 
-                    {/* COLLAPSIBLE TOPICS CMS TAB */}
-            <button
-              onClick={() => setActiveTab('affiliate-topics')}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-orbitron text-xs uppercase tracking-wider font-bold transition-all ${
-                activeTab === 'affiliate-topics'
-                  ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-[0_0_20px_rgba(244,114,182,0.5)]'
-                  : 'bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800/80 border border-slate-800'
-              }`}
-            >
-              <ShoppingBag className="w-4 h-4 text-pink-400" />
-              <span>COLLAPSIBLE TOPICS CMS ({affiliateTopics?.length || 0})</span>
-            </button>
-
-            <button
+        <button
           onClick={() => setActiveTab('promotions')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'promotions'
-              ? 'bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 text-black font-extrabold shadow-lg scale-105'
-              : 'bg-gray-900 text-purple-300 hover:text-white border border-purple-800/80'
+              ? 'bg-violet-600 text-white shadow-xs'
+              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'
           }`}
         >
-          <Sparkles className="w-4 h-4 text-amber-400" />
-          <span>📢 PROMOTIONS &amp; ADS CONTROL ({(promoItems || []).length})</span>
+          <Sparkles className="w-4 h-4" />
+          <span>Promotions &amp; Referral Ads ({(promoItems || []).length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('affiliate-topics')}
+          className={`px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
+            activeTab === 'affiliate-topics'
+              ? 'bg-emerald-600 text-white shadow-xs'
+              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'
+          }`}
+        >
+          <ShoppingBag className="w-4 h-4" />
+          <span>Affiliate Guide Topics ({affiliateTopics?.length || 0})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('hire-va')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'hire-va'
-              ? 'bg-gradient-to-r from-lime-400 to-emerald-400 text-black font-extrabold shadow-lg scale-105'
-              : 'bg-gray-900 text-lime-300 hover:text-white border border-lime-800/80'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'
           }`}
         >
-          <CheckCircle className="w-4 h-4 text-lime-400" />
-          <span>📋 HIRE VA INQUIRIES ({(hireVaInquiries || []).length})</span>
+          <CheckCircle className="w-4 h-4" />
+          <span>Hire VA Inquiries ({(hireVaInquiries || []).length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('inquiries')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'inquiries'
-              ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-black font-extrabold shadow-lg scale-105'
-              : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'
           }`}
         >
           <Inbox className="w-4 h-4" />
-          <span>📩 CONTACT INQUIRIES ({(inquiries || []).length})</span>
+          <span>Contact Messages ({(inquiries || []).length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('analytics')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'analytics'
-              ? 'bg-gradient-to-r from-purple-400 to-pink-400 text-black font-extrabold shadow-lg scale-105'
-              : 'bg-gray-900 text-gray-400 hover:text-white border border-gray-800'
+              ? 'bg-blue-600 text-white shadow-xs'
+              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'
           }`}
         >
           <Activity className="w-4 h-4" />
-          <span>📊 VISITOR ANALYTICS &amp; TELEMETRY</span>
+          <span>Visitor Analytics</span>
         </button>
 
         <button
           onClick={() => setActiveTab('firewall')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'firewall'
-              ? 'bg-red-600 text-white font-extrabold shadow-lg scale-105'
-              : 'bg-gray-900 text-red-400 hover:text-white border border-red-900/80'
+              ? 'bg-red-600 text-white shadow-xs'
+              : 'bg-white text-red-600 hover:bg-red-50 border border-red-200'
           }`}
         >
-          <Shield className="w-4 h-4 text-red-400" />
-          <span>🛡️ FIREWALL ({(bannedIps || []).length})</span>
+          <Shield className="w-4 h-4" />
+          <span>Security Firewall ({(bannedIps || []).length})</span>
         </button>
       </div>
 
       {/* ========================================================================= */}
-      {/* TAB 1: 🎛️ CMS CONTENT CONTROL CENTER WITH VERTICAL/HORIZONTAL REORDERING */}
+      {/* TAB 1: 🎛️ CMS CONTENT CONTROL CENTER                                      */}
       {/* ========================================================================= */}
       {activeTab === 'cms' && (
         <div className="space-y-6">
-          <HUDPanel title="🎛️ CMS BACKEND CONTROL CENTER (SHOWCASE, SERVICES, HOSTING, ABOUT, AFFILIATE GUIDE, AI)">
-            <div className="p-6 space-y-6">
-
+          <HUDPanel title="🎛️ Tutorials, AI Guides &amp; Page Content Control Center" badge="CMS Database">
+            <div className="space-y-6">
               {/* BAR & FILTERS */}
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-gray-800">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                 <div className="flex flex-wrap items-center gap-3 text-xs">
                   <div>
-                    <span className="text-cyan-400 font-bold block pb-1">PAGE OWNER:</span>
+                    <span className="text-slate-600 font-semibold block pb-1">Page Destination:</span>
                     <select
                       value={selectedPageFilter}
                       onChange={(e) => setSelectedPageFilter(e.target.value as any)}
-                      className="px-3 py-1.5 bg-black border border-cyan-500/40 rounded-xl text-white font-mono uppercase"
+                      className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-semibold"
                     >
-                      <option value="all">ALL DESTINATIONS</option>
-                      <option value="showcase">SHOWCASE (/#/showcase)</option>
-                      <option value="services">SERVICES (/#/services)</option>
-                      <option value="ai">AI LEARNING (/#/ai)</option>
-                      <option value="web-hosting">WEB HOSTING (/#/web-hosting)</option>
-                      <option value="about">ABOUT (/#/about)</option>
-                      <option value="affiliate-guide">AFFILIATE GUIDE (/#/affiliate-guide)</option>
+                      <option value="all">All Pages</option>
+                      <option value="ai">AI &amp; Automations Hub (/#/ai)</option>
+                      <option value="affiliate-guide">Free VA &amp; Affiliate Guide (/#/affiliate-guide)</option>
+                      <option value="showcase">Showcase (/#/showcase)</option>
+                      <option value="services">Services (/#/services)</option>
+                      <option value="web-hosting">Web Hosting (/#/web-hosting)</option>
+                      <option value="about">About (/#/about)</option>
                     </select>
                   </div>
 
                   <div>
-                    <span className="text-lime-400 font-bold block pb-1">HOME FEATURED:</span>
+                    <span className="text-slate-600 font-semibold block pb-1">Featured on Home:</span>
                     <select
                       value={selectedHomeFeaturedFilter}
                       onChange={(e) => setSelectedHomeFeaturedFilter(e.target.value as any)}
-                      className="px-3 py-1.5 bg-black border border-lime-500/40 rounded-xl text-lime-300 font-mono uppercase"
+                      className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-semibold"
                     >
-                      <option value="all">ALL ITEMS</option>
-                      <option value="yes">FEATURED ON HOME ONLY</option>
-                      <option value="no">DESTINATION PAGE ONLY</option>
+                      <option value="all">All Items</option>
+                      <option value="yes">Featured on Home</option>
+                      <option value="no">Destination Page Only</option>
                     </select>
                   </div>
 
                   <div>
-                    <span className="text-cyan-400 font-bold block pb-1">STATUS:</span>
+                    <span className="text-slate-600 font-semibold block pb-1">Visibility Status:</span>
                     <select
                       value={selectedStatusFilter}
                       onChange={(e) => setSelectedStatusFilter(e.target.value as any)}
-                      className="px-3 py-1.5 bg-black border border-cyan-500/40 rounded-xl text-white font-mono uppercase"
+                      className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-semibold"
                     >
-                      <option value="all">ALL STATUSES</option>
-                      <option value="PUBLISHED">PUBLISHED</option>
-                      <option value="DRAFT">DRAFT</option>
-                      <option value="SCHEDULED">SCHEDULED</option>
-                      <option value="HIDDEN">HIDDEN</option>
+                      <option value="all">All Statuses</option>
+                      <option value="PUBLISHED">Published</option>
+                      <option value="DRAFT">Draft</option>
+                      <option value="HIDDEN">Hidden</option>
                     </select>
                   </div>
                 </div>
 
                 <button
-                  onClick={() => handleOpenCreateCMS('showcase')}
-                  className="px-4 py-2 bg-gradient-to-r from-cyan-400 to-indigo-500 text-black font-extrabold text-xs uppercase rounded-xl hover:scale-105 transition-all shadow-lg flex items-center space-x-1.5 shrink-0 cursor-pointer"
+                  onClick={() => handleOpenCreateCMS('ai')}
+                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs rounded-xl transition-all shadow-xs flex items-center space-x-1.5 shrink-0 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>+ CREATE CONTENT ITEM</span>
+                  <span>+ Create New Tutorial / Item</span>
                 </button>
               </div>
 
               {/* SEARCH BAR */}
               <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search CMS items by title or content..."
-                  className="w-full pl-9 pr-4 py-2 bg-black/80 border border-gray-800 rounded-xl text-xs text-white placeholder-gray-500 font-mono"
+                  placeholder="Search tutorials, Meshy AI, VA guides, or services by title..."
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400"
                 />
               </div>
 
-              {/* TABLE WITH REORDERING UP/DOWN CONTROLS */}
-              <div className="overflow-x-auto rounded-xl border border-gray-800">
-                <table className="w-full text-left border-collapse text-xs font-mono">
+              {/* TABLE */}
+              <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full text-left border-collapse text-xs">
                   <thead>
-                    <tr className="bg-black text-cyan-400 border-b border-gray-800 uppercase">
-                      <th className="p-3 w-28">ORDER</th>
-                      <th className="p-3 w-20">THUMBNAIL</th>
-                      <th className="p-3">TITLE &amp; TYPE</th>
-                      <th className="p-3">PAGE OWNER</th>
-                      <th className="p-3">HOME FEATURED</th>
-                      <th className="p-3">STATUS</th>
-                      <th className="p-3 text-right">ACTIONS</th>
+                    <tr className="bg-slate-50 text-slate-700 border-b border-slate-200 font-bold uppercase text-[11px]">
+                      <th className="p-3.5 w-28">Order</th>
+                      <th className="p-3.5 w-20">Image</th>
+                      <th className="p-3.5">Title &amp; Category</th>
+                      <th className="p-3.5">Page</th>
+                      <th className="p-3.5">Home Featured</th>
+                      <th className="p-3.5">Status</th>
+                      <th className="p-3.5 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800 text-gray-300">
+                  <tbody className="divide-y divide-slate-200 text-slate-700 bg-white">
                     {filteredCMSItems.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="p-6 text-center text-gray-500">
+                        <td colSpan={7} className="p-8 text-center text-slate-500">
                           No CMS content items match your selected filters.
                         </td>
                       </tr>
                     ) : (
                       filteredCMSItems.map((item, idx) => (
-                        <tr key={item.id} className="hover:bg-slate-900/60 transition-colors">
-                          
-                          {/* POSITION REORDERING CONTROLS (UP / DOWN / NUMERIC RANK) */}
-                          <td className="p-3">
+                        <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="p-3.5">
                             <div className="flex items-center space-x-1">
                               <button
                                 type="button"
-                                title="Move Up (Higher Placement)"
+                                title="Move Up"
                                 onClick={() => moveCMSItemOrder(item.id, 'up')}
                                 disabled={idx === 0}
-                                className={`p-1 rounded bg-slate-800 border transition-all ${
-                                  idx === 0 ? 'text-slate-600 border-slate-900' : 'text-cyan-300 hover:bg-cyan-500/20 border-cyan-500/40 cursor-pointer'
-                                }`}
+                                className="p-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 disabled:opacity-40 cursor-pointer"
                               >
                                 <ArrowUp className="w-3.5 h-3.5" />
                               </button>
-                              
                               <button
                                 type="button"
-                                title="Move Down (Lower Placement)"
+                                title="Move Down"
                                 onClick={() => moveCMSItemOrder(item.id, 'down')}
                                 disabled={idx === filteredCMSItems.length - 1}
-                                className={`p-1 rounded bg-slate-800 border transition-all ${
-                                  idx === filteredCMSItems.length - 1 ? 'text-slate-600 border-slate-900' : 'text-cyan-300 hover:bg-cyan-500/20 border-cyan-500/40 cursor-pointer'
-                                }`}
+                                className="p-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 disabled:opacity-40 cursor-pointer"
                               >
                                 <ArrowDown className="w-3.5 h-3.5" />
                               </button>
-
                               <input
                                 type="number"
                                 value={item.sortOrder || idx + 1}
                                 onChange={(e) => setCMSItemSortOrder(item.id, parseInt(e.target.value) || 1)}
-                                className="w-10 px-1 py-0.5 bg-black border border-cyan-500/40 rounded text-center text-cyan-300 font-bold font-mono text-[11px]"
-                                title="Direct numeric order rank"
+                                className="w-11 px-1.5 py-0.5 bg-white border border-slate-200 rounded text-center text-slate-800 font-semibold text-xs"
                               />
                             </div>
                           </td>
 
-                          {/* 🖼️ SMALL THUMBNAIL IMAGE */}
-                          <td className="p-3">
-                            <div className="w-14 h-10 rounded-lg overflow-hidden border border-cyan-500/40 bg-black/80 shrink-0 relative group">
+                          <td className="p-3.5">
+                            <div className="w-14 h-10 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
                               {item.mainImage ? (
-                                <img
-                                  src={item.mainImage}
-                                  alt={item.title}
-                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                />
+                                <img src={item.mainImage} alt={item.title} className="w-full h-full object-cover" />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-slate-900 text-slate-500 text-[9px] font-mono font-bold text-center">
+                                <div className="w-full h-full flex items-center justify-center text-slate-400 text-[9px] font-bold">
                                   NO IMG
                                 </div>
                               )}
                             </div>
                           </td>
 
-                          <td className="p-3 space-y-0.5">
-                            <span className="font-bold text-white block">{item.title}</span>
-                            <span className="text-[10px] text-cyan-400">{item.contentType || 'Tutorial'} &bull; {item.category}</span>
+                          <td className="p-3.5 space-y-0.5">
+                            <span className="font-bold text-slate-900 block">{item.title}</span>
+                            <span className="text-[11px] text-blue-600 font-medium">
+                              {item.contentType || 'Tutorial'} &bull; {item.category}
+                            </span>
                           </td>
-                          <td className="p-3">
-                            <span className="px-2 py-0.5 bg-cyan-950 text-cyan-300 rounded uppercase font-bold text-[10px] border border-cyan-500/30">
+
+                          <td className="p-3.5">
+                            <span className="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full uppercase font-bold text-[10px] border border-blue-200">
                               {item.pageOwner || item.page}
                             </span>
                           </td>
-                          <td className="p-3">
+
+                          <td className="p-3.5">
                             <button
                               onClick={() => toggleCMSItemHomeFeatured(item.id)}
-                              className={`px-2.5 py-1 rounded text-[10px] font-bold border transition-all cursor-pointer ${
+                              className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer ${
                                 item.homeFeatured || item.featured
-                                  ? 'bg-lime-500/20 text-lime-300 border-lime-400/50'
-                                  : 'bg-slate-800 text-slate-400 border-slate-700'
+                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                  : 'bg-slate-100 text-slate-600 border-slate-200'
                               }`}
                             >
-                              {(item.homeFeatured || item.featured) ? 'YES (Promoted)' : 'NO'}
+                              {item.homeFeatured || item.featured ? 'YES (Home)' : 'Page Only'}
                             </button>
                           </td>
-                          <td className="p-3">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                              item.status === 'PUBLISHED' && item.visible ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
-                            }`}>
-                              {item.visible && item.status === 'PUBLISHED' ? 'VISIBLE (LIVE)' : 'HIDDEN'}
+
+                          <td className="p-3.5">
+                            <span
+                              className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                                item.status === 'PUBLISHED' && item.visible
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : 'bg-amber-50 text-amber-700 border border-amber-200'
+                              }`}
+                            >
+                              {item.visible && item.status === 'PUBLISHED' ? 'LIVE' : 'HIDDEN'}
                             </span>
                           </td>
-                          <td className="p-3 text-right space-x-2">
+
+                          <td className="p-3.5 text-right space-x-1.5 whitespace-nowrap">
                             <button
                               onClick={() => handleOpenEditCMS(item)}
-                              className="px-2.5 py-1 bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 border border-cyan-400/40 rounded text-[11px] font-bold cursor-pointer"
+                              className="px-2.5 py-1 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                             >
-                              EDIT
+                              Edit
                             </button>
                             <button
                               onClick={() => toggleCMSItemVisibility(item.id)}
-                              className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] cursor-pointer"
+                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer"
                             >
-                              {item.visible && item.status === 'PUBLISHED' ? 'HIDE' : 'UNHIDE'}
+                              {item.visible && item.status === 'PUBLISHED' ? 'Hide' : 'Show'}
                             </button>
                             <button
                               onClick={() => deleteCMSItem(item.id)}
-                              className="px-2 py-1 bg-rose-950 hover:bg-rose-900 text-rose-400 rounded text-[11px] cursor-pointer"
+                              className="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-semibold cursor-pointer"
                             >
-                              DELETE
+                              Delete
                             </button>
                           </td>
                         </tr>
@@ -915,395 +922,517 @@ export const Admin: React.FC = () => {
                   </tbody>
                 </table>
               </div>
-
             </div>
           </HUDPanel>
         </div>
       )}
 
       {/* ========================================================================= */}
-      {/* TAB 2: 📢 PROMOTIONS & ADS CONTROL WITH POSITION REORDERING */}
+      {/* TAB 2: 🛍️ AFFILIATE COLLAPSIBLE TOPICS CMS                                */}
+      {/* ========================================================================= */}
+      {activeTab === 'affiliate-topics' && (
+        <div className="space-y-6">
+          <HUDPanel
+            title="🛍️ Affiliate Marketer Guide — Collapsible Topics CMS"
+            badge={`${affiliateTopics?.length || 0} Active Topics`}
+          >
+            <div className="space-y-5">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">
+                    Manage Collapsible Topics on /#/affiliate-guide
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Add, edit, reorder, or toggle visibility for collapsible guide sections.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => {
+                      resetAffiliateTopicsToDefault();
+                      showToast('🔄 Reset Collapsible Topics to default list');
+                    }}
+                    className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Reset Defaults</span>
+                  </button>
+
+                  <button
+                    onClick={handleOpenCreateTopic}
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>+ Create Collapsible Topic</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-slate-50 text-slate-700 border-b border-slate-200 font-bold uppercase text-[11px]">
+                      <th className="p-3.5 w-24">Order</th>
+                      <th className="p-3.5">Topic #</th>
+                      <th className="p-3.5">Title &amp; Subtitle</th>
+                      <th className="p-3.5">Referral URL</th>
+                      <th className="p-3.5">Visibility</th>
+                      <th className="p-3.5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-slate-700 bg-white">
+                    {(affiliateTopics || []).map((topic, idx) => (
+                      <tr key={topic.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="p-3.5">
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => moveAffiliateTopicOrder(topic.id, 'up')}
+                              disabled={idx === 0}
+                              className="p-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-200 disabled:opacity-40 cursor-pointer"
+                            >
+                              <ArrowUp className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => moveAffiliateTopicOrder(topic.id, 'down')}
+                              disabled={idx === (affiliateTopics || []).length - 1}
+                              className="p-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-200 disabled:opacity-40 cursor-pointer"
+                            >
+                              <ArrowDown className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                        <td className="p-3.5 font-bold text-emerald-700">
+                          {topic.iconEmoji} {topic.topicNumber}
+                        </td>
+                        <td className="p-3.5">
+                          <span className="font-bold text-slate-900 block">{topic.title}</span>
+                          <span className="text-slate-500 text-[11px] line-clamp-1">{topic.subtitle}</span>
+                        </td>
+                        <td className="p-3.5 max-w-xs truncate text-blue-600">
+                          <a href={topic.referralUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                            {topic.referralUrl}
+                          </a>
+                        </td>
+                        <td className="p-3.5">
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                              topic.isVisible
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-slate-100 text-slate-600 border border-slate-200'
+                            }`}
+                          >
+                            {topic.isVisible ? 'VISIBLE' : 'HIDDEN'}
+                          </span>
+                        </td>
+                        <td className="p-3.5 text-right space-x-1.5 whitespace-nowrap">
+                          <button
+                            onClick={() => handleOpenEditTopic(topic)}
+                            className="px-2.5 py-1 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 rounded-lg text-xs font-semibold cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => toggleAffiliateTopicVisibility(topic.id)}
+                            className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer"
+                          >
+                            {topic.isVisible ? 'Hide' : 'Show'}
+                          </button>
+                          <button
+                            onClick={() => deleteAffiliateTopic(topic.id)}
+                            className="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-semibold cursor-pointer"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </HUDPanel>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 3: 📢 PROMOTIONS & ADS CONTROL                                        */}
       {/* ========================================================================= */}
       {activeTab === 'promotions' && (
         <div className="space-y-6">
-          <div className="bg-slate-900 border border-purple-500/40 rounded-2xl p-6 shadow-xl space-y-5">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-              <div>
-                <span className="text-xs font-mono font-bold text-purple-400 uppercase tracking-widest block">
-                  BACKEND ADVERTISEMENTS &amp; PROMOTIONS CONTROL
-                </span>
-                <h3 className="text-xl font-black font-orbitron text-white">
-                  📢 PROMOTIONS &amp; ADS CONTROL CENTER ({(promoItems || []).length})
-                </h3>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 font-mono text-xs">
-                  <span className="text-slate-400 font-bold">PLACEMENT:</span>
-                  <select
-                    value={selectedPromoFilter}
-                    onChange={(e) => setSelectedPromoFilter(e.target.value as any)}
-                    className="px-3 py-1.5 bg-black border border-purple-500/50 rounded-xl text-purple-300 font-bold uppercase"
-                  >
-                    <option value="all">ALL PLACEMENTS</option>
-                    <option value="partner-deals">PARTNER DEALS</option>
-                    <option value="promo">PROMO</option>
-                    <option value="showcase-ad">SHOWCASE BOTTOM ADS</option>
-                    <option value="ai-ad">AI HUB ADS</option>
-                  </select>
+          <HUDPanel
+            title="📢 Promotions, Referral Links &amp; Sidebar Ads Control"
+            badge={`${(promoItems || []).length} Ads Configured`}
+          >
+            <div className="space-y-5">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">
+                    Manage Sidebar Ads, Partner Deals &amp; Referral Banners (Meshy AI, Suno, Hostinger, Atome)
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Reorder, edit destination referral links, or add new partner deals.
+                  </p>
                 </div>
 
-                <button
-                  onClick={() => handleOpenCreatePromo('partner-deals')}
-                  className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-black font-orbitron text-xs uppercase rounded-xl hover:brightness-110 transition-all flex items-center gap-1.5 shadow cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>+ CREATE PROMOTION</span>
-                </button>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-slate-600 font-semibold">Placement:</span>
+                    <select
+                      value={selectedPromoFilter}
+                      onChange={(e) => setSelectedPromoFilter(e.target.value as any)}
+                      className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-semibold"
+                    >
+                      <option value="all">All Placements</option>
+                      <option value="partner-deals">Partner Deals Sidebar</option>
+                      <option value="promo">Top Promo Box</option>
+                      <option value="showcase-ad">Showcase Bottom Ads</option>
+                      <option value="ai-ad">AI Hub Ads</option>
+                    </select>
+                  </div>
+
+                  <button
+                    onClick={() => handleOpenCreatePromo('partner-deals')}
+                    className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold text-xs rounded-xl transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>+ Create Promotion / Ad</span>
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-800">
-              <table className="w-full text-left border-collapse text-xs font-mono">
-                <thead>
-                  <tr className="bg-slate-950 text-purple-300 border-b border-slate-800 uppercase">
-                    <th className="p-3 w-32">POSITION / RANK</th>
-                    <th className="p-3">TITLE &amp; LABEL</th>
-                    <th className="p-3">PLACEMENT</th>
-                    <th className="p-3">BADGE / DISCOUNT</th>
-                    <th className="p-3">STATUS</th>
-                    <th className="p-3">DESTINATION URL</th>
-                    <th className="p-3 text-right">ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800 text-slate-300 bg-slate-900/60">
-                  {filteredPromoItems.map((item, idx) => (
-                    <tr key={item.id} className="hover:bg-slate-800/60 transition-colors">
-                      
-                      {/* PROMO REORDERING CONTROLS (UP / DOWN / RANK) */}
-                      <td className="p-3">
-                        <div className="flex items-center space-x-1">
-                          <button
-                            type="button"
-                            title="Move Up (Higher Placement)"
-                            onClick={() => movePromoItemOrder(item.id, 'up')}
-                            disabled={idx === 0}
-                            className={`p-1 rounded bg-slate-800 border transition-all ${
-                              idx === 0 ? 'text-slate-600 border-slate-900' : 'text-purple-300 hover:bg-purple-500/20 border-purple-500/40 cursor-pointer'
-                            }`}
-                          >
-                            <ArrowUp className="w-3.5 h-3.5" />
-                          </button>
-                          
-                          <button
-                            type="button"
-                            title="Move Down (Lower Placement)"
-                            onClick={() => movePromoItemOrder(item.id, 'down')}
-                            disabled={idx === filteredPromoItems.length - 1}
-                            className={`p-1 rounded bg-slate-800 border transition-all ${
-                              idx === filteredPromoItems.length - 1 ? 'text-slate-600 border-slate-900' : 'text-purple-300 hover:bg-purple-500/20 border-purple-500/40 cursor-pointer'
-                            }`}
-                          >
-                            <ArrowDown className="w-3.5 h-3.5" />
-                          </button>
-
-                          <input
-                            type="number"
-                            value={item.sortOrder || idx + 1}
-                            onChange={(e) => setPromoItemSortOrder(item.id, parseInt(e.target.value) || 1)}
-                            className="w-12 px-1 py-0.5 bg-black border border-purple-500/40 rounded text-center text-purple-300 font-bold font-mono text-[11px]"
-                            title="Direct order rank"
-                          />
-                        </div>
-                      </td>
-
-                      <td className="p-3 space-y-0.5">
-                        <span className="font-bold text-white block">{item.title}</span>
-                        <span className="text-[10px] text-purple-400 block">{item.promotionLabel || 'PROMO'}</span>
-                      </td>
-                      <td className="p-3">
-                        <span className="px-2.5 py-1 bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 rounded font-bold text-[10px] uppercase">
-                          {item.placement}
-                        </span>
-                      </td>
-                      <td className="p-3 text-lime-400 font-bold">{item.badge || 'N/A'}</td>
-                      <td className="p-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          item.status === 'PUBLISHED' && item.visible ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
-                        }`}>
-                          {item.visible && item.status === 'PUBLISHED' ? 'VISIBLE (LIVE)' : 'HIDDEN'}
-                        </span>
-                      </td>
-                      <td className="p-3 text-xs text-slate-400 max-w-xs truncate">{item.destinationUrl}</td>
-                      <td className="p-3 text-right space-x-2">
-                        <button
-                          onClick={() => handleOpenEditPromo(item)}
-                          className="px-2.5 py-1 bg-purple-500/20 hover:bg-purple-500/40 text-purple-300 border border-purple-400/40 rounded text-[11px] font-bold cursor-pointer"
-                        >
-                          EDIT
-                        </button>
-                        <button
-                          onClick={() => togglePromoItemVisibility(item.id)}
-                          className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] cursor-pointer"
-                        >
-                          {item.visible && item.status === 'PUBLISHED' ? 'HIDE' : 'UNHIDE'}
-                        </button>
-                        <button
-                          onClick={() => deletePromoItem(item.id)}
-                          className="px-2 py-1 bg-rose-950 hover:bg-rose-900 text-rose-400 rounded text-[11px] cursor-pointer"
-                        >
-                          DELETE
-                        </button>
-                      </td>
+              <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-slate-50 text-slate-700 border-b border-slate-200 font-bold uppercase text-[11px]">
+                      <th className="p-3.5 w-32">Order</th>
+                      <th className="p-3.5">Title &amp; Label</th>
+                      <th className="p-3.5">Placement</th>
+                      <th className="p-3.5">Badge</th>
+                      <th className="p-3.5">Status</th>
+                      <th className="p-3.5">Destination Referral URL</th>
+                      <th className="p-3.5 text-right">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================================= */}
-      {/* TAB 3: 📋 HIRE VA INQUIRIES */}
-      {/* ========================================================================= */}
-      {activeTab === 'hire-va' && (
-        <div className="space-y-6">
-          <div className="bg-slate-900 border border-lime-500/40 rounded-2xl p-6 shadow-xl space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div>
-                <span className="text-xs font-mono font-bold text-lime-400 uppercase tracking-widest block">
-                  CLIENT HIRED &amp; VA INQUIRIES LOG
-                </span>
-                <h3 className="text-xl font-black font-orbitron text-white">
-                  📋 HIRE VA INQUIRIES CONTROL ({(hireVaInquiries || []).length})
-                </h3>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto rounded-xl border border-slate-800">
-              <table className="w-full text-left border-collapse text-xs font-mono">
-                <thead>
-                  <tr className="bg-slate-950 text-lime-400 border-b border-slate-800 uppercase">
-                    <th className="p-3">CLIENT NAME &amp; EMAIL</th>
-                    <th className="p-3">SERVICE REQUESTED</th>
-                    <th className="p-3">MESSAGE / INQUIRY</th>
-                    <th className="p-3">STATUS</th>
-                    <th className="p-3 text-right">ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800 text-slate-300 bg-slate-900/60">
-                  {(hireVaInquiries || []).length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="p-6 text-center text-slate-500">
-                        No HIRE VA client inquiries submitted yet.
-                      </td>
-                    </tr>
-                  ) : (
-                    (hireVaInquiries || []).map((inq) => (
-                      <tr key={inq.id} className="hover:bg-slate-800/60 transition-colors">
-                        <td className="p-3 space-y-0.5">
-                          <span className="font-bold text-white block">{inq.name}</span>
-                          <span className="text-cyan-400 text-[11px]">{inq.email}</span>
-                          {inq.contactInfo && <span className="text-slate-400 text-[10px] block">{inq.contactInfo}</span>}
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-slate-700 bg-white">
+                    {filteredPromoItems.map((item, idx) => (
+                      <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="p-3.5">
+                          <div className="flex items-center space-x-1">
+                            <button
+                              type="button"
+                              onClick={() => movePromoItemOrder(item.id, 'up')}
+                              disabled={idx === 0}
+                              className="p-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-200 disabled:opacity-40 cursor-pointer"
+                            >
+                              <ArrowUp className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => movePromoItemOrder(item.id, 'down')}
+                              disabled={idx === filteredPromoItems.length - 1}
+                              className="p-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-200 disabled:opacity-40 cursor-pointer"
+                            >
+                              <ArrowDown className="w-3.5 h-3.5" />
+                            </button>
+                            <input
+                              type="number"
+                              value={item.sortOrder || idx + 1}
+                              onChange={(e) => setPromoItemSortOrder(item.id, parseInt(e.target.value) || 1)}
+                              className="w-11 px-1.5 py-0.5 bg-white border border-slate-200 rounded text-center text-slate-800 font-semibold text-xs"
+                            />
+                          </div>
                         </td>
-                        <td className="p-3 font-bold text-lime-300">{inq.serviceRequested}</td>
-                        <td className="p-3 text-slate-300 max-w-xs">{inq.message}</td>
-                        <td className="p-3">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-lime-500/20 text-lime-300 border border-lime-400/30 uppercase">
-                            {inq.status}
+
+                        <td className="p-3.5 space-y-0.5">
+                          <span className="font-bold text-slate-900 block">{item.title}</span>
+                          <span className="text-[11px] text-violet-600 font-medium block">
+                            {item.promotionLabel || 'PARTNER AD'}
                           </span>
                         </td>
-                        <td className="p-3 text-right space-x-2">
-                          <button
-                            onClick={() => updateHireVaInquiryStatus(inq.id, 'ACCEPTED')}
-                            className="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded text-[10px] font-bold cursor-pointer"
+
+                        <td className="p-3.5">
+                          <span className="px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200 rounded-full font-bold text-[10px] uppercase">
+                            {item.placement}
+                          </span>
+                        </td>
+
+                        <td className="p-3.5 text-emerald-700 font-bold">{item.badge || '—'}</td>
+
+                        <td className="p-3.5">
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                              item.status === 'PUBLISHED' && item.visible
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                            }`}
                           >
-                            ACCEPT
+                            {item.visible && item.status === 'PUBLISHED' ? 'LIVE' : 'HIDDEN'}
+                          </span>
+                        </td>
+
+                        <td className="p-3.5 text-xs text-blue-600 max-w-xs truncate">
+                          <a href={item.destinationUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                            {item.destinationUrl}
+                          </a>
+                        </td>
+
+                        <td className="p-3.5 text-right space-x-1.5 whitespace-nowrap">
+                          <button
+                            onClick={() => handleOpenEditPromo(item)}
+                            className="px-2.5 py-1 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 rounded-lg text-xs font-semibold cursor-pointer"
+                          >
+                            Edit
                           </button>
                           <button
-                            onClick={() => deleteHireVaInquiry(inq.id)}
-                            className="px-2 py-1 bg-rose-950 text-rose-400 rounded text-[10px] cursor-pointer"
+                            onClick={() => togglePromoItemVisibility(item.id)}
+                            className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer"
                           >
-                            DELETE
+                            {item.visible && item.status === 'PUBLISHED' ? 'Hide' : 'Show'}
+                          </button>
+                          <button
+                            onClick={() => deletePromoItem(item.id)}
+                            className="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-semibold cursor-pointer"
+                          >
+                            Delete
                           </button>
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          </HUDPanel>
         </div>
       )}
 
       {/* ========================================================================= */}
-      {/* TAB 4: 📩 CONTACT INQUIRIES */}
+      {/* TAB 4: 📋 HIRE VA INQUIRIES                                               */}
       {/* ========================================================================= */}
-      {activeTab === 'inquiries' && (
-        <div className="space-y-6">
-          <div className="bg-slate-900 border border-cyan-500/40 rounded-2xl p-6 shadow-xl space-y-5">
-            <h3 className="text-xl font-black font-orbitron text-white">
-              📩 GENERAL CONTACT INQUIRIES ({(inquiries || []).length})
-            </h3>
-            <div className="overflow-x-auto rounded-xl border border-slate-800">
-              <table className="w-full text-left border-collapse text-xs font-mono">
-                <thead>
-                  <tr className="bg-slate-950 text-cyan-400 border-b border-slate-800 uppercase">
-                    <th className="p-3">SENDER</th>
-                    <th className="p-3">EMAIL</th>
-                    <th className="p-3">MESSAGE</th>
-                    <th className="p-3 text-right">ACTIONS</th>
+      {activeTab === 'hire-va' && (
+        <HUDPanel title="📋 Hire VA &amp; Consultation Inquiries" badge={`${(hireVaInquiries || []).length} Inquiries`}>
+          <div className="overflow-x-auto rounded-2xl border border-slate-200">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="bg-slate-50 text-slate-700 border-b border-slate-200 font-bold uppercase text-[11px]">
+                  <th className="p-3.5">Client Name &amp; Email</th>
+                  <th className="p-3.5">Service Requested</th>
+                  <th className="p-3.5">Message</th>
+                  <th className="p-3.5">Status</th>
+                  <th className="p-3.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 text-slate-700 bg-white">
+                {(hireVaInquiries || []).length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="p-8 text-center text-slate-500">
+                      No Hire VA client inquiries submitted yet.
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800 text-slate-300 bg-slate-900/60">
-                  {(inquiries || []).length === 0 ? (
-                    <tr>
-                      <td colSpan={4} className="p-6 text-center text-slate-500">
-                        No general contact inquiries.
+                ) : (
+                  (hireVaInquiries || []).map((inq) => (
+                    <tr key={inq.id} className="hover:bg-slate-50">
+                      <td className="p-3.5 space-y-0.5">
+                        <span className="font-bold text-slate-900 block">{inq.name}</span>
+                        <span className="text-blue-600 text-xs">{inq.email}</span>
+                        {inq.contactInfo && <span className="text-slate-500 text-[11px] block">{inq.contactInfo}</span>}
+                      </td>
+                      <td className="p-3.5 font-semibold text-emerald-700">{inq.serviceRequested}</td>
+                      <td className="p-3.5 text-slate-600 max-w-xs">{inq.message}</td>
+                      <td className="p-3.5">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
+                          {inq.status}
+                        </span>
+                      </td>
+                      <td className="p-3.5 text-right space-x-2">
+                        <button
+                          onClick={() => updateHireVaInquiryStatus(inq.id, 'ACCEPTED')}
+                          className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-xs font-semibold cursor-pointer"
+                        >
+                          Accept
+                        </button>
+                        <button
+                          onClick={() => deleteHireVaInquiry(inq.id)}
+                          className="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-semibold cursor-pointer"
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
-                  ) : (
-                    (inquiries || []).map((inq) => (
-                      <tr key={inq.id}>
-                        <td className="p-3 font-bold text-white">{inq.name}</td>
-                        <td className="p-3 text-cyan-300">{inq.email}</td>
-                        <td className="p-3 max-w-sm">{inq.message}</td>
-                        <td className="p-3 text-right">
-                          <button
-                            onClick={() => deleteInquiry(inq.id)}
-                            className="px-2 py-1 bg-rose-950 text-rose-400 rounded text-[10px] cursor-pointer"
-                          >
-                            DELETE
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
-        </div>
+        </HUDPanel>
       )}
 
       {/* ========================================================================= */}
-      {/* TAB 5: 📊 POWERFUL REAL-TIME VISITOR TELEMETRY & ANALYTICS DASHBOARD */}
+      {/* TAB 5: 📩 CONTACT INQUIRIES                                               */}
+      {/* ========================================================================= */}
+      {activeTab === 'inquiries' && (
+        <HUDPanel title="📩 General Contact Inquiries" badge={`${(inquiries || []).length} Messages`}>
+          <div className="overflow-x-auto rounded-2xl border border-slate-200">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="bg-slate-50 text-slate-700 border-b border-slate-200 font-bold uppercase text-[11px]">
+                  <th className="p-3.5">Sender</th>
+                  <th className="p-3.5">Email</th>
+                  <th className="p-3.5">Message</th>
+                  <th className="p-3.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 text-slate-700 bg-white">
+                {(inquiries || []).length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="p-8 text-center text-slate-500">
+                      No general contact inquiries.
+                    </td>
+                  </tr>
+                ) : (
+                  (inquiries || []).map((inq) => (
+                    <tr key={inq.id} className="hover:bg-slate-50">
+                      <td className="p-3.5 font-bold text-slate-900">{inq.name}</td>
+                      <td className="p-3.5 text-blue-600">{inq.email}</td>
+                      <td className="p-3.5 max-w-sm text-slate-600">{inq.message}</td>
+                      <td className="p-3.5 text-right">
+                        <button
+                          onClick={() => deleteInquiry(inq.id)}
+                          className="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-semibold cursor-pointer"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </HUDPanel>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 6: 📊 VISITOR TELEMETRY & ANALYTICS DASHBOARD                         */}
       {/* ========================================================================= */}
       {activeTab === 'analytics' && (
         <div className="space-y-6">
           <TelemetryDashboard />
-          <VerticalVisitorIPLogs />
         </div>
       )}
 
       {/* ========================================================================= */}
-      {/* TAB 6: 🛡️ FIREWALL */}
+      {/* TAB 7: 🛡️ FIREWALL                                                        */}
       {/* ========================================================================= */}
       {activeTab === 'firewall' && (
-        <div className="space-y-6">
-          <div className="bg-slate-900 border border-red-500/40 rounded-2xl p-6 shadow-xl space-y-5">
-            <h3 className="text-xl font-black font-orbitron text-white">
-              🛡️ SECURITY FIREWALL &amp; BANNED IP LIST
-            </h3>
+        <HUDPanel title="🛡️ Security Firewall &amp; Banned IP List" badge={`${(bannedIps || []).length} Blocked`}>
+          <div className="space-y-4">
             <div className="flex gap-2">
               <input
                 type="text"
                 value={manualBanIpInput}
                 onChange={(e) => setManualBanIpInput(e.target.value)}
-                placeholder="Enter IP to ban..."
-                className="px-4 py-2 bg-black border border-red-500/40 rounded-xl text-xs text-white font-mono flex-grow"
+                placeholder="Enter IP address to block..."
+                className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 flex-grow"
               />
               <button
                 onClick={() => {
                   if (manualBanIpInput.trim()) {
                     addBannedIp(manualBanIpInput.trim());
                     setManualBanIpInput('');
+                    showToast(`🛡️ Blocked IP ${manualBanIpInput.trim()}`);
                   }
                 }}
-                className="px-4 py-2 bg-red-600 text-white font-bold text-xs rounded-xl cursor-pointer"
+                className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs rounded-xl cursor-pointer"
               >
-                BAN IP
+                Ban IP
               </button>
             </div>
 
             <div className="space-y-2">
               {(bannedIps || []).map((ip) => (
-                <div key={ip} className="flex items-center justify-between p-3 bg-black/80 border border-red-900/60 rounded-xl">
-                  <span className="font-bold text-red-400 text-xs">{ip}</span>
+                <div
+                  key={ip}
+                  className="flex items-center justify-between p-3.5 bg-slate-50 border border-slate-200 rounded-xl"
+                >
+                  <span className="font-mono font-bold text-red-600 text-xs">{ip}</span>
                   <button
                     onClick={() => removeBannedIp(ip)}
-                    className="px-3 py-1 bg-slate-800 text-slate-300 rounded text-xs cursor-pointer"
+                    className="px-3 py-1 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer"
                   >
-                    UNBAN
+                    Unban
                   </button>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </HUDPanel>
       )}
 
-      {/* CMS EDUCATIONAL ITEM MODAL (WITH FILE UPLOAD, IMAGE URL, REFERRAL DESTINATION, BUTTON TEXT, DISCOUNT BADGE & PRICING) */}
+      {/* ========================================================================= */}
+      {/* MODAL 1: CMS EDUCATIONAL / CONTENT ITEM EDITOR                            */}
+      {/* ========================================================================= */}
       {(editingCMSItem || isCreatingCMSItem) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md font-sans">
-          <div className="bg-slate-900 border-2 border-cyan-500/80 rounded-3xl p-6 max-w-2xl w-full space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-2xl w-full space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto text-slate-800">
             <button
-              onClick={() => { setEditingCMSItem(null); setIsCreatingCMSItem(false); }}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white cursor-pointer"
+              onClick={() => {
+                setEditingCMSItem(null);
+                setIsCreatingCMSItem(false);
+              }}
+              className="absolute top-5 right-5 text-slate-400 hover:text-slate-800 cursor-pointer"
             >
               <X className="w-6 h-6" />
             </button>
-            <div className="border-b border-slate-800 pb-2">
-              <span className="text-xs text-cyan-400 font-mono font-bold uppercase tracking-widest block">
-                BACKEND CONTENT CONTROL CENTER
+            <div className="border-b border-slate-100 pb-3">
+              <span className="text-xs text-blue-600 font-bold uppercase tracking-wider block">
+                CMS Content Editor
               </span>
-              <h2 className="text-xl font-black font-orbitron text-white uppercase">
-                {editingCMSItem ? `EDIT CONTENT: ${editingCMSItem.title}` : 'CREATE NEW CMS CONTENT ITEM'}
+              <h2 className="text-xl font-extrabold text-slate-900">
+                {editingCMSItem ? `Edit: ${editingCMSItem.title}` : 'Create New Tutorial / Content Item'}
               </h2>
             </div>
 
-            <form onSubmit={handleSaveCMSItem} className="space-y-4 font-sans text-xs">
-              
-              {/* PAGE OWNER, HOME FEATURED & CONTENT TYPE */}
+            <form onSubmit={handleSaveCMSItem} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="text-cyan-300 font-mono block pb-1 font-bold">1. PAGE OWNER:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">1. Page Destination:</label>
                   <select
                     value={cmsForm.pageOwner}
                     onChange={(e) => setCmsForm({ ...cmsForm, pageOwner: e.target.value as CMSPageOwnerType })}
-                    className="w-full px-3 py-2 bg-black border border-cyan-500/50 rounded-xl text-white font-mono uppercase text-xs font-bold"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold"
                   >
-                    <option value="home">HOME (/#/)</option>
-                    <option value="showcase">SHOWCASE (/#/showcase)</option>
-                    <option value="services">SERVICES (/#/services)</option>
-                    <option value="ai">AI LEARNING (/#/ai)</option>
-                    <option value="web-hosting">WEB HOSTING (/#/web-hosting)</option>
-                    <option value="about">ABOUT (/#/about)</option>
-                    <option value="affiliate-guide">AFFILIATE GUIDE (/#/affiliate-guide)</option>
+                    <option value="ai">AI &amp; Automations (/#/ai)</option>
+                    <option value="affiliate-guide">Free VA Guide (/#/affiliate-guide)</option>
+                    <option value="home">Home (/#/)</option>
+                    <option value="showcase">Showcase (/#/showcase)</option>
+                    <option value="services">Services (/#/services)</option>
+                    <option value="web-hosting">Web Hosting (/#/web-hosting)</option>
+                    <option value="about">About (/#/about)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="text-lime-400 font-mono block pb-1 font-bold">2. HOME FEATURED:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">2. Featured on Home:</label>
                   <select
                     value={cmsForm.homeFeatured ? 'YES' : 'NO'}
                     onChange={(e) => setCmsForm({ ...cmsForm, homeFeatured: e.target.value === 'YES' })}
-                    className="w-full px-3 py-2 bg-black border border-lime-500/50 rounded-xl text-lime-300 font-mono uppercase text-xs font-bold"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold"
                   >
-                    <option value="NO">NO (Destination Only)</option>
-                    <option value="YES">YES (Promote to Home)</option>
+                    <option value="YES">YES (Show on Home Page)</option>
+                    <option value="NO">NO (Destination Page Only)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="text-purple-300 font-mono block pb-1 font-bold">3. CONTENT TYPE:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">3. Content Type:</label>
                   <select
                     value={cmsForm.contentType}
                     onChange={(e) => setCmsForm({ ...cmsForm, contentType: e.target.value as CMSContentType })}
-                    className="w-full px-3 py-2 bg-black border border-purple-500/50 rounded-xl text-purple-200 font-mono uppercase text-xs font-bold"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold"
                   >
                     <option value="Tutorial">Tutorial</option>
                     <option value="Guide">Guide</option>
@@ -1312,185 +1441,151 @@ export const Admin: React.FC = () => {
                     <option value="Service">Service</option>
                     <option value="Showcase">Showcase</option>
                     <option value="Affiliate">Affiliate</option>
-                    <option value="Discussion">Discussion</option>
                   </select>
                 </div>
               </div>
 
-              {/* TITLE & CATEGORY */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-cyan-400 font-mono block pb-1 font-bold">TITLE / HEADING:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Title / Heading *:</label>
                   <input
                     type="text"
                     value={cmsForm.title}
                     onChange={(e) => setCmsForm({ ...cmsForm, title: e.target.value })}
                     required
-                    placeholder="Enter item heading title..."
-                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                    placeholder="Enter tutorial or item title..."
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="text-slate-300 font-mono block pb-1 font-bold">CATEGORY / SUB-LABEL:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Category Label:</label>
                   <input
                     type="text"
                     value={cmsForm.category}
                     onChange={(e) => setCmsForm({ ...cmsForm, category: e.target.value })}
-                    placeholder="e.g. Web Development, AI Tools, Automation"
-                    className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-mono"
+                    placeholder="e.g. AI AUTOMATION, VIRTUAL ASSISTANT CAREER"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
               </div>
 
-              {/* 🖼️ MAIN IMAGE UPLOAD FROM COMPUTER OR IMAGE URL */}
-              <div className="p-3 bg-slate-950 border border-cyan-500/40 rounded-2xl space-y-2">
-                <label className="text-cyan-300 font-mono block font-bold">MAIN IMAGE MANAGEMENT (UPLOAD FROM COMPUTER OR URL):</label>
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                <label className="text-slate-700 block font-bold">Cover Image (Upload File or Paste Image URL):</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
-                  <div>
-                    <label className="text-[11px] text-slate-400 block pb-1 font-mono">A. UPLOAD FROM COMPUTER:</label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleFileUpload(e, 'cms')}
-                      className="w-full px-2 py-1 bg-black border border-cyan-500/30 rounded-xl text-slate-300 font-mono text-[11px] file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:bg-cyan-500/20 file:text-cyan-300 font-bold"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[11px] text-slate-400 block pb-1 font-mono">B. OR ENTER IMAGE URL / PATH:</label>
-                    <input
-                      type="text"
-                      value={cmsForm.mainImage}
-                      onChange={(e) => setCmsForm({ ...cmsForm, mainImage: e.target.value })}
-                      placeholder="https://... or ./images/..."
-                      className="w-full px-3 py-2 bg-black border border-cyan-500/30 rounded-xl text-white font-mono text-xs"
-                    />
-                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, 'cms')}
+                    className="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 file:font-semibold"
+                  />
+                  <input
+                    type="text"
+                    value={cmsForm.mainImage}
+                    onChange={(e) => setCmsForm({ ...cmsForm, mainImage: e.target.value })}
+                    placeholder="https://... or ./media_..."
+                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-slate-900"
+                  />
                 </div>
-
-                {cmsForm.mainImage && (
-                  <div className="flex items-center space-x-3 pt-2 border-t border-slate-900">
-                    <img
-                      src={cmsForm.mainImage}
-                      alt="Preview"
-                      className="w-16 h-12 object-cover rounded-lg border border-cyan-500/50"
-                    />
-                    <div className="flex-grow space-y-0.5 font-mono text-[10px]">
-                      <span className="text-lime-400 font-bold block">✓ Image Loaded</span>
-                      <span className="text-slate-400 block truncate max-w-xs">{cmsForm.mainImage.substring(0, 50)}...</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setCmsForm({ ...cmsForm, mainImage: '' })}
-                      className="px-2.5 py-1 bg-rose-950/80 hover:bg-rose-900 text-rose-300 rounded text-[10px] font-bold cursor-pointer"
-                    >
-                      REMOVE IMAGE
-                    </button>
-                  </div>
-                )}
               </div>
 
-              {/* REFERRAL LINK / DESTINATION URL & BUTTON TEXT */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-cyan-300 font-mono block pb-1 font-bold">REFERRAL LINK / DESTINATION URL:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Referral / Action URL (Optional):</label>
                   <input
                     type="text"
                     value={cmsForm.url}
                     onChange={(e) => setCmsForm({ ...cmsForm, url: e.target.value })}
                     placeholder="https://..."
-                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="text-cyan-300 font-mono block pb-1 font-bold">BUTTON CTA TEXT:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Button CTA Text:</label>
                   <input
                     type="text"
                     value={cmsForm.buttonText}
                     onChange={(e) => setCmsForm({ ...cmsForm, buttonText: e.target.value })}
-                    placeholder="e.g. CLAIM PROMO →, EXPLORE DEAL →"
-                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                    placeholder="e.g. TRY MESHY AI FREE →"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
               </div>
 
-              {/* DISCOUNT BADGE, PRICING & SORT ORDER */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="text-lime-400 font-mono block pb-1 font-bold">DISCOUNT / BADGE TEXT:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Badge Text:</label>
                   <input
                     type="text"
                     value={cmsForm.badge}
                     onChange={(e) => setCmsForm({ ...cmsForm, badge: e.target.value })}
-                    placeholder="e.g. 75% OFF, ₱7,800 CASHBACK"
-                    className="w-full px-3 py-2 bg-black border border-lime-500/40 rounded-xl text-white font-mono"
+                    placeholder="e.g. 100% FREE GUIDE"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="text-slate-300 font-mono block pb-1 font-bold">PRICING / COST METRIC:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Price / Cost:</label>
                   <input
                     type="text"
                     value={cmsForm.price}
                     onChange={(e) => setCmsForm({ ...cmsForm, price: e.target.value })}
-                    placeholder="e.g. Free, $49/mo"
-                    className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-mono"
+                    placeholder="e.g. Free"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="text-cyan-300 font-mono block pb-1 font-bold">POSITION / SORT ORDER:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Sort Order:</label>
                   <input
                     type="number"
                     value={cmsForm.sortOrder}
                     onChange={(e) => setCmsForm({ ...cmsForm, sortOrder: parseInt(e.target.value) || 1 })}
-                    placeholder="1"
-                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono font-bold"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold"
                   />
                 </div>
               </div>
 
-              {/* SHORT SUMMARY */}
               <div>
-                <label className="text-slate-300 font-mono block pb-1 font-bold">SHORT SUMMARY / DESCRIPTION:</label>
+                <label className="text-slate-700 block pb-1 font-bold">Short Summary *:</label>
                 <textarea
                   rows={2}
                   value={cmsForm.description}
                   onChange={(e) => setCmsForm({ ...cmsForm, description: e.target.value })}
                   required
-                  placeholder="Enter content summary..."
-                  className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-sans"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                 />
               </div>
 
-              {/* FULL RICH CONTENT / ARTICLE COPY */}
               <div>
-                <label className="text-purple-300 font-mono block pb-1 font-bold">FULL ARTICLE / RICH TEXT COPY (OPTIONAL):</label>
+                <label className="text-slate-700 block pb-1 font-bold">
+                  Full Tutorial Content (Supports Markdown Headings, Lists &amp; Code Blocks):
+                </label>
                 <textarea
-                  rows={5}
+                  rows={6}
                   value={cmsForm.fullContent}
                   onChange={(e) => setCmsForm({ ...cmsForm, fullContent: e.target.value })}
-                  placeholder="Enter detailed article text, step-by-step instructions, and markdown formatting..."
-                  className="w-full px-3 py-2 bg-black border border-purple-500/40 rounded-xl text-white font-sans"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono text-xs"
                 />
               </div>
 
-              {/* ACTION BUTTONS */}
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
                 <button
                   type="button"
-                  onClick={() => { setEditingCMSItem(null); setIsCreatingCMSItem(false); }}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-mono cursor-pointer"
+                  onClick={() => {
+                    setEditingCMSItem(null);
+                    setIsCreatingCMSItem(false);
+                  }}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl cursor-pointer"
                 >
-                  CANCEL
+                  Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-black font-black font-orbitron text-xs rounded-xl shadow-lg cursor-pointer"
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-xs cursor-pointer"
                 >
-                  SAVE CONTENT ITEM
+                  Save &amp; Publish
                 </button>
               </div>
             </form>
@@ -1498,196 +1593,166 @@ export const Admin: React.FC = () => {
         </div>
       )}
 
-      {/* PROMOTION / ADVERTISEMENT MODAL (WITH FILE UPLOAD & IMAGE URL) */}
+      {/* ========================================================================= */}
+      {/* MODAL 2: PROMOTION / AD EDITOR                                            */}
+      {/* ========================================================================= */}
       {(editingPromoItem || isCreatingPromoItem) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md font-sans">
-          <div className="bg-slate-900 border-2 border-purple-500/80 rounded-3xl p-6 max-w-2xl w-full space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-2xl w-full space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto text-slate-800">
             <button
-              onClick={() => { setEditingPromoItem(null); setIsCreatingPromoItem(false); }}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white cursor-pointer"
+              onClick={() => {
+                setEditingPromoItem(null);
+                setIsCreatingPromoItem(false);
+              }}
+              className="absolute top-5 right-5 text-slate-400 hover:text-slate-800 cursor-pointer"
             >
               <X className="w-6 h-6" />
             </button>
-            <div className="border-b border-slate-800 pb-2">
-              <span className="text-xs text-purple-400 font-mono font-bold uppercase tracking-widest block">
-                BACKEND PROMOTION / AD EDITOR
+            <div className="border-b border-slate-100 pb-3">
+              <span className="text-xs text-violet-600 font-bold uppercase tracking-wider block">
+                Promotion &amp; Referral Ad Editor
               </span>
-              <h2 className="text-xl font-black font-orbitron text-white uppercase">
-                {editingPromoItem ? `EDIT PROMOTION: ${editingPromoItem.title}` : 'CREATE NEW PROMOTION / AD'}
+              <h2 className="text-xl font-extrabold text-slate-900">
+                {editingPromoItem ? `Edit Ad: ${editingPromoItem.title}` : 'Create New Referral Ad'}
               </h2>
             </div>
 
-            <form onSubmit={handleSavePromoItem} className="space-y-4 font-sans text-xs">
-              
-              {/* PLACEMENT & STATUS */}
+            <form onSubmit={handleSavePromoItem} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-purple-300 font-mono block pb-1 font-bold">1. PLACEMENT SECTION:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">1. Placement Section:</label>
                   <select
                     value={promoForm.placement}
                     onChange={(e) => setPromoForm({ ...promoForm, placement: e.target.value as PromoPlacementType })}
-                    className="w-full px-3 py-2 bg-black border border-purple-500/50 rounded-xl text-white font-mono uppercase text-xs font-bold"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold"
                   >
-                    <option value="partner-deals">PARTNER DEALS</option>
-                    <option value="promo">PROMO</option>
-                    <option value="showcase-ad">SHOWCASE BOTTOM ADS</option>
-                    <option value="ai-ad">AI HUB ADS</option>
+                    <option value="partner-deals">Partner Deals Sidebar</option>
+                    <option value="promo">Top Promo Box</option>
+                    <option value="showcase-ad">Showcase Bottom Ads</option>
+                    <option value="ai-ad">AI Hub Ads</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="text-cyan-400 font-mono block pb-1 font-bold">2. PUBLICATION STATUS:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">2. Status:</label>
                   <select
                     value={promoForm.status}
                     onChange={(e) => setPromoForm({ ...promoForm, status: e.target.value as CMSStatusType })}
-                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono uppercase text-xs"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold"
                   >
                     <option value="PUBLISHED">PUBLISHED (Live)</option>
                     <option value="DRAFT">DRAFT</option>
-                    <option value="SCHEDULED">SCHEDULED</option>
                   </select>
                 </div>
               </div>
 
-              {/* TITLE & BADGE */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-purple-300 font-mono block pb-1 font-bold">PROMOTION TITLE:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Ad Title *:</label>
                   <input
                     type="text"
                     value={promoForm.title}
                     onChange={(e) => setPromoForm({ ...promoForm, title: e.target.value })}
                     required
-                    placeholder="e.g. Hostinger 75% OFF Cloud Server Deal"
-                    className="w-full px-3 py-2 bg-black border border-purple-500/40 rounded-xl text-white font-mono"
+                    placeholder="e.g. AI 3D Model Generator: Create 3D from Text & Images | Meshy"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="text-lime-400 font-mono block pb-1 font-bold">BADGE / DISCOUNT TEXT:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Badge / Discount Text:</label>
                   <input
                     type="text"
                     value={promoForm.badge}
                     onChange={(e) => setPromoForm({ ...promoForm, badge: e.target.value })}
-                    placeholder="e.g. 75% OFF or ₱7,800 CASHBACK"
-                    className="w-full px-3 py-2 bg-black border border-lime-500/40 rounded-xl text-white font-mono"
+                    placeholder="e.g. FREE 3D AI CREDITS"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
               </div>
 
-              {/* 🖼️ PROMO IMAGE UPLOAD FROM COMPUTER OR IMAGE URL */}
-              <div className="p-3 bg-slate-950 border border-purple-500/40 rounded-2xl space-y-2">
-                <label className="text-purple-300 font-mono block font-bold">PROMOTION IMAGE MANAGEMENT (UPLOAD FROM COMPUTER OR URL):</label>
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                <label className="text-slate-700 block font-bold">Banner Image (Upload or URL):</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
-                  <div>
-                    <label className="text-[11px] text-slate-400 block pb-1 font-mono">A. UPLOAD FROM COMPUTER:</label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleFileUpload(e, 'promo')}
-                      className="w-full px-2 py-1 bg-black border border-purple-500/30 rounded-xl text-slate-300 font-mono text-[11px] file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:bg-purple-500/20 file:text-purple-300 font-bold"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[11px] text-slate-400 block pb-1 font-mono">B. OR ENTER IMAGE URL / PATH:</label>
-                    <input
-                      type="text"
-                      value={promoForm.imageUrl}
-                      onChange={(e) => setPromoForm({ ...promoForm, imageUrl: e.target.value })}
-                      placeholder="https://... or ./images/..."
-                      className="w-full px-3 py-2 bg-black border border-purple-500/30 rounded-xl text-white font-mono text-xs"
-                    />
-                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, 'promo')}
+                    className="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-violet-50 file:text-violet-700 file:font-semibold"
+                  />
+                  <input
+                    type="text"
+                    value={promoForm.imageUrl}
+                    onChange={(e) => setPromoForm({ ...promoForm, imageUrl: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-slate-900"
+                  />
                 </div>
-
-                {promoForm.imageUrl && (
-                  <div className="flex items-center space-x-3 pt-2 border-t border-slate-900">
-                    <img
-                      src={promoForm.imageUrl}
-                      alt="Preview"
-                      className="w-16 h-12 object-cover rounded-lg border border-purple-500/50"
-                    />
-                    <div className="flex-grow space-y-0.5 font-mono text-[10px]">
-                      <span className="text-lime-400 font-bold block">✓ Image Loaded</span>
-                      <span className="text-slate-400 block truncate max-w-xs">{promoForm.imageUrl.substring(0, 50)}...</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setPromoForm({ ...promoForm, imageUrl: '' })}
-                      className="px-2.5 py-1 bg-rose-950/80 hover:bg-rose-900 text-rose-300 rounded text-[10px] font-bold cursor-pointer"
-                    >
-                      REMOVE IMAGE
-                    </button>
-                  </div>
-                )}
               </div>
 
-              {/* DESTINATION URL, BUTTON TEXT & SORT ORDER */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="text-cyan-300 font-mono block pb-1 font-bold">DESTINATION / REFERRAL URL:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Destination Referral URL *:</label>
                   <input
                     type="text"
                     value={promoForm.destinationUrl}
                     onChange={(e) => setPromoForm({ ...promoForm, destinationUrl: e.target.value })}
                     required
                     placeholder="https://..."
-                    className="w-full px-3 py-2 bg-black border border-cyan-500/40 rounded-xl text-white font-mono"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="text-slate-300 font-mono block pb-1 font-bold">BUTTON TEXT:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Button CTA Text *:</label>
                   <input
                     type="text"
                     value={promoForm.buttonText}
                     onChange={(e) => setPromoForm({ ...promoForm, buttonText: e.target.value })}
                     required
-                    placeholder="e.g. CLAIM PROMO →"
-                    className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-mono"
+                    placeholder="e.g. TRY MESHY AI 3D →"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="text-purple-300 font-mono block pb-1 font-bold">POSITION / SORT ORDER:</label>
+                  <label className="text-slate-700 block pb-1 font-bold">Sort Order:</label>
                   <input
                     type="number"
                     value={promoForm.sortOrder}
                     onChange={(e) => setPromoForm({ ...promoForm, sortOrder: parseInt(e.target.value) || 1 })}
-                    placeholder="1"
-                    className="w-full px-3 py-2 bg-black border border-purple-500/40 rounded-xl text-white font-mono font-bold"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold"
                   />
                 </div>
               </div>
 
-              {/* DESCRIPTION */}
               <div>
-                <label className="text-slate-300 font-mono block pb-1 font-bold">SHORT DESCRIPTION:</label>
+                <label className="text-slate-700 block pb-1 font-bold">Short Description *:</label>
                 <textarea
                   rows={2}
                   value={promoForm.description}
                   onChange={(e) => setPromoForm({ ...promoForm, description: e.target.value })}
                   required
-                  placeholder="Enter promotion description..."
-                  className="w-full px-3 py-2 bg-black border border-slate-700 rounded-xl text-white font-sans"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                 />
               </div>
 
-              {/* ACTION BUTTONS */}
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
                 <button
                   type="button"
-                  onClick={() => { setEditingPromoItem(null); setIsCreatingPromoItem(false); }}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-mono cursor-pointer"
+                  onClick={() => {
+                    setEditingPromoItem(null);
+                    setIsCreatingPromoItem(false);
+                  }}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl cursor-pointer"
                 >
-                  CANCEL
+                  Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-purple-500 hover:bg-purple-400 text-white font-black font-orbitron text-xs rounded-xl shadow-lg cursor-pointer"
+                  className="px-6 py-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl shadow-xs cursor-pointer"
                 >
-                  SAVE PROMOTION
+                  Save Promotion
                 </button>
               </div>
             </form>
@@ -1695,242 +1760,166 @@ export const Admin: React.FC = () => {
         </div>
       )}
 
-    
       {/* ========================================================================= */}
-      {/* 🛍️ COLLAPSIBLE TOPIC CREATE / EDIT MODAL */}
+      {/* MODAL 3: COLLAPSIBLE TOPIC CREATE / EDIT MODAL                            */}
       {/* ========================================================================= */}
       {isCreatingTopic && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-slate-900 border-2 border-pink-500 rounded-3xl w-full max-w-4xl p-6 sm:p-8 space-y-6 text-white shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
-            
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-3xl p-6 sm:p-8 space-y-6 text-slate-800 shadow-2xl my-8 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-400 flex items-center justify-center text-pink-300 font-bold text-lg">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 font-bold text-lg">
                   {topicForm.iconEmoji || '⚡'}
                 </div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-black font-orbitron text-white">
-                    {editingTopic ? 'EDIT COLLAPSIBLE TOPIC' : 'CREATE NEW COLLAPSIBLE TOPIC'}
+                  <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                    {editingTopic ? 'Edit Collapsible Topic' : 'Create New Collapsible Topic'}
                   </h3>
-                  <p className="text-xs text-pink-200 font-sans">
-                    Configure all details, referral links, coupon discounts, banner images &amp; video tutorials.
+                  <p className="text-xs text-slate-500">
+                    Configure referral links, coupon codes, banner images, and tutorial copy.
                   </p>
                 </div>
               </div>
 
               <button
-                onClick={() => { setIsCreatingTopic(false); setEditingTopic(null); }}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white"
+                onClick={() => {
+                  setIsCreatingTopic(false);
+                  setEditingTopic(null);
+                }}
+                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveTopic} className="space-y-6 font-sans text-xs">
-              
-              {/* ROW 1: Topic Number, Theme Color, Icon Emoji */}
+            <form onSubmit={handleSaveTopic} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">TOPIC NUMBER / LABEL *</label>
+                <div>
+                  <label className="text-slate-700 block pb-1 font-bold">Topic Number *:</label>
                   <input
                     type="text"
                     required
                     value={topicForm.topicNumber}
                     onChange={(e) => setTopicForm({ ...topicForm, topicNumber: e.target.value })}
-                    placeholder="e.g. TOPIC 7, TOPIC 8, CATEGORY 3"
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">COLOR THEME</label>
+                <div>
+                  <label className="text-slate-700 block pb-1 font-bold">Theme Color:</label>
                   <select
                     value={topicForm.themeColor}
                     onChange={(e) => setTopicForm({ ...topicForm, themeColor: e.target.value as TopicThemeColor })}
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   >
-                    <option value="pink">Pink / Rose (Creative &amp; Commerce)</option>
-                    <option value="purple">Purple / Indigo (AI &amp; Software)</option>
-                    <option value="cyan">Cyan / Blue (Cloud &amp; Tech)</option>
-                    <option value="emerald">Emerald / Green (Finance &amp; Growth)</option>
-                    <option value="amber">Amber / Orange (Deals &amp; Media)</option>
-                    <option value="indigo">Indigo / Violet (Default Hosting)</option>
+                    <option value="pink">Pink / Rose</option>
+                    <option value="purple">Purple / Indigo</option>
+                    <option value="cyan">Cyan / Blue</option>
+                    <option value="emerald">Emerald / Green</option>
+                    <option value="amber">Amber / Orange</option>
+                    <option value="indigo">Indigo / Violet</option>
                   </select>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">ICON / EMOJI</label>
+                <div>
+                  <label className="text-slate-700 block pb-1 font-bold">Icon / Emoji:</label>
                   <input
                     type="text"
                     value={topicForm.iconEmoji}
                     onChange={(e) => setTopicForm({ ...topicForm, iconEmoji: e.target.value })}
-                    placeholder="e.g. 🛍️, 🎙️, 🌐, 🎬, 🎁, 🎨, ⚡"
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
               </div>
 
-              {/* ROW 2: Category Badge & Topic Title */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">CATEGORY BADGE / TOP BAR TEXT</label>
+                <div>
+                  <label className="text-slate-700 block pb-1 font-bold">Category Badge:</label>
                   <input
                     type="text"
                     value={topicForm.categoryBadge}
                     onChange={(e) => setTopicForm({ ...topicForm, categoryBadge: e.target.value })}
-                    placeholder="e.g. TOPIC 7: NO-CODE AUTOMATION & WORKSPACE"
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">MAIN TOPIC TITLE *</label>
+                <div>
+                  <label className="text-slate-700 block pb-1 font-bold">Main Topic Title *:</label>
                   <input
                     type="text"
                     required
                     value={topicForm.title}
                     onChange={(e) => setTopicForm({ ...topicForm, title: e.target.value })}
-                    placeholder="e.g. TOPIC 7: NOTION — ALL-IN-ONE WORKSPACE OS"
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
               </div>
 
-              {/* ROW 3: Subtitle / Tagline */}
-              <div className="space-y-1.5">
-                <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">SUBTITLE / SHORT DESCRIPTION</label>
+              <div>
+                <label className="text-slate-700 block pb-1 font-bold">Subtitle:</label>
                 <input
                   type="text"
                   value={topicForm.subtitle}
                   onChange={(e) => setTopicForm({ ...topicForm, subtitle: e.target.value })}
-                  placeholder="e.g. Streamline client onboarding, team wiki documentation, and task boards."
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                 />
               </div>
 
-              {/* ROW 4: Referral URL & Primary CTA Button Text */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">AFFILIATE / REFERRAL URL</label>
+                <div>
+                  <label className="text-slate-700 block pb-1 font-bold">Referral URL:</label>
                   <input
                     type="text"
                     value={topicForm.referralUrl}
                     onChange={(e) => setTopicForm({ ...topicForm, referralUrl: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">PRIMARY CTA BUTTON TEXT</label>
+                <div>
+                  <label className="text-slate-700 block pb-1 font-bold">Primary Button CTA Text:</label>
                   <input
                     type="text"
                     value={topicForm.primaryCtaText}
                     onChange={(e) => setTopicForm({ ...topicForm, primaryCtaText: e.target.value })}
-                    placeholder="e.g. START SELLING ON GUMROAD →"
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                   />
                 </div>
               </div>
 
-              {/* ROW 5: Coupon Code & Discount Text */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">COUPON CODE (OPTIONAL)</label>
-                  <input
-                    type="text"
-                    value={topicForm.couponCode}
-                    onChange={(e) => setTopicForm({ ...topicForm, couponCode: e.target.value })}
-                    placeholder="e.g. DPDCABINCEHM"
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">DISCOUNT BADGE TEXT</label>
-                  <input
-                    type="text"
-                    value={topicForm.discountBadgeText}
-                    onChange={(e) => setTopicForm({ ...topicForm, discountBadgeText: e.target.value })}
-                    placeholder="e.g. UP TO 75% OFF + 3 MONTHS FREE"
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* ROW 6: Header Banner Image & Video URL */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">HEADER BANNER IMAGE URL / PATH</label>
-                  <input
-                    type="text"
-                    value={topicForm.headerBannerImage}
-                    onChange={(e) => setTopicForm({ ...topicForm, headerBannerImage: e.target.value })}
-                    placeholder="e.g. ./media_1787655285154.png or https://..."
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">VIDEO URL (YOUTUBE / MP4 STREAM)</label>
-                  <input
-                    type="text"
-                    value={topicForm.videoUrl}
-                    onChange={(e) => setTopicForm({ ...topicForm, videoUrl: e.target.value })}
-                    placeholder="e.g. https://www.youtube.com/watch?v=..."
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* ROW 7: In-depth Educational / Markdown Content */}
-              <div className="space-y-1.5">
-                <label className="font-mono text-[11px] text-pink-300 uppercase font-bold">IN-DEPTH TUTORIAL &amp; GUIDE CONTENT</label>
+              <div>
+                <label className="text-slate-700 block pb-1 font-bold">In-Depth Guide Content:</label>
                 <textarea
                   rows={4}
                   value={topicForm.markdownContent}
                   onChange={(e) => setTopicForm({ ...topicForm, markdownContent: e.target.value })}
-                  placeholder="Enter detailed learnings, instructions, workflow advice, and steps..."
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono focus:border-pink-500 outline-none"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900"
                 />
               </div>
 
-              {/* VISIBILITY TOGGLE */}
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-950 border border-slate-800">
-                <input
-                  type="checkbox"
-                  id="topicVisible"
-                  checked={topicForm.isVisible}
-                  onChange={(e) => setTopicForm({ ...topicForm, isVisible: e.target.checked })}
-                  className="w-4 h-4 accent-pink-500"
-                />
-                <label htmlFor="topicVisible" className="font-mono text-xs text-white font-bold cursor-pointer">
-                  PUBLISH TOPIC IMMEDIATELY (VISIBLE ON LIVE AFFILIATE GUIDE)
-                </label>
-              </div>
-
-              {/* MODAL FOOTER BUTTONS */}
-              <div className="flex items-center justify-end gap-4 border-t border-slate-800 pt-4">
+              <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
                 <button
                   type="button"
-                  onClick={() => { setIsCreatingTopic(false); setEditingTopic(null); }}
-                  className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs uppercase font-bold"
+                  onClick={() => {
+                    setIsCreatingTopic(false);
+                    setEditingTopic(null);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold"
                 >
-                  CANCEL
+                  Cancel
                 </button>
-
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white font-black font-orbitron text-xs uppercase rounded-xl shadow-[0_0_20px_rgba(244,114,182,0.5)] transition-all"
+                  className="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-xs"
                 >
-                  {editingTopic ? 'SAVE TOPIC CHANGES' : 'CREATE TOPIC'}
+                  {editingTopic ? 'Save Changes' : 'Create Topic'}
                 </button>
               </div>
-
             </form>
           </div>
         </div>
       )}
-</div>
+    </div>
   );
 };
+export default Admin;

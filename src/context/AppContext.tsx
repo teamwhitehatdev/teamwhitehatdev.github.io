@@ -3,7 +3,6 @@ import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
 import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
 import { INITIAL_PROMO_ITEMS } from '../utils/initialPromoData';
 import { INITIAL_AFFILIATE_TOPICS } from '../utils/initialAffiliateTopics';
-import { ALL_AFFILIATE_ADS } from '../data/affiliateAdsData';
 import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageOwnerType, CMSContentType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType, PromoItem, PromoPlacementType, AffiliateCollapsibleTopic } from '../types';
 
 interface AppContextType {
@@ -30,7 +29,7 @@ interface AppContextType {
   pendingCheckoutAction: (() => void) | null;
   setPendingCheckoutAction: (action: (() => void) | null) => void;
 
-    // COLLAPSIBLE TOPICS MANAGEMENT (AFFILIATE GUIDE)
+  // COLLAPSIBLE TOPICS MANAGEMENT (AFFILIATE GUIDE)
   affiliateTopics: AffiliateCollapsibleTopic[];
   addAffiliateTopic: (topic: Omit<AffiliateCollapsibleTopic, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateAffiliateTopic: (id: string, updates: Partial<AffiliateCollapsibleTopic>) => void;
@@ -87,31 +86,6 @@ interface AppContextType {
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
-
-const DEFAULT_CATEGORIES = [
-  'Virtual Assistant',
-  'VA Fundamentals',
-  'Admin Skills',
-  'Communication',
-  'Digital Skills',
-  'Freelancing',
-  'Affiliate Marketing',
-  'Content Strategy',
-  'Web Development',
-  'Graphic Design',
-  'Video Editing',
-  'Productivity',
-  'Automation',
-  'AI Tools',
-  'Social Media',
-  'Online Business',
-  'Web Hosting',
-  'Services',
-  'Showcase',
-  'Guides',
-  'Tutorials',
-  'Resources'
-];
 
 const DEFAULT_VISITOR_LOGS: VisitorLog[] = [
   {
@@ -254,19 +228,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : [];
   });
 
-  // CMS CATEGORIES
   // CMS CATEGORIES (COMPREHENSIVE ALL-SECTOR CATEGORY MATRIX)
   const [cmsCategories, setCmsCategories] = useState<string[]>(() => {
     const defaultCategories = [
       'ALL',
       'AI FUNDAMENTALS',
-      'AI ERA',
+      'AI CAPABILITIES',
       'AI AUTOMATION',
+      'AI TOOLS',
+      'AI ERA',
       'AI FOR VIRTUAL ASSISTANTS',
       'AI FOR FREELANCERS',
       'AI INFLUENCE',
       'AI SAFETY',
-      'DIGITAL TRANSFORMATION',
       'VIRTUAL ASSISTANT CAREER',
       'FREELANCING MASTERY',
       'DIGITAL SKILLS',
@@ -291,9 +265,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return defaultCategories;
   });
 
-  // CMS BACKEND EDUCATIONAL ITEMS STATE
-  // CMS BACKEND EDUCATIONAL ITEMS STATE (AUTO-MERGING & IMAGE SYNC)
-    // ==========================================
+  // ==========================================
   // COLLAPSIBLE TOPICS CMS STATE (AFFILIATE GUIDE)
   // ==========================================
   const [affiliateTopics, setAffiliateTopics] = useState<AffiliateCollapsibleTopic[]>(() => {
@@ -302,7 +274,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Merge any missing default items
           const existingIds = new Set(parsed.map((item: AffiliateCollapsibleTopic) => item.id));
           const missing = INITIAL_AFFILIATE_TOPICS.filter(item => !existingIds.has(item.id));
           return [...parsed, ...missing];
@@ -372,7 +343,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const targetIndex = direction === 'up' ? index - 1 : index + 1;
       if (targetIndex < 0 || targetIndex >= sorted.length) return prev;
 
-      // Swap
       const current = sorted[index];
       const target = sorted[targetIndex];
       const tempOrder = current.sortOrder;
@@ -393,12 +363,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
-    const saved = localStorage.getItem('wh_cms_items');
+    const saved = localStorage.getItem('wh_cms_items_v5690');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Update any system items in saved cache with fresh images, videoUrls, and CTAs from INITIAL_CMS_ITEMS
           const initialMap = new Map(INITIAL_CMS_ITEMS.map(item => [item.id, item]));
           const updatedParsed = parsed.map((item: any) => {
             const defaultItem = initialMap.get(item.id);
@@ -408,6 +377,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 mainImage: defaultItem.mainImage || item.mainImage,
                 videoUrl: defaultItem.videoUrl || item.videoUrl,
                 url: defaultItem.url || item.url,
+                referralUrl: defaultItem.referralUrl || item.referralUrl,
                 buttonText: defaultItem.buttonText || item.buttonText,
                 referralCta: defaultItem.referralCta || item.referralCta,
                 pageOwner: defaultItem.pageOwner || item.pageOwner,
@@ -417,10 +387,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             return item;
           });
 
-          // Merge newly added system items that don't exist yet in saved cache
           const existingIds = new Set(updatedParsed.map((item: any) => item.id));
           const missingSystemItems = INITIAL_CMS_ITEMS.filter(item => !existingIds.has(item.id));
-          return [...updatedParsed, ...missingSystemItems];
+          return [...missingSystemItems, ...updatedParsed];
         }
       } catch (e) {
         console.error('Error loading saved CMS items:', e);
@@ -431,12 +400,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // CMS PROMOTIONAL & ADVERTISEMENTS ITEMS STATE (PARTNER DEALS & PROMO)
   const [promoItems, setPromoItems] = useState<PromoItem[]>(() => {
-    const saved = localStorage.getItem('wh_promo_items');
+    const saved = localStorage.getItem('wh_promo_items_v5690');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          const existingIds = new Set(parsed.map((item: PromoItem) => item.id));
+          const missingPromos = INITIAL_PROMO_ITEMS.filter(item => !existingIds.has(item.id));
+          return [...missingPromos, ...parsed];
         }
       } catch (e) {
         console.error('Failed to parse saved Promo items:', e);
@@ -490,11 +461,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsCategories]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_items', JSON.stringify(cmsItems));
+    localStorage.setItem('wh_cms_items_v5690', JSON.stringify(cmsItems));
   }, [cmsItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_promo_items', JSON.stringify(promoItems));
+    localStorage.setItem('wh_promo_items_v5690', JSON.stringify(promoItems));
   }, [promoItems]);
 
   useEffect(() => {
@@ -541,7 +512,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems(prev => {
       const updated = [newItem, ...prev];
       try {
-        localStorage.setItem('wh_cms_items', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5690', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -559,7 +530,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return item;
       });
       try {
-        localStorage.setItem('wh_cms_items', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5690', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -569,7 +540,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems(prev => {
       const updated = prev.filter(item => item.id !== id);
       try {
-        localStorage.setItem('wh_cms_items', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5690', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -598,8 +569,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems(prev => prev.map(item => item.id === id ? { ...item, status, updatedAt: new Date().toISOString() } : item));
   };
 
-  // STRICT PAGE OWNER QUERY LOGIC
-  
   // CMS CONTENT ITEM REORDERING METHODS (MOVE UP / DOWN / EXACT RANK)
   const moveCMSItemOrder = (id: string, direction: 'up' | 'down') => {
     setCmsItems(prev => {
@@ -610,12 +579,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const targetIndex = direction === 'up' ? index - 1 : index + 1;
       if (targetIndex < 0 || targetIndex >= list.length) return prev;
 
-      // Swap items
       const temp = list[index];
       list[index] = list[targetIndex];
       list[targetIndex] = temp;
 
-      // Update sortOrder values explicitly
       return list.map((item, idx) => ({
         ...item,
         sortOrder: idx + 1,
@@ -641,12 +608,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const targetIndex = direction === 'up' ? index - 1 : index + 1;
       if (targetIndex < 0 || targetIndex >= list.length) return prev;
 
-      // Swap items
       const temp = list[index];
       list[index] = list[targetIndex];
       list[targetIndex] = temp;
 
-      // Update sortOrder values explicitly
       return list.map((item, idx) => ({
         ...item,
         sortOrder: idx + 1,
@@ -665,13 +630,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const getPublicPageCMSItems = useCallback((targetPageOwner: string) => {
     const targetKey = targetPageOwner.toLowerCase().trim();
     return cmsItems.filter(item => {
-      // Visibility check
       if (item.visible === false) return false;
       if (item.status && item.status.toUpperCase() !== 'PUBLISHED') return false;
 
       const rawOwner = (item.pageOwner || item.page || 'showcase').toLowerCase().trim();
       
-      // Normalized matching across route aliases
       if (targetKey === 'home') {
         return item.homeFeatured === true || item.featured === true || rawOwner === 'home';
       }
@@ -750,7 +713,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [promoItems]);
 
   const exportCMSDatabase = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ cmsItems, promoItems }, null, 2));
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ cmsItems, promoItems, affiliateTopics }, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
     downloadAnchor.setAttribute("download", `cms_database_backup_${new Date().toISOString().split('T')[0]}.json`);
@@ -766,6 +729,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setCmsItems(parsed.cmsItems);
         if (parsed.promoItems && Array.isArray(parsed.promoItems)) {
           setPromoItems(parsed.promoItems);
+        }
+        if (parsed.affiliateTopics && Array.isArray(parsed.affiliateTopics)) {
+          setAffiliateTopics(parsed.affiliateTopics);
         }
         return true;
       } else if (Array.isArray(parsed)) {
@@ -861,7 +827,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         services,
         projects,
         affiliates: [],
-        affiliateAds: ALL_AFFILIATE_ADS,
         testimonials,
         inquiries,
         hireVaInquiries,

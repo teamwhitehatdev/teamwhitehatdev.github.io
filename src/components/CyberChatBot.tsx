@@ -6,7 +6,7 @@ import { useApp } from '../context/AppContext';
 export const CyberChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
-  const { subscribeNewsletter, setIsCartOpen } = useApp();
+  // const { } = useApp(); // chat context removed
 
   const [messages, setMessages] = useState<Array<{ sender: 'bot' | 'user'; text: string; action?: string }>>([
     {

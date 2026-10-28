@@ -7,30 +7,29 @@ export const AtomeCardPanel: React.FC = () => {
   const promos = typeof getPublicPromoItems === 'function' ? getPublicPromoItems('promo') : [];
 
   return (
-    <div className="bg-gradient-to-b from-yellow-950/40 via-black to-cyan-950/50 border-2 border-yellow-400/60 rounded-3xl p-5 space-y-4 shadow-2xl font-mono select-none">
-
-      {/* COMPACT PANEL HEADER: PROMO */}
-      <div className="flex items-center justify-between border-b border-yellow-400/30 pb-3">
-        <span className="text-xs font-bold text-yellow-300 uppercase tracking-widest flex items-center space-x-1.5 font-orbitron">
-          <Sparkles className="w-4 h-4 text-yellow-400 animate-pulse" />
-          <span>PROMO</span>
+    <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-xs select-none">
+      {/* COMPACT PANEL HEADER: FEATURED PROMOS & ADS */}
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
+          <Sparkles className="w-4 h-4 text-amber-500" />
+          <span>Featured Partner Ads</span>
         </span>
-        <span className="bg-yellow-400/20 text-yellow-300 text-[10px] font-bold px-2 py-0.5 rounded border border-yellow-400/40">
-          FEATURED ({promos.length})
+        <span className="bg-amber-50 text-amber-800 text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-amber-200">
+          Active ({promos.length})
         </span>
       </div>
 
       {/* CMS PROMOTIONS LIST */}
       <div className="space-y-4">
         {promos.length === 0 ? (
-          <div className="p-4 bg-black/80 border border-yellow-400/30 rounded-xl text-center text-xs text-yellow-300 font-mono">
+          <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center text-xs text-slate-500">
             No active promos.
           </div>
         ) : (
           promos.map((ad) => (
             <div
               key={ad.id}
-              className="bg-black/90 border border-yellow-400/40 hover:border-yellow-400 rounded-2xl p-4 space-y-3 shadow-lg transition-all group"
+              className="bg-slate-50/70 border border-slate-200 hover:border-blue-300 rounded-2xl p-4 space-y-3 transition-all group"
             >
               {/* CLICKABLE PROMOTION IMAGE */}
               {ad.imageUrl && (
@@ -38,15 +37,15 @@ export const AtomeCardPanel: React.FC = () => {
                   href={ad.destinationUrl}
                   target={ad.openNewTab !== false ? '_blank' : '_self'}
                   rel="sponsored noopener noreferrer"
-                  className="block relative overflow-hidden rounded-xl border border-gray-800 group-hover:border-yellow-400 transition-all max-h-52"
+                  className="block relative overflow-hidden rounded-xl border border-slate-200 max-h-48"
                 >
                   <img
                     src={ad.imageUrl}
                     alt={ad.title}
-                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   {ad.badge && (
-                    <span className="absolute top-2 right-2 px-2.5 py-0.5 bg-yellow-400 text-black font-mono text-[10px] font-black rounded shadow">
+                    <span className="absolute top-2 right-2 px-2.5 py-0.5 bg-white/95 text-slate-900 text-[10px] font-bold rounded-full border border-slate-200 shadow-xs">
                       {ad.badge}
                     </span>
                   )}
@@ -55,18 +54,20 @@ export const AtomeCardPanel: React.FC = () => {
 
               {/* DETAILS */}
               <div className="space-y-1">
-                <div className="flex items-center justify-between text-[10px] font-mono">
-                  <span className="text-yellow-300 font-bold uppercase">{ad.promotionLabel || 'SPECIAL PROMO'}</span>
+                <div className="flex items-center justify-between text-[10px]">
+                  <span className="text-blue-600 font-bold uppercase">{ad.promotionLabel || 'PARTNER REFERRAL'}</span>
                   {ad.badge && !ad.imageUrl && (
-                    <span className="text-black bg-yellow-400 px-2 py-0.5 font-bold rounded">{ad.badge}</span>
+                    <span className="text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 font-semibold rounded-full">
+                      {ad.badge}
+                    </span>
                   )}
                 </div>
 
-                <h4 className="text-sm font-black font-rajdhani text-white uppercase leading-snug group-hover:text-yellow-300 transition-colors">
+                <h4 className="text-sm font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
                   {ad.title}
                 </h4>
 
-                <p className="text-[11px] text-gray-300 font-sans leading-relaxed line-clamp-3">
+                <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
                   {ad.description}
                 </p>
               </div>
@@ -76,16 +77,15 @@ export const AtomeCardPanel: React.FC = () => {
                 href={ad.destinationUrl}
                 target={ad.openNewTab !== false ? '_blank' : '_self'}
                 rel="sponsored noopener noreferrer"
-                className="w-full py-3 bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500 text-black font-black font-orbitron text-xs uppercase rounded-xl hover:scale-105 transition-all flex items-center justify-center space-x-1.5 shadow-lg"
+                className="w-full py-2.5 bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5 shadow-xs"
               >
-                <span>{ad.buttonText || 'CLAIM PROMO'} &rarr;</span>
+                <span>{ad.buttonText || 'Open Partner Link'}</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           ))
         )}
       </div>
-
     </div>
   );
 };

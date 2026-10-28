@@ -5,6 +5,24 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
   // 🏷️ PROMO PLACEMENT (PROMO SECTION)
   // =========================================================================
   {
+    id: 'promo-meshy-ai-3d-0',
+    title: 'AI 3D Model Generator: Create 3D from Text & Images | Meshy',
+    placement: 'promo',
+    description: 'Turn simple text prompts or 2D reference images into textured, production-ready 3D models in seconds. Free signup credits via official referral link.',
+    imageUrl: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=80',
+    destinationUrl: 'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
+    buttonText: 'TRY MESHY AI 3D FREE →',
+    badge: 'FREE 3D AI CREDITS',
+    promotionLabel: 'OFFICIAL AI REFERRAL',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 1,
+    openNewTab: true,
+    disclosureNote: 'Official Meshy AI referral link (Code: ER3M3J).',
+    createdAt: '2026-09-22T00:00:00Z',
+    updatedAt: '2026-10-28T00:00:00Z'
+  },
+  {
     id: 'promo-atome-card-1',
     title: 'Atome Card — Win Up to ₱7,800 Cashback!',
     placement: 'promo',
@@ -16,7 +34,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'OFFICIAL PROMO',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 1,
+    sortOrder: 2,
     openNewTab: true,
     disclosureNote: 'Official partner promotion subject to Atome Terms & Conditions.',
     createdAt: '2026-08-01T00:00:00Z',
@@ -34,7 +52,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'HOSTING PROMO',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 2,
+    sortOrder: 3,
     openNewTab: true,
     disclosureNote: 'Use referral code DPDCABINCEHM at checkout.',
     createdAt: '2026-08-05T00:00:00Z',
@@ -42,8 +60,42 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
   },
 
   // =========================================================================
-  // 🤝 PARTNER DEALS PLACEMENT (PARTNER DEALS SECTION)
+  // 🤝 PARTNER DEALS PLACEMENT (PARTNER DEALS / ADS SIDEBAR SECTION)
   // =========================================================================
+  {
+    id: 'deal-meshy-ai-3d-1',
+    title: 'AI 3D Model Generator: Create 3D from Text & Images | Meshy',
+    placement: 'partner-deals',
+    description: 'Create 3D models from text prompts and reference images in seconds with Meshy AI. Export to GLB, OBJ, FBX, or USDZ — no 3D experience needed.',
+    imageUrl: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=80',
+    destinationUrl: 'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
+    buttonText: 'TRY MESHY AI FREE →',
+    badge: 'AI 3D GENERATOR',
+    promotionLabel: 'OFFICIAL AI REFERRAL',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 1,
+    openNewTab: true,
+    createdAt: '2026-09-22T00:00:00Z',
+    updatedAt: '2026-10-28T00:00:00Z'
+  },
+  {
+    id: 'deal-suno-ai-music-2',
+    title: 'Suno AI Music Studio — Create Radio-Ready Songs Free',
+    placement: 'partner-deals',
+    description: 'Transform simple text prompts into full-length songs with realistic vocals, harmonies, and custom genres in seconds.',
+    imageUrl: './media_1787666146962.jpg',
+    destinationUrl: 'https://suno.com/invite/@chillvibemusics',
+    buttonText: 'CLAIM SUNO INVITE →',
+    badge: 'FREE CREDITS',
+    promotionLabel: 'AI MUSIC DEAL',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 2,
+    openNewTab: true,
+    createdAt: '2026-08-25T00:00:00Z',
+    updatedAt: '2026-10-28T00:00:00Z'
+  },
   {
     id: 'deal-envato-elements-1',
     title: 'Envato Elements & ThemeForest Templates',
@@ -56,7 +108,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'CREATIVE DEAL',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 1,
+    sortOrder: 3,
     openNewTab: true,
     createdAt: '2026-08-01T00:00:00Z',
     updatedAt: '2026-08-22T00:00:00Z'
@@ -73,7 +125,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'GRAPHICS DEAL',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 2,
+    sortOrder: 4,
     openNewTab: true,
     createdAt: '2026-08-05T00:00:00Z',
     updatedAt: '2026-08-22T00:00:00Z'
@@ -90,7 +142,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'PARTNER DEAL',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 3,
+    sortOrder: 5,
     openNewTab: true,
     createdAt: '2026-08-10T00:00:00Z',
     updatedAt: '2026-08-22T00:00:00Z'
@@ -107,7 +159,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'SOFTWARE DEAL',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 4,
+    sortOrder: 6,
     openNewTab: true,
     createdAt: '2026-08-12T00:00:00Z',
     updatedAt: '2026-08-22T00:00:00Z'
