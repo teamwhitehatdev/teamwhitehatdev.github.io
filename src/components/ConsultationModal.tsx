@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { validateEmailAndAntiBot, recordSuccessfulSubmission } from '../utils/emailValidator';
+import { sanitizeUserInput } from './SecurityEngine';
 
 interface ConsultationModalProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ interface ConsultationModalProps {
 export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   isOpen,
   onClose,
-  initialServiceTitle = 'Executive Virtual Assistance'
+  initialServiceTitle = 'Starter Virtual Assistant Trial Pack ($5/hr or $49/wk)'
 }) => {
   const { addInquiry, addHireVaInquiry } = useApp();
 
@@ -48,22 +49,27 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
       return;
     }
 
-    if (name.trim() && email.trim() && message.trim()) {
+    const cleanName = sanitizeUserInput(name);
+    const cleanEmail = email.trim();
+    const cleanContact = sanitizeUserInput(contactInfo);
+    const cleanMessage = sanitizeUserInput(message);
+
+    if (cleanName && cleanEmail && cleanMessage) {
       addInquiry({
-        name: name.trim(),
-        email: email.trim(),
+        name: cleanName,
+        email: cleanEmail,
         service: service,
-        message: message.trim()
+        message: cleanMessage
       });
 
       if (typeof addHireVaInquiry === 'function') {
         addHireVaInquiry({
-          name: name.trim(),
-          email: email.trim(),
-          contactInfo: contactInfo.trim() || undefined,
+          name: cleanName,
+          email: cleanEmail,
+          contactInfo: cleanContact || undefined,
           serviceRequested: service,
-          message: message.trim(),
-          sourcePage: window.location.hash || 'HomePage'
+          message: cleanMessage,
+          sourcePage: window.location.hash || '#/services'
         });
       }
 
@@ -83,52 +89,52 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs"
       onClick={onClose}
     >
       <div
-        className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-2xl relative text-slate-800"
+        className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-xl relative text-slate-800"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-slate-400 hover:text-slate-900 bg-slate-100 p-1.5 rounded-full transition-all"
+          className="absolute top-5 right-5 text-slate-400 hover:text-slate-900 bg-slate-100 p-1.5 rounded-full transition-all cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
         {submitted ? (
           <div className="text-center py-8 space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+            <div className="w-16 h-16 mx-auto rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-900">
               <CheckCircle2 className="w-10 h-10" />
             </div>
-            <h3 className="text-2xl font-extrabold text-slate-900">Inquiry Logged Securely!</h3>
+            <h3 className="text-2xl font-extrabold text-slate-900">Inquiry Logged Securely</h3>
             <p className="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
-              Thank you, <span className="text-blue-600 font-bold">{name}</span>! Your inquiry has been received and saved to our Admin CMS.
+              Thank you, <span className="text-slate-900 font-bold">{name}</span>! Your service request has been saved to our Admin CMS.
             </p>
-            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-semibold text-emerald-800 flex items-center justify-center space-x-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Team Review in Progress</span>
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center space-x-2">
+              <ShieldCheck className="w-4 h-4 text-slate-700" />
+              <span>Team Review in Progress — Response Within 24 Hours</span>
             </div>
           </div>
         ) : (
           <>
             <div className="space-y-2">
-              <div className="inline-flex items-center space-x-1.5 text-xs text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200 font-semibold">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                <span>Hire Dedicated VA &amp; Project Inquiry</span>
+              <div className="inline-flex items-center space-x-1.5 text-xs text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 font-semibold">
+                <Sparkles className="w-3.5 h-3.5 text-slate-700" />
+                <span>Affordable VA &amp; Automation Booking</span>
               </div>
               <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                Book a Free VA / Automation Consultation
+                Claim Your Affordable Service Package
               </h3>
               <p className="text-xs sm:text-sm text-slate-600">
-                Tell us about your Virtual Assistant, AI workflow automation, or web development needs.
+                Lock in our starter rates — no hidden agency markups, zero long-term lock-in contracts.
               </p>
             </div>
 
             {validationError && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs flex items-center space-x-2">
-                <AlertTriangle className="w-4 h-4 shrink-0 text-red-600" />
+              <div className="p-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-900 text-xs flex items-center space-x-2">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-slate-900" />
                 <span>{validationError}</span>
               </div>
             )}
@@ -146,7 +152,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
 
               <div>
                 <label className="text-slate-700 font-bold block pb-1.5 flex items-center space-x-1.5">
-                  <User className="w-3.5 h-3.5 text-blue-600" />
+                  <User className="w-3.5 h-3.5 text-slate-700" />
                   <span>Full Name:</span>
                 </label>
                 <input
@@ -158,67 +164,82 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                     setValidationError('');
                   }}
                   required
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-600"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
                 />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-slate-700 font-bold block pb-1.5 flex items-center space-x-1.5">
+                    <Mail className="w-3.5 h-3.5 text-slate-700" />
+                    <span>Email Address:</span>
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="name@company.com"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setValidationError('');
+                    }}
+                    required
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-700 font-bold block pb-1.5 flex items-center space-x-1.5">
+                    <span>WhatsApp / Telegram (Optional):</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="+1 / @username"
+                    value={contactInfo}
+                    onChange={(e) => setContactInfo(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
+                  />
+                </div>
               </div>
 
               <div>
                 <label className="text-slate-700 font-bold block pb-1.5 flex items-center space-x-1.5">
-                  <Mail className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Email Address:</span>
-                </label>
-                <input
-                  type="email"
-                  placeholder="name@company.com"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setValidationError('');
-                  }}
-                  required
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-600"
-                />
-              </div>
-
-              <div>
-                <label className="text-slate-700 font-bold block pb-1.5 flex items-center space-x-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Select Service Required:</span>
+                  <Calendar className="w-3.5 h-3.5 text-slate-700" />
+                  <span>Select Affordable Package:</span>
                 </label>
                 <select
                   value={service}
                   onChange={(e) => setService(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:border-blue-600"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:border-slate-900"
                 >
-                  <option value="Executive Virtual Assistance">Executive Virtual Assistance ($15/hr)</option>
-                  <option value="AI Workflow Automation Setup">AI Workflow Automation Setup ($750/setup)</option>
-                  <option value="Full-Stack Web Development">Full-Stack Web Development ($2,500/proj)</option>
-                  <option value="Mobile App Development">Mobile App Development ($799/proj)</option>
-                  <option value="Hostinger Web Hosting Setup">Hostinger Web Hosting Setup (Code: DPDCABINCEHM)</option>
-                  <option value="Graphic Design & Branding">Graphic Design &amp; Branding ($250/pack)</option>
+                  <option value="Starter Virtual Assistant Trial Pack ($5/hr or $49/wk)">Starter VA Trial Pack ($5/hr or $49/week)</option>
+                  <option value="Part-Time Dedicated Executive VA ($199/mo)">Part-Time Dedicated Executive VA ($199/month)</option>
+                  <option value="AI Automation Workflow Setup ($39/workflow)">AI Automation Workflow Setup ($39/workflow)</option>
+                  <option value="Modern Portfolio or Business Website ($99/site)">Modern Portfolio or Business Website ($99/website)</option>
+                  <option value="Short-Form Video & Canva Social Pack ($29/bundle)">Short-Form Video &amp; Canva Social Pack ($29/bundle)</option>
+                  <option value="Cross-Platform Mobile App MVP ($149/app)">Cross-Platform Mobile App MVP ($149/build)</option>
+                  <option value="Cloud Hosting & Domain Setup ($19)">Cloud Hosting &amp; Domain Setup ($19 one-time)</option>
                 </select>
               </div>
 
               <div>
                 <label className="text-slate-700 font-bold block pb-1.5 flex items-center space-x-1.5">
-                  <MessageSquare className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Project Details &amp; Requirements:</span>
+                  <MessageSquare className="w-3.5 h-3.5 text-slate-700" />
+                  <span>Task Details &amp; Goals:</span>
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Describe your tasks, hours needed, or automation goals..."
+                  placeholder="Describe the tasks, hours, or automation workflow you want us to handle..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-600"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center space-x-2 shadow-sm cursor-pointer"
+                className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center space-x-2 shadow-xs cursor-pointer"
               >
-                <span>Submit Inquiry</span>
+                <span>Submit Booking Request</span>
                 <Send className="w-4 h-4" />
               </button>
             </form>

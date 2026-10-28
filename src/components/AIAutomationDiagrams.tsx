@@ -67,7 +67,7 @@ const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         title: 'Webhook / Form Trigger',
         tool: 'Typeform / Webflow / FB Lead Ads',
         description: 'Fires instantly when a prospect submits their Name, Company URL, Budget, and Project Goals.',
-        color: 'border-blue-300 bg-blue-50 text-blue-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       },
       {
         step: '02',
@@ -75,7 +75,7 @@ const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         title: 'Website Scraper & Enrichment',
         tool: 'HTTP Fetch / Perplexity API',
         description: 'Fetches the prospect’s homepage text and LinkedIn summary so the AI has real context.',
-        color: 'border-indigo-300 bg-indigo-50 text-indigo-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       },
       {
         step: '03',
@@ -83,7 +83,7 @@ const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         title: 'LLM Qualification & Drafting',
         tool: 'GPT-4o / Claude 3.7 (JSON Mode)',
         description: 'Analyzes fit, assigns a Lead Score (0–100), identifies pain points, and drafts a personalized email.',
-        color: 'border-violet-300 bg-violet-50 text-violet-900'
+        color: 'border-slate-300 bg-slate-50 text-slate-900'
       },
       {
         step: '04',
@@ -91,7 +91,7 @@ const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         title: 'Conditional Filter / Router',
         tool: 'Make.com Router Node',
         description: 'Splits the flow: High-Value Leads (Score >= 75) go to VIP Fast-Track; others go to Nurture Sequence.',
-        color: 'border-amber-300 bg-amber-50 text-amber-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       },
       {
         step: '05',
@@ -99,7 +99,7 @@ const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         title: 'CRM Record + Gmail Draft + Slack',
         tool: 'Notion CRM + Gmail + Slack VIP',
         description: 'Creates the deal card in Notion/HubSpot, saves the custom email draft with Calendly link, and pings Slack.',
-        color: 'border-emerald-300 bg-emerald-50 text-emerald-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       }
     ],
     aiPromptSample: `SYSTEM PROMPT (Inside Make.com / n8n OpenAI Module):
@@ -138,7 +138,7 @@ Return ONLY valid JSON matching this schema:
         title: 'New Email Arrives in Inbox',
         tool: 'Gmail / Outlook Trigger',
         description: 'Monitors incoming customer or executive emails in real time (excluding newsletters/automated receipts).',
-        color: 'border-blue-300 bg-blue-50 text-blue-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       },
       {
         step: '02',
@@ -146,7 +146,7 @@ Return ONLY valid JSON matching this schema:
         title: 'AI Intent & Sentiment Classifier',
         tool: 'GPT-4o-mini Classifier',
         description: 'Categorizes email into: [1] Urgent Client Issue, [2] Pricing/Sales Inquiry, [3] Scheduling, or [4] Billing.',
-        color: 'border-violet-300 bg-violet-50 text-violet-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       },
       {
         step: '03',
@@ -154,7 +154,7 @@ Return ONLY valid JSON matching this schema:
         title: 'SOP & FAQ Retrieval (RAG)',
         tool: 'Notion Knowledge Base / Vector DB',
         description: 'Searches the company’s official FAQ and SOP documents for accurate policy, pricing, and links.',
-        color: 'border-indigo-300 bg-indigo-50 text-indigo-900'
+        color: 'border-slate-300 bg-slate-50 text-slate-900'
       },
       {
         step: '04',
@@ -162,7 +162,7 @@ Return ONLY valid JSON matching this schema:
         title: 'Context-Aware Reply Generator',
         tool: 'Claude 3.7 Sonnet',
         description: 'Writes a polite, accurate response grounded strictly in the retrieved company SOPs (zero hallucination).',
-        color: 'border-purple-300 bg-purple-50 text-purple-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       },
       {
         step: '05',
@@ -170,7 +170,7 @@ Return ONLY valid JSON matching this schema:
         title: 'Gmail Draft + Label Applied',
         tool: 'Gmail API + VA Review',
         description: 'Applies color-coded Gmail label (e.g., "AI-Draft-Ready") and saves the reply in Drafts for 1-click VA review.',
-        color: 'border-emerald-300 bg-emerald-50 text-emerald-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       }
     ],
     aiPromptSample: `SYSTEM PROMPT (RAG Grounded Email Assistant):
@@ -206,7 +206,7 @@ If the answer is not in the SOP Context, state that you are confirming with the 
         title: 'Content Topic or Product Photo',
         tool: 'Notion / Airtable Status = "Approved"',
         description: 'Triggered when a client drops a product image, blog link, or voice note into the content calendar.',
-        color: 'border-blue-300 bg-blue-50 text-blue-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       },
       {
         step: '02',
@@ -214,7 +214,7 @@ If the answer is not in the SOP Context, state that you are confirming with the 
         title: 'Multi-Format Script & Prompt Engine',
         tool: 'Claude 3.7 / GPT-4o',
         description: 'Generates TikTok/Reels hook script, LinkedIn carousel copy, AND 3D/Audio generation prompts.',
-        color: 'border-violet-300 bg-violet-50 text-violet-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       },
       {
         step: '03',
@@ -222,7 +222,7 @@ If the answer is not in the SOP Context, state that you are confirming with the 
         title: '3D Model Synthesis (Text/Image → 3D)',
         tool: 'Meshy AI 3D Generator',
         description: 'Converts product photos or text prompts into textured 3D models (.GLB/.FBX/.OBJ) for web & video renders.',
-        color: 'border-indigo-300 bg-indigo-50 text-indigo-900'
+        color: 'border-slate-300 bg-slate-50 text-slate-900'
       },
       {
         step: '04',
@@ -230,7 +230,7 @@ If the answer is not in the SOP Context, state that you are confirming with the 
         title: 'AI Voiceover & Royalty-Free Music',
         tool: 'ElevenLabs + Suno AI',
         description: 'Synthesizes natural studio narration and custom royalty-free background music tracks.',
-        color: 'border-amber-300 bg-amber-50 text-amber-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       },
       {
         step: '05',
@@ -238,7 +238,7 @@ If the answer is not in the SOP Context, state that you are confirming with the 
         title: 'Auto-Schedule & Client Approval Portal',
         tool: 'Buffer / Metricool / Google Drive',
         description: 'Uploads all generated assets into Google Drive and schedules approved posts across 5 social channels.',
-        color: 'border-emerald-300 bg-emerald-50 text-emerald-900'
+        color: 'border-slate-200 bg-white text-slate-900'
       }
     ],
     aiPromptSample: `MULTI-MODAL CREATIVE PROMPT GENERATOR:
@@ -272,7 +272,7 @@ const AI_CAPABILITIES_MATRIX = [
       'Converting messy meeting transcripts into structured action items & Notion tasks',
       'Extracting invoice totals, dates, and vendor names into Google Sheets'
     ],
-    badgeColor: 'bg-blue-50 text-blue-700 border-blue-200'
+    badgeColor: 'bg-slate-100 text-slate-800 border-slate-200'
   },
   {
     icon: Box,
@@ -287,7 +287,7 @@ const AI_CAPABILITIES_MATRIX = [
     ],
     partnerLink: MESHY_REFERRAL_URL,
     partnerLabel: 'AI 3D Model Generator: Create 3D from Text & Images | Meshy',
-    badgeColor: 'bg-violet-50 text-violet-700 border-violet-200'
+    badgeColor: 'bg-slate-100 text-slate-800 border-slate-200'
   },
   {
     icon: Music,
@@ -302,7 +302,7 @@ const AI_CAPABILITIES_MATRIX = [
     ],
     partnerLink: SUNO_REFERRAL_URL,
     partnerLabel: 'Explore Suno AI Music Studio (@chillvibemusics)',
-    badgeColor: 'bg-amber-50 text-amber-700 border-amber-200'
+    badgeColor: 'bg-slate-100 text-slate-800 border-slate-200'
   },
   {
     icon: Workflow,
@@ -315,7 +315,7 @@ const AI_CAPABILITIES_MATRIX = [
       'Automated invoice reminders, client onboarding folders, and Slack reporting',
       'Auto-publishing approved content across LinkedIn, Instagram, X, and YouTube'
     ],
-    badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200'
+    badgeColor: 'bg-slate-100 text-slate-800 border-slate-200'
   },
   {
     icon: Database,
@@ -328,7 +328,7 @@ const AI_CAPABILITIES_MATRIX = [
       'Deploying 24/7 customer support widgets trained on official product docs',
       'Instantly looking up contract clauses, refund policies, and SKU pricing'
     ],
-    badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200'
+    badgeColor: 'bg-slate-100 text-slate-800 border-slate-200'
   },
   {
     icon: Globe,
@@ -341,7 +341,7 @@ const AI_CAPABILITIES_MATRIX = [
       'E-commerce VAs generating SEO alt-text and product descriptions from catalog photos',
       'Auditing landing page screenshots for conversion rate optimization (CRO)'
     ],
-    badgeColor: 'bg-sky-50 text-sky-700 border-sky-200'
+    badgeColor: 'bg-slate-100 text-slate-800 border-slate-200'
   }
 ];
 
@@ -434,8 +434,8 @@ export const AIAutomationDiagrams: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 border-b border-slate-100 pb-6">
           <div className="space-y-2 max-w-3xl">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Workflow className="w-3.5 h-3.5 text-blue-600" />
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
+              <Workflow className="w-3.5 h-3.5 text-slate-800" />
               <span>Visual Architecture &bull; Real AI Automation Flow Diagrams</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -452,7 +452,7 @@ export const AIAutomationDiagrams: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold">
+            <span className="px-3 py-1.5 bg-slate-100 text-slate-800 border border-slate-200 rounded-xl text-xs font-bold">
               100% Free Interactive Blueprints
             </span>
           </div>
@@ -468,19 +468,19 @@ export const AIAutomationDiagrams: React.FC = () => {
                 onClick={() => setActiveBlueprintId(bp.id)}
                 className={`text-left p-4 rounded-2xl border transition-all flex flex-col justify-between gap-2 ${
                   isSelected
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                     : 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200'
                 }`}
               >
                 <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider">
-                  <span className={isSelected ? 'text-blue-100' : 'text-blue-600'}>
+                  <span className={isSelected ? 'text-slate-300' : 'text-slate-600'}>
                     Diagram 0{idx + 1}
                   </span>
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] ${
                       isSelected
                         ? 'bg-white/20 text-white'
-                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : 'bg-white text-slate-700 border border-slate-200'
                     }`}
                   >
                     Saves {bp.timeSaved}
@@ -496,7 +496,7 @@ export const AIAutomationDiagrams: React.FC = () => {
         <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 block">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-600 block">
                 {activeBlueprint.badge}
               </span>
               <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
@@ -507,10 +507,10 @@ export const AIAutomationDiagrams: React.FC = () => {
 
             <div className="flex flex-wrap items-center gap-2 text-xs">
               <span className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl font-semibold text-slate-700">
-                ⏱ Time Saved: <strong className="text-emerald-700">{activeBlueprint.timeSaved}</strong>
+                ⏱ Time Saved: <strong className="text-slate-900">{activeBlueprint.timeSaved}</strong>
               </span>
               <span className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl font-semibold text-slate-700">
-                💼 VA Market Value: <strong className="text-blue-700">{activeBlueprint.vaServiceValue}</strong>
+                💼 VA Market Value: <strong className="text-slate-900">{activeBlueprint.vaServiceValue}</strong>
               </span>
             </div>
           </div>
@@ -526,9 +526,9 @@ export const AIAutomationDiagrams: React.FC = () => {
               >
                 <defs>
                   <linearGradient id="pipeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#2563eb" />
-                    <stop offset="50%" stopColor="#7c3aed" />
-                    <stop offset="100%" stopColor="#059669" />
+                    <stop offset="0%" stopColor="#0f172a" />
+                    <stop offset="50%" stopColor="#475569" />
+                    <stop offset="100%" stopColor="#0f172a" />
                   </linearGradient>
                   <marker
                     id="arrowHead"
@@ -604,11 +604,11 @@ export const AIAutomationDiagrams: React.FC = () => {
                     width="154"
                     height="124"
                     rx="14"
-                    fill="#eff6ff"
-                    stroke="#93c5fd"
-                    strokeWidth="2"
+                    fill="#ffffff"
+                    stroke="#cbd5e1"
+                    strokeWidth="1.5"
                   />
-                  <rect x="12" y="12" width="68" height="20" rx="6" fill="#2563eb" />
+                  <rect x="12" y="12" width="68" height="20" rx="6" fill="#0f172a" />
                   <text x="46" y="26" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold">
                     01 TRIGGER
                   </text>
@@ -618,7 +618,7 @@ export const AIAutomationDiagrams: React.FC = () => {
                   <text x="12" y="74" fill="#475569" fontSize="10">
                     {activeBlueprint.nodes[0].tool.slice(0, 24)}
                   </text>
-                  <text x="12" y="104" fill="#1d4ed8" fontSize="10" fontWeight="600">
+                  <text x="12" y="104" fill="#334155" fontSize="10" fontWeight="600">
                     ⚡ Real-Time Webhook
                   </text>
                 </g>
@@ -629,11 +629,11 @@ export const AIAutomationDiagrams: React.FC = () => {
                     width="154"
                     height="124"
                     rx="14"
-                    fill="#eef2ff"
-                    stroke="#a5b4fc"
-                    strokeWidth="2"
+                    fill="#ffffff"
+                    stroke="#cbd5e1"
+                    strokeWidth="1.5"
                   />
-                  <rect x="12" y="12" width="76" height="20" rx="6" fill="#4f46e5" />
+                  <rect x="12" y="12" width="76" height="20" rx="6" fill="#334155" />
                   <text x="50" y="26" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold">
                     02 CONTEXT
                   </text>
@@ -643,7 +643,7 @@ export const AIAutomationDiagrams: React.FC = () => {
                   <text x="12" y="74" fill="#475569" fontSize="10">
                     {activeBlueprint.nodes[1].tool.slice(0, 24)}
                   </text>
-                  <text x="12" y="104" fill="#4338ca" fontSize="10" fontWeight="600">
+                  <text x="12" y="104" fill="#334155" fontSize="10" fontWeight="600">
                     🔍 Data &amp; SOP Lookup
                   </text>
                 </g>
@@ -654,11 +654,11 @@ export const AIAutomationDiagrams: React.FC = () => {
                     width="164"
                     height="140"
                     rx="16"
-                    fill="#f5f3ff"
-                    stroke="#8b5cf6"
-                    strokeWidth="2.5"
+                    fill="#f8fafc"
+                    stroke="#0f172a"
+                    strokeWidth="2"
                   />
-                  <rect x="12" y="12" width="96" height="22" rx="6" fill="#7c3aed" />
+                  <rect x="12" y="12" width="96" height="22" rx="6" fill="#0f172a" />
                   <text x="60" y="27" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold">
                     03 AI LLM BRAIN
                   </text>
@@ -668,8 +668,8 @@ export const AIAutomationDiagrams: React.FC = () => {
                   <text x="12" y="76" fill="#475569" fontSize="10">
                     {activeBlueprint.nodes[2].tool.slice(0, 25)}
                   </text>
-                  <rect x="12" y="92" width="140" height="32" rx="8" fill="#ede9fe" />
-                  <text x="82" y="112" textAnchor="middle" fill="#5b21b6" fontSize="10" fontWeight="bold">
+                  <rect x="12" y="92" width="140" height="32" rx="8" fill="#e2e8f0" />
+                  <text x="82" y="112" textAnchor="middle" fill="#0f172a" fontSize="10" fontWeight="bold">
                     🤖 Structured JSON Output
                   </text>
                 </g>
@@ -680,11 +680,11 @@ export const AIAutomationDiagrams: React.FC = () => {
                     width="154"
                     height="124"
                     rx="14"
-                    fill="#fffbeb"
-                    stroke="#fcd34d"
-                    strokeWidth="2"
+                    fill="#ffffff"
+                    stroke="#cbd5e1"
+                    strokeWidth="1.5"
                   />
-                  <rect x="12" y="12" width="76" height="20" rx="6" fill="#d97706" />
+                  <rect x="12" y="12" width="76" height="20" rx="6" fill="#334155" />
                   <text x="50" y="26" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold">
                     04 ROUTER
                   </text>
@@ -694,7 +694,7 @@ export const AIAutomationDiagrams: React.FC = () => {
                   <text x="12" y="74" fill="#475569" fontSize="10">
                     {activeBlueprint.nodes[3].tool.slice(0, 24)}
                   </text>
-                  <text x="12" y="104" fill="#b45309" fontSize="10" fontWeight="600">
+                  <text x="12" y="104" fill="#334155" fontSize="10" fontWeight="600">
                     🔀 If/Else Smart Logic
                   </text>
                 </g>
@@ -705,11 +705,11 @@ export const AIAutomationDiagrams: React.FC = () => {
                     width="154"
                     height="124"
                     rx="14"
-                    fill="#ecfdf5"
-                    stroke="#6ee7b7"
-                    strokeWidth="2"
+                    fill="#ffffff"
+                    stroke="#cbd5e1"
+                    strokeWidth="1.5"
                   />
-                  <rect x="12" y="12" width="76" height="20" rx="6" fill="#059669" />
+                  <rect x="12" y="12" width="76" height="20" rx="6" fill="#0f172a" />
                   <text x="50" y="26" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold">
                     05 ACTION
                   </text>
@@ -719,7 +719,7 @@ export const AIAutomationDiagrams: React.FC = () => {
                   <text x="12" y="74" fill="#475569" fontSize="10">
                     {activeBlueprint.nodes[4].tool.slice(0, 24)}
                   </text>
-                  <text x="12" y="104" fill="#047857" fontSize="10" fontWeight="600">
+                  <text x="12" y="104" fill="#0f172a" fontSize="10" fontWeight="600">
                     ✅ CRM + Email + Slack
                   </text>
                 </g>
@@ -752,18 +752,18 @@ export const AIAutomationDiagrams: React.FC = () => {
             {/* Left: System Prompt & JSON Output */}
             <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-violet-700 flex items-center gap-1.5">
-                  <Bot className="w-4 h-4 text-violet-600" />
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                  <Bot className="w-4 h-4 text-slate-800" />
                   <span>Inside Node 03: Real AI System Prompt &amp; JSON Output</span>
                 </span>
                 <button
                   onClick={() => handleCopy(activeBlueprint.aiPromptSample, `prompt-${activeBlueprint.id}`)}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200 transition-colors"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-slate-800 hover:text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 transition-colors"
                 >
                   {copiedId === `prompt-${activeBlueprint.id}` ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-700">Copied!</span>
+                      <Check className="w-3.5 h-3.5 text-slate-900" />
+                      <span className="text-slate-900">Copied!</span>
                     </>
                   ) : (
                     <>
@@ -774,15 +774,15 @@ export const AIAutomationDiagrams: React.FC = () => {
                 </button>
               </div>
 
-              <pre className="bg-slate-900 text-slate-100 p-3.5 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
+              <pre className="bg-slate-50 border border-slate-200 text-slate-800 p-3.5 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
                 {activeBlueprint.aiPromptSample}
               </pre>
 
               <div className="space-y-1.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 block">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700 block">
                   Structured JSON Returned to Make.com / n8n Router:
                 </span>
-                <pre className="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                <pre className="bg-slate-50 border border-slate-200 text-slate-800 p-3.5 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
                   {activeBlueprint.jsonOutputSample}
                 </pre>
               </div>
@@ -792,8 +792,8 @@ export const AIAutomationDiagrams: React.FC = () => {
             <div className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between space-y-4">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-blue-700 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-slate-800" />
                     <span>Step-by-Step Implementation Guide (Zero Coding Required)</span>
                   </span>
                 </div>
@@ -804,7 +804,7 @@ export const AIAutomationDiagrams: React.FC = () => {
                       key={i}
                       className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs sm:text-sm text-slate-700 leading-relaxed"
                     >
-                      <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="w-6 h-6 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                         {i + 1}
                       </span>
                       <span>{step}</span>
@@ -813,11 +813,11 @@ export const AIAutomationDiagrams: React.FC = () => {
                 </ol>
               </div>
 
-              <div className="p-4 rounded-xl bg-emerald-50/80 border border-emerald-200 space-y-2">
-                <div className="text-xs font-bold text-emerald-900 uppercase tracking-wide">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wide">
                   💡 Pro Tip for Aspiring Virtual Assistants &amp; Freelancers:
                 </div>
-                <p className="text-xs text-emerald-800 leading-relaxed">
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Build this exact workflow in a free Make.com or n8n account, record a 90-second Loom video walking through how the nodes connect, and attach that link to your Upwork / OnlineJobs.ph proposals. Clients hire VAs who show real working systems!
                 </p>
               </div>
@@ -832,8 +832,8 @@ export const AIAutomationDiagrams: React.FC = () => {
       <section className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-2 max-w-3xl">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-violet-50 text-violet-700 border border-violet-200 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Cpu className="w-3.5 h-3.5 text-violet-600" />
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
+              <Cpu className="w-3.5 h-3.5 text-slate-800" />
               <span>AI &amp; Its Capabilities &bull; Complete Educational Matrix</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -851,7 +851,7 @@ export const AIAutomationDiagrams: React.FC = () => {
             return (
               <div
                 key={idx}
-                className="bg-white border border-slate-200 hover:border-blue-300 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-5"
+                className="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl p-6 shadow-xs transition-all flex flex-col justify-between space-y-5"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
@@ -879,7 +879,7 @@ export const AIAutomationDiagrams: React.FC = () => {
                   <ul className="space-y-1.5">
                     {cap.vaUseCases.map((uc, uIdx) => (
                       <li key={uIdx} className="flex items-start gap-2 text-xs text-slate-700">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-slate-800 shrink-0 mt-0.5" />
                         <span>{uc}</span>
                       </li>
                     ))}
@@ -891,7 +891,7 @@ export const AIAutomationDiagrams: React.FC = () => {
                         href={cap.partnerLink}
                         target="_blank"
                         rel="sponsored noopener noreferrer"
-                        className="w-full py-2.5 px-3 bg-violet-600 hover:bg-violet-700 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-xs"
+                        className="w-full py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5"
                       >
                         <span>{cap.partnerLabel}</span>
                         <ExternalLink className="w-3.5 h-3.5 shrink-0" />
@@ -908,11 +908,11 @@ export const AIAutomationDiagrams: React.FC = () => {
       {/* =====================================================================
           SECTION 3: FREE COPY-PASTE VA & FREELANCER CAREER TOOLKIT
       ====================================================================== */}
-      <section className="bg-gradient-to-br from-emerald-50/70 via-white to-blue-50/60 border border-emerald-200 rounded-3xl p-6 sm:p-8 lg:p-10 space-y-8 shadow-sm">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 border-b border-emerald-200/60 pb-6">
+      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 lg:p-10 space-y-8 shadow-xs">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 border-b border-slate-100 pb-6">
           <div className="space-y-2 max-w-3xl">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full text-xs font-bold uppercase tracking-wider">
-              <GraduationCap className="w-4 h-4 text-emerald-700" />
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
+              <GraduationCap className="w-4 h-4 text-slate-800" />
               <span>100% Free Career Starter Toolkit &bull; Zero Cost Forever</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -928,10 +928,10 @@ export const AIAutomationDiagrams: React.FC = () => {
           {FREE_VA_TEMPLATES.map((tpl) => (
             <div
               key={tpl.id}
-              className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between space-y-4 shadow-xs"
+              className="bg-slate-50/70 border border-slate-200 rounded-2xl p-5 flex flex-col justify-between space-y-4"
             >
               <div className="space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-block">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700 bg-white border border-slate-200 px-2.5 py-0.5 rounded-full inline-block">
                   {tpl.role}
                 </span>
                 <h3 className="text-base font-extrabold text-slate-900 leading-snug">
@@ -940,17 +940,17 @@ export const AIAutomationDiagrams: React.FC = () => {
                 <p className="text-xs text-slate-500">{tpl.whenToUse}</p>
               </div>
 
-              <pre className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-xs text-slate-700 font-sans whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto">
+              <pre className="bg-white border border-slate-200 p-3.5 rounded-xl text-xs text-slate-700 font-sans whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto">
                 {tpl.content}
               </pre>
 
               <button
                 onClick={() => handleCopy(tpl.content, tpl.id)}
-                className="w-full py-2.5 bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-colors flex items-center justify-center gap-1.5"
               >
                 {copiedId === tpl.id ? (
                   <>
-                    <Check className="w-4 h-4 text-emerald-400" />
+                    <Check className="w-4 h-4 text-white" />
                     <span>Copied Template to Clipboard!</span>
                   </>
                 ) : (

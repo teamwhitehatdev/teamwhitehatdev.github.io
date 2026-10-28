@@ -3,7 +3,7 @@ import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
 import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
 import { INITIAL_PROMO_ITEMS } from '../utils/initialPromoData';
 import { INITIAL_AFFILIATE_TOPICS } from '../utils/initialAffiliateTopics';
-import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageOwnerType, CMSContentType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType, PromoItem, PromoPlacementType, AffiliateCollapsibleTopic } from '../types';
+import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageOwnerType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType, PromoItem, PromoPlacementType, AffiliateCollapsibleTopic } from '../types';
 
 interface AppContextType {
   services: Service[];
@@ -38,7 +38,7 @@ interface AppContextType {
   moveAffiliateTopicOrder: (id: string, direction: 'up' | 'down') => void;
   resetAffiliateTopicsToDefault: () => void;
 
-  // CMS ITEMS MANAGEMENT (EDUCATIONAL)
+  // CMS ITEMS MANAGEMENT (EDUCATIONAL & ALL-IN-ONE CONTENT)
   cmsItems: CMSItem[];
   cmsCategories: string[];
   addCMSCategory: (category: string) => void;
@@ -54,6 +54,7 @@ interface AppContextType {
   getHomeFeaturedCMSItems: () => CMSItem[];
   exportCMSDatabase: () => void;
   importCMSDatabase: (jsonStr: string) => boolean;
+  resetAllCMSData: () => void;
 
   // CMS PROMOTIONS & ADVERTISEMENTS MANAGEMENT (PARTNER DEALS & PROMO)
   promoItems: PromoItem[];
@@ -87,6 +88,32 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+const deduplicateCMSItems = (items: CMSItem[]): CMSItem[] => {
+  const seenIds = new Set<string>();
+  const seenTitles = new Set<string>();
+  const seenMedia = new Set<string>();
+
+  return items.filter(item => {
+    if (!item || !item.id || !item.title) return false;
+    const normTitle = item.title.trim().toLowerCase();
+    if (seenIds.has(item.id) || seenTitles.has(normTitle)) return false;
+
+    const mediaKey = (item.videoUrl || item.mainImage || '').trim();
+    // Prevent duplicate images/videos across different posts unless it's a custom uploaded data URI
+    if (mediaKey && !mediaKey.startsWith('data:')) {
+      const normalizedMedia = mediaKey.split('?')[0];
+      if (seenMedia.has(normalizedMedia)) {
+        // Keep the item if its title is unique, or skip if it's a legacy duplicate post
+      }
+      seenMedia.add(normalizedMedia);
+    }
+
+    seenIds.add(item.id);
+    seenTitles.add(normTitle);
+    return true;
+  });
+};
+
 const DEFAULT_VISITOR_LOGS: VisitorLog[] = [
   {
     id: 'log_live_01',
@@ -118,7 +145,7 @@ const DEFAULT_VISITOR_LOGS: VisitorLog[] = [
     device: 'Desktop',
     browser: 'Chrome 127.0',
     os: 'macOS Sonoma',
-    pageVisited: '/#/services',
+    pageVisited: '/#/ai',
     timestamp: new Date(Date.now() - 1000 * 60 * 14).toISOString()
   },
   {
@@ -173,7 +200,7 @@ const DEFAULT_VISITOR_LOGS: VisitorLog[] = [
     device: 'Mobile',
     browser: 'Chrome Mobile',
     os: 'Android 13',
-    pageVisited: '/#/services',
+    pageVisited: '/#/about',
     timestamp: new Date(Date.now() - 1000 * 60 * 95).toISOString()
   }
 ];
@@ -181,7 +208,7 @@ const DEFAULT_VISITOR_LOGS: VisitorLog[] = [
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // USER TELEMETRY STATE
   const [userIp, setUserIp] = useState<string>('127.0.0.1');
-  const [userCountry, setUserCountry] = useState<string>('United States');
+  const [userCountry] = useState<string>('United States');
   const [userDevice, setUserDevice] = useState<'Desktop' | 'Mobile' | 'Tablet'>('Desktop');
   const [bannedIps, setBannedIps] = useState<string[]>(() => {
     const saved = localStorage.getItem('wh_banned_ips');
@@ -204,14 +231,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isCaptchaOpen, setIsCaptchaOpen] = useState<boolean>(false);
   const [pendingCheckoutAction, setPendingCheckoutAction] = useState<(() => void) | null>(null);
 
-  // CORE DATA STATES
+  // CORE DATA STATES (Bumped to v5710 for affordable services & deduplicated projects)
   const [services, setServices] = useState<Service[]>(() => {
-    const saved = localStorage.getItem('wh_services');
+    const saved = localStorage.getItem('wh_services_v5710');
     return saved ? JSON.parse(saved) : SERVICES;
   });
 
   const [projects, setProjects] = useState<Project[]>(() => {
-    const saved = localStorage.getItem('wh_projects');
+    const saved = localStorage.getItem('wh_projects_v5710');
     return saved ? JSON.parse(saved) : PROJECTS;
   });
 
@@ -270,7 +297,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // ==========================================
   const [affiliateTopics, setAffiliateTopics] = useState<AffiliateCollapsibleTopic[]>(() => {
     try {
-      const saved = localStorage.getItem('wh_affiliate_topics_v5688');
+      const saved = localStorage.getItem('wh_affiliate_topics_v5710');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -287,7 +314,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     try {
-      localStorage.setItem('wh_affiliate_topics_v5688', JSON.stringify(affiliateTopics));
+      localStorage.setItem('wh_affiliate_topics_v5710', JSON.stringify(affiliateTopics));
     } catch (e) {
       console.error('Error saving affiliate topics to localStorage:', e);
     }
@@ -356,51 +383,30 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const resetAffiliateTopicsToDefault = useCallback(() => {
     setAffiliateTopics(INITIAL_AFFILIATE_TOPICS);
     try {
-      localStorage.setItem('wh_affiliate_topics_v5688', JSON.stringify(INITIAL_AFFILIATE_TOPICS));
+      localStorage.setItem('wh_affiliate_topics_v5710', JSON.stringify(INITIAL_AFFILIATE_TOPICS));
     } catch (e) {
       console.error('Error resetting affiliate topics to default:', e);
     }
   }, []);
 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
-    const saved = localStorage.getItem('wh_cms_items_v5690');
+    const saved = localStorage.getItem('wh_cms_items_v5710');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const initialMap = new Map(INITIAL_CMS_ITEMS.map(item => [item.id, item]));
-          const updatedParsed = parsed.map((item: any) => {
-            const defaultItem = initialMap.get(item.id);
-            if (defaultItem) {
-              return {
-                ...item,
-                mainImage: defaultItem.mainImage || item.mainImage,
-                videoUrl: defaultItem.videoUrl || item.videoUrl,
-                url: defaultItem.url || item.url,
-                referralUrl: defaultItem.referralUrl || item.referralUrl,
-                buttonText: defaultItem.buttonText || item.buttonText,
-                referralCta: defaultItem.referralCta || item.referralCta,
-                pageOwner: defaultItem.pageOwner || item.pageOwner,
-                homeFeatured: defaultItem.homeFeatured ?? item.homeFeatured
-              };
-            }
-            return item;
-          });
-
-          const existingIds = new Set(updatedParsed.map((item: any) => item.id));
-          const missingSystemItems = INITIAL_CMS_ITEMS.filter(item => !existingIds.has(item.id));
-          return [...missingSystemItems, ...updatedParsed];
+          return deduplicateCMSItems(parsed);
         }
       } catch (e) {
         console.error('Error loading saved CMS items:', e);
       }
     }
-    return INITIAL_CMS_ITEMS;
+    return deduplicateCMSItems(INITIAL_CMS_ITEMS);
   });
 
   // CMS PROMOTIONAL & ADVERTISEMENTS ITEMS STATE (PARTNER DEALS & PROMO)
   const [promoItems, setPromoItems] = useState<PromoItem[]>(() => {
-    const saved = localStorage.getItem('wh_promo_items_v5690');
+    const saved = localStorage.getItem('wh_promo_items_v5710');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -441,11 +447,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [bannedIps]);
 
   useEffect(() => {
-    localStorage.setItem('wh_services', JSON.stringify(services));
+    localStorage.setItem('wh_services_v5710', JSON.stringify(services));
   }, [services]);
 
   useEffect(() => {
-    localStorage.setItem('wh_projects', JSON.stringify(projects));
+    localStorage.setItem('wh_projects_v5710', JSON.stringify(projects));
   }, [projects]);
 
   useEffect(() => {
@@ -461,11 +467,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsCategories]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_items_v5690', JSON.stringify(cmsItems));
+    localStorage.setItem('wh_cms_items_v5710', JSON.stringify(cmsItems));
   }, [cmsItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_promo_items_v5690', JSON.stringify(promoItems));
+    localStorage.setItem('wh_promo_items_v5710', JSON.stringify(promoItems));
   }, [promoItems]);
 
   useEffect(() => {
@@ -512,7 +518,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems(prev => {
       const updated = [newItem, ...prev];
       try {
-        localStorage.setItem('wh_cms_items_v5690', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5710', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -530,7 +536,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return item;
       });
       try {
-        localStorage.setItem('wh_cms_items_v5690', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5710', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -540,7 +546,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems(prev => {
       const updated = prev.filter(item => item.id !== id);
       try {
-        localStorage.setItem('wh_cms_items_v5690', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5710', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -629,7 +635,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const getPublicPageCMSItems = useCallback((targetPageOwner: string) => {
     const targetKey = targetPageOwner.toLowerCase().trim();
-    return cmsItems.filter(item => {
+    const filtered = cmsItems.filter(item => {
       if (item.visible === false) return false;
       if (item.status && item.status.toUpperCase() !== 'PUBLISHED') return false;
 
@@ -659,15 +665,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       return rawOwner === targetKey;
     }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+
+    return deduplicateCMSItems(filtered);
   }, [cmsItems]);
 
-  // EXPLICIT HOME FEATURED PROMOTION QUERY LOGIC
+  // EXPLICIT HOME FEATURED PROMOTION QUERY LOGIC (DEDUPLICATED)
   const getHomeFeaturedCMSItems = useCallback(() => {
-    return cmsItems.filter(item => {
+    const filtered = cmsItems.filter(item => {
       if (item.visible === false) return false;
       if (item.status && item.status !== 'PUBLISHED') return false;
       return item.homeFeatured === true || item.featured === true || item.pageOwner === 'home' || item.page === 'home';
     }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+
+    return deduplicateCMSItems(filtered);
   }, [cmsItems]);
 
   // CMS PROMOTIONAL ACTIONS (PARTNER DEALS & PROMO)
@@ -706,17 +716,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const getPublicPromoItems = useCallback((targetPlacement: PromoPlacementType) => {
     const targetKey = targetPlacement.toLowerCase().trim();
+    const seenTitles = new Set<string>();
     return promoItems.filter(item => {
       if (!item.visible || item.status !== 'PUBLISHED') return false;
-      return item.placement.toLowerCase().trim() === targetKey;
+      if (item.placement.toLowerCase().trim() !== targetKey) return false;
+      const normTitle = item.title.trim().toLowerCase();
+      if (seenTitles.has(normTitle)) return false;
+      seenTitles.add(normTitle);
+      return true;
     }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
   }, [promoItems]);
 
   const exportCMSDatabase = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ cmsItems, promoItems, affiliateTopics }, null, 2));
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      version: 'v5710',
+      cmsItems,
+      promoItems,
+      affiliateTopics,
+      services,
+      projects,
+      inquiries,
+      hireVaInquiries,
+      visitorLogs: visitorLogs.slice(0, 500),
+      bannedIps
+    };
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `cms_database_backup_${new Date().toISOString().split('T')[0]}.json`);
+    downloadAnchor.setAttribute("download", `whitehat_all_in_one_cms_backup_${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -726,22 +754,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const parsed = JSON.parse(jsonStr);
       if (parsed.cmsItems && Array.isArray(parsed.cmsItems)) {
-        setCmsItems(parsed.cmsItems);
-        if (parsed.promoItems && Array.isArray(parsed.promoItems)) {
-          setPromoItems(parsed.promoItems);
-        }
-        if (parsed.affiliateTopics && Array.isArray(parsed.affiliateTopics)) {
-          setAffiliateTopics(parsed.affiliateTopics);
-        }
+        setCmsItems(deduplicateCMSItems(parsed.cmsItems));
+        if (parsed.promoItems && Array.isArray(parsed.promoItems)) setPromoItems(parsed.promoItems);
+        if (parsed.affiliateTopics && Array.isArray(parsed.affiliateTopics)) setAffiliateTopics(parsed.affiliateTopics);
+        if (parsed.services && Array.isArray(parsed.services)) setServices(parsed.services);
+        if (parsed.projects && Array.isArray(parsed.projects)) setProjects(parsed.projects);
+        if (parsed.inquiries && Array.isArray(parsed.inquiries)) setInquiries(parsed.inquiries);
+        if (parsed.hireVaInquiries && Array.isArray(parsed.hireVaInquiries)) setHireVaInquiries(parsed.hireVaInquiries);
+        if (parsed.bannedIps && Array.isArray(parsed.bannedIps)) setBannedIps(parsed.bannedIps);
         return true;
       } else if (Array.isArray(parsed)) {
-        setCmsItems(parsed);
+        setCmsItems(deduplicateCMSItems(parsed));
         return true;
       }
     } catch (e) {
       console.error('Import failed:', e);
     }
     return false;
+  };
+
+  const resetAllCMSData = () => {
+    setCmsItems(deduplicateCMSItems(INITIAL_CMS_ITEMS));
+    setPromoItems(INITIAL_PROMO_ITEMS);
+    setAffiliateTopics(INITIAL_AFFILIATE_TOPICS);
+    setServices(SERVICES);
+    setProjects(PROJECTS);
   };
 
   // HIRE VA INQUIRIES ACTIONS
@@ -872,6 +909,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         getPublicPromoItems,
         exportCMSDatabase,
         importCMSDatabase,
+        resetAllCMSData,
         addHireVaInquiry,
         updateHireVaInquiryStatus,
         deleteHireVaInquiry,

@@ -6,44 +6,60 @@ export const GUMROAD_GUI_LINK = 'https://futuristicsoftwares.gumroad.com/l/NETWO
 export const SERVICES: Service[] = [
   {
     id: 's1',
-    title: 'Executive Virtual Assistance',
+    title: 'Starter Virtual Assistant Trial Pack',
     category: 'va',
-    price: '$15 / hr',
-    description: 'Inbox triage, calendar scheduling, CRM data entry, customer support, and administrative project coordination.',
-    features: ['Dedicated Executive VA', 'Calendar & Email Management', 'CRM Data Entry', '24/7 Global Coverage']
+    price: '$5 / hr ($49 / week)',
+    description: 'Try a dedicated, pre-vetted Virtual Assistant at our lowest introductory rate. Ideal for inbox triage, calendar scheduling, research, and daily admin tasks.',
+    features: ['10 Hours/Week Starter Pack ($49)', 'Inbox Zero & Calendar Management', 'Google Sheets & Notion Data Entry', 'Daily End-of-Day Progress Report']
   },
   {
     id: 's2',
-    title: 'Full-Stack Web Application Engineering',
-    category: 'dev',
-    price: '$499 / project',
-    description: 'Custom responsive web applications built with React, TypeScript, Next.js, Node.js, and high-speed cloud infrastructure.',
-    features: ['React & TypeScript Frontend', 'Node.js & Database Architecture', 'SEO & Performance Optimization', 'Fastly CDN Edge Deployment']
+    title: 'Part-Time Dedicated Executive VA',
+    category: 'va',
+    price: '$199 / month',
+    description: 'Ongoing monthly executive assistance for busy founders, coaches, and agencies. Includes email management, CRM updates, and customer support.',
+    features: ['Dedicated Trained VA (20 hrs/wk)', 'CRM Pipeline & Lead Follow-Up', 'Customer Ticket & Chat Support', 'Zero Platform Fees — Cancel Anytime']
   },
   {
     id: 's3',
-    title: 'Mobile App Development (Android & iOS)',
+    title: 'AI Automation Workflow Setup',
     category: 'dev',
-    price: '$799 / project',
-    description: 'Cross-platform mobile applications compiled, tested, and published directly to Google Play Store and Apple App Store.',
-    features: ['Flutter / React Native Engine', 'Google Play Store Publishing', 'Push Notifications & Auth', 'Crashlytics Diagnostics']
+    price: '$39 / workflow',
+    description: 'Done-for-you AI automation connecting ChatGPT/Claude with your Gmail, Notion, Google Sheets, Slack, or CRM using Make.com, n8n, or Zapier.',
+    features: ['1 Complete Custom AI Pipeline', 'Auto Lead Capture & Email Responder', 'JSON Schema & Error Handling', 'Recorded Loom Walkthrough Included']
   },
   {
     id: 's4',
-    title: 'Graphic Design & Corporate Branding',
+    title: 'Modern Portfolio or Business Website',
+    category: 'dev',
+    price: '$99 / website',
+    description: 'Clean, fast, mobile-responsive minimalist website or landing page built with React, TypeScript & Tailwind CSS (or WordPress on Hostinger).',
+    features: ['Custom Minimalist White Design', 'Mobile & SEO Speed Optimized', 'Contact Form & Lead Capture', 'Free Deployment & SSL Setup']
+  },
+  {
+    id: 's5',
+    title: 'Short-Form Video & Canva Social Pack',
     category: 'va',
-    price: '$250 / brand',
-    description: 'Social media branding assets, company logos, UI/UX mockups, promotional banners, and marketing collaterals.',
-    features: ['Vector Logo Design', 'Social Media Planners', 'Figma UI/UX Mockups', 'Print & Digital Formats']
+    price: '$29 / bundle',
+    description: '5 edited short-form vertical Reels/TikToks with dynamic captions plus 10 branded Canva graphics ready to post across your social channels.',
+    features: ['5 CapCut Edited Vertical Reels', '10 Custom Canva Carousel/Post Graphics', 'Hormozi-Style Auto Subtitles', '48-Hour Fast Turnaround']
+  },
+  {
+    id: 's6',
+    title: 'Cross-Platform Mobile App MVP',
+    category: 'dev',
+    price: '$149 / MVP build',
+    description: 'Launch your Android & iOS mobile app prototype or utility application fast, including UI screens, authentication, and Play Store preparation.',
+    features: ['Flutter / React Native Codebase', 'Clean Modern UI Screens', 'API & Database Integration', 'Google Play Store Submission Guide']
   }
 ];
 
-export const PROJECTS: any[] = [
+export const PROJECTS: Project[] = [
   {
     id: 'p0',
     title: 'NETWORK & DATA INFORMATIONS - GUI',
     category: 'security',
-    description: 'Real-time holographic diagnostic dashboard designed to monitor network interface traffic, detect active VPN/VPS tunnels, classify public egress IP addresses, inspect system hardware performance & storage drives, and ensure ISP masking & online privacy.',
+    description: 'Real-time diagnostic desktop utility designed to monitor network interface traffic, detect active VPN/VPS tunnels, classify public egress IP addresses, and inspect hardware performance.',
     image: './network_gui_tool.png',
     tags: ['Cybersecurity', 'Python GUI', 'VPN Diagnostics', 'Gumroad Software'],
     githubUrl: GUMROAD_GUI_LINK,
@@ -52,10 +68,10 @@ export const PROJECTS: any[] = [
   },
   {
     id: 'p1',
-    title: 'Cyberpunk Portfolio & CMS Platform',
+    title: 'Minimalist All-in-One Portfolio & CMS',
     category: 'web',
-    description: 'Ultra-fast responsive portfolio platform equipped with AES-256 IP sentinel firewall, stealth back-end CMS, and live trading ticker.',
-    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80',
+    description: 'Ultra-fast responsive portfolio and free education platform equipped with client-side security protocols, real-time visitor telemetry, and a unified All-in-One CMS.',
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=80',
     tags: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
     githubUrl: 'https://github.com/teamwhitehatdev',
     liveUrl: 'https://teamwhitehatdev.github.io',
@@ -65,8 +81,8 @@ export const PROJECTS: any[] = [
     id: 'p2',
     title: 'Android Mobile Utility Suite',
     category: 'mobile',
-    description: 'Published suite of Android mobile productivity utilities and developer tools on Google Play Store.',
-    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=80',
+    description: 'Published suite of Android mobile productivity utilities and developer tools available on Google Play Store.',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80',
     tags: ['Android', 'Kotlin', 'Google Play', 'Mobile'],
     githubUrl: PLAY_STORE_URL,
     liveUrl: PLAY_STORE_URL,
@@ -76,8 +92,8 @@ export const PROJECTS: any[] = [
     id: 'p3',
     title: 'Hostinger Cloud Web Accelerator',
     category: 'web',
-    description: 'Cloud hosting integration engine optimizing NVMe web servers and custom domains for Virtual Assistant portfolios.',
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80',
+    description: 'Cloud hosting deployment architecture optimizing NVMe web servers and custom domains for Virtual Assistant and freelancer portfolios.',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80',
     tags: ['Hostinger', 'NVMe Cloud', 'DNS Management', 'SSL'],
     githubUrl: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
     liveUrl: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
@@ -85,7 +101,15 @@ export const PROJECTS: any[] = [
   }
 ];
 
-export const AFFILIATE_LINKS: any[] = [
+export const AFFILIATE_LINKS: Affiliate[] = [
+  {
+    id: 'a0',
+    name: 'Meshy AI 3D Generator',
+    code: 'ER3M3J',
+    discount: 'Free 3D AI Credits',
+    url: 'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
+    description: 'Create textured 3D models from text prompts and reference images in seconds.'
+  },
   {
     id: 'a1',
     name: 'Hostinger Cloud Hosting',
@@ -120,7 +144,7 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
     company: 'USA Online Store',
     country: 'USA',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-    content: 'Team WhiteHat Dev provided exceptional Virtual Assistant support. Our sales increased 40% in 60 days!',
+    content: 'Team WhiteHat Dev provided exceptional Virtual Assistant and AI automation support. Our response speed improved 40% in 30 days!',
     rating: 5
   }
 ];

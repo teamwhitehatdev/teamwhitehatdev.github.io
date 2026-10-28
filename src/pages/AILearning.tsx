@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
-import { HUDPanel } from '../components/HUDPanel';
 import {
-  Sparkles,
   BookOpen,
   Search,
-  ArrowRight,
   ExternalLink,
   Video,
   Box,
-  Workflow,
-  Cpu,
-  GraduationCap,
-  Music
+  Cpu
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { CMSItem } from '../types';
@@ -60,13 +54,13 @@ export const AILearning: React.FC = () => {
   });
 
   return (
-    <div className="space-y-12 max-w-7xl mx-auto pb-16">
-      {/* 🚀 HERO HEADER BANNER */}
-      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
+    <div className="space-y-12 max-w-7xl mx-auto pb-16 bg-white text-slate-900">
+      {/* 🚀 HERO HEADER BANNER (PURE MINIMALIST WHITE) */}
+      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xs space-y-6">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
           <div className="space-y-3 max-w-3xl">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Cpu className="w-4 h-4 text-blue-600" />
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
+              <Cpu className="w-4 h-4 text-slate-700" />
               <span>100% Free AI Academy • Capabilities • Real Automation Diagrams</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
@@ -78,13 +72,13 @@ export const AILearning: React.FC = () => {
           </div>
 
           {/* FEATURED MESHY AI 3D GENERATOR REFERRAL IN AI NAVIGATION TAB */}
-          <div className="bg-gradient-to-br from-violet-50 to-indigo-50 border-2 border-violet-200 rounded-2xl p-4 sm:p-5 max-w-sm w-full space-y-3 shadow-xs">
-            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-violet-700">
+          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 max-w-sm w-full space-y-3 shadow-xs">
+            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-700">
               <span className="flex items-center gap-1">
-                <Box className="w-3.5 h-3.5 text-violet-600" />
+                <Box className="w-3.5 h-3.5 text-slate-800" />
                 <span>Featured AI 3D Partner</span>
               </span>
-              <span className="px-2 py-0.5 bg-violet-600 text-white rounded-full">Free Credits</span>
+              <span className="px-2 py-0.5 bg-slate-900 text-white rounded-full">Free Credits</span>
             </div>
             <h2 className="text-sm font-extrabold text-slate-900 leading-snug">
               AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy
@@ -96,7 +90,7 @@ export const AILearning: React.FC = () => {
               href={MESHY_REFERRAL_URL}
               target="_blank"
               rel="sponsored noopener noreferrer"
-              className="w-full py-2.5 px-4 bg-violet-600 hover:bg-violet-700 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-xs"
+              className="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-xs"
             >
               <span>Try Meshy AI 3D Generator Free</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -114,12 +108,12 @@ export const AILearning: React.FC = () => {
                 placeholder="Search free tutorials: AI capabilities, automation diagrams, Meshy 3D, VA proposals..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-colors"
               />
             </div>
 
             <div className="text-xs font-semibold text-slate-500 shrink-0">
-              Showing <strong className="text-slate-900">{filteredArticles.length}</strong> Free Guides
+              Showing <strong className="text-slate-900">{filteredArticles.length}</strong> Unique Free Guides
             </div>
           </div>
 
@@ -129,9 +123,9 @@ export const AILearning: React.FC = () => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-xl font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded-xl font-semibold transition-all cursor-pointer ${
                   selectedCategory === cat
-                    ? 'bg-blue-600 text-white shadow-xs'
+                    ? 'bg-slate-900 text-white shadow-xs'
                     : 'bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
                 }`}
               >
@@ -162,32 +156,32 @@ export const AILearning: React.FC = () => {
           {filteredArticles.map((article) => (
             <div
               key={article.id}
-              className="bg-white border border-slate-200 hover:border-blue-300 rounded-2xl overflow-hidden flex flex-col justify-between transition-all group shadow-xs hover:shadow-md"
+              className="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl overflow-hidden flex flex-col justify-between transition-all group shadow-xs"
             >
               {/* CARD COVER IMAGE */}
-              <div className="h-48 w-full relative overflow-hidden bg-slate-100 border-b border-slate-100">
+              <div className="h-48 w-full relative overflow-hidden bg-slate-50 border-b border-slate-100">
                 <img
                   src={
                     article.mainImage ||
-                    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80'
+                    'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop&q=80'
                   }
                   alt={article.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src =
-                      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80';
+                      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop&q=80';
                   }}
                 />
-                <span className="absolute top-3 left-3 px-2.5 py-1 bg-white/95 backdrop-blur-xs text-blue-700 text-[10px] font-bold rounded-full border border-blue-200 uppercase shadow-xs">
+                <span className="absolute top-3 left-3 px-2.5 py-1 bg-white/95 backdrop-blur-xs text-slate-800 text-[10px] font-bold rounded-full border border-slate-200 uppercase shadow-xs">
                   {article.category}
                 </span>
                 {article.badge && (
-                  <span className="absolute top-3 right-3 px-2.5 py-1 bg-emerald-600 text-white text-[10px] font-bold rounded-full uppercase shadow-xs">
+                  <span className="absolute top-3 right-3 px-2.5 py-1 bg-slate-900 text-white text-[10px] font-bold rounded-full uppercase shadow-xs">
                     {article.badge}
                   </span>
                 )}
                 {article.videoUrl && (
-                  <span className="absolute bottom-3 right-3 px-2.5 py-1 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center gap-1.5 shadow-xs">
+                  <span className="absolute bottom-3 right-3 px-2.5 py-1 bg-slate-900 text-white text-[10px] font-bold rounded-full flex items-center gap-1.5 shadow-xs">
                     <Video className="w-3.5 h-3.5" />
                     <span>Video Guide</span>
                   </span>
@@ -199,7 +193,7 @@ export const AILearning: React.FC = () => {
                 <div className="space-y-2">
                   <h3
                     onClick={() => setSelectedArticle(article)}
-                    className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 cursor-pointer"
+                    className="text-base sm:text-lg font-bold text-slate-900 group-hover:underline transition-colors line-clamp-2 cursor-pointer"
                   >
                     {article.title}
                   </h3>
@@ -211,7 +205,7 @@ export const AILearning: React.FC = () => {
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 mt-2 text-xs">
                   <button
                     onClick={() => setSelectedArticle(article)}
-                    className="px-3.5 py-2 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 font-semibold rounded-xl transition-all flex items-center gap-1.5"
+                    className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
                   >
                     <BookOpen className="w-3.5 h-3.5" />
                     <span>Read Free Tutorial</span>

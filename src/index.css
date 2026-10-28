@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --primary-color: #2563eb;
-  --secondary-color: #059669;
-  --accent-color: #7c3aed;
-  --bg-color: #f8fafc;
+  --primary-color: #0f172a;
+  --secondary-color: #334155;
+  --accent-color: #475569;
+  --bg-color: #ffffff;
   --panel-bg: #ffffff;
-  --glow-color: rgba(37, 99, 235, 0.08);
-  --primary-cyan: #2563eb;
-  --primary-lime: #059669;
-  --primary-purple: #7c3aed;
-  --cyber-black: #f8fafc;
+  --glow-color: rgba(15, 23, 42, 0.04);
+  --primary-cyan: #0f172a;
+  --primary-lime: #334155;
+  --primary-purple: #475569;
+  --cyber-black: #ffffff;
 }
 
 /* UNIVERSAL CROSS-DEVICE HARDWARE ACCELERATION & TOUCH SETTINGS */
@@ -27,6 +27,7 @@ html {
   -ms-text-size-adjust: 100%;
   font-size: 16px;
   color-scheme: light;
+  background-color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -36,7 +37,7 @@ html {
 }
 
 body {
-  background-color: #f8fafc;
+  background-color: #ffffff;
   color: #0f172a;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
@@ -55,15 +56,14 @@ body {
   letter-spacing: -0.015em;
 }
 
-/* PROFESSIONAL MINIMALIST LIGHT BACKGROUND GRADIENT */
+/* PURE WHITE MINIMALIST BACKGROUND */
 .cyber-bg-gradient {
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+  background: #ffffff;
 }
 
 /* ============================================================================
-   UNIVERSAL LIGHT-THEME HARMONIZATION FOR SECONDARY PAGES
-   Converts legacy dark card containers into clean minimalist white/slate cards
-   while preserving dark code blocks (<pre>) and vibrant CTA buttons.
+   UNIVERSAL PURE WHITE MINIMALIST THEME ENFORCEMENT
+   Replaces any remaining dark/black backgrounds with crisp white/slate-50
 ============================================================================ */
 div[class*="bg-black"]:not([class*="fixed"]),
 section[class*="bg-black"],
@@ -72,57 +72,26 @@ section[class*="bg-gray-9"],
 div[class*="bg-slate-9"]:not([class*="fixed"]),
 section[class*="bg-slate-9"],
 div[class*="bg-[#0"],
-section[class*="bg-[#0"] {
-  background-color: #ffffff !important;
+section[class*="bg-[#0"],
+pre[class*="bg-slate-9"],
+pre[class*="bg-black"] {
+  background-color: #f8fafc !important;
   background-image: none !important;
   color: #0f172a !important;
   border-color: #e2e8f0 !important;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+  box-shadow: none !important;
 }
 
-/* Harmonize nested dark inputs/selects/textareas on secondary pages */
+/* Harmonize nested inputs/selects/textareas */
 input[class*="bg-black"],
 select[class*="bg-black"],
 textarea[class*="bg-black"],
 input[class*="bg-slate-9"],
 select[class*="bg-slate-9"],
 textarea[class*="bg-slate-9"] {
-  background-color: #f8fafc !important;
+  background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #cbd5e1 !important;
-}
-
-/* Harmonize headings and paragraphs that used text-white / text-gray-300 on secondary pages */
-h1.text-white,
-h2.text-white,
-h3.text-white,
-h4.text-white,
-h5.text-white,
-p.text-white,
-p.text-gray-200,
-p.text-gray-300,
-p.text-gray-400,
-p.text-slate-200,
-p.text-slate-300,
-p.text-slate-400,
-li.text-gray-300,
-li.text-slate-300,
-td.text-gray-300,
-td.text-slate-300,
-span.text-gray-300,
-span.text-slate-300 {
-  color: #1e293b !important;
-}
-
-/* Readable high-contrast accent text in Light Mode */
-.text-cyan-300,
-.text-cyan-400 {
-  color: #2563eb !important;
-}
-
-.text-lime-300,
-.text-lime-400 {
-  color: #059669 !important;
 }
 
 /* SMOOTH TOUCH SCROLLING FOR IOS & ANDROID TABLETS */
@@ -132,38 +101,22 @@ span.text-slate-300 {
 
 /* ACCESSIBILITY FOCUS OUTLINE */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-  outline: 2px solid #2563eb !important;
+  outline: 2px solid #0f172a !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15) !important;
-}
-
-/* ANIMATED MARQUEE TEXT FOR ALL DEVICES */
-@keyframes marqueeSlow {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marqueeSlow {
-  display: inline-flex;
-  animation: marqueeSlow 35s linear infinite;
-}
-
-.animate-marqueeSlow:hover {
-  animation-play-state: paused;
 }
 
 p, span, li, button, input, select, textarea {
   letter-spacing: 0.005em;
 }
 
-/* Custom Clean Scrollbar for Light Mode */
+/* Custom Clean Scrollbar for White Mode */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f8fafc;
 }
 
 ::-webkit-scrollbar-thumb {

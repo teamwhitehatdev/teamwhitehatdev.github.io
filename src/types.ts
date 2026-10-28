@@ -13,20 +13,29 @@ export interface Project {
   category: 'web' | 'mobile' | 'security' | 'design';
   image: string;
   description: string;
-  techStack: string[];
-  metrics: string;
-  featured: boolean;
+  tags?: string[];
+  liveUrl?: string;
+  githubUrl?: string;
+  techStack?: string[];
+  metrics?: string;
+  featured?: boolean;
 }
 
 export interface Affiliate {
   id: string;
-  title: string;
-  category: string;
+  name?: string;
+  title?: string;
+  code?: string;
+  discount?: string;
+  url?: string;
+  category?: string;
   description: string;
-  referralUrl: string;
-  bannerImage: string;
-  badge: string;
-  discountText: string;
+  referralUrl?: string;
+  bannerImage?: string;
+  image?: string;
+  badge?: string;
+  discountText?: string;
+  commission?: string;
 }
 
 export interface Testimonial {

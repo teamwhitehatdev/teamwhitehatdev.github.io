@@ -12,24 +12,24 @@ export const DynamicAdsSidebar: React.FC = () => {
   return (
     <div className="space-y-5 select-none">
       {/* SECTION HEADER: PARTNER DEALS & ADS */}
-      <div className="flex items-center justify-between bg-white border border-slate-200 p-3.5 rounded-2xl shadow-xs">
+      <div className="flex items-center justify-between bg-white border border-slate-200 p-3.5 rounded-2xl">
         <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
-          <Sparkles className="w-4 h-4 text-blue-600" />
+          <Sparkles className="w-4 h-4 text-slate-700" />
           <span>Featured Tools &amp; Partner Deals</span>
         </span>
-        <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+        <span className="text-[10px] text-slate-700 font-semibold bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
           Verified ({partnerDeals.length})
         </span>
       </div>
 
       {/* PINNED MESHY AI 3D GENERATOR REFERRAL AD CARD */}
-      <div className="bg-gradient-to-br from-violet-50 via-white to-indigo-50 border-2 border-violet-200 hover:border-violet-400 rounded-2xl p-4 space-y-3 shadow-sm transition-all group">
+      <div className="bg-white border border-slate-300 hover:border-slate-900 rounded-2xl p-4 space-y-3 shadow-xs transition-all group">
         <div className="flex items-center justify-between text-[10px]">
-          <span className="text-violet-700 font-bold uppercase flex items-center gap-1">
-            <Box className="w-3.5 h-3.5 text-violet-600" />
+          <span className="text-slate-800 font-bold uppercase flex items-center gap-1">
+            <Box className="w-3.5 h-3.5 text-slate-900" />
             <span>FEATURED AI 3D REFERRAL</span>
           </span>
-          <span className="px-2 py-0.5 bg-violet-600 text-white font-semibold rounded-full text-[9px]">
+          <span className="px-2 py-0.5 bg-slate-900 text-white font-semibold rounded-full text-[9px]">
             FREE CREDITS
           </span>
         </div>
@@ -38,7 +38,7 @@ export const DynamicAdsSidebar: React.FC = () => {
           href={MESHY_URL}
           target="_blank"
           rel="sponsored noopener noreferrer"
-          className="block relative overflow-hidden rounded-xl border border-violet-200 group-hover:border-violet-400 transition-all max-h-44"
+          className="block relative overflow-hidden rounded-xl border border-slate-200 max-h-44"
         >
           <img
             src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=80"
@@ -48,7 +48,7 @@ export const DynamicAdsSidebar: React.FC = () => {
         </a>
 
         <div className="space-y-1">
-          <h4 className="text-sm font-bold text-slate-900 leading-snug group-hover:text-violet-700 transition-colors">
+          <h4 className="text-sm font-bold text-slate-900 leading-snug">
             AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy
           </h4>
           <p className="text-xs text-slate-600 leading-relaxed">
@@ -60,7 +60,7 @@ export const DynamicAdsSidebar: React.FC = () => {
           href={MESHY_URL}
           target="_blank"
           rel="sponsored noopener noreferrer"
-          className="w-full py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5 shadow-xs"
+          className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5"
         >
           <span>Try Meshy AI 3D Generator Free</span>
           <ExternalLink className="w-3.5 h-3.5" />
@@ -69,59 +69,61 @@ export const DynamicAdsSidebar: React.FC = () => {
 
       {/* CMS PROMOTIONAL CARDS */}
       <div className="space-y-4">
-        {partnerDeals.map((ad) => (
-          <div
-            key={ad.id}
-            className="bg-white border border-slate-200 hover:border-blue-300 rounded-2xl p-4 space-y-3 shadow-xs hover:shadow-md transition-all group"
-          >
-            {ad.imageUrl && (
+        {partnerDeals
+          .filter((ad) => ad.id !== 'deal-meshy-ai-3d-1')
+          .map((ad) => (
+            <div
+              key={ad.id}
+              className="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl p-4 space-y-3 shadow-xs transition-all group"
+            >
+              {ad.imageUrl && (
+                <a
+                  href={ad.destinationUrl}
+                  target={ad.openNewTab !== false ? '_blank' : '_self'}
+                  rel="sponsored noopener noreferrer"
+                  className="block relative overflow-hidden rounded-xl border border-slate-100 max-h-44"
+                >
+                  <img
+                    src={ad.imageUrl}
+                    alt={ad.title}
+                    className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  {ad.badge && (
+                    <span className="absolute top-2 right-2 px-2 py-0.5 bg-white/95 text-slate-900 text-[10px] font-bold rounded-full border border-slate-200">
+                      {ad.badge}
+                    </span>
+                  )}
+                </a>
+              )}
+
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-[10px]">
+                  <span className="text-slate-500 font-bold uppercase">{ad.promotionLabel || 'PARTNER DEAL'}</span>
+                  {ad.badge && !ad.imageUrl && (
+                    <span className="text-slate-800 font-semibold bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">
+                      {ad.badge}
+                    </span>
+                  )}
+                </div>
+                <h4 className="text-sm font-bold text-slate-900 leading-snug">
+                  {ad.title}
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                  {ad.description}
+                </p>
+              </div>
+
               <a
                 href={ad.destinationUrl}
                 target={ad.openNewTab !== false ? '_blank' : '_self'}
                 rel="sponsored noopener noreferrer"
-                className="block relative overflow-hidden rounded-xl border border-slate-100 max-h-44"
+                className="w-full py-2 bg-slate-100 hover:bg-slate-900 text-slate-900 hover:text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5 border border-slate-200"
               >
-                <img
-                  src={ad.imageUrl}
-                  alt={ad.title}
-                  className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                {ad.badge && (
-                  <span className="absolute top-2 right-2 px-2 py-0.5 bg-white/95 text-blue-700 text-[10px] font-bold rounded-full border border-blue-200 shadow-xs">
-                    {ad.badge}
-                  </span>
-                )}
+                <span>{ad.buttonText || 'Explore Partner Offer'}</span>
+                <ExternalLink className="w-3.5 h-3.5" />
               </a>
-            )}
-
-            <div className="space-y-1">
-              <div className="flex items-center justify-between text-[10px]">
-                <span className="text-blue-600 font-bold uppercase">{ad.promotionLabel || 'PARTNER DEAL'}</span>
-                {ad.badge && !ad.imageUrl && (
-                  <span className="text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                    {ad.badge}
-                  </span>
-                )}
-              </div>
-              <h4 className="text-sm font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
-                {ad.title}
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
-                {ad.description}
-              </p>
             </div>
-
-            <a
-              href={ad.destinationUrl}
-              target={ad.openNewTab !== false ? '_blank' : '_self'}
-              rel="sponsored noopener noreferrer"
-              className="w-full py-2 bg-slate-100 hover:bg-blue-600 text-slate-800 hover:text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5"
-            >
-              <span>{ad.buttonText || 'Explore Partner Offer'}</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

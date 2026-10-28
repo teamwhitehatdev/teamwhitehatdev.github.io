@@ -11,10 +11,10 @@ export const AtomeCardPanel: React.FC = () => {
       {/* COMPACT PANEL HEADER: FEATURED PROMOS & ADS */}
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
         <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
-          <Sparkles className="w-4 h-4 text-amber-500" />
+          <Sparkles className="w-4 h-4 text-slate-700" />
           <span>Featured Partner Ads</span>
         </span>
-        <span className="bg-amber-50 text-amber-800 text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-amber-200">
+        <span className="bg-slate-100 text-slate-800 text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-slate-200">
           Active ({promos.length})
         </span>
       </div>
@@ -29,7 +29,7 @@ export const AtomeCardPanel: React.FC = () => {
           promos.map((ad) => (
             <div
               key={ad.id}
-              className="bg-slate-50/70 border border-slate-200 hover:border-blue-300 rounded-2xl p-4 space-y-3 transition-all group"
+              className="bg-slate-50/70 border border-slate-200 hover:border-slate-400 rounded-2xl p-4 space-y-3 transition-all group"
             >
               {/* CLICKABLE PROMOTION IMAGE */}
               {ad.imageUrl && (
@@ -45,7 +45,7 @@ export const AtomeCardPanel: React.FC = () => {
                     className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   {ad.badge && (
-                    <span className="absolute top-2 right-2 px-2.5 py-0.5 bg-white/95 text-slate-900 text-[10px] font-bold rounded-full border border-slate-200 shadow-xs">
+                    <span className="absolute top-2 right-2 px-2.5 py-0.5 bg-white/95 text-slate-900 text-[10px] font-bold rounded-full border border-slate-200">
                       {ad.badge}
                     </span>
                   )}
@@ -55,15 +55,15 @@ export const AtomeCardPanel: React.FC = () => {
               {/* DETAILS */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-[10px]">
-                  <span className="text-blue-600 font-bold uppercase">{ad.promotionLabel || 'PARTNER REFERRAL'}</span>
+                  <span className="text-slate-500 font-bold uppercase">{ad.promotionLabel || 'PARTNER REFERRAL'}</span>
                   {ad.badge && !ad.imageUrl && (
-                    <span className="text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 font-semibold rounded-full">
+                    <span className="text-slate-800 bg-slate-100 border border-slate-200 px-2 py-0.5 font-semibold rounded-full">
                       {ad.badge}
                     </span>
                   )}
                 </div>
 
-                <h4 className="text-sm font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
+                <h4 className="text-sm font-bold text-slate-900 leading-snug">
                   {ad.title}
                 </h4>
 
@@ -77,7 +77,7 @@ export const AtomeCardPanel: React.FC = () => {
                 href={ad.destinationUrl}
                 target={ad.openNewTab !== false ? '_blank' : '_self'}
                 rel="sponsored noopener noreferrer"
-                className="w-full py-2.5 bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5 shadow-xs"
+                className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5"
               >
                 <span>{ad.buttonText || 'Open Partner Link'}</span>
                 <ExternalLink className="w-3.5 h-3.5" />

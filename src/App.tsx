@@ -70,7 +70,7 @@ export function AppContent() {
     <Router>
       <VisitorPageTracker />
       <ThemeEngine>
-        <div className="relative min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans pb-16">
+        <div className="relative min-h-screen bg-white text-slate-900 flex flex-col font-sans pb-16">
           <CyberBackground />
 
           <div className="relative z-10 flex flex-col min-h-screen">

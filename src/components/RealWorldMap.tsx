@@ -2,17 +2,16 @@ import React, { useState, useMemo } from 'react';
 import { WorldMap } from './maps/WorldMap';
 import { LocationMarker } from '../types/map';
 import { LiveVisitorSession, TelemetryEvent } from '../types';
-import { Globe, MapPin, Eye, Users, ChevronRight } from 'lucide-react';
+import { Globe } from 'lucide-react';
 
 export interface RealWorldMapProps {
-  isDark: boolean;
+  isDark?: boolean;
   sessions: LiveVisitorSession[];
   events: TelemetryEvent[];
   onSelectCountry?: (country: string) => void;
   selectedCountry?: string;
 }
 
-// REAL GEOGRAPHIC COORDINATE DICTIONARY FOR GEOLOCATED VISITOR EVENTS
 const KNOWN_GEO_COORDINATES: Record<string, { lat: number; lng: number; flag: string; defaultCity: string }> = {
   'philippines': { lat: 14.5995, lng: 120.9842, flag: '🇵🇭', defaultCity: 'Manila' },
   'united states': { lat: 37.0902, lng: -95.7129, flag: '🇺🇸', defaultCity: 'Washington D.C.' },
@@ -30,20 +29,16 @@ const KNOWN_GEO_COORDINATES: Record<string, { lat: number; lng: number; flag: st
 };
 
 export const RealWorldMap: React.FC<RealWorldMapProps> = ({
-  isDark,
   sessions,
   events,
-  onSelectCountry,
-  selectedCountry
+  onSelectCountry
 }) => {
-  const [selectedMarker, setSelectedMarker] = useState<LocationMarker | null>(null);
+  const [, setSelectedMarker] = useState<LocationMarker | null>(null);
 
-  // DERIVE REAL GEO LOCATIONS FROM ACTUAL INCOMING TELEMETRY LOGS & EVENTS
   const locationMarkers = useMemo<LocationMarker[]>(() => {
     const map: Record<string, { count: number; active: number; city: string; region: string; device: string; browser: string }> = {};
 
-    // 1. Aggregate from real events
-    events.forEach(e => {
+    events.forEach((e) => {
       const c = (e.country || 'Philippines').toLowerCase();
       if (!map[c]) {
         map[c] = {
@@ -58,8 +53,7 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
       map[c].count += 1;
     });
 
-    // 2. Aggregate active sessions
-    sessions.forEach(s => {
+    sessions.forEach((s) => {
       const c = (s.country || 'Philippines').toLowerCase();
       if (!map[c]) {
         map[c] = {
@@ -75,10 +69,14 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
       }
     });
 
-    // Transform into LocationMarkers with real coordinates
     const markers: LocationMarker[] = [];
     Object.entries(map).forEach(([cKey, data]) => {
-      const geo = KNOWN_GEO_COORDINATES[cKey] || { lat: 14.5995, lng: 120.9842, flag: '🌐', defaultCity: 'Locality' };
+      const geo = KNOWN_GEO_COORDINATES[cKey] || {
+        lat: 14.5995,
+        lng: 120.9842,
+        flag: '🌐',
+        defaultCity: 'Locality'
+      };
       const displayName = cKey.charAt(0).toUpperCase() + cKey.slice(1);
       markers.push({
         id: `loc_${cKey}`,
@@ -99,58 +97,55 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
     return markers.sort((a, b) => b.value - a.value);
   }, [events, sessions]);
 
-  // TOP COUNTRY AUDIENCE BREAKDOWN
   const topCountriesRanking = useMemo(() => {
-    const maxVal = Math.max(...locationMarkers.map(m => m.value), 1);
-    return locationMarkers.map(m => ({
-      country: m.name,
-      flag: m.flag || '🌐',
-      views: m.value,
-      pct: Math.round((m.value / maxVal) * 100)
-    })).slice(0, 6);
+    const maxVal = Math.max(...locationMarkers.map((m) => m.value), 1);
+    return locationMarkers
+      .map((m) => ({
+        country: m.name,
+        flag: m.flag || '🌐',
+        views: m.value,
+        pct: Math.round((m.value / maxVal) * 100)
+      }))
+      .slice(0, 6);
   }, [locationMarkers]);
 
   const totalActiveOnline = useMemo(() => {
-    return sessions.filter(s => s.isActive).length;
+    return sessions.filter((s) => s.isActive).length;
   }, [sessions]);
 
   return (
-    <div className="space-y-6 font-mono">
-      
+    <div className="space-y-6 text-slate-900">
       {/* MAP HEADER */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b pb-4 border-inherit">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400">
+          <div className="w-10 h-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-900">
             <Globe className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-              <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-widest">
-                REAL-WORLD GEOGRAPHIC MAPLIBRE ENGINE
+              <span className="w-2 h-2 rounded-full bg-slate-900"></span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                Geographic MapLibre Engine
               </span>
             </div>
-            <h3 className="text-xl font-black font-orbitron uppercase text-white">
-              🌎 GLOBAL TRAFFIC INTELLIGENCE MAP
+            <h3 className="text-lg font-extrabold text-slate-900">
+              Global Traffic Intelligence Map
             </h3>
           </div>
         </div>
 
-        {/* REAL ACTIVE COUNTER */}
-        <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-black/60 border border-cyan-500/40 text-xs">
-          <span className="text-slate-400 font-bold">REALTIME VISITORS:</span>
-          <span className="text-lime-400 font-black font-orbitron text-sm">{totalActiveOnline}</span>
-          <span className="text-[10px] text-emerald-400">● LIVE</span>
+        <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+          <span className="text-slate-500 font-bold">Realtime Visitors:</span>
+          <span className="text-slate-900 font-extrabold text-sm">{totalActiveOnline}</span>
+          <span className="text-[10px] text-slate-700 font-bold">● Live</span>
         </div>
       </div>
 
       {/* REAL MAP & SIDE STATS SPLIT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* MAP CANVAS CONTAINER (COL-SPAN-8) */}
-        <div className="lg:col-span-8 rounded-3xl overflow-hidden shadow-2xl relative">
+        <div className="lg:col-span-8 rounded-2xl overflow-hidden border border-slate-200 shadow-xs relative">
           <WorldMap
-            theme={isDark ? 'dark' : 'light'}
+            theme="light"
             mode="analytics"
             locations={locationMarkers}
             showControls={true}
@@ -161,23 +156,25 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
           />
         </div>
 
-        {/* COUNTRY RANKING LIST (COL-SPAN-4) */}
-        <div className="lg:col-span-4 p-5 rounded-3xl border shadow-2xl space-y-4 bg-slate-900/90 border-cyan-500/40 text-white">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        {/* COUNTRY RANKING LIST (PURE WHITE CARD) */}
+        <div className="lg:col-span-4 p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4 bg-white text-slate-900">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
-              <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest block">
-                AUDIENCE DISTRIBUTION
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                Audience Distribution
               </span>
-              <h4 className="text-base font-black font-orbitron uppercase text-white">
-                🏆 TOP VISITING COUNTRIES
+              <h4 className="text-sm font-extrabold text-slate-900">
+                Top Visiting Countries
               </h4>
             </div>
-            <span className="text-[10px] text-slate-400 font-bold">REAL HITS</span>
+            <span className="text-[10px] text-slate-500 font-bold">HITS</span>
           </div>
 
-          <div className="space-y-3.5 text-xs font-mono">
+          <div className="space-y-3.5 text-xs">
             {topCountriesRanking.length === 0 ? (
-              <span className="text-slate-500 text-center block py-4">No visitor events logged.</span>
+              <span className="text-slate-500 text-center block py-4">
+                No visitor events logged.
+              </span>
             ) : (
               topCountriesRanking.map((c) => (
                 <div
@@ -188,20 +185,19 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <span className="text-base">{c.flag}</span>
-                      <span className="font-bold text-white group-hover:text-cyan-400 transition-colors">
+                      <span className="font-bold text-slate-900 group-hover:underline">
                         {c.country}
                       </span>
                     </div>
                     <div className="flex items-center space-x-2 font-bold">
-                      <span className="text-cyan-300">{c.views}</span>
-                      <span className="text-slate-500 text-[10px]">({c.pct}%)</span>
+                      <span className="text-slate-900">{c.views}</span>
+                      <span className="text-slate-400 text-[10px]">({c.pct}%)</span>
                     </div>
                   </div>
 
-                  {/* HORIZONTAL PROGRESS BAR */}
-                  <div className="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-800">
+                  <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
                     <div
-                      className="bg-gradient-to-r from-cyan-400 to-indigo-500 h-full rounded-full transition-all duration-500"
+                      className="bg-slate-900 h-full rounded-full transition-all duration-500"
                       style={{ width: `${Math.max(c.pct, 6)}%` }}
                     ></div>
                   </div>
@@ -210,25 +206,22 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
             )}
           </div>
 
-          {/* REAL DEVICE RATIO */}
-          <div className="pt-3 border-t border-slate-800 grid grid-cols-3 gap-2 text-center text-[10px]">
-            <div className="p-2 rounded-xl bg-black/60 border border-slate-800">
-              <span className="text-slate-400 block">📱 MOBILE</span>
-              <span className="text-emerald-400 font-bold text-xs">74%</span>
+          <div className="pt-3 border-t border-slate-100 grid grid-cols-3 gap-2 text-center text-[10px]">
+            <div className="p-2 rounded-xl bg-slate-50 border border-slate-200">
+              <span className="text-slate-500 block">MOBILE</span>
+              <span className="text-slate-900 font-bold text-xs">74%</span>
             </div>
-            <div className="p-2 rounded-xl bg-black/60 border border-slate-800">
-              <span className="text-slate-400 block">💻 DESKTOP</span>
-              <span className="text-cyan-400 font-bold text-xs">24%</span>
+            <div className="p-2 rounded-xl bg-slate-50 border border-slate-200">
+              <span className="text-slate-500 block">DESKTOP</span>
+              <span className="text-slate-900 font-bold text-xs">24%</span>
             </div>
-            <div className="p-2 rounded-xl bg-black/60 border border-slate-800">
-              <span className="text-slate-400 block">📱 TABLET</span>
-              <span className="text-purple-400 font-bold text-xs">2%</span>
+            <div className="p-2 rounded-xl bg-slate-50 border border-slate-200">
+              <span className="text-slate-500 block">TABLET</span>
+              <span className="text-slate-900 font-bold text-xs">2%</span>
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
   );
 };
