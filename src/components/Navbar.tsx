@@ -26,8 +26,20 @@ export const Navbar: React.FC<NavbarProps> = () => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
 
+  // Helper to alternate hover accents between "apple green" and "indigo"
+  const getTabHoverTheme = (tab: { slug?: string }, index: number): 'apple-green' | 'indigo' => {
+    // Specifically assign or alternate cleanly
+    if (tab.slug === 'home' || tab.slug === 'affiliate-guide' || tab.slug === 'services' || tab.slug === 'about') {
+      return 'apple-green';
+    }
+    if (tab.slug === 'ai' || tab.slug === 'showcase' || tab.slug === 'web-hosting' || tab.slug === 'admin') {
+      return 'indigo';
+    }
+    return index % 2 === 0 ? 'apple-green' : 'indigo';
+  };
+
   return (
-    <nav className="bg-white/90 backdrop-blur-md border-b border-slate-200/90 text-slate-900 sticky top-0 z-50 transition-all">
+    <nav className="bg-white/95 backdrop-blur-md border-b border-slate-200/90 text-slate-900 sticky top-0 z-50 transition-all">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-2">
           {/* BRAND TITLE & SUBTITLE */}
@@ -36,29 +48,41 @@ export const Navbar: React.FC<NavbarProps> = () => {
               <img
                 src="./favicon.png"
                 alt="Team WhiteHat Dev"
-                className="w-9 h-9 rounded-xl border border-slate-200 object-cover group-hover:border-slate-900 transition-colors shadow-xs"
+                className="w-9 h-9 rounded-xl border border-slate-200 object-cover group-hover:border-emerald-500 transition-colors shadow-xs"
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-sm sm:text-lg text-slate-900 tracking-tight leading-none">
+              <span className="font-bold text-sm sm:text-lg text-slate-900 tracking-tight leading-none group-hover:text-emerald-700 transition-colors">
                 Team WhiteHat Dev
               </span>
               <span className="text-[10px] text-slate-500 font-medium tracking-wide leading-tight pt-0.5">
-                Free VA Academy • AI Automations • Portfolio
+                ThemeForest Marketplace • Free VA Academy • AI Automations
               </span>
             </div>
           </Link>
 
           {/* DESKTOP NAV LINKS */}
           <div className="hidden xl:flex items-center space-x-1 text-xs flex-wrap justify-end">
-            {visibleNavTabs.map((tab) =>
-              tab.isExternal ? (
+            {visibleNavTabs.map((tab, idx) => {
+              const theme = getTabHoverTheme(tab, idx);
+              const isTabActive = isActive(tab.path);
+              const isAppleGreen = theme === 'apple-green';
+
+              const activeStyle = isAppleGreen
+                ? 'bg-emerald-600 text-white font-semibold shadow-xs border border-emerald-600'
+                : 'bg-indigo-600 text-white font-semibold shadow-xs border border-indigo-600';
+
+              const inactiveStyle = isAppleGreen
+                ? 'text-slate-700 border border-transparent hover:text-emerald-800 hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-xs hover:shadow-emerald-500/20'
+                : 'text-slate-700 border border-transparent hover:text-indigo-800 hover:bg-indigo-50 hover:border-indigo-400 hover:shadow-xs hover:shadow-indigo-500/20';
+
+              return tab.isExternal ? (
                 <a
                   key={tab.id}
                   href={tab.path}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-2 rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all whitespace-nowrap inline-flex items-center gap-1"
+                  className={`px-3 py-2 rounded-xl font-semibold transition-all whitespace-nowrap inline-flex items-center gap-1.5 ${inactiveStyle}`}
                 >
                   <span>{tab.label}</span>
                   {tab.badge && (
@@ -72,17 +96,15 @@ export const Navbar: React.FC<NavbarProps> = () => {
                 <Link
                   key={tab.id}
                   to={tab.path}
-                  className={`px-3 py-2 rounded-lg font-medium transition-all whitespace-nowrap inline-flex items-center gap-1.5 ${
-                    isActive(tab.path)
-                      ? 'bg-slate-900 text-white font-semibold shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  className={`px-3 py-2 rounded-xl font-semibold transition-all whitespace-nowrap inline-flex items-center gap-1.5 ${
+                    isTabActive ? activeStyle : inactiveStyle
                   }`}
                 >
                   <span>{tab.label}</span>
                   {tab.badge && (
                     <span
                       className={`px-1.5 py-0.5 text-[9px] font-bold rounded ${
-                        isActive(tab.path)
+                        isTabActive
                           ? 'bg-white/20 text-white'
                           : 'bg-slate-100 text-slate-800 border border-slate-200'
                       }`}
@@ -91,16 +113,16 @@ export const Navbar: React.FC<NavbarProps> = () => {
                     </span>
                   )}
                 </Link>
-              )
-            )}
+              );
+            })}
 
-            {/* DIRECT MESHY AI 3D REFERRAL LINK IN NAVIGATION BAR */}
+            {/* DIRECT MESHY AI 3D REFERRAL LINK IN NAVIGATION BAR (APPLE GREEN ACCENT) */}
             <a
               href={MESHY_REFERRAL_URL}
               target="_blank"
               rel="sponsored noopener noreferrer"
               title="AI 3D Model Generator: Create 3D from Text & Images | Meshy"
-              className="px-3 py-2 bg-slate-100 hover:bg-slate-900 text-slate-900 hover:text-white border border-slate-300 rounded-lg font-semibold flex items-center space-x-1.5 transition-all whitespace-nowrap ml-1"
+              className="px-3 py-2 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 hover:border-emerald-600 rounded-xl font-bold flex items-center space-x-1.5 transition-all whitespace-nowrap ml-1 shadow-2xs hover:shadow-emerald-500/25"
             >
               <Box className="w-3.5 h-3.5" />
               <span>Meshy 3D AI</span>
@@ -114,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
               href={MESHY_REFERRAL_URL}
               target="_blank"
               rel="sponsored noopener noreferrer"
-              className="px-2.5 py-1.5 bg-slate-900 text-white rounded-lg font-semibold text-[11px] flex items-center space-x-1 shrink-0"
+              className="px-2.5 py-1.5 bg-emerald-600 text-white rounded-lg font-bold text-[11px] flex items-center space-x-1 shrink-0 shadow-xs"
             >
               <Box className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Meshy 3D</span>
@@ -122,7 +144,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-slate-700 hover:text-slate-900 rounded-lg border border-slate-200 bg-white flex items-center space-x-1 font-semibold text-xs active:scale-95 transition-transform"
+              className="p-2 text-slate-700 hover:text-emerald-700 rounded-lg border border-slate-200 bg-white flex items-center space-x-1 font-semibold text-xs active:scale-95 transition-transform"
               aria-label="Toggle Menu"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -131,16 +153,28 @@ export const Navbar: React.FC<NavbarProps> = () => {
           </div>
         </div>
 
-        {/* MOBILE & TABLET INTERACTIVE HORIZONTAL QUICK-TAB BAR (Smooth Touch Scrolling on All Mobile Screens) */}
+        {/* MOBILE & TABLET INTERACTIVE HORIZONTAL QUICK-TAB BAR (Alternating Apple Green & Indigo) */}
         <div className="xl:hidden flex items-center gap-1.5 overflow-x-auto no-scrollbar py-2 border-t border-slate-100">
-          {visibleNavTabs.map((tab) =>
-            tab.isExternal ? (
+          {visibleNavTabs.map((tab, idx) => {
+            const theme = getTabHoverTheme(tab, idx);
+            const isTabActive = isActive(tab.path);
+            const isAppleGreen = theme === 'apple-green';
+
+            const activeStyle = isAppleGreen
+              ? 'bg-emerald-600 text-white font-semibold shadow-xs border border-emerald-600'
+              : 'bg-indigo-600 text-white font-semibold shadow-xs border border-indigo-600';
+
+            const inactiveStyle = isAppleGreen
+              ? 'bg-slate-50 text-slate-700 border border-slate-200/80 hover:text-emerald-800 hover:bg-emerald-50 hover:border-emerald-400'
+              : 'bg-slate-50 text-slate-700 border border-slate-200/80 hover:text-indigo-800 hover:bg-indigo-50 hover:border-indigo-400';
+
+            return tab.isExternal ? (
               <a
                 key={tab.id}
                 href={tab.path}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap shrink-0 bg-slate-50 text-slate-700 border border-slate-200 inline-flex items-center gap-1"
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap shrink-0 inline-flex items-center gap-1 ${inactiveStyle}`}
               >
                 <span>{tab.label}</span>
                 <ExternalLink className="w-2.5 h-2.5 opacity-70" />
@@ -151,39 +185,49 @@ export const Navbar: React.FC<NavbarProps> = () => {
                 to={tab.path}
                 onClick={() => setIsOpen(false)}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap shrink-0 transition-all inline-flex items-center gap-1 ${
-                  isActive(tab.path)
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200/80'
+                  isTabActive ? activeStyle : inactiveStyle
                 }`}
               >
                 <span>{tab.label}</span>
                 {tab.badge && (
                   <span
                     className={`px-1 py-0.2 text-[9px] font-bold rounded ${
-                      isActive(tab.path) ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-800'
+                      isTabActive ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-800'
                     }`}
                   >
                     {tab.badge}
                   </span>
                 )}
               </Link>
-            )
-          )}
+            );
+          })}
         </div>
       </div>
 
       {/* MOBILE & TABLET EXPANDED DRAWER MENU */}
       {isOpen && (
-        <div className="xl:hidden bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 pt-3 pb-6 space-y-1.5 text-sm shadow-lg max-h-[80vh] overflow-y-auto">
-          {visibleNavTabs.map((tab) =>
-            tab.isExternal ? (
+        <div className="xl:hidden bg-white/98 backdrop-blur-md border-b border-slate-200 px-4 pt-3 pb-6 space-y-1.5 text-sm shadow-lg max-h-[80vh] overflow-y-auto">
+          {visibleNavTabs.map((tab, idx) => {
+            const theme = getTabHoverTheme(tab, idx);
+            const isTabActive = isActive(tab.path);
+            const isAppleGreen = theme === 'apple-green';
+
+            const activeStyle = isAppleGreen
+              ? 'bg-emerald-600 text-white font-semibold'
+              : 'bg-indigo-600 text-white font-semibold';
+
+            const hoverText = isAppleGreen
+              ? 'hover:text-emerald-700 hover:bg-emerald-50'
+              : 'hover:text-indigo-700 hover:bg-indigo-50';
+
+            return tab.isExternal ? (
               <a
                 key={tab.id}
                 href={tab.path}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}
-                className="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-between"
+                className={`block px-3.5 py-2.5 rounded-xl font-medium text-slate-700 ${hoverText} flex items-center justify-between`}
               >
                 <span>{tab.label}</span>
                 <ExternalLink className="w-4 h-4 opacity-70" />
@@ -194,24 +238,22 @@ export const Navbar: React.FC<NavbarProps> = () => {
                 to={tab.path}
                 onClick={() => setIsOpen(false)}
                 className={`block px-3.5 py-2.5 rounded-xl font-medium flex items-center justify-between ${
-                  isActive(tab.path)
-                    ? 'bg-slate-900 text-white font-semibold'
-                    : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                  isTabActive ? activeStyle : `text-slate-700 ${hoverText}`
                 }`}
               >
                 <span>{tab.label}</span>
                 {tab.badge && (
                   <span
                     className={`px-2 py-0.5 text-[10px] font-bold rounded-md ${
-                      isActive(tab.path) ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-800'
+                      isTabActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-800'
                     }`}
                   >
                     {tab.badge}
                   </span>
                 )}
               </Link>
-            )
-          )}
+            );
+          })}
 
           {/* MESHY AI REFERRAL IN MOBILE AI NAV MENU */}
           <a
@@ -219,7 +261,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             target="_blank"
             rel="sponsored noopener noreferrer"
             onClick={() => setIsOpen(false)}
-            className="block px-3.5 py-2.5 bg-slate-900 text-white rounded-xl font-semibold flex items-center justify-between mt-2"
+            className="block px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold flex items-center justify-between mt-2 shadow-xs"
           >
             <span className="flex items-center space-x-2">
               <Box className="w-4 h-4 shrink-0" />
@@ -233,7 +275,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setIsOpen(false)}
-            className="block px-3.5 py-2.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl font-medium flex items-center space-x-2"
+            className="block px-3.5 py-2.5 bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 rounded-xl font-medium flex items-center space-x-2"
           >
             <Smartphone className="w-4 h-4 text-slate-700 shrink-0" />
             <span className="text-xs sm:text-sm">Official Google Play Store Apps</span>
@@ -243,4 +285,5 @@ export const Navbar: React.FC<NavbarProps> = () => {
     </nav>
   );
 };
+
 export default Navbar;

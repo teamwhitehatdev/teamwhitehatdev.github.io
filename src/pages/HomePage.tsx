@@ -341,21 +341,32 @@ export const HomePage: React.FC<HomePageProps> = () => {
                   </p>
                 </div>
 
-                {/* CATEGORY FILTER BUTTONS */}
+                {/* CATEGORY FILTER BUTTONS (ALTERNATING APPLE GREEN & INDIGO HOVER) */}
                 <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 text-xs">
-                  {['ALL', 'MAKE MONEY', 'AI', 'VA', 'FREELANC', 'AUTOMATION', 'DEV'].map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                        selectedCategory === cat
-                          ? 'bg-slate-900 text-white shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-                      }`}
-                    >
-                      {cat === 'FREELANC' ? 'FREELANCE' : cat}
-                    </button>
-                  ))}
+                  {['ALL', 'MAKE MONEY', 'AI', 'VA', 'FREELANC', 'AUTOMATION', 'DEV'].map((cat, cIdx) => {
+                    const isSelected = selectedCategory === cat;
+                    const isAppleGreen = cIdx % 2 === 0;
+                    const hoverClass = isAppleGreen
+                      ? 'hover:text-emerald-800 hover:bg-emerald-50 hover:border-emerald-300'
+                      : 'hover:text-indigo-800 hover:bg-indigo-50 hover:border-indigo-300';
+                    const activeClass = isAppleGreen
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'bg-indigo-600 text-white shadow-xs';
+
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => setSelectedCategory(cat)}
+                        className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                          isSelected
+                            ? activeClass
+                            : `text-slate-600 ${hoverClass}`
+                        }`}
+                      >
+                        {cat === 'FREELANC' ? 'FREELANCE' : cat}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -369,8 +380,8 @@ export const HomePage: React.FC<HomePageProps> = () => {
                   return (
                     <div
                       key={item.id}
-                      className={`bg-white border border-slate-200 hover:border-slate-400 rounded-2xl overflow-hidden flex flex-col justify-between transition-all group shadow-xs ${
-                        isInlineExpanded ? 'sm:col-span-2 ring-1 ring-slate-900/10' : 'hover:-translate-y-0.5'
+                      className={`themeforest-card overflow-hidden flex flex-col justify-between transition-all group ${
+                        isInlineExpanded ? 'sm:col-span-2 ring-2 ring-emerald-500/20' : ''
                       }`}
                     >
                       {showImage && (

@@ -58,28 +58,33 @@ export const Footer: React.FC = () => {
               <span>Free Resources &amp; Pages</span>
             </h4>
             <ul className="space-y-2 text-xs">
-              {visibleNavTabs.map((tab) => (
-                <li key={tab.id}>
-                  {tab.isExternal ? (
-                    <a
-                      href={tab.path}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-slate-900 transition-colors inline-flex items-center gap-1"
-                    >
-                      <span>{tab.label}</span>
-                      <ExternalLink className="w-2.5 h-2.5 opacity-70" />
-                    </a>
-                  ) : (
-                    <Link
-                      to={tab.path}
-                      className="hover:text-slate-900 transition-colors font-medium text-slate-700"
-                    >
-                      {tab.label}
-                    </Link>
-                  )}
-                </li>
-              ))}
+              {visibleNavTabs.map((tab, idx) => {
+                const isAppleGreen = idx % 2 === 0;
+                const hoverColor = isAppleGreen ? 'hover:text-emerald-700' : 'hover:text-indigo-700';
+
+                return (
+                  <li key={tab.id}>
+                    {tab.isExternal ? (
+                      <a
+                        href={tab.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${hoverColor} transition-colors inline-flex items-center gap-1 text-slate-700 font-medium`}
+                      >
+                        <span>{tab.label}</span>
+                        <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+                      </a>
+                    ) : (
+                      <Link
+                        to={tab.path}
+                        className={`${hoverColor} transition-colors font-medium text-slate-700`}
+                      >
+                        {tab.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
               <li className="pt-1 border-t border-slate-100">
                 <Link
                   to="/privacy-policy"

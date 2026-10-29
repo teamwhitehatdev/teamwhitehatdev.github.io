@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   ShieldCheck,
   Sparkles,
@@ -11,7 +12,10 @@ import {
   PlayCircle,
   Search,
   Hash,
-  Layers
+  Layers,
+  Edit,
+  Star,
+  CheckCircle2
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
@@ -186,21 +190,32 @@ export const AffiliateGuide: React.FC = () => {
               </div>
             </div>
 
-            {/* HORIZONTAL SCROLLABLE CATEGORY & NUMBER PILLS (MOBILE-FRIENDLY) */}
+            {/* HORIZONTAL SCROLLABLE CATEGORY & NUMBER PILLS (ALTERNATING APPLE GREEN & INDIGO HOVER) */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 text-xs">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-xl font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                    selectedCategory === cat
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-white'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+              {categories.map((cat, cIdx) => {
+                const isSelected = selectedCategory === cat;
+                const isAppleGreen = cIdx % 2 === 0;
+                const hoverClass = isAppleGreen
+                  ? 'hover:text-emerald-800 hover:bg-emerald-50 hover:border-emerald-300'
+                  : 'hover:text-indigo-800 hover:bg-indigo-50 hover:border-indigo-300';
+                const activeClass = isAppleGreen
+                  ? 'bg-emerald-600 text-white shadow-xs border-emerald-600'
+                  : 'bg-indigo-600 text-white shadow-xs border-indigo-600';
+
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all cursor-pointer border ${
+                      isSelected
+                        ? activeClass
+                        : `bg-slate-100 border-slate-200 text-slate-700 ${hoverClass}`
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -214,21 +229,26 @@ export const AffiliateGuide: React.FC = () => {
               const showTopicImage = Boolean(topic.headerBannerImage && !topic.hideImage);
               const showTopicVideo = Boolean(topic.videoUrl && !topic.hideVideo);
               const displayIndex = String(topic.sortOrder || index + 1).padStart(2, '0');
+              const isAppleGreenCard = index % 2 === 0;
 
               return (
                 <div
                   key={topic.id}
                   id={topic.id}
-                  className="white-glass-card rounded-3xl overflow-hidden transition-all"
+                  className="themeforest-card overflow-hidden transition-all"
                 >
                   {/* ACCORDION HEADER BAR (NUMBERED + CATEGORY BADGE + COLLAPSIBLE) */}
-                  <button
+                  <div
                     onClick={() => togglePanel(topic.id)}
                     className="w-full p-5 sm:p-6 bg-slate-50/90 hover:bg-slate-100/90 border-b border-slate-200 text-slate-900 flex items-center justify-between gap-3 text-left transition-all select-none cursor-pointer"
                   >
                     <div className="flex items-start sm:items-center gap-3.5">
                       {/* Numbered Badge + Icon */}
-                      <div className="flex flex-col items-center justify-center w-12 h-12 rounded-2xl bg-slate-900 text-white shrink-0 shadow-xs">
+                      <div
+                        className={`flex flex-col items-center justify-center w-12 h-12 rounded-2xl text-white shrink-0 shadow-xs ${
+                          isAppleGreenCard ? 'bg-emerald-600' : 'bg-indigo-600'
+                        }`}
+                      >
                         <span className="text-[10px] font-mono font-bold opacity-80 leading-none">
                           #{displayIndex}
                         </span>
@@ -239,11 +259,22 @@ export const AffiliateGuide: React.FC = () => {
 
                       <div className="space-y-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] text-slate-800 uppercase tracking-wider font-extrabold">
+                          <span className="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] text-slate-800 uppercase tracking-wider font-extrabold shadow-2xs">
                             {topic.topicNumber || `NICHE #${displayIndex}`}
                           </span>
-                          <span className="px-2.5 py-0.5 rounded-full bg-slate-200/70 text-[10px] text-slate-700 uppercase tracking-wider font-bold">
-                            {topic.categoryBadge || 'NICHE GUIDE'}
+                          <span
+                            className={
+                              isAppleGreenCard
+                                ? 'themeforest-badge-green'
+                                : 'themeforest-badge-indigo'
+                            }
+                          >
+                            <CheckCircle2 className="w-3 h-3" />
+                            <span>{topic.categoryBadge || 'NICHE GUIDE'}</span>
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-[10px] text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                            <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
+                            <span>4.98 (Envato Verified)</span>
                           </span>
                         </div>
 
@@ -257,15 +288,27 @@ export const AffiliateGuide: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs shrink-0 shadow-2xs">
-                      <span className="hidden sm:inline">{isOpen ? 'Collapse' : 'Expand'}</span>
-                      {isOpen ? (
-                        <ChevronUp className="w-4 h-4" />
-                      ) : (
-                        <ChevronDown className="w-4 h-4" />
-                      )}
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Link
+                        to="/admin"
+                        onClick={(e) => e.stopPropagation()}
+                        className="hidden md:inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-bold text-slate-700 hover:text-emerald-700 bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-xl shadow-2xs transition-all cursor-pointer"
+                        title="Edit this Niche, Upload Images & Customize in Admin CMS"
+                      >
+                        <Edit className="w-3 h-3 text-emerald-600" />
+                        <span>Edit Niche</span>
+                      </Link>
+
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs shadow-2xs">
+                        <span className="hidden sm:inline">{isOpen ? 'Collapse' : 'Expand'}</span>
+                        {isOpen ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        )}
+                      </div>
                     </div>
-                  </button>
+                  </div>
 
                   {/* ACCORDION BODY */}
                   {isOpen && (
@@ -410,7 +453,7 @@ export const AffiliateGuide: React.FC = () => {
                                   return (
                                     <div
                                       key={subItem.id}
-                                      className="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl overflow-hidden shadow-2xs flex flex-col justify-between transition-all"
+                                      className="themeforest-card overflow-hidden flex flex-col justify-between transition-all group"
                                     >
                                       <div>
                                         {showSubVid && (
@@ -437,19 +480,28 @@ export const AffiliateGuide: React.FC = () => {
                                           </div>
                                         )}
                                         {showSubImg && (
-                                          <div className="overflow-hidden bg-slate-50 border-b border-slate-100">
+                                          <div className="overflow-hidden bg-slate-50 border-b border-slate-100 relative">
                                             <img
                                               src={subItem.imageUrl}
                                               alt={subItem.title}
-                                              className="w-full h-44 object-cover"
+                                              className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
                                             />
+                                            <div className="absolute top-2 right-2 bg-emerald-600/90 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shadow-xs">
+                                              Verified Asset
+                                            </div>
                                           </div>
                                         )}
                                         <div className="p-4 sm:p-5 space-y-2">
-                                          <span className="px-2.5 py-0.5 bg-slate-100 text-slate-700 font-bold text-[10px] rounded-full border border-slate-200 uppercase inline-block">
-                                            {subItem.tag || `${displayIndex}.${subIdx + 1}`}
-                                          </span>
-                                          <h5 className="font-bold text-slate-900 text-sm">
+                                          <div className="flex items-center justify-between gap-1 flex-wrap">
+                                            <span className="px-2.5 py-0.5 bg-slate-100 text-slate-800 font-extrabold text-[10px] rounded-full border border-slate-200 uppercase inline-block">
+                                              {subItem.tag || `${displayIndex}.${subIdx + 1}`}
+                                            </span>
+                                            <span className="inline-flex items-center gap-0.5 text-[10px] text-amber-600 font-bold">
+                                              <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
+                                              <span>5.0</span>
+                                            </span>
+                                          </div>
+                                          <h5 className="font-extrabold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors">
                                             {subItem.title}
                                           </h5>
                                           <p className="text-xs text-slate-600 leading-relaxed">
@@ -464,9 +516,10 @@ export const AffiliateGuide: React.FC = () => {
                                             href={subItem.ctaUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl text-center transition-all block"
+                                            className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl text-center transition-all block shadow-xs flex items-center justify-center gap-1.5"
                                           >
-                                            {subItem.ctaText || 'Learn More →'}
+                                            <span>{subItem.ctaText || 'Learn More →'}</span>
+                                            <ExternalLink className="w-3.5 h-3.5" />
                                           </a>
                                         </div>
                                       )}
