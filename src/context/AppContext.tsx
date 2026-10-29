@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
-import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
+import { INITIAL_CMS_ITEMS, DEFAULT_PLAY_STORE_CONFIG } from '../utils/initialCMSData';
 import { INITIAL_PROMO_ITEMS } from '../utils/initialPromoData';
 import { INITIAL_AFFILIATE_TOPICS } from '../utils/initialAffiliateTopics';
 import {
@@ -19,7 +19,8 @@ import {
   PromoPlacementType,
   AffiliateCollapsibleTopic,
   NavTabConfig,
-  AdSenseConfig
+  AdSenseConfig,
+  PlayStoreAppConfig
 } from '../types';
 
 interface AppContextType {
@@ -116,6 +117,11 @@ interface AppContextType {
   // GOOGLE ADSENSE & UNIVERSAL AD MONETIZATION CONFIG
   adSenseConfig: AdSenseConfig;
   updateAdSenseConfig: (updates: Partial<AdSenseConfig>) => void;
+
+  // GOOGLE PLAY STORE ANDROID APP WINDOWS FRAME POPUP CMS CONFIG
+  playStoreConfig: PlayStoreAppConfig;
+  updatePlayStoreConfig: (updates: Partial<PlayStoreAppConfig>) => void;
+  resetPlayStoreConfig: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -1250,6 +1256,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAdSenseConfig((prev) => ({ ...prev, ...updates }));
   };
 
+  // GOOGLE PLAY STORE ANDROID APP WINDOWS FRAME POPUP STATE
+  const [playStoreConfig, setPlayStoreConfig] = useState<PlayStoreAppConfig>(() => {
+    try {
+      const saved = localStorage.getItem('wh_playstore_config_v1');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      // ignore
+    }
+    return DEFAULT_PLAY_STORE_CONFIG;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('wh_playstore_config_v1', JSON.stringify(playStoreConfig));
+    } catch (e) {
+      // ignore
+    }
+  }, [playStoreConfig]);
+
+  const updatePlayStoreConfig = (updates: Partial<PlayStoreAppConfig>) => {
+    setPlayStoreConfig((prev) => ({
+      ...prev,
+      ...updates,
+      updatedAt: new Date().toISOString()
+    }));
+  };
+
+  const resetPlayStoreConfig = () => {
+    setPlayStoreConfig(DEFAULT_PLAY_STORE_CONFIG);
+  };
+
   const isUserBanned = bannedIps.includes(userIp);
 
   return (
@@ -1327,7 +1364,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         addInquiry,
         deleteInquiry,
         adSenseConfig,
-        updateAdSenseConfig
+        updateAdSenseConfig,
+        playStoreConfig,
+        updatePlayStoreConfig,
+        resetPlayStoreConfig
       }}
     >
       {children}

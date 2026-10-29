@@ -28,7 +28,13 @@ import {
   Briefcase,
   Database,
   RotateCcw,
-  Compass
+  Compass,
+  Smartphone,
+  Star,
+  Minus,
+  Square,
+  Maximize2,
+  CheckCircle2
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { TelemetryDashboard } from '../components/TelemetryDashboard';
@@ -49,7 +55,8 @@ import {
   TopicThemeColor,
   Service,
   Project,
-  NavTabConfig
+  NavTabConfig,
+  PlayStoreAppConfig
 } from '../types';
 
 export const Admin: React.FC = () => {
@@ -107,7 +114,10 @@ export const Admin: React.FC = () => {
     addBannedIp,
     removeBannedIp,
     adSenseConfig,
-    updateAdSenseConfig
+    updateAdSenseConfig,
+    playStoreConfig,
+    updatePlayStoreConfig,
+    resetPlayStoreConfig
   } = useApp();
 
   const [usernameInput, setUsernameInput] = useState('admin');
@@ -139,11 +149,93 @@ export const Admin: React.FC = () => {
     | 'services-mgr'
     | 'affiliate-topics'
     | 'promotions'
+    | 'playstore-popup'
     | 'hire-va'
     | 'inquiries'
     | 'analytics'
     | 'firewall'
   >('cms');
+
+  // GOOGLE PLAY STORE ANDROID APP WINDOWS POPUP CMS STATE
+  const [playStoreForm, setPlayStoreForm] = useState<PlayStoreAppConfig>(() => playStoreConfig);
+  const [newFeatureInput, setNewFeatureInput] = useState('');
+  const [playStorePreviewOpen, setPlayStorePreviewOpen] = useState(false);
+
+  useEffect(() => {
+    if (playStoreConfig) {
+      setPlayStoreForm(playStoreConfig);
+    }
+  }, [playStoreConfig]);
+
+  const handlePlayStoreBannerUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Banner image must be under 5MB');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setPlayStoreForm((prev) => ({
+          ...prev,
+          bannerImageUrl: reader.result as string,
+          hideBannerImage: false
+        }));
+        showToast('Banner image uploaded successfully!');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePlayStoreIconUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Icon image must be under 2MB');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setPlayStoreForm((prev) => ({
+          ...prev,
+          appIconUrl: reader.result as string,
+          hideAppIcon: false
+        }));
+        showToast('App icon uploaded successfully!');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleAddPlayStoreFeature = () => {
+    if (!newFeatureInput.trim()) return;
+    setPlayStoreForm((prev) => ({
+      ...prev,
+      featuresList: [...(prev.featuresList || []), newFeatureInput.trim()]
+    }));
+    setNewFeatureInput('');
+  };
+
+  const handleRemovePlayStoreFeature = (index: number) => {
+    setPlayStoreForm((prev) => ({
+      ...prev,
+      featuresList: (prev.featuresList || []).filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleSavePlayStoreConfig = () => {
+    updatePlayStoreConfig(playStoreForm);
+    showToast('Google Play Store Popup configuration saved!');
+  };
+
+  const handleResetPlayStoreConfig = () => {
+    if (window.confirm('Reset Google Play Store Popup to default settings?')) {
+      resetPlayStoreConfig();
+      showToast('Google Play Store Popup restored to default!');
+    }
+  };
 
   // NAVIGATION TAB MODAL STATE
   const [editingNavTab, setEditingNavTab] = useState<NavTabConfig | null>(null);
@@ -1338,6 +1430,18 @@ export const Admin: React.FC = () => {
         </button>
 
         <button
+          onClick={() => setActiveTab('playstore-popup')}
+          className={`px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition-all cursor-pointer ${
+            activeTab === 'playstore-popup'
+              ? 'bg-slate-900 text-white shadow-2xs'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+          }`}
+        >
+          <Smartphone className="w-4 h-4 text-emerald-500" />
+          <span>7. Google Play App Window ({playStoreConfig?.enabled ? 'Active' : 'Hidden'})</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('hire-va')}
           className={`px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'hire-va'
@@ -1346,7 +1450,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Inbox className="w-4 h-4" />
-          <span>7. Bookings ({(hireVaInquiries || []).length})</span>
+          <span>8. Bookings ({(hireVaInquiries || []).length})</span>
         </button>
 
         <button
@@ -1358,7 +1462,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Inbox className="w-4 h-4" />
-          <span>8. Inquiries ({(inquiries || []).length})</span>
+          <span>9. Inquiries ({(inquiries || []).length})</span>
         </button>
 
         <button
@@ -1370,7 +1474,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Activity className="w-4 h-4" />
-          <span>9. Telemetry</span>
+          <span>10. Telemetry</span>
         </button>
 
         <button
@@ -1382,7 +1486,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Shield className="w-4 h-4" />
-          <span>10. Security &amp; DB ({(bannedIps || []).length})</span>
+          <span>11. Security &amp; DB ({(bannedIps || []).length})</span>
         </button>
       </div>
 
@@ -2574,6 +2678,640 @@ export const Admin: React.FC = () => {
               ))}
             </div>
           </HUDPanel>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 7: GOOGLE PLAY STORE ANDROID APP WINDOWS POPUP CMS                   */}
+      {/* ========================================================================= */}
+      {activeTab === 'playstore-popup' && (
+        <div className="space-y-6">
+          <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xs">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <h2 className="text-lg font-extrabold text-slate-900">
+                  Google Play Store Android App — Windows Frame Popup CMS
+                </h2>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Control the popping-out Windows frame displayed in the bottom-right of your website.
+                Modify your app title, upload banners, customize ratings, change destination Play Store links, or hide/unhide with 1 click.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  setPlayStoreForm((prev) => ({ ...prev, enabled: !prev.enabled }))
+                }
+                className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                  playStoreForm.enabled
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
+                    : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
+                }`}
+              >
+                {playStoreForm.enabled ? (
+                  <>
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Popup Status: VISIBLE (Active)</span>
+                  </>
+                ) : (
+                  <>
+                    <EyeOff className="w-3.5 h-3.5" />
+                    <span>Popup Status: HIDDEN (Disabled)</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleResetPlayStoreConfig}
+                className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-semibold text-xs rounded-xl flex items-center gap-1 cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reset Defaults</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSavePlayStoreConfig}
+                className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl flex items-center gap-1.5 shadow-sm cursor-pointer"
+              >
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <span>Save All Changes</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* LEFT 7 COLS: COMPREHENSIVE FORM CONTROLS */}
+            <div className="lg:col-span-7 space-y-6">
+              {/* 1. GOOGLE PLAY STORE DESTINATION LINK */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-emerald-600" />
+                    <span>1. Google Play Store Destination Link</span>
+                  </h3>
+                  {playStoreForm.playStoreUrl && (
+                    <a
+                      href={playStoreForm.playStoreUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1"
+                    >
+                      <span>Test URL</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 block">
+                    Google Play Store URL (App details or Publisher URL):
+                  </label>
+                  <input
+                    type="url"
+                    value={playStoreForm.playStoreUrl}
+                    onChange={(e) =>
+                      setPlayStoreForm((prev) => ({ ...prev, playStoreUrl: e.target.value }))
+                    }
+                    placeholder="https://play.google.com/store/apps/details?id=your.package.name"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
+                  />
+                  <p className="text-[11px] text-slate-500">
+                    When visitors click the &quot;GET IT ON GOOGLE PLAY&quot; button, they will be taken directly to this Play Store destination.
+                  </p>
+                </div>
+              </div>
+
+              {/* 2. APP NAME, DEVELOPER & CATEGORY */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-xs">
+                <h3 className="text-sm font-bold text-slate-900">2. Application Identity &amp; Badges</h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1 sm:col-span-2">
+                    <label className="text-xs font-bold text-slate-700 block">Application Name / Title:</label>
+                    <input
+                      type="text"
+                      value={playStoreForm.appName}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({ ...prev, appName: e.target.value }))
+                      }
+                      placeholder="e.g. WhiteHat Cyber Security & Productivity Suite"
+                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">Developer / Publisher Name:</label>
+                    <input
+                      type="text"
+                      value={playStoreForm.developerName}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({ ...prev, developerName: e.target.value }))
+                      }
+                      placeholder="e.g. Team WhiteHat Dev"
+                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">Category / Genre Badge:</label>
+                    <input
+                      type="text"
+                      value={playStoreForm.categoryBadge}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({ ...prev, categoryBadge: e.target.value }))
+                      }
+                      placeholder="e.g. Tools & Productivity"
+                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">Banner Tagline Pill:</label>
+                    <input
+                      type="text"
+                      value={playStoreForm.tagline}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({ ...prev, tagline: e.target.value }))
+                      }
+                      placeholder="e.g. OFFICIAL ANDROID APP SHOWCASE"
+                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">Promotional Badge:</label>
+                    <input
+                      type="text"
+                      value={playStoreForm.badgeText}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({ ...prev, badgeText: e.target.value }))
+                      }
+                      placeholder="e.g. Editors' Choice"
+                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. BANNER IMAGE (UPLOAD / URL / HIDE / UNHIDE) */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <ImageIcon className="w-4 h-4 text-emerald-600" />
+                    <span>3. Banner Image Controls</span>
+                  </h3>
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(playStoreForm.hideBannerImage)}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({
+                          ...prev,
+                          hideBannerImage: e.target.checked
+                        }))
+                      }
+                      className="w-4 h-4 rounded text-emerald-600 cursor-pointer"
+                    />
+                    <span>Hide Banner Image</span>
+                  </label>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+                    <label className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl cursor-pointer flex items-center gap-1.5 shrink-0">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>Upload Banner File</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePlayStoreBannerUpload}
+                        className="hidden"
+                      />
+                    </label>
+
+                    <div className="flex-1 w-full flex items-center gap-2">
+                      <input
+                        type="url"
+                        value={playStoreForm.bannerImageUrl || ''}
+                        onChange={(e) =>
+                          setPlayStoreForm((prev) => ({
+                            ...prev,
+                            bannerImageUrl: e.target.value,
+                            hideBannerImage: false
+                          }))
+                        }
+                        placeholder="Or paste banner image URL (https://...)"
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                      />
+                      {playStoreForm.bannerImageUrl && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setPlayStoreForm((prev) => ({ ...prev, bannerImageUrl: '' }))
+                          }
+                          className="px-2.5 py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 rounded-xl border border-slate-200 text-xs cursor-pointer"
+                          title="Clear Banner"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {playStoreForm.bannerImageUrl && (
+                    <div className="relative rounded-xl overflow-hidden border border-slate-200 max-h-36 bg-slate-900">
+                      <img
+                        src={playStoreForm.bannerImageUrl}
+                        alt="Banner Preview"
+                        className="w-full h-32 object-cover"
+                      />
+                      {playStoreForm.hideBannerImage && (
+                        <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center text-white text-xs font-bold gap-1.5">
+                          <EyeOff className="w-4 h-4 text-amber-400" />
+                          <span>Banner Currently Hidden from Visitors</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 4. APP ICON (UPLOAD / URL / HIDE / UNHIDE) */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-emerald-600" />
+                    <span>4. Application Icon Controls</span>
+                  </h3>
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(playStoreForm.hideAppIcon)}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({
+                          ...prev,
+                          hideAppIcon: e.target.checked
+                        }))
+                      }
+                      className="w-4 h-4 rounded text-emerald-600 cursor-pointer"
+                    />
+                    <span>Hide Icon</span>
+                  </label>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 items-center">
+                  <label className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl cursor-pointer flex items-center gap-1.5 shrink-0">
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Upload Icon</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePlayStoreIconUpload}
+                      className="hidden"
+                    />
+                  </label>
+
+                  <input
+                    type="url"
+                    value={playStoreForm.appIconUrl || ''}
+                    onChange={(e) =>
+                      setPlayStoreForm((prev) => ({
+                        ...prev,
+                        appIconUrl: e.target.value,
+                        hideAppIcon: false
+                      }))
+                    }
+                    placeholder="Or paste App Icon URL (https://...)"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                  />
+
+                  {playStoreForm.appIconUrl && (
+                    <img
+                      src={playStoreForm.appIconUrl}
+                      alt="Icon Preview"
+                      className="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0"
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* 5. RATINGS & STATS */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-xs">
+                <h3 className="text-sm font-bold text-slate-900">5. Ratings, Reviews &amp; Downloads Stats</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">Star Rating (1.0 - 5.0):</label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="1.0"
+                      max="5.0"
+                      value={playStoreForm.rating}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({
+                          ...prev,
+                          rating: parseFloat(e.target.value) || 4.9
+                        }))
+                      }
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">Reviews Count Text:</label>
+                    <input
+                      type="text"
+                      value={playStoreForm.reviewsCount}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({ ...prev, reviewsCount: e.target.value }))
+                      }
+                      placeholder="e.g. 14.2K reviews"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">Downloads Count Text:</label>
+                    <input
+                      type="text"
+                      value={playStoreForm.downloadsCount}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({ ...prev, downloadsCount: e.target.value }))
+                      }
+                      placeholder="e.g. 50K+ Downloads"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 6. DESCRIPTION & FEATURE BULLETS */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-xs">
+                <h3 className="text-sm font-bold text-slate-900">6. App Description &amp; Highlights</h3>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 block">Description Text:</label>
+                  <textarea
+                    rows={3}
+                    value={playStoreForm.description}
+                    onChange={(e) =>
+                      setPlayStoreForm((prev) => ({ ...prev, description: e.target.value }))
+                    }
+                    placeholder="Describe your Android application features and why visitors should download it..."
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                  />
+                </div>
+
+                {/* Key feature bullet points */}
+                <div className="space-y-2 pt-2 border-t border-slate-100">
+                  <label className="text-xs font-bold text-slate-700 block">Key Feature Highlights:</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newFeatureInput}
+                      onChange={(e) => setNewFeatureInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddPlayStoreFeature();
+                        }
+                      }}
+                      placeholder="e.g. Military-Grade Network Diagnostics"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddPlayStoreFeature}
+                      className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shrink-0 cursor-pointer"
+                    >
+                      + Add
+                    </button>
+                  </div>
+
+                  <div className="space-y-1.5 pt-1">
+                    {(playStoreForm.featuresList || []).map((feat, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-800"
+                      >
+                        <span className="flex items-center gap-1.5">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>{feat}</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemovePlayStoreFeature(idx)}
+                          className="text-slate-400 hover:text-rose-600 cursor-pointer p-0.5"
+                          title="Remove feature"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* 7. WINDOWS FRAME BEHAVIOR & APPEARANCE */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-xs">
+                <h3 className="text-sm font-bold text-slate-900">7. Window Title, CTA &amp; Timing</h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">Windows Frame Title:</label>
+                    <input
+                      type="text"
+                      value={playStoreForm.windowTitle}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({ ...prev, windowTitle: e.target.value }))
+                      }
+                      placeholder="Google Play™ Store - Android App Showcase.exe"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono text-slate-900"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">CTA Button Label:</label>
+                    <input
+                      type="text"
+                      value={playStoreForm.ctaButtonText}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({ ...prev, ctaButtonText: e.target.value }))
+                      }
+                      placeholder="GET IT ON GOOGLE PLAY"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 block">Popup Delay (seconds):</label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={60}
+                      value={playStoreForm.popupDelaySeconds}
+                      onChange={(e) =>
+                        setPlayStoreForm((prev) => ({
+                          ...prev,
+                          popupDelaySeconds: parseInt(e.target.value) || 4
+                        }))
+                      }
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900"
+                    />
+                  </div>
+
+                  <div className="space-y-1 flex flex-col justify-end">
+                    <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer py-2">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(playStoreForm.reopenOnRefresh)}
+                        onChange={(e) =>
+                          setPlayStoreForm((prev) => ({
+                            ...prev,
+                            reopenOnRefresh: e.target.checked
+                          }))
+                        }
+                        className="w-4 h-4 rounded text-emerald-600 cursor-pointer"
+                      />
+                      <span>Pops out every time visitor refreshes page</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT 5 COLS: LIVE INTERACTIVE WINDOWS FRAME PREVIEW */}
+            <div className="lg:col-span-5 sticky top-24 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Live Windows Frame Preview:
+                </span>
+                <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">
+                  {playStoreForm.enabled ? '● Active' : '○ Hidden'}
+                </span>
+              </div>
+
+              {/* EXACT VISUAL PREVIEW OF WINDOWS MODAL */}
+              <div className="bg-white border-2 border-slate-700/80 rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                {/* Title Bar */}
+                <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white px-3.5 py-2 flex items-center justify-between border-b border-slate-800 select-none">
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <div className="w-4 h-4 shrink-0 rounded bg-emerald-500 flex items-center justify-center text-slate-950 font-black text-[10px]">
+                      ▶
+                    </div>
+                    <span className="font-mono text-xs font-bold text-slate-200 truncate">
+                      {playStoreForm.windowTitle || 'Google Play™ Store - Android App Showcase.exe'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center space-x-1 shrink-0 ml-2">
+                    <div className="w-5 h-5 rounded flex items-center justify-center text-slate-400 bg-slate-800/50 text-[10px]">_</div>
+                    <div className="w-5 h-5 rounded flex items-center justify-center text-slate-400 bg-slate-800/50 text-[10px]">□</div>
+                    <div className="w-5 h-5 rounded flex items-center justify-center text-slate-400 bg-rose-600 text-white text-[10px]">✕</div>
+                  </div>
+                </div>
+
+                {/* Preview Body */}
+                <div className="p-4 space-y-3.5 bg-slate-50/60 max-h-[520px] overflow-y-auto">
+                  {/* Banner */}
+                  {playStoreForm.bannerImageUrl && !playStoreForm.hideBannerImage && (
+                    <div className="relative rounded-xl overflow-hidden border border-slate-200 shadow-2xs group bg-slate-900 aspect-16/8">
+                      <img
+                        src={playStoreForm.bannerImageUrl}
+                        alt="Banner Preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-emerald-500/90 text-slate-950 font-mono font-bold text-[9px] uppercase">
+                        {playStoreForm.tagline || 'OFFICIAL ANDROID APP'}
+                      </div>
+                      {playStoreForm.badgeText && (
+                        <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-white text-slate-900 font-bold text-[9px] shadow-xs flex items-center gap-1">
+                          <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-500" />
+                          <span>{playStoreForm.badgeText}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* App info */}
+                  <div className="flex items-start space-x-3 bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
+                    {playStoreForm.appIconUrl && !playStoreForm.hideAppIcon ? (
+                      <img
+                        src={playStoreForm.appIconUrl}
+                        alt="App Icon"
+                        className="w-11 h-11 rounded-xl object-cover border border-slate-200 shrink-0"
+                      />
+                    ) : (
+                      <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-base shrink-0">
+                        ▶
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0 space-y-0.5">
+                      <h4 className="text-xs font-extrabold text-slate-900 leading-snug line-clamp-2">
+                        {playStoreForm.appName || 'Application Name'}
+                      </h4>
+                      <p className="text-[10px] font-medium text-emerald-700">
+                        {playStoreForm.developerName || 'Developer Name'}
+                      </p>
+                      <div className="flex items-center gap-1.5 pt-0.5 text-[10px] text-slate-600">
+                        <span className="flex items-center gap-0.5 font-bold text-amber-600">
+                          <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-500" />
+                          {playStoreForm.rating}
+                        </span>
+                        <span>•</span>
+                        <span>{playStoreForm.reviewsCount}</span>
+                        <span>•</span>
+                        <span>{playStoreForm.downloadsCount}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  {playStoreForm.description && (
+                    <p className="text-[11px] text-slate-700 leading-relaxed bg-white p-2.5 rounded-xl border border-slate-200">
+                      {playStoreForm.description}
+                    </p>
+                  )}
+
+                  {/* Features */}
+                  {playStoreForm.featuresList && playStoreForm.featuresList.length > 0 && (
+                    <div className="space-y-1 bg-white p-2.5 rounded-xl border border-slate-200 text-[11px] text-slate-700">
+                      {playStoreForm.featuresList.map((f, i) => (
+                        <div key={i} className="flex items-center gap-1.5">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                          <span>{f}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* CTA button */}
+                  <a
+                    href={playStoreForm.playStoreUrl || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase rounded-xl text-center shadow-md flex items-center justify-center gap-1.5 border border-slate-800"
+                  >
+                    <span>{playStoreForm.ctaButtonText || 'GET IT ON GOOGLE PLAY'}</span>
+                    <ExternalLink className="w-3 h-3 text-slate-400" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs text-emerald-900 space-y-1">
+                <p className="font-bold">⚡ Instant Live Sync:</p>
+                <p className="text-[11px] text-emerald-800 leading-relaxed">
+                  Click <strong>&quot;Save All Changes&quot;</strong> above to instantly push this configuration live across the site. Visitors will see this popup based on your configured delay seconds.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

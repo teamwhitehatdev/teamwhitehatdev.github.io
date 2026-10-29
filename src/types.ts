@@ -363,3 +363,32 @@ export interface AffiliateCollapsibleTopic {
   createdAt: string;
   updatedAt: string;
 }
+
+// ============================================================================
+// GOOGLE PLAY STORE ANDROID APP WINDOWS FRAME POPUP CMS CONFIG
+// ============================================================================
+export interface PlayStoreAppConfig {
+  id: string;
+  enabled: boolean;             // Master toggle: Show/Hide entire Windows Frame popup
+  windowTitle: string;          // Windows title bar text (e.g. "Google Play™ Store - Android App Showcase.exe")
+  appName: string;              // Application Title (e.g. "WhiteHat Cyber Security & Productivity Suite")
+  tagline: string;              // Subtitle/tagline (e.g. "OFFICIAL ANDROID APP SHOWCASE")
+  developerName: string;        // Developer/Publisher Name (e.g. "Team WhiteHat Dev")
+  categoryBadge: string;        // e.g. "Tools & Productivity"
+  rating: number;               // e.g. 4.9
+  reviewsCount: string;         // e.g. "14.2K reviews"
+  downloadsCount: string;       // e.g. "50K+ Downloads"
+  badgeText: string;            // e.g. "Editors' Choice"
+  description: string;          // Rich text / summary of application
+  playStoreUrl: string;         // Target Google Play Store link (app or publisher link)
+  ctaButtonText: string;        // e.g. "GET IT ON GOOGLE PLAY"
+  bannerImageUrl?: string;      // Banner image URL or Base64 uploaded image
+  hideBannerImage?: boolean;    // Toggle: Hide/Unhide banner image without deleting URL
+  appIconUrl?: string;          // App icon URL or Base64 uploaded icon
+  hideAppIcon?: boolean;        // Toggle: Hide/Unhide app icon
+  popupDelaySeconds: number;    // Seconds to wait before popping out on refresh
+  reopenOnRefresh: boolean;     // If true, pops out on every refresh; if false, remembers dismissal per session
+  featuresList: string[];       // Bullet highlights of app features
+  updatedAt: string;
+}
+

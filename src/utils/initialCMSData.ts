@@ -1,5 +1,5 @@
 import { COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS } from '../data/comprehensiveEducationalData';
-import { CMSItem } from '../types';
+import { CMSItem, PlayStoreAppConfig } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
   // =========================================================================
@@ -784,3 +784,37 @@ Successful affiliate content creators focus on solving real problems first. When
     updatedAt: '2026-10-29T00:00:00Z'
   }
 ];
+
+// ============================================================================
+// DEFAULT GOOGLE PLAY STORE ANDROID APP WINDOWS FRAME POPUP CONFIGURATION
+// (100% EDITABLE / HIDE / UNHIDE / UPLOAD BANNER IN /#/ADMIN)
+// ============================================================================
+export const DEFAULT_PLAY_STORE_CONFIG: PlayStoreAppConfig = {
+  id: 'playstore-default-app',
+  enabled: true,
+  windowTitle: 'Google Play™ Store - Android App Showcase.exe',
+  appName: 'WhiteHat Cyber Security & Productivity Suite',
+  tagline: 'OFFICIAL ANDROID APP SHOWCASE',
+  developerName: 'Team WhiteHat Dev',
+  categoryBadge: 'Tools & Productivity',
+  rating: 4.9,
+  reviewsCount: '14.2K reviews',
+  downloadsCount: '50K+ Downloads',
+  badgeText: "Editors' Choice",
+  description: 'Download the official WhiteHat Dev Android suite featuring mobile cybersecurity scanners, network packet diagnostics, automated VA workflow assistants, and offline career masterclasses.',
+  playStoreUrl: 'https://play.google.com/store/apps/dev?id=7374638355121114347',
+  ctaButtonText: 'GET IT ON GOOGLE PLAY',
+  bannerImageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop&q=80',
+  hideBannerImage: false,
+  appIconUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80',
+  hideAppIcon: false,
+  popupDelaySeconds: 4,
+  reopenOnRefresh: true,
+  featuresList: [
+    'Military-Grade Network & Packet Security Diagnostics',
+    'AI Virtual Assistant Automation Workflows Offline',
+    'Lightweight & Zero In-App Ads'
+  ],
+  updatedAt: '2026-10-29T00:00:00Z'
+};
+

@@ -157,108 +157,99 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
   const displayBadge = customPromo?.badge || tfItem.badge;
   const displayCategory = customPromo?.promotionLabel || tfItem.category;
 
+  const isSidebar = placement === 'sidebar';
+
   return (
-    <div
-      className={`themeforest-card overflow-hidden my-4 ${className}`}
-    >
+    <div className={`themeforest-card overflow-hidden my-4 ${className}`}>
       {/* TOP MARKETPLACE BAR */}
-      <div className="bg-slate-50/90 border-b border-slate-200/80 px-4 py-2 flex items-center justify-between text-[10px]">
-        <div className="flex items-center gap-1.5 font-bold text-slate-700 uppercase tracking-wider">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-          <span>ThemeForest Marketplace Partner • {displayCategory}</span>
+      <div className="bg-slate-50/90 border-b border-slate-200/80 px-4 py-2 flex flex-wrap items-center justify-between gap-1.5 text-[10px]">
+        <div className="flex items-center gap-1.5 font-bold text-slate-700 uppercase tracking-wider truncate">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <span className="truncate">ThemeForest Partner • {displayCategory}</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <span className="themeforest-badge-green">
-            <CheckCircle2 className="w-3 h-3" />
-            <span>Verified Theme / Item</span>
+            <CheckCircle2 className="w-3 h-3 shrink-0" />
+            <span>Verified</span>
           </span>
-          <span className="text-slate-400 font-bold uppercase text-[9px]">Google AdSense Ready</span>
+          <span className="text-slate-400 font-bold uppercase text-[9px] hidden sm:inline">AdSense Ready</span>
         </div>
       </div>
 
-      {/* THEMEFOREST HORIZONTAL MARKETPLACE BODY */}
-      <div className="p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6">
-        {/* PREVIEW THUMBNAIL WITH HOVER OVERLAY */}
-        <a
-          href={displayUrl}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
-          className="relative w-full md:w-56 h-36 md:h-32 rounded-xl overflow-hidden border border-slate-200 shrink-0 group bg-slate-100 block"
-        >
-          <img
-            src={displayImage}
-            alt={displayTitle}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
-          <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-slate-900/90 text-white text-[9px] font-extrabold uppercase tracking-wider">
-            {displayBadge}
-          </span>
-          <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-            <span className="px-3 py-1.5 rounded-lg bg-white text-slate-900 font-bold text-[11px] flex items-center gap-1 shadow-sm">
-              <Eye className="w-3.5 h-3.5" />
-              <span>Live Preview</span>
+      {/* DEDICATED VERTICAL SIDEBAR LAYOUT (FIXES ALL DISTORTION & OVERLAPPING) */}
+      {isSidebar ? (
+        <div className="p-4 space-y-3.5">
+          {/* FULL-WIDTH THUMBNAIL */}
+          <a
+            href={displayUrl}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-200 shrink-0 group bg-slate-100 block"
+          >
+            <img
+              src={displayImage}
+              alt={displayTitle}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+            <span className="absolute top-2 left-2 px-2.5 py-0.5 rounded bg-slate-900/90 text-white text-[9px] font-extrabold uppercase tracking-wider">
+              {displayBadge}
             </span>
-          </div>
-        </a>
+            <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+              <span className="px-3 py-1.5 rounded-lg bg-white text-slate-900 font-bold text-[11px] flex items-center gap-1 shadow-sm">
+                <Eye className="w-3.5 h-3.5" />
+                <span>Live Preview</span>
+              </span>
+            </div>
+          </a>
 
-        {/* MIDDLE ITEM METADATA (THEMEFOREST STYLE) */}
-        <div className="flex-1 space-y-2 min-w-0">
-          <div>
+          {/* ITEM DETAILS */}
+          <div className="space-y-2">
             <a
               href={displayUrl}
               target="_blank"
               rel="sponsored noopener noreferrer"
-              className="text-sm sm:text-base font-extrabold text-slate-900 hover:underline leading-snug block"
+              className="text-sm font-extrabold text-slate-900 hover:underline leading-snug block break-words"
             >
               {displayTitle}
             </a>
-            <p className="text-[11px] text-slate-500 font-medium mt-0.5">{tfItem.vendor}</p>
-          </div>
+            <p className="text-[11px] text-slate-500 font-medium">{tfItem.vendor}</p>
 
-          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-            {customPromo?.description ||
-              'Production-ready digital toolkit trusted by remote Virtual Assistants, full-stack developers, and digital agencies worldwide.'}
-          </p>
+            <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+              {customPromo?.description ||
+                'Production-ready digital toolkit trusted by remote Virtual Assistants, full-stack developers, and digital agencies worldwide.'}
+            </p>
 
-          <div className="flex flex-wrap items-center gap-2 pt-0.5">
-            {tfItem.features.map((feat, i) => (
-              <span
-                key={i}
-                className="text-[10px] font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md"
-              >
-                ✓ {feat}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* RIGHT PRICE, RATING & SPLIT ACTION BOX (THEMEFOREST MARKETPLACE COLUMN) */}
-        <div className="md:border-l border-slate-200 md:pl-6 flex flex-row md:flex-col items-center md:items-end justify-between gap-3 shrink-0 pt-3 md:pt-0 border-t md:border-t-0">
-          <div className="text-left md:text-right space-y-0.5">
-            <div className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
-              {tfItem.priceBadge}
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+              {tfItem.features.map((feat, i) => (
+                <span
+                  key={i}
+                  className="text-[10px] font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md"
+                >
+                  ✓ {feat}
+                </span>
+              ))}
             </div>
-            <div className="flex items-center md:justify-end gap-1 text-amber-500 text-xs font-bold">
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span className="text-slate-700 text-[11px] ml-0.5">
-                {tfItem.rating} ({tfItem.reviews})
-              </span>
+          </div>
+
+          {/* RATING & SALES ROW */}
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px]">
+            <div className="flex items-center gap-1 text-amber-500 font-bold">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 shrink-0" />
+              <span className="text-slate-800 font-bold">{tfItem.rating}</span>
+              <span className="text-slate-400 font-normal">({tfItem.reviews})</span>
             </div>
             <div className="text-[10px] text-slate-500 font-semibold">{tfItem.sales}</div>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* ACTION BUTTONS */}
+          <div className="flex items-center gap-2 pt-1">
             <a
               href={displayUrl}
               target="_blank"
               rel="sponsored noopener noreferrer"
               title="Live Preview"
-              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-colors"
+              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-colors shrink-0"
             >
               <Eye className="w-4 h-4" />
             </a>
@@ -266,15 +257,115 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
               href={displayUrl}
               target="_blank"
               rel="sponsored noopener noreferrer"
-              className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all whitespace-nowrap"
+              className="flex-1 py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5 shadow-2xs"
             >
-              <ShoppingCart className="w-3.5 h-3.5" />
-              <span>{customPromo?.buttonText || 'Get Offer →'}</span>
-              <ExternalLink className="w-3 h-3 opacity-80" />
+              <ShoppingCart className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">{customPromo?.buttonText || 'Get Offer →'}</span>
+              <ExternalLink className="w-3 h-3 shrink-0 opacity-80" />
             </a>
           </div>
         </div>
-      </div>
+      ) : (
+        /* WIDE HORIZONTAL RESPONSIVE LAYOUT (FOR HEADER, IN-ARTICLE, AND FOOTER) */
+        <div className="p-4 sm:p-5 flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 sm:gap-6">
+          {/* PREVIEW THUMBNAIL WITH HOVER OVERLAY */}
+          <a
+            href={displayUrl}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            className="relative w-full xl:w-56 h-40 xl:h-32 rounded-xl overflow-hidden border border-slate-200 shrink-0 group bg-slate-100 block"
+          >
+            <img
+              src={displayImage}
+              alt={displayTitle}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+            <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-slate-900/90 text-white text-[9px] font-extrabold uppercase tracking-wider">
+              {displayBadge}
+            </span>
+            <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+              <span className="px-3 py-1.5 rounded-lg bg-white text-slate-900 font-bold text-[11px] flex items-center gap-1 shadow-sm">
+                <Eye className="w-3.5 h-3.5" />
+                <span>Live Preview</span>
+              </span>
+            </div>
+          </a>
+
+          {/* MIDDLE ITEM METADATA (THEMEFOREST STYLE) */}
+          <div className="flex-1 space-y-2 min-w-0">
+            <div>
+              <a
+                href={displayUrl}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="text-sm sm:text-base font-extrabold text-slate-900 hover:underline leading-snug block break-words"
+              >
+                {displayTitle}
+              </a>
+              <p className="text-[11px] text-slate-500 font-medium mt-0.5">{tfItem.vendor}</p>
+            </div>
+
+            <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+              {customPromo?.description ||
+                'Production-ready digital toolkit trusted by remote Virtual Assistants, full-stack developers, and digital agencies worldwide.'}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-2 pt-0.5">
+              {tfItem.features.map((feat, i) => (
+                <span
+                  key={i}
+                  className="text-[10px] font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md"
+                >
+                  ✓ {feat}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT PRICE, RATING & SPLIT ACTION BOX (THEMEFOREST MARKETPLACE COLUMN) */}
+          <div className="w-full xl:w-auto xl:border-l border-slate-200 xl:pl-6 flex flex-row xl:flex-col items-center xl:items-end justify-between gap-3 shrink-0 pt-3 xl:pt-0 border-t xl:border-t-0">
+            <div className="text-left xl:text-right space-y-0.5">
+              <div className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
+                {tfItem.priceBadge}
+              </div>
+              <div className="flex items-center xl:justify-end gap-1 text-amber-500 text-xs font-bold">
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <span className="text-slate-700 text-[11px] ml-0.5">
+                  {tfItem.rating} ({tfItem.reviews})
+                </span>
+              </div>
+              <div className="text-[10px] text-slate-500 font-semibold">{tfItem.sales}</div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <a
+                href={displayUrl}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                title="Live Preview"
+                className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-colors"
+              >
+                <Eye className="w-4 h-4" />
+              </a>
+              <a
+                href={displayUrl}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all whitespace-nowrap"
+              >
+                <ShoppingCart className="w-3.5 h-3.5" />
+                <span>{customPromo?.buttonText || 'Get Offer →'}</span>
+                <ExternalLink className="w-3 h-3 opacity-80" />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
