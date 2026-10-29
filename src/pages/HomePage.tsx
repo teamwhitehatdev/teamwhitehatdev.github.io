@@ -4,7 +4,6 @@ import { TESTIMONIALS_DATA } from '../data/testimonialsData';
 import {
   Music,
   Star,
-  RefreshCw,
   BookOpen,
   Sparkles,
   ArrowRight,
@@ -18,6 +17,7 @@ import {
 } from 'lucide-react';
 import { AtomeCardPanel } from '../components/AtomeCardPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
+import { AdSenseSlot } from '../components/AdSenseSlot';
 import { useApp } from '../context/AppContext';
 import { ArticleModal } from '../components/ArticleModal';
 import { AIAutomationDiagrams } from '../components/AIAutomationDiagrams';
@@ -28,14 +28,28 @@ interface HomePageProps {
   onOpenConsultation?: (serviceTitle?: string) => void;
 }
 
-const MESHY_REFERRAL_URL =
-  'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends';
-
 export const HomePage: React.FC<HomePageProps> = () => {
-  const { getHomeFeaturedCMSItems } = useApp();
-  const [displayTestimonials, setDisplayTestimonials] = useState(TESTIMONIALS_DATA);
+  const { getHomeFeaturedCMSItems, cmsItems } = useApp();
+  const [displayTestimonials] = useState(() =>
+    [...TESTIMONIALS_DATA].sort(() => Math.random() - 0.5)
+  );
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [selectedArticle, setSelectedArticle] = useState<CMSItem | null>(null);
+  const [expandedArticleIds, setExpandedArticleIds] = useState<Record<string, boolean>>({});
+
+  const toggleArticleInline = (id: string) => {
+    setExpandedArticleIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  // Featured Home Divisions (Suno AI & Meshy 3D or any custom Home divisions) managed in CMS
+  const homeDivisions = (cmsItems || []).filter(
+    (item) =>
+      item.visible !== false &&
+      item.status === 'PUBLISHED' &&
+      (item.id === 'cms-home-division-suno' ||
+        item.id === 'cms-home-division-meshy' ||
+        item.category.toUpperCase().includes('DIVISION'))
+  );
 
   const homeCmsItems = typeof getHomeFeaturedCMSItems === 'function' ? getHomeFeaturedCMSItems() : [];
 
@@ -45,12 +59,12 @@ export const HomePage: React.FC<HomePageProps> = () => {
       : homeCmsItems.filter((item) => item.category.toUpperCase().includes(selectedCategory));
 
   return (
-    <div className="space-y-12 max-w-7xl mx-auto pb-12 bg-white text-slate-900">
+    <div className="space-y-12 max-w-7xl mx-auto pb-12 bg-transparent text-slate-900">
       {/* ========================================================================= */}
       {/* 🚀 SECTION 1: CLEAN MINIMALIST WHITE PORTFOLIO & FREE VA ACADEMY HERO     */}
       {/* ========================================================================= */}
-      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xs space-y-8">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pb-8 border-b border-slate-100">
+      <section className="white-glass-card rounded-3xl p-6 sm:p-10 space-y-8">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pb-8 border-b border-slate-200/80">
           <div className="space-y-4 max-w-3xl">
             <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
               <GraduationCap className="w-4 h-4 text-slate-700" />
@@ -59,11 +73,16 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
               Free Tutorials, AI Automation Diagrams &amp; Career Guides for{' '}
-              <span className="underline decoration-slate-300 underline-offset-8">Virtual Assistants &amp; Freelancers</span>
+              <span className="underline decoration-slate-300 underline-offset-8">
+                Virtual Assistants &amp; Freelancers
+              </span>
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-              Learn how to become a successful Virtual Assistant or Freelancer at <strong className="text-slate-900">zero cost</strong>. Explore authentic step-by-step career blueprints, copy-paste client proposal templates, and visual <strong className="text-slate-900">AI Automation Workflow Diagrams</strong>.
+              Learn how to become a successful Virtual Assistant or Freelancer at{' '}
+              <strong className="text-slate-900">zero cost</strong>. Explore authentic step-by-step
+              career blueprints, copy-paste client proposal templates, and visual{' '}
+              <strong className="text-slate-900">AI Automation Workflow Diagrams</strong>.
             </p>
           </div>
 
@@ -97,183 +116,204 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
         {/* 4 CORE VALUE PILLARS (MINIMALIST MONOCHROME WHITE) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-          <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200 space-y-2 hover:border-slate-400 transition-all">
+          <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-2 hover:border-slate-400 hover:-translate-y-0.5 transition-all">
             <div className="flex items-center space-x-2 text-slate-700 font-bold uppercase tracking-wider">
               <GraduationCap className="w-4 h-4" />
               <span>100% Free VA Academy</span>
             </div>
             <h3 className="text-sm font-bold text-slate-900">Zero-to-Pro Freelancer Guides</h3>
             <p className="text-slate-600 leading-relaxed">
-              Free step-by-step roadmaps, Upwork/OnlineJobs.ph proposal scripts, and daily VA checklists.
+              Free step-by-step roadmaps, Upwork/OnlineJobs.ph proposal scripts, and daily VA
+              checklists.
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200 space-y-2 hover:border-slate-400 transition-all">
+          <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-2 hover:border-slate-400 hover:-translate-y-0.5 transition-all">
             <div className="flex items-center space-x-2 text-slate-700 font-bold uppercase tracking-wider">
               <Workflow className="w-4 h-4" />
               <span>Real AI Flows</span>
             </div>
             <h3 className="text-sm font-bold text-slate-900">Visual Automation Diagrams</h3>
             <p className="text-slate-600 leading-relaxed">
-              Interactive node-by-node diagrams showing how Webhooks, LLMs, Routers, and CRMs work together.
+              Interactive node-by-node diagrams showing how Webhooks, LLMs, Routers, and CRMs work
+              together.
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200 space-y-2 hover:border-slate-400 transition-all">
+          <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-2 hover:border-slate-400 hover:-translate-y-0.5 transition-all">
             <div className="flex items-center space-x-2 text-slate-700 font-bold uppercase tracking-wider">
               <Briefcase className="w-4 h-4" />
               <span>Authentic Niche</span>
             </div>
             <h3 className="text-sm font-bold text-slate-900">Verified Remote Playbooks</h3>
             <p className="text-slate-600 leading-relaxed">
-              Original, non-duplicated tutorials covering executive assistance, CRM operations, and client retention.
+              Original, non-duplicated tutorials covering executive assistance, CRM operations, and
+              client retention.
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200 space-y-2 hover:border-slate-400 transition-all">
+          <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-2 hover:border-slate-400 hover:-translate-y-0.5 transition-all">
             <div className="flex items-center space-x-2 text-slate-700 font-bold uppercase tracking-wider">
               <Code className="w-4 h-4" />
               <span>Full-Stack Studio</span>
             </div>
             <h3 className="text-sm font-bold text-slate-900">Web, Apps &amp; 3D AI</h3>
             <p className="text-slate-600 leading-relaxed">
-              Custom React/TypeScript web platforms, Google Play mobile apps, and AI 3D asset pipelines.
+              Custom React/TypeScript web platforms, Google Play mobile apps, and AI 3D asset
+              pipelines.
             </p>
           </div>
         </div>
       </section>
 
+      {/* THEMEFOREST MARKETPLACE / GOOGLE ADSENSE FEATURED SLOT */}
+      <AdSenseSlot placement="in-article" />
+
       {/* ========================================================================= */}
-      {/* 🎵 & 🧊 SIDE-BY-SIDE DIVISIONS: SUNO AI MUSIC + MESHY AI 3D GENERATOR      */}
+      {/* 🎵 & 🧊 CMS-DRIVEN DIVISIONS: SUNO AI MUSIC + MESHY AI 3D GENERATOR        */}
       {/* ========================================================================= */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-        {/* DIVISION 1: SUNO AI MUSIC STUDIO */}
-        <div className="rounded-3xl bg-white border border-slate-200 hover:border-slate-400 p-6 sm:p-7 shadow-xs flex flex-col justify-between space-y-5 transition-all">
-          <div className="space-y-4">
-            <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-xs bg-slate-50">
-                <img
-                  src="./media_1787666146962.jpg"
-                  alt="Suno AI Music Generation Logo"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = './media_1786678717227.png';
-                  }}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
-                    <Music className="w-3 h-3 text-slate-700" />
-                    <span>SUNO AI DIVISION</span>
-                  </span>
-                  <span className="px-2 py-0.5 rounded-full bg-slate-50 text-slate-600 border border-slate-200 text-[10px] font-semibold">
-                    Free Signup Credits
-                  </span>
+      {homeDivisions.length > 0 && (
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+          {homeDivisions.map((divItem) => {
+            const isMeshy =
+              divItem.id.includes('meshy') || divItem.category.toUpperCase().includes('MESHY');
+            const showImg = Boolean(divItem.mainImage && !divItem.hideImage);
+            const showVid = Boolean(divItem.videoUrl && !divItem.hideVideo);
+
+            return (
+              <div
+                key={divItem.id}
+                className="white-glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-5 hover:-translate-y-0.5 transition-all"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-start gap-4">
+                    {divItem.galleryImages && divItem.galleryImages[0] && !divItem.hideImage ? (
+                      <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-xs bg-slate-50">
+                        <img
+                          src={divItem.galleryImages[0]}
+                          alt={divItem.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-xs bg-slate-900 text-white flex flex-col items-center justify-center">
+                        {isMeshy ? <Box className="w-7 h-7" /> : <Music className="w-7 h-7" />}
+                        <span className="text-[10px] font-extrabold tracking-tight">
+                          {isMeshy ? 'MESHY 3D' : 'SUNO AI'}
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                          {isMeshy ? (
+                            <Sparkles className="w-3 h-3 text-slate-700" />
+                          ) : (
+                            <Music className="w-3 h-3 text-slate-700" />
+                          )}
+                          <span>{divItem.category}</span>
+                        </span>
+                        {divItem.badge && (
+                          <span className="px-2 py-0.5 rounded-full bg-slate-50 text-slate-600 border border-slate-200 text-[10px] font-semibold">
+                            {divItem.badge}
+                          </span>
+                        )}
+                      </div>
+                      <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+                        {divItem.url ? (
+                          <a
+                            href={divItem.url}
+                            target="_blank"
+                            rel="sponsored noopener noreferrer"
+                            className="hover:underline transition-colors"
+                          >
+                            {divItem.title}
+                          </a>
+                        ) : (
+                          divItem.title
+                        )}
+                      </h2>
+                    </div>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {divItem.description}
+                  </p>
+
+                  {showVid && (
+                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+                      {divItem.videoUrl!.includes('youtube.com') ||
+                      divItem.videoUrl!.includes('youtu.be') ? (
+                        <iframe
+                          src={
+                            divItem.videoUrl!.includes('watch?v=')
+                              ? divItem.videoUrl!.replace('watch?v=', 'embed/')
+                              : divItem.videoUrl
+                          }
+                          title={divItem.title}
+                          className="w-full aspect-video border-0"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <video
+                          src={divItem.videoUrl}
+                          controls
+                          className="w-full max-h-48 object-cover"
+                        />
+                      )}
+                    </div>
+                  )}
+
+                  {showImg && (
+                    <div className="overflow-hidden rounded-xl border border-slate-200 h-28 bg-slate-50">
+                      <img
+                        src={divItem.mainImage}
+                        alt={divItem.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+
+                  {divItem.metrics && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {divItem.metrics
+                        .split(',')
+                        .map((t) => t.trim())
+                        .filter(Boolean)
+                        .map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-semibold"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                    </div>
+                  )}
                 </div>
-                <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-                  Create Original Radio-Ready Songs with Suno AI
-                </h2>
-              </div>
-            </div>
 
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Suno is the leading generative AI music studio. Transform simple text prompts into full-length broadcast-quality songs with realistic vocals, harmonies, and custom background tracks for client videos.
-            </p>
-
-            <div className="overflow-hidden rounded-xl border border-slate-200 h-28 bg-slate-50">
-              <img
-                src="./media_1787666146964.jpg"
-                alt="Suno AI Music Showcase"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = './media_1786678717227.png';
-                }}
-              />
-            </div>
-          </div>
-
-          <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
-            <span className="text-xs text-slate-500 font-medium">Official Creator: @chillvibemusics</span>
-            <a
-              href="https://suno.com/@chillvibemusics"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all shadow-xs flex items-center justify-center gap-2"
-            >
-              <span>Explore Suno AI Music Studio</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-
-        {/* DIVISION 2 (NEXT TO SUNO): MESHY AI 3D MODEL GENERATOR REFERRAL */}
-        <div className="rounded-3xl bg-white border border-slate-200 hover:border-slate-400 p-6 sm:p-7 shadow-xs flex flex-col justify-between space-y-5 transition-all">
-          <div className="space-y-4">
-            <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-xs bg-slate-900 text-white flex flex-col items-center justify-center">
-                <Box className="w-7 h-7" />
-                <span className="text-[10px] font-extrabold tracking-tight">MESHY 3D</span>
-              </div>
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-slate-700" />
-                    <span>MESHY AI 3D DIVISION • OFFICIAL REFERRAL</span>
+                <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
+                  <span className="text-xs text-slate-500 font-medium">
+                    {divItem.summary || 'Official Partner Division'}
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-slate-50 text-slate-600 border border-slate-200 text-[10px] font-semibold">
-                    Free Bonus Credits
-                  </span>
+                  {divItem.url && (
+                    <a
+                      href={divItem.url}
+                      target="_blank"
+                      rel="sponsored noopener noreferrer"
+                      className="w-full sm:w-auto px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all shadow-xs flex items-center justify-center gap-2"
+                    >
+                      <span>{divItem.buttonText || 'Explore Now'}</span>
+                      <ExternalLink className="w-4 h-4 shrink-0" />
+                    </a>
+                  )}
                 </div>
-                <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-                  <a
-                    href={MESHY_REFERRAL_URL}
-                    target="_blank"
-                    rel="sponsored noopener noreferrer"
-                    className="hover:underline transition-colors"
-                  >
-                    AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy
-                  </a>
-                </h2>
               </div>
-            </div>
-
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Generate production-ready 3D models and PBR textures from simple text prompts or reference photos in under 60 seconds. Export in <code className="px-1.5 py-0.5 bg-slate-100 rounded text-slate-800 text-xs">.GLB</code>, <code className="px-1.5 py-0.5 bg-slate-100 rounded text-slate-800 text-xs">.FBX</code>, <code className="px-1.5 py-0.5 bg-slate-100 rounded text-slate-800 text-xs">.OBJ</code>, or <code className="px-1.5 py-0.5 bg-slate-100 rounded text-slate-800 text-xs">.USDZ</code> for web design, e-commerce, Blender, Unity, and Unreal Engine.
-            </p>
-
-            <div className="flex flex-wrap gap-1.5">
-              {[
-                'Text to 3D',
-                'Image to 3D',
-                'AI PBR Texturing',
-                'GLB / FBX / OBJ Export',
-                'No 3D Experience Needed'
-              ].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-semibold"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
-            <span className="text-xs text-slate-500 font-medium">Partner Code: ER3M3J (Invite Friends)</span>
-            <a
-              href={MESHY_REFERRAL_URL}
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="w-full sm:w-auto px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all shadow-xs flex items-center justify-center gap-2"
-            >
-              <span>AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy</span>
-              <ExternalLink className="w-4 h-4 shrink-0" />
-            </a>
-          </div>
-        </div>
-      </section>
+            );
+          })}
+        </section>
+      )}
 
       {/* ========================================================================= */}
       {/* 🤖 SECTION 2: VISUAL AI AUTOMATION DIAGRAMS & FREE VA TOOLKIT             */}
@@ -296,13 +336,14 @@ export const HomePage: React.FC<HomePageProps> = () => {
                     <span>Step-by-Step Guides for Virtual Assistants &amp; Freelancers</span>
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    Click any tutorial card below to read the complete guide, checklists, and workflow steps for free.
+                    Click any tutorial card below to read the complete guide, checklists, and
+                    workflow steps for free.
                   </p>
                 </div>
 
                 {/* CATEGORY FILTER BUTTONS */}
                 <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 text-xs">
-                  {['ALL', 'AI', 'VA', 'FREELANC', 'AUTOMATION', 'DEV'].map((cat) => (
+                  {['ALL', 'MAKE MONEY', 'AI', 'VA', 'FREELANC', 'AUTOMATION', 'DEV'].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
@@ -320,107 +361,187 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
               {/* TUTORIALS / ARTICLES GRID */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {filteredCmsItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl overflow-hidden flex flex-col justify-between transition-all group shadow-xs"
-                  >
-                    {item.mainImage && (
-                      <div className="h-40 w-full relative overflow-hidden border-b border-slate-100 bg-slate-50">
-                        <img
-                          src={item.mainImage}
-                          alt={item.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src =
-                              'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop&q=80';
-                          }}
-                        />
-                        <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 bg-white/95 backdrop-blur-xs text-slate-800 text-[10px] font-bold rounded-full border border-slate-200 uppercase shadow-xs">
-                          {item.category}
-                        </span>
-                        {item.badge && (
-                          <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 bg-slate-900 text-white text-[10px] font-bold rounded-full uppercase shadow-xs">
-                            {item.badge}
-                          </span>
-                        )}
-                        {item.videoUrl && (
-                          <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 bg-slate-900 text-white text-[10px] font-bold rounded-full flex items-center gap-1 shadow-xs">
-                            <Video className="w-3 h-3" />
-                            <span>Video</span>
-                          </span>
-                        )}
-                      </div>
-                    )}
+                {filteredCmsItems.map((item) => {
+                  const showImage = Boolean(item.mainImage && !item.hideImage);
+                  const showVideo = Boolean(item.videoUrl && !item.hideVideo);
+                  const isInlineExpanded = Boolean(expandedArticleIds[item.id]);
 
-                    <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
-                      <div className="space-y-1.5">
-                        <h4
-                          onClick={() => setSelectedArticle(item)}
-                          className="text-sm font-bold text-slate-900 group-hover:underline transition-colors line-clamp-2 cursor-pointer"
+                  return (
+                    <div
+                      key={item.id}
+                      className={`bg-white border border-slate-200 hover:border-slate-400 rounded-2xl overflow-hidden flex flex-col justify-between transition-all group shadow-xs ${
+                        isInlineExpanded ? 'sm:col-span-2 ring-1 ring-slate-900/10' : 'hover:-translate-y-0.5'
+                      }`}
+                    >
+                      {showImage && (
+                        <div
+                          className={`${
+                            isInlineExpanded ? 'h-56 sm:h-72' : 'h-40'
+                          } w-full relative overflow-hidden border-b border-slate-100 bg-slate-50 transition-all`}
                         >
-                          {item.title}
-                        </h4>
-                        <p className="text-slate-600 text-xs leading-relaxed line-clamp-3">
-                          {item.description}
-                        </p>
-                      </div>
-
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 mt-2">
-                        <button
-                          onClick={() => setSelectedArticle(item)}
-                          className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5 cursor-pointer"
-                        >
-                          <BookOpen className="w-3.5 h-3.5" />
-                          <span>Read Free Guide</span>
-                        </button>
-
-                        {(item.url || item.referralUrl) && (
-                          <a
-                            href={item.url || item.referralUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-[11px] rounded-lg transition-all flex items-center gap-1 shrink-0"
-                          >
-                            <span>
-                              {item.buttonText
-                                ? item.buttonText.split('(')[0].trim().slice(0, 18)
-                                : 'Open Resource'}
+                          <img
+                            src={item.mainImage}
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
+                          />
+                          <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 bg-white/95 backdrop-blur-xs text-slate-800 text-[10px] font-bold rounded-full border border-slate-200 uppercase shadow-xs">
+                            {item.category}
+                          </span>
+                          {item.badge && (
+                            <span className="absolute top-2.5 right-2.5 px-2.5 py-0.5 bg-slate-900 text-white text-[10px] font-bold rounded-full uppercase shadow-xs">
+                              {item.badge}
                             </span>
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                        )}
+                          )}
+                          {showVideo && (
+                            <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 bg-slate-900 text-white text-[10px] font-bold rounded-full flex items-center gap-1 shadow-xs">
+                              <Video className="w-3 h-3" />
+                              <span>Video</span>
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {!showImage && showVideo && (
+                        <div className="w-full border-b border-slate-100 bg-slate-50">
+                          {item.videoUrl!.includes('youtube.com') ||
+                          item.videoUrl!.includes('youtu.be') ? (
+                            <iframe
+                              src={
+                                item.videoUrl!.includes('watch?v=')
+                                  ? item.videoUrl!.replace('watch?v=', 'embed/')
+                                  : item.videoUrl
+                              }
+                              title={item.title}
+                              className="w-full aspect-video border-0"
+                              allowFullScreen
+                            />
+                          ) : (
+                            <video
+                              src={item.videoUrl}
+                              controls
+                              className="w-full h-40 object-cover"
+                            />
+                          )}
+                        </div>
+                      )}
+
+                      <div className="p-4 sm:p-5 space-y-3 flex-1 flex flex-col justify-between">
+                        <div className="space-y-2">
+                          {!showImage && (
+                            <div className="flex items-center justify-between gap-2 pb-1">
+                              <span className="px-2.5 py-0.5 bg-slate-100 text-slate-800 text-[10px] font-bold rounded-full border border-slate-200 uppercase">
+                                {item.category}
+                              </span>
+                              {item.badge && (
+                                <span className="px-2 py-0.5 bg-slate-900 text-white text-[10px] font-bold rounded-full uppercase">
+                                  {item.badge}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          <h4
+                            onClick={() => toggleArticleInline(item.id)}
+                            className={`text-sm sm:text-base font-extrabold text-slate-900 group-hover:underline transition-colors cursor-pointer ${
+                              isInlineExpanded ? '' : 'line-clamp-2'
+                            }`}
+                          >
+                            {item.title}
+                          </h4>
+                          <p
+                            className={`text-slate-600 text-xs leading-relaxed ${
+                              isInlineExpanded ? 'font-medium text-slate-800' : 'line-clamp-3'
+                            }`}
+                          >
+                            {item.description}
+                          </p>
+
+                          {/* INLINE EXPANDED DEEP-DIVE TUTORIAL READER */}
+                          {isInlineExpanded && (
+                            <div className="mt-4 pt-4 border-t border-slate-200 space-y-4 text-xs text-slate-700 leading-relaxed">
+                              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 whitespace-pre-wrap font-sans leading-relaxed max-h-[480px] overflow-y-auto">
+                                {item.fullContent || item.description}
+                              </div>
+
+                              {/* PRACTITIONER PRO TIPS & ACTION BLUEPRINT */}
+                              <div className="p-4 rounded-xl bg-slate-100/80 border border-slate-200 space-y-2">
+                                <span className="text-[11px] font-extrabold text-slate-900 uppercase tracking-wider block">
+                                  ★ Practitioner Execution Checklist &amp; Pro Tips:
+                                </span>
+                                <ul className="space-y-1 text-slate-700 list-disc pl-4">
+                                  <li>
+                                    <strong>Step 1 — Setup &amp; Audit:</strong> Document your client&apos;s exact workflow inputs, naming rules, and deadlines in a shared Notion or Google Doc SOP before starting.
+                                  </li>
+                                  <li>
+                                    <strong>Step 2 — Prototype &amp; Verify:</strong> Run a 3-sample test batch first and record a 60-second Loom walkthrough so your client can approve the format asynchronously.
+                                  </li>
+                                  <li>
+                                    <strong>Step 3 — Scale &amp; Automate:</strong> Connect repetitive triggers using Make.com, Zapier, or AI prompts to cut turnaround time by 60%+.
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 mt-2">
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => toggleArticleInline(item.id)}
+                              className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 font-bold text-xs rounded-lg transition-all cursor-pointer"
+                            >
+                              {isInlineExpanded ? '▲ Collapse Article' : '▼ Expand Full Article'}
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => setSelectedArticle(item)}
+                              className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <BookOpen className="w-3.5 h-3.5" />
+                              <span>Full-Screen Reader</span>
+                            </button>
+                          </div>
+
+                          {(item.url || item.referralUrl) && (
+                            <a
+                              href={item.url || item.referralUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-[11px] rounded-lg transition-all flex items-center gap-1 shrink-0"
+                            >
+                              <span>
+                                {item.buttonText
+                                  ? item.buttonText.split('(')[0].trim().slice(0, 18)
+                                  : 'Open Resource'}
+                              </span>
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </HUDPanel>
 
-          {/* VERIFIED REVIEWS (MINIMALIST WHITE) */}
+          {/* VERIFIED REVIEWS (MINIMALIST WHITE — AUTO-SHUFFLED ON REFRESH) */}
           <HUDPanel title="Verified Student, Freelancer &amp; Client Reviews" badge="Community Feedback">
             <div className="space-y-5">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <p className="text-xs text-slate-600">
-                  Real feedback from Virtual Assistants, freelancers, and founders using our free guides and workflows.
+                  Real feedback from Virtual Assistants, freelancers, and founders using our free
+                  guides and workflows.
                 </p>
-                <button
-                  onClick={() =>
-                    setDisplayTestimonials([...TESTIMONIALS_DATA].sort(() => Math.random() - 0.5))
-                  }
-                  className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer"
-                >
-                  <RefreshCw className="w-3.5 h-3.5" />
-                  <span>Shuffle Reviews</span>
-                </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
                 {displayTestimonials.slice(0, 6).map((t) => (
                   <div
                     key={t.id}
-                    className="bg-slate-50/70 border border-slate-200 p-4 rounded-2xl space-y-2.5 flex flex-col justify-between"
+                    className="bg-slate-50/80 border border-slate-200 p-4 rounded-2xl space-y-2.5 flex flex-col justify-between hover:border-slate-400 transition-all"
                   >
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">

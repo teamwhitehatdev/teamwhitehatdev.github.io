@@ -27,7 +27,8 @@ import {
   Video,
   Briefcase,
   Database,
-  RotateCcw
+  RotateCcw,
+  Compass
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { TelemetryDashboard } from '../components/TelemetryDashboard';
@@ -46,11 +47,19 @@ import {
   AffiliateCollapsibleTopic,
   TopicThemeColor,
   Service,
-  Project
+  Project,
+  NavTabConfig
 } from '../types';
 
 export const Admin: React.FC = () => {
   const {
+    navTabs,
+    addNavTab,
+    updateNavTab,
+    deleteNavTab,
+    toggleNavTabVisibility,
+    moveNavTabOrder,
+    resetNavTabsToDefault,
     affiliateTopics,
     addAffiliateTopic,
     updateAffiliateTopic,
@@ -85,23 +94,30 @@ export const Admin: React.FC = () => {
     addService,
     updateService,
     deleteService,
+    toggleServiceVisibility,
     projects,
     addProject,
     updateProject,
     deleteProject,
+    toggleProjectVisibility,
     inquiries,
     deleteInquiry,
     bannedIps,
     addBannedIp,
-    removeBannedIp
+    removeBannedIp,
+    adSenseConfig,
+    updateAdSenseConfig
   } = useApp();
 
+  const [usernameInput, setUsernameInput] = useState('admin');
   const [pinInput, setPinInput] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     try {
-      const isSessionAuth = sessionStorage.getItem('wh_admin_auth') === 'true';
-      const isLocalAuth = localStorage.getItem('wh_admin_auth_persist') === 'true';
-      return isSessionAuth || isLocalAuth;
+      // Strictly require active tab session login — clear any legacy persistent keys so visitors never auto-login
+      localStorage.removeItem('wh_admin_auth_persist');
+      sessionStorage.removeItem('wh_admin_auth');
+      return sessionStorage.getItem('wh_admin_session_strict_v5730') === 'true';
     } catch (e) {
       return false;
     }
@@ -117,6 +133,8 @@ export const Admin: React.FC = () => {
   // ALL-IN-ONE TABS STATE
   const [activeTab, setActiveTab] = useState<
     | 'cms'
+    | 'nav-tabs'
+    | 'adsense-mgr'
     | 'services-mgr'
     | 'affiliate-topics'
     | 'promotions'
@@ -126,8 +144,34 @@ export const Admin: React.FC = () => {
     | 'firewall'
   >('cms');
 
+  // NAVIGATION TAB MODAL STATE
+  const [editingNavTab, setEditingNavTab] = useState<NavTabConfig | null>(null);
+  const [isNavTabModalOpen, setIsNavTabModalOpen] = useState(false);
+  const [navTabForm, setNavTabForm] = useState<{
+    label: string;
+    slug: string;
+    path: string;
+    visible: boolean;
+    isExternal: boolean;
+    heroTitle: string;
+    heroSubtitle: string;
+    badge: string;
+    sortOrder: number;
+  }>({
+    label: '',
+    slug: '',
+    path: '',
+    visible: true,
+    isExternal: false,
+    heroTitle: '',
+    heroSubtitle: '',
+    badge: 'NEW',
+    sortOrder: 7
+  });
+
   // FILTERS
   const [selectedPageFilter, setSelectedPageFilter] = useState<CMSPageOwnerType | 'all'>('all');
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>('all');
   const [selectedHomeFeaturedFilter, setSelectedHomeFeaturedFilter] = useState<'all' | 'yes' | 'no'>('all');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<CMSStatusType | 'HIDDEN' | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -135,7 +179,7 @@ export const Admin: React.FC = () => {
   const [manualBanIpInput, setManualBanIpInput] = useState('');
   const [newCategoryInput, setNewCategoryInput] = useState('');
 
-  // CMS ITEM MODAL FORM STATE (INCLUDES IMAGE & VIDEO UPLOAD + REMOVE)
+  // CMS ITEM MODAL FORM STATE (INCLUDES IMAGE & VIDEO UPLOAD + HIDE/UNHIDE + REMOVE)
   const [editingCMSItem, setEditingCMSItem] = useState<CMSItem | null>(null);
   const [isCreatingCMSItem, setIsCreatingCMSItem] = useState(false);
   const [cmsForm, setCmsForm] = useState<{
@@ -151,6 +195,8 @@ export const Admin: React.FC = () => {
     fullContent: string;
     mainImage: string;
     videoUrl: string;
+    hideImage: boolean;
+    hideVideo: boolean;
     galleryImages: string[];
     url: string;
     referralUrl: string;
@@ -172,6 +218,8 @@ export const Admin: React.FC = () => {
     fullContent: '',
     mainImage: '',
     videoUrl: '',
+    hideImage: false,
+    hideVideo: false,
     galleryImages: [],
     url: '',
     referralUrl: '',
@@ -191,21 +239,35 @@ export const Admin: React.FC = () => {
     price: string;
     description: string;
     featuresText: string;
+    image: string;
+    videoUrl: string;
+    hideImage: boolean;
+    hideVideo: boolean;
+    visible: boolean;
   }>({
     title: '',
     category: 'va',
     price: '$5 / hr ($49 / week)',
     description: '',
-    featuresText: 'Dedicated VA, Inbox Zero, Daily EOD Report'
+    featuresText: 'Dedicated VA, Inbox Zero, Daily EOD Report',
+    image: '',
+    videoUrl: '',
+    hideImage: false,
+    hideVideo: false,
+    visible: true
   });
 
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [projectForm, setProjectForm] = useState<{
     title: string;
-    category: 'web' | 'mobile' | 'security' | 'design';
+    category: 'web' | 'mobile' | 'security' | 'design' | string;
     description: string;
     image: string;
+    videoUrl: string;
+    hideImage: boolean;
+    hideVideo: boolean;
+    visible: boolean;
     tagsText: string;
     liveUrl: string;
     githubUrl: string;
@@ -215,6 +277,10 @@ export const Admin: React.FC = () => {
     category: 'web',
     description: '',
     image: '',
+    videoUrl: '',
+    hideImage: false,
+    hideVideo: false,
+    visible: true,
     tagsText: 'React, TypeScript, Tailwind CSS',
     liveUrl: '',
     githubUrl: '',
@@ -233,6 +299,8 @@ export const Admin: React.FC = () => {
     themeColor: TopicThemeColor;
     headerBannerImage: string;
     videoUrl: string;
+    hideImage: boolean;
+    hideVideo: boolean;
     referralUrl: string;
     primaryCtaText: string;
     secondaryCtaText: string;
@@ -243,14 +311,16 @@ export const Admin: React.FC = () => {
     isVisible: boolean;
     isDefaultOpen: boolean;
   }>({
-    topicNumber: 'TOPIC 7',
-    categoryBadge: 'TOPIC 7: DIGITAL TOOLKIT',
-    title: 'TOPIC 7: NEW DIGITAL WORKSPACE & TOOL',
+    topicNumber: 'NICHE #16',
+    categoryBadge: 'CATEGORY 16 • DIGITAL TOOLKIT',
+    title: 'NICHE #16: NEW DIGITAL WORKSPACE & TOOL',
     subtitle: 'Streamline your freelance workflow and automate client tasks.',
     iconEmoji: '📘',
     themeColor: 'indigo',
     headerBannerImage: '',
     videoUrl: '',
+    hideImage: false,
+    hideVideo: false,
     referralUrl: '',
     primaryCtaText: 'GET STARTED NOW →',
     secondaryCtaText: '',
@@ -270,6 +340,9 @@ export const Admin: React.FC = () => {
     placement: PromoPlacementType;
     description: string;
     imageUrl: string;
+    videoUrl: string;
+    hideImage: boolean;
+    hideVideo: boolean;
     destinationUrl: string;
     buttonText: string;
     badge: string;
@@ -282,6 +355,9 @@ export const Admin: React.FC = () => {
     placement: 'partner-deals',
     description: '',
     imageUrl: '',
+    videoUrl: '',
+    hideImage: false,
+    hideVideo: false,
     destinationUrl: '',
     buttonText: 'LEARN MORE →',
     badge: 'PARTNER DEAL',
@@ -292,11 +368,13 @@ export const Admin: React.FC = () => {
   });
 
   useEffect(() => {
-    const savedAuth =
-      sessionStorage.getItem('wh_admin_auth') === 'true' ||
-      localStorage.getItem('wh_admin_auth_persist') === 'true';
-    if (savedAuth) {
-      setIsAuthenticated(true);
+    try {
+      localStorage.removeItem('wh_admin_auth_persist');
+      sessionStorage.removeItem('wh_admin_auth');
+      const strictSession = sessionStorage.getItem('wh_admin_session_strict_v5730') === 'true';
+      setIsAuthenticated(strictSession);
+    } catch (e) {
+      setIsAuthenticated(false);
     }
   }, []);
 
@@ -313,31 +391,31 @@ export const Admin: React.FC = () => {
       return;
     }
 
+    const userClean = usernameInput.trim().toLowerCase();
+    const validUsers = ['admin', 'developer', 'whitehatdev', 'teamwhitehatdev'];
     const inputClean = pinInput.trim().toLowerCase();
     const validPins = [
       'anonymousphilippines',
-      'admin',
-      'admin123',
-      'whitehatdev',
+      'whitehatdev#2026!',
+      'whitehatdev2026',
       'teamwhitehatdev'
     ];
 
-    if (validPins.includes(inputClean)) {
+    if (validUsers.includes(userClean) && validPins.includes(inputClean)) {
       resetAdminRateLimit();
       setIsAuthenticated(true);
-      sessionStorage.setItem('wh_admin_auth', 'true');
-      localStorage.setItem('wh_admin_auth_persist', 'true');
+      sessionStorage.setItem('wh_admin_session_strict_v5730', 'true');
       setAuthError('');
-      showToast('Authenticated: Welcome to the All-in-One Admin CMS');
+      showToast('Authenticated: Welcome Admin & Developer');
     } else {
       const failResult = recordAdminFailedAttempt();
       if (failResult.locked) {
         setAuthError(
-          'Security Alert: 5 failed PIN attempts detected. Access locked for 15 minutes.'
+          'Security Alert: 5 failed login attempts detected. Access locked for 15 minutes.'
         );
       } else {
         setAuthError(
-          `Invalid Admin PIN (${failResult.attemptsLeft} attempt${
+          `Invalid Admin Username or Password (${failResult.attemptsLeft} attempt${
             failResult.attemptsLeft === 1 ? '' : 's'
           } remaining before lockout).`
         );
@@ -347,15 +425,124 @@ export const Admin: React.FC = () => {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
+    sessionStorage.removeItem('wh_admin_session_strict_v5730');
     sessionStorage.removeItem('wh_admin_auth');
     localStorage.removeItem('wh_admin_auth_persist');
     setPinInput('');
+    showToast('Logged out: Admin CMS is now locked.');
+  };
+
+  // NAVIGATION TAB HANDLERS (ADD / EDIT / REMOVE / HIDE / UNHIDE TABS)
+  const handleOpenCreateNavTab = () => {
+    setEditingNavTab(null);
+    setNavTabForm({
+      label: '',
+      slug: '',
+      path: '',
+      visible: true,
+      isExternal: false,
+      heroTitle: '',
+      heroSubtitle: '',
+      badge: 'NEW',
+      sortOrder: (navTabs?.length || 6) + 1
+    });
+    setIsNavTabModalOpen(true);
+  };
+
+  const handleOpenEditNavTab = (tab: NavTabConfig) => {
+    setEditingNavTab(tab);
+    setNavTabForm({
+      label: tab.label,
+      slug: tab.slug,
+      path: tab.path,
+      visible: tab.visible,
+      isExternal: Boolean(tab.isExternal),
+      heroTitle: tab.heroTitle || '',
+      heroSubtitle: tab.heroSubtitle || '',
+      badge: tab.badge || '',
+      sortOrder: tab.sortOrder || 1
+    });
+    setIsNavTabModalOpen(true);
+  };
+
+  const handleSaveNavTab = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanSlug =
+      (navTabForm.slug || navTabForm.label)
+        .toLowerCase()
+        .replace(/[^a-z0-9-_]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '') || 'custom-tab';
+    const computedPath = navTabForm.isExternal
+      ? navTabForm.path.trim()
+      : navTabForm.path.trim().startsWith('/')
+      ? navTabForm.path.trim()
+      : `/page/${cleanSlug}`;
+
+    if (editingNavTab) {
+      updateNavTab(editingNavTab.id, {
+        label: navTabForm.label.trim(),
+        slug: editingNavTab.isSystem ? editingNavTab.slug : cleanSlug,
+        path: editingNavTab.isSystem ? editingNavTab.path : computedPath,
+        visible: navTabForm.visible,
+        isExternal: navTabForm.isExternal,
+        heroTitle: navTabForm.heroTitle.trim() || navTabForm.label.trim(),
+        heroSubtitle: navTabForm.heroSubtitle.trim(),
+        badge: navTabForm.badge.trim(),
+        sortOrder: navTabForm.sortOrder
+      });
+      showToast(`Updated navigation tab "${navTabForm.label}"`);
+    } else {
+      addNavTab({
+        label: navTabForm.label.trim(),
+        slug: cleanSlug,
+        path: computedPath,
+        visible: navTabForm.visible,
+        isExternal: navTabForm.isExternal,
+        heroTitle: navTabForm.heroTitle.trim() || navTabForm.label.trim(),
+        heroSubtitle:
+          navTabForm.heroSubtitle.trim() ||
+          `Explore curated guides, resources, and media for ${navTabForm.label.trim()}.`,
+        badge: navTabForm.badge.trim(),
+        sortOrder: navTabForm.sortOrder
+      });
+      showToast(`Created new navigation tab "${navTabForm.label}" (${computedPath})`);
+    }
+    setIsNavTabModalOpen(false);
+    setEditingNavTab(null);
+  };
+
+  // DOWNLOAD CUSTOMIZED ADS.TXT FOR GOOGLE ADSENSE
+  const handleDownloadAdsTxt = () => {
+    const rawPub = (adSenseConfig.publisherId || 'pub-0000000000000000')
+      .replace(/^ca-/, '')
+      .trim();
+    const pubFormatted = rawPub.startsWith('pub-') ? rawPub : `pub-${rawPub}`;
+    const content = `# Authorized Digital Sellers (ads.txt) — Team WhiteHat Dev\ngoogle.com, ${pubFormatted}, DIRECT, f08c47fec0942fa0\n`;
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ads.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Downloaded ads.txt ready for your domain root!');
   };
 
   // UNIVERSAL FILE UPLOAD HANDLER (IMAGES, VIDEOS & JSON DATABASE)
   const handleFileUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
-    target: 'cms-image' | 'cms-video' | 'promo-image' | 'topic-image' | 'project-image'
+    target:
+      | 'cms-image'
+      | 'cms-video'
+      | 'promo-image'
+      | 'promo-video'
+      | 'topic-image'
+      | 'topic-video'
+      | 'project-image'
+      | 'project-video'
+      | 'service-image'
+      | 'service-video'
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -363,20 +550,35 @@ export const Admin: React.FC = () => {
     reader.onloadend = () => {
       const base64Data = reader.result as string;
       if (target === 'cms-image') {
-        setCmsForm((prev) => ({ ...prev, mainImage: base64Data }));
+        setCmsForm((prev) => ({ ...prev, mainImage: base64Data, hideImage: false }));
         showToast('Image uploaded and attached to content item');
       } else if (target === 'cms-video') {
-        setCmsForm((prev) => ({ ...prev, videoUrl: base64Data }));
+        setCmsForm((prev) => ({ ...prev, videoUrl: base64Data, hideVideo: false }));
         showToast('Video uploaded and attached to content item');
       } else if (target === 'promo-image') {
-        setPromoForm((prev) => ({ ...prev, imageUrl: base64Data }));
+        setPromoForm((prev) => ({ ...prev, imageUrl: base64Data, hideImage: false }));
         showToast('Promo image uploaded');
+      } else if (target === 'promo-video') {
+        setPromoForm((prev) => ({ ...prev, videoUrl: base64Data, hideVideo: false }));
+        showToast('Promo video uploaded');
       } else if (target === 'topic-image') {
-        setTopicForm((prev) => ({ ...prev, headerBannerImage: base64Data }));
+        setTopicForm((prev) => ({ ...prev, headerBannerImage: base64Data, hideImage: false }));
         showToast('Topic banner image uploaded');
+      } else if (target === 'topic-video') {
+        setTopicForm((prev) => ({ ...prev, videoUrl: base64Data, hideVideo: false }));
+        showToast('Topic video uploaded');
       } else if (target === 'project-image') {
-        setProjectForm((prev) => ({ ...prev, image: base64Data }));
+        setProjectForm((prev) => ({ ...prev, image: base64Data, hideImage: false }));
         showToast('Project thumbnail uploaded');
+      } else if (target === 'project-video') {
+        setProjectForm((prev) => ({ ...prev, videoUrl: base64Data, hideVideo: false }));
+        showToast('Project video uploaded');
+      } else if (target === 'service-image') {
+        setServiceForm((prev) => ({ ...prev, image: base64Data, hideImage: false }));
+        showToast('Service cover image uploaded');
+      } else if (target === 'service-video') {
+        setServiceForm((prev) => ({ ...prev, videoUrl: base64Data, hideVideo: false }));
+        showToast('Service video uploaded');
       }
     };
     reader.readAsDataURL(file);
@@ -412,6 +614,8 @@ export const Admin: React.FC = () => {
       fullContent: '',
       mainImage: '',
       videoUrl: '',
+      hideImage: false,
+      hideVideo: false,
       galleryImages: [],
       url: '',
       referralUrl: '',
@@ -440,6 +644,8 @@ export const Admin: React.FC = () => {
       fullContent: item.fullContent || '',
       mainImage: item.mainImage || '',
       videoUrl: item.videoUrl || '',
+      hideImage: Boolean(item.hideImage),
+      hideVideo: Boolean(item.hideVideo),
       galleryImages: item.galleryImages || [],
       url: item.url || '',
       referralUrl: item.referralUrl || '',
@@ -468,16 +674,19 @@ export const Admin: React.FC = () => {
 
   // COLLAPSIBLE TOPICS ACTIONS
   const handleOpenCreateTopic = () => {
+    const nextNum = String((affiliateTopics?.length || 15) + 1).padStart(2, '0');
     setEditingTopic(null);
     setTopicForm({
-      topicNumber: `TOPIC ${(affiliateTopics?.length || 6) + 1}`,
-      categoryBadge: `TOPIC ${(affiliateTopics?.length || 6) + 1}: DIGITAL AUTOMATION & WORKSPACE`,
-      title: `TOPIC ${(affiliateTopics?.length || 6) + 1}: NEW REMOTE WORKFLOW GUIDE`,
+      topicNumber: `NICHE #${nextNum}`,
+      categoryBadge: `CATEGORY ${nextNum} • DIGITAL AUTOMATION & WORKSPACE`,
+      title: `NICHE #${nextNum}: NEW REMOTE WORKFLOW GUIDE`,
       subtitle: 'Streamline client onboarding, project tracking, and automated SOP workflows.',
       iconEmoji: '📘',
       themeColor: 'indigo',
       headerBannerImage: '',
       videoUrl: '',
+      hideImage: false,
+      hideVideo: false,
       referralUrl: 'https://',
       primaryCtaText: 'EXPLORE TOOLKIT NOW →',
       secondaryCtaText: '',
@@ -503,6 +712,8 @@ export const Admin: React.FC = () => {
       themeColor: topic.themeColor || 'indigo',
       headerBannerImage: topic.headerBannerImage || '',
       videoUrl: topic.videoUrl || '',
+      hideImage: Boolean(topic.hideImage),
+      hideVideo: Boolean(topic.hideVideo),
       referralUrl: topic.referralUrl || '',
       primaryCtaText: topic.primaryCtaText || '',
       secondaryCtaText: topic.secondaryCtaText || '',
@@ -544,6 +755,9 @@ export const Admin: React.FC = () => {
       placement: defaultPlacement,
       description: '',
       imageUrl: '',
+      videoUrl: '',
+      hideImage: false,
+      hideVideo: false,
       destinationUrl: '',
       buttonText: 'LEARN MORE →',
       badge: 'PARTNER DEAL',
@@ -563,6 +777,9 @@ export const Admin: React.FC = () => {
       placement: item.placement,
       description: item.description,
       imageUrl: item.imageUrl || '',
+      videoUrl: item.videoUrl || '',
+      hideImage: Boolean(item.hideImage),
+      hideVideo: Boolean(item.hideVideo),
       destinationUrl: item.destinationUrl,
       buttonText: item.buttonText || 'LEARN MORE →',
       badge: item.badge || '',
@@ -595,7 +812,12 @@ export const Admin: React.FC = () => {
       category: 'va',
       price: '$5 / hr ($49 / week)',
       description: '',
-      featuresText: 'Dedicated VA, Inbox Zero, Daily EOD Report, Cancel Anytime'
+      featuresText: 'Dedicated VA, Inbox Zero, Daily EOD Report, Cancel Anytime',
+      image: '',
+      videoUrl: '',
+      hideImage: false,
+      hideVideo: false,
+      visible: true
     });
     setIsServiceModalOpen(true);
   };
@@ -607,7 +829,12 @@ export const Admin: React.FC = () => {
       category: svc.category,
       price: svc.price || '',
       description: svc.description,
-      featuresText: (svc.features || []).join(', ')
+      featuresText: (svc.features || []).join(', '),
+      image: svc.image || '',
+      videoUrl: svc.videoUrl || '',
+      hideImage: Boolean(svc.hideImage),
+      hideVideo: Boolean(svc.hideVideo),
+      visible: svc.visible !== false
     });
     setIsServiceModalOpen(true);
   };
@@ -624,7 +851,12 @@ export const Admin: React.FC = () => {
         category: serviceForm.category,
         price: serviceForm.price,
         description: serviceForm.description,
-        features
+        features,
+        image: serviceForm.image,
+        videoUrl: serviceForm.videoUrl,
+        hideImage: serviceForm.hideImage,
+        hideVideo: serviceForm.hideVideo,
+        visible: serviceForm.visible
       });
       showToast(`Updated service package "${serviceForm.title}"`);
     } else {
@@ -633,7 +865,12 @@ export const Admin: React.FC = () => {
         category: serviceForm.category,
         price: serviceForm.price,
         description: serviceForm.description,
-        features
+        features,
+        image: serviceForm.image,
+        videoUrl: serviceForm.videoUrl,
+        hideImage: serviceForm.hideImage,
+        hideVideo: serviceForm.hideVideo,
+        visible: serviceForm.visible
       });
       showToast(`Added new affordable service "${serviceForm.title}"`);
     }
@@ -649,6 +886,10 @@ export const Admin: React.FC = () => {
       category: 'web',
       description: '',
       image: '',
+      videoUrl: '',
+      hideImage: false,
+      hideVideo: false,
+      visible: true,
       tagsText: 'React, TypeScript, Tailwind CSS',
       liveUrl: 'https://',
       githubUrl: 'https://',
@@ -663,7 +904,11 @@ export const Admin: React.FC = () => {
       title: proj.title,
       category: proj.category,
       description: proj.description,
-      image: proj.image,
+      image: proj.image || '',
+      videoUrl: proj.videoUrl || '',
+      hideImage: Boolean(proj.hideImage),
+      hideVideo: Boolean(proj.hideVideo),
+      visible: proj.visible !== false,
       tagsText: (proj.tags || []).join(', '),
       liveUrl: proj.liveUrl || '',
       githubUrl: proj.githubUrl || '',
@@ -684,6 +929,10 @@ export const Admin: React.FC = () => {
         category: projectForm.category,
         description: projectForm.description,
         image: projectForm.image,
+        videoUrl: projectForm.videoUrl,
+        hideImage: projectForm.hideImage,
+        hideVideo: projectForm.hideVideo,
+        visible: projectForm.visible,
         tags,
         liveUrl: projectForm.liveUrl,
         githubUrl: projectForm.githubUrl,
@@ -696,6 +945,10 @@ export const Admin: React.FC = () => {
         category: projectForm.category,
         description: projectForm.description,
         image: projectForm.image,
+        videoUrl: projectForm.videoUrl,
+        hideImage: projectForm.hideImage,
+        hideVideo: projectForm.hideVideo,
+        visible: projectForm.visible,
         tags,
         liveUrl: projectForm.liveUrl,
         githubUrl: projectForm.githubUrl,
@@ -708,11 +961,20 @@ export const Admin: React.FC = () => {
   };
 
   // FILTERED LISTS
+  const allUniqueCategories = Array.from(
+    new Set([
+      'MAKE MONEY ONLINE',
+      ...(cmsCategories || []).filter((c) => c !== 'ALL'),
+      ...(cmsItems || []).map((i) => i.category).filter(Boolean)
+    ])
+  );
+
   const filteredCMSItems = (cmsItems || [])
     .filter((item) => {
       const owner = item.pageOwner || item.page || 'showcase';
       const isHomeFeat = item.homeFeatured !== undefined ? item.homeFeatured : item.featured;
       if (selectedPageFilter !== 'all' && owner !== selectedPageFilter) return false;
+      if (selectedCategoryFilter !== 'all' && item.category !== selectedCategoryFilter) return false;
       if (selectedHomeFeaturedFilter === 'yes' && !isHomeFeat) return false;
       if (selectedHomeFeaturedFilter === 'no' && isHomeFeat) return false;
       if (selectedStatusFilter === 'HIDDEN' && item.visible) return false;
@@ -742,40 +1004,67 @@ export const Admin: React.FC = () => {
     .sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
 
   // ============================================================================
-  // 🔒 RESTRICTED ADMIN & DEVELOPER LOGIN SCREEN (PURE MINIMALIST WHITE)
+  // 🔒 RESTRICTED ADMIN & DEVELOPER LOGIN SCREEN (STRICT LOGIN / LOGOUT GATE)
   // ============================================================================
   if (!isAuthenticated) {
     return (
-      <div className="min-h-[75vh] flex items-center justify-center px-4 py-12 bg-white text-slate-900">
-        <div className="max-w-md w-full bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-6">
+      <div className="min-h-[78vh] flex items-center justify-center px-4 py-12 bg-transparent text-slate-900">
+        <div className="max-w-md w-full white-glass-card border border-slate-200 rounded-3xl p-8 shadow-lg space-y-6">
           <div className="text-center space-y-2">
-            <div className="w-14 h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center mx-auto text-slate-900">
+            <div className="w-14 h-14 rounded-2xl bg-slate-900 text-white flex items-center justify-center mx-auto shadow-xs">
               <Lock className="w-7 h-7" />
             </div>
             <span className="inline-block px-3 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold uppercase tracking-wider text-slate-700">
-              Restricted Parameter Route • /#/admin
+              Restricted Developer &amp; Admin Route • /#/admin
             </span>
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-              Admin &amp; Developer All-in-One CMS
+              Admin &amp; Developer Login
             </h1>
             <p className="text-xs text-slate-500 leading-relaxed">
-              This portal is hidden from the public interface and restricted to authorized administrators and developers only. Protected by brute-force rate limiting.
+              Public visitors are blocked from accessing this control center. Only authorized Administrators and Developers with valid credentials can sign in.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="text-xs font-bold text-slate-700 block pb-1.5">
-                Enter Administrator Security Passphrase:
+                Admin / Developer Username:
               </label>
               <input
-                type="password"
+                type="text"
+                required
+                value={usernameInput}
+                onChange={(e) => {
+                  setUsernameInput(e.target.value);
+                  setAuthError('');
+                }}
+                placeholder="admin or developer"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm font-semibold focus:outline-none focus:border-slate-900"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between pb-1.5">
+                <label className="text-xs font-bold text-slate-700">
+                  Administrator Security Password:
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-[11px] font-semibold text-slate-500 hover:text-slate-900 cursor-pointer"
+                >
+                  {showPassword ? 'Hide Password' : 'Show Password'}
+                </button>
+              </div>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
                 value={pinInput}
                 onChange={(e) => {
                   setPinInput(e.target.value);
                   setAuthError('');
                 }}
-                placeholder="Enter secret passphrase..."
+                placeholder="Enter secret admin password..."
                 autoFocus
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-slate-900"
               />
@@ -792,7 +1081,7 @@ export const Admin: React.FC = () => {
               className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-xs"
             >
               <Key className="w-4 h-4" />
-              <span>Authenticate &amp; Open CMS</span>
+              <span>Login to Admin Control Center</span>
             </button>
           </form>
         </div>
@@ -804,7 +1093,7 @@ export const Admin: React.FC = () => {
   // 🎛️ AUTHENTICATED ALL-IN-ONE ADMIN CMS (100% PURE MINIMALIST WHITE THEME)
   // ============================================================================
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-16 bg-white text-slate-900">
+    <div className="space-y-8 max-w-7xl mx-auto pb-16 bg-transparent text-slate-900">
       {/* TOAST NOTIFICATION */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl font-semibold text-xs flex items-center space-x-2 border border-slate-700">
@@ -814,20 +1103,20 @@ export const Admin: React.FC = () => {
       )}
 
       {/* TOP HEADER BAR */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 bg-white border border-slate-200 p-6 rounded-3xl shadow-xs">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 white-glass-card border border-slate-200 p-6 rounded-3xl shadow-xs">
         <div className="flex items-center space-x-3.5">
           <div className="p-3 rounded-2xl bg-slate-900 text-white">
             <Database className="w-6 h-6" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="w-2 h-2 rounded-full bg-slate-900"></span>
+              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
               <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                All-in-One CMS • Content, Media, Services, Insights &amp; Security
+                Authenticated Session: {usernameInput || 'Admin'} • All-in-One CMS &amp; AdSense Center
               </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-              Team WhiteHat Dev — All-in-One Admin Control Center
+              Team WhiteHat Dev — Developer &amp; Admin Control Center
             </h1>
           </div>
         </div>
@@ -839,6 +1128,14 @@ export const Admin: React.FC = () => {
           >
             <Plus className="w-3.5 h-3.5" />
             <span>+ Add Content / Image / Video</span>
+          </button>
+
+          <button
+            onClick={handleOpenCreateNavTab}
+            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 rounded-xl text-xs font-semibold flex items-center space-x-1.5 cursor-pointer"
+          >
+            <Compass className="w-3.5 h-3.5" />
+            <span>+ New Nav Tab</span>
           </button>
 
           <button
@@ -862,53 +1159,52 @@ export const Admin: React.FC = () => {
 
           <button
             onClick={handleLogout}
-            className="px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold cursor-pointer"
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 cursor-pointer shadow-xs"
           >
-            Lock CMS
+            <Lock className="w-3.5 h-3.5" />
+            <span>Log Out &amp; Lock Admin</span>
           </button>
         </div>
       </div>
 
       {/* GLOBAL SUMMARY KPI STRIP */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 text-xs">
-        <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
+        <div className="p-3.5 rounded-2xl border border-slate-200 white-glass-card">
+          <span className="text-[10px] font-bold text-slate-500 uppercase block">Nav Tabs</span>
+          <span className="text-xl font-extrabold text-slate-900">{(navTabs || []).length}</span>
+        </div>
+        <div className="p-3.5 rounded-2xl border border-slate-200 white-glass-card">
           <span className="text-[10px] font-bold text-slate-500 uppercase block">Total Posts</span>
           <span className="text-xl font-extrabold text-slate-900">{(cmsItems || []).length}</span>
         </div>
-        <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
+        <div className="p-3.5 rounded-2xl border border-slate-200 white-glass-card">
           <span className="text-[10px] font-bold text-slate-500 uppercase block">Visible Posts</span>
           <span className="text-xl font-extrabold text-slate-900">
             {(cmsItems || []).filter((i) => i.visible).length}
           </span>
         </div>
-        <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
-          <span className="text-[10px] font-bold text-slate-500 uppercase block">Hidden Posts</span>
-          <span className="text-xl font-extrabold text-slate-900">
-            {(cmsItems || []).filter((i) => !i.visible).length}
-          </span>
-        </div>
-        <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
+        <div className="p-3.5 rounded-2xl border border-slate-200 white-glass-card">
           <span className="text-[10px] font-bold text-slate-500 uppercase block">Services (/services)</span>
           <span className="text-xl font-extrabold text-slate-900">{(services || []).length}</span>
         </div>
-        <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
+        <div className="p-3.5 rounded-2xl border border-slate-200 white-glass-card">
           <span className="text-[10px] font-bold text-slate-500 uppercase block">Showcase Builds</span>
           <span className="text-xl font-extrabold text-slate-900">{(projects || []).length}</span>
         </div>
-        <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
-          <span className="text-[10px] font-bold text-slate-500 uppercase block">Guide Topics</span>
+        <div className="p-3.5 rounded-2xl border border-slate-200 white-glass-card">
+          <span className="text-[10px] font-bold text-slate-500 uppercase block">Guide Niches</span>
           <span className="text-xl font-extrabold text-slate-900">
             {(affiliateTopics || []).length}
           </span>
         </div>
-        <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
+        <div className="p-3.5 rounded-2xl border border-slate-200 white-glass-card">
           <span className="text-[10px] font-bold text-slate-500 uppercase block">Partner Ads</span>
           <span className="text-xl font-extrabold text-slate-900">{(promoItems || []).length}</span>
         </div>
-        <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
-          <span className="text-[10px] font-bold text-slate-500 uppercase block">Bookings</span>
-          <span className="text-xl font-extrabold text-slate-900">
-            {(hireVaInquiries || []).length + (inquiries || []).length}
+        <div className="p-3.5 rounded-2xl border border-slate-200 white-glass-card">
+          <span className="text-[10px] font-bold text-slate-500 uppercase block">AdSense Status</span>
+          <span className="text-sm font-extrabold text-emerald-700">
+            {adSenseConfig?.enabled ? '● Ready / Active' : '○ Paused'}
           </span>
         </div>
       </div>
@@ -924,7 +1220,31 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Layers className="w-4 h-4" />
-          <span>1. Content, Images &amp; Videos ({(cmsItems || []).length})</span>
+          <span>1. All Content, Images &amp; Videos ({(cmsItems || []).length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('nav-tabs')}
+          className={`px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition-all cursor-pointer ${
+            activeTab === 'nav-tabs'
+              ? 'bg-slate-900 text-white shadow-2xs'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+          }`}
+        >
+          <Compass className="w-4 h-4" />
+          <span>2. Navigation Tabs Manager ({(navTabs || []).length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('adsense-mgr')}
+          className={`px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition-all cursor-pointer ${
+            activeTab === 'adsense-mgr'
+              ? 'bg-slate-900 text-white shadow-2xs'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+          }`}
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>3. Google AdSense &amp; Monetization</span>
         </button>
 
         <button
@@ -936,7 +1256,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Briefcase className="w-4 h-4" />
-          <span>2. Services (/services) &amp; Showcase ({(services || []).length + (projects || []).length})</span>
+          <span>4. Services &amp; Showcase ({(services || []).length + (projects || []).length})</span>
         </button>
 
         <button
@@ -948,7 +1268,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Sparkles className="w-4 h-4" />
-          <span>3. Collapsible Guide Topics ({(affiliateTopics || []).length})</span>
+          <span>5. Collapsible Guide Niches ({(affiliateTopics || []).length})</span>
         </button>
 
         <button
@@ -960,7 +1280,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <ShoppingBag className="w-4 h-4" />
-          <span>4. Partner Deals &amp; Ads ({(promoItems || []).length})</span>
+          <span>6. ThemeForest Partner Ads ({(promoItems || []).length})</span>
         </button>
 
         <button
@@ -972,7 +1292,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Inbox className="w-4 h-4" />
-          <span>5. Service Bookings ({(hireVaInquiries || []).length})</span>
+          <span>7. Bookings ({(hireVaInquiries || []).length})</span>
         </button>
 
         <button
@@ -984,7 +1304,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Inbox className="w-4 h-4" />
-          <span>6. General Inquiries ({(inquiries || []).length})</span>
+          <span>8. Inquiries ({(inquiries || []).length})</span>
         </button>
 
         <button
@@ -996,7 +1316,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Activity className="w-4 h-4" />
-          <span>7. Insights &amp; Visitor Telemetry</span>
+          <span>9. Telemetry</span>
         </button>
 
         <button
@@ -1008,9 +1328,370 @@ export const Admin: React.FC = () => {
           }`}
         >
           <Shield className="w-4 h-4" />
-          <span>8. Security &amp; Database ({(bannedIps || []).length})</span>
+          <span>10. Security &amp; DB ({(bannedIps || []).length})</span>
         </button>
       </div>
+
+      {/* ========================================================================= */}
+      {/* TAB 2: NAVIGATION TABS MANAGER (ADD / REMOVE / HIDE / UNHIDE NAV TABS)    */}
+      {/* ========================================================================= */}
+      {activeTab === 'nav-tabs' && (
+        <div className="space-y-6">
+          <div className="white-glass-card border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <h2 className="text-lg font-extrabold text-slate-900">
+                Navigation Bar Tabs Manager — Add, Remove, Hide, Unhide &amp; Populate Any Tab
+              </h2>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Create new navigational tabs on your website header &amp; footer, reorder existing tabs, hide/unhide tabs (like <code className="font-mono bg-slate-100 px-1 rounded">/services</code>), and add rich articles, images, and videos to any tab you create.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleOpenCreateNavTab}
+                className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>+ Add New Navigation Tab</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.confirm('Reset Navigation Tabs to default configuration?')) {
+                    resetNavTabsToDefault();
+                    showToast('Navigation Tabs restored to default');
+                  }
+                }}
+                className="px-3.5 py-2.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold text-xs rounded-xl cursor-pointer"
+              >
+                Reset Default Tabs
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            {[...(navTabs || [])]
+              .sort((a, b) => a.sortOrder - b.sortOrder)
+              .map((tab, idx) => {
+                const tabContentCount = (cmsItems || []).filter(
+                  (i) => (i.pageOwner || i.page) === tab.slug
+                ).length;
+
+                return (
+                  <div
+                    key={tab.id}
+                    className={`p-5 rounded-2xl border transition-all flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 ${
+                      tab.visible
+                        ? 'white-glass-card border-slate-200'
+                        : 'bg-slate-50 border-slate-200 opacity-70'
+                    }`}
+                  >
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="px-2.5 py-0.5 rounded-full bg-slate-900 text-white text-[10px] font-bold uppercase">
+                          Tab #{idx + 1}
+                        </span>
+                        <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200 text-[10px] font-mono font-bold">
+                          Path: /#{tab.path} (Slug: {tab.slug})
+                        </span>
+                        <span
+                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
+                            tab.visible
+                              ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                              : 'bg-slate-200 text-slate-700 border-slate-300'
+                          }`}
+                        >
+                          {tab.visible ? '● Visible in Navbar' : '○ Hidden (Direct URL Only)'}
+                        </span>
+                        {tab.badge && (
+                          <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-bold">
+                            Badge: {tab.badge}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-base font-extrabold text-slate-900">{tab.label}</h3>
+                      {tab.heroTitle && (
+                        <p className="text-xs text-slate-600">
+                          <strong>Page Headline:</strong> {tab.heroTitle}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 shrink-0 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenCreateCMS(tab.slug)}
+                        className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-semibold flex items-center gap-1 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>+ Add Content to Tab ({tabContentCount})</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedPageFilter(tab.slug);
+                          setActiveTab('cms');
+                        }}
+                        className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 rounded-xl font-semibold cursor-pointer"
+                      >
+                        View Tab Posts
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => moveNavTabOrder(tab.id, 'up')}
+                        className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg cursor-pointer"
+                        title="Move Left / Up"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveNavTabOrder(tab.id, 'down')}
+                        className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg cursor-pointer"
+                        title="Move Right / Down"
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          toggleNavTabVisibility(tab.id);
+                          showToast(
+                            tab.visible
+                              ? `Hidden "${tab.label}" from public navigation bar`
+                              : `Unhidden "${tab.label}" in public navigation bar`
+                          );
+                        }}
+                        className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl font-semibold flex items-center gap-1 cursor-pointer"
+                      >
+                        {tab.visible ? (
+                          <>
+                            <EyeOff className="w-3.5 h-3.5" />
+                            <span>Hide Tab</span>
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>Unhide Tab</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEditNavTab(tab)}
+                        className="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-900 border border-slate-300 rounded-xl font-semibold flex items-center gap-1 cursor-pointer"
+                      >
+                        <Edit className="w-3.5 h-3.5" />
+                        <span>Edit Tab</span>
+                      </button>
+
+                      {!tab.isSystem && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm(`Delete navigation tab "${tab.label}"?`)) {
+                              deleteNavTab(tab.id);
+                              showToast(`Removed navigation tab "${tab.label}"`);
+                            }
+                          }}
+                          className="p-2 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl cursor-pointer"
+                          title="Remove Tab"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 3: GOOGLE ADSENSE & UNIVERSAL MONETIZATION ENGINE                     */}
+      {/* ========================================================================= */}
+      {activeTab === 'adsense-mgr' && (
+        <div className="space-y-6">
+          <HUDPanel
+            title="Google AdSense & Universal Ad Network Monetization Center"
+            badge="100% AdSense Ready"
+          >
+            <div className="space-y-6 text-xs">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <h3 className="text-sm font-extrabold text-slate-900">
+                    Your Website is Built &amp; Ready for Google AdSense + Affiliate Monetization
+                  </h3>
+                  <p className="text-slate-600 leading-relaxed">
+                    When you connect your custom domain and get your Google AdSense Publisher ID (<code className="font-mono bg-white px-1.5 py-0.5 rounded border border-slate-200">ca-pub-XXXXXXXXXXXXXXXX</code>), paste it below. While in standby, your ad slots automatically display high-converting <strong>ThemeForest-Style Marketplace Partner Ads</strong> so you earn referral revenue from visitors immediately!
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleDownloadAdsTxt}
+                  className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl flex items-center gap-2 shrink-0 cursor-pointer"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download Custom ads.txt</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <label className="p-4 rounded-2xl border border-slate-200 bg-white flex items-center justify-between cursor-pointer">
+                  <div>
+                    <span className="font-extrabold text-slate-900 block">Enable Monetization Slots</span>
+                    <span className="text-[11px] text-slate-500">Show AdSense / Marketplace slots across site</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={adSenseConfig.enabled}
+                    onChange={(e) => {
+                      updateAdSenseConfig({ enabled: e.target.checked });
+                      showToast('Updated Monetization status');
+                    }}
+                    className="w-4 h-4 rounded"
+                  />
+                </label>
+
+                <label className="p-4 rounded-2xl border border-slate-200 bg-white flex items-center justify-between cursor-pointer">
+                  <div>
+                    <span className="font-extrabold text-slate-900 block">Google Auto Ads Script</span>
+                    <span className="text-[11px] text-slate-500">Auto-inject AdSense script into &lt;head&gt;</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={adSenseConfig.autoAdsEnabled}
+                    onChange={(e) => {
+                      updateAdSenseConfig({ autoAdsEnabled: e.target.checked });
+                      showToast('Updated Google Auto Ads script setting');
+                    }}
+                    className="w-4 h-4 rounded"
+                  />
+                </label>
+
+                <label className="p-4 rounded-2xl border border-slate-200 bg-white flex items-center justify-between cursor-pointer">
+                  <div>
+                    <span className="font-extrabold text-slate-900 block">ThemeForest Partner Fallback</span>
+                    <span className="text-[11px] text-slate-500">Show ThemeForest-style partner deals when AdSense is on standby</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={adSenseConfig.showPartnerFallbackAds}
+                    onChange={(e) => {
+                      updateAdSenseConfig({ showPartnerFallbackAds: e.target.checked });
+                      showToast('Updated ThemeForest Partner Fallback setting');
+                    }}
+                    className="w-4 h-4 rounded"
+                  />
+                </label>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">
+                    Google AdSense Publisher ID (ca-pub-...):
+                  </label>
+                  <input
+                    type="text"
+                    value={adSenseConfig.publisherId}
+                    onChange={(e) => updateAdSenseConfig({ publisherId: e.target.value })}
+                    placeholder="ca-pub-0000000000000000"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-900"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">
+                    In-Article Display Ad Slot ID:
+                  </label>
+                  <input
+                    type="text"
+                    value={adSenseConfig.inArticleSlotId}
+                    onChange={(e) => updateAdSenseConfig({ inArticleSlotId: e.target.value })}
+                    placeholder="e.g. 1234567890 (Optional)"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-900"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">
+                    Sidebar Ad Slot ID:
+                  </label>
+                  <input
+                    type="text"
+                    value={adSenseConfig.sidebarSlotId}
+                    onChange={(e) => updateAdSenseConfig({ sidebarSlotId: e.target.value })}
+                    placeholder="e.g. 2345678901 (Optional)"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-900"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">
+                    Footer Leaderboard Ad Slot ID:
+                  </label>
+                  <input
+                    type="text"
+                    value={adSenseConfig.footerSlotId}
+                    onChange={(e) => updateAdSenseConfig({ footerSlotId: e.target.value })}
+                    placeholder="e.g. 3456789012 (Optional)"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block pb-1">
+                  Universal Custom Ad Network HTML / Script (Ezoic, Mediavine, PropellerAds, Carbon Ads, etc.):
+                </label>
+                <textarea
+                  rows={3}
+                  value={adSenseConfig.customAdScriptHtml || ''}
+                  onChange={(e) => updateAdSenseConfig({ customAdScriptHtml: e.target.value })}
+                  placeholder="Paste any custom ad banner HTML or script snippet here..."
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-900"
+                />
+              </div>
+
+              {/* GOOGLE ADSENSE APPROVAL READINESS CHECKLIST */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                <h4 className="font-extrabold text-slate-900 text-sm">
+                  ✓ Built-In Google AdSense Approval Readiness Checklist
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div className="p-3 bg-white rounded-xl border border-slate-200">
+                    <span className="font-bold text-emerald-700 block">✓ Privacy Policy &amp; DART Cookie Page</span>
+                    <span className="text-[11px] text-slate-600">Live at /#/privacy-policy &amp; /#/terms</span>
+                  </div>
+                  <div className="p-3 bg-white rounded-xl border border-slate-200">
+                    <span className="font-bold text-emerald-700 block">✓ GDPR / CCPA Cookie Consent Banner</span>
+                    <span className="text-[11px] text-slate-600">Interactive consent notice active for visitors</span>
+                  </div>
+                  <div className="p-3 bg-white rounded-xl border border-slate-200">
+                    <span className="font-bold text-emerald-700 block">✓ Root /ads.txt File Included</span>
+                    <span className="text-[11px] text-slate-600">Pre-configured at /ads.txt for AdSense crawlers</span>
+                  </div>
+                  <div className="p-3 bg-white rounded-xl border border-slate-200">
+                    <span className="font-bold text-emerald-700 block">✓ Long-Form High-Value Tutorials</span>
+                    <span className="text-[11px] text-slate-600">25+ comprehensive tutorials &amp; 15 numbered niches</span>
+                  </div>
+                  <div className="p-3 bg-white rounded-xl border border-slate-200">
+                    <span className="font-bold text-emerald-700 block">✓ Clear Navigation &amp; Mobile Speed</span>
+                    <span className="text-[11px] text-slate-600">Responsive across all mobile &amp; desktop screens</span>
+                  </div>
+                  <div className="p-3 bg-white rounded-xl border border-slate-200">
+                    <span className="font-bold text-emerald-700 block">✓ Publisher Transparency &amp; Contact</span>
+                    <span className="text-[11px] text-slate-600">About page, consultation form &amp; verified Play ID</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </HUDPanel>
+        </div>
+      )}
 
       {/* ========================================================================= */}
       {/* TAB 1: ALL-IN-ONE CONTENT, IMAGES & VIDEOS MANAGER                        */}
@@ -1023,12 +1704,12 @@ export const Admin: React.FC = () => {
                 Upload, Add, Edit, Hide/Unhide or Remove Any Content, Image, or Video
               </h3>
               <p className="text-xs text-slate-600">
-                Every tutorial, guide, resource, image, and video across Home, AI &amp; Automations, Showcase, Services, Web Hosting, Affiliate Guide, and About is controlled here.
+                Every tutorial, guide, resource, image, and video across Home, AI &amp; Automations, Showcase, Services, Web Hosting, Affiliate Guide, About, and any Custom Navigation Tab is controlled here.
               </p>
             </div>
             <div className="flex flex-wrap gap-2 shrink-0">
               <button
-                onClick={() => handleOpenCreateCMS('ai')}
+                onClick={() => handleOpenCreateCMS(selectedPageFilter === 'all' ? 'ai' : selectedPageFilter)}
                 className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl flex items-center space-x-1.5 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
@@ -1042,20 +1723,34 @@ export const Admin: React.FC = () => {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="space-y-1.5">
                 <span className="text-[10px] font-bold text-slate-400 uppercase block">
-                  Filter by Page Assignment:
+                  Filter by Navigation Tab / Page Assignment:
                 </span>
                 <div className="flex flex-wrap gap-1.5 text-xs">
-                  {(
-                    [
-                      'all',
-                      'ai',
-                      'affiliate-guide',
-                      'showcase',
-                      'services',
-                      'web-hosting',
-                      'about'
-                    ] as const
-                  ).map((pg) => (
+                  {[
+                    'all',
+                    'home',
+                    'ai',
+                    'affiliate-guide',
+                    'showcase',
+                    'services',
+                    'web-hosting',
+                    'about',
+                    ...(navTabs || [])
+                      .map((t) => t.slug)
+                      .filter(
+                        (s) =>
+                          ![
+                            'home',
+                            'ai',
+                            'affiliate-guide',
+                            'showcase',
+                            'services',
+                            'web-hosting',
+                            'about',
+                            'admin'
+                          ].includes(s)
+                      )
+                  ].map((pg) => (
                     <button
                       key={pg}
                       onClick={() => setSelectedPageFilter(pg)}
@@ -1090,6 +1785,44 @@ export const Admin: React.FC = () => {
                     </button>
                   ))}
                 </div>
+              </div>
+            </div>
+
+            {/* SEPARATE FILTER BY CATEGORY / NICHE BAR */}
+            <div className="pt-3 border-t border-slate-100 space-y-1.5">
+              <span className="text-[10px] font-bold text-slate-400 uppercase block">
+                Filter &amp; Separate by Category / Niche ({allUniqueCategories.length} Categories):
+              </span>
+              <div className="flex flex-wrap gap-1.5 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setSelectedCategoryFilter('all')}
+                  className={`px-3 py-1 rounded-xl font-semibold transition-all cursor-pointer ${
+                    selectedCategoryFilter === 'all'
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200'
+                  }`}
+                >
+                  All Categories ({(cmsItems || []).length})
+                </button>
+                {allUniqueCategories.map((cat) => {
+                  const count = (cmsItems || []).filter((i) => i.category === cat).length;
+                  if (count === 0 && cat !== 'MAKE MONEY ONLINE') return null;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedCategoryFilter(cat)}
+                      className={`px-3 py-1 rounded-xl font-semibold transition-all cursor-pointer ${
+                        selectedCategoryFilter === cat
+                          ? 'bg-slate-900 text-white'
+                          : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200'
+                      }`}
+                    >
+                      {cat} ({count})
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -1364,9 +2097,25 @@ export const Admin: React.FC = () => {
                 {(services || []).map((svc) => (
                   <div
                     key={svc.id}
-                    className="p-5 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between space-y-4 shadow-2xs"
+                    className={`p-5 rounded-2xl border flex flex-col justify-between space-y-4 shadow-2xs ${
+                      svc.visible !== false
+                        ? 'border-slate-200 bg-white'
+                        : 'border-slate-200 bg-slate-50 opacity-60'
+                    }`}
                   >
                     <div className="space-y-2">
+                      {svc.image && !svc.hideImage && (
+                        <div className="h-32 w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-50 relative group">
+                          <img src={svc.image} alt={svc.title} className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => updateService(svc.id, { image: '' })}
+                            className="absolute inset-0 bg-slate-900/70 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center text-[10px] font-bold cursor-pointer"
+                          >
+                            Remove Image
+                          </button>
+                        </div>
+                      )}
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                           {svc.category === 'va' ? 'Virtual Assistant' : 'Engineering & AI'}
@@ -1384,27 +2133,39 @@ export const Admin: React.FC = () => {
                       </ul>
                     </div>
 
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2 text-xs">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenEditService(svc)}
-                        className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold flex items-center gap-1 cursor-pointer"
-                      >
-                        <Edit className="w-3.5 h-3.5" />
-                        <span>Edit Price / Details</span>
-                      </button>
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
                       <button
                         type="button"
                         onClick={() => {
-                          if (window.confirm(`Delete service "${svc.title}"?`)) {
-                            deleteService(svc.id);
-                            showToast(`Deleted service "${svc.title}"`);
-                          }
+                          toggleServiceVisibility(svc.id);
+                          showToast(`Toggled visibility for service "${svc.title}"`);
                         }}
-                        className="p-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg cursor-pointer"
+                        className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg font-semibold cursor-pointer"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        {svc.visible !== false ? 'Hide' : 'Unhide'}
                       </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditService(svc)}
+                          className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                          <span>Edit / Media</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm(`Delete service "${svc.title}"?`)) {
+                              deleteService(svc.id);
+                              showToast(`Deleted service "${svc.title}"`);
+                            }
+                          }}
+                          className="p-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1420,7 +2181,7 @@ export const Admin: React.FC = () => {
             <div className="space-y-5">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                 <p className="text-xs text-slate-600">
-                  Add, edit, upload project screenshots, or remove portfolio items displayed on <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-900">/#/showcase</code>.
+                  Add, edit, upload project screenshots/videos, hide/unhide, or remove portfolio items displayed on <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-900">/#/showcase</code>.
                 </p>
                 <button
                   type="button"
@@ -1436,10 +2197,14 @@ export const Admin: React.FC = () => {
                 {(projects || []).map((proj) => (
                   <div
                     key={proj.id}
-                    className="p-5 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between space-y-4 shadow-2xs"
+                    className={`p-5 rounded-2xl border flex flex-col justify-between space-y-4 shadow-2xs ${
+                      proj.visible !== false
+                        ? 'border-slate-200 bg-white'
+                        : 'border-slate-200 bg-slate-50 opacity-60'
+                    }`}
                   >
                     <div className="flex items-start gap-4">
-                      {proj.image && (
+                      {proj.image && !proj.hideImage && (
                         <img
                           src={proj.image}
                           alt={proj.title}
@@ -1455,27 +2220,39 @@ export const Admin: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2 text-xs">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenEditProject(proj)}
-                        className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold flex items-center gap-1 cursor-pointer"
-                      >
-                        <Edit className="w-3.5 h-3.5" />
-                        <span>Edit Project</span>
-                      </button>
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
                       <button
                         type="button"
                         onClick={() => {
-                          if (window.confirm(`Delete project "${proj.title}"?`)) {
-                            deleteProject(proj.id);
-                            showToast(`Deleted project "${proj.title}"`);
-                          }
+                          toggleProjectVisibility(proj.id);
+                          showToast(`Toggled visibility for project "${proj.title}"`);
                         }}
-                        className="p-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg cursor-pointer"
+                        className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg font-semibold cursor-pointer"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        {proj.visible !== false ? 'Hide' : 'Unhide'}
                       </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditProject(proj)}
+                          className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold flex items-center gap-1 cursor-pointer"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                          <span>Edit Project / Media</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm(`Delete project "${proj.title}"?`)) {
+                              deleteProject(proj.id);
+                              showToast(`Deleted project "${proj.title}"`);
+                            }
+                          }}
+                          className="p-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -2025,7 +2802,7 @@ export const Admin: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
                 <div>
                   <label className="text-slate-700 font-bold block pb-1">
-                    1. Target Page Owner:
+                    1. Target Navigation Tab / Page:
                   </label>
                   <select
                     value={cmsForm.pageOwner}
@@ -2034,12 +2811,32 @@ export const Admin: React.FC = () => {
                     }
                     className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-slate-900 font-semibold"
                   >
+                    <option value="home">Home Page (/#/)</option>
                     <option value="ai">AI &amp; Automations (/#/ai)</option>
                     <option value="affiliate-guide">Free VA &amp; Affiliate Guide (/#/affiliate-guide)</option>
                     <option value="showcase">Portfolio Showcase (/#/showcase)</option>
                     <option value="services">Hidden Services Page (/#/services)</option>
                     <option value="web-hosting">Web Hosting (/#/web-hosting)</option>
                     <option value="about">About Page (/#/about)</option>
+                    {(navTabs || [])
+                      .filter(
+                        (t) =>
+                          ![
+                            'home',
+                            'ai',
+                            'affiliate-guide',
+                            'showcase',
+                            'services',
+                            'web-hosting',
+                            'about',
+                            'admin'
+                          ].includes(t.slug)
+                      )
+                      .map((t) => (
+                        <option key={t.id} value={t.slug}>
+                          Custom Tab: {t.label} (/#{t.path})
+                        </option>
+                      ))}
                   </select>
                 </div>
 
@@ -2104,7 +2901,7 @@ export const Admin: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-slate-700 font-bold block pb-1">Category:</label>
+                  <label className="text-slate-700 font-bold block pb-1">Category / Niche:</label>
                   <input
                     type="text"
                     required
@@ -2141,22 +2938,32 @@ export const Admin: React.FC = () => {
                 />
               </div>
 
-              {/* IMAGE UPLOAD / URL / REMOVE SECTION */}
+              {/* IMAGE UPLOAD / URL / HIDE / REMOVE SECTION */}
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between flex-wrap gap-2">
                   <label className="text-slate-900 font-bold flex items-center gap-1.5">
                     <ImageIcon className="w-4 h-4" />
                     <span>Cover Image (Upload from Computer OR Paste Image URL):</span>
                   </label>
-                  {cmsForm.mainImage && (
-                    <button
-                      type="button"
-                      onClick={() => setCmsForm({ ...cmsForm, mainImage: '' })}
-                      className="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[11px] font-semibold cursor-pointer"
-                    >
-                      ✕ Remove Image
-                    </button>
-                  )}
+                  <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-1.5 cursor-pointer font-semibold text-slate-700">
+                      <input
+                        type="checkbox"
+                        checked={cmsForm.hideImage}
+                        onChange={(e) => setCmsForm({ ...cmsForm, hideImage: e.target.checked })}
+                      />
+                      <span>Hide Image</span>
+                    </label>
+                    {cmsForm.mainImage && (
+                      <button
+                        type="button"
+                        onClick={() => setCmsForm({ ...cmsForm, mainImage: '' })}
+                        className="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[11px] font-semibold cursor-pointer"
+                      >
+                        ✕ Remove Image
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -2175,7 +2982,7 @@ export const Admin: React.FC = () => {
                   />
                 </div>
 
-                {cmsForm.mainImage && (
+                {cmsForm.mainImage && !cmsForm.hideImage && (
                   <div className="h-32 w-48 rounded-xl overflow-hidden border border-slate-200 bg-white">
                     <img
                       src={cmsForm.mainImage}
@@ -2186,22 +2993,32 @@ export const Admin: React.FC = () => {
                 )}
               </div>
 
-              {/* VIDEO UPLOAD / URL / REMOVE SECTION */}
+              {/* VIDEO UPLOAD / URL / HIDE / REMOVE SECTION */}
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between flex-wrap gap-2">
                   <label className="text-slate-900 font-bold flex items-center gap-1.5">
                     <Video className="w-4 h-4" />
                     <span>Video Tutorial (YouTube Embed/Watch URL, MP4 Link, or Upload Video File):</span>
                   </label>
-                  {cmsForm.videoUrl && (
-                    <button
-                      type="button"
-                      onClick={() => setCmsForm({ ...cmsForm, videoUrl: '' })}
-                      className="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[11px] font-semibold cursor-pointer"
-                    >
-                      ✕ Remove Video
-                    </button>
-                  )}
+                  <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-1.5 cursor-pointer font-semibold text-slate-700">
+                      <input
+                        type="checkbox"
+                        checked={cmsForm.hideVideo}
+                        onChange={(e) => setCmsForm({ ...cmsForm, hideVideo: e.target.checked })}
+                      />
+                      <span>Hide Video</span>
+                    </label>
+                    {cmsForm.videoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setCmsForm({ ...cmsForm, videoUrl: '' })}
+                        className="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[11px] font-semibold cursor-pointer"
+                      >
+                        ✕ Remove Video
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -2294,8 +3111,8 @@ export const Admin: React.FC = () => {
       {/* MODAL 2: CREATE / EDIT AFFORDABLE SERVICE PACKAGE                         */}
       {/* ========================================================================= */}
       {isServiceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl text-slate-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl my-8 max-h-[90vh] overflow-y-auto text-slate-900">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-lg font-extrabold text-slate-900">
                 {editingService ? 'Edit Affordable Service Package' : 'Add Affordable Service Package'}
@@ -2340,7 +3157,7 @@ export const Admin: React.FC = () => {
                   <select
                     value={serviceForm.category}
                     onChange={(e) =>
-                      setServiceForm({ ...serviceForm, category: e.target.value as 'va' | 'dev' })
+                      setServiceForm({ ...serviceForm, category: e.target.value })
                     }
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold"
                   >
@@ -2378,6 +3195,44 @@ export const Admin: React.FC = () => {
                 />
               </div>
 
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-slate-800">Service Image:</label>
+                  <div className="flex items-center gap-2">
+                    <label className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={serviceForm.hideImage}
+                        onChange={(e) => setServiceForm({ ...serviceForm, hideImage: e.target.checked })}
+                      />
+                      <span>Hide Image</span>
+                    </label>
+                    {serviceForm.image && (
+                      <button
+                        type="button"
+                        onClick={() => setServiceForm({ ...serviceForm, image: '' })}
+                        className="text-[11px] text-slate-600 underline cursor-pointer"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Image URL..."
+                  value={serviceForm.image}
+                  onChange={(e) => setServiceForm({ ...serviceForm, image: e.target.value })}
+                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e, 'service-image')}
+                  className="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-900 file:text-white cursor-pointer"
+                />
+              </div>
+
               <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
                 <button
                   type="button"
@@ -2402,8 +3257,8 @@ export const Admin: React.FC = () => {
       {/* MODAL 3: CREATE / EDIT PORTFOLIO SHOWCASE PROJECT                         */}
       {/* ========================================================================= */}
       {isProjectModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl text-slate-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl my-8 max-h-[90vh] overflow-y-auto text-slate-900">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-lg font-extrabold text-slate-900">
                 {editingProject ? 'Edit Portfolio Project' : 'Add Portfolio Project'}
@@ -2444,15 +3299,25 @@ export const Admin: React.FC = () => {
               <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="font-bold text-slate-800">Project Image:</label>
-                  {projectForm.image && (
-                    <button
-                      type="button"
-                      onClick={() => setProjectForm({ ...projectForm, image: '' })}
-                      className="text-[11px] text-slate-600 underline cursor-pointer"
-                    >
-                      Remove Image
-                    </button>
-                  )}
+                  <div className="flex items-center gap-2">
+                    <label className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={projectForm.hideImage}
+                        onChange={(e) => setProjectForm({ ...projectForm, hideImage: e.target.checked })}
+                      />
+                      <span>Hide Image</span>
+                    </label>
+                    {projectForm.image && (
+                      <button
+                        type="button"
+                        onClick={() => setProjectForm({ ...projectForm, image: '' })}
+                        className="text-[11px] text-slate-600 underline cursor-pointer"
+                      >
+                        Remove Image
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <input
                   type="text"
@@ -2466,6 +3331,38 @@ export const Admin: React.FC = () => {
                   accept="image/*"
                   onChange={(e) => handleFileUpload(e, 'project-image')}
                   className="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-900 file:text-white cursor-pointer"
+                />
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-slate-800">Project Video (Optional):</label>
+                  <div className="flex items-center gap-2">
+                    <label className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={projectForm.hideVideo}
+                        onChange={(e) => setProjectForm({ ...projectForm, hideVideo: e.target.checked })}
+                      />
+                      <span>Hide Video</span>
+                    </label>
+                    {projectForm.videoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setProjectForm({ ...projectForm, videoUrl: '' })}
+                        className="text-[11px] text-slate-600 underline cursor-pointer"
+                      >
+                        Remove Video
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  placeholder="YouTube or MP4 Video URL..."
+                  value={projectForm.videoUrl}
+                  onChange={(e) => setProjectForm({ ...projectForm, videoUrl: e.target.value })}
+                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl"
                 />
               </div>
 
@@ -2586,15 +3483,25 @@ export const Admin: React.FC = () => {
               <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="font-bold text-slate-800">Header Banner Image:</label>
-                  {topicForm.headerBannerImage && (
-                    <button
-                      type="button"
-                      onClick={() => setTopicForm({ ...topicForm, headerBannerImage: '' })}
-                      className="text-[11px] text-slate-600 underline cursor-pointer"
-                    >
-                      Remove Image
-                    </button>
-                  )}
+                  <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={topicForm.hideImage}
+                        onChange={(e) => setTopicForm({ ...topicForm, hideImage: e.target.checked })}
+                      />
+                      <span>Hide Image</span>
+                    </label>
+                    {topicForm.headerBannerImage && (
+                      <button
+                        type="button"
+                        onClick={() => setTopicForm({ ...topicForm, headerBannerImage: '' })}
+                        className="text-[11px] text-slate-600 underline cursor-pointer"
+                      >
+                        Remove Image
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <input
                   type="text"
@@ -2615,9 +3522,19 @@ export const Admin: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 block pb-1">
-                    Video URL (Optional YouTube/MP4):
-                  </label>
+                  <div className="flex items-center justify-between pb-1">
+                    <label className="font-bold text-slate-700">
+                      Video URL (Optional YouTube/MP4):
+                    </label>
+                    <label className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={topicForm.hideVideo}
+                        onChange={(e) => setTopicForm({ ...topicForm, hideVideo: e.target.checked })}
+                      />
+                      <span>Hide Video</span>
+                    </label>
+                  </div>
                   <input
                     type="text"
                     value={topicForm.videoUrl}
@@ -2681,11 +3598,11 @@ export const Admin: React.FC = () => {
       {/* MODAL 5: CREATE / EDIT PROMOTION / SIDEBAR AD                             */}
       {/* ========================================================================= */}
       {(isCreatingPromoItem || editingPromoItem) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl text-slate-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl my-8 max-h-[90vh] overflow-y-auto text-slate-900">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-lg font-extrabold text-slate-900">
-                {editingPromoItem ? 'Edit Promotion / Ad' : 'Create Promotion / Ad'}
+                {editingPromoItem ? 'Edit ThemeForest / Partner Ad' : 'Create ThemeForest / Partner Ad'}
               </h3>
               <button
                 onClick={() => {
@@ -2744,15 +3661,25 @@ export const Admin: React.FC = () => {
               <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="font-bold text-slate-800">Ad Image:</label>
-                  {promoForm.imageUrl && (
-                    <button
-                      type="button"
-                      onClick={() => setPromoForm({ ...promoForm, imageUrl: '' })}
-                      className="text-[11px] text-slate-600 underline cursor-pointer"
-                    >
-                      Remove Image
-                    </button>
-                  )}
+                  <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={promoForm.hideImage}
+                        onChange={(e) => setPromoForm({ ...promoForm, hideImage: e.target.checked })}
+                      />
+                      <span>Hide Image</span>
+                    </label>
+                    {promoForm.imageUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setPromoForm({ ...promoForm, imageUrl: '' })}
+                        className="text-[11px] text-slate-600 underline cursor-pointer"
+                      >
+                        Remove Image
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <input
                   type="text"
@@ -2766,6 +3693,38 @@ export const Admin: React.FC = () => {
                   accept="image/*"
                   onChange={(e) => handleFileUpload(e, 'promo-image')}
                   className="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-900 file:text-white cursor-pointer"
+                />
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-slate-800">Ad Video (Optional):</label>
+                  <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={promoForm.hideVideo}
+                        onChange={(e) => setPromoForm({ ...promoForm, hideVideo: e.target.checked })}
+                      />
+                      <span>Hide Video</span>
+                    </label>
+                    {promoForm.videoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setPromoForm({ ...promoForm, videoUrl: '' })}
+                        className="text-[11px] text-slate-600 underline cursor-pointer"
+                      >
+                        Remove Video
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  placeholder="YouTube or MP4 Video URL..."
+                  value={promoForm.videoUrl}
+                  onChange={(e) => setPromoForm({ ...promoForm, videoUrl: e.target.value })}
+                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl"
                 />
               </div>
 
@@ -2811,6 +3770,165 @@ export const Admin: React.FC = () => {
                   className="px-5 py-2 bg-slate-900 text-white rounded-xl font-semibold cursor-pointer"
                 >
                   Save Promotion
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL 6: CREATE / EDIT NAVIGATION TAB (ADD / REMOVE / HIDE / UNHIDE TAB)  */}
+      {/* ========================================================================= */}
+      {isNavTabModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl my-8 text-slate-900">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                  Navigation Bar &amp; Dynamic Page Builder
+                </span>
+                <h3 className="text-lg font-extrabold text-slate-900">
+                  {editingNavTab ? `Edit Navigation Tab: ${editingNavTab.label}` : 'Add New Navigation Tab'}
+                </h3>
+              </div>
+              <button
+                onClick={() => {
+                  setIsNavTabModalOpen(false);
+                  setEditingNavTab(null);
+                }}
+                className="p-1.5 bg-slate-100 rounded-lg text-slate-600 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveNavTab} className="space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-2">
+                  <label className="font-bold text-slate-700 block pb-1">
+                    Tab Label (Shown in Navbar):
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={navTabForm.label}
+                    onChange={(e) => {
+                      const lbl = e.target.value;
+                      const autoSlug = lbl
+                        .toLowerCase()
+                        .replace(/[^a-z0-9-_]/g, '-')
+                        .replace(/-+/g, '-')
+                        .replace(/^-|-$/g, '');
+                      setNavTabForm((prev) => ({
+                        ...prev,
+                        label: lbl,
+                        slug: editingNavTab ? prev.slug : autoSlug,
+                        path: editingNavTab ? prev.path : `/page/${autoSlug}`
+                      }));
+                    }}
+                    placeholder="e.g. Make Money Hub"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">Badge (Optional):</label>
+                  <input
+                    type="text"
+                    value={navTabForm.badge}
+                    onChange={(e) => setNavTabForm({ ...navTabForm, badge: e.target.value })}
+                    placeholder="NEW / HOT"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">Tab Slug (Page Owner ID):</label>
+                  <input
+                    type="text"
+                    disabled={Boolean(editingNavTab?.isSystem)}
+                    value={navTabForm.slug}
+                    onChange={(e) => setNavTabForm({ ...navTabForm, slug: e.target.value })}
+                    placeholder="make-money-hub"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">Route Path or External URL:</label>
+                  <input
+                    type="text"
+                    disabled={Boolean(editingNavTab?.isSystem)}
+                    value={navTabForm.path}
+                    onChange={(e) => setNavTabForm({ ...navTabForm, path: e.target.value })}
+                    placeholder="/page/make-money-hub"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block pb-1">
+                  Page Hero Headline (For Custom Tab Page):
+                </label>
+                <input
+                  type="text"
+                  value={navTabForm.heroTitle}
+                  onChange={(e) => setNavTabForm({ ...navTabForm, heroTitle: e.target.value })}
+                  placeholder="Enter page headline..."
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block pb-1">
+                  Page Hero Subtitle:
+                </label>
+                <textarea
+                  rows={2}
+                  value={navTabForm.heroSubtitle}
+                  onChange={(e) => setNavTabForm({ ...navTabForm, heroSubtitle: e.target.value })}
+                  placeholder="Describe the articles, guides, and media on this tab..."
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl"
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-6 pt-1">
+                <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-800">
+                  <input
+                    type="checkbox"
+                    checked={navTabForm.visible}
+                    onChange={(e) => setNavTabForm({ ...navTabForm, visible: e.target.checked })}
+                  />
+                  <span>Visible in Public Navbar</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-800">
+                  <input
+                    type="checkbox"
+                    checked={navTabForm.isExternal}
+                    onChange={(e) => setNavTabForm({ ...navTabForm, isExternal: e.target.checked })}
+                  />
+                  <span>External Link (Opens in New Tab)</span>
+                </label>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsNavTabModalOpen(false);
+                    setEditingNavTab(null);
+                  }}
+                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-semibold cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-slate-900 text-white rounded-xl font-semibold cursor-pointer"
+                >
+                  Save Navigation Tab
                 </button>
               </div>
             </form>

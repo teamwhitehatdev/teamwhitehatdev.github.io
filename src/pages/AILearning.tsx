@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  BookOpen,
-  Search,
-  ExternalLink,
-  Video,
-  Box,
-  Cpu
-} from 'lucide-react';
+import { BookOpen, Search, ExternalLink, Video, Box, Cpu } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { CMSItem } from '../types';
 import { ArticleModal } from '../components/ArticleModal';
@@ -54,10 +47,10 @@ export const AILearning: React.FC = () => {
   });
 
   return (
-    <div className="space-y-12 max-w-7xl mx-auto pb-16 bg-white text-slate-900">
-      {/* 🚀 HERO HEADER BANNER (PURE MINIMALIST WHITE) */}
-      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-xs space-y-6">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+    <div className="space-y-12 max-w-7xl mx-auto pb-16 bg-transparent text-slate-900">
+      {/* 🚀 HERO HEADER BANNER (GLASSMORPHIC MINIMALIST WHITE) */}
+      <section className="white-glass-card rounded-3xl p-6 sm:p-10 space-y-6">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-slate-200/80">
           <div className="space-y-3 max-w-3xl">
             <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
               <Cpu className="w-4 h-4 text-slate-700" />
@@ -67,12 +60,14 @@ export const AILearning: React.FC = () => {
               AI &amp; Its Capabilities, Visual Automation Workflows &amp; Free VA Tutorials
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Master how modern Artificial Intelligence works, explore interactive node-by-node <strong className="text-slate-900">AI Automation Flow Diagrams</strong>, and learn how Virtual Assistants and freelancers use AI tools to save clients 15+ hours every week.
+              Master how modern Artificial Intelligence works, explore interactive node-by-node{' '}
+              <strong className="text-slate-900">AI Automation Flow Diagrams</strong>, and learn how
+              Virtual Assistants and freelancers use AI tools to save clients 15+ hours every week.
             </p>
           </div>
 
           {/* FEATURED MESHY AI 3D GENERATOR REFERRAL IN AI NAVIGATION TAB */}
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 max-w-sm w-full space-y-3 shadow-xs">
+          <div className="bg-slate-50/90 border border-slate-200 rounded-2xl p-4 sm:p-5 max-w-sm w-full space-y-3 shadow-xs">
             <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-700">
               <span className="flex items-center gap-1">
                 <Box className="w-3.5 h-3.5 text-slate-800" />
@@ -108,12 +103,13 @@ export const AILearning: React.FC = () => {
                 placeholder="Search free tutorials: AI capabilities, automation diagrams, Meshy 3D, VA proposals..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-colors"
               />
             </div>
 
             <div className="text-xs font-semibold text-slate-500 shrink-0">
-              Showing <strong className="text-slate-900">{filteredArticles.length}</strong> Unique Free Guides
+              Showing <strong className="text-slate-900">{filteredArticles.length}</strong> Unique
+              Free Guides
             </div>
           </div>
 
@@ -153,83 +149,119 @@ export const AILearning: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredArticles.map((article) => (
-            <div
-              key={article.id}
-              className="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl overflow-hidden flex flex-col justify-between transition-all group shadow-xs"
-            >
-              {/* CARD COVER IMAGE */}
-              <div className="h-48 w-full relative overflow-hidden bg-slate-50 border-b border-slate-100">
-                <img
-                  src={
-                    article.mainImage ||
-                    'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop&q=80'
-                  }
-                  alt={article.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop&q=80';
-                  }}
-                />
-                <span className="absolute top-3 left-3 px-2.5 py-1 bg-white/95 backdrop-blur-xs text-slate-800 text-[10px] font-bold rounded-full border border-slate-200 uppercase shadow-xs">
-                  {article.category}
-                </span>
-                {article.badge && (
-                  <span className="absolute top-3 right-3 px-2.5 py-1 bg-slate-900 text-white text-[10px] font-bold rounded-full uppercase shadow-xs">
-                    {article.badge}
-                  </span>
-                )}
-                {article.videoUrl && (
-                  <span className="absolute bottom-3 right-3 px-2.5 py-1 bg-slate-900 text-white text-[10px] font-bold rounded-full flex items-center gap-1.5 shadow-xs">
-                    <Video className="w-3.5 h-3.5" />
-                    <span>Video Guide</span>
-                  </span>
-                )}
-              </div>
+          {filteredArticles.map((article) => {
+            const showImage = Boolean(article.mainImage && !article.hideImage);
+            const showVideo = Boolean(article.videoUrl && !article.hideVideo);
 
-              {/* CARD CONTENT */}
-              <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <h3
-                    onClick={() => setSelectedArticle(article)}
-                    className="text-base sm:text-lg font-bold text-slate-900 group-hover:underline transition-colors line-clamp-2 cursor-pointer"
-                  >
-                    {article.title}
-                  </h3>
-                  <p className="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
-                    {article.description}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 mt-2 text-xs">
-                  <button
-                    onClick={() => setSelectedArticle(article)}
-                    className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <BookOpen className="w-3.5 h-3.5" />
-                    <span>Read Free Tutorial</span>
-                  </button>
-
-                  {(article.url || article.referralUrl) && (
-                    <a
-                      href={article.url || article.referralUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-all flex items-center gap-1 shrink-0"
-                    >
-                      <span>
-                        {article.buttonText
-                          ? article.buttonText.split('(')[0].trim().slice(0, 16)
-                          : 'Open Link'}
+            return (
+              <div
+                key={article.id}
+                className="white-glass-card rounded-2xl overflow-hidden flex flex-col justify-between transition-all group hover:-translate-y-1"
+              >
+                {/* CARD COVER IMAGE OR INLINE VIDEO */}
+                {showImage && (
+                  <div className="h-48 w-full relative overflow-hidden bg-slate-50 border-b border-slate-100">
+                    <img
+                      src={article.mainImage}
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
+                    />
+                    <span className="absolute top-3 left-3 px-2.5 py-1 bg-white/95 backdrop-blur-xs text-slate-800 text-[10px] font-bold rounded-full border border-slate-200 uppercase shadow-xs">
+                      {article.category}
+                    </span>
+                    {article.badge && (
+                      <span className="absolute top-3 right-3 px-2.5 py-1 bg-slate-900 text-white text-[10px] font-bold rounded-full uppercase shadow-xs">
+                        {article.badge}
                       </span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
+                    )}
+                    {showVideo && (
+                      <span className="absolute bottom-3 right-3 px-2.5 py-1 bg-slate-900 text-white text-[10px] font-bold rounded-full flex items-center gap-1.5 shadow-xs">
+                        <Video className="w-3.5 h-3.5" />
+                        <span>Video Guide</span>
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {!showImage && showVideo && (
+                  <div className="w-full bg-slate-50 border-b border-slate-100">
+                    {article.videoUrl!.includes('youtube.com') ||
+                    article.videoUrl!.includes('youtu.be') ? (
+                      <iframe
+                        src={
+                          article.videoUrl!.includes('watch?v=')
+                            ? article.videoUrl!.replace('watch?v=', 'embed/')
+                            : article.videoUrl
+                        }
+                        title={article.title}
+                        className="w-full aspect-video border-0"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <video
+                        src={article.videoUrl}
+                        controls
+                        className="w-full h-48 object-cover"
+                      />
+                    )}
+                  </div>
+                )}
+
+                {/* CARD CONTENT */}
+                <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    {!showImage && (
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="px-2.5 py-0.5 bg-slate-100 text-slate-800 text-[10px] font-bold rounded-full border border-slate-200 uppercase">
+                          {article.category}
+                        </span>
+                        {article.badge && (
+                          <span className="px-2.5 py-0.5 bg-slate-900 text-white text-[10px] font-bold rounded-full uppercase">
+                            {article.badge}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    <h3
+                      onClick={() => setSelectedArticle(article)}
+                      className="text-base sm:text-lg font-bold text-slate-900 group-hover:underline transition-colors line-clamp-2 cursor-pointer"
+                    >
+                      {article.title}
+                    </h3>
+                    <p className="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
+                      {article.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 mt-2 text-xs">
+                    <button
+                      onClick={() => setSelectedArticle(article)}
+                      className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>Read Free Tutorial</span>
+                    </button>
+
+                    {(article.url || article.referralUrl) && (
+                      <a
+                        href={article.url || article.referralUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-all flex items-center gap-1 shrink-0"
+                      >
+                        <span>
+                          {article.buttonText
+                            ? article.buttonText.split('(')[0].trim().slice(0, 16)
+                            : 'Open Link'}
+                        </span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Smartphone, Menu, X, Box, ExternalLink } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 export interface NavbarProps {
   onOpenConsultation?: () => void;
@@ -12,22 +13,21 @@ export const MESHY_REFERRAL_URL =
 export const Navbar: React.FC<NavbarProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { navTabs } = useApp();
   const PLAY_STORE_URL = 'https://play.google.com/store/apps/dev?id=7374638355121114347';
 
-  // Public navigation links ONLY (/services and /admin are hidden from UI and accessible via direct URL only)
-  const navLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/ai', label: 'AI & Automations' },
-    { path: '/affiliate-guide', label: 'Free VA & Freelancer Guide' },
-    { path: '/showcase', label: 'Portfolio' },
-    { path: '/web-hosting', label: 'Web Hosting' },
-    { path: '/about', label: 'About' }
-  ];
+  // Dynamically read visible navigation tabs sorted by sortOrder (managed in Admin -> Navigation Tabs)
+  const visibleNavTabs = [...navTabs]
+    .filter((tab) => tab.visible !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
 
   return (
-    <nav className="bg-white border-b border-slate-200 text-slate-900 sticky top-0 z-50">
+    <nav className="bg-white/90 backdrop-blur-md border-b border-slate-200/90 text-slate-900 sticky top-0 z-50 transition-all">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-2">
           {/* BRAND TITLE & SUBTITLE */}
@@ -36,11 +36,11 @@ export const Navbar: React.FC<NavbarProps> = () => {
               <img
                 src="./favicon.png"
                 alt="Team WhiteHat Dev"
-                className="w-9 h-9 rounded-xl border border-slate-200 object-cover group-hover:border-slate-900 transition-colors"
+                className="w-9 h-9 rounded-xl border border-slate-200 object-cover group-hover:border-slate-900 transition-colors shadow-xs"
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-base sm:text-lg text-slate-900 tracking-tight leading-none">
+              <span className="font-bold text-sm sm:text-lg text-slate-900 tracking-tight leading-none">
                 Team WhiteHat Dev
               </span>
               <span className="text-[10px] text-slate-500 font-medium tracking-wide leading-tight pt-0.5">
@@ -50,20 +50,49 @@ export const Navbar: React.FC<NavbarProps> = () => {
           </Link>
 
           {/* DESKTOP NAV LINKS */}
-          <div className="hidden xl:flex items-center space-x-1 text-xs">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`px-3.5 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
-                  isActive(link.path)
-                    ? 'bg-slate-900 text-white font-semibold'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`}
-              >
-                <span>{link.label}</span>
-              </Link>
-            ))}
+          <div className="hidden xl:flex items-center space-x-1 text-xs flex-wrap justify-end">
+            {visibleNavTabs.map((tab) =>
+              tab.isExternal ? (
+                <a
+                  key={tab.id}
+                  href={tab.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-2 rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all whitespace-nowrap inline-flex items-center gap-1"
+                >
+                  <span>{tab.label}</span>
+                  {tab.badge && (
+                    <span className="px-1.5 py-0.5 text-[9px] font-bold bg-slate-200 text-slate-800 rounded">
+                      {tab.badge}
+                    </span>
+                  )}
+                  <ExternalLink className="w-3 h-3 opacity-70" />
+                </a>
+              ) : (
+                <Link
+                  key={tab.id}
+                  to={tab.path}
+                  className={`px-3 py-2 rounded-lg font-medium transition-all whitespace-nowrap inline-flex items-center gap-1.5 ${
+                    isActive(tab.path)
+                      ? 'bg-slate-900 text-white font-semibold shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  {tab.badge && (
+                    <span
+                      className={`px-1.5 py-0.5 text-[9px] font-bold rounded ${
+                        isActive(tab.path)
+                          ? 'bg-white/20 text-white'
+                          : 'bg-slate-100 text-slate-800 border border-slate-200'
+                      }`}
+                    >
+                      {tab.badge}
+                    </span>
+                  )}
+                </Link>
+              )
+            )}
 
             {/* DIRECT MESHY AI 3D REFERRAL LINK IN NAVIGATION BAR */}
             <a
@@ -79,77 +108,110 @@ export const Navbar: React.FC<NavbarProps> = () => {
             </a>
           </div>
 
-          {/* TABLET / MID-DESKTOP QUICK LINKS */}
-          <div className="hidden md:flex xl:hidden items-center space-x-2 text-xs">
-            <Link
-              to="/ai"
-              className="px-3 py-1.5 bg-slate-100 text-slate-900 border border-slate-200 rounded-lg font-semibold text-xs"
-            >
-              AI &amp; Automations
-            </Link>
-
-            <Link
-              to="/affiliate-guide"
-              className="px-3 py-1.5 bg-slate-100 text-slate-900 border border-slate-200 rounded-lg font-semibold text-xs"
-            >
-              Free VA Guide
-            </Link>
-
+          {/* MOBILE & TABLET RIGHT CONTROLS */}
+          <div className="flex xl:hidden items-center gap-1.5">
             <a
               href={MESHY_REFERRAL_URL}
               target="_blank"
               rel="sponsored noopener noreferrer"
-              className="px-2.5 py-1.5 bg-slate-900 text-white rounded-lg font-semibold text-xs flex items-center space-x-1"
+              className="px-2.5 py-1.5 bg-slate-900 text-white rounded-lg font-semibold text-[11px] flex items-center space-x-1 shrink-0"
             >
               <Box className="w-3.5 h-3.5" />
-              <span>Meshy 3D</span>
+              <span className="hidden sm:inline">Meshy 3D</span>
             </a>
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-slate-700 hover:text-slate-900 rounded-lg border border-slate-200 bg-white flex items-center space-x-1 font-semibold text-xs"
-            >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              <span>Menu</span>
-            </button>
-          </div>
-
-          {/* MOBILE HAMBURGER TOGGLE */}
-          <div className="md:hidden flex items-center gap-1.5">
-            <Link
-              to="/ai"
-              className="px-2.5 py-1.5 bg-slate-100 text-slate-900 border border-slate-200 rounded-lg font-semibold text-[11px]"
-            >
-              AI Hub
-            </Link>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-slate-700 hover:text-slate-900 rounded-lg border border-slate-200 bg-white"
+              className="p-2 text-slate-700 hover:text-slate-900 rounded-lg border border-slate-200 bg-white flex items-center space-x-1 font-semibold text-xs active:scale-95 transition-transform"
               aria-label="Toggle Menu"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <span className="hidden sm:inline">Menu</span>
             </button>
           </div>
         </div>
+
+        {/* MOBILE & TABLET INTERACTIVE HORIZONTAL QUICK-TAB BAR (Smooth Touch Scrolling on All Mobile Screens) */}
+        <div className="xl:hidden flex items-center gap-1.5 overflow-x-auto no-scrollbar py-2 border-t border-slate-100">
+          {visibleNavTabs.map((tab) =>
+            tab.isExternal ? (
+              <a
+                key={tab.id}
+                href={tab.path}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap shrink-0 bg-slate-50 text-slate-700 border border-slate-200 inline-flex items-center gap-1"
+              >
+                <span>{tab.label}</span>
+                <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+              </a>
+            ) : (
+              <Link
+                key={tab.id}
+                to={tab.path}
+                onClick={() => setIsOpen(false)}
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap shrink-0 transition-all inline-flex items-center gap-1 ${
+                  isActive(tab.path)
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200/80'
+                }`}
+              >
+                <span>{tab.label}</span>
+                {tab.badge && (
+                  <span
+                    className={`px-1 py-0.2 text-[9px] font-bold rounded ${
+                      isActive(tab.path) ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-800'
+                    }`}
+                  >
+                    {tab.badge}
+                  </span>
+                )}
+              </Link>
+            )
+          )}
+        </div>
       </div>
 
-      {/* MOBILE & TABLET EXPANDED MENU */}
+      {/* MOBILE & TABLET EXPANDED DRAWER MENU */}
       {isOpen && (
-        <div className="xl:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-1.5 text-sm shadow-sm">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              onClick={() => setIsOpen(false)}
-              className={`block px-3.5 py-2.5 rounded-xl font-medium ${
-                isActive(link.path)
-                  ? 'bg-slate-900 text-white font-semibold'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="xl:hidden bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 pt-3 pb-6 space-y-1.5 text-sm shadow-lg max-h-[80vh] overflow-y-auto">
+          {visibleNavTabs.map((tab) =>
+            tab.isExternal ? (
+              <a
+                key={tab.id}
+                href={tab.path}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsOpen(false)}
+                className="block px-3.5 py-2.5 rounded-xl font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-between"
+              >
+                <span>{tab.label}</span>
+                <ExternalLink className="w-4 h-4 opacity-70" />
+              </a>
+            ) : (
+              <Link
+                key={tab.id}
+                to={tab.path}
+                onClick={() => setIsOpen(false)}
+                className={`block px-3.5 py-2.5 rounded-xl font-medium flex items-center justify-between ${
+                  isActive(tab.path)
+                    ? 'bg-slate-900 text-white font-semibold'
+                    : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                <span>{tab.label}</span>
+                {tab.badge && (
+                  <span
+                    className={`px-2 py-0.5 text-[10px] font-bold rounded-md ${
+                      isActive(tab.path) ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-800'
+                    }`}
+                  >
+                    {tab.badge}
+                  </span>
+                )}
+              </Link>
+            )
+          )}
 
           {/* MESHY AI REFERRAL IN MOBILE AI NAV MENU */}
           <a
@@ -157,11 +219,11 @@ export const Navbar: React.FC<NavbarProps> = () => {
             target="_blank"
             rel="sponsored noopener noreferrer"
             onClick={() => setIsOpen(false)}
-            className="block px-3.5 py-2.5 bg-slate-900 text-white rounded-xl font-semibold flex items-center justify-between"
+            className="block px-3.5 py-2.5 bg-slate-900 text-white rounded-xl font-semibold flex items-center justify-between mt-2"
           >
             <span className="flex items-center space-x-2">
-              <Box className="w-4 h-4" />
-              <span>AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy</span>
+              <Box className="w-4 h-4 shrink-0" />
+              <span className="text-xs sm:text-sm">AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy</span>
             </span>
             <ExternalLink className="w-4 h-4 shrink-0" />
           </a>
@@ -173,8 +235,8 @@ export const Navbar: React.FC<NavbarProps> = () => {
             onClick={() => setIsOpen(false)}
             className="block px-3.5 py-2.5 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl font-medium flex items-center space-x-2"
           >
-            <Smartphone className="w-4 h-4 text-slate-700" />
-            <span>Official Google Play Store Apps</span>
+            <Smartphone className="w-4 h-4 text-slate-700 shrink-0" />
+            <span className="text-xs sm:text-sm">Official Google Play Store Apps</span>
           </a>
         </div>
       )}

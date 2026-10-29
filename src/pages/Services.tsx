@@ -24,7 +24,8 @@ interface ServicesProps {
 }
 
 export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
-  const { getPublicPageCMSItems, services: contextServices, addInquiry, addHireVaInquiry } = useApp();
+  const { getPublicPageCMSItems, services: contextServices, addInquiry, addHireVaInquiry } =
+    useApp();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -46,6 +47,11 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
     category: item.category || 'Virtual Assistance',
     price: item.price || '$5 / hr ($49 / week)',
     description: item.description,
+    image: !item.hideImage ? item.mainImage : '',
+    videoUrl: !item.hideVideo ? item.videoUrl : '',
+    hideImage: item.hideImage,
+    hideVideo: item.hideVideo,
+    visible: item.visible !== false,
     features: item.metrics
       ? item.metrics.split(',').map((s) => s.trim())
       : [
@@ -56,8 +62,11 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
         ]
   }));
 
-  // Combine CMS services with context services (deduplicated by title)
-  const baseServices = contextServices && contextServices.length > 0 ? contextServices : SERVICES;
+  // Combine CMS services with visible context services (deduplicated by title)
+  const baseServices = (
+    contextServices && contextServices.length > 0 ? contextServices : SERVICES
+  ).filter((s) => s.visible !== false);
+
   const combined = [...formattedCMSServices, ...baseServices];
   const seenTitles = new Set<string>();
   const allServices = combined.filter((s) => {
@@ -123,9 +132,9 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
   };
 
   return (
-    <div className="space-y-10 max-w-6xl mx-auto pb-12 bg-white text-slate-900">
-      {/* PAGE HEADLINE (PRIVATE DIRECT-LINK OFFER PAGE — PURE WHITE THEME) */}
-      <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 text-center space-y-4 shadow-xs">
+    <div className="space-y-10 max-w-6xl mx-auto pb-12 bg-transparent text-slate-900">
+      {/* PAGE HEADLINE (PRIVATE DIRECT-LINK OFFER PAGE — GLASSMORPHIC WHITE THEME) */}
+      <div className="white-glass-card rounded-3xl p-6 sm:p-10 text-center space-y-4">
         <div className="inline-flex items-center space-x-2 bg-slate-100 border border-slate-200 px-3.5 py-1 rounded-full text-xs text-slate-800 font-bold uppercase tracking-wider">
           <Tag className="w-3.5 h-3.5 text-slate-700" />
           <span>Direct-Link Exclusive Rates • Up to 70% Lower Than Traditional Agencies</span>
@@ -134,7 +143,10 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
           Ultra-Affordable Virtual Assistant, AI Automation &amp; Web Packages
         </h1>
         <p className="text-sm sm:text-base text-slate-600 max-w-3xl mx-auto leading-relaxed">
-          Start small with zero risk. Hire a dedicated Virtual Assistant from just <strong className="text-slate-900">$5/hr ($49/week Starter Pack)</strong>, automate repetitive workflows for <strong className="text-slate-900">$39</strong>, or launch a complete modern website for <strong className="text-slate-900">$99</strong>.
+          Start small with zero risk. Hire a dedicated Virtual Assistant from just{' '}
+          <strong className="text-slate-900">$5/hr ($49/week Starter Pack)</strong>, automate
+          repetitive workflows for <strong className="text-slate-900">$39</strong>, or launch a
+          complete modern website for <strong className="text-slate-900">$99</strong>.
         </p>
 
         {/* QUICK VALUE HIGHLIGHTS */}
@@ -158,59 +170,106 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
         </div>
       </div>
 
-      {/* SERVICES GRID WITH DIRECT BOOKING BUTTONS */}
+      {/* SERVICES GRID WITH DIRECT BOOKING BUTTONS & OPTIONAL IMAGE/VIDEO */}
       <HUDPanel title="Affordable Service Packages &amp; Starter Bundles" badge="Direct Link Pricing">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allServices.map((s) => (
-            <div
-              key={s.id}
-              className="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl p-6 flex flex-col justify-between space-y-5 transition-all shadow-2xs"
-            >
-              <div className="space-y-4">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-900 shrink-0">
-                    <Cpu className="w-5 h-5" />
-                  </div>
-                  <span className="text-xs font-extrabold text-white bg-slate-900 px-3 py-1 rounded-full">
-                    {s.price}
-                  </span>
-                </div>
+          {allServices.map((s) => {
+            const showImage = Boolean(s.image && !s.hideImage);
+            const showVideo = Boolean(s.videoUrl && !s.hideVideo);
 
+            return (
+              <div
+                key={s.id}
+                className="bg-white border border-slate-200 hover:border-slate-400 hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col justify-between transition-all shadow-2xs group"
+              >
                 <div>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                    {s.category === 'va' ? 'VIRTUAL ASSISTANCE' : s.category === 'dev' ? 'ENGINEERING & AI' : s.category}
-                  </span>
-                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900 mt-0.5">
-                    {s.title}
-                  </h3>
+                  {showVideo && (
+                    <div className="w-full bg-slate-50 border-b border-slate-100">
+                      {s.videoUrl!.includes('youtube.com') || s.videoUrl!.includes('youtu.be') ? (
+                        <iframe
+                          src={
+                            s.videoUrl!.includes('watch?v=')
+                              ? s.videoUrl!.replace('watch?v=', 'embed/')
+                              : s.videoUrl
+                          }
+                          title={s.title}
+                          className="w-full aspect-video border-0"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <video src={s.videoUrl} controls className="w-full h-44 object-cover" />
+                      )}
+                    </div>
+                  )}
+
+                  {showImage && (
+                    <div className="h-40 w-full relative overflow-hidden bg-slate-50 border-b border-slate-100">
+                      <img
+                        src={s.image}
+                        alt={s.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <span className="absolute top-3 right-3 text-xs font-extrabold text-white bg-slate-900 px-3 py-1 rounded-full shadow-xs">
+                        {s.price}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="p-6 space-y-4">
+                    {!showImage && (
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-900 shrink-0">
+                          <Cpu className="w-5 h-5" />
+                        </div>
+                        <span className="text-xs font-extrabold text-white bg-slate-900 px-3 py-1 rounded-full">
+                          {s.price}
+                        </span>
+                      </div>
+                    )}
+
+                    <div>
+                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                        {s.category === 'va'
+                          ? 'VIRTUAL ASSISTANCE'
+                          : s.category === 'dev'
+                          ? 'ENGINEERING & AI'
+                          : s.category}
+                      </span>
+                      <h3 className="text-base sm:text-lg font-extrabold text-slate-900 mt-0.5">
+                        {s.title}
+                      </h3>
+                    </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed">{s.description}</p>
+
+                    <div className="space-y-2 pt-3 border-t border-slate-100">
+                      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        What's Included:
+                      </h4>
+                      <div className="space-y-1.5 text-xs text-slate-700">
+                        {(s.features || []).map((feat: string, idx: number) => (
+                          <div key={idx} className="flex items-center space-x-2">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-slate-900 shrink-0" />
+                            <span>{feat}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed">{s.description}</p>
-
-                <div className="space-y-2 pt-3 border-t border-slate-100">
-                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                    What's Included:
-                  </h4>
-                  <div className="space-y-1.5 text-xs text-slate-700">
-                    {(s.features || []).map((feat: string, idx: number) => (
-                      <div key={idx} className="flex items-center space-x-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-slate-900 shrink-0" />
-                        <span>{feat}</span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="p-6 pt-0">
+                  <button
+                    onClick={() => handleBook(s.title, s.price)}
+                    className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-2 shadow-2xs cursor-pointer"
+                  >
+                    <span>Claim This Package</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
-
-              <button
-                onClick={() => handleBook(s.title, s.price)}
-                className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-2 shadow-2xs cursor-pointer"
-              >
-                <span>Claim This Package</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </HUDPanel>
 
@@ -226,7 +285,8 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                 Booking Request Saved to Admin CMS
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
-                Thank you, <span className="text-slate-900 font-bold">{name}</span>! Your service request has been logged in our All-in-One CMS. We will reply within 24 hours.
+                Thank you, <span className="text-slate-900 font-bold">{name}</span>! Your service
+                request has been logged in our All-in-One CMS. We will reply within 24 hours.
               </p>
             </div>
           ) : (
@@ -250,7 +310,8 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                   Tell Us What Tasks or Project You Need Done
                 </h3>
                 <p className="text-xs text-slate-600">
-                  Fill out the form below. All inquiries are encrypted and stored directly inside our Admin CMS.
+                  Fill out the form below. All inquiries are encrypted and stored directly inside
+                  our Admin CMS.
                 </p>
               </div>
 
@@ -276,7 +337,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                       setValidationError('');
                     }}
                     required
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
+                    className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
                   />
                 </div>
 
@@ -294,7 +355,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                       setValidationError('');
                     }}
                     required
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
+                    className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
                   />
                 </div>
 
@@ -308,7 +369,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                     placeholder="+1 / @username"
                     value={contactInfo}
                     onChange={(e) => setContactInfo(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
+                    className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
                   />
                 </div>
               </div>
@@ -321,7 +382,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                 <select
                   value={service}
                   onChange={(e) => setService(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:border-slate-900"
+                  className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:border-slate-900"
                 >
                   {allServices.map((s) => (
                     <option key={s.id} value={`${s.title} (${s.price})`}>
@@ -345,7 +406,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
+                  className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-slate-900"
                 />
               </div>
 

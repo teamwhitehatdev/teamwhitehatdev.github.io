@@ -3,7 +3,24 @@ import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
 import { INITIAL_CMS_ITEMS } from '../utils/initialCMSData';
 import { INITIAL_PROMO_ITEMS } from '../utils/initialPromoData';
 import { INITIAL_AFFILIATE_TOPICS } from '../utils/initialAffiliateTopics';
-import { Service, Project, Affiliate, Testimonial, ContactInquiry, CMSItem, CMSPageOwnerType, CMSStatusType, VisitorLog, HireVaInquiry, HireVaStatusType, PromoItem, PromoPlacementType, AffiliateCollapsibleTopic } from '../types';
+import {
+  Service,
+  Project,
+  Affiliate,
+  Testimonial,
+  ContactInquiry,
+  CMSItem,
+  CMSPageOwnerType,
+  CMSStatusType,
+  VisitorLog,
+  HireVaInquiry,
+  HireVaStatusType,
+  PromoItem,
+  PromoPlacementType,
+  AffiliateCollapsibleTopic,
+  NavTabConfig,
+  AdSenseConfig
+} from '../types';
 
 interface AppContextType {
   services: Service[];
@@ -17,6 +34,15 @@ interface AppContextType {
   userCountry: string;
   userDevice: 'Desktop' | 'Mobile' | 'Tablet';
   isUserBanned: boolean;
+
+  // DYNAMIC NAVIGATION TABS MANAGEMENT (ADD / REMOVE / HIDE / UNHIDE TABS)
+  navTabs: NavTabConfig[];
+  addNavTab: (tab: Omit<NavTabConfig, 'id' | 'createdAt' | 'updatedAt'>) => NavTabConfig;
+  updateNavTab: (id: string, updates: Partial<NavTabConfig>) => void;
+  deleteNavTab: (id: string) => void;
+  toggleNavTabVisibility: (id: string) => void;
+  moveNavTabOrder: (id: string, direction: 'up' | 'down') => void;
+  resetNavTabsToDefault: () => void;
 
   // VISITOR LOGS TELEMETRY
   visitorLogs: VisitorLog[];
@@ -74,39 +100,144 @@ interface AppContextType {
   addService: (service: Omit<Service, 'id'>) => void;
   updateService: (id: string, service: Partial<Service>) => void;
   deleteService: (id: string) => void;
+  toggleServiceVisibility: (id: string) => void;
 
   addProject: (project: Omit<Project, 'id'>) => void;
   updateProject: (id: string, project: Partial<Project>) => void;
   deleteProject: (id: string) => void;
+  toggleProjectVisibility: (id: string) => void;
 
   addBannedIp: (ip: string) => void;
   removeBannedIp: (ip: string) => void;
 
   addInquiry: (inquiry: Omit<ContactInquiry, 'id' | 'timestamp'>) => void;
   deleteInquiry: (id: string) => void;
+
+  // GOOGLE ADSENSE & UNIVERSAL AD MONETIZATION CONFIG
+  adSenseConfig: AdSenseConfig;
+  updateAdSenseConfig: (updates: Partial<AdSenseConfig>) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+export const DEFAULT_NAV_TABS: NavTabConfig[] = [
+  {
+    id: 'nav_home',
+    label: 'Home',
+    slug: 'home',
+    path: '/',
+    heroTitle: 'Free Tutorials, AI Automation Diagrams & Career Guides',
+    heroSubtitle: 'Learn how to become a successful Virtual Assistant or Freelancer at zero cost.',
+    visible: true,
+    isSystem: true,
+    sortOrder: 1,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-29T00:00:00Z'
+  },
+  {
+    id: 'nav_ai',
+    label: 'Free AI & VA Academy',
+    slug: 'ai',
+    path: '/ai',
+    badge: 'Free',
+    heroTitle: 'AI & Its Capabilities, Visual Automation Workflows & Free VA Tutorials',
+    heroSubtitle: 'Master how modern Artificial Intelligence works and explore interactive node-by-node automation diagrams.',
+    visible: true,
+    isSystem: true,
+    sortOrder: 2,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-29T00:00:00Z'
+  },
+  {
+    id: 'nav_affiliate',
+    label: 'Free VA & Affiliate Guide',
+    slug: 'affiliate-guide',
+    path: '/affiliate-guide',
+    heroTitle: 'Free Freelancer Guides & Curated Remote Toolkits',
+    heroSubtitle: 'Explore step-by-step free masterclasses, cloud hosting, AI 3D & video suites, and digital marketplaces.',
+    visible: true,
+    isSystem: true,
+    sortOrder: 3,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-29T00:00:00Z'
+  },
+  {
+    id: 'nav_showcase',
+    label: 'Portfolio Showcase',
+    slug: 'showcase',
+    path: '/showcase',
+    heroTitle: 'Projects, Applications & Digital Assets',
+    heroSubtitle: 'Explore our authentic portfolio of custom web applications, mobile utilities, and VA operational systems.',
+    visible: true,
+    isSystem: true,
+    sortOrder: 4,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-29T00:00:00Z'
+  },
+  {
+    id: 'nav_hosting',
+    label: 'Web Hosting',
+    slug: 'web-hosting',
+    path: '/web-hosting',
+    heroTitle: 'Launch Your Portfolio & Client Websites with Hostinger Cloud & NVMe Hosting',
+    heroSubtitle: 'Ultra-fast NVMe storage, 99.9% uptime, free SSL certificates, and built-in AI tools.',
+    visible: true,
+    isSystem: true,
+    sortOrder: 5,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-29T00:00:00Z'
+  },
+  {
+    id: 'nav_about',
+    label: 'About',
+    slug: 'about',
+    path: '/about',
+    heroTitle: 'Who Is Team WhiteHat Dev?',
+    heroSubtitle: 'Digital engineering and free education collective focused on ethical cybersecurity, web apps, and VA mentorship.',
+    visible: true,
+    isSystem: true,
+    sortOrder: 6,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-29T00:00:00Z'
+  },
+  {
+    id: 'nav_services',
+    label: 'Services ($5/hr VA)',
+    slug: 'services',
+    path: '/services',
+    badge: 'Hidden Link',
+    heroTitle: 'Ultra-Affordable Virtual Assistant, AI Automation & Web Packages',
+    heroSubtitle: 'Direct-link exclusive rates: $5/hr Starter VA, $39 AI Workflow Setup, and $99 Modern Websites.',
+    visible: false, // Hidden by default (URL-only), can be unhidden/hidden anytime in Admin CMS!
+    isSystem: true,
+    sortOrder: 7,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-29T00:00:00Z'
+  },
+  {
+    id: 'nav_admin',
+    label: 'Admin CMS',
+    slug: 'admin',
+    path: '/admin',
+    badge: 'Admin Only',
+    heroTitle: 'All-in-One Admin & Developer CMS',
+    heroSubtitle: 'Protected management console for content, media, navigation tabs, telemetry, and security.',
+    visible: false, // Hidden by default (URL-only), can be unhidden/hidden anytime in Admin CMS!
+    isSystem: true,
+    sortOrder: 8,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-29T00:00:00Z'
+  }
+];
+
 const deduplicateCMSItems = (items: CMSItem[]): CMSItem[] => {
   const seenIds = new Set<string>();
   const seenTitles = new Set<string>();
-  const seenMedia = new Set<string>();
 
-  return items.filter(item => {
+  return items.filter((item) => {
     if (!item || !item.id || !item.title) return false;
     const normTitle = item.title.trim().toLowerCase();
     if (seenIds.has(item.id) || seenTitles.has(normTitle)) return false;
-
-    const mediaKey = (item.videoUrl || item.mainImage || '').trim();
-    // Prevent duplicate images/videos across different posts unless it's a custom uploaded data URI
-    if (mediaKey && !mediaKey.startsWith('data:')) {
-      const normalizedMedia = mediaKey.split('?')[0];
-      if (seenMedia.has(normalizedMedia)) {
-        // Keep the item if its title is unique, or skip if it's a legacy duplicate post
-      }
-      seenMedia.add(normalizedMedia);
-    }
 
     seenIds.add(item.id);
     seenTitles.add(normTitle);
@@ -222,7 +353,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      } catch (e) {}
+      } catch {}
     }
     return DEFAULT_VISITOR_LOGS;
   });
@@ -231,14 +362,113 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isCaptchaOpen, setIsCaptchaOpen] = useState<boolean>(false);
   const [pendingCheckoutAction, setPendingCheckoutAction] = useState<(() => void) | null>(null);
 
-  // CORE DATA STATES (Bumped to v5710 for affordable services & deduplicated projects)
+  // DYNAMIC NAVIGATION TABS STATE (ADD / REMOVE / HIDE / UNHIDE TABS)
+  const [navTabs, setNavTabs] = useState<NavTabConfig[]>(() => {
+    try {
+      const saved = localStorage.getItem('wh_nav_tabs_v5720');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const existingIds = new Set(parsed.map((t: NavTabConfig) => t.id));
+          const missing = DEFAULT_NAV_TABS.filter((t) => !existingIds.has(t.id));
+          return [...parsed, ...missing].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+        }
+      }
+    } catch (e) {
+      console.error('Error loading navTabs:', e);
+    }
+    return DEFAULT_NAV_TABS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('wh_nav_tabs_v5720', JSON.stringify(navTabs));
+    } catch {}
+  }, [navTabs]);
+
+  const addNavTab = useCallback(
+    (tab: Omit<NavTabConfig, 'id' | 'createdAt' | 'updatedAt'>): NavTabConfig => {
+      const cleanSlug =
+        (tab.slug || tab.label)
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9-]+/g, '-')
+          .replace(/^-|-$/g, '') || `tab-${Date.now()}`;
+      const cleanPath = tab.path?.trim().startsWith('/')
+        ? tab.path.trim()
+        : `/page/${cleanSlug}`;
+      const newTab: NavTabConfig = {
+        ...tab,
+        id: `nav_custom_${Date.now()}`,
+        slug: cleanSlug,
+        path: cleanPath,
+        visible: tab.visible !== false,
+        isSystem: false,
+        sortOrder: tab.sortOrder ?? navTabs.length + 1,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      setNavTabs((prev) => [...prev, newTab]);
+      return newTab;
+    },
+    [navTabs.length]
+  );
+
+  const updateNavTab = useCallback((id: string, updates: Partial<NavTabConfig>) => {
+    setNavTabs((prev) =>
+      prev.map((tab) =>
+        tab.id === id ? { ...tab, ...updates, updatedAt: new Date().toISOString() } : tab
+      )
+    );
+  }, []);
+
+  const deleteNavTab = useCallback((id: string) => {
+    setNavTabs((prev) => prev.filter((tab) => tab.id !== id));
+  }, []);
+
+  const toggleNavTabVisibility = useCallback((id: string) => {
+    setNavTabs((prev) =>
+      prev.map((tab) =>
+        tab.id === id
+          ? { ...tab, visible: !tab.visible, updatedAt: new Date().toISOString() }
+          : tab
+      )
+    );
+  }, []);
+
+  const moveNavTabOrder = useCallback((id: string, direction: 'up' | 'down') => {
+    setNavTabs((prev) => {
+      const sorted = [...prev].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+      const idx = sorted.findIndex((t) => t.id === id);
+      if (idx === -1) return prev;
+      const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (targetIdx < 0 || targetIdx >= sorted.length) return prev;
+      const temp = sorted[idx];
+      sorted[idx] = sorted[targetIdx];
+      sorted[targetIdx] = temp;
+      return sorted.map((t, i) => ({
+        ...t,
+        sortOrder: i + 1,
+        updatedAt: new Date().toISOString()
+      }));
+    });
+  }, []);
+
+  const resetNavTabsToDefault = useCallback(() => {
+    setNavTabs(DEFAULT_NAV_TABS);
+    try {
+      localStorage.setItem('wh_nav_tabs_v5720', JSON.stringify(DEFAULT_NAV_TABS));
+    } catch {}
+  }, []);
+
+  // CORE DATA STATES (Bumped to v5720 for full media/visibility support across all niches)
   const [services, setServices] = useState<Service[]>(() => {
-    const saved = localStorage.getItem('wh_services_v5710');
+    const saved = localStorage.getItem('wh_services_v5720');
     return saved ? JSON.parse(saved) : SERVICES;
   });
 
   const [projects, setProjects] = useState<Project[]>(() => {
-    const saved = localStorage.getItem('wh_projects_v5710');
+    const saved = localStorage.getItem('wh_projects_v5720');
     return saved ? JSON.parse(saved) : PROJECTS;
   });
 
@@ -259,6 +489,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [cmsCategories, setCmsCategories] = useState<string[]>(() => {
     const defaultCategories = [
       'ALL',
+      'MAKE MONEY ONLINE',
       'AI FUNDAMENTALS',
       'AI CAPABILITIES',
       'AI AUTOMATION',
@@ -276,7 +507,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       'AUTOMATION',
       'CYBERSECURITY',
       'NETWORKING',
-      'AFFILIATE MARKETING'
+      'AFFILIATE MARKETING',
+      'SUNO AI DIVISION',
+      'MESHY AI 3D DIVISION',
+      'AUTOMATION ENGINE',
+      'AI MARKETING STUDIO',
+      'AI COPYWRITING',
+      'CORE PILLAR'
     ];
     const saved = localStorage.getItem('wh_cms_categories');
     if (saved) {
@@ -297,13 +534,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // ==========================================
   const [affiliateTopics, setAffiliateTopics] = useState<AffiliateCollapsibleTopic[]>(() => {
     try {
-      const saved = localStorage.getItem('wh_affiliate_topics_v5710');
+      const saved = localStorage.getItem('wh_affiliate_topics_v5730');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
           const existingIds = new Set(parsed.map((item: AffiliateCollapsibleTopic) => item.id));
-          const missing = INITIAL_AFFILIATE_TOPICS.filter(item => !existingIds.has(item.id));
-          return [...parsed, ...missing];
+          const missing = INITIAL_AFFILIATE_TOPICS.filter((item) => !existingIds.has(item.id));
+          return [...parsed, ...missing].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
         }
       }
     } catch (e) {
@@ -314,57 +551,67 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     try {
-      localStorage.setItem('wh_affiliate_topics_v5710', JSON.stringify(affiliateTopics));
+      localStorage.setItem('wh_affiliate_topics_v5730', JSON.stringify(affiliateTopics));
     } catch (e) {
       console.error('Error saving affiliate topics to localStorage:', e);
     }
   }, [affiliateTopics]);
 
-  const addAffiliateTopic = useCallback((topic: Omit<AffiliateCollapsibleTopic, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newTopic: AffiliateCollapsibleTopic = {
-      ...topic,
-      id: `topic_custom_${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      sortOrder: topic.sortOrder ?? (affiliateTopics.length + 1)
-    };
-    setAffiliateTopics(prev => [...prev, newTopic]);
-  }, [affiliateTopics.length]);
+  const addAffiliateTopic = useCallback(
+    (topic: Omit<AffiliateCollapsibleTopic, 'id' | 'createdAt' | 'updatedAt'>) => {
+      const newTopic: AffiliateCollapsibleTopic = {
+        ...topic,
+        id: `topic_custom_${Date.now()}`,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        sortOrder: topic.sortOrder ?? affiliateTopics.length + 1
+      };
+      setAffiliateTopics((prev) => [...prev, newTopic]);
+    },
+    [affiliateTopics.length]
+  );
 
-  const updateAffiliateTopic = useCallback((id: string, updates: Partial<AffiliateCollapsibleTopic>) => {
-    setAffiliateTopics(prev => prev.map(topic => {
-      if (topic.id === id) {
-        return {
-          ...topic,
-          ...updates,
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return topic;
-    }));
-  }, []);
+  const updateAffiliateTopic = useCallback(
+    (id: string, updates: Partial<AffiliateCollapsibleTopic>) => {
+      setAffiliateTopics((prev) =>
+        prev.map((topic) => {
+          if (topic.id === id) {
+            return {
+              ...topic,
+              ...updates,
+              updatedAt: new Date().toISOString()
+            };
+          }
+          return topic;
+        })
+      );
+    },
+    []
+  );
 
   const deleteAffiliateTopic = useCallback((id: string) => {
-    setAffiliateTopics(prev => prev.filter(topic => topic.id !== id));
+    setAffiliateTopics((prev) => prev.filter((topic) => topic.id !== id));
   }, []);
 
   const toggleAffiliateTopicVisibility = useCallback((id: string) => {
-    setAffiliateTopics(prev => prev.map(topic => {
-      if (topic.id === id) {
-        return {
-          ...topic,
-          isVisible: !topic.isVisible,
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return topic;
-    }));
+    setAffiliateTopics((prev) =>
+      prev.map((topic) => {
+        if (topic.id === id) {
+          return {
+            ...topic,
+            isVisible: !topic.isVisible,
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return topic;
+      })
+    );
   }, []);
 
   const moveAffiliateTopicOrder = useCallback((id: string, direction: 'up' | 'down') => {
-    setAffiliateTopics(prev => {
+    setAffiliateTopics((prev) => {
       const sorted = [...prev].sort((a, b) => a.sortOrder - b.sortOrder);
-      const index = sorted.findIndex(t => t.id === id);
+      const index = sorted.findIndex((t) => t.id === id);
       if (index === -1) return prev;
 
       const targetIndex = direction === 'up' ? index - 1 : index + 1;
@@ -383,19 +630,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const resetAffiliateTopicsToDefault = useCallback(() => {
     setAffiliateTopics(INITIAL_AFFILIATE_TOPICS);
     try {
-      localStorage.setItem('wh_affiliate_topics_v5710', JSON.stringify(INITIAL_AFFILIATE_TOPICS));
+      localStorage.setItem('wh_affiliate_topics_v5720', JSON.stringify(INITIAL_AFFILIATE_TOPICS));
     } catch (e) {
       console.error('Error resetting affiliate topics to default:', e);
     }
   }, []);
 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
-    const saved = localStorage.getItem('wh_cms_items_v5710');
+    const saved = localStorage.getItem('wh_cms_items_v5740');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return deduplicateCMSItems(parsed);
+          const existingIds = new Set(parsed.map((item: CMSItem) => item.id));
+          const missingItems = INITIAL_CMS_ITEMS.filter((item) => !existingIds.has(item.id));
+          return deduplicateCMSItems([...parsed, ...missingItems]);
         }
       } catch (e) {
         console.error('Error loading saved CMS items:', e);
@@ -406,13 +655,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // CMS PROMOTIONAL & ADVERTISEMENTS ITEMS STATE (PARTNER DEALS & PROMO)
   const [promoItems, setPromoItems] = useState<PromoItem[]>(() => {
-    const saved = localStorage.getItem('wh_promo_items_v5710');
+    const saved = localStorage.getItem('wh_promo_items_v5720');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
           const existingIds = new Set(parsed.map((item: PromoItem) => item.id));
-          const missingPromos = INITIAL_PROMO_ITEMS.filter(item => !existingIds.has(item.id));
+          const missingPromos = INITIAL_PROMO_ITEMS.filter((item) => !existingIds.has(item.id));
           return [...missingPromos, ...parsed];
         }
       } catch (e) {
@@ -434,8 +683,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     fetch('https://api.ipify.org?format=json')
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.ip) setUserIp(data.ip);
       })
       .catch(() => setUserIp('185.220.101.5'));
@@ -447,11 +696,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [bannedIps]);
 
   useEffect(() => {
-    localStorage.setItem('wh_services_v5710', JSON.stringify(services));
+    localStorage.setItem('wh_services_v5720', JSON.stringify(services));
   }, [services]);
 
   useEffect(() => {
-    localStorage.setItem('wh_projects_v5710', JSON.stringify(projects));
+    localStorage.setItem('wh_projects_v5720', JSON.stringify(projects));
   }, [projects]);
 
   useEffect(() => {
@@ -467,11 +716,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsCategories]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_items_v5710', JSON.stringify(cmsItems));
+    localStorage.setItem('wh_cms_items_v5740', JSON.stringify(cmsItems));
   }, [cmsItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_promo_items_v5710', JSON.stringify(promoItems));
+    localStorage.setItem('wh_promo_items_v5720', JSON.stringify(promoItems));
   }, [promoItems]);
 
   useEffect(() => {
@@ -479,19 +728,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [visitorLogs]);
 
   // LOG VISITOR NAVIGATION
-  const logVisitorPageNavigation = useCallback((pagePath: string) => {
-    const newLog: VisitorLog = {
-      id: 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-      ip: userIp,
-      country: userCountry,
-      device: userDevice,
-      browser: navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Browser',
-      os: navigator.platform,
-      pageVisited: pagePath,
-      timestamp: new Date().toISOString()
-    };
-    setVisitorLogs(prev => [newLog, ...prev.slice(0, 4999)]);
-  }, [userIp, userCountry, userDevice]);
+  const logVisitorPageNavigation = useCallback(
+    (pagePath: string) => {
+      const newLog: VisitorLog = {
+        id: 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        ip: userIp,
+        country: userCountry,
+        device: userDevice,
+        browser: navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Browser',
+        os: navigator.platform,
+        pageVisited: pagePath,
+        timestamp: new Date().toISOString()
+      };
+      setVisitorLogs((prev) => [newLog, ...prev.slice(0, 4999)]);
+    },
+    [userIp, userCountry, userDevice]
+  );
 
   const clearVisitorLogs = () => setVisitorLogs([]);
 
@@ -499,7 +751,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const addCMSCategory = (category: string) => {
     const trimmed = category.trim();
     if (trimmed && !cmsCategories.includes(trimmed)) {
-      setCmsCategories(prev => [...prev, trimmed]);
+      setCmsCategories((prev) => [...prev, trimmed]);
     }
   };
 
@@ -508,25 +760,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...item,
       id: 'cms_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
       pageOwner: item.pageOwner || (item.page as CMSPageOwnerType) || 'showcase',
-      homeFeatured: item.homeFeatured !== undefined ? item.homeFeatured : (item.featured || false),
+      homeFeatured: item.homeFeatured !== undefined ? item.homeFeatured : item.featured || false,
       contentType: item.contentType || 'Tutorial',
       status: item.status || 'PUBLISHED',
       visible: item.visible !== false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
-    setCmsItems(prev => {
+    setCmsItems((prev) => {
       const updated = [newItem, ...prev];
       try {
-        localStorage.setItem('wh_cms_items_v5710', JSON.stringify(updated));
-      } catch (e) {}
+        localStorage.setItem('wh_cms_items_v5740', JSON.stringify(updated));
+      } catch {}
       return updated;
     });
   };
 
   const updateCMSItem = (id: string, updates: Partial<CMSItem>) => {
-    setCmsItems(prev => {
-      const updated = prev.map(item => {
+    setCmsItems((prev) => {
+      const updated = prev.map((item) => {
         if (item.id === id) {
           const u = { ...item, ...updates, updatedAt: new Date().toISOString() };
           if (updates.pageOwner) u.page = updates.pageOwner;
@@ -536,52 +788,69 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return item;
       });
       try {
-        localStorage.setItem('wh_cms_items_v5710', JSON.stringify(updated));
-      } catch (e) {}
+        localStorage.setItem('wh_cms_items_v5740', JSON.stringify(updated));
+      } catch {}
       return updated;
     });
   };
 
   const deleteCMSItem = (id: string) => {
-    setCmsItems(prev => {
-      const updated = prev.filter(item => item.id !== id);
+    setCmsItems((prev) => {
+      const updated = prev.filter((item) => item.id !== id);
       try {
-        localStorage.setItem('wh_cms_items_v5710', JSON.stringify(updated));
-      } catch (e) {}
+        localStorage.setItem('wh_cms_items_v5740', JSON.stringify(updated));
+      } catch {}
       return updated;
     });
   };
 
   const toggleCMSItemVisibility = (id: string) => {
-    setCmsItems(prev => prev.map(item => {
-      if (item.id === id) {
-        const nextVisible = !item.visible;
-        return {
-          ...item,
-          visible: nextVisible,
-          status: nextVisible ? 'PUBLISHED' : item.status,
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return item;
-    }));
+    setCmsItems((prev) =>
+      prev.map((item) => {
+        if (item.id === id) {
+          const nextVisible = !item.visible;
+          return {
+            ...item,
+            visible: nextVisible,
+            status: nextVisible ? 'PUBLISHED' : item.status,
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return item;
+      })
+    );
   };
 
   const toggleCMSItemHomeFeatured = (id: string) => {
-    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, homeFeatured: !item.homeFeatured, featured: !item.homeFeatured, updatedAt: new Date().toISOString() } : item));
+    setCmsItems((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              homeFeatured: !item.homeFeatured,
+              featured: !item.homeFeatured,
+              updatedAt: new Date().toISOString()
+            }
+          : item
+      )
+    );
   };
 
   const setCMSItemStatus = (id: string, status: CMSStatusType) => {
-    setCmsItems(prev => prev.map(item => item.id === id ? { ...item, status, updatedAt: new Date().toISOString() } : item));
+    setCmsItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, status, updatedAt: new Date().toISOString() } : item
+      )
+    );
   };
 
   // CMS CONTENT ITEM REORDERING METHODS (MOVE UP / DOWN / EXACT RANK)
   const moveCMSItemOrder = (id: string, direction: 'up' | 'down') => {
-    setCmsItems(prev => {
+    setCmsItems((prev) => {
       const list = [...prev];
-      const index = list.findIndex(item => item.id === id);
+      const index = list.findIndex((item) => item.id === id);
       if (index === -1) return prev;
-      
+
       const targetIndex = direction === 'up' ? index - 1 : index + 1;
       if (targetIndex < 0 || targetIndex >= list.length) return prev;
 
@@ -598,19 +867,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const setCMSItemSortOrder = (id: string, newOrder: number) => {
-    setCmsItems(prev => {
-      return prev.map(item => item.id === id ? { ...item, sortOrder: newOrder, updatedAt: new Date().toISOString() } : item)
+    setCmsItems((prev) => {
+      return prev
+        .map((item) =>
+          item.id === id
+            ? { ...item, sortOrder: newOrder, updatedAt: new Date().toISOString() }
+            : item
+        )
         .sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999));
     });
   };
 
   // PROMO / AD REORDERING METHODS (MOVE UP / DOWN / EXACT RANK)
   const movePromoItemOrder = (id: string, direction: 'up' | 'down') => {
-    setPromoItems(prev => {
+    setPromoItems((prev) => {
       const list = [...prev];
-      const index = list.findIndex(item => item.id === id);
+      const index = list.findIndex((item) => item.id === id);
       if (index === -1) return prev;
-      
+
       const targetIndex = direction === 'up' ? index - 1 : index + 1;
       if (targetIndex < 0 || targetIndex >= list.length) return prev;
 
@@ -627,55 +901,75 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const setPromoItemSortOrder = (id: string, newOrder: number) => {
-    setPromoItems(prev => {
-      return prev.map(item => item.id === id ? { ...item, sortOrder: newOrder, updatedAt: new Date().toISOString() } : item)
+    setPromoItems((prev) => {
+      return prev
+        .map((item) =>
+          item.id === id
+            ? { ...item, sortOrder: newOrder, updatedAt: new Date().toISOString() }
+            : item
+        )
         .sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999));
     });
   };
 
-  const getPublicPageCMSItems = useCallback((targetPageOwner: string) => {
-    const targetKey = targetPageOwner.toLowerCase().trim();
-    const filtered = cmsItems.filter(item => {
-      if (item.visible === false) return false;
-      if (item.status && item.status.toUpperCase() !== 'PUBLISHED') return false;
+  const getPublicPageCMSItems = useCallback(
+    (targetPageOwner: string) => {
+      const targetKey = targetPageOwner.toLowerCase().trim();
+      const filtered = cmsItems
+        .filter((item) => {
+          if (item.visible === false) return false;
+          if (item.status && item.status.toUpperCase() !== 'PUBLISHED') return false;
 
-      const rawOwner = (item.pageOwner || item.page || 'showcase').toLowerCase().trim();
-      
-      if (targetKey === 'home') {
-        return item.homeFeatured === true || item.featured === true || rawOwner === 'home';
-      }
-      if (targetKey === 'ai' || targetKey === 'ai-learning') {
-        return rawOwner === 'ai' || rawOwner === 'ai-learning';
-      }
-      if (targetKey === 'web-hosting' || targetKey === 'hosting') {
-        return rawOwner === 'web-hosting' || rawOwner === 'hosting';
-      }
-      if (targetKey === 'affiliate-guide' || targetKey === 'affiliate') {
-        return rawOwner === 'affiliate-guide' || rawOwner === 'affiliate';
-      }
-      if (targetKey === 'services') {
-        return rawOwner === 'services';
-      }
-      if (targetKey === 'showcase') {
-        return rawOwner === 'showcase';
-      }
-      if (targetKey === 'about') {
-        return rawOwner === 'about';
-      }
+          const rawOwner = (item.pageOwner || item.page || 'showcase').toLowerCase().trim();
 
-      return rawOwner === targetKey;
-    }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+          if (targetKey === 'home') {
+            return rawOwner === 'home';
+          }
+          if (targetKey === 'ai' || targetKey === 'ai-learning') {
+            return rawOwner === 'ai' || rawOwner === 'ai-learning';
+          }
+          if (targetKey === 'web-hosting' || targetKey === 'hosting') {
+            return rawOwner === 'web-hosting' || rawOwner === 'hosting';
+          }
+          if (targetKey === 'affiliate-guide' || targetKey === 'affiliate') {
+            return rawOwner === 'affiliate-guide' || rawOwner === 'affiliate';
+          }
+          if (targetKey === 'services') {
+            return rawOwner === 'services';
+          }
+          if (targetKey === 'showcase') {
+            return rawOwner === 'showcase';
+          }
+          if (targetKey === 'about') {
+            return rawOwner === 'about';
+          }
 
-    return deduplicateCMSItems(filtered);
-  }, [cmsItems]);
+          return rawOwner === targetKey;
+        })
+        .sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+
+      return deduplicateCMSItems(filtered);
+    },
+    [cmsItems]
+  );
 
   // EXPLICIT HOME FEATURED PROMOTION QUERY LOGIC (DEDUPLICATED)
   const getHomeFeaturedCMSItems = useCallback(() => {
-    const filtered = cmsItems.filter(item => {
-      if (item.visible === false) return false;
-      if (item.status && item.status !== 'PUBLISHED') return false;
-      return item.homeFeatured === true || item.featured === true || item.pageOwner === 'home' || item.page === 'home';
-    }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+    const filtered = cmsItems
+      .filter((item) => {
+        if (item.visible === false) return false;
+        if (item.status && item.status !== 'PUBLISHED') return false;
+        if (item.id === 'cms-home-division-suno' || item.id === 'cms-home-division-meshy') {
+          return false;
+        }
+        return (
+          item.homeFeatured === true ||
+          item.featured === true ||
+          item.pageOwner === 'home' ||
+          item.page === 'home'
+        );
+      })
+      .sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
 
     return deduplicateCMSItems(filtered);
   }, [cmsItems]);
@@ -688,49 +982,61 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
-    setPromoItems(prev => [newPromo, ...prev]);
+    setPromoItems((prev) => [newPromo, ...prev]);
   };
 
   const updatePromoItem = (id: string, updates: Partial<PromoItem>) => {
-    setPromoItems(prev => prev.map(item => item.id === id ? { ...item, ...updates, updatedAt: new Date().toISOString() } : item));
+    setPromoItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, ...updates, updatedAt: new Date().toISOString() } : item
+      )
+    );
   };
 
   const deletePromoItem = (id: string) => {
-    setPromoItems(prev => prev.filter(item => item.id !== id));
+    setPromoItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   const togglePromoItemVisibility = (id: string) => {
-    setPromoItems(prev => prev.map(item => {
-      if (item.id === id) {
-        const nextVisible = !item.visible;
-        return {
-          ...item,
-          visible: nextVisible,
-          status: nextVisible ? 'PUBLISHED' : item.status,
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return item;
-    }));
+    setPromoItems((prev) =>
+      prev.map((item) => {
+        if (item.id === id) {
+          const nextVisible = !item.visible;
+          return {
+            ...item,
+            visible: nextVisible,
+            status: nextVisible ? 'PUBLISHED' : item.status,
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return item;
+      })
+    );
   };
 
-  const getPublicPromoItems = useCallback((targetPlacement: PromoPlacementType) => {
-    const targetKey = targetPlacement.toLowerCase().trim();
-    const seenTitles = new Set<string>();
-    return promoItems.filter(item => {
-      if (!item.visible || item.status !== 'PUBLISHED') return false;
-      if (item.placement.toLowerCase().trim() !== targetKey) return false;
-      const normTitle = item.title.trim().toLowerCase();
-      if (seenTitles.has(normTitle)) return false;
-      seenTitles.add(normTitle);
-      return true;
-    }).sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
-  }, [promoItems]);
+  const getPublicPromoItems = useCallback(
+    (targetPlacement: PromoPlacementType) => {
+      const targetKey = targetPlacement.toLowerCase().trim();
+      const seenTitles = new Set<string>();
+      return promoItems
+        .filter((item) => {
+          if (!item.visible || item.status !== 'PUBLISHED') return false;
+          if (item.placement.toLowerCase().trim() !== targetKey) return false;
+          const normTitle = item.title.trim().toLowerCase();
+          if (seenTitles.has(normTitle)) return false;
+          seenTitles.add(normTitle);
+          return true;
+        })
+        .sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+    },
+    [promoItems]
+  );
 
   const exportCMSDatabase = () => {
     const payload = {
       exportedAt: new Date().toISOString(),
-      version: 'v5710',
+      version: 'v5720',
+      navTabs,
       cmsItems,
       promoItems,
       affiliateTopics,
@@ -741,10 +1047,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       visitorLogs: visitorLogs.slice(0, 500),
       bannedIps
     };
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+    const dataStr =
+      'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(payload, null, 2));
     const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `whitehat_all_in_one_cms_backup_${new Date().toISOString().split('T')[0]}.json`);
+    downloadAnchor.setAttribute('href', dataStr);
+    downloadAnchor.setAttribute(
+      'download',
+      `whitehat_all_in_one_cms_backup_${new Date().toISOString().split('T')[0]}.json`
+    );
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -755,12 +1065,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const parsed = JSON.parse(jsonStr);
       if (parsed.cmsItems && Array.isArray(parsed.cmsItems)) {
         setCmsItems(deduplicateCMSItems(parsed.cmsItems));
+        if (parsed.navTabs && Array.isArray(parsed.navTabs)) setNavTabs(parsed.navTabs);
         if (parsed.promoItems && Array.isArray(parsed.promoItems)) setPromoItems(parsed.promoItems);
-        if (parsed.affiliateTopics && Array.isArray(parsed.affiliateTopics)) setAffiliateTopics(parsed.affiliateTopics);
+        if (parsed.affiliateTopics && Array.isArray(parsed.affiliateTopics))
+          setAffiliateTopics(parsed.affiliateTopics);
         if (parsed.services && Array.isArray(parsed.services)) setServices(parsed.services);
         if (parsed.projects && Array.isArray(parsed.projects)) setProjects(parsed.projects);
         if (parsed.inquiries && Array.isArray(parsed.inquiries)) setInquiries(parsed.inquiries);
-        if (parsed.hireVaInquiries && Array.isArray(parsed.hireVaInquiries)) setHireVaInquiries(parsed.hireVaInquiries);
+        if (parsed.hireVaInquiries && Array.isArray(parsed.hireVaInquiries))
+          setHireVaInquiries(parsed.hireVaInquiries);
         if (parsed.bannedIps && Array.isArray(parsed.bannedIps)) setBannedIps(parsed.bannedIps);
         return true;
       } else if (Array.isArray(parsed)) {
@@ -774,6 +1087,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const resetAllCMSData = () => {
+    setNavTabs(DEFAULT_NAV_TABS);
     setCmsItems(deduplicateCMSItems(INITIAL_CMS_ITEMS));
     setPromoItems(INITIAL_PROMO_ITEMS);
     setAffiliateTopics(INITIAL_AFFILIATE_TOPICS);
@@ -792,52 +1106,78 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       country: userCountry,
       device: userDevice
     };
-    setHireVaInquiries(prev => [newInquiry, ...prev]);
+    setHireVaInquiries((prev) => [newInquiry, ...prev]);
   };
 
   const updateHireVaInquiryStatus = (id: string, status: HireVaStatusType, notes?: string) => {
-    setHireVaInquiries(prev => prev.map(item => item.id === id ? { ...item, status, adminNotes: notes !== undefined ? notes : item.adminNotes } : item));
+    setHireVaInquiries((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, status, adminNotes: notes !== undefined ? notes : item.adminNotes }
+          : item
+      )
+    );
   };
 
   const deleteHireVaInquiry = (id: string) => {
-    setHireVaInquiries(prev => prev.filter(item => item.id !== id));
+    setHireVaInquiries((prev) => prev.filter((item) => item.id !== id));
   };
 
   // SERVICE & PROJECT ACTIONS
   const addService = (service: Omit<Service, 'id'>) => {
-    const newService = { ...service, id: 'svc_' + Date.now() };
-    setServices(prev => [...prev, newService]);
+    const newService: Service = {
+      ...service,
+      visible: service.visible !== false,
+      id: 'svc_' + Date.now()
+    };
+    setServices((prev) => [...prev, newService]);
   };
 
   const updateService = (id: string, service: Partial<Service>) => {
-    setServices(prev => prev.map(s => s.id === id ? { ...s, ...service } : s));
+    setServices((prev) => prev.map((s) => (s.id === id ? { ...s, ...service } : s)));
   };
 
   const deleteService = (id: string) => {
-    setServices(prev => prev.filter(s => s.id !== id));
+    setServices((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  const toggleServiceVisibility = (id: string) => {
+    setServices((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, visible: s.visible === false ? true : false } : s))
+    );
   };
 
   const addProject = (project: Omit<Project, 'id'>) => {
-    const newProj = { ...project, id: 'proj_' + Date.now() };
-    setProjects(prev => [...prev, newProj]);
+    const newProj: Project = {
+      ...project,
+      visible: project.visible !== false,
+      id: 'proj_' + Date.now()
+    };
+    setProjects((prev) => [...prev, newProj]);
   };
 
   const updateProject = (id: string, project: Partial<Project>) => {
-    setProjects(prev => prev.map(p => p.id === id ? { ...p, ...project } : p));
+    setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, ...project } : p)));
   };
 
   const deleteProject = (id: string) => {
-    setProjects(prev => prev.filter(p => p.id !== id));
+    setProjects((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const toggleProjectVisibility = (id: string) => {
+    setProjects((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, visible: p.visible === false ? true : false } : p))
+    );
   };
 
   const addBannedIp = (ip: string) => {
     if (ip && !bannedIps.includes(ip)) {
-      setBannedIps(prev => [...prev, ip]);
+      setBannedIps((prev) => [...prev, ip]);
     }
   };
 
   const removeBannedIp = (ip: string) => {
-    setBannedIps(prev => prev.filter(i => i !== ip));
+    setBannedIps((prev) => prev.filter((i) => i !== ip));
   };
 
   const addInquiry = (inquiry: Omit<ContactInquiry, 'id' | 'timestamp'>) => {
@@ -849,11 +1189,65 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       country: userCountry,
       device: userDevice
     };
-    setInquiries(prev => [newInquiry, ...prev]);
+    setInquiries((prev) => [newInquiry, ...prev]);
   };
 
   const deleteInquiry = (id: string) => {
-    setInquiries(prev => prev.filter(i => i.id !== id));
+    setInquiries((prev) => prev.filter((i) => i.id !== id));
+  };
+
+  // GOOGLE ADSENSE & UNIVERSAL AD NETWORK STATE
+  const [adSenseConfig, setAdSenseConfig] = useState<AdSenseConfig>(() => {
+    try {
+      const saved = localStorage.getItem('wh_adsense_config_v5730');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      // ignore
+    }
+    return {
+      enabled: true,
+      publisherId: 'ca-pub-0000000000000000',
+      autoAdsEnabled: false,
+      showPartnerFallbackAds: true,
+      headerSlotId: '',
+      inArticleSlotId: '',
+      sidebarSlotId: '',
+      footerSlotId: '',
+      customAdScriptHtml: '',
+      cookieConsentEnabled: true
+    };
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('wh_adsense_config_v5730', JSON.stringify(adSenseConfig));
+      // Automatically inject Google AdSense Auto Ads script into <head> when enabled with a real publisher ID
+      if (
+        adSenseConfig.enabled &&
+        adSenseConfig.autoAdsEnabled &&
+        adSenseConfig.publisherId &&
+        adSenseConfig.publisherId !== 'ca-pub-0000000000000000' &&
+        typeof document !== 'undefined'
+      ) {
+        const scriptId = 'wh-google-adsense-script';
+        if (!document.getElementById(scriptId)) {
+          const script = document.createElement('script');
+          script.id = scriptId;
+          script.async = true;
+          script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(
+            adSenseConfig.publisherId.trim()
+          )}`;
+          script.crossOrigin = 'anonymous';
+          document.head.appendChild(script);
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [adSenseConfig]);
+
+  const updateAdSenseConfig = (updates: Partial<AdSenseConfig>) => {
+    setAdSenseConfig((prev) => ({ ...prev, ...updates }));
   };
 
   const isUserBanned = bannedIps.includes(userIp);
@@ -872,6 +1266,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         userCountry,
         userDevice,
         isUserBanned,
+        navTabs,
+        addNavTab,
+        updateNavTab,
+        deleteNavTab,
+        toggleNavTabVisibility,
+        moveNavTabOrder,
+        resetNavTabsToDefault,
         visitorLogs,
         clearVisitorLogs,
         logVisitorPageNavigation,
@@ -916,13 +1317,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         addService,
         updateService,
         deleteService,
+        toggleServiceVisibility,
         addProject,
         updateProject,
         deleteProject,
+        toggleProjectVisibility,
         addBannedIp,
         removeBannedIp,
         addInquiry,
-        deleteInquiry
+        deleteInquiry,
+        adSenseConfig,
+        updateAdSenseConfig
       }}
     >
       {children}

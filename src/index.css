@@ -56,9 +56,145 @@ body {
   letter-spacing: -0.015em;
 }
 
-/* PURE WHITE MINIMALIST BACKGROUND */
-.cyber-bg-gradient {
-  background: #ffffff;
+/* ============================================================================
+   MINIMALIST WHITE & PEARL ANIMATED BACKGROUND KEYFRAMES
+============================================================================ */
+@keyframes orbFloat1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(65px, 45px, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-35px, 75px, 0) scale(0.95);
+  }
+}
+
+@keyframes orbFloat2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  40% {
+    transform: translate3d(-75px, -50px, 0) scale(1.1);
+  }
+  75% {
+    transform: translate3d(30px, 55px, 0) scale(0.94);
+  }
+}
+
+@keyframes orbFloat3 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(80px, -45px, 0) scale(1.07);
+  }
+}
+
+@keyframes bgGridDrift {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 44px 44px;
+  }
+}
+
+@keyframes bgBeamSweep {
+  0% {
+    background-position: 200% 0%;
+  }
+  100% {
+    background-position: -200% 0%;
+  }
+}
+
+@keyframes spinUltraSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reverseSpinUltraSlow {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes shimmerSlide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-orb-float-1 {
+  animation: orbFloat1 18s ease-in-out infinite;
+}
+
+.animate-orb-float-2 {
+  animation: orbFloat2 22s ease-in-out infinite;
+}
+
+.animate-orb-float-3 {
+  animation: orbFloat3 20s ease-in-out infinite;
+}
+
+.animate-bg-grid-drift {
+  animation: bgGridDrift 16s linear infinite;
+}
+
+.animate-bg-beam {
+  animation: bgBeamSweep 14s ease-in-out infinite;
+}
+
+.animate-spin-ultra-slow {
+  animation: spinUltraSlow 65s linear infinite;
+}
+
+.animate-reverse-spin-ultra-slow {
+  animation: reverseSpinUltraSlow 55s linear infinite;
+}
+
+.animate-shimmer-slide {
+  animation: shimmerSlide 5.5s ease-in-out infinite;
+}
+
+.animate-subtle-float {
+  animation: subtleFloat 5s ease-in-out infinite;
+}
+
+/* Glassmorphic Minimalist White Surface Styling */
+.white-glass-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(203, 213, 225, 0.85);
+  box-shadow: 0 4px 24px -6px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.white-glass-card:hover {
+  border-color: rgba(100, 116, 139, 0.55);
+  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.09), 0 2px 6px 0 rgba(15, 23, 42, 0.04);
 }
 
 /* ============================================================================
@@ -69,7 +205,7 @@ div[class*="bg-black"]:not([class*="fixed"]),
 section[class*="bg-black"],
 div[class*="bg-gray-9"],
 section[class*="bg-gray-9"],
-div[class*="bg-slate-9"]:not([class*="fixed"]),
+div[class*="bg-slate-9"]:not([class*="fixed"]):not(button):not(a):not(span),
 section[class*="bg-slate-9"],
 div[class*="bg-[#0"],
 section[class*="bg-[#0"],

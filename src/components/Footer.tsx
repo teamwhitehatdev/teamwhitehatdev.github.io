@@ -1,12 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Shield, Smartphone, ExternalLink, Code, Box } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 const MESHY_URL =
   'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends';
 
 export const Footer: React.FC = () => {
+  const { navTabs } = useApp();
+
+  const visibleNavTabs = [...navTabs]
+    .filter((tab) => tab.visible !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+
   return (
-    <footer className="bg-white border-t border-slate-200 text-slate-600 py-12 select-none">
+    <footer className="bg-white/90 backdrop-blur-md border-t border-slate-200 text-slate-600 py-12 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Info */}
@@ -36,26 +44,58 @@ export const Footer: React.FC = () => {
                 rel="sponsored noopener noreferrer"
                 className="inline-flex items-center space-x-2 text-xs font-semibold text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-300 px-3 py-1.5 rounded-lg transition-colors"
               >
-                <Box className="w-3.5 h-3.5 text-slate-800" />
+                <Box className="w-3.5 h-3.5 text-slate-800 shrink-0" />
                 <span>AI 3D Model Generator: Create 3D from Text &amp; Images | Meshy</span>
-                <ExternalLink className="w-3 h-3" />
+                <ExternalLink className="w-3 h-3 shrink-0" />
               </a>
             </div>
           </div>
 
-          {/* Public Navigation Links (/services and /admin hidden from public menu, active via direct URL) */}
+          {/* Public Navigation Links (synced with Admin Navigation Tabs Manager) */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
               <Code className="w-4 h-4 text-slate-700" />
               <span>Free Resources &amp; Pages</span>
             </h4>
             <ul className="space-y-2 text-xs">
-              <li><a href="#/" className="hover:text-slate-900 transition-colors">Home &amp; Free VA Academy</a></li>
-              <li><a href="#/ai" className="hover:text-slate-900 transition-colors font-semibold text-slate-800">AI Capabilities &amp; Automation Diagrams</a></li>
-              <li><a href="#/affiliate-guide" className="hover:text-slate-900 transition-colors font-semibold text-slate-800">Free VA &amp; Freelancer Master Guide</a></li>
-              <li><a href="#/showcase" className="hover:text-slate-900 transition-colors">Portfolio &amp; Showcase</a></li>
-              <li><a href="#/web-hosting" className="hover:text-slate-900 transition-colors">Web Hosting Deals</a></li>
-              <li><a href="#/about" className="hover:text-slate-900 transition-colors">About Our Team</a></li>
+              {visibleNavTabs.map((tab) => (
+                <li key={tab.id}>
+                  {tab.isExternal ? (
+                    <a
+                      href={tab.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-slate-900 transition-colors inline-flex items-center gap-1"
+                    >
+                      <span>{tab.label}</span>
+                      <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={tab.path}
+                      className="hover:text-slate-900 transition-colors font-medium text-slate-700"
+                    >
+                      {tab.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+              <li className="pt-1 border-t border-slate-100">
+                <Link
+                  to="/privacy-policy"
+                  className="hover:text-slate-900 transition-colors font-semibold text-slate-800"
+                >
+                  Privacy Policy &amp; AdSense Disclosure
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/terms"
+                  className="hover:text-slate-900 transition-colors font-medium text-slate-600"
+                >
+                  Terms of Use &amp; FTC Affiliate Disclosure
+                </Link>
+              </li>
             </ul>
           </div>
 

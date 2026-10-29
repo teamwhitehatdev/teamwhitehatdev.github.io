@@ -5,13 +5,22 @@ export interface Service {
   price?: string;
   description: string;
   features?: string[];
+  image?: string;
+  videoUrl?: string;
+  hideImage?: boolean;
+  hideVideo?: boolean;
+  visible?: boolean;
 }
 
 export interface Project {
   id: string;
   title: string;
-  category: 'web' | 'mobile' | 'security' | 'design';
+  category: 'web' | 'mobile' | 'security' | 'design' | string;
   image: string;
+  videoUrl?: string;
+  hideImage?: boolean;
+  hideVideo?: boolean;
+  visible?: boolean;
   description: string;
   tags?: string[];
   liveUrl?: string;
@@ -33,6 +42,10 @@ export interface Affiliate {
   referralUrl?: string;
   bannerImage?: string;
   image?: string;
+  videoUrl?: string;
+  hideImage?: boolean;
+  hideVideo?: boolean;
+  visible?: boolean;
   badge?: string;
   discountText?: string;
   commission?: string;
@@ -94,8 +107,25 @@ export interface VisitorLog {
   timestamp: string; // ISO date string
 }
 
+// NAVIGATION TAB MANAGER TYPES (DYNAMIC ADD / REMOVE / HIDE / UNHIDE TABS)
+export interface NavTabConfig {
+  id: string;
+  label: string;
+  slug: string;          // Page owner key used by CMS items (e.g. 'home', 'ai', 'services', or custom 'templates')
+  path: string;          // Router path (e.g. '/', '/ai', '/services', or '/page/templates')
+  badge?: string;        // Optional badge pill
+  heroTitle?: string;    // Headline displayed on custom tab page
+  heroSubtitle?: string; // Subtitle displayed on custom tab page
+  visible: boolean;      // true = visible in Navbar, false = hidden (direct link only)
+  isExternal?: boolean;  // true if opens in new external tab
+  isSystem?: boolean;    // true for built-in routes
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // CMS BACKEND EDUCATIONAL TYPES
-export type CMSPageOwnerType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide' | 'ai' | 'home';
+export type CMSPageOwnerType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide' | 'ai' | 'home' | string;
 export type CMSContentType = 'Tutorial' | 'Guide' | 'Article' | 'Resource' | 'Service' | 'Showcase' | 'Affiliate' | 'Discussion';
 export type CMSPageType = CMSPageOwnerType | 'home' | 'va-hub' | 'freelancing' | 'affiliate-learning';
 export type CMSStatusType = 'DRAFT' | 'PUBLISHED' | 'SCHEDULED';
@@ -107,15 +137,16 @@ export interface CMSItem {
   homeFeatured: boolean;       // Independent Home Page Promotion Toggle
   contentType: CMSContentType; // Content Type (Tutorial, Guide, Article, etc.)
   title: string;
-  category: string;            // Category within page
+  category: string;            // Category / Niche within page
   status: CMSStatusType;       // 'DRAFT' | 'PUBLISHED' | 'SCHEDULED'
-  visible: boolean;            // true / false
+  visible: boolean;            // true / false (Hide / Unhide)
   publishDate?: string;
   scheduleDate?: string;
   summary?: string;
   fullContent?: string;        // Rich article text
   description: string;
   mainImage?: string;
+  hideImage?: boolean;         // Hide / Unhide image without deleting URL
   galleryImages?: string[];
   url?: string;                // Affiliate / Referral / Target URL
   buttonText?: string;
@@ -123,9 +154,10 @@ export interface CMSItem {
   discount?: string;
   price?: string;
   metrics?: string;
-  videoUrl?: string;         // Video URL for tutorials/articles
-  referralUrl?: string;      // Affiliate referral link
-  referralCta?: string;      // Referral CTA button text
+  videoUrl?: string;           // Video URL or uploaded DataURL for tutorials/articles
+  hideVideo?: boolean;         // Hide / Unhide video without deleting URL
+  referralUrl?: string;        // Affiliate referral link
+  referralCta?: string;        // Referral CTA button text
   seoTitle?: string;
   seoDescription?: string;
   sortOrder?: number;
@@ -147,6 +179,9 @@ export interface PromoItem {
   description: string;
   fullDescription?: string;
   imageUrl?: string;
+  videoUrl?: string;
+  hideImage?: boolean;
+  hideVideo?: boolean;
   destinationUrl: string;
   buttonText: string;
   badge?: string;
@@ -256,6 +291,22 @@ export interface PrivacyConfig {
 }
 
 // ============================================================================
+// GOOGLE ADSENSE & UNIVERSAL AD NETWORK MONETIZATION CONFIG
+// ============================================================================
+export interface AdSenseConfig {
+  enabled: boolean;
+  publisherId: string; // e.g. 'ca-pub-0000000000000000'
+  autoAdsEnabled: boolean;
+  showPartnerFallbackAds: boolean; // Shows revenue-generating Partner/Affiliate sponsor banners when AdSense slot is empty or in standby
+  headerSlotId: string;
+  inArticleSlotId: string;
+  sidebarSlotId: string;
+  footerSlotId: string;
+  customAdScriptHtml?: string;
+  cookieConsentEnabled: boolean;
+}
+
+// ============================================================================
 // AFFILIATE GUIDE COLLAPSIBLE TOPIC TYPES
 // ============================================================================
 export interface TopicSubItem {
@@ -264,6 +315,10 @@ export interface TopicSubItem {
   description: string;
   tag?: string;
   imageUrl?: string;
+  videoUrl?: string;
+  hideImage?: boolean;
+  hideVideo?: boolean;
+  visible?: boolean;
   ctaText?: string;
   ctaUrl?: string;
 }
@@ -291,6 +346,8 @@ export interface AffiliateCollapsibleTopic {
   themeColor: TopicThemeColor;
   headerBannerImage?: string;
   videoUrl?: string;
+  hideImage?: boolean;
+  hideVideo?: boolean;
   referralUrl: string;
   primaryCtaText: string;
   secondaryCtaText?: string;
