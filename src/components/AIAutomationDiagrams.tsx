@@ -18,7 +18,6 @@ import {
   GraduationCap,
   Briefcase,
   ExternalLink,
-  Code2,
   ShieldCheck,
   Activity,
   PhoneCall,
@@ -2190,7 +2189,6 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   const [selectedNodeIndex, setSelectedNodeIndex] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [isInboundIngestionExpanded, setIsInboundIngestionExpanded] = useState<boolean>(false);
 
   // DRAGGABLE NODES ENGINE STATE
   const [nodePositions, setNodePositions] = useState<Array<{ x: number; y: number }>>(DEFAULT_NODE_POSITIONS);
@@ -2611,175 +2609,8 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
         </div>
 
         <div className="relative z-10 pt-3 flex flex-wrap items-center justify-between text-xs text-slate-600 font-mono">
-          <span>💡 Tip: Click any node box to inspect its runtime payload and schema specifications below.</span>
+          <span>💡 Tip: Drag any node box on the canvas to customize your interactive workflow layout.</span>
           <span className="text-slate-900 font-bold">Active Focus: Node {selectedNode.step} • {selectedNode.title}</span>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          SECTION 3: NODE ARCHITECTURE & EXECUTION SPECIFICATIONS (NODE BY NODE)
-      ====================================================================== */}
-      <section className="bg-white border-2 border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
-          <div className="text-xs font-mono text-slate-950 uppercase tracking-wider flex items-center gap-1.5 font-black">
-            <Code2 className="w-4 h-4 text-slate-900" />
-            <span className="text-slate-950 font-black">Node Architecture & Execution Specifications (Node by Node):</span>
-          </div>
-          <span className="text-xs text-slate-900 font-bold font-mono">
-            Active Focus: Node {selectedNode.step} • {selectedNode.title}
-          </span>
-        </div>
-
-        {/* EXPANDABLE MULTI-SOURCE INGESTION STREAM SPECIFICATION (OPTIONAL TO SHOW) */}
-        <div className="rounded-2xl border-2 border-slate-300 bg-white p-4 space-y-3 shadow-xs text-slate-900">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs sm:text-sm font-mono font-black text-slate-950 uppercase tracking-wider">
-                Autonomous Inbound Lead Capture & Sanitization (Multi-Source AI Lead Ingestion Stream)
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-900 border border-slate-300 font-bold">
-                {isInboundIngestionExpanded ? 'EXPANDED VIEW' : 'CLICK TO EXPAND'}
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsInboundIngestionExpanded(!isInboundIngestionExpanded)}
-              className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-bold border border-slate-900 flex items-center gap-1.5 cursor-pointer transition-all shrink-0 shadow-xs"
-            >
-              <span>{isInboundIngestionExpanded ? '[-] Collapse Ingestion Stream' : '[+] Expand Multi-Source Ingestion Stream'}</span>
-            </button>
-          </div>
-
-          {isInboundIngestionExpanded && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-slate-200 text-xs font-mono">
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                <div className="text-slate-950 font-black text-xs">Stream 01: High-Speed Webhook Ingress</div>
-                <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/stream (TLS 1.3)</div>
-                <p className="text-slate-800 text-xs leading-relaxed font-medium">
-                  Captures submissions from Typeform, Webflow, and custom landing page forms in ~12ms with cryptographic payload signature verification.
-                </p>
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                <div className="text-slate-950 font-black text-xs">Stream 02: Calendly Meeting Ingress</div>
-                <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/calendly (OAuth2)</div>
-                <p className="text-slate-800 text-xs leading-relaxed font-medium">
-                  Streams newly scheduled discovery calls, auto-normalizes invitee contact data, and triggers firmographic enrichment pre-call.
-                </p>
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                <div className="text-slate-950 font-black text-xs">Stream 03: LinkedIn Lead Gen Ads</div>
-                <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/linkedin (Webhooks API)</div>
-                <p className="text-slate-800 text-xs leading-relaxed font-medium">
-                  Instant lead ingestion from sponsored LinkedIn Lead Gen ad forms, resolving company size, verified work emails, and seniority.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* 5 NODE CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-          {activeBlueprint.nodes.map((node, index) => {
-            const isSelected = selectedNodeIndex === index;
-            return (
-              <div
-                key={node.step}
-                onClick={() => setSelectedNodeIndex(index)}
-                className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden shadow-xs ${
-                  isSelected
-                    ? 'bg-white border-cyan-500 shadow-md ring-2 ring-cyan-400 text-slate-950'
-                    : 'bg-white border-slate-200 hover:border-slate-400 hover:bg-slate-50 text-slate-950'
-                }`}
-              >
-                {isSelected && (
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-400 animate-pulse" />
-                )}
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-[10px] font-mono font-bold">
-                    <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-900 border border-slate-300 font-bold">
-                      NODE {node.step}
-                    </span>
-                    <span className="px-2 py-0.5 rounded-full bg-slate-900 text-white font-bold uppercase">
-                      {node.type}
-                    </span>
-                  </div>
-
-                  <h4 className="font-black text-sm text-slate-950 leading-snug line-clamp-1">
-                    {node.title}
-                  </h4>
-
-                  <div className="text-xs font-bold text-slate-900 flex items-center justify-between">
-                    <span className="truncate">{node.tool}</span>
-                    <span className="text-[10px] font-mono text-slate-600 font-bold shrink-0">:{node.port}</span>
-                  </div>
-
-                  <p className="text-[11px] text-slate-700 font-medium leading-relaxed line-clamp-2">
-                    {node.description}
-                  </p>
-                </div>
-
-                <div className="space-y-1.5 pt-2 border-t border-slate-200 font-mono text-[10px]">
-                  <div className="text-slate-600 font-bold flex items-center justify-between">
-                    <span>{node.protocolBadge}</span>
-                    <span className="text-emerald-700 font-bold">{node.latency}</span>
-                  </div>
-                  <div className="p-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-900 font-bold text-[10px] truncate">
-                    IP: {node.ipAddress} • SLA {node.statusUptime}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* DIRECT INLINE SPECIFICATION INSPECTOR */}
-        <div className="bg-white border-2 border-slate-300 rounded-2xl p-5 space-y-4 shadow-xs text-slate-900">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-900 border border-slate-300 text-xs font-mono font-bold">
-                NODE {selectedNode.step} • {selectedNode.type}
-              </span>
-              <h3 className="text-base sm:text-lg font-black text-slate-950">
-                {selectedNode.title} ({selectedNode.tool})
-              </h3>
-            </div>
-            <div className="flex items-center gap-3 text-xs font-mono">
-              <span className="text-slate-600 font-medium">Endpoint: <strong className="text-slate-950 font-bold">{selectedNode.detailedSpecs.endpoint}</strong></span>
-              <span className="text-emerald-700 font-bold">Latency: {selectedNode.latency}</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs font-mono">
-            <div className="space-y-1.5">
-              <span className="text-[11px] text-slate-950 uppercase tracking-wider block font-black">
-                Input Schema Payload Stream:
-              </span>
-              <pre className="bg-black/90 border border-slate-800 text-cyan-200 p-3 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap max-h-36">
-                {selectedNode.inputPayload}
-              </pre>
-            </div>
-
-            <div className="space-y-1.5">
-              <span className="text-[11px] text-slate-950 uppercase tracking-wider block font-black">
-                Output Return Payload:
-              </span>
-              <pre className="bg-black/90 border border-slate-800 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap max-h-36">
-                {selectedNode.outputPayload}
-              </pre>
-            </div>
-          </div>
-
-          <div className="p-3 rounded-xl bg-slate-100 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
-            <div className="text-slate-800 font-medium">
-              <span className="text-slate-950 font-bold">Retry Policy: </span>
-              {selectedNode.detailedSpecs.retryPolicy}
-            </div>
-            <div className="text-amber-800 shrink-0 font-bold">
-              Fallback: {selectedNode.detailedSpecs.fallbackAction}
-            </div>
-          </div>
         </div>
       </section>
 
