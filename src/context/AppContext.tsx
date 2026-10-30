@@ -343,9 +343,13 @@ const DEFAULT_VISITOR_LOGS: VisitorLog[] = [
 ];
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // USER TELEMETRY STATE
+  // USER TELEMETRY STATE (REAL-TIME GEOLOCATION & VISITOR INTELLIGENCE)
   const [userIp, setUserIp] = useState<string>('127.0.0.1');
-  const [userCountry] = useState<string>('United States');
+  const [userCountry, setUserCountry] = useState<string>('Philippines');
+  const [userCity, setUserCity] = useState<string>('Manila');
+  const [userRegion, setUserRegion] = useState<string>('National Capital Region');
+  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number }>({ lat: 14.5995, lng: 120.9842 });
+  const [userIsp, setUserIsp] = useState<string>('ISP Network');
   const [userDevice, setUserDevice] = useState<'Desktop' | 'Mobile' | 'Tablet'>('Desktop');
   const [bannedIps, setBannedIps] = useState<string[]>(() => {
     const saved = localStorage.getItem('wh_banned_ips');
@@ -682,23 +686,157 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return INITIAL_PROMO_ITEMS;
   });
 
-  // DETECT USER IP & DEVICE ON MOUNT
+  // DETECT REAL-TIME VISITOR IP, GEOLOCATION & HARDWARE ENVIRONMENT ON MOUNT
   useEffect(() => {
     const ua = navigator.userAgent;
+    let detectedDevice: 'Desktop' | 'Mobile' | 'Tablet' = 'Desktop';
     if (/Mobi|Android|iPhone/i.test(ua)) {
-      setUserDevice('Mobile');
+      detectedDevice = 'Mobile';
     } else if (/Tablet|iPad/i.test(ua)) {
-      setUserDevice('Tablet');
-    } else {
-      setUserDevice('Desktop');
+      detectedDevice = 'Tablet';
     }
+    setUserDevice(detectedDevice);
 
-    fetch('https://api.ipify.org?format=json')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.ip) setUserIp(data.ip);
-      })
-      .catch(() => setUserIp('185.220.101.5'));
+    // REAL-TIME GEOLOCATION & REAL VISITOR TELEMETRY RESOLUTION
+    const fetchGeoData = async () => {
+      let resolvedIp = '';
+      let resolvedCountry = '';
+      let resolvedCity = '';
+      let resolvedRegion = '';
+      let resolvedLat = 14.5995;
+      let resolvedLng = 120.9842;
+      let resolvedIsp = '';
+
+      try {
+        // Attempt 1: ipapi.co (detailed IP, Country, City, Region, Lat, Lng, ISP)
+        const res = await fetch('https://ipapi.co/json/');
+        if (res.ok) {
+          const d = await res.json();
+          if (d && d.ip) {
+            resolvedIp = d.ip;
+            resolvedCountry = d.country_name || d.country || 'Philippines';
+            resolvedCity = d.city || 'Manila';
+            resolvedRegion = d.region || '';
+            resolvedLat = typeof d.latitude === 'number' ? d.latitude : 14.5995;
+            resolvedLng = typeof d.longitude === 'number' ? d.longitude : 120.9842;
+            resolvedIsp = d.org || d.asn || 'ISP Network';
+          }
+        }
+      } catch (e1) {
+        // Attempt 2 fallback: ipwho.is
+        try {
+          const res2 = await fetch('https://ipwho.is/');
+          if (res2.ok) {
+            const d2 = await res2.json();
+            if (d2 && d2.ip) {
+              resolvedIp = d2.ip;
+              resolvedCountry = d2.country || 'Philippines';
+              resolvedCity = d2.city || 'Manila';
+              resolvedRegion = d2.region || '';
+              resolvedLat = typeof d2.latitude === 'number' ? d2.latitude : 14.5995;
+              resolvedLng = typeof d2.longitude === 'number' ? d2.longitude : 120.9842;
+              resolvedIsp = d2.connection?.isp || d2.connection?.org || 'ISP Network';
+            }
+          }
+        } catch (e2) {
+          // Attempt 3 fallback: api.ipify.org
+          try {
+            const res3 = await fetch('https://api.ipify.org?format=json');
+            if (res3.ok) {
+              const d3 = await res3.json();
+              if (d3 && d3.ip) resolvedIp = d3.ip;
+            }
+          } catch (e3) {}
+        }
+      }
+
+      if (resolvedIp) setUserIp(resolvedIp);
+      if (resolvedCountry) setUserCountry(resolvedCountry);
+      if (resolvedCity) setUserCity(resolvedCity);
+      if (resolvedRegion) setUserRegion(resolvedRegion);
+      if (resolvedLat && resolvedLng) setUserCoords({ lat: resolvedLat, lng: resolvedLng });
+      if (resolvedIsp) setUserIsp(resolvedIsp);
+
+      const finalIp = resolvedIp || '127.0.0.1';
+      const finalCountry = resolvedCountry || 'Philippines';
+      const finalCity = resolvedCity || 'Manila';
+
+      // Log current real visitor session into Telemetry and Visitor Logs
+      const currentPath = window.location.hash || window.location.pathname || '/';
+      const newLog: VisitorLog = {
+        id: 'log_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+        ip: finalIp,
+        country: finalCountry,
+        city: finalCity,
+        region: resolvedRegion,
+        lat: resolvedLat,
+        lng: resolvedLng,
+        isp: resolvedIsp,
+        device: detectedDevice,
+        browser: ua.includes('Edg') ? 'Edge' : ua.includes('Chrome') ? 'Chrome' : ua.includes('Firefox') ? 'Firefox' : ua.includes('Safari') ? 'Safari' : 'Browser',
+        os: navigator.platform || 'OS',
+        pageVisited: currentPath,
+        timestamp: new Date().toISOString()
+      };
+
+      setVisitorLogs((prev) => [newLog, ...prev.slice(0, 4999)]);
+
+      // Create or update real LiveVisitorSession in localStorage for TelemetryDashboard & RealWorldMap
+      try {
+        const sKey = 'wh_telemetry_sessions';
+        const rawSessions = localStorage.getItem(sKey);
+        const existingSessions = rawSessions ? JSON.parse(rawSessions) : [];
+        const mySessionId = sessionStorage.getItem('wh_telemetry_session_id') || ('SESS-' + Date.now().toString(36).toUpperCase());
+        sessionStorage.setItem('wh_telemetry_session_id', mySessionId);
+
+        const currentSession = {
+          id: 'sess_' + Date.now(),
+          sessionId: mySessionId,
+          visitorId: 'vis_' + finalIp.replace(/[^a-zA-Z0-9]/g, '_'),
+          ip: finalIp,
+          country: finalCountry,
+          city: finalCity,
+          region: resolvedRegion,
+          lat: resolvedLat,
+          lng: resolvedLng,
+          device: detectedDevice,
+          browser: newLog.browser,
+          os: newLog.os,
+          durationSeconds: 150,
+          isActive: true,
+          eventsCount: 1,
+          events: [
+            {
+              id: 'evt_' + Date.now(),
+              sessionId: mySessionId,
+              visitorId: 'vis_' + finalIp.replace(/[^a-zA-Z0-9]/g, '_'),
+              type: 'PAGE_VIEW',
+              label: `Real Visitor visited ${currentPath}`,
+              pagePath: currentPath,
+              timestamp: new Date().toISOString(),
+              country: finalCountry,
+              city: finalCity,
+              region: resolvedRegion,
+              device: detectedDevice,
+              browser: newLog.browser,
+              os: newLog.os,
+              referrer: document.referrer || 'Direct Discovery'
+            }
+          ]
+        };
+
+        const updatedSessions = [currentSession, ...existingSessions.filter((s: any) => s.ip !== finalIp).slice(0, 50)];
+        localStorage.setItem(sKey, JSON.stringify(updatedSessions));
+
+        // Append to wh_telemetry_events
+        const eKey = 'wh_telemetry_events';
+        const rawEvents = localStorage.getItem(eKey);
+        const existingEvents = rawEvents ? JSON.parse(rawEvents) : [];
+        localStorage.setItem(eKey, JSON.stringify([currentSession.events[0], ...existingEvents.slice(0, 4999)]));
+      } catch (err) {}
+    };
+
+    fetchGeoData();
   }, []);
 
   // PERSIST LOCALSTORAGE
@@ -738,22 +876,52 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem('wh_visitor_logs', JSON.stringify(visitorLogs.slice(0, 2000)));
   }, [visitorLogs]);
 
-  // LOG VISITOR NAVIGATION
+  // LOG VISITOR NAVIGATION (REAL-TIME TELEMETRY TRACKER)
   const logVisitorPageNavigation = useCallback(
     (pagePath: string) => {
+      const ua = navigator.userAgent;
       const newLog: VisitorLog = {
-        id: 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        id: 'log_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
         ip: userIp,
         country: userCountry,
+        city: userCity,
+        region: userRegion,
+        lat: userCoords.lat,
+        lng: userCoords.lng,
+        isp: userIsp,
         device: userDevice,
-        browser: navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Browser',
-        os: navigator.platform,
+        browser: ua.includes('Edg') ? 'Edge' : ua.includes('Chrome') ? 'Chrome' : ua.includes('Firefox') ? 'Firefox' : ua.includes('Safari') ? 'Safari' : 'Browser',
+        os: navigator.platform || 'OS',
         pageVisited: pagePath,
         timestamp: new Date().toISOString()
       };
       setVisitorLogs((prev) => [newLog, ...prev.slice(0, 4999)]);
+
+      // Push real-time event into wh_telemetry_events for live radar monitoring
+      try {
+        const eKey = 'wh_telemetry_events';
+        const raw = localStorage.getItem(eKey);
+        const list = raw ? JSON.parse(raw) : [];
+        list.unshift({
+          id: 'evt_' + Date.now(),
+          sessionId: sessionStorage.getItem('wh_telemetry_session_id') || ('SESS-' + Date.now().toString(36).toUpperCase()),
+          visitorId: 'vis_' + userIp.replace(/[^a-zA-Z0-9]/g, '_'),
+          type: 'PAGE_VIEW',
+          label: `Navigation: ${pagePath}`,
+          pagePath,
+          timestamp: new Date().toISOString(),
+          country: userCountry,
+          city: userCity,
+          region: userRegion,
+          device: userDevice,
+          browser: newLog.browser,
+          os: newLog.os,
+          referrer: document.referrer || 'Internal Navigation'
+        });
+        localStorage.setItem(eKey, JSON.stringify(list.slice(0, 5000)));
+      } catch (err) {}
     },
-    [userIp, userCountry, userDevice]
+    [userIp, userCountry, userCity, userRegion, userCoords, userIsp, userDevice]
   );
 
   const clearVisitorLogs = () => setVisitorLogs([]);

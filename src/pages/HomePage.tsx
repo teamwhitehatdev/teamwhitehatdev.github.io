@@ -13,7 +13,9 @@ import {
   Video,
   Box,
   GraduationCap,
-  Workflow
+  Workflow,
+  Search,
+  X
 } from 'lucide-react';
 import { AtomeCardPanel } from '../components/AtomeCardPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
@@ -113,6 +115,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
     [...TESTIMONIALS_DATA].sort(() => Math.random() - 0.5)
   );
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedArticle, setSelectedArticle] = useState<CMSItem | null>(null);
   const [expandedArticleIds, setExpandedArticleIds] = useState<Record<string, boolean>>({});
 
@@ -132,10 +135,19 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
   const homeCmsItems = typeof getHomeFeaturedCMSItems === 'function' ? getHomeFeaturedCMSItems() : [];
 
-  const filteredCmsItems =
-    selectedCategory === 'ALL'
-      ? homeCmsItems
-      : homeCmsItems.filter((item) => item.category.toUpperCase().includes(selectedCategory));
+  const filteredCmsItems = homeCmsItems.filter((item) => {
+    const matchesCat =
+      selectedCategory === 'ALL' ||
+      item.category.toUpperCase().includes(selectedCategory);
+    const q = searchQuery.toLowerCase().trim();
+    const matchesSearch =
+      !q ||
+      item.title.toLowerCase().includes(q) ||
+      item.description.toLowerCase().includes(q) ||
+      item.category.toLowerCase().includes(q) ||
+      (item.fullContent || '').toLowerCase().includes(q);
+    return matchesCat && matchesSearch;
+  });
 
   return (
     <div className="space-y-12 max-w-7xl mx-auto pb-12 bg-transparent text-slate-900">
@@ -453,9 +465,58 @@ export const HomePage: React.FC<HomePageProps> = () => {
                 </div>
               </div>
 
+              {/* LIVE SEARCH BAR FOR TUTORIALS & MASTERCLASSES */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white/60 backdrop-blur-xs p-2.5 rounded-2xl border border-indigo-200/80">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-indigo-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search free tutorials: AI capabilities, Meshy 3D, VA proposals, CRM automation, client outreach..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-10 py-2 bg-white border border-indigo-200/80 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 cursor-pointer"
+                      title="Clear search"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+                <div className="text-xs font-bold text-indigo-950 px-2 shrink-0">
+                  Showing <strong className="text-indigo-600 font-extrabold">{filteredCmsItems.length}</strong> of{' '}
+                  {homeCmsItems.length} Masterclasses
+                </div>
+              </div>
+
               {/* TUTORIALS / ARTICLES GRID WITH COLOR-CODED NICHE CATEGORY CONTAINERS */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {filteredCmsItems.map((item) => {
+              {filteredCmsItems.length === 0 ? (
+                <div className="text-center py-12 bg-white/80 backdrop-blur-xs rounded-2xl border border-indigo-200/80 p-8 space-y-3">
+                  <Sparkles className="w-8 h-8 text-indigo-400 mx-auto" />
+                  <h4 className="text-base font-extrabold text-indigo-950">
+                    No tutorials found matching &quot;{searchQuery}&quot;
+                  </h4>
+                  <p className="text-xs text-indigo-900/80 max-w-md mx-auto">
+                    Try searching for keywords like &quot;AI&quot;, &quot;VA&quot;, &quot;Automation&quot;, &quot;CRM&quot;, or &quot;Freelance&quot;.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setSelectedCategory('ALL');
+                    }}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs cursor-pointer transition-all"
+                  >
+                    Clear Search &amp; Show All Guides
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {filteredCmsItems.map((item) => {
                   const showImage = Boolean(item.mainImage && !item.hideImage);
                   const showVideo = Boolean(item.videoUrl && !item.hideVideo);
                   const isInlineExpanded = Boolean(expandedArticleIds[item.id]);
@@ -623,6 +684,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
                   );
                 })}
               </div>
+              )}
             </div>
           </HUDPanel>
 

@@ -38,6 +38,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { TelemetryDashboard } from '../components/TelemetryDashboard';
+import { VisualPageBuilder } from '../components/VisualPageBuilder';
 import {
   checkAdminRateLimit,
   recordAdminFailedAttempt,
@@ -240,6 +241,8 @@ export const Admin: React.FC = () => {
   // NAVIGATION TAB MODAL STATE
   const [editingNavTab, setEditingNavTab] = useState<NavTabConfig | null>(null);
   const [isNavTabModalOpen, setIsNavTabModalOpen] = useState(false);
+  const [isVisualBuilderOpen, setIsVisualBuilderOpen] = useState(false);
+  const [visualBuilderTargetTab, setVisualBuilderTargetTab] = useState<NavTabConfig | null>(null);
   const [navTabForm, setNavTabForm] = useState<{
     label: string;
     slug: string;
@@ -1379,6 +1382,18 @@ export const Admin: React.FC = () => {
       {/* ALL-IN-ONE NAVIGATION TABS */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-4 text-xs">
         <button
+          type="button"
+          onClick={() => {
+            setVisualBuilderTargetTab(null);
+            setIsVisualBuilderOpen(true);
+          }}
+          className="px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2 transition-all cursor-pointer bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-700 hover:to-indigo-700 text-white shadow-xs"
+        >
+          <Sparkles className="w-4 h-4 text-emerald-200" />
+          <span>🎨 Drag &amp; Drop Website Builder (Wix Style)</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('cms')}
           className={`px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition-all cursor-pointer ${
             activeTab === 'cms'
@@ -1528,6 +1543,17 @@ export const Admin: React.FC = () => {
             <div className="flex flex-wrap gap-2 shrink-0">
               <button
                 type="button"
+                onClick={() => {
+                  setVisualBuilderTargetTab(null);
+                  setIsVisualBuilderOpen(true);
+                }}
+                className="px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-xs cursor-pointer transition-all"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>+ Create Tab With Drag &amp; Drop Builder</span>
+              </button>
+              <button
+                type="button"
                 onClick={handleOpenCreateNavTab}
                 className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer"
               >
@@ -1598,6 +1624,19 @@ export const Admin: React.FC = () => {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2 shrink-0 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setVisualBuilderTargetTab(tab);
+                          setIsVisualBuilderOpen(true);
+                        }}
+                        className="px-3 py-1.5 bg-gradient-to-r from-emerald-50 to-indigo-50 hover:from-emerald-100 hover:to-indigo-100 text-indigo-900 border border-indigo-200 rounded-xl font-bold flex items-center gap-1 cursor-pointer transition-all shadow-2xs"
+                        title="Design custom landing page with Drag & Drop Builder"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>🎨 Drag &amp; Drop Builder {tab.builderBlocks && tab.builderBlocks.length > 0 ? `(${tab.builderBlocks.length} blocks)` : ''}</span>
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => handleOpenCreateCMS(tab.slug)}
@@ -4814,6 +4853,30 @@ export const Admin: React.FC = () => {
               </button>
             </div>
 
+            {/* DRAG & DROP WEBSITE BUILDER QUICK ACTION BANNER */}
+            <div className="p-4 bg-gradient-to-r from-emerald-50 to-indigo-50 border border-emerald-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <span className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-emerald-600" />
+                  <span>Wix &amp; WordPress Drag &amp; Drop Builder</span>
+                </span>
+                <p className="text-[11px] text-slate-600">
+                  Build custom sections, containers, videos, images, and export clean HTML/TSX code.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsNavTabModalOpen(false);
+                  setVisualBuilderTargetTab(editingNavTab);
+                  setIsVisualBuilderOpen(true);
+                }}
+                className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shrink-0 cursor-pointer shadow-xs transition-all flex items-center gap-1.5"
+              >
+                <span>🎨 Open Builder</span>
+              </button>
+            </div>
+
             <form onSubmit={handleSaveNavTab} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="sm:col-span-2">
@@ -4945,6 +5008,35 @@ export const Admin: React.FC = () => {
             </form>
           </div>
         </div>
+      )}
+      {/* ========================================================================= */}
+      {/* 🎨 DRAG & DROP WEBSITE BUILDER (WIX / WORDPRESS STYLE INTERACTIVE TOOL)     */}
+      {/* ========================================================================= */}
+      {isVisualBuilderOpen && (
+        <VisualPageBuilder
+          initialTab={visualBuilderTargetTab}
+          navTabs={navTabs || []}
+          onSaveToTab={(tabId, blocks, settings) => {
+            updateNavTab(tabId, {
+              builderBlocks: blocks,
+              builderPageSettings: settings,
+              pageLayoutType: 'builder',
+              heroTitle: settings.pageTitle,
+              heroSubtitle: settings.pageSubtitle
+            });
+            setIsVisualBuilderOpen(false);
+            showToast('Saved custom drag & drop page layout to tab!');
+          }}
+          onCreateNewTabWithBuilder={(tabData) => {
+            addNavTab(tabData);
+            setIsVisualBuilderOpen(false);
+            showToast(`Created new navigation tab "${tabData.label}" with custom layout!`);
+          }}
+          onClose={() => {
+            setIsVisualBuilderOpen(false);
+            setVisualBuilderTargetTab(null);
+          }}
+        />
       )}
     </div>
   );

@@ -15,14 +15,16 @@ import {
   Compass,
   Layers,
   UserCheck,
-  Bot
+  Bot,
+  Search,
+  X
 } from 'lucide-react';
 import { TelemetryEvent, LiveVisitorSession, WebPerfTelemetry, PrivacyConfig } from '../types';
 import { getInitialTelemetryData } from '../utils/telemetryTracker';
 
 export const TelemetryDashboard: React.FC = () => {
   const [timeframe, setTimeframe] = useState<'1H' | '6H' | '12H' | '24H' | '7D' | '30D' | '90D' | '1Y'>('24H');
-  const [searchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedCountryFilter, setSelectedCountryFilter] = useState('ALL');
   const [selectedVisitorProfile, setSelectedVisitorProfile] = useState<LiveVisitorSession | null>(null);
 
@@ -168,6 +170,14 @@ export const TelemetryDashboard: React.FC = () => {
     };
   }, [filteredEvents, totalEvents]);
 
+  const availableCountries = useMemo(() => {
+    const set = new Set<string>();
+    telemetryData.events.forEach((e) => {
+      if (e.country) set.add(e.country);
+    });
+    return Array.from(set).sort();
+  }, [telemetryData.events]);
+
   const exportTelemetryCSV = () => {
     const headers = [
       'Timestamp',
@@ -272,6 +282,46 @@ export const TelemetryDashboard: React.FC = () => {
               {tf}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* REAL-TIME INTELLIGENCE SEARCH & GEOGRAPHIC FILTER TOOLBAR */}
+      <div className="p-3.5 bg-white border border-slate-200 rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-2xs text-xs">
+        <div className="relative flex-1">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search real-time telemetry: Country (Philippines, US), IP, City, Page, Device, Browser..."
+            className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 cursor-pointer"
+              title="Clear search"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-slate-600 shrink-0">Filter Country:</span>
+          <select
+            value={selectedCountryFilter}
+            onChange={(e) => setSelectedCountryFilter(e.target.value)}
+            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-800 focus:outline-none cursor-pointer"
+          >
+            <option value="ALL">All Countries ({availableCountries.length})</option>
+            {availableCountries.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 

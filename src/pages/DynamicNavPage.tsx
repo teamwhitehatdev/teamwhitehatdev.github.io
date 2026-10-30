@@ -7,13 +7,257 @@ import {
   Video,
   Sparkles,
   ArrowLeft,
-  Layers
+  Layers,
+  X,
+  ChevronDown
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { CMSItem } from '../types';
+import { CMSItem, BuilderBlock } from '../types';
 import { ArticleModal } from '../components/ArticleModal';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { HUDPanel } from '../components/HUDPanel';
+import { getBlockTailwindClasses } from '../utils/builderCodeGenerator';
+
+const RenderCustomBuilderBlock: React.FC<{ block: BuilderBlock }> = ({ block }) => {
+  const twClasses = getBlockTailwindClasses(block);
+  const s = block.styles || {};
+  const inlineStyle = {
+    backgroundColor: s.backgroundColor || undefined,
+    color: s.textColor || undefined,
+    borderColor: s.borderColor || undefined
+  };
+
+  switch (block.type) {
+    case 'hero':
+      return (
+        <section className={`border border-slate-200/80 ${twClasses}`} style={inlineStyle}>
+          <div className="max-w-4xl mx-auto text-center space-y-5">
+            {block.badgeText && (
+              <span
+                className="inline-flex items-center px-3.5 py-1 text-xs font-bold uppercase tracking-wider rounded-full"
+                style={{
+                  backgroundColor: block.badgeColor ? `${block.badgeColor}20` : '#10b98120',
+                  color: block.badgeColor || '#065f46'
+                }}
+              >
+                {block.badgeText}
+              </span>
+            )}
+            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+              {block.title || 'Welcome'}
+            </h1>
+            {block.subtitle && (
+              <p className="text-base sm:text-lg opacity-80 max-w-2xl mx-auto leading-relaxed">
+                {block.subtitle}
+              </p>
+            )}
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              {block.buttonText && (
+                <a
+                  href={block.buttonLink || '#'}
+                  className={`px-6 py-3 font-bold rounded-xl text-sm transition-all shadow-md ${
+                    block.buttonStyle === 'apple-green'
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                      : block.buttonStyle === 'indigo'
+                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                      : 'bg-slate-900 hover:bg-slate-800 text-white'
+                  }`}
+                >
+                  {block.buttonText}
+                </a>
+              )}
+              {block.secondaryButtonText && (
+                <a
+                  href={block.secondaryButtonLink || '#'}
+                  className="px-6 py-3 font-bold rounded-xl text-sm transition-all border border-slate-300 hover:bg-slate-100/60 text-slate-800"
+                >
+                  {block.secondaryButtonText}
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+
+    case 'heading':
+      return (
+        <div className={twClasses} style={inlineStyle}>
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">{block.title}</h2>
+          {block.subtitle && <p className="text-sm opacity-75 mt-1">{block.subtitle}</p>}
+        </div>
+      );
+
+    case 'paragraph':
+      return (
+        <div className={twClasses} style={inlineStyle}>
+          <p className="text-sm sm:text-base leading-relaxed opacity-90">{block.content}</p>
+        </div>
+      );
+
+    case 'features-grid':
+    case '3-column':
+      return (
+        <div className={twClasses} style={inlineStyle}>
+          {block.title && (
+            <div className="mb-6">
+              <h3 className="text-2xl font-extrabold tracking-tight">{block.title}</h3>
+              {block.subtitle && <p className="text-xs opacity-75 mt-1">{block.subtitle}</p>}
+            </div>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {(block.gridItems || []).map((it) => (
+              <div key={it.id} className="p-5 rounded-2xl border border-slate-200/90 bg-white/90 space-y-2.5 shadow-xs">
+                {it.badge && (
+                  <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">
+                    {it.badge}
+                  </span>
+                )}
+                <h4 className="text-base font-bold text-slate-900">{it.title}</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">{it.description}</p>
+                {it.linkText && (
+                  <a href={it.link || '#'} className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                    {it.linkText} &rarr;
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case '2-column':
+      return (
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 items-center border border-slate-200 p-6 sm:p-8 ${twClasses}`} style={inlineStyle}>
+          <div className="space-y-4">
+            {block.badgeText && (
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-800">
+                {block.badgeText}
+              </span>
+            )}
+            <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">{block.title}</h3>
+            <p className="text-sm leading-relaxed opacity-85">{block.content}</p>
+            {block.buttonText && (
+              <a href={block.buttonLink || '#'} className="inline-block px-5 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl shadow-xs">
+                {block.buttonText}
+              </a>
+            )}
+          </div>
+          <div>
+            <img src={block.imageUrl || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'} alt="Showcase" className="w-full h-auto rounded-xl object-cover shadow-sm max-h-80" />
+          </div>
+        </div>
+      );
+
+    case 'image':
+      return (
+        <figure className={`overflow-hidden border border-slate-200 ${twClasses}`} style={inlineStyle}>
+          <img src={block.imageUrl || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80'} alt={block.imageAlt || 'Banner'} className="w-full h-auto object-cover max-h-[500px]" />
+          {(block.title || block.subtitle) && (
+            <figcaption className="p-4 bg-white/90 border-t border-slate-100">
+              {block.title && <h4 className="font-bold text-sm text-slate-900">{block.title}</h4>}
+              {block.subtitle && <p className="text-xs text-slate-500">{block.subtitle}</p>}
+            </figcaption>
+          )}
+        </figure>
+      );
+
+    case 'video':
+      return (
+        <div className={`overflow-hidden border border-slate-200 ${twClasses}`} style={inlineStyle}>
+          {block.title && <div className="p-4 border-b border-slate-100"><h4 className="font-bold text-sm text-slate-900">{block.title}</h4></div>}
+          <div className="aspect-video w-full bg-slate-900 flex items-center justify-center">
+            {block.videoUrl && (block.videoUrl.includes('youtube.com') || block.videoUrl.includes('youtu.be')) ? (
+              <iframe className="w-full h-full" src={block.videoUrl.replace('watch?v=', 'embed/')} title={block.title || 'Video'} allowFullScreen />
+            ) : block.videoUrl ? (
+              <video className="w-full h-full object-cover" controls src={block.videoUrl} />
+            ) : (
+              <div className="text-white text-xs opacity-75">No video stream loaded</div>
+            )}
+          </div>
+        </div>
+      );
+
+    case 'card':
+      return (
+        <div className={`border border-slate-200 p-6 space-y-3 ${twClasses}`} style={inlineStyle}>
+          {block.badgeText && <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-800">{block.badgeText}</span>}
+          <h3 className="text-xl font-bold tracking-tight">{block.title}</h3>
+          {block.subtitle && <h5 className="text-xs font-semibold opacity-75">{block.subtitle}</h5>}
+          <p className="text-sm leading-relaxed opacity-90">{block.content}</p>
+          {block.buttonText && (
+            <a href={block.buttonLink || '#'} className="inline-block mt-3 px-4 py-2 text-xs font-bold rounded-lg bg-slate-900 text-white">
+              {block.buttonText}
+            </a>
+          )}
+        </div>
+      );
+
+    case 'call-to-action':
+      return (
+        <div className={`border border-indigo-200 p-8 text-center space-y-4 bg-gradient-to-r from-indigo-50/80 to-emerald-50/80 ${twClasses}`} style={inlineStyle}>
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{block.title || 'Ready to Scale?'}</h3>
+          <p className="text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">{block.content}</p>
+          <div className="pt-2">
+            <a href={block.buttonLink || '#'} className="inline-flex items-center gap-2 px-7 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm rounded-xl shadow-md transition-all">
+              <span>{block.buttonText || 'Get Started Now'}</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      );
+
+    case 'accordion':
+      return (
+        <div className={twClasses} style={inlineStyle}>
+          {block.title && <h3 className="text-2xl font-extrabold mb-4">{block.title}</h3>}
+          <div className="space-y-3">
+            {(block.accordionItems || []).map((it) => (
+              <details key={it.id} className="p-4 rounded-xl border border-slate-200 bg-white/80 group">
+                <summary className="font-bold text-sm text-slate-900 cursor-pointer list-none flex items-center justify-between">
+                  <span>{it.question}</span>
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform" />
+                </summary>
+                <p className="text-xs text-slate-600 mt-2 leading-relaxed pt-2 border-t border-slate-100">{it.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      );
+
+    case 'button':
+      return (
+        <div className={twClasses}>
+          <a
+            href={block.buttonLink || '#'}
+            className={`inline-flex items-center gap-2 px-6 py-3 font-bold rounded-xl text-sm transition-all shadow-sm ${
+              block.buttonStyle === 'apple-green'
+                ? 'bg-emerald-600 text-white'
+                : block.buttonStyle === 'indigo'
+                ? 'bg-indigo-600 text-white'
+                : 'bg-slate-900 text-white'
+            }`}
+            style={inlineStyle}
+          >
+            <span>{block.buttonText || 'Take Action'}</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        </div>
+      );
+
+    case 'divider':
+      return (
+        <div className={`${twClasses} my-6`}>
+          <hr className="border-t border-slate-200" style={inlineStyle} />
+        </div>
+      );
+
+    case 'html-embed':
+      return <div className={twClasses} dangerouslySetInnerHTML={{ __html: block.htmlContent || '' }} />;
+
+    default:
+      return null;
+  }
+};
 
 export const DynamicNavPage: React.FC = () => {
   const { tabSlug } = useParams<{ tabSlug: string }>();
@@ -114,8 +358,18 @@ export const DynamicNavPage: React.FC = () => {
                 placeholder={`Search ${currentTab?.label || 'this section'}...`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900"
+                className="w-full pl-10 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900"
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 cursor-pointer"
+                  title="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
             <div className="text-xs font-semibold text-slate-500 shrink-0">
               Showing <strong className="text-slate-900">{filteredItems.length}</strong> Published
@@ -142,6 +396,15 @@ export const DynamicNavPage: React.FC = () => {
           )}
         </div>
       </section>
+
+      {/* CUSTOM DRAG & DROP BUILDER BLOCKS IF CONFIGURED ON THIS TAB */}
+      {currentTab?.builderBlocks && currentTab.builderBlocks.length > 0 && (
+        <div className="space-y-6 pb-4">
+          {currentTab.builderBlocks.map((block) => (
+            <RenderCustomBuilderBlock key={block.id} block={block} />
+          ))}
+        </div>
+      )}
 
       {/* 2-COLUMN RESPONSIVE CONTENT + SIDEBAR */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">

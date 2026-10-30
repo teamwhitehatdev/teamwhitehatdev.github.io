@@ -100,11 +100,109 @@ export interface VisitorLog {
   ip: string;
   country: string;
   city?: string;
+  region?: string;
+  lat?: number;
+  lng?: number;
+  isp?: string;
+  org?: string;
   device: 'Desktop' | 'Mobile' | 'Tablet';
   browser: string;
   os: string;
   pageVisited: string;
   timestamp: string; // ISO date string
+}
+
+// ============================================================================
+// DRAG & DROP WEBSITE BUILDER TYPES (WIX / WORDPRESS / ELEMENTOR STYLE)
+// ============================================================================
+export type BuilderBlockType =
+  | 'hero'
+  | 'heading'
+  | 'paragraph'
+  | '2-column'
+  | '3-column'
+  | 'image'
+  | 'video'
+  | 'button'
+  | 'card'
+  | 'badge'
+  | 'features-grid'
+  | 'accordion'
+  | 'call-to-action'
+  | 'divider'
+  | 'html-embed';
+
+export type BuilderFontFamily = 'inter' | 'mono' | 'sans' | 'serif' | 'poppins';
+export type BuilderFontSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
+export type BuilderFontWeight = 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold';
+export type BuilderTextAlign = 'left' | 'center' | 'right';
+export type BuilderBorderRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full';
+export type BuilderShadow = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'glow-emerald' | 'glow-indigo';
+
+export interface BuilderBlockStyle {
+  textColor?: string;
+  backgroundColor?: string;
+  borderColor?: string;
+  borderWidth?: 'none' | 'thin' | 'medium';
+  borderRadius?: BuilderBorderRadius;
+  paddingY?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  paddingX?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  textAlign?: BuilderTextAlign;
+  fontFamily?: BuilderFontFamily;
+  fontSize?: BuilderFontSize;
+  fontWeight?: BuilderFontWeight;
+  shadow?: BuilderShadow;
+  customClass?: string;
+}
+
+export interface BuilderGridItem {
+  id: string;
+  title: string;
+  description: string;
+  icon?: string;
+  badge?: string;
+  link?: string;
+  linkText?: string;
+  imageUrl?: string;
+}
+
+export interface BuilderAccordionItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface BuilderBlock {
+  id: string;
+  type: BuilderBlockType;
+  title?: string;
+  subtitle?: string;
+  content?: string;
+  badgeText?: string;
+  badgeColor?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  videoUrl?: string;
+  buttonText?: string;
+  buttonLink?: string;
+  buttonStyle?: 'primary' | 'secondary' | 'apple-green' | 'indigo' | 'outline';
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+  columns?: 1 | 2 | 3 | 4;
+  gridItems?: BuilderGridItem[];
+  accordionItems?: BuilderAccordionItem[];
+  htmlContent?: string;
+  dividerStyle?: 'solid' | 'dashed' | 'gradient';
+  styles: BuilderBlockStyle;
+}
+
+export interface BuilderPageSettings {
+  pageTitle: string;
+  pageSubtitle?: string;
+  maxWidth: 'max-w-4xl' | 'max-w-6xl' | 'max-w-7xl' | 'w-full';
+  backgroundColor?: string;
+  fontFamily?: BuilderFontFamily;
+  customCss?: string;
 }
 
 // NAVIGATION TAB MANAGER TYPES (DYNAMIC ADD / REMOVE / HIDE / UNHIDE TABS)
@@ -120,6 +218,9 @@ export interface NavTabConfig {
   isExternal?: boolean;  // true if opens in new external tab
   isSystem?: boolean;    // true for built-in routes
   sortOrder: number;
+  pageLayoutType?: 'standard' | 'builder';
+  builderBlocks?: BuilderBlock[];
+  builderPageSettings?: BuilderPageSettings;
   createdAt: string;
   updatedAt: string;
 }

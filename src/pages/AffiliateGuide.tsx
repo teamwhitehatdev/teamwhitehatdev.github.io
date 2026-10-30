@@ -15,7 +15,8 @@ import {
   Layers,
   Edit,
   Star,
-  CheckCircle2
+  CheckCircle2,
+  X
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
@@ -144,8 +145,18 @@ export const AffiliateGuide: React.FC = () => {
                   placeholder="Search niches by number (#01-#15), category, or tool (Hostinger, Meshy 3D, Suno, VA)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900"
+                  className="w-full pl-10 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900"
                 />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 cursor-pointer"
+                    title="Clear search"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
               </div>
 
               {/* Sort & Accordion Controls */}
@@ -224,8 +235,29 @@ export const AffiliateGuide: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* LEFT COLUMN: NUMBERED & CATEGORY-SORTED COLLAPSIBLE NICHES */}
           <div className="lg:col-span-2 space-y-5">
-            {visibleTopics.map((topic, index) => {
-              const isOpen = openPanels[topic.id] ?? false;
+            {visibleTopics.length === 0 ? (
+              <div className="p-12 text-center space-y-3 white-glass-card rounded-3xl border border-slate-200">
+                <Sparkles className="w-8 h-8 text-slate-400 mx-auto" />
+                <h3 className="text-base font-extrabold text-slate-900">
+                  No Niches or Toolkits Found Matching &quot;{searchQuery}&quot;
+                </h3>
+                <p className="text-xs text-slate-600 max-w-sm mx-auto">
+                  Try searching by niche number (e.g. #01, #05), category name, or tool (Hostinger, Meshy, Suno).
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedCategory('ALL');
+                  }}
+                  className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all cursor-pointer"
+                >
+                  Clear Search &amp; Show All #01 - #15 Niches
+                </button>
+              </div>
+            ) : (
+              visibleTopics.map((topic, index) => {
+                const isOpen = searchQuery.trim() ? true : (openPanels[topic.id] ?? false);
               const showTopicImage = Boolean(topic.headerBannerImage && !topic.hideImage);
               const showTopicVideo = Boolean(topic.videoUrl && !topic.hideVideo);
               const displayIndex = String(topic.sortOrder || index + 1).padStart(2, '0');
@@ -589,7 +621,8 @@ export const AffiliateGuide: React.FC = () => {
                   )}
                 </div>
               );
-            })}
+            })
+          )}
 
             {/* DYNAMIC CMS MANAGED TOPIC DIVISION */}
             {cmsAffiliateItems.length > 0 && (

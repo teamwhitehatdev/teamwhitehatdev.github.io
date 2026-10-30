@@ -25,7 +25,25 @@ const KNOWN_GEO_COORDINATES: Record<string, { lat: number; lng: number; flag: st
   'netherlands': { lat: 52.1326, lng: 5.2913, flag: '🇳🇱', defaultCity: 'Amsterdam' },
   'portugal': { lat: 39.3999, lng: -8.2245, flag: '🇵🇹', defaultCity: 'Lisbon' },
   'france': { lat: 46.2276, lng: 2.2137, flag: '🇫🇷', defaultCity: 'Paris' },
-  'brazil': { lat: -14.2350, lng: -51.9253, flag: '🇧🇷', defaultCity: 'Brasilia' }
+  'brazil': { lat: -14.2350, lng: -51.9253, flag: '🇧🇷', defaultCity: 'Brasilia' },
+  'united arab emirates': { lat: 23.4241, lng: 53.8478, flag: '🇦🇪', defaultCity: 'Dubai' },
+  'saudi arabia': { lat: 23.8859, lng: 45.0792, flag: '🇸🇦', defaultCity: 'Riyadh' },
+  'spain': { lat: 40.4637, lng: -3.7492, flag: '🇪🇸', defaultCity: 'Madrid' },
+  'italy': { lat: 41.8719, lng: 12.5674, flag: '🇮🇹', defaultCity: 'Rome' },
+  'south korea': { lat: 35.9078, lng: 127.7669, flag: '🇰🇷', defaultCity: 'Seoul' },
+  'indonesia': { lat: -0.7893, lng: 113.9213, flag: '🇮🇩', defaultCity: 'Jakarta' },
+  'malaysia': { lat: 4.2105, lng: 101.9758, flag: '🇲🇾', defaultCity: 'Kuala Lumpur' },
+  'vietnam': { lat: 14.0583, lng: 108.2772, flag: '🇻🇳', defaultCity: 'Hanoi' },
+  'thailand': { lat: 15.8700, lng: 100.9925, flag: '🇹🇭', defaultCity: 'Bangkok' },
+  'taiwan': { lat: 23.6978, lng: 120.9605, flag: '🇹🇼', defaultCity: 'Taipei' },
+  'mexico': { lat: 23.6345, lng: -102.5528, flag: '🇲🇽', defaultCity: 'Mexico City' },
+  'south africa': { lat: -30.5595, lng: 22.9375, flag: '🇿🇦', defaultCity: 'Pretoria' },
+  'switzerland': { lat: 46.8182, lng: 8.2275, flag: '🇨🇭', defaultCity: 'Bern' },
+  'sweden': { lat: 60.1282, lng: 18.6435, flag: '🇸🇪', defaultCity: 'Stockholm' },
+  'norway': { lat: 60.4720, lng: 8.4689, flag: '🇳🇴', defaultCity: 'Oslo' },
+  'ireland': { lat: 53.1424, lng: -7.6921, flag: '🇮🇪', defaultCity: 'Dublin' },
+  'new zealand': { lat: -40.9006, lng: 174.8860, flag: '🇳🇿', defaultCity: 'Wellington' },
+  'poland': { lat: 51.9194, lng: 19.1451, flag: '🇵🇱', defaultCity: 'Warsaw' }
 };
 
 export const RealWorldMap: React.FC<RealWorldMapProps> = ({
@@ -36,9 +54,9 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
   const [, setSelectedMarker] = useState<LocationMarker | null>(null);
 
   const locationMarkers = useMemo<LocationMarker[]>(() => {
-    const map: Record<string, { count: number; active: number; city: string; region: string; device: string; browser: string }> = {};
+    const map: Record<string, { count: number; active: number; city: string; region: string; device: string; browser: string; lat?: number; lng?: number }> = {};
 
-    events.forEach((e) => {
+    events.forEach((e: any) => {
       const c = (e.country || 'Philippines').toLowerCase();
       if (!map[c]) {
         map[c] = {
@@ -47,13 +65,17 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
           city: e.city || '',
           region: e.region || '',
           device: e.device || 'Desktop',
-          browser: e.browser || 'Chrome'
+          browser: e.browser || 'Chrome',
+          lat: e.lat,
+          lng: e.lng
         };
       }
       map[c].count += 1;
+      if (e.lat && !map[c].lat) map[c].lat = e.lat;
+      if (e.lng && !map[c].lng) map[c].lng = e.lng;
     });
 
-    sessions.forEach((s) => {
+    sessions.forEach((s: any) => {
       const c = (s.country || 'Philippines').toLowerCase();
       if (!map[c]) {
         map[c] = {
@@ -62,10 +84,14 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
           city: s.city || '',
           region: s.region || '',
           device: s.device || 'Desktop',
-          browser: s.browser || 'Chrome'
+          browser: s.browser || 'Chrome',
+          lat: s.lat,
+          lng: s.lng
         };
       } else if (s.isActive) {
         map[c].active += 1;
+        if (s.lat && !map[c].lat) map[c].lat = s.lat;
+        if (s.lng && !map[c].lng) map[c].lng = s.lng;
       }
     });
 
@@ -84,8 +110,8 @@ export const RealWorldMap: React.FC<RealWorldMapProps> = ({
         country: displayName,
         city: data.city || geo.defaultCity,
         region: data.region || 'Region',
-        latitude: geo.lat,
-        longitude: geo.lng,
+        latitude: data.lat || geo.lat,
+        longitude: data.lng || geo.lng,
         value: data.count,
         activeCount: data.active,
         device: data.device,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, Search, ExternalLink, Video, Box, Cpu } from 'lucide-react';
+import { BookOpen, Search, ExternalLink, Video, Box, Cpu, X, Sparkles } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { CMSItem } from '../types';
 import { ArticleModal } from '../components/ArticleModal';
@@ -103,8 +103,18 @@ export const AILearning: React.FC = () => {
                 placeholder="Search free tutorials: AI capabilities, automation diagrams, Meshy 3D, VA proposals..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-colors"
+                className="w-full pl-10 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-colors"
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 cursor-pointer"
+                  title="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
 
             <div className="text-xs font-semibold text-slate-500 shrink-0">
@@ -148,8 +158,28 @@ export const AILearning: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredArticles.map((article) => {
+        {filteredArticles.length === 0 ? (
+          <div className="py-16 text-center space-y-4 white-glass-card rounded-3xl border border-slate-200 p-8">
+            <Sparkles className="w-10 h-10 text-slate-400 mx-auto" />
+            <h3 className="text-lg font-extrabold text-slate-900">
+              No Tutorials Found Matching &quot;{searchQuery}&quot;
+            </h3>
+            <p className="text-xs text-slate-600 max-w-md mx-auto">
+              We couldn&apos;t find any tutorial matching your exact search. Try broader terms or clear your search query.
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('ALL');
+              }}
+              className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-xs cursor-pointer transition-all"
+            >
+              Clear Search &amp; Show All Guides
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredArticles.map((article) => {
             const showImage = Boolean(article.mainImage && !article.hideImage);
             const showVideo = Boolean(article.videoUrl && !article.hideVideo);
 
@@ -263,6 +293,7 @@ export const AILearning: React.FC = () => {
             );
           })}
         </div>
+        )}
       </section>
 
       {/* 📖 FULL ARTICLE READER MODAL */}

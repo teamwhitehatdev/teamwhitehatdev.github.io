@@ -1,6 +1,6 @@
 import { useApp } from '../context/AppContext';
 import React, { useState } from 'react';
-import { ExternalLink, ShoppingBag, Sparkles, Search, Video } from 'lucide-react';
+import { ExternalLink, ShoppingBag, Sparkles, Search, Video, X } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 
 export const Showcase: React.FC = () => {
@@ -91,8 +91,12 @@ export const Showcase: React.FC = () => {
       }
     }
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      return p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+      const q = searchQuery.toLowerCase().trim();
+      const titleMatch = p.title.toLowerCase().includes(q);
+      const descMatch = p.desc.toLowerCase().includes(q);
+      const catMatch = (p.category || '').toLowerCase().includes(q);
+      const tagMatch = (p.tags || []).some((t: string) => t.toLowerCase().includes(q));
+      return titleMatch || descMatch || catMatch || tagMatch;
     }
     return true;
   });
@@ -119,11 +123,21 @@ export const Showcase: React.FC = () => {
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search portfolio projects..."
+              placeholder="Search portfolio projects by title, tech stack (React, Android, Flutter), or category..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900"
+              className="w-full pl-10 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 cursor-pointer"
+                title="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -151,8 +165,22 @@ export const Showcase: React.FC = () => {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProjects.length === 0 ? (
-            <div className="col-span-full py-12 text-center text-slate-500 text-sm">
-              No projects found matching "{activeCategory}".
+            <div className="col-span-full py-12 text-center space-y-3">
+              <Sparkles className="w-8 h-8 text-slate-400 mx-auto" />
+              <h4 className="text-base font-bold text-slate-900">
+                No projects found matching {searchQuery ? `"${searchQuery}"` : `category "${activeCategory}"`}
+              </h4>
+              <p className="text-xs text-slate-500">Try searching for other keywords or reset your filters.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setActiveCategory('ALL PROJECTS');
+                }}
+                className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-xs cursor-pointer"
+              >
+                Clear Search &amp; Show All Projects
+              </button>
             </div>
           ) : (
             filteredProjects.map((p) => (
