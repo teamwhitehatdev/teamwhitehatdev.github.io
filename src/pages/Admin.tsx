@@ -37,6 +37,7 @@ import {
   CheckCircle2,
   Clock,
   Zap,
+  BookOpen,
   Loader2
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
@@ -187,8 +188,9 @@ export const Admin: React.FC = () => {
     try {
       const data = await fetchPlayStoreMetadata(urlToUse);
       if (data && (data.appName || data.description || data.appIconUrl)) {
-        setPlayStoreForm((prev) => ({
-          ...prev,
+        const updatedConfig: PlayStoreAppConfig = {
+          ...playStoreForm,
+          enabled: true,
           playStoreUrl: urlToUse.startsWith('http') ? urlToUse : `https://play.google.com/store/apps/details?id=${urlToUse}`,
           ...(data.appName ? { appName: data.appName } : {}),
           ...(data.developerName ? { developerName: data.developerName } : {}),
@@ -198,16 +200,21 @@ export const Admin: React.FC = () => {
           ...(data.downloadsCount ? { downloadsCount: data.downloadsCount } : {}),
           ...(data.description ? { description: data.description } : {}),
           ...(data.appIconUrl ? { appIconUrl: data.appIconUrl, hideAppIcon: false } : {}),
+          ...(data.bannerImageUrl ? { bannerImageUrl: data.bannerImageUrl, hideBannerImage: false } : {}),
           ...(data.windowTitle ? { windowTitle: data.windowTitle } : {}),
           ...(data.tagline ? { tagline: data.tagline } : {}),
           ...(data.badgeText ? { badgeText: data.badgeText } : {})
-        }));
+        };
+
+        setPlayStoreForm(updatedConfig);
+        // AUTOMATICALLY SAVE & DISPLAY ON WEBSITE IMMEDIATELY
+        updatePlayStoreConfig(updatedConfig);
 
         setPlayStoreFetchMsg({
           type: 'success',
-          text: `✓ Successfully fetched metadata for "${data.appName || 'Android App'}"! Details have been automatically populated below. You can customize any field as optional.`
+          text: `✓ Successfully fetched metadata for "${data.appName || 'Android App'}"! Details, banner images, and app icons have been automatically populated and displayed on the website. You can edit any field below as optional.`
         });
-        showToast(`Auto-fetched details for "${data.appName || 'Android App'}"!`);
+        showToast(`Auto-fetched and displayed "${data.appName || 'Android App'}" on website!`);
       } else {
         setPlayStoreFetchMsg({
           type: 'error',
@@ -474,7 +481,7 @@ export const Admin: React.FC = () => {
     categoryBadge: 'CATEGORY 16 • DIGITAL TOOLKIT',
     title: 'NICHE #16: NEW DIGITAL WORKSPACE & TOOL',
     subtitle: 'Streamline your freelance workflow and automate client tasks.',
-    iconEmoji: '📘',
+    iconEmoji: '',
     themeColor: 'indigo',
     headerBannerImage: '',
     videoUrl: '',
@@ -853,7 +860,7 @@ export const Admin: React.FC = () => {
       categoryBadge: `CATEGORY ${nextNum} • DIGITAL AUTOMATION & WORKSPACE`,
       title: `NICHE #${nextNum}: NEW REMOTE WORKFLOW GUIDE`,
       subtitle: 'Streamline client onboarding, project tracking, and automated SOP workflows.',
-      iconEmoji: '📘',
+      iconEmoji: '',
       themeColor: 'indigo',
       headerBannerImage: '',
       videoUrl: '',
@@ -881,7 +888,7 @@ export const Admin: React.FC = () => {
       categoryBadge: topic.categoryBadge || '',
       title: topic.title || '',
       subtitle: topic.subtitle || '',
-      iconEmoji: topic.iconEmoji || '📘',
+      iconEmoji: topic.iconEmoji || '',
       themeColor: topic.themeColor || 'indigo',
       headerBannerImage: topic.headerBannerImage || '',
       videoUrl: topic.videoUrl || '',
@@ -1452,7 +1459,7 @@ export const Admin: React.FC = () => {
           className="px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2 transition-all cursor-pointer bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-700 hover:to-indigo-700 text-white shadow-xs"
         >
           <Sparkles className="w-4 h-4 text-emerald-200" />
-          <span>🎨 Drag &amp; Drop Website Builder (Wix Style)</span>
+          <span>Drag &amp; Drop Website Builder (Wix Style)</span>
         </button>
 
         <button
@@ -1524,7 +1531,7 @@ export const Admin: React.FC = () => {
           }`}
         >
           <ShoppingBag className="w-4 h-4" />
-          <span>6. ThemeForest Partner Ads ({(promoItems || []).length})</span>
+          <span>6. Verified Partner Ads ({(promoItems || []).length})</span>
         </button>
 
         <button
@@ -1696,7 +1703,7 @@ export const Admin: React.FC = () => {
                         title="Design custom landing page with Drag & Drop Builder"
                       >
                         <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>🎨 Drag &amp; Drop Builder {tab.builderBlocks && tab.builderBlocks.length > 0 ? `(${tab.builderBlocks.length} blocks)` : ''}</span>
+                        <span>Drag &amp; Drop Builder {tab.builderBlocks && tab.builderBlocks.length > 0 ? `(${tab.builderBlocks.length} blocks)` : ''}</span>
                       </button>
 
                       <button
@@ -1809,7 +1816,7 @@ export const Admin: React.FC = () => {
                     Your Website is Built &amp; Ready for Google AdSense + Affiliate Monetization
                   </h3>
                   <p className="text-slate-600 leading-relaxed">
-                    When you connect your custom domain and get your Google AdSense Publisher ID (<code className="font-mono bg-white px-1.5 py-0.5 rounded border border-slate-200">ca-pub-XXXXXXXXXXXXXXXX</code>), paste it below. While in standby, your ad slots automatically display high-converting <strong>ThemeForest-Style Marketplace Partner Ads</strong> so you earn referral revenue from visitors immediately!
+                    When you connect your custom domain and get your Google AdSense Publisher ID (<code className="font-mono bg-white px-1.5 py-0.5 rounded border border-slate-200">ca-pub-XXXXXXXXXXXXXXXX</code>), paste it below. While in standby, your ad slots automatically display high-converting <strong>Verified Marketplace Partner Ads</strong> so you earn referral revenue from visitors immediately!
                   </p>
                 </div>
                 <button
@@ -1857,15 +1864,15 @@ export const Admin: React.FC = () => {
 
                 <label className="p-4 rounded-2xl border border-slate-200 bg-white flex items-center justify-between cursor-pointer">
                   <div>
-                    <span className="font-extrabold text-slate-900 block">ThemeForest Partner Fallback</span>
-                    <span className="text-[11px] text-slate-500">Show ThemeForest-style partner deals when AdSense is on standby</span>
+                    <span className="font-extrabold text-slate-900 block">Verified Partner Fallback</span>
+                    <span className="text-[11px] text-slate-500">Show verified marketplace partner deals when AdSense is on standby</span>
                   </div>
                   <input
                     type="checkbox"
                     checked={adSenseConfig.showPartnerFallbackAds}
                     onChange={(e) => {
                       updateAdSenseConfig({ showPartnerFallbackAds: e.target.checked });
-                      showToast('Updated ThemeForest Partner Fallback setting');
+                      showToast('Updated Verified Partner Fallback setting');
                     }}
                     className="w-4 h-4 rounded"
                   />
@@ -2591,8 +2598,8 @@ export const Admin: React.FC = () => {
                   }`}
                 >
                   <div className="flex items-start gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-lg shrink-0">
-                      {topic.iconEmoji || '📘'}
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
+                      <BookOpen className="w-5 h-5 text-slate-700" />
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -4849,7 +4856,7 @@ export const Admin: React.FC = () => {
           <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl my-8 max-h-[90vh] overflow-y-auto text-slate-900">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-lg font-extrabold text-slate-900">
-                {editingPromoItem ? 'Edit ThemeForest / Partner Ad' : 'Create ThemeForest / Partner Ad'}
+                {editingPromoItem ? 'Edit Verified / Partner Ad' : 'Create Verified / Partner Ad'}
               </h3>
               <button
                 onClick={() => {
@@ -5070,7 +5077,7 @@ export const Admin: React.FC = () => {
                 }}
                 className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shrink-0 cursor-pointer shadow-xs transition-all flex items-center gap-1.5"
               >
-                <span>🎨 Open Builder</span>
+                <span>Open Builder</span>
               </button>
             </div>
 

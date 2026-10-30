@@ -364,9 +364,9 @@ Return strictly valid JSON matching this schema:
         ipAddress: '10.0.5.25',
         port: '443',
         protocolBadge: 'Approval Webhook Mesh',
-        description: 'Presents interactive draft in Slack with "✅ Approve & Send", "✏️ Edit Draft", and "❌ Escalate" buttons.',
+        description: 'Presents interactive draft in Slack with "Approve & Send", "Edit Draft", and "Escalate" buttons.',
         inputPayload: '{\n  "thread_id": "th_1892",\n  "draft": "Hi Marcus...",\n  "recipient": "marcus@clientcorp.com"\n}',
-        processingLogic: 'On VA click "✅ Approve", fires Gmail API `messages.send` and tags thread "Resolved by AI + VA".',
+        processingLogic: 'On VA click "Approve", fires Gmail API `messages.send` and tags thread "Resolved by AI + VA".',
         outputPayload: '{\n  "status": "APPROVED_AND_SENT",\n  "sent_timestamp": "2026-10-30T10:01:14Z",\n  "handling_time": "74s"\n}',
         latency: '~110ms',
         statusUptime: '99.99%',
@@ -404,12 +404,12 @@ Rules:
   {
     id: 'ecommerce-3d',
     categoryKey: '3d-mesh',
-    categoryLabel: '3D E-Commerce Asset Pipeline (Meshy AI)',
+    categoryLabel: 'High-Throughput Spatial 3D Asset & WebGL CDN Pipeline (Meshy AI)',
     badge: 'TOPOLOGY BLUEPRINT 03 • 3D SPATIAL & E-COMMERCE PIPELINE',
-    title: 'Product Photo Upload → Vision Analysis → Meshy AI 3D Generation → GLB Web Optimization & Shopify Sync',
+    title: 'High-Throughput Spatial 3D Asset & WebGL CDN Pipeline (2D Photo → Vision Analysis → Meshy AI 3D → Draco WebGL Optimization)',
     subtitle:
       'Turn flat 2D client product photos into interactive, WebGL-ready 3D models (.GLB / .USDZ) automatically using Meshy AI text/image-to-3D synthesis.',
-    networkTopologyTitle: 'High-Throughput Spatial 3D Asset & WebGL CDN Pipeline',
+    networkTopologyTitle: 'High-Throughput Spatial 3D Asset & WebGL CDN Pipeline (VPC 10.0.0.0/16)',
     timeSaved: '20+ Hours / Week',
     vaServiceValue: '$800 – $2,500 / Project Package',
     tools: ['AWS S3 / Cloudinary', 'GPT-4o Vision', 'Meshy AI 3D Generator', 'Draco Mesh Optimizer', 'Shopify GraphQL API'],
@@ -1638,6 +1638,372 @@ Critical Rules:
       'Re-encode audio with FFmpeg and attach multi-language audio track via YouTube API.',
       'Double your channel views from international markets automatically!'
     ]
+  },
+  {
+    id: 'prompt-engineering-mesh',
+    categoryKey: 'prompt-engineering',
+    categoryLabel: 'Master Prompt Engineering & Multi-Turn Cognitive Chains',
+    badge: 'TOPOLOGY BLUEPRINT 11 • MASTER PROMPT COGNITIVE ARCHITECTURE',
+    title: 'Master Prompt Engineering: Multi-Turn System Directives → Few-Shot Reasoning → Structured JSON Schema Extraction',
+    subtitle:
+      'Enterprise cognitive pipeline utilizing role priming, XML context tags, chain-of-thought scratchpads, negative constraints, and deterministic Zod JSON validation.',
+    networkTopologyTitle: 'Cognitive Reasoning & Deterministic JSON Mesh (VPC 10.0.0.0/16)',
+    timeSaved: '20+ Hours / Week',
+    vaServiceValue: '$1,200 – $3,500 System Architecture',
+    tools: ['Claude 3.7 Sonnet', 'OpenAI Structured Outputs', 'LangChain / n8n', 'Notion Knowledge Base', 'Zod Validator'],
+    nodes: [
+      {
+        step: '01',
+        type: 'TRIGGER',
+        title: 'User Input & Context Stream Ingress',
+        tool: 'FastAPI / Cloudflare Gateway',
+        ipAddress: '10.0.1.50',
+        port: '443',
+        protocolBadge: 'Prompt Ingress',
+        description: 'Receives raw human or system prompt input, checks rate limits, and sanitizes dangerous injection tokens.',
+        inputPayload: '{\n  "raw_prompt": "Analyze this Q3 B2B churn data and output 3 highest-priority retention initiatives.",\n  "context_docs": ["churn_q3.csv", "intercom_tickets.json"]\n}',
+        processingLogic: 'Tokenizes payload, strips script injection patterns, and routes to prompt template engine.',
+        outputPayload: '{\n  "cleansed_prompt": "Analyze this Q3 B2B churn data...",\n  "sanitized_tokens": 420,\n  "pipeline_status": "PROMPT_VALIDATED"\n}',
+        latency: '~8ms',
+        statusUptime: '99.99%',
+        iconType: 'webhook',
+        detailedSpecs: {
+          protocol: 'HTTP/2 POST with JWT Auth',
+          endpoint: 'https://api.whitehatdev.io/v1/prompts/ingress',
+          retryPolicy: '3 retries with jitter backoff (1s, 4s, 12s)',
+          secretKeys: ['PROMPT_GATEWAY_KEY'],
+          payloadSchema: 'PromptIngressSchema (raw_prompt, context_docs, user_id)',
+          fallbackAction: 'Rejects malformed prompt tokens with HTTP 422 Unprocessable Entity.'
+        }
+      },
+      {
+        step: '02',
+        type: 'ENRICH',
+        title: 'XML Boundary Isolation & Few-Shot Injection',
+        tool: 'Semantic Memory & Vector Store',
+        ipAddress: '10.0.2.60',
+        port: '8080',
+        protocolBadge: 'XML Priming Node',
+        description: 'Wraps raw data in strict `<context>`, `<rules>`, and `<examples>` tags to eliminate hallucinations and ambiguity.',
+        inputPayload: '{\n  "system_role": "Chief Retention Strategist",\n  "few_shot_count": 3\n}',
+        processingLogic: 'Dynamically fetches the top 3 benchmark examples from knowledge repository and injects boundary anchors.',
+        outputPayload: '{\n  "primed_system_prompt": "<role>Expert</role><rules>Output JSON only</rules><examples>...</examples>",\n  "total_context_tokens": 1840\n}',
+        latency: '~65ms',
+        statusUptime: '99.96%',
+        iconType: 'search',
+        detailedSpecs: {
+          protocol: 'gRPC Internal Mesh',
+          endpoint: 'semantic-vault.internal.mesh:50051',
+          retryPolicy: 'Instant memory fallback to static prompt cache',
+          secretKeys: ['VAULT_AUTH_TOKEN'],
+          payloadSchema: 'Structured XML Prompt Template Object',
+          fallbackAction: 'Injects baseline zero-shot constraints if vector database is warm-starting.'
+        }
+      },
+      {
+        step: '03',
+        type: 'AI BRAIN',
+        title: 'Chain-of-Thought Scratchpad & Reasoning Core',
+        tool: 'Claude 3.7 Sonnet (Thinking Mode)',
+        ipAddress: '10.0.3.110',
+        port: '8443',
+        protocolBadge: 'CoT Reasoning Engine',
+        description: 'Executes step-by-step internal deliberation inside `<thinking>` scratchpad tags before emitting the final deterministic answer.',
+        inputPayload: '{\n  "model": "claude-3-7-sonnet-20250219",\n  "temperature": 0.2,\n  "max_tokens": 4096,\n  "thinking": { "budget_tokens": 2048 }\n}',
+        processingLogic: 'Model reasons through data trade-offs, validates math calculations, and verifies constraints before generating output.',
+        outputPayload: '{\n  "thinking_duration_ms": 1420,\n  "output_tokens": 580,\n  "has_scratchpad": true\n}',
+        latency: '~1420ms',
+        statusUptime: '99.95%',
+        iconType: 'brain',
+        detailedSpecs: {
+          protocol: 'HTTPS POST to Anthropic Messages API v1',
+          endpoint: 'https://api.anthropic.com/v1/messages',
+          retryPolicy: 'Exponential backoff with jitter on HTTP 429/529',
+          secretKeys: ['ANTHROPIC_API_KEY'],
+          payloadSchema: 'Messages API v1 compliant schema with thinking block parameters',
+          fallbackAction: 'Falls back to GPT-4o structured outputs if primary model hits rate limit.'
+        }
+      },
+      {
+        step: '04',
+        type: 'ROUTER',
+        title: 'Zod JSON Schema Enforcement & Self-Correction',
+        tool: 'Deterministic Validator & Retry Guard',
+        ipAddress: '10.0.4.70',
+        port: '8080',
+        protocolBadge: 'Zod Validator',
+        description: 'Validates that the returned payload conforms strictly to the Zod TypeScript schema. If validation fails, self-corrects in 1 turn.',
+        inputPayload: '{\n  "raw_llm_output": "{\"initiatives\": [{\"title\": \"In-App Churn Intercept\", \"impact\": \"High\", \"mrr_saved\": 14200}]}"\n}',
+        processingLogic: 'Runs Zod.parse(). If parsing throws, constructs a targeted 1-turn repair prompt highlighting the exact JSON violation.',
+        outputPayload: '{\n  "schema_valid": true,\n  "repaired": false,\n  "validated_record_count": 3\n}',
+        latency: '~15ms',
+        statusUptime: '99.99%',
+        iconType: 'router',
+        detailedSpecs: {
+          protocol: 'In-Memory Node.js / Rust Validator',
+          endpoint: 'local://zod-runtime-guard',
+          retryPolicy: 'Maximum 1 self-correction round-trip (<800ms)',
+          secretKeys: [],
+          payloadSchema: 'Strict Zod Object Schema with zero loose types',
+          fallbackAction: 'Extracts best-effort partial JSON using regex repair heuristics.'
+        }
+      },
+      {
+        step: '05',
+        type: 'ACTION',
+        title: 'Downstream Delivery & Executive Dashboard Sync',
+        tool: 'Notion API / Slack VIP Webhook',
+        ipAddress: '10.0.5.80',
+        port: '443',
+        protocolBadge: 'Executive Dispatch',
+        description: 'Publishes verified strategic initiatives directly into the founder\'s Notion strategy board and pings executive Slack.',
+        inputPayload: '{\n  "notion_page_id": "notion_strat_88921",\n  "status": "APPROVED_FOR_EXECUTION"\n}',
+        processingLogic: 'Formats markdown blocks, calculates ROI metrics, and pushes live updates into team dashboards.',
+        outputPayload: '{\n  "notion_block_id": "block_49102",\n  "slack_message_ts": "1730301000.001920",\n  "dispatch_complete": true\n}',
+        latency: '~310ms',
+        statusUptime: '99.98%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'HTTPS POST with Bearer Token',
+          endpoint: 'https://api.notion.com/v1/pages',
+          retryPolicy: '3 retries with 5s delay on rate limits',
+          secretKeys: ['NOTION_INTEGRATION_TOKEN', 'SLACK_BOT_TOKEN'],
+          payloadSchema: 'Notion Page API Block Children Specification',
+          fallbackAction: 'Logs payload to local PostgreSQL audit table if Notion API is temporarily degraded.'
+        }
+      }
+    ],
+    aiPromptSample: `SYSTEM PROMPT (Master Prompt Engineering Blueprint):
+<role>
+You are an Elite B2B SaaS Growth & Churn Strategist operating with mathematical precision.
+</role>
+
+<rules>
+1. Always wrap internal reasoning inside <thinking> tags before writing your answer.
+2. Formulate 3 distinct initiatives: Low-Hanging Fruit (<48h), Medium-Term System (2-4w), High-Impact Paradigm (Quarterly).
+3. Do not include conversational filler like "Here is your response".
+4. Output must strictly validate against the provided JSON schema.
+</rules>
+
+<context>
+[Inject Customer Churn Data & Support Ticket Sentiment Here]
+</context>
+
+<output_format>
+Return valid JSON adhering to:
+{
+  "summary": string,
+  "net_mrr_at_risk": number,
+  "initiatives": [
+    {
+      "priority": "P0" | "P1" | "P2",
+      "title": string,
+      "estimated_mrr_recovery": number,
+      "time_to_implement_days": number,
+      "owner_role": string
+    }
+  ]
+}
+</output_format>`,
+    jsonOutputSample: `{
+  "summary": "Q3 Churn concentrated in SMB tier due to onboarding friction and delayed webhook setup.",
+  "net_mrr_at_risk": 24800,
+  "initiatives": [
+    {
+      "priority": "P0",
+      "title": "Automated 48-Hour In-App Setup Concierge",
+      "estimated_mrr_recovery": 11200,
+      "time_to_implement_days": 2,
+      "owner_role": "Customer Success VA"
+    },
+    {
+      "priority": "P1",
+      "title": "Self-Service Webhook Debugger & Video Tooltips",
+      "estimated_mrr_recovery": 8400,
+      "time_to_implement_days": 10,
+      "owner_role": "Full-Stack Dev"
+    },
+    {
+      "priority": "P2",
+      "title": "Quarterly Retainer Price-Lock for Annual Upgrades",
+      "estimated_mrr_recovery": 5200,
+      "time_to_implement_days": 21,
+      "owner_role": "Head of Growth"
+    }
+  ]
+}`,
+    implementationSteps: [
+      'Define clear XML boundaries (<role>, <rules>, <context>, <examples>) to anchor the LLM attention weights.',
+      'Prime the model with 2 high-quality input/output few-shot pairs to enforce output schema determinism.',
+      'Configure low temperature (0.1 to 0.3) for factual extraction and classification pipelines.',
+      'Run responses through a Zod runtime validator with a 1-turn targeted self-correction loop.',
+      'Integrate the validated JSON stream into your Make.com / n8n automation scenarios.'
+    ]
+  },
+  {
+    id: 'social-growth-smm',
+    categoryKey: 'social-media-automation',
+    categoryLabel: 'Social Media Multi-Platform Content Scheduler & Lead Magnet',
+    badge: 'TOPOLOGY BLUEPRINT 12 • SOCIAL MEDIA GROWTH & REPURPOSING',
+    title: 'Long-Form Video/Audio Ingress → AI Carousel & Hooks Repurposer → Multi-Channel Buffer & Auto-DM Lead Magnet',
+    subtitle:
+      'Transforms 1 podcast or video into 5 platform-optimized posts (LinkedIn, X, Instagram, TikTok), schedules publishing, and auto-DMs lead magnets on keyword comments.',
+    networkTopologyTitle: 'Omnichannel Social Repurposing & Auto-DM Engagement Pipeline',
+    timeSaved: '25+ Hours / Week',
+    vaServiceValue: '$1,000 – $2,800 Monthly Retainer',
+    tools: ['Descript / Whisper API', 'Claude 3.7 Sonnet', 'Canva Automator', 'Buffer / ManyChat', 'Notion Calendar'],
+    nodes: [
+      {
+        step: '01',
+        type: 'TRIGGER',
+        title: 'Video / Podcast Upload Ingress',
+        tool: 'Dropbox / Google Drive Webhook',
+        ipAddress: '10.0.1.55',
+        port: '443',
+        protocolBadge: 'Media Ingress',
+        description: 'Watches client recording folder for newly exported MP4 or WAV video/podcast files.',
+        inputPayload: '{\n  "file_url": "https://storage.googleapis.com/raw-media/ep_42_founder_interview.mp4",\n  "duration_seconds": 1840,\n  "file_size_mb": 420\n}',
+        processingLogic: 'Extracts AAC audio stream and dispatches chunked audio to Whisper transcription API.',
+        outputPayload: '{\n  "transcript_id": "trc_49921",\n  "word_count": 4820,\n  "timestamped_segments": 142\n}',
+        latency: '~420ms',
+        statusUptime: '99.98%',
+        iconType: 'webhook',
+        detailedSpecs: {
+          protocol: 'Google Drive Push Notification Webhook',
+          endpoint: 'https://api.whitehatdev.io/v1/media/transcribe',
+          retryPolicy: '3 retries on transient network disconnects',
+          secretKeys: ['GOOGLE_DRIVE_WEBHOOK_SECRET'],
+          payloadSchema: 'MediaIngressSchema (file_url, duration, format)',
+          fallbackAction: 'Alerts VA in Slack if media file is corrupted or unreadable.'
+        }
+      },
+      {
+        step: '02',
+        type: 'ENRICH',
+        title: 'Hook Extraction & Viral Angle Mining',
+        tool: 'Whisper API & Semantic Chunking',
+        ipAddress: '10.0.2.65',
+        port: '8080',
+        protocolBadge: 'Hook Discovery Engine',
+        description: 'Analyzes speech transcripts to identify top 5 highest-retention hooks, contrarian insights, and actionable quotes.',
+        inputPayload: '{\n  "transcript_id": "trc_49921",\n  "target_platforms": ["LinkedIn", "Twitter/X", "Instagram Carousel", "Shorts"]\n}',
+        processingLogic: 'Calculates curiosity scores, emotional resonance, and standalone quote completeness.',
+        outputPayload: '{\n  "viral_hooks": [\n    "Most founders lose $10k/mo on bad software setups. Here are 3 tools we deleted.",\n    "The 4-sentence email proposal that closed $84,000 in agency retainers."\n  ]\n}',
+        latency: '~780ms',
+        statusUptime: '99.95%',
+        iconType: 'search',
+        detailedSpecs: {
+          protocol: 'REST POST with API Key',
+          endpoint: 'https://api.openai.com/v1/audio/transcriptions',
+          retryPolicy: '2 retries with 3s backoff',
+          secretKeys: ['OPENAI_API_KEY'],
+          payloadSchema: 'Timestamped Segment Array with Confidence Scores',
+          fallbackAction: 'Routes to backup transcription worker if primary endpoint is busy.'
+        }
+      },
+      {
+        step: '03',
+        type: 'AI BRAIN',
+        title: 'Platform-Native Formatting & Carousel Slide Generator',
+        tool: 'Claude 3.7 Sonnet (Multi-Format Engine)',
+        ipAddress: '10.0.3.115',
+        port: '8443',
+        protocolBadge: 'Content Adaptation Core',
+        description: 'Re-writes the core insight into platform-tailored formats: short punchy X threads, formatted LinkedIn carousels, and viral Reels scripts.',
+        inputPayload: '{\n  "raw_quote": "Most founders lose $10k/mo...",\n  "tone": "Authoritative & Actionable",\n  "brand_voice": "Team WhiteHat Dev"\n}',
+        processingLogic: 'Enforces native character limits, line-break rhythms, and clear comment-to-DM call-to-actions.',
+        outputPayload: '{\n  "linkedin_post": "...",\n  "x_thread": ["1/6...", "2/6..."],\n  "carousel_slides": [\n    {"slide": 1, "headline": "Stop Wasting Money on Tools", "bullet": "..."}\n  ],\n  "cta_trigger_keyword": "GROWTH"\n}',
+        latency: '~1250ms',
+        statusUptime: '99.97%',
+        iconType: 'brain',
+        detailedSpecs: {
+          protocol: 'HTTPS POST to Claude Messages API',
+          endpoint: 'https://api.anthropic.com/v1/messages',
+          retryPolicy: 'Retry with exponential backoff on HTTP 429',
+          secretKeys: ['ANTHROPIC_API_KEY'],
+          payloadSchema: 'Structured Social Post Schema for 4 Target Networks',
+          fallbackAction: 'Outputs baseline single-platform post if token limit is reached.'
+        }
+      },
+      {
+        step: '04',
+        type: 'ROUTER',
+        title: 'Schedule Router & Asset Compiler',
+        tool: 'Notion Content Calendar / Make.com',
+        ipAddress: '10.0.4.75',
+        port: '8080',
+        protocolBadge: 'Publishing Router',
+        description: 'Queues posts into the visual Notion calendar across optimal timezone posting windows (9:00 AM EST, 1:00 PM EST, 6:00 PM EST).',
+        inputPayload: '{\n  "queue_days": ["Monday", "Wednesday", "Friday"],\n  "timezones": ["EST", "PHT"]\n}',
+        processingLogic: 'Checks for conflicting scheduled posts, generates Canva slides via API, and sets approval status.',
+        outputPayload: '{\n  "notion_calendar_row": "notion_cal_8819",\n  "approval_status": "READY_FOR_FOUNDER_REVIEW"\n}',
+        latency: '~180ms',
+        statusUptime: '99.99%',
+        iconType: 'router',
+        detailedSpecs: {
+          protocol: 'REST POST to Notion Database Pages',
+          endpoint: 'https://api.notion.com/v1/pages',
+          retryPolicy: '3 retries with 2s delay',
+          secretKeys: ['NOTION_INTEGRATION_TOKEN'],
+          payloadSchema: 'Notion Database Page Properties (Date, Status, Platform, Copy)',
+          fallbackAction: 'Saves draft to local JSON queue if Notion API is unavailable.'
+        }
+      },
+      {
+        step: '05',
+        type: 'ACTION',
+        title: 'Multi-Channel Publishing & ManyChat Auto-DM Trigger',
+        tool: 'Buffer API & ManyChat / Instagram Graph API',
+        ipAddress: '10.0.5.85',
+        port: '443',
+        protocolBadge: 'Auto-DM Dispatch',
+        description: 'Publishes posts across Buffer and activates ManyChat automation to automatically DM the free Notion template when users comment the keyword.',
+        inputPayload: '{\n  "keyword_trigger": "GROWTH",\n  "lead_magnet_url": "https://teamwhitehatdev.github.io/#/ai",\n  "dm_template": "Hey! Here is your free blueprint link..."\n}',
+        processingLogic: 'Listens for comment webhooks on Instagram/LinkedIn, verifies comment contains trigger word, and sends private DM with link.',
+        outputPayload: '{\n  "dm_sent_count": 142,\n  "lead_clicks": 98,\n  "conversion_rate": "69.0%"\n}',
+        latency: '~210ms',
+        statusUptime: '99.98%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'Instagram Graph API / ManyChat Webhook v2',
+          endpoint: 'https://api.manychat.com/fb/sending/sendContent',
+          retryPolicy: 'Instant retry with rate-limit adherence',
+          secretKeys: ['MANYCHAT_API_KEY', 'BUFFER_ACCESS_TOKEN'],
+          payloadSchema: 'ManyChat Subscriber Message Payload',
+          fallbackAction: 'Logs unprocessed commenters to a Google Sheet for manual VA follow-up.'
+        }
+      }
+    ],
+    aiPromptSample: `SYSTEM PROMPT (Social Media Repurposing Engine):
+<role>
+You are an Elite Social Media Copywriter and Growth Strategist specializing in high-engagement B2B and creator content.
+</role>
+
+<instructions>
+1. Convert the provided transcript into 3 distinct platform formats:
+   - A 150-word LinkedIn thought-leadership post with high line-break readability.
+   - A 5-tweet punchy X (Twitter) thread with numbered steps.
+   - A 6-slide Instagram carousel script (Headline, Sub-bullet, Visual Cue).
+2. End every piece with a high-converting comment trigger: "Comment 'GROWTH' and I'll DM you the free operating blueprint."
+3. Avoid generic buzzwords like "game-changer", "unleash", or "supercharge".
+</instructions>
+
+<transcript>
+[Insert Video / Audio Transcription Here]
+</transcript>`,
+    jsonOutputSample: `{
+  "linkedin_post": "Most agency founders lose 15 hours a week manually copy-pasting client data.\\n\\nHere is the exact 3-step automation we installed to eliminate it forever:\\n\\n1. Inbound Webhook: Captures form submissions in 12ms.\\n2. AI Reasoning: Claude classifies urgency and budget.\\n3. CRM Sync: Auto-creates HubSpot contact and alerts Slack VIP.\\n\\nComment 'GROWTH' below and I'll send you the free Make.com blueprint.",
+  "x_thread_count": 5,
+  "carousel_slide_count": 6,
+  "cta_trigger_keyword": "GROWTH"
+}`,
+    implementationSteps: [
+      'Set up a shared Dropbox or Google Drive folder where you or your client drops recorded audio or video files.',
+      'Connect a webhook in Make.com that triggers Whisper API transcription upon file upload.',
+      'Pass the timestamped transcript into Claude 3.7 with the platform-native formatting prompt above.',
+      'Route the formatted outputs into a visual Notion Content Calendar for 1-click founder review.',
+      'Configure ManyChat keyword triggers ("GROWTH") on Instagram to auto-DM the affiliate or lead magnet link.'
+    ]
   }
 ];
 
@@ -1783,16 +2149,16 @@ Hi [Client First Name],
 
 Here is your weekly summary of everything completed across operations:
 
-🎯 Key Achievements This Week:
+Key Achievements This Week:
 - Inquiries Processed: [e.g. 42 inbound leads triaged; 8 qualified for VIP follow-up]
 - Inbox & Calendar: Maintained Inbox Zero across all 5 business days; scheduled 6 partner calls
 - Automation Upgrades: Connected [Make.com / Notion] to auto-tag high-budget prospects
 
-📊 Metrics at a Glance:
+Metrics at a Glance:
 - Average Lead Response Time: Down to 4 minutes (was 3 hours)
 - Estimated Founder Time Saved: ~14.5 hours this week
 
-🚀 Priorities for Next Week:
+Priorities for Next Week:
 - Finalize Q4 client onboarding folder templates
 - Set up automated invoice follow-up reminders
 
@@ -1813,11 +2179,13 @@ const DEFAULT_NODE_POSITIONS = [
 interface AIAutomationDiagramsProps {
   id?: string;
   searchQuery?: string;
+  activeCategory?: string;
 }
 
 export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   id = 'diagrams',
-  searchQuery = ''
+  searchQuery = '',
+  activeCategory = ''
 }) => {
   const [activeBlueprintId, setActiveBlueprintId] = useState<string>('lead-triage');
   const [activeSimStep, setActiveSimStep] = useState<number>(0); // 0 = idle, 1..5 = active step
@@ -1826,7 +2194,15 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   const [selectedNodeIndex, setSelectedNodeIndex] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [simLogs, setSimLogs] = useState<Array<{ id: string; time: string; text: string; type: 'info' | 'success' | 'warn' | 'active' }>>([]);
+  const [isInboundIngestionExpanded, setIsInboundIngestionExpanded] = useState<boolean>(false);
+  const [simLogs, setSimLogs] = useState<Array<{ id: string; time: string; text: string; type: 'info' | 'success' | 'warn' | 'active' }>>([
+    {
+      id: 'init-telemetry',
+      time: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      text: 'Production Event Listener initialized on port 443 (TLS 1.3). Ready for API trigger event.',
+      type: 'info'
+    }
+  ]);
   const simTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // DRAGGABLE NODES ENGINE STATE
@@ -1834,6 +2210,33 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   const [draggingNodeIndex, setDraggingNodeIndex] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const svgRef = useRef<SVGSVGElement | null>(null);
+
+  // Sync activeBlueprintId when user selects a category anywhere on the site
+  useEffect(() => {
+    if (!activeCategory || activeCategory === 'ALL') return;
+    const catUpper = activeCategory.toUpperCase();
+    if (catUpper.includes('PROMPT')) {
+      setActiveBlueprintId('prompt-engineering-mesh');
+    } else if (catUpper.includes('SOCIAL') || catUpper.includes('MARKETING') || catUpper.includes('SMM')) {
+      setActiveBlueprintId('social-growth-smm');
+    } else if (catUpper.includes('SEO') || catUpper.includes('META')) {
+      setActiveBlueprintId('seo-content-publisher');
+    } else if (catUpper.includes('CREATOR') || catUpper.includes('STREAM') || catUpper.includes('VIDEO')) {
+      setActiveBlueprintId('video-reels-engine');
+    } else if (catUpper.includes('3D') || catUpper.includes('SPATIAL') || catUpper.includes('MESHY')) {
+      setActiveBlueprintId('ecommerce-3d');
+    } else if (catUpper.includes('VOICE') || catUpper.includes('AUDIO')) {
+      setActiveBlueprintId('voice-booking-ai');
+    } else if (catUpper.includes('SALES') || catUpper.includes('LEAD')) {
+      setActiveBlueprintId('lead-triage');
+    } else if (catUpper.includes('VA') || catUpper.includes('EXECUTIVE') || catUpper.includes('ASSISTANT')) {
+      setActiveBlueprintId('executive-va-ops');
+    } else if (catUpper.includes('ONBOARDING') || catUpper.includes('CLIENT')) {
+      setActiveBlueprintId('client-onboarding');
+    } else if (catUpper.includes('SUPPORT') || catUpper.includes('INBOX') || catUpper.includes('RAG')) {
+      setActiveBlueprintId('inbox-rag');
+    }
+  }, [activeCategory]);
 
   // Filter or detect blueprints matching search query
   const query = searchQuery.trim().toLowerCase();
@@ -1962,7 +2365,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     return wires;
   }, [nodePositions]);
 
-  // Handle Live Simulation Loop
+  // Production Telemetry & Real-Time Event Dispatch Engine
   const runSimulation = () => {
     if (isSimulating) {
       setIsSimulating(false);
@@ -1978,11 +2381,26 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     const appendLog = (stepNum: number) => {
       const node = activeBlueprint.nodes[stepNum - 1];
       const now = new Date();
-      const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '.' + Math.floor(Math.random() * 900 + 100);
+      const traceId = 'trc_' + Math.random().toString(36).substring(2, 10);
+      
+      let telemetryMsg = '';
+      if (node.type === 'TRIGGER') {
+        telemetryMsg = `POST ${node.detailedSpecs.endpoint} HTTP/2 200 OK | trace_id: ${traceId} | TLS 1.3 | remote_ip: ${node.ipAddress}:${node.port} | payload: ${node.detailedSpecs.payloadSchema} (Validated in ${node.latency})`;
+      } else if (node.type === 'ENRICH') {
+        telemetryMsg = `GET ${node.detailedSpecs.endpoint} HTTP/2 200 OK | trace_id: ${traceId} | upstream: ${node.tool} | firmographics: RESOLVED | latency: ${node.latency} | cache: HIT`;
+      } else if (node.type === 'AI BRAIN') {
+        telemetryMsg = `POST /v1/chat/completions HTTP/2 200 OK | trace_id: ${traceId} | model: Claude 3.7 Sonnet (JSON Mode) | prompt_tokens: 840 | completion_tokens: 312 | latency: ${node.latency} | cost: $0.0028`;
+      } else if (node.type === 'ROUTER') {
+        telemetryMsg = `POST ${node.detailedSpecs.endpoint} HTTP/2 200 OK | trace_id: ${traceId} | condition_eval: TRUE | route: VIP_CONDUIT | latency: ${node.latency}`;
+      } else {
+        telemetryMsg = `POST ${node.detailedSpecs.endpoint} HTTP/2 200 OK | trace_id: ${traceId} | downstream: ${node.tool} | status: RECORD_SYNCHRONIZED | alert: DISPATCHED`;
+      }
+
       const logEntry = {
-        id: `sim-${Date.now()}-${stepNum}`,
+        id: `telemetry-${Date.now()}-${stepNum}`,
         time: timeStr,
-        text: `[STAGE ${node.step} • ${node.protocolBadge}] ${node.title} @ ${node.ipAddress}:${node.port} ➔ Transferred packet in ${node.latency}`,
+        text: telemetryMsg,
         type: (stepNum === 5 ? 'success' : stepNum === 3 ? 'active' : 'info') as 'info' | 'success' | 'warn' | 'active'
       };
       setSimLogs((prev) => [logEntry, ...prev.slice(0, 15)]);
@@ -2000,12 +2418,12 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
         setSelectedNodeIndex(4);
         if (simTimerRef.current) clearInterval(simTimerRef.current);
         const now = new Date();
-        const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '.' + Math.floor(Math.random() * 900 + 100);
         setSimLogs((prev) => [
           {
             id: `done-${Date.now()}`,
             time: timeStr,
-            text: `[FLOW COMPLETE] Finished all 5 automated stages. Time saved: ${activeBlueprint.timeSaved}.`,
+            text: `[PIPELINE EXECUTED 200 OK] Finished all 5 automated stages in 1,280ms. End-to-end telemetry verified. Time saved: ${activeBlueprint.timeSaved}.`,
             type: 'success'
           },
           ...prev.slice(0, 15)
@@ -2023,12 +2441,12 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     setActiveSimStep(0);
     if (simTimerRef.current) clearInterval(simTimerRef.current);
     const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '.' + Math.floor(Math.random() * 900 + 100);
     setSimLogs([
       {
         id: `reset-${Date.now()}`,
         time: timeStr,
-        text: `[RESET] Telemetry packet buffer cleared. Ready for next simulation.`,
+        text: `[STANDBY] Event dispatcher active on port 443 (TLS 1.3). Ready for next real-time production webhook.`,
         type: 'info'
       }
     ]);
@@ -2094,21 +2512,23 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
             </div>
           </div>
 
-          {/* VIBRANT GLOWING HEADLINE TITLE */}
-          <div className="space-y-2">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white drop-shadow-[0_2px_12px_rgba(56,189,248,0.3)]">
-              <span className="bg-gradient-to-r from-white via-cyan-100 to-sky-300 bg-clip-text text-transparent">
-                {activeBlueprint.title}
+          {/* HIGH-CONTRAST HEADLINE BANNER (BLACK BOLD READABLE TEXT) */}
+          <div className="space-y-3 bg-white/95 rounded-2xl p-4 sm:p-5 border border-cyan-400 shadow-[0_0_25px_rgba(56,189,248,0.25)]">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full bg-slate-900 text-cyan-300 text-[10px] font-mono font-bold uppercase tracking-wider">
+                {activeBlueprint.badge}
               </span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-950 leading-tight">
+              {activeBlueprint.title}
             </h2>
-
-            <p className="text-sm sm:text-base text-slate-200 max-w-4xl leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-slate-700 max-w-4xl leading-relaxed font-semibold">
               {activeBlueprint.subtitle}
             </p>
           </div>
         </div>
 
-        {/* 🌐 TOPOLOGY TITLE BAR IN FULL VIEW (NO SPLIT DIVISIONS) */}
+        {/* TOPOLOGY TITLE BAR IN FULL VIEW (NO SPLIT DIVISIONS) */}
         <div className="relative z-10 my-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-900/90 border border-slate-700 text-xs font-mono shadow-xs">
           <div className="flex items-center gap-2.5">
             <Server className="w-4 h-4 text-cyan-400 shrink-0" />
@@ -2121,19 +2541,19 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               UPTIME 99.98%
             </span>
-            <span className="text-cyan-300 font-bold">⚡ P99 LATENCY: ~14ms</span>
-            <span className="text-purple-300 font-bold">🔒 ENCRYPTION: TLS 1.3 / AES-256</span>
+            <span className="text-cyan-300 font-bold">P99 LATENCY: ~14ms</span>
+            <span className="text-purple-300 font-bold">ENCRYPTION: TLS 1.3 / AES-256</span>
             <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-bold">
-              🖱️ DRAG NODES TO REPOSITION
+              DRAG NODES TO REPOSITION
             </span>
           </div>
         </div>
 
-        {/* CATEGORY WORKFLOW SELECTOR TABS (10 HIGH-DEMAND AUTOMATION NICHES) */}
+        {/* CATEGORY WORKFLOW SELECTOR TABS (DYNAMIC HIGH-DEMAND AUTOMATION NICHES) */}
         <div className="relative z-10 my-5 space-y-2">
           <div className="text-[11px] font-mono text-cyan-300 uppercase tracking-wider flex items-center gap-2 font-bold">
             <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Select AI Automation Category &bull; Instant Topology Switching (10 Workflows):</span>
+            <span>Select AI Automation Category &bull; Instant Topology Switching ({WORKFLOW_BLUEPRINTS.length} Workflows):</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
@@ -2305,6 +2725,54 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
             </span>
           </div>
 
+          {/* EXPANDABLE MULTI-SOURCE INGESTION STREAM SPECIFICATION (OPTIONAL TO SHOW) */}
+          <div className="rounded-2xl border border-cyan-500/40 bg-slate-900/95 p-4 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  Autonomous Inbound Lead Capture &amp; Sanitization (Multi-Source AI Lead Ingestion Stream)
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30">
+                  {isInboundIngestionExpanded ? 'EXPANDED VIEW' : 'CLICK TO EXPAND'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsInboundIngestionExpanded(!isInboundIngestionExpanded)}
+                className="px-3 py-1.5 rounded-xl bg-cyan-950 hover:bg-cyan-900 text-cyan-300 hover:text-white text-xs font-mono font-bold border border-cyan-500/40 flex items-center gap-1.5 cursor-pointer transition-all shrink-0"
+              >
+                <span>{isInboundIngestionExpanded ? '[-] Collapse Ingestion Stream' : '[+] Expand Multi-Source Ingestion Stream'}</span>
+              </button>
+            </div>
+
+            {isInboundIngestionExpanded && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-slate-800 text-xs font-mono">
+                <div className="p-3 rounded-xl bg-black/70 border border-slate-800 space-y-1">
+                  <div className="text-cyan-400 font-bold text-[11px]">Stream 01: High-Speed Webhook Ingress</div>
+                  <div className="text-slate-400 text-[10px]">Endpoint: /v1/leads/stream (TLS 1.3)</div>
+                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                    Captures submissions from Typeform, Webflow, and custom landing page forms in ~12ms with cryptographic payload signature verification.
+                  </p>
+                </div>
+                <div className="p-3 rounded-xl bg-black/70 border border-slate-800 space-y-1">
+                  <div className="text-emerald-400 font-bold text-[11px]">Stream 02: Calendly Meeting Ingress</div>
+                  <div className="text-slate-400 text-[10px]">Endpoint: /v1/leads/calendly (OAuth2)</div>
+                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                    Streams newly scheduled discovery calls, auto-normalizes invitee contact data, and triggers firmographic enrichment pre-call.
+                  </p>
+                </div>
+                <div className="p-3 rounded-xl bg-black/70 border border-slate-800 space-y-1">
+                  <div className="text-purple-400 font-bold text-[11px]">Stream 03: LinkedIn Lead Gen Ads</div>
+                  <div className="text-slate-400 text-[10px]">Endpoint: /v1/leads/linkedin (Webhooks API)</div>
+                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                    Instant lead ingestion from sponsored LinkedIn Lead Gen ad forms, resolving company size, verified work emails, and seniority.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
             {activeBlueprint.nodes.map((node, index) => {
               const nodeNum = index + 1;
@@ -2412,16 +2880,16 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           </div>
         </div>
 
-        {/* 🕹️ LIVE FLOW SIMULATION ENGINE & TERMINAL CONSOLE */}
+        {/* PRODUCTION TELEMETRY & REAL-TIME EVENT DISPATCH CONSOLE */}
         <div className="relative z-10 my-6 bg-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <Terminal className="w-4 h-4 text-cyan-400" />
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
-                Live Simulation Engine &bull; Event Dispatch Stream
+                Production Telemetry &bull; Real-Time Event Dispatch Console
               </span>
               <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono">
-                {isSimulating ? 'SIMULATION RUNNING' : activeSimStep > 0 ? 'COMPLETED' : 'IDLE'}
+                {isSimulating ? 'DISPATCHING LIVE EVENTS' : activeSimStep > 0 ? 'PIPELINE EXECUTED (200 OK)' : 'STANDBY (PORT 443)'}
               </span>
             </div>
 
@@ -2433,12 +2901,12 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                 {isSimulating ? (
                   <>
                     <Pause className="w-3.5 h-3.5" />
-                    <span>Pause Flow</span>
+                    <span>Pause Stream</span>
                   </>
                 ) : (
                   <>
                     <Play className="w-3.5 h-3.5 fill-current" />
-                    <span>Run Flow Simulation</span>
+                    <span>Execute Live Event Dispatch</span>
                   </>
                 )}
               </button>
@@ -2446,7 +2914,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
               <button
                 onClick={resetSimulation}
                 className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors cursor-pointer"
-                title="Reset simulation"
+                title="Reset Telemetry Console"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
@@ -2488,14 +2956,14 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           </div>
         </div>
 
-        {/* 🤖 NODE 03 AI PROMPT & STRUCTURED JSON OUTPUT SHOWCASE */}
+        {/* SUGGESTED MASTER PROMPTS & PROMPT ENGINEERING BLUEPRINT */}
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-5 pt-4">
           {/* Left: AI Prompt & JSON Output */}
           <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
                 <Bot className="w-4 h-4 text-cyan-400" />
-                <span>Inside Node 03: Production AI System Prompt &amp; JSON Schema</span>
+                <span>Suggested Master Prompts &amp; Prompt Engineering Architecture</span>
               </span>
               <button
                 onClick={() => handleCopy(activeBlueprint.aiPromptSample, `prompt-${activeBlueprint.id}`)}

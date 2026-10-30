@@ -288,7 +288,7 @@ export const AffiliateGuide: React.FC = () => {
 
                     <div
                       id={topic.id}
-                      className="themeforest-card overflow-hidden transition-all"
+                      className="partner-verified-card overflow-hidden transition-all"
                     >
                   {/* ACCORDION HEADER BAR (NUMBERED + CATEGORY BADGE + COLLAPSIBLE) */}
                   <div
@@ -296,18 +296,13 @@ export const AffiliateGuide: React.FC = () => {
                     className="w-full p-5 sm:p-6 bg-slate-50/90 hover:bg-slate-100/90 border-b border-slate-200 text-slate-900 flex items-center justify-between gap-3 text-left transition-all select-none cursor-pointer"
                   >
                     <div className="flex items-start sm:items-center gap-3.5">
-                      {/* Numbered Badge + Icon */}
+                      {/* Numbered Badge (Clean, No Icons or Emojis Underneath) */}
                       <div
-                        className={`flex flex-col items-center justify-center w-12 h-12 rounded-2xl text-white shrink-0 shadow-xs ${
+                        className={`flex items-center justify-center w-12 h-12 rounded-2xl text-white shrink-0 shadow-xs font-mono font-black text-sm tracking-tight ${
                           isAppleGreenCard ? 'bg-emerald-600' : 'bg-indigo-600'
                         }`}
                       >
-                        <span className="text-[10px] font-mono font-bold opacity-80 leading-none">
-                          #{displayIndex}
-                        </span>
-                        <span className="text-base leading-none mt-0.5">
-                          {topic.iconEmoji || '📘'}
-                        </span>
+                        #{displayIndex}
                       </div>
 
                       <div className="space-y-1">
@@ -318,8 +313,8 @@ export const AffiliateGuide: React.FC = () => {
                           <span
                             className={
                               isAppleGreenCard
-                                ? 'themeforest-badge-green'
-                                : 'themeforest-badge-indigo'
+                                ? 'partner-badge-green'
+                                : 'partner-badge-indigo'
                             }
                           >
                             <CheckCircle2 className="w-3 h-3" />
@@ -496,7 +491,7 @@ export const AffiliateGuide: React.FC = () => {
                                   return (
                                     <div
                                       key={subItem.id}
-                                      className="themeforest-card overflow-hidden flex flex-col justify-between transition-all group"
+                                      className="partner-verified-card overflow-hidden flex flex-col justify-between transition-all group"
                                     >
                                       <div>
                                         {showSubVid && (

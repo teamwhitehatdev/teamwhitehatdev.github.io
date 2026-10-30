@@ -49,7 +49,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       const currentUser = {
         email: email,
         username: userMatch ? userMatch.username : email.split('@')[0],
-        status: 'VERIFIED CLIENT 🟢',
+        status: 'VERIFIED CLIENT',
         verifiedAt: new Date().toISOString()
       };
       localStorage.setItem('wh_active_user', JSON.stringify(currentUser));
@@ -76,7 +76,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         username: username || email.split('@')[0],
         email: email,
         passwordHash: passHash,
-        status: 'VERIFIED CLIENT 🟢',
+        status: 'VERIFIED CLIENT',
         joinedDate: new Date().toISOString().split('T')[0],
         totalPurchases: 0,
         ordersCount: 0
@@ -229,7 +229,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         {step === 'success' && (
           <div className="space-y-4 text-center py-6">
             <CheckCircle2 className="w-16 h-16 text-lime-400 mx-auto animate-bounce" />
-            <h2 className="text-2xl font-bold font-rajdhani text-white uppercase">REGISTRATION VERIFIED 🟢</h2>
+            <h2 className="text-2xl font-bold font-rajdhani text-white uppercase">REGISTRATION VERIFIED</h2>
             <p className="text-xs text-gray-400 font-mono">Your account has been registered and verified in our database.</p>
           </div>
         )}

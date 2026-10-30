@@ -1084,7 +1084,7 @@ Return ONLY raw JSON with this exact structure:
   "recommended_service_tier": "$3,500 Make.com Enterprise Workflow Setup",
   "personalized_email_subject": "quick thought on {COMPANY_NAME}'s onboarding flow",
   "personalized_email_body": "Hi {NAME},\\n\\nSaw that your team is running into manual delays with onboarding new accounts...",
-  "slack_notification_alert": "🔥 HOT LEAD: Sarah Jenkins ($5k budget) | Scored 85/100 | Click to view draft"
+  "slack_notification_alert": "HOT LEAD: Sarah Jenkins ($5k budget) | Scored 85/100 | Click to view draft"
 }
 \`\`\``,
     mainImage: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&auto=format&fit=crop&q=80',

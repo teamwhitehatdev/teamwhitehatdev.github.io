@@ -98,7 +98,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
   },
   {
     id: 'deal-envato-elements-1',
-    title: 'Envato Elements & ThemeForest Templates',
+    title: 'Envato Elements & Digital Market Templates',
     placement: 'partner-deals',
     description: 'Access 50,000+ premium website themes, UI kits, graphics, and code scripts with commercial license.',
     imageUrl: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80',

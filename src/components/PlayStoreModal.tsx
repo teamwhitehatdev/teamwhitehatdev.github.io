@@ -230,6 +230,23 @@ export const PlayStoreModal: React.FC = () => {
         {/* COMPACT & MINIMALISTIC WINDOW BODY                                */}
         {/* ================================================================= */}
         <div className="p-3 space-y-2.5 bg-slate-50/80">
+          {/* Optional Expanded Banner Image (When not in minimalist mode) */}
+          {!isCompact && playStoreConfig.bannerImageUrl && !playStoreConfig.hideBannerImage && (
+            <div className="relative h-24 overflow-hidden rounded-xl border border-slate-200 shadow-2xs">
+              <img
+                src={playStoreConfig.bannerImageUrl}
+                alt={playStoreConfig.appName}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent flex items-end p-2">
+                <span className="text-[10px] font-bold text-white tracking-wide uppercase drop-shadow-xs">
+                  {playStoreConfig.tagline || 'OFFICIAL ANDROID APP'}
+                </span>
+              </div>
+            </div>
+          )}
+
           {/* App Header Card */}
           <div className="flex items-center space-x-2.5 bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
             {/* App Icon */}

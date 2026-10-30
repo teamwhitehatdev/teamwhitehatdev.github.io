@@ -10,7 +10,7 @@ export const DynamicAdsSidebar: React.FC = () => {
 
   return (
     <div className="space-y-5 select-none">
-      {/* SECTION HEADER: THEMEFOREST MARKETPLACE STYLE PARTNER DEALS */}
+      {/* SECTION HEADER: VERIFIED MARKETPLACE STYLE PARTNER DEALS */}
       <div className="flex items-center justify-between white-glass-card p-3.5 rounded-2xl">
         <span className="text-xs font-extrabold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
           <Sparkles className="w-4 h-4 text-slate-900" />
@@ -22,7 +22,7 @@ export const DynamicAdsSidebar: React.FC = () => {
         </span>
       </div>
 
-      {/* THEMEFOREST STYLE PROMOTIONAL CARDS (ALL EDITABLE, HIDE/UNHIDE, IMAGE & VIDEO SUPPORTED) */}
+      {/* VERIFIED STYLE PROMOTIONAL CARDS (ALL EDITABLE, HIDE/UNHIDE, IMAGE & VIDEO SUPPORTED) */}
       <div className="space-y-4">
         {partnerDeals.map((ad, idx) => {
           const showVideo = Boolean(ad.videoUrl && !ad.hideVideo);
@@ -69,7 +69,7 @@ export const DynamicAdsSidebar: React.FC = () => {
                 </div>
               )}
 
-              {/* THEMEFOREST THUMBNAIL PREVIEW WITH HOVER OVERLAY */}
+              {/* VERIFIED THUMBNAIL PREVIEW WITH HOVER OVERLAY */}
               {showImage && (
                 <a
                   href={ad.destinationUrl}
@@ -97,7 +97,7 @@ export const DynamicAdsSidebar: React.FC = () => {
                 </a>
               )}
 
-              {/* THEMEFOREST BODY */}
+              {/* VERIFIED CARD BODY */}
               <div className="p-4 space-y-3">
                 <div className="space-y-1">
                   <a
@@ -116,7 +116,7 @@ export const DynamicAdsSidebar: React.FC = () => {
                   </p>
                 </div>
 
-                {/* THEMEFOREST RATING & SALES ROW */}
+                {/* VERIFIED RATING & SALES ROW */}
                 <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px]">
                   <div className="flex items-center gap-0.5 text-amber-400">
                     <Star className="w-3.5 h-3.5 fill-amber-400" />
@@ -131,7 +131,7 @@ export const DynamicAdsSidebar: React.FC = () => {
                   <span className="text-[10px] font-semibold text-slate-500">{activeUsers}</span>
                 </div>
 
-                {/* THEMEFOREST SPLIT ACTION FOOTER */}
+                {/* VERIFIED SPLIT ACTION FOOTER */}
                 <div className="flex items-center gap-2 pt-1">
                   <a
                     href={ad.destinationUrl}

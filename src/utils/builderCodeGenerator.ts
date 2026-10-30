@@ -240,6 +240,45 @@ function renderBlockHtml(block: BuilderBlock): string {
       </div>
     </div>`;
 
+    case 'empty-column': {
+      const cols = block.columns || 3;
+      const colClass =
+        cols === 1
+          ? 'grid-cols-1'
+          : cols === 2
+          ? 'grid-cols-1 md:grid-cols-2'
+          : cols === 4
+          ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+          : 'grid-cols-1 md:grid-cols-3';
+      const items = block.customColumnsData || [];
+      return `    <!-- Custom Empty Columns Section (${cols} Cols) -->
+    <div class="space-y-6 border border-slate-200 p-6 sm:p-8 ${twClasses}" style="${inlineStyles}">
+      ${block.title ? `<div class="space-y-1">
+        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">${escapeHtml(block.title)}</h3>
+        ${block.subtitle ? `<p class="text-xs text-slate-500">${escapeHtml(block.subtitle)}</p>` : ''}
+      </div>` : ''}
+      <div class="grid ${colClass} gap-6">
+        ${items.map((col, idx) => `
+        <div class="p-5 rounded-2xl border border-slate-200 bg-white space-y-3 shadow-xs flex flex-col justify-between">
+          <div class="space-y-2">
+            ${col.badge ? `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">${escapeHtml(col.badge)}</span>` : `<span class="text-[10px] text-slate-400 font-mono font-bold">Column #${idx + 1}</span>`}
+            ${col.imageUrl ? `<img src="${escapeHtml(col.imageUrl)}" alt="${escapeHtml(col.title || 'Image')}" class="w-full h-auto rounded-xl object-cover max-h-40" />` : ''}
+            ${col.title ? `<h4 class="text-base font-bold text-slate-900 leading-snug">${escapeHtml(col.title)}</h4>` : ''}
+            ${col.subtitle ? `<p class="text-xs text-slate-500 font-medium">${escapeHtml(col.subtitle)}</p>` : ''}
+            ${col.content ? `<p class="text-xs text-slate-700 leading-relaxed whitespace-pre-line">${escapeHtml(col.content)}</p>` : ''}
+          </div>
+          ${(col.destinationLink || col.buttonText) ? `
+          <div class="pt-2 border-t border-slate-100">
+            <a href="${escapeHtml(col.destinationLink || '#')}" target="${escapeHtml(col.destinationLinkTarget || '_blank')}" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 text-white font-semibold text-xs rounded-xl shadow-xs">
+              <span>${escapeHtml(col.buttonText || 'Explore Link')}</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+          </div>` : ''}
+        </div>`).join('')}
+      </div>
+    </div>`;
+    }
+
     case 'call-to-action':
       return `    <!-- Call to Action Banner -->
     <div class="border border-indigo-200 p-8 text-center space-y-4 bg-gradient-to-r from-indigo-50/80 to-emerald-50/80 ${twClasses}" style="${inlineStyles}">

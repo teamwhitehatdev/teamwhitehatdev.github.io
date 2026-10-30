@@ -135,9 +135,71 @@ export const HomePage: React.FC<HomePageProps> = () => {
   const homeCmsItems = typeof getHomeFeaturedCMSItems === 'function' ? getHomeFeaturedCMSItems() : [];
 
   const filteredCmsItems = homeCmsItems.filter((item) => {
-    const matchesCat =
-      selectedCategory === 'ALL' ||
-      item.category.toUpperCase().includes(selectedCategory);
+    const cat = (item.category || '').toUpperCase();
+    const title = (item.title || '').toUpperCase();
+    const desc = (item.description || '').toUpperCase();
+
+    const matchesCat = (() => {
+      if (selectedCategory === 'ALL') return true;
+
+      if (selectedCategory === 'VA') {
+        return (
+          cat.includes('VA') ||
+          cat.includes('VIRTUAL ASSISTANT') ||
+          title.includes('VA') ||
+          title.includes('VIRTUAL ASSISTANT') ||
+          desc.includes('VIRTUAL ASSISTANT') ||
+          /\bVA\b/.test(title) ||
+          /\bVA\b/.test(desc)
+        );
+      }
+      if (selectedCategory === 'AI') {
+        return (
+          cat.includes('AI') ||
+          cat.includes('ARTIFICIAL') ||
+          cat.includes('PROMPT') ||
+          title.includes('AI') ||
+          title.includes('GPT') ||
+          title.includes('LLM')
+        );
+      }
+      if (selectedCategory === 'FREELANC') {
+        return (
+          cat.includes('FREELANC') ||
+          title.includes('FREELANC') ||
+          desc.includes('FREELANC') ||
+          cat.includes('CLIENT')
+        );
+      }
+      if (selectedCategory === 'AUTOMATION') {
+        return (
+          cat.includes('AUTOMAT') ||
+          title.includes('AUTOMAT') ||
+          desc.includes('AUTOMAT') ||
+          cat.includes('WORKFLOW')
+        );
+      }
+      if (selectedCategory === 'MAKE MONEY') {
+        return (
+          cat.includes('MAKE MONEY') ||
+          cat.includes('INCOME') ||
+          cat.includes('MONEY') ||
+          title.includes('MONEY') ||
+          title.includes('INCOME')
+        );
+      }
+      if (selectedCategory === 'DEV') {
+        return (
+          cat.includes('DEV') ||
+          cat.includes('CODE') ||
+          cat.includes('CYBER') ||
+          cat.includes('CLOUD') ||
+          cat.includes('ENGINEERING')
+        );
+      }
+      return cat.includes(selectedCategory);
+    })();
+
     const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
       !q ||
@@ -266,7 +328,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
         </div>
       </section>
 
-      {/* THEMEFOREST MARKETPLACE / GOOGLE ADSENSE FEATURED SLOT */}
+      {/* VERIFIED PARTNER / GOOGLE ADSENSE FEATURED SLOT */}
       <AdSenseSlot placement="in-article" />
 
       {/* ========================================================================= */}
@@ -502,10 +564,12 @@ export const HomePage: React.FC<HomePageProps> = () => {
                 <div className="text-center py-12 bg-white/80 backdrop-blur-xs rounded-2xl border border-indigo-200/80 p-8 space-y-3">
                   <Sparkles className="w-8 h-8 text-indigo-400 mx-auto" />
                   <h4 className="text-base font-extrabold text-indigo-950">
-                    No tutorials found matching &quot;{searchQuery}&quot;
+                    {searchQuery
+                      ? `No tutorials found matching "${searchQuery}"`
+                      : `No tutorials found under the "${selectedCategory}" category.`}
                   </h4>
                   <p className="text-xs text-indigo-900/80 max-w-md mx-auto">
-                    Try searching for keywords like &quot;AI&quot;, &quot;VA&quot;, &quot;Automation&quot;, &quot;CRM&quot;, or &quot;Freelance&quot;.
+                    Try browsing other categories like "AI", "VA", "Automation", "Freelance", or click below to view all masterclasses.
                   </p>
                   <button
                     type="button"
@@ -627,7 +691,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
                               {/* PRACTITIONER PRO TIPS & ACTION BLUEPRINT */}
                               <div className="p-4 rounded-xl bg-indigo-50/80 border border-indigo-200 space-y-2">
                                 <span className="text-[11px] font-extrabold text-indigo-950 uppercase tracking-wider block">
-                                  ★ Practitioner Execution Checklist &amp; Pro Tips:
+                                  Practitioner Execution Checklist &amp; Pro Tips:
                                 </span>
                                 <ul className="space-y-1 text-slate-800 list-disc pl-4">
                                   <li>

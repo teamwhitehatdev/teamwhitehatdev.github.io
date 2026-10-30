@@ -201,10 +201,10 @@ export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
   },
 
   // ==========================================
-  // 7. ENVATO THEMEFOREST TEMPLATES (IMPACT.COM / 1.envato.market)
+  // 7. ENVATO DIGITAL TEMPLATES (IMPACT.COM / 1.envato.market)
   // ==========================================
   {
-    id: 'envato-themeforest-hero',
+    id: 'envato-market-hero',
     brand: 'Envato',
     category: 'webdev',
     sizeType: 'hero',
@@ -212,7 +212,7 @@ export const ALL_AFFILIATE_ADS: AffiliateAdItem[] = [
     height: 628,
     clickUrl: 'https://1.envato.market/c/5024116/805521/4415',
     imageUrl: './images/affiliates/envato-banner.jpg',
-    title: 'Envato ThemeForest — 50,000+ Premium Web Templates',
+    title: 'Envato Market — 50,000+ Premium Web Templates',
     description: 'World-class WordPress themes, HTML5 templates, landing page designs, and web UI components.',
     badge: '50K+ TEMPLATES'
   },

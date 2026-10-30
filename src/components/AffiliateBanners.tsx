@@ -37,7 +37,7 @@ export const AffiliateBanners: React.FC = () => {
   }, [activeCategory, activeSizeType, isAutoRotating]);
 
   return (
-    <HUDPanel title="🛍️ VERIFIED IMPACT.COM AFFILIATE SHOWCASE — CATEGORIZED & SIZED DEALS">
+    <HUDPanel title="VERIFIED IMPACT.COM AFFILIATE SHOWCASE — CATEGORIZED & SIZED DEALS">
       <div className="p-5 space-y-6 font-mono">
         
         {/* Header & Controls */}
@@ -59,7 +59,7 @@ export const AffiliateBanners: React.FC = () => {
                     : 'bg-gray-900 text-gray-400 border-gray-800'
                 }`}
               >
-                {isAutoRotating ? '⚡ AUTO-ROTATE ON' : 'PAUSED'}
+                {isAutoRotating ? 'AUTO-ROTATE ON' : 'PAUSED'}
               </button>
 
               <button
@@ -81,11 +81,11 @@ export const AffiliateBanners: React.FC = () => {
             <div className="flex flex-wrap gap-1.5">
               {[
                 { id: 'all', label: 'ALL CATEGORIES' },
-                { id: 'hardware', label: '💻 Laptops & Hardware' },
-                { id: 'creative', label: '🎬 Video & Graphic Design' },
-                { id: 'education', label: '🎓 Certifications & Tech' },
-                { id: 'security', label: '🛡️ VPN & Security' },
-                { id: 'webdev', label: '🌐 Web Templates & Code' }
+                { id: 'hardware', label: 'Laptops & Hardware' },
+                { id: 'creative', label: 'Video & Graphic Design' },
+                { id: 'education', label: 'Certifications & Tech' },
+                { id: 'security', label: 'VPN & Security' },
+                { id: 'webdev', label: 'Web Templates & Code' }
               ].map((cat) => (
                 <button
                   key={cat.id}
@@ -110,10 +110,10 @@ export const AffiliateBanners: React.FC = () => {
             <div className="flex flex-wrap gap-1.5">
               {[
                 { id: 'all', label: 'ALL SIZES' },
-                { id: 'hero', label: '🦸 Hero Banners (1200x628 / 2400x600)' },
-                { id: 'skyscraper', label: '🏢 Skyscraper Ads (300x600 / 600x1200)' },
-                { id: 'square', label: '🔲 Square & Medium (1080x1080 / 300x300)' },
-                { id: 'banner', label: '📏 Standard Leaderboards (728x90)' }
+                { id: 'hero', label: 'Hero Banners (1200x628 / 2400x600)' },
+                { id: 'skyscraper', label: 'Skyscraper Ads (300x600 / 600x1200)' },
+                { id: 'square', label: 'Square & Medium (1080x1080 / 300x300)' },
+                { id: 'banner', label: 'Standard Leaderboards (728x90)' }
               ].map((sz) => (
                 <button
                   key={sz.id}

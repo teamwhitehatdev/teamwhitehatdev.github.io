@@ -49,7 +49,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, cart, o
       itemsCount: cart.length,
       totalAmount: subtotal,
       paymentMethod: paymentMethod === 'paypal' ? 'PayPal Gateway (Tokenized)' : `Tokenized ${cardBrand.name}`,
-      status: 'PAID & COMPLETED 🟢',
+      status: 'PAID & COMPLETED',
       date: new Date().toISOString().replace('T', ' ').slice(0, 19)
     };
 

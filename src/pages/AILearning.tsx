@@ -242,7 +242,7 @@ export const AILearning: React.FC = () => {
 
   return (
     <div className="space-y-12 max-w-7xl mx-auto pb-16 bg-transparent text-slate-900">
-      {/* 🚀 HERO HEADER BANNER (GLASSMORPHIC MINIMALIST WHITE) */}
+      {/* HERO HEADER BANNER (GLASSMORPHIC MINIMALIST WHITE) */}
       <section className="white-glass-card rounded-3xl p-6 sm:p-10 space-y-6">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-slate-200/80">
           <div className="space-y-3 max-w-3xl">
@@ -288,7 +288,7 @@ export const AILearning: React.FC = () => {
           </div>
         </div>
 
-        {/* 🔍 UPGRADED SEARCH AND CATEGORY FILTER ENGINE */}
+        {/* UPGRADED SEARCH AND CATEGORY FILTER ENGINE */}
         <div className="space-y-4">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
             <div className="relative flex-1">
@@ -420,10 +420,10 @@ export const AILearning: React.FC = () => {
         </div>
       </section>
 
-      {/* 🤖 INTERACTIVE ANIMATED BLACK TOPOLOGY CANVAS WORKFLOW */}
-      <AIAutomationDiagrams id="diagrams" searchQuery={searchQuery} />
+      {/* INTERACTIVE ANIMATED TOPOLOGY CANVAS WORKFLOW */}
+      <AIAutomationDiagrams id="diagrams" searchQuery={searchQuery} activeCategory={selectedCategory} />
 
-      {/* 📚 ALL NICHE TUTORIALS, SMM GUIDES, SEO & CREATOR PLAYBOOKS */}
+      {/* ALL NICHE TUTORIALS, SMM GUIDES, SEO & CREATOR PLAYBOOKS */}
       <section className="space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-1 max-w-3xl">
@@ -463,7 +463,7 @@ export const AILearning: React.FC = () => {
           </div>
         ) : viewMode === 'by-category' ? (
           // =================================================================
-          // 🗂️ GROUPED BY NICHE / CATEGORY SECTIONS
+          // GROUPED BY NICHE / CATEGORY SECTIONS
           // =================================================================
           <div className="space-y-12">
             {Array.from(articlesByCategory.entries()).map(([catName, articles]) => {
@@ -509,7 +509,7 @@ export const AILearning: React.FC = () => {
           </div>
         ) : (
           // =================================================================
-          // 📑 ALL GRID VIEW
+          // ALL GRID VIEW
           // =================================================================
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredArticles.map((article) => (
@@ -524,7 +524,7 @@ export const AILearning: React.FC = () => {
         )}
       </section>
 
-      {/* 📖 FULL ARTICLE READER MODAL */}
+      {/* FULL ARTICLE READER MODAL */}
       <ArticleModal
         article={selectedArticle}
         isOpen={!!selectedArticle}

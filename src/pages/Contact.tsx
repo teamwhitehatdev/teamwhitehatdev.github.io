@@ -1,6 +1,6 @@
 import { validateEmailAndAntiBot, recordSuccessfulSubmission } from '../utils/emailValidator';
 import React, { useState } from 'react';
-import { Terminal, Mail, Send,    Globe, PhoneCall } from 'lucide-react';
+import { Terminal, Mail, Send, Globe, PhoneCall, AlertCircle } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { audioEngine } from '../components/AudioEngine';
 
@@ -118,7 +118,7 @@ export const Contact: React.FC = () => {
               />
               {validationError && (
                 <div className="p-3 bg-rose-950/80 border border-rose-500/60 rounded text-rose-300 text-xs font-mono">
-                  ⚠️ {validationError}
+                  <AlertCircle className="w-4 h-4 inline mr-1 shrink-0" /> {validationError}
                 </div>
               )}
               <div>

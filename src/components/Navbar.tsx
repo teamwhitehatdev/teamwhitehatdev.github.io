@@ -56,7 +56,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
                 Team WhiteHat Dev
               </span>
               <span className="text-[10px] text-slate-500 font-medium tracking-wide leading-tight pt-0.5">
-                ThemeForest Marketplace • Enterprise VA Portal • AI Automations
+                Verified Partner Marketplace • Enterprise VA Portal • AI Automations
               </span>
             </div>
           </Link>

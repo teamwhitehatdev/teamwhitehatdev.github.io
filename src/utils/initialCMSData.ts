@@ -449,7 +449,7 @@ Best,
     contentType: 'Guide',
     page: 'ai',
     featured: true,
-    title: 'GUIDE #10: How to Turn Your Website into a 24/7 Money Machine (Google AdSense + ThemeForest-Style Partner Deals)',
+    title: 'GUIDE #10: How to Turn Your Website into a 24/7 Money Machine (Google AdSense + Verified Partner Deals)',
     category: 'MAKE MONEY ONLINE',
     badge: 'ATTRACTION GUIDE #10',
     status: 'PUBLISHED',
@@ -468,7 +468,7 @@ When you own a professional, fast-loading website filled with genuinely helpful 
    - Publishing detailed, step-by-step guides (like *How to Make Money with AI Automations* or *How to Set Up Cloud Hosting*) attracts organic search traffic and keeps readers on your site for 4–8 minutes per session.
 2. **Google AdSense & Display Ad Slots (Passive RPM Revenue):**
    - Once you connect your custom .com domain and enable your **Google AdSense Publisher ID (ca-pub-XXXXXXXXXXXXXXXX)** inside /#/admin, responsive display ad banners (Header, In-Article, Sidebar, and Footer) automatically pay you per thousand impressions (RPM) and per click (CPC).
-3. **ThemeForest-Style Marketplace Partner Cards (High-Ticket Commissions):**
+3. **Verified Marketplace Partner Cards (High-Ticket Commissions):**
    - While AdSense pays you for general traffic volume, your curated **Partner Deals & Collapsible Niche Guides** pay $15 to $150+ whenever a reader signs up for a recommended tool they actually need (such as Hostinger, ElevenLabs, Meshy AI, or CapCut).
 
 ---

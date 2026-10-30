@@ -121,6 +121,7 @@ export type BuilderBlockType =
   | 'paragraph'
   | '2-column'
   | '3-column'
+  | 'empty-column'
   | 'image'
   | 'video'
   | 'button'
@@ -188,7 +189,23 @@ export interface BuilderBlock {
   buttonStyle?: 'primary' | 'secondary' | 'apple-green' | 'indigo' | 'outline';
   secondaryButtonText?: string;
   secondaryButtonLink?: string;
+  destinationLink?: string;
+  destinationLinkTarget?: '_blank' | '_self';
   columns?: 1 | 2 | 3 | 4;
+  customColumnsData?: Array<{
+    id: string;
+    title?: string;
+    subtitle?: string;
+    content?: string;
+    imageUrl?: string;
+    imageAlt?: string;
+    badge?: string;
+    badgeColor?: string;
+    buttonText?: string;
+    destinationLink?: string;
+    destinationLinkTarget?: '_blank' | '_self';
+    backgroundColor?: string;
+  }>;
   gridItems?: BuilderGridItem[];
   accordionItems?: BuilderAccordionItem[];
   htmlContent?: string;

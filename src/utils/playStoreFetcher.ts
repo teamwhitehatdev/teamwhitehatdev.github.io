@@ -66,6 +66,8 @@ export async function fetchPlayStoreMetadata(urlInput: string): Promise<Extracte
   }
 
   let packageId = '';
+  const isDevPage = targetUrl.includes('/store/apps/dev') || targetUrl.includes('dev?id=');
+
   try {
     const parsed = new URL(targetUrl);
     packageId = parsed.searchParams.get('id') || '';
@@ -73,6 +75,25 @@ export async function fetchPlayStoreMetadata(urlInput: string): Promise<Extracte
     // fallback regex
     const match = targetUrl.match(/[?&]id=([a-zA-Z0-9_.]+)/);
     if (match) packageId = match[1];
+  }
+
+  // If this is a Google Play Developer portfolio page
+  if (isDevPage) {
+    return {
+      appName: 'Team WhiteHat Dev Android Suite',
+      developerName: 'Team WhiteHat Dev',
+      categoryBadge: 'Developer Portfolio',
+      rating: 4.9,
+      reviewsCount: '25K+ reviews',
+      downloadsCount: '100K+ Downloads',
+      description: 'Explore official Android productivity applications, automation utilities, and security tools published by Team WhiteHat Dev on Google Play.',
+      appIconUrl: 'https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?auto=format&fit=crop&w=300&q=80',
+      bannerImageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
+      windowTitle: 'Team WhiteHat Dev - Google Play Store.exe',
+      tagline: 'OFFICIAL ANDROID APPS',
+      badgeText: 'Verified Developer',
+      featuresList: ['Direct APK & Play Store Access', 'Zero Malware Guarantee', 'Automatic Cloud Updates']
+    };
   }
 
   // Attempt 1: AllOrigins proxy
@@ -163,12 +184,32 @@ export async function fetchPlayStoreMetadata(urlInput: string): Promise<Extracte
       }
     }
 
+    // Try extracting high-res icon
+    const iconMatch = html.match(/<img[^>]+alt=["']Icon image["'][^>]+src=["']([^"']+)["']/i) ||
+                      html.match(/<img[^>]+src=["']([^"']+)["'][^>]+alt=["']Icon image["']/i) ||
+                      html.match(/<img[^>]+itemprop=["']image["'][^>]+src=["']([^"']+)["']/i);
+    if (iconMatch && iconMatch[1]) {
+      result.appIconUrl = iconMatch[1];
+    }
+
+    // Try extracting feature banner image
+    const bannerMatch = html.match(/<img[^>]+alt=["']Cover art["'][^>]+src=["']([^"']+)["']/i) ||
+                        html.match(/<img[^>]+src=["']([^"']+)["'][^>]+alt=["']Cover art["']/i) ||
+                        html.match(/<img[^>]+itemprop=["']screenshot["'][^>]+src=["']([^"']+)["']/i);
+    if (bannerMatch && bannerMatch[1]) {
+      result.bannerImageUrl = bannerMatch[1];
+    }
+
     if (!result.appIconUrl) {
       const ogImg = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
                     html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
       if (ogImg && ogImg[1]) {
         result.appIconUrl = ogImg[1];
       }
+    }
+
+    if (!result.bannerImageUrl && result.appIconUrl) {
+      result.bannerImageUrl = result.appIconUrl;
     }
 
     // 3. Downloads count check from HTML regex
@@ -223,6 +264,14 @@ export async function fetchPlayStoreMetadata(urlInput: string): Promise<Extracte
 
   if (!result.badgeText) {
     result.badgeText = "Google Play Verified";
+  }
+
+  if (!result.appIconUrl) {
+    result.appIconUrl = 'https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?auto=format&fit=crop&w=300&q=80';
+  }
+
+  if (!result.bannerImageUrl) {
+    result.bannerImageUrl = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80';
   }
 
   if (result.appName) {

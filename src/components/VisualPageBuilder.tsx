@@ -32,7 +32,9 @@ import {
   FileCode,
   Upload,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Columns,
+  Globe
 } from 'lucide-react';
 import {
   BuilderBlock,
@@ -216,6 +218,49 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
           buttonLink: '#',
           imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
           styles: baseStyle
+        };
+        break;
+
+      case 'empty-column':
+        newBlock = {
+          id: newId,
+          type: 'empty-column',
+          title: 'Custom Section / Empty Columns',
+          subtitle: 'Add your own custom niche text, images, and destination links below.',
+          columns: 3,
+          customColumnsData: [
+            {
+              id: 'col-1',
+              title: 'Custom Column #1',
+              subtitle: 'Sub-topic or niche',
+              content: 'Add your own text, recommendations, tutorial steps, or review details here.',
+              buttonText: 'Visit Link →',
+              destinationLink: 'https://teamwhitehatdev.github.io',
+              destinationLinkTarget: '_blank',
+              badge: 'Column 1'
+            },
+            {
+              id: 'col-2',
+              title: 'Custom Column #2',
+              subtitle: 'Sub-topic or niche',
+              content: 'Add your own text, recommendations, tutorial steps, or review details here.',
+              buttonText: 'Visit Link →',
+              destinationLink: 'https://teamwhitehatdev.github.io',
+              destinationLinkTarget: '_blank',
+              badge: 'Column 2'
+            },
+            {
+              id: 'col-3',
+              title: 'Custom Column #3',
+              subtitle: 'Sub-topic or niche',
+              content: 'Add your own text, recommendations, tutorial steps, or review details here.',
+              buttonText: 'Visit Link →',
+              destinationLink: 'https://teamwhitehatdev.github.io',
+              destinationLinkTarget: '_blank',
+              badge: 'Column 3'
+            }
+          ],
+          styles: { ...baseStyle, backgroundColor: '#ffffff' }
         };
         break;
 
@@ -672,11 +717,31 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
         {!isPreviewMode && (
           <aside className="w-64 sm:w-72 bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto">
             {/* TEMPLATE PICKER ACCORDION */}
-            <div className="p-4 border-b border-slate-100 space-y-2 bg-slate-50/50">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                1-Click Starter Templates
-              </span>
-              <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+            <div className="p-4 border-b border-slate-100 space-y-2.5 bg-slate-50/50">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                  WordPress &amp; Starter Templates
+                </span>
+                <span className="text-[9px] font-bold bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded-full">
+                  {PREBUILT_BUILDER_TEMPLATES.length} Styles
+                </span>
+              </div>
+
+              {/* QUICK EMPTY PAGE ACTION BUTTON */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.confirm('Clear canvas and start with a fresh Empty Page Canvas?')) {
+                    handleLoadTemplate('template-wp-empty-canvas');
+                  }
+                }}
+                className="w-full py-2 px-3 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>+ Start Blank Empty Page Canvas</span>
+              </button>
+
+              <div className="grid grid-cols-2 gap-1.5 text-[11px] max-h-44 overflow-y-auto pr-1">
                 {PREBUILT_BUILDER_TEMPLATES.map((tmpl) => (
                   <button
                     key={tmpl.id}
@@ -699,6 +764,21 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                   Layout &amp; Structure
                 </span>
                 <div className="grid grid-cols-2 gap-2">
+                  {/* EMPTY COLUMN / CUSTOM SECTION COMPONENT */}
+                  <button
+                    onClick={() => handleAddBlock('empty-column')}
+                    className="p-3 bg-emerald-50/80 hover:bg-emerald-100/90 hover:border-emerald-500 border border-emerald-300 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1 col-span-2 shadow-2xs"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 font-bold text-emerald-950">
+                        <Columns className="w-4 h-4 text-emerald-700" />
+                        <span>Empty Column / Custom Section</span>
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-emerald-200 text-emerald-900 text-[9px] font-bold">Custom</span>
+                    </div>
+                    <span className="text-[10px] text-emerald-800">1 to 4 customizable columns • Add custom niche text, media &amp; destination links</span>
+                  </button>
+
                   <button
                     onClick={() => handleAddBlock('hero')}
                     className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
@@ -1060,6 +1140,86 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                           </div>
                         )}
 
+                        {block.type === 'empty-column' && (
+                          <div className="space-y-5">
+                            {(block.title || block.subtitle) && (
+                              <div className="space-y-1">
+                                {block.title && <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">{block.title}</h3>}
+                                {block.subtitle && <p className="text-xs sm:text-sm opacity-75">{block.subtitle}</p>}
+                              </div>
+                            )}
+
+                            <div
+                              className={`grid gap-4 ${
+                                block.columns === 1
+                                  ? 'grid-cols-1'
+                                  : block.columns === 2
+                                  ? 'grid-cols-1 md:grid-cols-2'
+                                  : block.columns === 4
+                                  ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+                                  : 'grid-cols-1 md:grid-cols-3'
+                              }`}
+                            >
+                              {(block.customColumnsData || []).map((col, cIdx) => (
+                                <div
+                                  key={col.id || `col-${cIdx}`}
+                                  className="p-5 rounded-2xl border border-slate-200/90 bg-white/90 space-y-3 shadow-2xs flex flex-col justify-between transition-all hover:border-slate-400"
+                                  style={{ backgroundColor: col.backgroundColor || undefined }}
+                                >
+                                  <div className="space-y-2.5">
+                                    <div className="flex items-center justify-between gap-2">
+                                      {col.badge ? (
+                                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">
+                                          {col.badge}
+                                        </span>
+                                      ) : (
+                                        <span className="text-[10px] text-slate-400 font-mono font-bold">
+                                          Column #{cIdx + 1}
+                                        </span>
+                                      )}
+                                    </div>
+
+                                    {col.imageUrl && (
+                                      <div className="overflow-hidden rounded-xl border border-slate-200 max-h-40 bg-slate-50">
+                                        <img
+                                          src={col.imageUrl}
+                                          alt={col.imageAlt || col.title || 'Column image'}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      </div>
+                                    )}
+
+                                    {col.title && (
+                                      <h4 className="text-base font-bold text-slate-900 leading-snug">{col.title}</h4>
+                                    )}
+                                    {col.subtitle && (
+                                      <p className="text-xs text-slate-500 font-medium">{col.subtitle}</p>
+                                    )}
+                                    {col.content && (
+                                      <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-line">{col.content}</p>
+                                    )}
+                                  </div>
+
+                                  {(col.destinationLink || col.buttonText) && (
+                                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                                      <a
+                                        href={col.destinationLink || '#'}
+                                        target={col.destinationLinkTarget || '_blank'}
+                                        rel="noopener noreferrer"
+                                        onClick={(e) => !isPreviewMode && e.preventDefault()}
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl shadow-2xs transition-all"
+                                      >
+                                        <span>{col.buttonText || 'Explore Link'}</span>
+                                        <ExternalLink className="w-3.5 h-3.5" />
+                                      </a>
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
                         {(block.type === 'features-grid' || block.type === '3-column') && (
                           <div className="space-y-4">
                             {block.title && (
@@ -1337,6 +1497,280 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                   </div>
                 )}
 
+                {/* DESTINATION LINK (AFFILIATE / EXTERNAL / INTERNAL NAVIGATION) */}
+                <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-emerald-950 text-[11px] flex items-center gap-1.5">
+                      <ExternalLink className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>Destination Link (Affiliate / Web Link)</span>
+                    </span>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-200 text-emerald-900">Link</span>
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-slate-600 block mb-1">Destination URL / Route</label>
+                    <input
+                      type="text"
+                      value={selectedBlock.destinationLink || selectedBlock.buttonLink || ''}
+                      onChange={(e) =>
+                        handleUpdateBlock(selectedBlock.id, {
+                          destinationLink: e.target.value,
+                          buttonLink: e.target.value
+                        })
+                      }
+                      className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-mono"
+                      placeholder="https://example.com/partner or #/affiliate-guide"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-[10px] font-bold text-slate-600 block mb-1">Target Window</label>
+                      <select
+                        value={selectedBlock.destinationLinkTarget || '_blank'}
+                        onChange={(e) =>
+                          handleUpdateBlock(selectedBlock.id, {
+                            destinationLinkTarget: e.target.value as any
+                          })
+                        }
+                        className="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                      >
+                        <option value="_blank">New Tab (_blank)</option>
+                        <option value="_self">Same Tab (_self)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold text-slate-600 block mb-1">Button / CTA Text</label>
+                      <input
+                        type="text"
+                        value={selectedBlock.buttonText || ''}
+                        onChange={(e) =>
+                          handleUpdateBlock(selectedBlock.id, { buttonText: e.target.value })
+                        }
+                        className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs"
+                        placeholder="e.g. Visit Link →"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* EMPTY COLUMN & SECTION MANAGER */}
+                {selectedBlock.type === 'empty-column' && (
+                  <div className="space-y-4 pt-2 border-t border-slate-200">
+                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-800 text-[11px] flex items-center gap-1.5">
+                          <Columns className="w-3.5 h-3.5 text-indigo-600" />
+                          <span>Column Layout &amp; Count</span>
+                        </span>
+                        <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+                          {selectedBlock.columns || 3} Columns Active
+                        </span>
+                      </div>
+
+                      {/* Column Selector Buttons: 1, 2, 3, 4 */}
+                      <div className="grid grid-cols-4 gap-1.5">
+                        {[1, 2, 3, 4].map((num) => (
+                          <button
+                            key={num}
+                            type="button"
+                            onClick={() => {
+                              let curCols = [...(selectedBlock.customColumnsData || [])];
+                              if (curCols.length < num) {
+                                const toAdd = num - curCols.length;
+                                for (let i = 0; i < toAdd; i++) {
+                                  curCols.push({
+                                    id: `col-${Date.now()}-${i}`,
+                                    title: `Column #${curCols.length + 1} Title`,
+                                    subtitle: 'Custom sub-topic',
+                                    content: 'Write your custom content or review details here.',
+                                    buttonText: 'Destination Link →',
+                                    destinationLink: 'https://teamwhitehatdev.github.io',
+                                    destinationLinkTarget: '_blank',
+                                    badge: `Col ${curCols.length + 1}`
+                                  });
+                                }
+                              }
+                              handleUpdateBlock(selectedBlock.id, {
+                                columns: num as any,
+                                customColumnsData: curCols
+                              });
+                            }}
+                            className={`py-1.5 rounded-lg font-bold text-xs border transition-all cursor-pointer ${
+                              (selectedBlock.columns || 3) === num
+                                ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
+                                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                            }`}
+                          >
+                            {num} Col{num > 1 ? 's' : ''}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* MANAGING INDIVIDUAL COLUMNS */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-800 text-[11px]">
+                          Custom Columns ({(selectedBlock.customColumnsData || []).length})
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cur = selectedBlock.customColumnsData || [];
+                            const newCol = {
+                              id: `col-${Date.now()}`,
+                              title: `Column #${cur.length + 1} Title`,
+                              subtitle: 'Custom sub-topic',
+                              content: 'Write your custom content or review details here.',
+                              buttonText: 'Destination Link →',
+                              destinationLink: 'https://teamwhitehatdev.github.io',
+                              destinationLinkTarget: '_blank' as const,
+                              badge: `Col ${cur.length + 1}`
+                            };
+                            handleUpdateBlock(selectedBlock.id, {
+                              customColumnsData: [...cur, newCol]
+                            });
+                          }}
+                          className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] cursor-pointer flex items-center gap-1 shadow-2xs"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Add Column</span>
+                        </button>
+                      </div>
+
+                      {(selectedBlock.customColumnsData || []).map((col, idx) => (
+                        <div key={col.id} className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5">
+                          <div className="flex items-center justify-between border-b border-slate-200/80 pb-1.5">
+                            <span className="font-extrabold text-[11px] text-slate-800">Column #{idx + 1}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = (selectedBlock.customColumnsData || []).filter((c) => c.id !== col.id);
+                                handleUpdateBlock(selectedBlock.id, { customColumnsData: updated });
+                              }}
+                              className="text-red-500 hover:text-red-700 text-[10px] font-bold cursor-pointer"
+                            >
+                              Remove
+                            </button>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Title</label>
+                            <input
+                              type="text"
+                              value={col.title || ''}
+                              onChange={(e) => {
+                                const updated = (selectedBlock.customColumnsData || []).map((c) =>
+                                  c.id === col.id ? { ...c, title: e.target.value } : c
+                                );
+                                handleUpdateBlock(selectedBlock.id, { customColumnsData: updated });
+                              }}
+                              placeholder="Column Title"
+                              className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-xs font-bold"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Subtitle / Niche</label>
+                            <input
+                              type="text"
+                              value={col.subtitle || ''}
+                              onChange={(e) => {
+                                const updated = (selectedBlock.customColumnsData || []).map((c) =>
+                                  c.id === col.id ? { ...c, subtitle: e.target.value } : c
+                                );
+                                handleUpdateBlock(selectedBlock.id, { customColumnsData: updated });
+                              }}
+                              placeholder="Sub-topic or niche"
+                              className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-[11px]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Content Text</label>
+                            <textarea
+                              rows={3}
+                              value={col.content || ''}
+                              onChange={(e) => {
+                                const updated = (selectedBlock.customColumnsData || []).map((c) =>
+                                  c.id === col.id ? { ...c, content: e.target.value } : c
+                                );
+                                handleUpdateBlock(selectedBlock.id, { customColumnsData: updated });
+                              }}
+                              placeholder="Write your custom text or instructions here..."
+                              className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-[11px]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Image URL (Optional)</label>
+                            <input
+                              type="text"
+                              value={col.imageUrl || ''}
+                              onChange={(e) => {
+                                const updated = (selectedBlock.customColumnsData || []).map((c) =>
+                                  c.id === col.id ? { ...c, imageUrl: e.target.value } : c
+                                );
+                                handleUpdateBlock(selectedBlock.id, { customColumnsData: updated });
+                              }}
+                              placeholder="https://..."
+                              className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-[11px]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-emerald-800 block mb-0.5">Destination Link (URL)</label>
+                            <input
+                              type="text"
+                              value={col.destinationLink || ''}
+                              onChange={(e) => {
+                                const updated = (selectedBlock.customColumnsData || []).map((c) =>
+                                  c.id === col.id ? { ...c, destinationLink: e.target.value } : c
+                                );
+                                handleUpdateBlock(selectedBlock.id, { customColumnsData: updated });
+                              }}
+                              placeholder="https://... or #/page"
+                              className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-[11px] font-mono"
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Button Text</label>
+                              <input
+                                type="text"
+                                value={col.buttonText || ''}
+                                onChange={(e) => {
+                                  const updated = (selectedBlock.customColumnsData || []).map((c) =>
+                                    c.id === col.id ? { ...c, buttonText: e.target.value } : c
+                                  );
+                                  handleUpdateBlock(selectedBlock.id, { customColumnsData: updated });
+                                }}
+                                placeholder="e.g. Visit Link →"
+                                className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-[11px]"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-slate-500 block mb-0.5">Badge Text</label>
+                              <input
+                                type="text"
+                                value={col.badge || ''}
+                                onChange={(e) => {
+                                  const updated = (selectedBlock.customColumnsData || []).map((c) =>
+                                    c.id === col.id ? { ...c, badge: e.target.value } : c
+                                  );
+                                  handleUpdateBlock(selectedBlock.id, { customColumnsData: updated });
+                                }}
+                                placeholder="e.g. Pro Tip"
+                                className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-[11px]"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Button Controls */}
                 {(selectedBlock.type === 'hero' ||
                   selectedBlock.type === 'button' ||
@@ -1454,6 +1888,38 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                           placeholder="Description"
                           className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-[11px]"
                         />
+                        <div className="grid grid-cols-2 gap-1.5 pt-1">
+                          <div>
+                            <label className="text-[9px] font-bold text-slate-500 block mb-0.5">Destination Link</label>
+                            <input
+                              type="text"
+                              value={it.link || ''}
+                              onChange={(e) => {
+                                const newItems = (selectedBlock.gridItems || []).map((x) =>
+                                  x.id === it.id ? { ...x, link: e.target.value } : x
+                                );
+                                handleUpdateBlock(selectedBlock.id, { gridItems: newItems });
+                              }}
+                              placeholder="https://... or #/page"
+                              className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-[10px] font-mono"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[9px] font-bold text-slate-500 block mb-0.5">Link Text</label>
+                            <input
+                              type="text"
+                              value={it.linkText || ''}
+                              onChange={(e) => {
+                                const newItems = (selectedBlock.gridItems || []).map((x) =>
+                                  x.id === it.id ? { ...x, linkText: e.target.value } : x
+                                );
+                                handleUpdateBlock(selectedBlock.id, { gridItems: newItems });
+                              }}
+                              placeholder="e.g. Learn More →"
+                              className="w-full px-2 py-1 bg-white border border-slate-200 rounded text-[10px]"
+                            />
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>

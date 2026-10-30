@@ -7,9 +7,9 @@ export interface AdSenseSlotProps {
   className?: string;
 }
 
-const THEMEFOREST_FEATURED_ADS = [
+const PARTNER_FEATURED_ADS = [
   {
-    id: 'tf-hostinger-pro',
+    id: 'partner-hostinger-pro',
     title: 'Hostinger Cloud & WordPress Business Hosting — AI Website Builder Suite',
     vendor: 'by Hostinger International in Web Hosting & Cloud',
     category: 'WEB HOSTING & CLOUD',
@@ -25,7 +25,7 @@ const THEMEFOREST_FEATURED_ADS = [
     features: ['99.9% Uptime SLA', 'NVMe SSD Speed', '24/7 Live Support']
   },
   {
-    id: 'tf-meshy-3d',
+    id: 'partner-meshy-3d',
     title: 'Meshy 3D AI Studio — Text & Image to PBR 3D Asset Generator Pipeline',
     vendor: 'by Meshy AI Labs in 3D Generative AI Tools',
     category: '3D AI & GAME ASSETS',
@@ -41,7 +41,7 @@ const THEMEFOREST_FEATURED_ADS = [
     features: ['Text-to-3D Mesh', 'Blender & Unity Ready', '4K PBR Textures']
   },
   {
-    id: 'tf-elevenlabs-voice',
+    id: 'partner-elevenlabs-voice',
     title: 'ElevenLabs Prime Voice AI — Ultra-Realistic Multilingual Dubbing & Cloning',
     vendor: 'by ElevenLabs Audio in AI Voice & Media',
     category: 'AI VOICE & AUDIO',
@@ -134,15 +134,15 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
     );
   }
 
-  // 3. THEMEFOREST MARKETPLACE STYLE SPONSORED CARDS (WHEN PARTNER FALLBACK IS ENABLED)
+  // 3. VERIFIED PARTNER MARKETPLACE STYLE SPONSORED CARDS (WHEN PARTNER FALLBACK IS ENABLED)
   if (!adSenseConfig.showPartnerFallbackAds) {
     return null;
   }
 
-  // Pick item based on placement so each slot shows a distinct ThemeForest-style item
+  // Pick item based on placement so each slot shows a distinct verified partner item
   const fallbackIndex =
     placement === 'header' ? 0 : placement === 'in-article' ? 1 : placement === 'footer' ? 2 : 0;
-  const tfItem = THEMEFOREST_FEATURED_ADS[fallbackIndex % THEMEFOREST_FEATURED_ADS.length];
+  const tfItem = PARTNER_FEATURED_ADS[fallbackIndex % PARTNER_FEATURED_ADS.length];
 
   // Also check if admin has custom visible promo items
   const visiblePromos = (promoItems || []).filter((p) => p.visible !== false);
@@ -160,15 +160,15 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
   const isSidebar = placement === 'sidebar';
 
   return (
-    <div className={`themeforest-card overflow-hidden my-4 ${className}`}>
+    <div className={`partner-verified-card overflow-hidden my-4 ${className}`}>
       {/* TOP MARKETPLACE BAR */}
       <div className="bg-slate-50/90 border-b border-slate-200/80 px-4 py-2 flex flex-wrap items-center justify-between gap-1.5 text-[10px]">
         <div className="flex items-center gap-1.5 font-bold text-slate-700 uppercase tracking-wider truncate">
           <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-          <span className="truncate">ThemeForest Partner • {displayCategory}</span>
+          <span className="truncate">Verified Partner • {displayCategory}</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="themeforest-badge-green">
+          <span className="partner-badge-green">
             <CheckCircle2 className="w-3 h-3 shrink-0" />
             <span>Verified</span>
           </span>
@@ -292,7 +292,7 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
             </div>
           </a>
 
-          {/* MIDDLE ITEM METADATA (THEMEFOREST STYLE) */}
+          {/* MIDDLE ITEM METADATA (VERIFIED PARTNER STYLE) */}
           <div className="flex-1 space-y-2 min-w-0">
             <div>
               <a
@@ -323,7 +323,7 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
             </div>
           </div>
 
-          {/* RIGHT PRICE, RATING & SPLIT ACTION BOX (THEMEFOREST MARKETPLACE COLUMN) */}
+          {/* RIGHT PRICE, RATING & SPLIT ACTION BOX (VERIFIED MARKETPLACE COLUMN) */}
           <div className="w-full xl:w-auto xl:border-l border-slate-200 xl:pl-6 flex flex-row xl:flex-col items-center xl:items-end justify-between gap-3 shrink-0 pt-3 xl:pt-0 border-t xl:border-t-0">
             <div className="text-left xl:text-right space-y-0.5">
               <div className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">

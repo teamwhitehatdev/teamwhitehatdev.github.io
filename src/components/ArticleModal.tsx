@@ -285,7 +285,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, isOpen, onC
             {renderFormattedMarkdown(activeArticle.fullContent || activeArticle.description)}
           </div>
 
-          {/* IN-ARTICLE THEMEFOREST / GOOGLE ADSENSE MONETIZATION SLOT */}
+          {/* IN-ARTICLE SPONSORED / GOOGLE ADSENSE MONETIZATION SLOT */}
           <AdSenseSlot placement="in-article" />
 
           {/* ===================================================================== */}
