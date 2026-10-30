@@ -652,7 +652,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
-    const saved = localStorage.getItem('wh_cms_items_v5750');
+    const saved = localStorage.getItem('wh_cms_items_v5760');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -865,7 +865,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsCategories]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_items_v5750', JSON.stringify(cmsItems));
+    localStorage.setItem('wh_cms_items_v5760', JSON.stringify(cmsItems));
   }, [cmsItems]);
 
   useEffect(() => {
@@ -949,7 +949,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems((prev) => {
       const updated = [newItem, ...prev];
       try {
-        localStorage.setItem('wh_cms_items_v5750', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5760', JSON.stringify(updated));
       } catch {}
       return updated;
     });
@@ -967,7 +967,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return item;
       });
       try {
-        localStorage.setItem('wh_cms_items_v5750', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5760', JSON.stringify(updated));
       } catch {}
       return updated;
     });
@@ -977,7 +977,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems((prev) => {
       const updated = prev.filter((item) => item.id !== id);
       try {
-        localStorage.setItem('wh_cms_items_v5750', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5760', JSON.stringify(updated));
       } catch {}
       return updated;
     });

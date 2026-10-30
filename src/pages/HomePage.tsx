@@ -179,11 +179,11 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
           <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 w-full sm:w-auto">
             <Link
-              to="/ai"
-              className="px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl transition-all shadow-xs flex items-center justify-center space-x-2"
+              to="/ai#diagrams"
+              className="px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl transition-all shadow-xs flex items-center justify-center space-x-2 group"
             >
-              <Workflow className="w-4 h-4" />
-              <span>Explore AI Automation Diagrams</span>
+              <Workflow className="w-4 h-4 text-cyan-400 group-hover:rotate-12 transition-transform" />
+              <span>AI FLOW DIAGRAM</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 
@@ -219,17 +219,27 @@ export const HomePage: React.FC<HomePageProps> = () => {
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-2 hover:border-slate-400 hover:-translate-y-0.5 transition-all">
-            <div className="flex items-center space-x-2 text-slate-700 font-bold uppercase tracking-wider">
-              <Workflow className="w-4 h-4" />
-              <span>Real AI Flows</span>
+          <Link
+            to="/ai#diagrams"
+            className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-2 hover:border-slate-900 hover:-translate-y-0.5 transition-all group block text-left"
+          >
+            <div className="flex items-center justify-between text-slate-700 font-bold uppercase tracking-wider">
+              <div className="flex items-center space-x-2">
+                <Workflow className="w-4 h-4 text-slate-800 group-hover:text-blue-600 transition-colors" />
+                <span>Real AI Flows</span>
+              </div>
+              <span className="px-2 py-0.5 bg-slate-900 text-white text-[10px] rounded-full font-bold">
+                AI FLOW DIAGRAM
+              </span>
             </div>
-            <h3 className="text-sm font-bold text-slate-900">Visual Automation Diagrams</h3>
+            <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+              Visual Automation Diagrams &rarr;
+            </h3>
             <p className="text-slate-600 leading-relaxed">
               Interactive node-by-node diagrams showing how Webhooks, LLMs, Routers, and CRMs work
               together.
             </p>
-          </div>
+          </Link>
 
           <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-2 hover:border-slate-400 hover:-translate-y-0.5 transition-all">
             <div className="flex items-center space-x-2 text-slate-700 font-bold uppercase tracking-wider">

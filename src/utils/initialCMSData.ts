@@ -1,4 +1,5 @@
 import { COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS } from '../data/comprehensiveEducationalData';
+import { ADVANCED_NICHE_CMS_ITEMS } from '../data/advancedNicheCMSData';
 import { CMSItem, PlayStoreAppConfig } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
@@ -484,6 +485,7 @@ When you own a professional, fast-loading website filled with genuinely helpful 
     updatedAt: '2026-10-29T00:00:00Z'
   },
 
+  ...ADVANCED_NICHE_CMS_ITEMS,
   ...COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS,
 
   // =========================================================================
