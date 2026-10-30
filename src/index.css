@@ -248,13 +248,86 @@ body {
   border: 1px solid #e2e8f0;
   border-radius: 1.125rem;
   box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.26s ease;
+  will-change: transform, box-shadow;
 }
 
 .themeforest-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px) scale(1.006);
   border-color: #22c55e;
-  box-shadow: 0 16px 36px -12px rgba(34, 197, 94, 0.18), 0 6px 14px -4px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 18px 40px -10px rgba(34, 197, 94, 0.20), 0 6px 14px -4px rgba(15, 23, 42, 0.06);
+}
+
+/* ============================================================================
+   ADVANCED SMOOTH TRANSITIONS & FLUID PHYSICS ANIMATION SYSTEM
+============================================================================ */
+@keyframes pageEnterFadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.994);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+}
+
+@keyframes pulseGlowEmerald {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 22px 5px rgba(34, 197, 94, 0.22);
+  }
+}
+
+@keyframes pulseGlowIndigo {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 22px 5px rgba(99, 102, 241, 0.22);
+  }
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.page-enter-transition {
+  animation: pageEnterFadeSlide 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-pulse-glow-emerald {
+  animation: pulseGlowEmerald 3.5s ease-in-out infinite;
+}
+
+.animate-pulse-glow-indigo {
+  animation: pulseGlowIndigo 3.5s ease-in-out infinite;
+}
+
+.animate-float-gentle {
+  animation: floatGentle 4.5s ease-in-out infinite;
+}
+
+/* ADVANCED SPRING-TACTILE INTERACTION FOR BUTTONS AND CARDS */
+.btn-spring {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, background-color 0.22s ease;
+}
+.btn-spring:hover {
+  transform: translateY(-1.5px);
+}
+.btn-spring:active {
+  transform: translateY(0.5px) scale(0.97);
 }
 
 .themeforest-badge-green {

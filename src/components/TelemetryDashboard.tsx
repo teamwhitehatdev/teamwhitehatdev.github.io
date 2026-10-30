@@ -463,7 +463,7 @@ export const TelemetryDashboard: React.FC = () => {
             <div className="text-center text-slate-400 font-bold">↓</div>
             <div className="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
               <span className="font-semibold text-slate-800">
-                2. Home Free VA Academy (/#/)
+                2. Home Free VA Portal (/#/)
               </span>
               <span className="text-slate-900 font-bold">78% Progress</span>
             </div>

@@ -8,7 +8,7 @@ export const StickyConversionBar: React.FC<{ onOpenConsultation?: () => void }> 
       <div className="flex items-center space-x-2 text-slate-700 font-medium">
         <GraduationCap className="w-4 h-4 text-slate-900 shrink-0" />
         <span className="hidden sm:inline text-slate-800 font-medium">
-          100% Free Virtual Assistant &amp; AI Automation Academy — Step-by-step career blueprints &amp; workflow diagrams at zero cost.
+          100% Free Virtual Assistant &amp; AI Automation Portal — Step-by-step career blueprints &amp; workflow diagrams at zero cost.
         </span>
         <span className="sm:hidden text-slate-800 font-medium">
           100% Free VA &amp; AI Automation Guides

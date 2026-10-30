@@ -773,7 +773,7 @@ Successful affiliate content creators focus on solving real problems first. When
     contentType: 'Article',
     page: 'about',
     featured: false,
-    title: '4. Free VA & AI Automation Academy',
+    title: '4. Free VA & AI Automation Portal',
     category: 'CORE PILLAR',
     status: 'PUBLISHED',
     visible: true,

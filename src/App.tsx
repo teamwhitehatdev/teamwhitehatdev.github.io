@@ -41,6 +41,33 @@ function VisitorPageTracker() {
   return null;
 }
 
+function AnimatedAppRoutes({ onOpenConsultation }: { onOpenConsultation: (svc?: string) => void }) {
+  const location = useLocation();
+  return (
+    <div key={location.pathname} className="page-enter-transition">
+      <Routes location={location}>
+        <Route path="/" element={<HomePage onOpenConsultation={(svc?: string) => onOpenConsultation(svc)} />} />
+        <Route path="/showcase" element={<Showcase />} />
+        <Route path="/web-hosting" element={<WebHosting />} />
+        <Route path="/services" element={<Services onOpenConsultation={(svc) => onOpenConsultation(svc)} />} />
+        <Route path="/ai" element={<AILearning />} />
+        <Route path="/ai/" element={<AILearning />} />
+        <Route path="/ai-learning" element={<AILearning />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/affiliate-guide" element={<AffiliateGuide />} />
+        <Route path="/affiliate-guide/" element={<AffiliateGuide />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<PrivacyPolicy />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/" element={<Admin />} />
+        {/* Dynamic Developer-Created Navigation Tabs */}
+        <Route path="/page/:tabSlug" element={<DynamicNavPage />} />
+        <Route path="/:tabSlug" element={<DynamicNavPage />} />
+      </Routes>
+    </div>
+  );
+}
+
 export function AppContent() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<string | undefined>(undefined);
@@ -92,25 +119,7 @@ export function AppContent() {
             <StockTicker />
 
             <main className="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
-              <Routes>
-                <Route path="/" element={<HomePage onOpenConsultation={(svc?: string) => handleOpenConsultation(svc)} />} />
-                <Route path="/showcase" element={<Showcase />} />
-                <Route path="/web-hosting" element={<WebHosting />} />
-                <Route path="/services" element={<Services onOpenConsultation={(svc) => handleOpenConsultation(svc)} />} />
-                <Route path="/ai" element={<AILearning />} />
-                <Route path="/ai/" element={<AILearning />} />
-                <Route path="/ai-learning" element={<AILearning />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/affiliate-guide" element={<AffiliateGuide />} />
-                <Route path="/affiliate-guide/" element={<AffiliateGuide />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms" element={<PrivacyPolicy />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/admin/" element={<Admin />} />
-                {/* Dynamic Developer-Created Navigation Tabs */}
-                <Route path="/page/:tabSlug" element={<DynamicNavPage />} />
-                <Route path="/:tabSlug" element={<DynamicNavPage />} />
-              </Routes>
+              <AnimatedAppRoutes onOpenConsultation={handleOpenConsultation} />
 
               <div className="mt-10">
                 <AdSenseSlot placement="footer" />

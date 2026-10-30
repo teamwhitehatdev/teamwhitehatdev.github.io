@@ -465,7 +465,7 @@ export const INITIAL_AFFILIATE_TOPICS: AffiliateCollapsibleTopic[] = [
     themeColor: 'slate',
     headerBannerImage: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1200&auto=format&fit=crop&q=80',
     referralUrl: 'https://teamwhitehatdev.github.io/#/ai',
-    primaryCtaText: 'OPEN VA ACADEMY GUIDES →',
+    primaryCtaText: 'OPEN VA PORTAL GUIDES →',
     discountBadgeText: 'NICHE #11 • HIGH-DEMAND REMOTE CAREER',
     markdownContent:
       'Executive Virtual Assistants are the operational backbone of modern remote companies. By implementing structured Inbox Zero filters (`Action Required`, `Waiting On`, `Delegated`, `Archive`), color-coded time-blocking calendars, and concise End-of-Day (EOD) status reports, an Executive VA saves founders 12–20 hours every week.',

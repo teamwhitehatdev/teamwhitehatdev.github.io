@@ -54,7 +54,7 @@ export const AILearning: React.FC = () => {
           <div className="space-y-3 max-w-3xl">
             <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
               <Cpu className="w-4 h-4 text-slate-700" />
-              <span>100% Free AI Academy • Capabilities • Real Automation Diagrams</span>
+              <span>100% Free AI Portal • Capabilities • Real Automation Diagrams</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               AI &amp; Its Capabilities, Visual Automation Workflows &amp; Free VA Tutorials

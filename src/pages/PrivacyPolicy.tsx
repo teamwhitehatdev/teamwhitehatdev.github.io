@@ -17,7 +17,7 @@ export const PrivacyPolicy: React.FC = () => {
         </h1>
 
         <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          Last Updated: October 2026 &nbsp;•&nbsp; Publisher: <strong>Team WhiteHat Dev</strong> (Official Educational Academy, AI Workflow Documentation &amp; Software Engineering Portfolio).
+          Last Updated: October 2026 &nbsp;•&nbsp; Publisher: <strong>Team WhiteHat Dev</strong> (Official Educational Portal, AI Workflow Documentation &amp; Software Engineering Portfolio).
         </p>
       </div>
 
@@ -74,7 +74,7 @@ export const PrivacyPolicy: React.FC = () => {
             In compliance with the Federal Trade Commission (FTC) guidelines, please note that some links on this website (including software tools, AI generators, and cloud web hosting links such as Hostinger, Meshy 3D AI, ElevenLabs, and Suno AI) are partner or referral links.
           </p>
           <p>
-            If you click on a partner link and register or make a purchase, <strong>Team WhiteHat Dev</strong> may earn a small referral commission at <strong>zero additional cost to you</strong>. These commissions fund our 100% free Virtual Assistant Academy tutorials, open workflow diagrams, and student guides.
+            If you click on a partner link and register or make a purchase, <strong>Team WhiteHat Dev</strong> may earn a small referral commission at <strong>zero additional cost to you</strong>. These commissions fund our 100% free Virtual Assistant Portal tutorials, open workflow diagrams, and student guides.
           </p>
         </div>
       </HUDPanel>

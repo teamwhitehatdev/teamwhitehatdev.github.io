@@ -64,7 +64,7 @@ export const THEMES: Record<ThemeName, ThemeConfig> = {
   },
   cybernotes: {
     name: 'cybernotes',
-    label: 'ACADEMY PAPER LIGHT',
+    label: 'PORTAL CLEAN LIGHT',
     ...LIGHT_MINIMAL_THEME,
     description: 'High-contrast editorial light theme built for reading free tutorials and guides.'
   },
@@ -72,7 +72,7 @@ export const THEMES: Record<ThemeName, ThemeConfig> = {
     name: 'matrix',
     label: 'CLEAN TECH LIGHT',
     ...LIGHT_MINIMAL_THEME,
-    description: 'Minimalistic developer & VA academy light theme.'
+    description: 'Minimalistic developer & VA portal light theme.'
   },
   tron: {
     name: 'tron',

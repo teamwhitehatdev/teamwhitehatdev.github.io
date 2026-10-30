@@ -29,7 +29,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-xs font-semibold text-slate-700 tracking-wide uppercase">
-              Free Virtual Assistant Academy • AI Automations • Software &amp; Digital Innovation
+              Free Virtual Assistant Portal • AI Automations • Software &amp; Digital Innovation
             </p>
 
             <p className="text-xs text-slate-600 leading-relaxed max-w-md pt-1">

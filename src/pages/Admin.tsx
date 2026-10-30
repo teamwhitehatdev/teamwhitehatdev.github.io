@@ -478,17 +478,15 @@ export const Admin: React.FC = () => {
     if (e) e.preventDefault();
 
     const userClean = usernameInput.trim().toLowerCase();
-    const validUsers = ['admin', 'developer', 'whitehatdev', 'teamwhitehatdev', 'owner', ''];
+    const validUsers = ['admin', 'developer', 'whitehatdev_master'];
     const inputClean = pinInput.trim().toLowerCase();
+
+    // SECURE NON-GUESSABLE MASTER PASSWORDS (EASY PASSWORDS LIKE ADMIN/WHITEHATDEV STRICTLY REMOVED)
     const validPins = [
-      'whitehatdev2026',
-      'whitehatdev#2026!',
-      'teamwhitehatdev',
-      'whitehatdev',
-      'admin',
-      'admin123',
-      'anonymousphilippines',
-      '123456'
+      'whitehat#9821$masterdev',
+      'whitehatdev@2026!secure',
+      'wh#vault2026!key',
+      'whitehatdev#2026!'
     ];
 
     // Priority 1: If credentials match, immediately authenticate and clear any lockout
@@ -518,9 +516,9 @@ export const Admin: React.FC = () => {
       );
     } else {
       setAuthError(
-        `Invalid Admin Username or Password (${failResult.attemptsLeft} attempt${
+        `Invalid Admin Username or Security Password (${failResult.attemptsLeft} attempt${
           failResult.attemptsLeft === 1 ? '' : 's'
-        } remaining before lockout). Default password is: whitehatdev2026`
+        } remaining before lockout).`
       );
     }
   };
@@ -528,9 +526,8 @@ export const Admin: React.FC = () => {
   const handleClearLockout = () => {
     resetAdminRateLimit();
     setAuthError('');
-    setUsernameInput('admin');
-    setPinInput('whitehatdev2026');
-    showToast('Lockout cleared! Credentials set to admin / whitehatdev2026');
+    setPinInput('');
+    showToast('Security lockout cleared. You can now enter your secret password.');
   };
 
   const handleLogout = () => {
@@ -1240,44 +1237,10 @@ export const Admin: React.FC = () => {
                     onClick={handleClearLockout}
                     className="w-full py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-bold text-[11px] transition-all cursor-pointer shadow-2xs"
                   >
-                    Reset Security Lockout &amp; Pre-Fill
+                    Reset Security Lockout
                   </button>
                 </div>
               )}
-            </div>
-
-            {/* AUTHORIZED DEVELOPER CREDENTIALS ASSISTANT */}
-            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs space-y-2 text-slate-700">
-              <div className="flex items-center justify-between">
-                <span className="font-extrabold text-slate-900 flex items-center gap-1.5">
-                  <Shield className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Authorized Credentials:</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetAdminRateLimit();
-                    setUsernameInput('admin');
-                    setPinInput('whitehatdev2026');
-                    setAuthError('');
-                    showToast('Credentials filled: admin / whitehatdev2026');
-                  }}
-                  className="text-emerald-700 hover:text-emerald-800 font-bold underline cursor-pointer text-[11px]"
-                >
-                  Auto-Fill
-                </button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 text-[11px] font-mono bg-white p-2.5 rounded-xl border border-slate-200">
-                <div>
-                  <span className="text-slate-400 block text-[9px] uppercase tracking-wider">Username</span>
-                  <strong className="text-slate-900">admin</strong>
-                </div>
-                <div>
-                  <span className="text-slate-400 block text-[9px] uppercase tracking-wider">Password</span>
-                  <strong className="text-slate-900">whitehatdev2026</strong>
-                </div>
-              </div>
             </div>
 
             <button

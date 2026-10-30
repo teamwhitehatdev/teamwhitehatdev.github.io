@@ -140,14 +140,14 @@ export const HomePage: React.FC<HomePageProps> = () => {
   return (
     <div className="space-y-12 max-w-7xl mx-auto pb-12 bg-transparent text-slate-900">
       {/* ========================================================================= */}
-      {/* 🚀 SECTION 1: CLEAN MINIMALIST WHITE PORTFOLIO & FREE VA ACADEMY HERO     */}
+      {/* 🚀 SECTION 1: CLEAN MINIMALIST WHITE PORTFOLIO & ENTERPRISE VA PORTAL HERO */}
       {/* ========================================================================= */}
       <section className="white-glass-card rounded-3xl p-6 sm:p-10 space-y-8">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pb-8 border-b border-slate-200/80">
           <div className="space-y-4 max-w-3xl">
             <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
               <GraduationCap className="w-4 h-4 text-slate-700" />
-              <span>100% Free VA Academy • AI Automation Blueprints • Digital Portfolio</span>
+              <span>100% Free VA Portal • AI Automation Blueprints • Digital Command Hub</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
@@ -198,7 +198,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
           <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-2 hover:border-slate-400 hover:-translate-y-0.5 transition-all">
             <div className="flex items-center space-x-2 text-slate-700 font-bold uppercase tracking-wider">
               <GraduationCap className="w-4 h-4" />
-              <span>100% Free VA Academy</span>
+              <span>100% Free VA Portal</span>
             </div>
             <h3 className="text-sm font-bold text-slate-900">Zero-to-Pro Freelancer Guides</h3>
             <p className="text-slate-600 leading-relaxed">

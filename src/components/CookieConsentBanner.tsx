@@ -40,7 +40,7 @@ export const CookieConsentBanner: React.FC = () => {
             Cookie &amp; Ad Personalization Notice
           </h4>
           <p className="text-[11px] text-slate-600 leading-relaxed">
-            We use cookies (including Google AdSense &amp; partner analytics) to personalize content, display relevant ads, and keep our Virtual Assistant Academy 100% free.{' '}
+            We use cookies (including Google AdSense &amp; partner analytics) to personalize content, display relevant ads, and keep our Virtual Assistant Portal 100% free.{' '}
             <Link to="/privacy-policy" className="text-slate-900 font-bold underline">
               Privacy Policy &amp; Ad Disclosure
             </Link>

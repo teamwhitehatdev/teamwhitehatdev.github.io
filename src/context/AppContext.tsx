@@ -142,7 +142,7 @@ export const DEFAULT_NAV_TABS: NavTabConfig[] = [
   },
   {
     id: 'nav_ai',
-    label: 'Free AI & VA Academy',
+    label: 'Free AI & VA Portal',
     slug: 'ai',
     path: '/ai',
     badge: 'Free',
@@ -375,9 +375,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const existingIds = new Set(parsed.map((t: NavTabConfig) => t.id));
+          // Auto-migrate any legacy "Academy" strings to "Portal"
+          const sanitized = parsed.map((t: NavTabConfig) => ({
+            ...t,
+            label: t.label ? t.label.replace(/Academy/gi, 'Portal') : t.label
+          }));
+          const existingIds = new Set(sanitized.map((t: NavTabConfig) => t.id));
           const missing = DEFAULT_NAV_TABS.filter((t) => !existingIds.has(t.id));
-          return [...parsed, ...missing].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+          return [...sanitized, ...missing].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
         }
       }
     } catch (e) {
