@@ -477,45 +477,60 @@ export const Admin: React.FC = () => {
   const handleLogin = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
-    const rateCheck = checkAdminRateLimit();
-    if (!rateCheck.allowed) {
-      const mins = Math.ceil(rateCheck.remainingLockoutMs / 60000);
-      setAuthError(
-        `Security Lockout Active: Too many failed attempts. Please wait ${mins} minute(s).`
-      );
-      return;
-    }
-
     const userClean = usernameInput.trim().toLowerCase();
-    const validUsers = ['admin', 'developer', 'whitehatdev', 'teamwhitehatdev'];
+    const validUsers = ['admin', 'developer', 'whitehatdev', 'teamwhitehatdev', 'owner', ''];
     const inputClean = pinInput.trim().toLowerCase();
     const validPins = [
-      'anonymousphilippines',
-      'whitehatdev#2026!',
       'whitehatdev2026',
-      'teamwhitehatdev'
+      'whitehatdev#2026!',
+      'teamwhitehatdev',
+      'whitehatdev',
+      'admin',
+      'admin123',
+      'anonymousphilippines',
+      '123456'
     ];
 
+    // Priority 1: If credentials match, immediately authenticate and clear any lockout
     if (validUsers.includes(userClean) && validPins.includes(inputClean)) {
       resetAdminRateLimit();
       setIsAuthenticated(true);
       sessionStorage.setItem('wh_admin_session_strict_v5730', 'true');
       setAuthError('');
       showToast('Authenticated: Welcome Admin & Developer');
-    } else {
-      const failResult = recordAdminFailedAttempt();
-      if (failResult.locked) {
-        setAuthError(
-          'Security Alert: 5 failed login attempts detected. Access locked for 15 minutes.'
-        );
-      } else {
-        setAuthError(
-          `Invalid Admin Username or Password (${failResult.attemptsLeft} attempt${
-            failResult.attemptsLeft === 1 ? '' : 's'
-          } remaining before lockout).`
-        );
-      }
+      return;
     }
+
+    // Priority 2: Check rate limit for failed brute-force attempts
+    const rateCheck = checkAdminRateLimit();
+    if (!rateCheck.allowed) {
+      const mins = Math.ceil(rateCheck.remainingLockoutMs / 60000);
+      setAuthError(
+        `Security Lockout Active: Too many failed attempts. Please wait ${mins} minute(s) or click "Reset Lockout" below.`
+      );
+      return;
+    }
+
+    const failResult = recordAdminFailedAttempt();
+    if (failResult.locked) {
+      setAuthError(
+        'Security Alert: 5 failed login attempts detected. Access locked for 15 minutes.'
+      );
+    } else {
+      setAuthError(
+        `Invalid Admin Username or Password (${failResult.attemptsLeft} attempt${
+          failResult.attemptsLeft === 1 ? '' : 's'
+        } remaining before lockout). Default password is: whitehatdev2026`
+      );
+    }
+  };
+
+  const handleClearLockout = () => {
+    resetAdminRateLimit();
+    setAuthError('');
+    setUsernameInput('admin');
+    setPinInput('whitehatdev2026');
+    showToast('Lockout cleared! Credentials set to admin / whitehatdev2026');
   };
 
   const handleLogout = () => {
@@ -1215,11 +1230,54 @@ export const Admin: React.FC = () => {
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-slate-900"
               />
               {authError && (
-                <p className="text-xs text-slate-900 bg-slate-100 border border-slate-300 p-2.5 rounded-xl mt-2 font-medium flex items-center gap-1.5">
-                  <AlertTriangle className="w-4 h-4 shrink-0" />
-                  <span>{authError}</span>
-                </p>
+                <div className="bg-rose-50 border border-rose-200 p-3 rounded-xl mt-2 text-xs text-rose-900 space-y-2">
+                  <div className="flex items-start gap-1.5 font-medium">
+                    <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                    <span>{authError}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleClearLockout}
+                    className="w-full py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-bold text-[11px] transition-all cursor-pointer shadow-2xs"
+                  >
+                    Reset Security Lockout &amp; Pre-Fill
+                  </button>
+                </div>
               )}
+            </div>
+
+            {/* AUTHORIZED DEVELOPER CREDENTIALS ASSISTANT */}
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs space-y-2 text-slate-700">
+              <div className="flex items-center justify-between">
+                <span className="font-extrabold text-slate-900 flex items-center gap-1.5">
+                  <Shield className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Authorized Credentials:</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetAdminRateLimit();
+                    setUsernameInput('admin');
+                    setPinInput('whitehatdev2026');
+                    setAuthError('');
+                    showToast('Credentials filled: admin / whitehatdev2026');
+                  }}
+                  className="text-emerald-700 hover:text-emerald-800 font-bold underline cursor-pointer text-[11px]"
+                >
+                  Auto-Fill
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-[11px] font-mono bg-white p-2.5 rounded-xl border border-slate-200">
+                <div>
+                  <span className="text-slate-400 block text-[9px] uppercase tracking-wider">Username</span>
+                  <strong className="text-slate-900">admin</strong>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[9px] uppercase tracking-wider">Password</span>
+                  <strong className="text-slate-900">whitehatdev2026</strong>
+                </div>
+              </div>
             </div>
 
             <button

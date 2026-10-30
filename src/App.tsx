@@ -55,6 +55,15 @@ export function AppContent() {
   useEffect(() => {
     setShowGumroadModal(false);
     setShowElevenLabsModal(false);
+
+    // If user navigates directly to unhashed /admin route, normalize to /#/admin
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname;
+      if (pathname.includes('/admin') && !window.location.hash.includes('admin')) {
+        const basePath = pathname.replace(/\/admin.*$/, '');
+        window.location.replace(window.location.origin + basePath + '/#/admin');
+      }
+    }
   }, []);
 
   const handleOpenConsultation = (serviceTitle?: string) => {
