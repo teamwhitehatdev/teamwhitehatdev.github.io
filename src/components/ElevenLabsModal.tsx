@@ -57,11 +57,11 @@ export const ElevenLabsModal: React.FC<ElevenLabsModalProps> = ({ isOpen, onClos
             <Mic className="w-8 h-8 animate-bounce" />
           </div>
 
-          <h3 className="text-2xl font-black font-rajdhani text-white uppercase tracking-wider">
+          <h3 className="text-2xl font-black font-rajdhani text-slate-950 uppercase tracking-wider">
             ELEVENLABS AI VOICE STUDIO
           </h3>
 
-          <p className="text-xs text-gray-300 font-sans leading-relaxed">
+          <p className="text-xs text-slate-700 font-sans leading-relaxed">
             Offer high-paying AI voiceover narration, podcast editing, and video voiceovers for international clients in 29+ languages.
           </p>
         </div>

@@ -164,11 +164,11 @@ export const AffiliateBanners: React.FC = () => {
                   </div>
                 )}
 
-                <h4 className="text-xs font-black font-rajdhani text-white uppercase leading-tight pt-1">
+                <h4 className="text-xs font-black font-rajdhani text-slate-950 uppercase leading-tight pt-1">
                   {item.title}
                 </h4>
 
-                <p className="text-[11px] text-gray-300 font-sans leading-snug">
+                <p className="text-[11px] text-slate-700 font-sans leading-snug">
                   {item.description}
                 </p>
               </div>

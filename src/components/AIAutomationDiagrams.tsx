@@ -2464,7 +2464,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           SECTION 1: THE ANIMATED REAL FULL-VIEW NETWORKING TOPOLOGY DIAGRAM
       ====================================================================== */}
       <section
-        className={`relative rounded-3xl bg-[#060813] border border-cyan-500/40 shadow-[0_0_50px_rgba(2,132,199,0.15)] p-5 sm:p-8 lg:p-9 overflow-hidden text-slate-100 transition-all ${
+        className={`relative rounded-3xl bg-white border-2 border-slate-200 shadow-sm p-5 sm:p-8 lg:p-9 overflow-hidden text-slate-900 transition-all ${
           isExpanded ? 'fixed inset-3 z-50 overflow-y-auto' : ''
         }`}
       >
@@ -2482,9 +2482,9 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
         {/* TOP HUD RETICLE & PROMINENT HIGHLIGHTED HEADLINE */}
-        <div className="relative z-10 space-y-4 pb-6 border-b border-slate-800">
+        <div className="relative z-10 space-y-4 pb-6 border-b border-slate-200">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/90 border border-cyan-400 text-cyan-300 text-xs font-mono font-bold tracking-wider uppercase shadow-[0_0_15px_rgba(56,189,248,0.25)]">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-100 border border-cyan-400 text-slate-950 text-xs font-mono font-bold tracking-wider uppercase shadow-xs">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
@@ -2529,21 +2529,21 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
         </div>
 
         {/* TOPOLOGY TITLE BAR IN FULL VIEW (NO SPLIT DIVISIONS) */}
-        <div className="relative z-10 my-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-900/90 border border-slate-700 text-xs font-mono shadow-xs">
+        <div className="relative z-10 my-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-white border-2 border-slate-300 text-xs font-mono shadow-xs text-slate-900">
           <div className="flex items-center gap-2.5">
             <Server className="w-4 h-4 text-cyan-400 shrink-0" />
-            <span className="text-white font-extrabold text-sm tracking-wide">
+            <span className="text-slate-950 font-black text-sm sm:text-base tracking-wide">
               {activeBlueprint.networkTopologyTitle}
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-3 text-[11px]">
-            <span className="text-emerald-400 font-bold flex items-center gap-1">
+            <span className="text-emerald-700 font-bold flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               UPTIME 99.98%
             </span>
-            <span className="text-cyan-300 font-bold">P99 LATENCY: ~14ms</span>
-            <span className="text-purple-300 font-bold">ENCRYPTION: TLS 1.3 / AES-256</span>
-            <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-bold">
+            <span className="text-slate-900 font-bold">P99 LATENCY: ~14ms</span>
+            <span className="text-slate-900 font-bold">ENCRYPTION: TLS 1.3 / AES-256</span>
+            <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white font-bold text-[10px]">
               DRAG NODES TO REPOSITION
             </span>
           </div>
@@ -2551,9 +2551,9 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
 
         {/* CATEGORY WORKFLOW SELECTOR TABS (DYNAMIC HIGH-DEMAND AUTOMATION NICHES) */}
         <div className="relative z-10 my-5 space-y-2">
-          <div className="text-[11px] font-mono text-cyan-300 uppercase tracking-wider flex items-center gap-2 font-bold">
-            <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Select AI Automation Category &bull; Instant Topology Switching ({WORKFLOW_BLUEPRINTS.length} Workflows):</span>
+          <div className="text-xs font-mono text-slate-950 uppercase tracking-wider flex items-center gap-2 font-black pb-1">
+            <Sliders className="w-4 h-4 text-slate-900" />
+            <span className="text-slate-950 font-black">Select AI Automation Category &bull; Instant Topology Switching ({WORKFLOW_BLUEPRINTS.length} Workflows):</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
@@ -2568,8 +2568,8 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                   }}
                   className={`text-left p-3 rounded-xl border transition-all flex flex-col justify-between gap-1.5 cursor-pointer relative overflow-hidden ${
                     isSelected
-                      ? 'bg-cyan-950/95 border-cyan-400 text-white shadow-[0_0_20px_rgba(56,189,248,0.3)] ring-1 ring-cyan-400'
-                      : 'bg-slate-900/80 border-slate-800 text-slate-300 hover:border-slate-600 hover:bg-slate-900'
+                      ? 'bg-slate-900 border-2 border-slate-900 text-white shadow-md ring-2 ring-cyan-400'
+                      : 'bg-white border-2 border-slate-200 text-slate-950 hover:border-slate-400 hover:bg-slate-50 shadow-2xs'
                   }`}
                 >
                   {matchesSearch && query && (
@@ -2578,12 +2578,12 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                     </span>
                   )}
                   <div className="flex items-center justify-between text-[10px] font-mono font-bold">
-                    <span className={isSelected ? 'text-cyan-300' : 'text-slate-400'}>
+                    <span className={isSelected ? 'text-cyan-300 font-bold' : 'text-slate-600 font-bold'}>
                       TOPOLOGY 0{idx + 1}
                     </span>
                     <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-cyan-400 animate-ping' : 'bg-slate-700'}`} />
                   </div>
-                  <div className="font-bold text-xs leading-snug line-clamp-2">{bp.categoryLabel}</div>
+                  <div className={`font-black text-xs leading-snug line-clamp-2 ${isSelected ? 'text-white' : 'text-slate-950'}`}>{bp.categoryLabel}</div>
                 </button>
               );
             })}
@@ -2716,56 +2716,56 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
         {/* 5-NODE WELL-DETAILED BOXES (ALL SPECIFICATIONS DIRECTLY DISPLAYED) */}
         <div className="relative z-10 my-6 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono text-cyan-300 uppercase tracking-wider flex items-center gap-1.5 font-bold">
-              <Code2 className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Node Architecture &amp; Execution Specifications (Node by Node):</span>
+            <span className="text-xs font-mono text-slate-950 uppercase tracking-wider flex items-center gap-1.5 font-black">
+              <Code2 className="w-4 h-4 text-slate-900" />
+              <span className="text-slate-950 font-black">Node Architecture &amp; Execution Specifications (Node by Node):</span>
             </span>
-            <span className="text-[11px] text-cyan-300 font-mono">
+            <span className="text-xs text-slate-900 font-bold font-mono">
               Active Focus: Node {selectedNode.step} &bull; {selectedNode.title}
             </span>
           </div>
 
           {/* EXPANDABLE MULTI-SOURCE INGESTION STREAM SPECIFICATION (OPTIONAL TO SHOW) */}
-          <div className="rounded-2xl border border-cyan-500/40 bg-slate-900/95 p-4 space-y-3">
+          <div className="rounded-2xl border-2 border-slate-300 bg-white p-4 space-y-3 shadow-xs text-slate-900">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs sm:text-sm font-mono font-black text-slate-950 uppercase tracking-wider">
                   Autonomous Inbound Lead Capture &amp; Sanitization (Multi-Source AI Lead Ingestion Stream)
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-900 border border-slate-300 font-bold">
                   {isInboundIngestionExpanded ? 'EXPANDED VIEW' : 'CLICK TO EXPAND'}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setIsInboundIngestionExpanded(!isInboundIngestionExpanded)}
-                className="px-3 py-1.5 rounded-xl bg-cyan-950 hover:bg-cyan-900 text-cyan-300 hover:text-white text-xs font-mono font-bold border border-cyan-500/40 flex items-center gap-1.5 cursor-pointer transition-all shrink-0"
+                className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-bold border border-slate-900 flex items-center gap-1.5 cursor-pointer transition-all shrink-0 shadow-xs"
               >
                 <span>{isInboundIngestionExpanded ? '[-] Collapse Ingestion Stream' : '[+] Expand Multi-Source Ingestion Stream'}</span>
               </button>
             </div>
 
             {isInboundIngestionExpanded && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-slate-800 text-xs font-mono">
-                <div className="p-3 rounded-xl bg-black/70 border border-slate-800 space-y-1">
-                  <div className="text-cyan-400 font-bold text-[11px]">Stream 01: High-Speed Webhook Ingress</div>
-                  <div className="text-slate-400 text-[10px]">Endpoint: /v1/leads/stream (TLS 1.3)</div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-slate-200 text-xs font-mono">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="text-slate-950 font-black text-xs">Stream 01: High-Speed Webhook Ingress</div>
+                  <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/stream (TLS 1.3)</div>
+                  <p className="text-slate-800 text-xs leading-relaxed font-medium">
                     Captures submissions from Typeform, Webflow, and custom landing page forms in ~12ms with cryptographic payload signature verification.
                   </p>
                 </div>
-                <div className="p-3 rounded-xl bg-black/70 border border-slate-800 space-y-1">
-                  <div className="text-emerald-400 font-bold text-[11px]">Stream 02: Calendly Meeting Ingress</div>
-                  <div className="text-slate-400 text-[10px]">Endpoint: /v1/leads/calendly (OAuth2)</div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="text-slate-950 font-black text-xs">Stream 02: Calendly Meeting Ingress</div>
+                  <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/calendly (OAuth2)</div>
+                  <p className="text-slate-800 text-xs leading-relaxed font-medium">
                     Streams newly scheduled discovery calls, auto-normalizes invitee contact data, and triggers firmographic enrichment pre-call.
                   </p>
                 </div>
-                <div className="p-3 rounded-xl bg-black/70 border border-slate-800 space-y-1">
-                  <div className="text-purple-400 font-bold text-[11px]">Stream 03: LinkedIn Lead Gen Ads</div>
-                  <div className="text-slate-400 text-[10px]">Endpoint: /v1/leads/linkedin (Webhooks API)</div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="text-slate-950 font-black text-xs">Stream 03: LinkedIn Lead Gen Ads</div>
+                  <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/linkedin (Webhooks API)</div>
+                  <p className="text-slate-800 text-xs leading-relaxed font-medium">
                     Instant lead ingestion from sponsored LinkedIn Lead Gen ad forms, resolving company size, verified work emails, and seniority.
                   </p>
                 </div>
@@ -2782,10 +2782,10 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                 <div
                   key={node.step}
                   onClick={() => setSelectedNodeIndex(index)}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden ${
+                  className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden shadow-xs ${
                     isSelected || isActiveStep
-                      ? 'bg-slate-900 border-cyan-400 shadow-[0_0_24px_rgba(56,189,248,0.35)] ring-1 ring-cyan-400'
-                      : 'bg-slate-900/80 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                      ? 'bg-white border-cyan-500 shadow-md ring-2 ring-cyan-400 text-slate-950'
+                      : 'bg-white border-slate-200 hover:border-slate-400 hover:bg-slate-50 text-slate-950'
                   }`}
                 >
                   {(isSelected || isActiveStep) && (
@@ -2794,35 +2794,35 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-[10px] font-mono font-bold">
-                      <span className="px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300 border border-slate-700">
+                      <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-900 border border-slate-300 font-bold">
                         NODE {node.step}
                       </span>
-                      <span className="px-2 py-0.5 rounded-full bg-slate-950 text-slate-300 border border-slate-800 uppercase">
+                      <span className="px-2 py-0.5 rounded-full bg-slate-900 text-white font-bold uppercase">
                         {node.type}
                       </span>
                     </div>
 
-                    <h4 className="font-extrabold text-sm text-white leading-snug line-clamp-1">
+                    <h4 className="font-black text-sm text-slate-950 leading-snug line-clamp-1">
                       {node.title}
                     </h4>
 
-                    <div className="text-xs font-semibold text-cyan-400 flex items-center justify-between">
+                    <div className="text-xs font-bold text-slate-900 flex items-center justify-between">
                       <span className="truncate">{node.tool}</span>
-                      <span className="text-[10px] font-mono text-slate-400 shrink-0">:{node.port}</span>
+                      <span className="text-[10px] font-mono text-slate-600 font-bold shrink-0">:{node.port}</span>
                     </div>
 
-                    <p className="text-[11px] text-slate-300 leading-relaxed line-clamp-2">
+                    <p className="text-[11px] text-slate-700 font-medium leading-relaxed line-clamp-2">
                       {node.description}
                     </p>
                   </div>
 
                   {/* INLINE NETWORK SPECIFICATION */}
-                  <div className="space-y-1.5 pt-2 border-t border-slate-800/80 font-mono text-[10px]">
-                    <div className="text-slate-400 flex items-center justify-between">
+                  <div className="space-y-1.5 pt-2 border-t border-slate-200 font-mono text-[10px]">
+                    <div className="text-slate-600 font-bold flex items-center justify-between">
                       <span>{node.protocolBadge}</span>
-                      <span className="text-emerald-400 font-bold">{node.latency}</span>
+                      <span className="text-emerald-700 font-bold">{node.latency}</span>
                     </div>
-                    <div className="p-2 rounded-lg bg-black/50 border border-slate-800/80 text-slate-300 text-[10px] truncate">
+                    <div className="p-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-900 font-bold text-[10px] truncate">
                       IP: {node.ipAddress} &bull; SLA {node.statusUptime}
                     </div>
                   </div>
@@ -2833,25 +2833,25 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
         </div>
 
         {/* 🔍 DIRECT INLINE SPECIFICATION INSPECTOR (NO POPUP MODALS) */}
-        <div className="relative z-10 bg-slate-950 border border-slate-800 rounded-2xl p-5 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+        <div className="relative z-10 bg-white border-2 border-slate-300 rounded-2xl p-5 space-y-4 shadow-xs text-slate-900">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-1 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold">
+              <span className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-900 border border-slate-300 text-xs font-mono font-bold">
                 NODE {selectedNode.step} &bull; {selectedNode.type}
               </span>
-              <h3 className="text-base sm:text-lg font-extrabold text-white">
+              <h3 className="text-base sm:text-lg font-black text-slate-950">
                 {selectedNode.title} ({selectedNode.tool})
               </h3>
             </div>
             <div className="flex items-center gap-3 text-xs font-mono">
-              <span className="text-slate-400">Endpoint: <strong className="text-cyan-300">{selectedNode.detailedSpecs.endpoint}</strong></span>
-              <span className="text-emerald-400 font-bold">Latency: {selectedNode.latency}</span>
+              <span className="text-slate-600 font-medium">Endpoint: <strong className="text-slate-950 font-bold">{selectedNode.detailedSpecs.endpoint}</strong></span>
+              <span className="text-emerald-700 font-bold">Latency: {selectedNode.latency}</span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs font-mono">
             <div className="space-y-1.5">
-              <span className="text-[11px] text-slate-400 uppercase tracking-wider block font-bold">
+              <span className="text-[11px] text-slate-950 uppercase tracking-wider block font-black">
                 Input Schema Payload Stream:
               </span>
               <pre className="bg-black/90 border border-slate-800 text-cyan-200 p-3 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap max-h-36">
@@ -2860,7 +2860,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
             </div>
 
             <div className="space-y-1.5">
-              <span className="text-[11px] text-slate-400 uppercase tracking-wider block font-bold">
+              <span className="text-[11px] text-slate-950 uppercase tracking-wider block font-black">
                 Output Return Payload:
               </span>
               <pre className="bg-black/90 border border-slate-800 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap max-h-36">
@@ -2869,26 +2869,26 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
-            <div className="text-slate-300">
-              <span className="text-slate-400 font-bold">Retry Policy: </span>
+          <div className="p-3 rounded-xl bg-slate-100 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
+            <div className="text-slate-800 font-medium">
+              <span className="text-slate-950 font-bold">Retry Policy: </span>
               {selectedNode.detailedSpecs.retryPolicy}
             </div>
-            <div className="text-amber-300 shrink-0 font-bold">
+            <div className="text-amber-800 shrink-0 font-bold">
               Fallback: {selectedNode.detailedSpecs.fallbackAction}
             </div>
           </div>
         </div>
 
         {/* PRODUCTION TELEMETRY & REAL-TIME EVENT DISPATCH CONSOLE */}
-        <div className="relative z-10 my-6 bg-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
+        <div className="relative z-10 my-6 bg-white border-2 border-slate-300 rounded-2xl p-4 sm:p-5 space-y-4 shadow-xs text-slate-900">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-cyan-400" />
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+              <Terminal className="w-4 h-4 text-slate-900" />
+              <span className="text-xs sm:text-sm font-mono font-black uppercase tracking-wider text-slate-950">
                 Production Telemetry &bull; Real-Time Event Dispatch Console
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-mono font-bold">
                 {isSimulating ? 'DISPATCHING LIVE EVENTS' : activeSimStep > 0 ? 'PIPELINE EXECUTED (200 OK)' : 'STANDBY (PORT 443)'}
               </span>
             </div>
@@ -2959,15 +2959,15 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
         {/* SUGGESTED MASTER PROMPTS & PROMPT ENGINEERING BLUEPRINT */}
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-5 pt-4">
           {/* Left: AI Prompt & JSON Output */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div className="bg-white border-2 border-slate-300 rounded-2xl p-5 space-y-4 shadow-xs text-slate-900">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-                <Bot className="w-4 h-4 text-cyan-400" />
+              <span className="text-xs sm:text-sm font-mono font-black uppercase tracking-wider text-slate-950 flex items-center gap-1.5">
+                <Bot className="w-4 h-4 text-slate-900" />
                 <span>Suggested Master Prompts &amp; Prompt Engineering Architecture</span>
               </span>
               <button
                 onClick={() => handleCopy(activeBlueprint.aiPromptSample, `prompt-${activeBlueprint.id}`)}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-300 hover:text-white bg-cyan-950/70 px-2.5 py-1 rounded-lg border border-cyan-500/40 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 text-xs font-bold text-slate-900 hover:bg-slate-200 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-300 transition-colors cursor-pointer"
               >
                 {copiedId === `prompt-${activeBlueprint.id}` ? (
                   <>
@@ -2988,7 +2988,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
             </pre>
 
             <div className="space-y-1.5">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+              <span className="text-[11px] font-mono font-black uppercase tracking-wider text-slate-900 block">
                 Structured JSON Returned to Make.com / n8n Router:
               </span>
               <pre className="bg-black/80 border border-slate-800 text-emerald-300/90 p-3.5 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
@@ -2998,11 +2998,11 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           </div>
 
           {/* Right: How to Build It Step-by-Step */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+          <div className="bg-white border-2 border-slate-300 rounded-2xl p-5 flex flex-col justify-between space-y-4 shadow-xs text-slate-900">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs sm:text-sm font-mono font-black uppercase tracking-wider text-slate-950 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   <span>Step-by-Step Implementation Guide (Zero Coding Required)</span>
                 </span>
               </div>
@@ -3011,9 +3011,9 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                 {activeBlueprint.implementationSteps.map((step, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-3 p-3 rounded-xl bg-slate-950/70 border border-slate-800 text-xs sm:text-sm text-slate-300 leading-relaxed"
+                    className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium"
                   >
-                    <span className="w-6 h-6 rounded-full bg-cyan-500 text-slate-950 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-6 h-6 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                       {i + 1}
                     </span>
                     <span>{step}</span>
@@ -3022,12 +3022,12 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
               </ol>
             </div>
 
-            <div className="p-4 rounded-xl bg-cyan-950/40 border border-cyan-500/30 space-y-2">
-              <div className="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wide flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="p-4 rounded-xl bg-slate-100 border border-slate-300 space-y-2 text-slate-900">
+              <div className="text-xs font-mono font-black text-slate-950 uppercase tracking-wide flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-slate-900" />
                 <span>Pro Tip for Aspiring Virtual Assistants &amp; Freelancers:</span>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-slate-800 leading-relaxed font-medium">
                 Build this exact workflow in a free Make.com or n8n account, record a 90-second Loom video walking through how the nodes connect, and attach that link to your Upwork / OnlineJobs.ph proposals. Clients hire VAs who demonstrate real working systems!
               </p>
             </div>

@@ -109,7 +109,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mx-auto">
                 <Lock className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl font-bold font-rajdhani text-white uppercase tracking-wider">
+              <h2 className="text-2xl font-bold font-rajdhani text-slate-950 uppercase tracking-wider">
                 {isLogin ? 'ACCOUNT LOGIN' : 'REAL USER REGISTRATION'}
               </h2>
               <p className="text-xs text-gray-400 font-mono">
@@ -196,7 +196,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             <div className="w-12 h-12 rounded-xl bg-lime-500/10 border border-lime-500/30 text-lime-400 flex items-center justify-center mx-auto">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold font-rajdhani text-white uppercase">EMAIL SECURITY OTP DISPATCH</h2>
+            <h2 className="text-xl font-bold font-rajdhani text-slate-950 uppercase">EMAIL SECURITY OTP DISPATCH</h2>
             <p className="text-xs text-gray-400 font-mono">
               We sent a 6-digit security code to <span className="text-lime-400 font-bold">{email}</span>.
             </p>
@@ -229,7 +229,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         {step === 'success' && (
           <div className="space-y-4 text-center py-6">
             <CheckCircle2 className="w-16 h-16 text-lime-400 mx-auto animate-bounce" />
-            <h2 className="text-2xl font-bold font-rajdhani text-white uppercase">REGISTRATION VERIFIED</h2>
+            <h2 className="text-2xl font-bold font-rajdhani text-slate-950 uppercase">REGISTRATION VERIFIED</h2>
             <p className="text-xs text-gray-400 font-mono">Your account has been registered and verified in our database.</p>
           </div>
         )}

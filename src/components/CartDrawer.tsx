@@ -80,7 +80,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, cart, o
           <div className="flex items-center justify-between pb-4 border-b border-gray-800">
             <div className="flex items-center space-x-2">
               <ShoppingBag className="w-5 h-5 text-cyan-400" />
-              <h2 className="text-lg font-bold font-rajdhani text-white uppercase">YOUR SHOPPING CART ({cart.length})</h2>
+              <h2 className="text-lg font-bold font-rajdhani text-slate-950 uppercase">YOUR SHOPPING CART ({cart.length})</h2>
             </div>
             <button onClick={onClose} className="text-gray-400 hover:text-white p-1">
               <X className="w-5 h-5" />
@@ -97,7 +97,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, cart, o
               {cart.map((item, idx) => (
                 <div key={idx} className="flex items-center justify-between p-3 bg-black/40 border border-gray-800 rounded-lg">
                   <div>
-                    <h4 className="text-sm font-bold text-white font-rajdhani">{item.title}</h4>
+                    <h4 className="text-sm font-bold text-slate-950 font-rajdhani">{item.title}</h4>
                     <p className="text-xs text-cyan-400 font-mono">${item.price?.toFixed(2)} USD</p>
                   </div>
                   <button onClick={() => onRemove(idx)} className="text-red-400 hover:text-red-300 p-1">

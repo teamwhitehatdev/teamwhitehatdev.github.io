@@ -12,10 +12,10 @@ export const Gallery: React.FC = () => {
   return (
     <div className="space-y-12 max-w-6xl mx-auto px-4 py-6">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl md:text-5xl font-black font-rajdhani uppercase text-white tracking-wider">
+        <h1 className="text-4xl md:text-5xl font-black font-rajdhani uppercase text-slate-950 tracking-wider">
           CYBER GALLERY & CONCEPT SHOWCASE
         </h1>
-        <p className="text-sm text-gray-400 font-mono max-w-2xl mx-auto">
+        <p className="text-sm text-slate-600 font-medium font-mono max-w-2xl mx-auto">
           High-resolution 3D renders, vector HUD layouts, and futuristic user interface concepts built for modern digital brands.
         </p>
       </div>
@@ -27,8 +27,8 @@ export const Gallery: React.FC = () => {
               <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-lg border border-gray-800" />
               <div className="space-y-1">
                 <span className="text-[10px] font-mono text-cyan-400 uppercase">{item.category}</span>
-                <h3 className="text-base font-bold text-white font-rajdhani">{item.title}</h3>
-                <p className="text-xs text-gray-400 font-mono">{item.description}</p>
+                <h3 className="text-base font-bold text-slate-950 font-rajdhani">{item.title}</h3>
+                <p className="text-xs text-slate-600 font-mono">{item.description}</p>
               </div>
             </div>
           ))}

@@ -62,10 +62,10 @@ export const Contact: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-mono">
       {/* Header */}
       <div className="text-center space-y-3">
-        <h1 className="font-orbitron font-black text-3xl sm:text-4xl text-white">
+        <h1 className="font-orbitron font-black text-3xl sm:text-4xl text-slate-950">
           CONTACT & HIRE <span className="neon-text-primary">TERMINAL</span>
         </h1>
-        <p className="text-xs text-gray-400 max-w-2xl mx-auto">
+        <p className="text-xs text-slate-600 font-medium max-w-2xl mx-auto">
           Targeting worldwide clients. Reach out for custom web development, Google Play Store app engineering, virtual assistant services, or security audits.
         </p>
       </div>
@@ -96,8 +96,8 @@ export const Contact: React.FC = () => {
           {submitted ? (
             <div className="text-center py-12 space-y-3">
               <div className="text-3xl text-green-400">✓</div>
-              <h3 className="font-orbitron font-bold text-lg text-white">MESSAGE TRANSMITTED!</h3>
-              <p className="text-xs text-gray-300">Thank you, {formData.name}. Our developer team will respond within 2-4 hours.</p>
+              <h3 className="font-orbitron font-bold text-lg text-slate-950">MESSAGE TRANSMITTED!</h3>
+              <p className="text-xs text-slate-700 font-medium">Thank you, {formData.name}. Our developer team will respond within 2-4 hours.</p>
               <button 
                 onClick={() => setSubmitted(false)}
                 className="px-4 py-2 rounded bg-[var(--primary-color)] text-black font-bold text-xs"
