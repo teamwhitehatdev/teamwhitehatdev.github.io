@@ -34,8 +34,14 @@ import {
   Radio,
   GripHorizontal,
   Move,
-  RefreshCw
+  RefreshCw,
+  Compass,
+  Rocket,
+  Target,
+  Lightbulb,
+  CheckSquare
 } from 'lucide-react';
+import { WORKFLOW_STRATEGY_DATA } from '../data/workflowStrategyData';
 
 const MESHY_REFERRAL_URL =
   'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends';
@@ -2262,6 +2268,14 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
 
   const selectedNode = activeBlueprint.nodes[selectedNodeIndex] || activeBlueprint.nodes[0];
 
+  const activeStrategy = useMemo(() => {
+    return (
+      WORKFLOW_STRATEGY_DATA[activeBlueprint.id] ||
+      WORKFLOW_STRATEGY_DATA[activeBlueprint.categoryKey] ||
+      WORKFLOW_STRATEGY_DATA['lead-triage']
+    );
+  }, [activeBlueprint.id, activeBlueprint.categoryKey]);
+
   // Reset positions to default when blueprint changes
   useEffect(() => {
     setNodePositions(DEFAULT_NODE_POSITIONS);
@@ -2611,6 +2625,398 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
         <div className="relative z-10 pt-3 flex flex-wrap items-center justify-between text-xs text-slate-600 font-mono">
           <span>💡 Tip: Drag any node box on the canvas to customize your interactive workflow layout.</span>
           <span className="text-slate-900 font-bold">Active Focus: Node {selectedNode.step} • {selectedNode.title}</span>
+        </div>
+
+        {/* ===============================================================
+            SUBSECTION A: INTERACTIVE NODE ARCHITECTURE & LIVE TELEMETRY INSPECTOR
+        =============================================================== */}
+        <div className="relative z-10 mt-6 pt-6 border-t-2 border-slate-200">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-300 text-slate-900 text-xs font-mono font-bold">
+                <Cpu className="w-3.5 h-3.5 text-cyan-600" />
+                <span>INTERACTIVE NODE TELEMETRY & SPECIFICATION INSPECTOR</span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-slate-950 mt-1">
+                Node {selectedNode.step} Architecture: {selectedNode.title}
+              </h3>
+            </div>
+
+            {/* Quick Node Selector Pills */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              {activeBlueprint.nodes.map((node, i) => (
+                <button
+                  key={node.step}
+                  onClick={() => setSelectedNodeIndex(i)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    selectedNodeIndex === i
+                      ? 'bg-slate-900 text-cyan-300 border border-slate-900 shadow-sm'
+                      : 'bg-white hover:bg-slate-100 text-slate-800 border border-slate-300'
+                  }`}
+                  title={`Focus Node ${node.step}: ${node.title}`}
+                >
+                  <span className={`w-2 h-2 rounded-full ${selectedNodeIndex === i ? 'bg-cyan-400 animate-pulse' : 'bg-slate-400'}`} />
+                  <span>Node {node.step}</span>
+                  <span className="hidden sm:inline text-[10px] opacity-75">({node.type})</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Node Specification & Payload Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            {/* Left: Execution Specs Card (5 cols) */}
+            <div className="lg:col-span-5 rounded-2xl bg-slate-50 border-2 border-slate-200 p-4.5 space-y-3 shadow-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded bg-cyan-100 text-cyan-900 border border-cyan-300 text-[11px] font-mono font-bold">
+                    STEP {selectedNode.step}
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-mono font-bold">
+                    {selectedNode.type}
+                  </span>
+                </div>
+                <span className="text-emerald-700 font-mono text-xs font-bold flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  UPTIME {selectedNode.statusUptime}
+                </span>
+              </div>
+
+              <div className="space-y-2 text-xs">
+                <div>
+                  <span className="text-[11px] font-mono text-slate-500 font-bold uppercase tracking-wider block">Target Service / Tool</span>
+                  <span className="text-slate-950 font-black text-sm">{selectedNode.tool}</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <div>
+                    <span className="text-[10px] font-mono text-slate-500 font-bold uppercase block">Endpoint / Virtual IP</span>
+                    <span className="text-slate-900 font-mono font-bold text-xs">{selectedNode.ipAddress}:{selectedNode.port}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-slate-500 font-bold uppercase block">Target Latency / SLA</span>
+                    <span className="text-cyan-700 font-mono font-bold text-xs">{selectedNode.latency}</span>
+                  </div>
+                </div>
+
+                <div className="pt-1">
+                  <span className="text-[10px] font-mono text-slate-500 font-bold uppercase block">Protocol Gateway</span>
+                  <span className="text-slate-800 font-semibold">{selectedNode.protocolBadge}</span>
+                </div>
+
+                <div className="pt-1">
+                  <span className="text-[10px] font-mono text-slate-500 font-bold uppercase block">Node Processing Logic</span>
+                  <p className="text-slate-800 font-medium leading-relaxed mt-0.5 bg-white p-2.5 rounded-xl border border-slate-200">
+                    {selectedNode.processingLogic}
+                  </p>
+                </div>
+
+                {selectedNode.detailedSpecs && (
+                  <div className="pt-2 border-t border-slate-200 space-y-1.5 text-[11px] font-mono">
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-slate-500 font-bold">Protocol:</span>
+                      <span className="text-slate-900 text-right font-medium">{selectedNode.detailedSpecs.protocol}</span>
+                    </div>
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-slate-500 font-bold">Endpoint:</span>
+                      <span className="text-slate-900 text-right truncate max-w-[210px] font-medium" title={selectedNode.detailedSpecs.endpoint}>
+                        {selectedNode.detailedSpecs.endpoint}
+                      </span>
+                    </div>
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-slate-500 font-bold">Retry Policy:</span>
+                      <span className="text-slate-900 text-right font-medium">{selectedNode.detailedSpecs.retryPolicy}</span>
+                    </div>
+                    {selectedNode.detailedSpecs.fallbackAction && (
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="text-slate-500 font-bold">Fallback:</span>
+                        <span className="text-amber-800 text-right font-medium">{selectedNode.detailedSpecs.fallbackAction}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right: Input & Output Payload Previews (7 cols) */}
+            <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {/* Inbound Payload */}
+              <div className="rounded-2xl bg-white border-2 border-slate-200 p-3.5 flex flex-col justify-between shadow-xs">
+                <div>
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200 mb-2">
+                    <span className="text-xs font-mono font-bold text-slate-950 flex items-center gap-1.5">
+                      <ArrowRight className="w-3.5 h-3.5 text-cyan-600" />
+                      <span>Inbound Stream Payload</span>
+                    </span>
+                    <button
+                      onClick={() => handleCopy(selectedNode.inputPayload, `in-${selectedNode.step}`)}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded border border-slate-300 transition-colors cursor-pointer"
+                    >
+                      {copiedId === `in-${selectedNode.step}` ? (
+                        <>
+                          <Check className="w-3 h-3 text-emerald-600" />
+                          <span>Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <pre className="bg-slate-950 text-cyan-300 p-3 rounded-xl text-[11px] font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-[220px]">
+                    {selectedNode.inputPayload}
+                  </pre>
+                </div>
+                <span className="text-[10px] font-mono text-slate-500 mt-2 block">
+                  Raw payload passed from previous node conduit
+                </span>
+              </div>
+
+              {/* Transformed Output Payload */}
+              <div className="rounded-2xl bg-white border-2 border-slate-200 p-3.5 flex flex-col justify-between shadow-xs">
+                <div>
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200 mb-2">
+                    <span className="text-xs font-mono font-bold text-slate-950 flex items-center gap-1.5">
+                      <Zap className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Transformed Output Payload</span>
+                    </span>
+                    <button
+                      onClick={() => handleCopy(selectedNode.outputPayload, `out-${selectedNode.step}`)}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded border border-slate-300 transition-colors cursor-pointer"
+                    >
+                      {copiedId === `out-${selectedNode.step}` ? (
+                        <>
+                          <Check className="w-3 h-3 text-emerald-600" />
+                          <span>Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <pre className="bg-slate-950 text-emerald-300 p-3 rounded-xl text-[11px] font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-[220px]">
+                    {selectedNode.outputPayload}
+                  </pre>
+                </div>
+                <span className="text-[10px] font-mono text-slate-500 mt-2 block">
+                  Normalized payload emitted to downstream subscribers
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ===============================================================
+            SUBSECTION B: SUGGESTED 3-PHASE IMPLEMENTATION PLAN & PROGRESSION ROADMAP
+        =============================================================== */}
+        <div className="relative z-10 mt-8 pt-6 border-t-2 border-slate-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-100 border border-cyan-300 text-slate-950 text-xs font-mono font-bold">
+              <Compass className="w-3.5 h-3.5 text-cyan-700" />
+              <span>SUGGESTED 3-PHASE IMPLEMENTATION PLAN & PROGRESSION ROADMAP</span>
+            </div>
+            <div className="text-xs font-mono font-bold text-slate-700">
+              ESTIMATED ROLLOUT: <span className="text-cyan-700">1 TO 2 BUSINESS DAYS</span>
+            </div>
+          </div>
+
+          <h3 className="text-base sm:text-xl font-black text-slate-950">
+            {activeStrategy.planTitle}
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1 leading-relaxed max-w-4xl">
+            {activeStrategy.planOverview}
+          </p>
+
+          {/* 3-Phase Interactive Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+            {activeStrategy.phases.map((phase) => (
+              <div
+                key={phase.phase}
+                className="rounded-2xl bg-white border-2 border-slate-300 hover:border-cyan-500 transition-all p-5 shadow-xs flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between pb-2.5 border-b border-slate-200 mb-3">
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 text-cyan-300 text-xs font-mono font-black tracking-wider">
+                      {phase.phase}
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-800 text-[11px] font-mono font-bold">
+                      {phase.duration}
+                    </span>
+                  </div>
+
+                  <h4 className="text-sm font-black text-slate-950 group-hover:text-cyan-800 transition-colors">
+                    {phase.name}
+                  </h4>
+
+                  <p className="text-xs text-slate-700 font-medium leading-relaxed mt-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    {phase.objective}
+                  </p>
+
+                  <div className="mt-3.5 space-y-2">
+                    <span className="text-[11px] font-mono text-slate-500 font-bold uppercase tracking-wider block">
+                      Key Milestone Tasks:
+                    </span>
+                    {phase.tasks.map((task, tidx) => (
+                      <div key={tidx} className="flex items-start gap-2 text-xs text-slate-800 font-medium leading-relaxed">
+                        <CheckSquare className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>{task}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                  <span>Deliverable</span>
+                  <span className="text-emerald-700 font-bold">Verified & Tested</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ===============================================================
+            SUBSECTION C: RECOMMENDED WEBSITES & PRODUCTION TOOLKITS
+        =============================================================== */}
+        <div className="relative z-10 mt-8 pt-6 border-t-2 border-slate-200">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-300 text-slate-950 text-xs font-mono font-bold mb-3">
+            <Globe className="w-3.5 h-3.5 text-cyan-600" />
+            <span>RECOMMENDED WEBSITES & PRODUCTION TOOLKITS</span>
+          </div>
+
+          <h3 className="text-base sm:text-lg font-black text-slate-950">
+            Recommended Websites & Platforms to Deploy This Automation
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1 leading-relaxed">
+            Direct links to the official orchestration portals, model APIs, and vector databases used in this architecture:
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mt-4">
+            {activeStrategy.recommendedWebsites.map((site) => (
+              <a
+                key={site.name}
+                href={site.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-4 rounded-2xl bg-white border-2 border-slate-300 hover:border-cyan-500 hover:shadow-md transition-all flex flex-col justify-between group cursor-pointer"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-black text-slate-950 group-hover:text-cyan-700 transition-colors flex items-center gap-1.5">
+                      <span>{site.name}</span>
+                    </span>
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-cyan-600 transition-colors" />
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                    <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-mono font-bold">
+                      {site.category}
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 text-[10px] font-mono font-bold">
+                      {site.role}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-700 font-medium leading-relaxed mt-2">
+                    {site.description}
+                  </p>
+                </div>
+
+                <div className="mt-3.5 pt-2.5 border-t border-slate-200 flex items-center justify-between text-xs font-bold text-cyan-700 group-hover:underline">
+                  <span>Open Platform</span>
+                  <span>→</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* ===============================================================
+            SUBSECTION D: ARCHITECTURAL PRO TIPS & SECRET STRATEGIES
+        =============================================================== */}
+        <div className="relative z-10 mt-8 pt-6 border-t-2 border-slate-200">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-950 text-xs font-mono font-bold mb-3">
+            <Lightbulb className="w-3.5 h-3.5 text-amber-700" />
+            <span>ARCHITECTURAL PRO TIPS & HIGH-IMPACT IMPLEMENTATION STRATEGIES</span>
+          </div>
+
+          <h3 className="text-base sm:text-lg font-black text-slate-950">
+            Battle-Tested Tips & Strategies for High-Conversion Automation
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1 leading-relaxed">
+            Actionable execution tactics to prevent production bottlenecks, maximize token efficiency, and scale smoothly:
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mt-4">
+            {activeStrategy.proTips.map((tip, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 text-slate-900 text-xs font-medium flex items-start gap-3 shadow-xs"
+              >
+                <div className="w-7 h-7 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 font-bold text-xs shadow-xs">
+                  {idx + 1}
+                </div>
+                <div className="flex-1 leading-relaxed text-slate-800">
+                  {tip}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ===============================================================
+            SUBSECTION E: IMPLEMENTATION PROGRESSION MILESTONES & ROI VALUE
+        =============================================================== */}
+        <div className="relative z-10 mt-8 pt-6 border-t-2 border-slate-200">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-950 text-xs font-mono font-bold mb-3">
+            <Rocket className="w-3.5 h-3.5 text-emerald-700" />
+            <span>PROGRESSION MILESTONES & BUSINESS VALUE RETURN</span>
+          </div>
+
+          <h3 className="text-base sm:text-lg font-black text-slate-950">
+            Progression Roadmap & Tangible Value Metrics
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1 leading-relaxed">
+            What you will achieve at each milestone of implementing this automation workflow:
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+            {activeStrategy.progressionMilestones.map((m, idx) => (
+              <div
+                key={idx}
+                className="p-4.5 rounded-2xl bg-white border-2 border-slate-300 hover:border-emerald-500 transition-all shadow-xs flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-200">
+                    <span className="px-2.5 py-0.5 rounded-full bg-slate-900 text-cyan-300 text-[11px] font-mono font-bold">
+                      {m.stage}
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-500 font-bold">
+                      STAGE 0{idx + 1}
+                    </span>
+                  </div>
+
+                  <span className="text-xs font-black text-slate-950 block mt-2">
+                    {m.target}
+                  </span>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-200">
+                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block mb-1">
+                    ROI Impact & Service Value
+                  </span>
+                  <div className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1.5 rounded-xl border border-emerald-200 flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>{m.roiImpact}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
