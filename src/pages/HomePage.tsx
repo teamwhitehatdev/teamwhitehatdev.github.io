@@ -22,7 +22,6 @@ import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { AdSenseSlot } from '../components/AdSenseSlot';
 import { useApp } from '../context/AppContext';
 import { ArticleModal } from '../components/ArticleModal';
-import { AIAutomationDiagrams } from '../components/AIAutomationDiagrams';
 import { CMSItem } from '../types';
 import { Link } from 'react-router-dom';
 
@@ -417,12 +416,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
       )}
 
       {/* ========================================================================= */}
-      {/* 🤖 SECTION 2: VISUAL AI AUTOMATION DIAGRAMS & FREE VA TOOLKIT             */}
-      {/* ========================================================================= */}
-      <AIAutomationDiagrams />
-
-      {/* ========================================================================= */}
-      {/* 🌟 SECTION 3: 2-COLUMN GRID: FREE TUTORIALS (LEFT 2/3) + ADS (RIGHT 1/3)  */}
+      {/* 🌟 SECTION 2: 2-COLUMN GRID: FREE TUTORIALS (LEFT 2/3) + ADS (RIGHT 1/3)  */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         {/* 📚 LEFT 2/3 COLUMN: FREE TUTORIALS, GUIDES & REVIEWS */}

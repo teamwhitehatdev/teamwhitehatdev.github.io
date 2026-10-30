@@ -832,5 +832,501 @@ Tech founders, venture capitalists, and agency CEOs are eager to build their per
     seoDescription: 'Learn how modern digital writers earn $4,000 to $18,000/mo through high-RPM blogging, affiliate reviews, paid newsletters, and executive ghostwriting.',
     createdAt: '2026-10-30T00:00:00Z',
     updatedAt: '2026-10-30T00:00:00Z'
+  },
+
+  // =========================================================================
+  // 🧠 PROMPT ENGINEERING & MASTER FULL-PROMPTS (PRODUCTION-GRADE AGENTS & TEMPLATES)
+  // =========================================================================
+  {
+    id: 'cms-prompt-frameworks-01',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Guide',
+    page: 'ai',
+    featured: true,
+    title: 'GUIDE: Prompt Engineering Masterclass — The 6 Core Architectures, RTF, CREATE & Chain-of-Thought (CoT) Frameworks',
+    category: 'PROMPT ENGINEERING & MASTER PROMPTS',
+    badge: 'MASTER PROMPT #01 • SYSTEM ARCHITECTURE',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 21,
+    summary: 'Master the foundational architectures used by elite AI engineers: Context framing, Role-Task-Format (RTF), CREATE, Chain-of-Thought (CoT), few-shot calibration, and zero-shot structured outputs.',
+    description: 'Learn the exact science of prompt engineering for Claude 3.7 Sonnet, GPT-4o, and Gemini 1.5 Pro. Understand temperature settings, system role boundaries, few-shot examples, and preventing hallucinations.',
+    fullContent: `# Prompt Engineering Masterclass: The 6 Core Architectures, RTF, CREATE & Chain-of-Thought (CoT) Frameworks
+
+Prompt engineering is not guesswork; it is **software engineering in natural language**. By treating an LLM (Large Language Model) as a probabilistic reasoning engine with explicit boundary constraints, you can eliminate hallucinations, achieve 100% deterministic JSON schemas, and command autonomous agents to execute complex enterprise workflows.
+
+---
+
+## 1. The Anatomy of a Production-Grade System Prompt
+
+Every enterprise prompt consists of **6 non-negotiable structural components**:
+
+\`\`\`markdown
+1. IDENTITY & EXPERTISE (Role Definition)
+   - Define exact persona, years of domain mastery, and psychological perspective.
+2. CONTEXT & MISSION (Operating Environment)
+   - Explain the business background, current situation, and goals of this execution.
+3. CONSTRAINTS & NEGATIVE DIRECTIVES (Safety Rails)
+   - Explicit "DO NOT" rules (e.g. no corporate buzzwords, no markdown preambles, no assuming unstated facts).
+4. REASONING PROCESS (Chain-of-Thought Protocol)
+   - Instruct the model to formulate its thoughts in <thinking>...</thinking> scratchpads before emitting final answers.
+5. FEW-SHOT BENCHMARK EXAMPLES (Calibrated Input/Output Pairs)
+   - Provide 2 to 3 gold-standard examples of ideal input -> ideal output.
+6. STRICT OUTPUT SPECIFICATION (Schema Enforcement)
+   - Define exact formatting: JSON Schema, Markdown tables, or specific character limits.
+\`\`\`
+
+---
+
+## 2. Core Prompting Frameworks: RTF vs. CREATE
+
+### A. The RTF Framework (Rapid & High-Impact)
+- **Role:** You are an elite Senior Staff Database Architect.
+- **Task:** Review the attached PostgreSQL query for index utilization and sequential scan bottlenecks.
+- **Format:** Provide your recommendations in a 3-column markdown table: [Current Query Pattern | Identified Performance Bottleneck | Optimized Query / Index DDL].
+
+### B. The CREATE Framework (Enterprise Complex Tasks)
+- **C - Character:** You are an authoritative Chief Marketing Officer specializing in B2B SaaS conversion optimization.
+- **R - Request:** Audit the headline, value proposition, and call-to-action of this landing page copy.
+- **E - Examples:** Emulate the direct, punchy brevity of Stripe, Basecamp, and Linear copy.
+- **A - Adjustments:** Speak directly to technical founders. Do not use generic buzzwords like "supercharge" or "revolutionize."
+- **T - Type of Output:** Return 3 distinct alternative variants: Variant A (Pain-point led), Variant B (Metrics led), Variant C (Feature-benefit led).
+- **E - Extras:** Include a 1-sentence psychological rationale for why each variant will increase click-through rate.
+
+---
+
+## 3. Advanced Reasoning: Chain-of-Thought (CoT) & Structured Scratchpads
+
+When solving non-trivial logic, coding, or mathematical tasks, models make significantly fewer errors when forced to reason step-by-step prior to writing the deliverable.
+
+### The Universal CoT Implementation:
+\`\`\`markdown
+Before generating the final deliverable, you MUST execute your internal reasoning inside <thinking>...</thinking> tags:
+1. Break down the user's inquiry into core requirements and implicit constraints.
+2. Identify edge cases, conflicting variables, and missing data points.
+3. Formulate your solution hypothesis and stress-test it against alternative approaches.
+4. Verify that all negative constraints (rules) are strictly respected.
+
+After closing </thinking>, emit ONLY the requested deliverable without echoing your reasoning.
+\`\`\`
+
+---
+
+## 4. Temperature & Sampling Parameter Cheat Sheet
+
+| Task Objective | Temperature | Top_P | Presence Penalty | Frequency Penalty | Best Model Choice |
+|---|---|---|---|---|---|
+| **Deterministic JSON / Code / SQL** | 0.0 – 0.2 | 0.1 | 0.0 | 0.0 | Claude 3.7 / GPT-4o (JSON Mode) |
+| **B2B Copywriting & SEO Articles** | 0.6 – 0.7 | 0.85 | 0.2 | 0.3 | Claude 3.7 Sonnet |
+| **Brainstorming & Creative Ideation** | 0.8 – 1.0 | 0.95 | 0.5 | 0.5 | GPT-4o / Gemini 1.5 Pro |
+| **Mathematical & Multi-Step Logic** | 0.1 – 0.3 | 0.2 | 0.0 | 0.0 | Claude 3.7 (with Extended Thinking) |`,
+    mainImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80',
+    url: 'https://teamwhitehatdev.github.io/#/ai',
+    buttonText: 'MASTER PROMPTING →',
+    seoTitle: 'Prompt Engineering Masterclass & Core Frameworks | Team WhiteHat Dev',
+    seoDescription: 'Master prompt engineering for AI automations: RTF, CREATE, Chain-of-Thought, few-shot calibration, and deterministic JSON schemas.',
+    createdAt: '2026-10-30T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+  {
+    id: 'cms-prompt-support-agent-02',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Guide',
+    page: 'ai',
+    featured: true,
+    title: 'FULL MASTER PROMPT: 24/7 Autonomous Customer Support & Multi-Tier Issue Resolution System Prompt',
+    category: 'PROMPT ENGINEERING & MASTER PROMPTS',
+    badge: 'MASTER PROMPT #02 • READY-TO-DEPLOY',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 22,
+    summary: 'A complete, production-ready system prompt for deploying autonomous AI support agents that handle ticket triage, policy enforcement, empathy pacing, and human escalation triggers.',
+    description: 'Copy and deploy this production-grade customer service system prompt for Zendesk, Intercom, Crisp, or custom webhook chatbots.',
+    fullContent: `# Production Master Prompt: 24/7 Autonomous Customer Support & Issue Resolution Agent
+
+Use this battle-tested system prompt inside **Make.com, n8n, OpenAI Assistants API, or LangChain** to power an autonomous customer support agent that resolves 70%+ of inbound inquiries without human intervention while safely escalating complex bugs.
+
+---
+
+## 1. Copy-Paste Master System Prompt
+
+\`\`\`markdown
+# ROLE & IDENTITY
+You are "Aura", the Senior Technical Support & Customer Experience Specialist for {COMPANY_NAME}.
+You combine the technical precision of a Systems Engineer with the warm, patient empathy of a world-class concierge.
+Your mission is to resolve customer inquiries quickly, accurately, and politely while upholding company refund and privacy policies.
+
+# COMPANY KNOWLEDGE INJECTION
+- Platform Name: {COMPANY_NAME}
+- Core Product: {PRODUCT_DESCRIPTION}
+- Support Hours: 24/7/365 AI Automated Triage with Human Escalation Mon-Fri 9AM-6PM EST.
+- Refund Policy: 100% money-back guarantee within 14 days of purchase. No refunds after 14 days without VP approval.
+- Documentation URL: {DOCS_URL}
+
+# OPERATIONAL PROTOCOL (STEP-BY-STEP)
+1. EMPATHY & INTAKE:
+   - Always acknowledge the customer's frustration immediately in 1 calm, reassuring sentence.
+   - Never say "As an AI..." or blame the user.
+2. ISSUE CLASSIFICATION:
+   - Determine category: [BILLING | ACCOUNT_ACCESS | TECHNICAL_BUG | FEATURE_REQUEST | HOW_TO]
+   - Determine severity level:
+     * P1 (CRITICAL): Complete service outage or data loss -> Trigger IMMEDIATE human paging.
+     * P2 (HIGH): Core feature failure with no workaround.
+     * P3 (MEDIUM): Non-critical bug or billing question with available workaround.
+     * P4 (LOW): General how-to questions or UI feedback.
+3. TROUBLESHOOTING & RESOLUTION:
+   - Provide numbered, easy-to-follow steps (maximum 4 steps per reply).
+   - If a known bug matches the issue, provide the official workaround immediately.
+4. HUMAN ESCALATION CRITERIA:
+   - You MUST escalate to a human tier-2 agent if:
+     a) Customer expresses extreme anger, legal threats, or mentions filing a credit card chargeback.
+     b) Issue requires database write permissions or manual API key resets.
+     c) The same issue has been unresolved after 2 consecutive AI responses.
+
+# OUTPUT FORMAT (STRICT JSON SCHEMA)
+You must ALWAYS respond with a raw JSON object matching this schema with NO markdown code fencing:
+{
+  "ticket_category": "BILLING | TECHNICAL_BUG | ACCOUNT_ACCESS | GENERAL",
+  "priority_level": "P1 | P2 | P3 | P4",
+  "sentiment": "POSITIVE | NEUTRAL | FRUSTRATED | HOSTILE",
+  "customer_reply_markdown": "The friendly, helpful message sent directly to the customer.",
+  "internal_notes_for_team": "Brief 1-sentence technical diagnosis for human agents.",
+  "requires_human_escalation": false,
+  "suggested_macro_action": "SEND_PASSWORD_RESET | ISSUE_REFUND | NONE"
+}
+\`\`\`
+
+---
+
+## 2. Real Benchmark Execution Example
+
+### Input (Customer Inbound Ticket):
+> "Hey, I was charged $49 yesterday for my subscription renewal, but I haven't used the tool in three weeks because my project ended. Can I please get my money back?"
+
+### Model Output (Deterministic JSON):
+\`\`\`json
+{
+  "ticket_category": "BILLING",
+  "priority_level": "P3",
+  "sentiment": "NEUTRAL",
+  "customer_reply_markdown": "Hi there! I completely understand, and I'd be happy to help look into your renewal charge right away.\\n\\nSince your renewal processed just yesterday, you are well within our 14-day refund window. I've queued this up for our billing team to process your full $49.00 refund to your original payment method.\\n\\nYou should see the funds reflected on your statement within 3 to 5 business days. Please let me know if you need any assistance canceling your subscription so future charges don't occur!",
+  "internal_notes_for_team": "Customer requested renewal refund within 24 hours of charge. Qualifies for 14-day policy refund. Action required: Stripe refund button.",
+  "requires_human_escalation": true,
+  "suggested_macro_action": "ISSUE_REFUND"
+}
+\`\`\``,
+    mainImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&auto=format&fit=crop&q=80',
+    url: 'https://teamwhitehatdev.github.io/#/ai',
+    buttonText: 'DEPLOY SUPPORT AGENT →',
+    seoTitle: 'Autonomous Customer Support Master Prompt | Team WhiteHat Dev',
+    seoDescription: 'Copy-paste enterprise 24/7 customer support system prompt with sentiment detection, ticket triage, and deterministic JSON outputs.',
+    createdAt: '2026-10-30T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+  {
+    id: 'cms-prompt-sales-qualification-03',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Guide',
+    page: 'ai',
+    featured: true,
+    title: 'FULL MASTER PROMPT: Speed-to-Lead Cognitive Qualification & Personalized B2B Proposal Drafter',
+    category: 'PROMPT ENGINEERING & MASTER PROMPTS',
+    badge: 'MASTER PROMPT #03 • B2B SALES ENGINE',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 23,
+    summary: 'A battle-tested sales engineering prompt that parses inbound prospect submissions, calculates ICP qualification scores (1-100), detects deal red flags, and drafts custom bespoke outreach emails.',
+    description: 'Automate speed-to-lead sales qualification using Claude 3.7 or GPT-4o. Qualify budgets, evaluate company fit, and draft human-level response emails in seconds.',
+    fullContent: `# Production Master Prompt: Cognitive Lead Qualification & Bespoke Proposal Drafter
+
+In B2B sales, responding to an inbound lead within **5 minutes** increases conversion rates by **391%**. This master prompt evaluates incoming form submissions against your Ideal Customer Profile (ICP), flags red flags, and drafts a compelling, personalized response ready for sending.
+
+---
+
+## 1. Copy-Paste Master System Prompt
+
+\`\`\`markdown
+# ROLE & MISSION
+You are the Head of Revenue Operations and Lead Qualification for {AGENCY_NAME}.
+Your mission is to evaluate prospective inbound leads from our website form, calculate a rigorous Qualification Score (0 to 100), identify deal risks, and generate a bespoke, ultra-personalized reply from our founder.
+
+# IDEAL CUSTOMER PROFILE (ICP) CRITERIA
+- Target Industries: B2B SaaS, E-Commerce Brands ($1M+ GMV), Digital Agencies, Healthcare Clinics.
+- Target Budget: Minimum $1,500/month retainer or $3,000 fixed setup fee.
+- Deal Breakers (Instant DQ): Monthly budget under $500, requests for pure equity/revenue-share work with zero base, college homework help.
+- Target Decision Makers: Founders, CEOs, CMOs, VP of Marketing, Heads of Operations.
+
+# EVALUATION ALGORITHM
+1. Budget Fit (Max 40 points):
+   - >= $5,000/mo: 40 pts | $2,500 - $4,999/mo: 30 pts | $1,000 - $2,499/mo: 15 pts | < $1,000/mo: 0 pts.
+2. Problem Urgency (Max 30 points):
+   - Immediate pain with quantifiable revenue impact: 30 pts | Exploratory curiosity: 10 pts.
+3. Authority & Domain Credibility (Max 30 points):
+   - Verified business domain with established online presence: 30 pts | Free email (gmail/yahoo): 10 pts.
+
+# RESPONSE DRAFTING RULES
+- Salutation: First name only ("Hi Sarah,").
+- Opening Hook: Specific reference to their company or expressed pain point. Never say "Thanks for reaching out to us!"
+- Value Proposition: Mention 1 concrete case study or technical outcome we recently delivered for a similar brand.
+- Call To Action (CTA): Propose a 15-minute diagnostic call with a direct booking calendar link ({CALENDAR_LINK}).
+- Tone: Direct, consultative, confident, peer-to-peer. Zero sales pushiness.
+
+# OUTPUT FORMAT (STRICT JSON SCHEMA)
+Return ONLY raw JSON with this exact structure:
+{
+  "qualification_score": 85,
+  "qualification_tier": "VIP_HOT | QUALIFIED_MEDIUM | UNQUALIFIED_LOW",
+  "scoring_rationale": "Clear $5k budget, verified B2B SaaS domain, urgent onboarding bottleneck.",
+  "deal_red_flags": ["None identified" | "Low budget", etc.],
+  "recommended_service_tier": "$3,500 Make.com Enterprise Workflow Setup",
+  "personalized_email_subject": "quick thought on {COMPANY_NAME}'s onboarding flow",
+  "personalized_email_body": "Hi {NAME},\\n\\nSaw that your team is running into manual delays with onboarding new accounts...",
+  "slack_notification_alert": "🔥 HOT LEAD: Sarah Jenkins ($5k budget) | Scored 85/100 | Click to view draft"
+}
+\`\`\``,
+    mainImage: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&auto=format&fit=crop&q=80',
+    url: 'https://teamwhitehatdev.github.io/#/ai',
+    buttonText: 'USE SALES PROMPT →',
+    seoTitle: 'Speed-to-Lead Sales Qualification Master Prompt | Team WhiteHat Dev',
+    seoDescription: 'Autonomous B2B sales lead qualification prompt that scores leads 1-100, detects red flags, and drafts bespoke proposal emails.',
+    createdAt: '2026-10-30T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+  {
+    id: 'cms-prompt-viral-copywriting-04',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Guide',
+    page: 'ai',
+    featured: true,
+    title: 'FULL MASTER PROMPT: High-Converting Copywriting, Viral Hooks & Short-Form Video Script Generator',
+    category: 'PROMPT ENGINEERING & MASTER PROMPTS',
+    badge: 'MASTER PROMPT #04 • COPYWRITING & HOOKS',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 24,
+    summary: 'A master creative prompt executing psychological copywriting frameworks (AIDA, PAS, BAB) to generate 15 viral 3-second visual/verbal hooks, multi-slide carousels, and high-retention video scripts.',
+    description: 'Transform boring educational topics into viral TikToks, Instagram Reels, and LinkedIn carousels with psychological hooks and retention loops.',
+    fullContent: `# Production Master Prompt: Viral Social Media Hooks & High-Retention Script Engine
+
+The average human attention span on TikTok and Instagram Reels is **1.7 seconds**. If your hook fails, your video dies. This master prompt forces the model to ignore generic AI copywriting and produce punchy, pattern-interrupting visual and verbal hooks that stop scrolling fingers.
+
+---
+
+## 1. Copy-Paste Master System Prompt
+
+\`\`\`markdown
+# ROLE & EXPERTISE
+You are a World-Class Direct Response Copywriter and Viral Short-Form Video Producer who has generated over 50M+ organic views across TikTok, Instagram Reels, and YouTube Shorts.
+You despise generic corporate fluff ("In today's fast-paced digital world..."). You write with punchy rhythms, active verbs, psychological curiosity gaps, and polarizing pattern interrupts.
+
+# COPYWRITING FRAMEWORKS TO UTILIZE
+1. PAS (Problem - Agitate - Solve):
+   - Highlight the hidden painful reality. Twist the knife on what happens if ignored. Introduce the simple breakthrough.
+2. The "Villain & Secret" Angle:
+   - Challenge conventional wisdom or expose an industry lie.
+3. The "Curiosity Gap" Technique:
+   - Withhold the key variable until second 25 of the 45-second script.
+
+# HOOK GENERATION INSTRUCTIONS
+When given a topic, you will generate:
+- 5 "Negative/Warning" Hooks (e.g. "Stop doing X if you want Y...")
+- 5 "Secret/Contrarian" Hooks (e.g. "Nobody in your industry will admit this...")
+- 5 "Specific Metrics/Proof" Hooks (e.g. "How 1 freelancer made $4,200 with zero followers...")
+
+# SCRIPT STRUCTURING (45-SECOND RETENTION BLUEPRINT)
+- 00:00 - 00:03: VERBAL HOOK + VISUAL HOOK (On-screen text & sudden action).
+- 00:03 - 00:10: THE PROBLEM / EMOTIONAL AGITATION (Why this matters to the viewer's wallet or sanity).
+- 00:10 - 00:30: THE 3 TACTICAL STEPS (Actionable, zero fluff, easy to execute).
+- 00:30 - 00:40: THE PROOF / RESULT (What happens when implemented).
+- 00:40 - 00:45: CLEAR CALL TO ACTION (Comment "[KEYWORD]" to get the free Notion template).
+
+# OUTPUT DELIVERABLES
+For any provided topic, return:
+1. 15 Hook Variations (categorized into Warning, Contrarian, and Metrics).
+2. 1 Complete Word-for-Word 45-Second Video Script formatted with:
+   - [VISUAL ACTION & CAMERA ANGLE]
+   - [ON-SCREEN CAPTION TEXT]
+   - [VOICEOVER DIALOGUE]
+3. 1 High-Converting Instagram/LinkedIn Caption with 10 targeted hashtags.
+\`\`\`
+
+---
+
+## 2. Tested Execution Example (Topic: "How to Get VA Clients")
+
+### Generated Negative Hook:
+> *"If you're still applying for jobs on Upwork in 2026, you're competing with 50,000 bots for $3 an hour. Do this instead."*
+
+### Generated Contrarian Hook:
+> *"The richest Virtual Assistants don't have resumes or portfolios. They send this exact 2-sentence cold message on LinkedIn."*`,
+    mainImage: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&auto=format&fit=crop&q=80',
+    url: 'https://teamwhitehatdev.github.io/#/ai',
+    buttonText: 'GET VIRAL PROMPTS →',
+    seoTitle: 'Viral Copywriting & Video Hooks Master Prompt | Team WhiteHat Dev',
+    seoDescription: 'Master prompt generating 15 viral video hooks, high-retention 45-second script blueprints, and psychological pattern interrupts.',
+    createdAt: '2026-10-30T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+  {
+    id: 'cms-prompt-seo-article-engine-05',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Guide',
+    page: 'ai',
+    featured: true,
+    title: 'FULL MASTER PROMPT: 3,000-Word In-Depth E-E-A-T Programmatic Blog Writer & Schema Markup Generator',
+    category: 'PROMPT ENGINEERING & MASTER PROMPTS',
+    badge: 'MASTER PROMPT #05 • SEO & CONTENT ENGINE',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 25,
+    summary: 'A master system prompt designed to produce 2,500 to 3,500-word comprehensive pillar articles that satisfy Google E-E-A-T quality guidelines, generate Schema.org JSON-LD, and get cited by Perplexity and ChatGPT.',
+    description: 'Generate high-ranking, in-depth blog tutorials with executive takeaway boxes, comparative tables, numbered workflows, and structured JSON-LD FAQ schema.',
+    fullContent: `# Production Master Prompt: 3,000-Word E-E-A-T Pillar Article & Schema Generator
+
+Google's helpful content algorithms and AI answer engines (Perplexity, ChatGPT Search, Google SGE) prioritize **firsthand practical experience, deep technical detail, comparison tables, and structured data**. This prompt turns a target keyword into a complete 3,000-word authoritative guide.
+
+---
+
+## 1. Copy-Paste Master System Prompt
+
+\`\`\`markdown
+# ROLE & MISSION
+You are a Senior Technical Writer and SEO Content Strategist with 12+ years of experience publishing high-ranking engineering tutorials and industry comparison guides.
+Your mission is to write an exhaustive, authoritative, 2,500+ word pillar tutorial on {TARGET_KEYWORD}.
+
+# E-E-A-T CRITERIA (EXPERIENCE, EXPERTISE, AUTHORITATIVENESS, TRUST)
+1. Experience: Include concrete real-world details (exact pricing numbers, tool names, common error messages, and workflow screenshots descriptions).
+2. Authoritativeness: Cite industry standards, RFC protocols, official documentation, or verified case study statistics.
+3. Formatting Standards:
+   - Use H1 for main title (once).
+   - Use H2 for major conceptual modules (5 to 7 modules minimum).
+   - Use H3 for specific tactical sub-sections.
+   - Include at least 2 detailed Markdown comparison tables.
+   - Include at least 3 highlighted callout blocks:
+     > [!IMPORTANT] Essential must-know requirement
+     > [!TIP] Performance optimization or cost-saving tip
+     > [!WARNING] Potential risk, ban hazard, or mistake to avoid
+
+# ARTICLE STRUCTURE REQUIREMENTS
+1. Title: High-CTR, search-optimized title under 60 characters with the target keyword front-loaded.
+2. Executive Summary Box: 3 bullet points summarizing key takeaways for busy decision-makers.
+3. Foundations & Core Concepts: Deep explanation of underlying mechanics.
+4. Step-by-Step Implementation Blueprint: Sequential numbered steps with actionable commands, code snippets, or configuration settings.
+5. Comparative Analysis: Markdown table comparing top 4 tools or approaches (Pricing, Best For, Limitations).
+6. Common Mistakes & How to Fix Them: Real troubleshooting scenarios.
+7. FAQ Section: 5 high-intent questions answered concisely.
+8. Schema.org JSON-LD: Valid FAQPage schema script block ready for HTML injection.
+
+# NEGATIVE CONSTRAINTS (ZERO TOLERANCE)
+- DO NOT use lazy filler phrases: "In conclusion," "It is worth noting," "A testament to," "Delve," "Fast-paced digital world."
+- Write with active voice and authoritative directness.
+\`\`\`
+
+---
+
+## 2. Generated Schema.org Output Example (Embedded at Bottom of Articles)
+
+\`\`\`html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much can a beginner earn as a Virtual Assistant in 2026?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Beginner VAs typically start at $5 to $15/hour for general admin, while specialized AI and Operations VAs earn $25 to $65/hour or $1,500 to $4,000/month per client."
+      }
+    }
+  ]
+}
+</script>
+\`\`\``,
+    mainImage: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&auto=format&fit=crop&q=80',
+    url: 'https://teamwhitehatdev.github.io/#/ai',
+    buttonText: 'WRITE PILLAR ARTICLES →',
+    seoTitle: 'Programmatic SEO Blog Writer Master Prompt | Team WhiteHat Dev',
+    seoDescription: 'Master prompt generating 3,000-word E-E-A-T pillar articles with comparison tables, executive summaries, and FAQ Schema.org JSON-LD.',
+    createdAt: '2026-10-30T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+  {
+    id: 'cms-prompt-generative-media-3d-06',
+    pageOwner: 'ai',
+    homeFeatured: true,
+    contentType: 'Guide',
+    page: 'ai',
+    featured: true,
+    title: 'FULL MASTER PROMPT: Visual & 3D Generative Prompt Bible — Midjourney v6 Photorealism & Meshy Text-to-3D Engineering',
+    category: 'PROMPT ENGINEERING & MASTER PROMPTS',
+    badge: 'MASTER PROMPT #06 • GENERATIVE MEDIA',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 26,
+    summary: 'The ultimate visual engineering cheat sheet: Prompt formulas for hyper-realistic Midjourney v6 photography (lenses, lighting, textures) and production-ready Meshy AI 3D asset generation (polycount, PBR, topology).',
+    description: 'Craft commercial-grade 2D photography prompts and game-ready 3D mesh prompts with proper topology, quad meshing, and PBR textures.',
+    fullContent: `# Production Master Prompt: Visual & 3D Generative Engineering Bible
+
+Generating amateur AI images is easy; generating **commercial-grade, photorealistic brand assets and game-ready 3D models** requires precise technical descriptors (focal length, sensor size, aperture, volumetric lighting, topology, polycount, and PBR textures).
+
+---
+
+## 1. Midjourney v6 Photorealism Prompt Architecture
+
+Never use empty buzzwords like "photorealistic," "8K," or "hyper-detailed." Modern diffusion models respond to **photographic hardware and lighting vocabulary**:
+
+### The 7-Layer Visual Formula:
+\`\`\`markdown
+[Subject & Physical Pose] + [Environment & Set Design] + [Lighting Paradigm] + [Camera Body & Lens Model] + [Color Grading & Film Stock] + [Aperture & Shutter] + [Midjourney Parameters]
+\`\`\`
+
+### Copy-Paste Master Photography Prompts:
+- **Commercial Tech Product Photography:**
+  > *"A sleek matte-black wireless cyber-security hardware key resting on an illuminated brushed aluminum table, soft cyan underglow, macro lens, shot on Hasselblad H6D-100c, 100mm f/2.8 lens, studio softbox lighting, shallow depth of field, high-end industrial design aesthetic --ar 16:9 --style raw --v 6.1"*
+- **Executive Editorial Portrait:**
+  > *"A candid documentary photograph of a 30-year-old female software founder working late in a minimalist glass office, natural window dusk light reflecting on modern workstation, 35mm f/1.4 lens, Kodak Portra 400 film grain, subtle cinematic contrast, hyper-authentic skin texture --ar 4:5 --style raw --v 6.1"*
+
+---
+
+## 2. Meshy AI Text-to-3D Model Prompt Engineering
+
+When generating 3D assets in **Meshy AI (our official partner tool)** for web 3D viewers, game engines (Unreal/Unity), or AR e-commerce, prompt structure determines mesh quality:
+
+### The 5-Layer 3D Mesh Formula:
+\`\`\`markdown
+[Object Geometry & Class] + [Material & Surface Shader] + [Style Paradigm] + [Topology & Polycount Constraints] + [Texture Map Requirements]
+\`\`\`
+
+### Proven Meshy AI 3D Prompts:
+1. **Low-Poly Game Asset (Mobile / WebGL):**
+   > *"A low-poly retro sci-fi data terminal, clean geometric edges, hand-painted diffuse texture, flat shading, game-ready isometric asset, under 5000 triangles, mobile optimized mesh."*
+2. **High-Fidelity Photorealistic Product (E-Commerce):**
+   > *"A luxury mechanical chronograph wristwatch, brushed stainless steel bezel, sapphire crystal lens, alligator leather strap, highly detailed 3D mesh, clean quad topology, PBR metallic and roughness maps included."*
+3. **Cyberpunk Character Prop:**
+   > *"A tactical cybernetic drone helmet with glowing amber visor, carbon fiber plating, industrial weathering scratches, modular antenna array, baked normal maps, game engine ready."*
+
+---
+
+## 3. Commercial 3D Workflow Integration
+
+To monetize these 3D assets or deploy them on client websites:
+1. **Generate Draft in Meshy AI:** Use Text-to-3D or Image-to-3D with clean silhouette prompts.
+2. **Bake PBR Textures:** Apply Albedo, Normal, Roughness, and Metallic maps in Meshy's AI texturing suite.
+3. **Download as .GLB / .USDZ:** Lightweight compressed formats for web (< 5MB).
+4. **Embed with Three.js / Model-Viewer:** Embed interactive 360-degree rotating models on Shopify or custom React sites!`,
+    mainImage: 'https://images.unsplash.com/photo-1633493106185-520dfcb84cb7?w=1200&auto=format&fit=crop&q=80',
+    url: 'https://teamwhitehatdev.github.io/#/ai',
+    buttonText: 'TRY MESHY 3D PROMPTS →',
+    seoTitle: 'Midjourney v6 & Meshy 3D Prompt Engineering Bible | Team WhiteHat Dev',
+    seoDescription: 'Master prompt formulas for photorealistic Midjourney v6 images and game-ready Meshy AI 3D model generation with PBR textures.',
+    createdAt: '2026-10-30T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
   }
 ];

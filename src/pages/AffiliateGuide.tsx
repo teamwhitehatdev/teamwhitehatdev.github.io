@@ -258,17 +258,38 @@ export const AffiliateGuide: React.FC = () => {
             ) : (
               visibleTopics.map((topic, index) => {
                 const isOpen = searchQuery.trim() ? true : (openPanels[topic.id] ?? false);
-              const showTopicImage = Boolean(topic.headerBannerImage && !topic.hideImage);
-              const showTopicVideo = Boolean(topic.videoUrl && !topic.hideVideo);
-              const displayIndex = String(topic.sortOrder || index + 1).padStart(2, '0');
-              const isAppleGreenCard = index % 2 === 0;
+                const showTopicImage = Boolean(topic.headerBannerImage && !topic.hideImage);
+                const showTopicVideo = Boolean(topic.videoUrl && !topic.hideVideo);
+                const displayIndex = String(topic.sortOrder || index + 1).padStart(2, '0');
+                const isAppleGreenCard = index % 2 === 0;
 
-              return (
-                <div
-                  key={topic.id}
-                  id={topic.id}
-                  className="themeforest-card overflow-hidden transition-all"
-                >
+                const prevTopic = index > 0 ? visibleTopics[index - 1] : null;
+                const isNewCategory =
+                  sortMode === 'category' &&
+                  (!prevTopic || (prevTopic.categoryBadge || '') !== (topic.categoryBadge || ''));
+
+                return (
+                  <React.Fragment key={topic.id}>
+                    {isNewCategory && (
+                      <div className="pt-4 pb-1 first:pt-0">
+                        <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-slate-900 text-white shadow-xs border border-slate-800">
+                          <div className="flex items-center gap-2.5">
+                            <Layers className="w-4 h-4 text-cyan-400 shrink-0" />
+                            <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-cyan-100">
+                              {topic.categoryBadge || 'CATEGORY NICHE'}
+                            </span>
+                          </div>
+                          <span className="px-2.5 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-300">
+                            Niche Module
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    <div
+                      id={topic.id}
+                      className="themeforest-card overflow-hidden transition-all"
+                    >
                   {/* ACCORDION HEADER BAR (NUMBERED + CATEGORY BADGE + COLLAPSIBLE) */}
                   <div
                     onClick={() => togglePanel(topic.id)}
@@ -610,9 +631,10 @@ export const AffiliateGuide: React.FC = () => {
                     </div>
                   )}
                 </div>
-              );
-            })
-          )}
+              </React.Fragment>
+            );
+          })
+        )}
 
             {/* DYNAMIC CMS MANAGED TOPIC DIVISION */}
             {cmsAffiliateItems.length > 0 && (

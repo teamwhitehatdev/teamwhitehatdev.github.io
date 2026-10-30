@@ -15,7 +15,9 @@ import {
   Globe2,
   FileSearch,
   Gamepad2,
-  Workflow
+  Workflow,
+  Terminal,
+  Hash
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { CMSItem } from '../types';
@@ -61,7 +63,8 @@ export const AILearning: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [selectedArticle, setSelectedArticle] = useState<CMSItem | null>(null);
-  const [viewMode, setViewMode] = useState<'all' | 'by-category'>('all');
+  const [viewMode, setViewMode] = useState<'all' | 'by-category'>('by-category');
+  const [sortOrderMode, setSortOrderMode] = useState<'number' | 'title'>('number');
 
   // Handle Hash Scroll (e.g. from /#/ai#diagrams)
   useEffect(() => {
@@ -92,6 +95,20 @@ export const AILearning: React.FC = () => {
 
   const categories = [
     'ALL',
+    'PROMPT ENGINEERING & MASTER PROMPTS',
+    'AI AUTOMATION',
+    'AI CAPABILITIES',
+    'SOCIAL MEDIA & MARKETING',
+    'SEO & METADATA',
+    'CONTENT CREATORS & STREAMERS',
+    'MAKE MONEY ONLINE',
+    'VIRTUAL ASSISTANT CAREER',
+    'FREELANCING MASTERY',
+    'DIGITAL SKILLS'
+  ];
+
+  const CATEGORY_ORDER = [
+    'PROMPT ENGINEERING & MASTER PROMPTS',
     'AI AUTOMATION',
     'AI CAPABILITIES',
     'SOCIAL MEDIA & MARKETING',
@@ -104,6 +121,9 @@ export const AILearning: React.FC = () => {
   ];
 
   const quickSearchTags = [
+    'Prompt Engineering',
+    'Master Prompts',
+    'System Prompts',
     'Social Media Manager',
     'Algorithm Mechanics',
     'SEO & Metadata',
@@ -117,7 +137,7 @@ export const AILearning: React.FC = () => {
 
   const filteredArticles = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
-    return allArticles.filter((item) => {
+    const list = allArticles.filter((item) => {
       const matchesCategory =
         selectedCategory === 'ALL' ||
         item.category.toUpperCase().includes(selectedCategory.toUpperCase());
@@ -134,9 +154,16 @@ export const AILearning: React.FC = () => {
 
       return titleMatch || descMatch || catMatch || summaryMatch || contentMatch || badgeMatch;
     });
-  }, [allArticles, selectedCategory, searchQuery]);
 
-  // Grouped articles by category
+    return list.sort((a, b) => {
+      if (sortOrderMode === 'title') {
+        return a.title.localeCompare(b.title);
+      }
+      return (a.sortOrder || 999) - (b.sortOrder || 999);
+    });
+  }, [allArticles, selectedCategory, searchQuery, sortOrderMode]);
+
+  // Grouped and sorted articles by category with canonical hierarchy
   const articlesByCategory = useMemo(() => {
     const map = new Map<string, CMSItem[]>();
     filteredArticles.forEach((article) => {
@@ -146,10 +173,36 @@ export const AILearning: React.FC = () => {
       }
       map.get(cat)!.push(article);
     });
-    return map;
-  }, [filteredArticles]);
+
+    // Sort items within each category
+    map.forEach((items) => {
+      items.sort((a, b) => {
+        if (sortOrderMode === 'title') {
+          return a.title.localeCompare(b.title);
+        }
+        return (a.sortOrder || 999) - (b.sortOrder || 999);
+      });
+    });
+
+    // Sort categories according to canonical priority
+    const sortedEntries = Array.from(map.entries()).sort(([catA], [catB]) => {
+      const idxA = CATEGORY_ORDER.indexOf(catA);
+      const idxB = CATEGORY_ORDER.indexOf(catB);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return catA.localeCompare(catB);
+    });
+
+    return new Map(sortedEntries);
+  }, [filteredArticles, sortOrderMode]);
 
   const categoryMeta: Record<string, { label: string; icon: React.FC<{ className?: string }>; desc: string }> = {
+    'PROMPT ENGINEERING & MASTER PROMPTS': {
+      label: 'Prompt Engineering & Master Full-Prompts',
+      icon: Terminal,
+      desc: 'Production-grade system prompts, RTF & CREATE architectures, Chain-of-Thought reasoning, and few-shot calibration.'
+    },
     'SOCIAL MEDIA & MARKETING': {
       label: 'Social Media Marketing & Management',
       icon: Share2,
@@ -179,6 +232,11 @@ export const AILearning: React.FC = () => {
       label: 'Core AI Capabilities & Deep Fundamentals',
       icon: Cpu,
       desc: 'LLM reasoning, RAG vector search, multimodal vision OCR, and generative 3D modeling.'
+    },
+    'VIRTUAL ASSISTANT CAREER': {
+      label: 'Virtual Assistance & Remote Careers',
+      icon: Layers,
+      desc: 'Executive assistant playbooks, client onboarding, retainer contracts, and high-income skill stacks.'
     }
   };
 
@@ -258,6 +316,33 @@ export const AILearning: React.FC = () => {
               <span className="text-xs font-semibold text-slate-500">
                 Found <strong className="text-slate-900">{filteredArticles.length}</strong> Guides
               </span>
+
+              {/* Sort mode toggle: Number vs Title */}
+              <div className="flex items-center rounded-xl bg-slate-100 p-1 text-xs">
+                <button
+                  onClick={() => setSortOrderMode('number')}
+                  className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1 ${
+                    sortOrderMode === 'number'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="Sort by Guide Number"
+                >
+                  <Hash className="w-3 h-3" />
+                  <span>By Number</span>
+                </button>
+                <button
+                  onClick={() => setSortOrderMode('title')}
+                  className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1 ${
+                    sortOrderMode === 'title'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="Sort Alphabetically by Title"
+                >
+                  <span>A-Z</span>
+                </button>
+              </div>
 
               {/* View mode toggle: Grid vs Grouped by Category */}
               <div className="flex items-center rounded-xl bg-slate-100 p-1 text-xs">
