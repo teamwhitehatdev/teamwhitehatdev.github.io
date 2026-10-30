@@ -44,13 +44,13 @@ const getNicheTheme = (category: string = ''): NicheTheme => {
   const cat = category.toUpperCase();
   if (cat.includes('MONEY') || cat.includes('INCOME') || cat.includes('FINANCE')) {
     return {
-      cardBg: 'bg-gradient-to-br from-emerald-50/80 via-teal-50/50 to-white/95 border-emerald-200/90 shadow-xs',
-      badgeBg: 'bg-emerald-600 text-white shadow-xs',
-      badgeText: 'text-emerald-800 font-bold',
-      borderHover: 'hover:border-emerald-500 hover:shadow-emerald-500/15',
+      cardBg: 'bg-gradient-to-br from-slate-50/90 via-blue-50/30 to-white/95 border-slate-200/90 shadow-xs',
+      badgeBg: 'bg-slate-900 text-white shadow-xs',
+      badgeText: 'text-slate-800 font-bold',
+      borderHover: 'hover:border-indigo-500 hover:shadow-indigo-500/15',
       btnPrimary: 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-xs',
-      btnSecondary: 'bg-white/95 hover:bg-emerald-50 text-emerald-900 border border-emerald-300 font-bold',
-      accentText: 'text-emerald-950'
+      btnSecondary: 'bg-white/95 hover:bg-slate-100 text-slate-900 border border-slate-300 font-bold',
+      accentText: 'text-slate-950'
     };
   }
   if (cat.includes('AI') || cat.includes('AUTOMATION') || cat.includes('GPT') || cat.includes('PROMPT')) {

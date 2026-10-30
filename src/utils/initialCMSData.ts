@@ -628,6 +628,8 @@ Successful affiliate content creators focus on solving real problems first. When
   // =========================================================================
   // 🛠️ SERVICES PAGE OWNER ONLY (URL-ONLY /#/services — ULTRA-AFFORDABLE)
   // =========================================================================
+  // 💼 SERVICES PAGE OWNER (DETAILED NICHE VA & TECH PACKAGES)
+  // =========================================================================
   {
     id: 'cms-services-1',
     pageOwner: 'services',
@@ -637,83 +639,237 @@ Successful affiliate content creators focus on solving real problems first. When
     featured: false,
     title: 'Cloud Hosting, Custom Domain & SSL Setup Service',
     category: 'Engineering & Setup',
+    badge: 'STARTER SETUP',
     status: 'PUBLISHED',
     visible: true,
-    description: 'Complete hands-free setup of your Hostinger cloud hosting, custom domain DNS records, Cloudflare CDN protection, and free SSL certificate.',
+    description: 'Complete hands-free setup of your Hostinger NVMe cloud hosting, custom domain DNS records (A, CNAME, MX), Cloudflare CDN edge caching, and free auto-renewing SSL certificate.',
+    summary: 'Turnkey cloud web hosting setup with domain DNS, SSL, and speed optimization completed within 24 hours.',
+    fullContent: `# Cloud Hosting, Custom Domain & SSL Setup Service
+
+Ensure your portfolio, agency website, or client store loads in under 1 second with enterprise-grade infrastructure.
+
+### What Is Included in This Setup:
+1. **Hostinger Cloud Configuration:** Account provisioning, data center selection (closest to your target audience), and PHP/Node runtime tuning.
+2. **Domain & DNS Record Routing:** Full configuration of Root (A), Subdomain (CNAME), and Google Workspace / Zoho Mail (MX) records.
+3. **Free Auto-Renewing SSL Certificate:** Zero-cost Let's Encrypt SSL with forced HTTPS redirection for Google search ranking safety.
+4. **Cloudflare CDN Integration:** Edge server caching, bot fighting mode, and image compression to drop bounce rates by up to 40%.
+5. **24-Hour Turnaround:** Delivered with a recorded Loom walkthrough explaining your new hosting dashboard.`,
     mainImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&auto=format&fit=crop&q=80',
     price: '$19 / one-time',
     metrics: 'Custom Domain DNS Setup, Free SSL Security Certificate, WordPress or React Deployment, 24-Hour Turnaround',
     url: 'https://teamwhitehatdev.github.io/#/services',
+    buttonText: 'Order Setup Service →',
     createdAt: '2026-08-01T00:00:00Z',
-    updatedAt: '2026-10-28T00:00:00Z'
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+  {
+    id: 'cms-services-2',
+    pageOwner: 'services',
+    homeFeatured: false,
+    contentType: 'Service',
+    page: 'services',
+    featured: false,
+    title: 'Executive Virtual Assistant & Operations Retainer',
+    category: 'VA Services',
+    badge: 'POPULAR RETAINER',
+    status: 'PUBLISHED',
+    visible: true,
+    description: 'Dedicated part-time or full-time VA covering inbox zero triage, Google Calendar scheduling, client CRM pipelines, customer support tickets, and weekly metrics reporting.',
+    summary: 'A trained, English-fluent Virtual Assistant dedicated to freeing 15+ hours of your work week.',
+    fullContent: `# Executive Virtual Assistant & Operations Retainer
+
+Eliminate repetitive administrative drag so you can focus 100% on sales, client delivery, and strategic business growth.
+
+### Daily Responsibilities Managed:
+- **Inbox Zero Management:** Filtering spam, drafting routine client replies, prioritizing urgent founder inquiries, and tagging leads.
+- **Calendar & Appointment Coordination:** Booking discovery calls across multiple timezones using Calendly/TidyCal with zero scheduling conflicts.
+- **CRM Pipeline Upkeep:** Moving leads across Hubspot/GoHighLevel/Airtable stages and verifying contact data.
+- **Async Communication:** Daily morning check-in and end-of-day Loom summary of completed tasks.`,
+    mainImage: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1200&auto=format&fit=crop&q=80',
+    price: '$199 / month (20 hrs/wk)',
+    metrics: 'Trained Remote VA, Zero Platform Fees, Daily Loom Updates, Cancel Anytime',
+    url: 'https://teamwhitehatdev.github.io/#/services',
+    buttonText: 'Inquire for VA Retainer →',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
   },
 
   // =========================================================================
-  // 🌐 WEB HOSTING PAGE OWNER ONLY (100% EDITABLE HOSTINGER CARDS)
+  // 🌐 WEB HOSTING PAGE OWNER (ACCURATE, NICHE & ACTIONABLE CLOUD GUIDES)
   // =========================================================================
   {
     id: 'cms-webhosting-1',
     pageOwner: 'web-hosting',
     homeFeatured: false,
-    contentType: 'Resource',
+    contentType: 'Guide',
     page: 'web-hosting',
-    featured: false,
-    title: 'Automate Without Work',
-    category: 'AUTOMATION ENGINE',
-    badge: 'Included',
+    featured: true,
+    title: 'NVMe Cloud Hosting Architecture: Speed, Uptime & LiteSpeed Benchmarks',
+    category: 'CLOUD INFRASTRUCTURE',
+    badge: 'HOSTINGER BENCHMARK',
     status: 'PUBLISHED',
     visible: true,
-    description: 'Welcome new subscribers, run drip campaigns, send automated client updates, and scale your online business effortlessly.',
-    mainImage: './media_1786678717227.png',
-    price: 'Up to 75% OFF',
+    summary: 'Why NVMe SSD drives and LiteSpeed web servers outperform standard Apache hosting by up to 300% for client portfolios and e-commerce stores.',
+    description: 'Deep technical breakdown of NVMe SSD storage, LiteSpeed server cache engines, HTTP/3 protocols, and global data center locations for sub-second Time to First Byte (TTFB).',
+    fullContent: `# NVMe Cloud Hosting Architecture: Speed, Uptime & Benchmarks
+
+When building a portfolio or deploying client websites, server speed directly dictates your Google search rankings (Core Web Vitals) and visitor conversion rates.
+
+---
+
+## 1. Why NVMe SSDs Outperform Traditional SATA Drives
+- **SATA SSDs:** Maximum read/write bandwidth of ~550 MB/s limited by older storage controller buses.
+- **PCIe NVMe SSDs (Used by Hostinger Cloud):** Read/write speeds exceeding **3,500–7,000 MB/s**, enabling instant MySQL database queries and near-zero asset latency.
+- **Result:** Heavy dynamic CMS pages (WordPress, WooCommerce, headless React backends) render 3x faster under simultaneous visitor traffic.
+
+---
+
+## 2. LiteSpeed Web Server vs. Apache
+Hostinger utilizes enterprise **LiteSpeed Web Servers (LSWS)** paired with native LSCache plugins:
+1. **Event-Driven Architecture:** Handles thousands of concurrent visitor requests with minimal CPU overhead compared to thread-based Apache processes.
+2. **Built-in Object Caching (Redis/Memcached):** Database queries are cached in high-speed RAM, dropping TTFB to under 120ms globally.
+3. **HTTP/3 & QUIC Protocol Support:** Enables multiplexed data streams over UDP, speeding up mobile asset loading over unstable cellular networks.
+
+---
+
+## 3. Recommended Tier for Freelancers & VAs
+For solo creators managing 1–5 websites, the **Hostinger Business Web Hosting** tier provides the ideal sweet spot: free custom domain, 200 GB NVMe storage, daily automated backups, free CDN, and unlimited free SSLs.`,
+    mainImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&auto=format&fit=crop&q=80',
+    price: 'From $2.99 / mo',
     url: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
-    buttonText: 'Register on Hostinger',
+    buttonText: 'Claim Hostinger NVMe Discount →',
     createdAt: '2026-08-01T00:00:00Z',
-    updatedAt: '2026-10-29T00:00:00Z'
+    updatedAt: '2026-10-30T00:00:00Z'
   },
   {
     id: 'cms-webhosting-2',
     pageOwner: 'web-hosting',
     homeFeatured: false,
-    contentType: 'Resource',
+    contentType: 'Tutorial',
     page: 'web-hosting',
     featured: false,
-    title: 'Weekly Campaign Ideas',
-    category: 'AI MARKETING STUDIO',
-    badge: 'Included',
+    title: 'Step-by-Step 1-Click WordPress & React Client Site Deployment',
+    category: 'DEPLOYMENT GUIDE',
+    badge: '1-CLICK WORKFLOW',
     status: 'PUBLISHED',
     visible: true,
-    description: 'Built-in AI studies your website to suggest ready-to-go marketing and growth campaign ideas every single week.',
-    mainImage: './media_1786678717242.png',
+    summary: 'A complete practical walkthrough for setting up domains, installing WordPress or static React builds, and activating Let\'s Encrypt SSL in 15 minutes.',
+    description: 'Learn how to launch production-ready client websites on Hostinger with automated SSL certificates, staging environments, and Git deployment integrations.',
+    fullContent: `# Step-by-Step 1-Click WordPress & React Client Site Deployment
+
+A hands-on, zero-fluff checklist for deploying your first client website with 99.9% uptime and bulletproof security.
+
+---
+
+### Step 1: Claim Your Free Domain & Hosting Plan
+1. Sign up on **Hostinger** using the verified discount link.
+2. Choose your primary server location closest to your client's customers (e.g., North America, Europe, or Southeast Asia).
+3. Register your free '.com' or '.dev' domain during checkout.
+
+---
+
+### Step 2: 1-Click Auto-Installer
+- In hPanel, navigate to **Websites → Auto Installer → WordPress** (or Node.js / Custom HTML for React applications).
+- Select your target directory, enter your admin credentials, and enable automated daily database backups.
+- Hostinger's wizard automatically deploys the database schema and writes the Nginx/LiteSpeed rewrite rules.
+
+---
+
+### Step 3: Activate Lifetime Free SSL
+- Go to **Security → SSL** in your dashboard.
+- Toggle **Force HTTPS** to on. This automatically issues a Let's Encrypt wildcard certificate and reroutes all insecure HTTP requests to encrypted HTTPS.
+
+---
+
+### Step 4: Speed Verification & Core Web Vitals
+Test your new URL using **Google PageSpeed Insights** and **GTmetrix**. With LiteSpeed caching enabled, your site should achieve an **A (95%+) score** with an LCP (Largest Contentful Paint) under 1.2 seconds.`,
+    mainImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80',
     price: 'Free Domain Included',
     url: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
-    buttonText: 'Register on Hostinger',
+    buttonText: 'Deploy On Hostinger →',
     createdAt: '2026-08-02T00:00:00Z',
-    updatedAt: '2026-10-29T00:00:00Z'
+    updatedAt: '2026-10-30T00:00:00Z'
   },
   {
     id: 'cms-webhosting-3',
     pageOwner: 'web-hosting',
     homeFeatured: false,
-    contentType: 'Resource',
+    contentType: 'Guide',
     page: 'web-hosting',
     featured: false,
-    title: 'Subject Lines Written For You',
-    category: 'AI COPYWRITING',
-    badge: 'Included',
+    title: 'Cloudflare CDN Edge Caching & Web Application Firewall (WAF) Setup',
+    category: 'EDGE SECURITY',
+    badge: 'CDN OPTIMIZATION',
     status: 'PUBLISHED',
     visible: true,
-    description: 'Proven high-converting subject lines matched to your exact content. Pick your favorite and launch in seconds.',
-    mainImage: './media_1786678717364.png',
-    price: '$2.99 / mo Starter',
+    summary: 'Configure free Cloudflare reverse proxy rules, DDoS mitigation, and edge caching to shield your client websites from traffic spikes and bots.',
+    description: 'How to route domain nameservers through Cloudflare, enable Bot Fight Mode, enforce Full (Strict) SSL encryption, and optimize browser cache TTLs.',
+    fullContent: `# Cloudflare CDN Edge Caching & WAF Protection Guide
+
+By putting Cloudflare in front of your Hostinger origin server, you reduce server bandwidth consumption by 65% and protect your site from malicious scrapers.
+
+---
+
+## 1. Nameserver Delegation (Zero Downtime)
+1. In Cloudflare, add your site domain and copy Cloudflare's two assigned nameservers.
+2. In Hostinger's Domain Manager, update the nameservers to Cloudflare. DNS propagation completes within 5 to 30 minutes.
+
+---
+
+## 2. Essential Cloudflare Edge Rules for 2026
+- **SSL/TLS Encryption Mode:** Set to **Full (Strict)**. This ensures traffic between the browser and Cloudflare, as well as Cloudflare and Hostinger, is 100% encrypted.
+- **Bot Fight Mode:** Turn ON to challenge automated scrapers and brute-force vulnerability scanners.
+- **Auto Minify & Brotli Compression:** Enable Gzip and Brotli compression to shrink JS/CSS bundles by an additional 20%.
+- **Always Online™:** If your origin server ever undergoes maintenance, Cloudflare automatically serves a cached static copy to visitors without showing an error page.`,
+    mainImage: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&auto=format&fit=crop&q=80',
+    price: '100% Free CDN Layer',
     url: 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM',
-    buttonText: 'Register on Hostinger',
+    buttonText: 'Get Started with Cloudflare & Hostinger →',
     createdAt: '2026-08-03T00:00:00Z',
-    updatedAt: '2026-10-29T00:00:00Z'
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+  {
+    id: 'cms-webhosting-4',
+    pageOwner: 'web-hosting',
+    homeFeatured: false,
+    contentType: 'Playbook',
+    page: 'web-hosting',
+    featured: false,
+    title: 'How VAs & Freelancers Make $200–$600/Month Reselling Web Hosting Retainers',
+    category: 'FREELANCE INCOME',
+    badge: 'RECURRING RETAINER',
+    status: 'PUBLISHED',
+    visible: true,
+    summary: 'How to turn a single $10/month cloud hosting plan into $35–$75/month recurring website maintenance retainers per client.',
+    description: 'Learn the exact package structure, client contracts, uptime monitoring tools, and monthly reporting templates that create reliable recurring retainer income.',
+    fullContent: `# Reselling Web Hosting & Website Care Plans ($200–$600/Month Passive)
+
+Most small business owners have zero desire to manage domain renewals, PHP updates, plugin conflicts, or backup restores. They gladly pay **$35 to $75 every month** for peace of mind.
+
+---
+
+## The Business Model Math
+- **Your Cost:** 1 Hostinger Cloud Startup Plan (~$10/month), which supports up to 300 websites and 100 sub-accounts.
+- **Client Pricing:** Charge **$49/month per client** for "Managed Hosting, Weekly Backups & Security Care."
+- **10 Active Clients:** 10 × $49 = **$490/month in recurring gross revenue** on an expense of $10/month.
+
+---
+
+## What To Include in Your Monthly Care Report:
+1. **Uptime Stat:** 99.98% uptime screenshot from UptimeRobot (free tool).
+2. **Security Scan:** 0 malware threats detected by Hostinger / Cloudflare shield.
+3. **Core Updates:** WordPress core, theme, and 8 plugins safely updated.
+4. **Cloud Backup Timestamp:** Stored off-site copy generated every Sunday at 2 AM.`,
+    mainImage: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=1200&auto=format&fit=crop&q=80',
+    price: '$35–$75/mo Retainer Model',
+    url: 'https://teamwhitehatdev.github.io/#/services',
+    buttonText: 'View Freelancer Retainer Playbook →',
+    createdAt: '2026-08-04T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
   },
 
   // =========================================================================
-  // ℹ️ ABOUT PAGE OWNER ONLY (100% EDITABLE PROFILE & PILLARS)
+  // ℹ️ ABOUT PAGE OWNER (ACCURATE, DETAILED CORE PILLARS & MISSION)
   // =========================================================================
   {
     id: 'cms-about-1',
@@ -722,15 +878,25 @@ Successful affiliate content creators focus on solving real problems first. When
     contentType: 'Article',
     page: 'about',
     featured: false,
-    title: '1. Full-Stack Web Engineering',
-    category: 'CORE PILLAR',
+    title: 'Core Pillar 1: Full-Stack Web & Headless Architecture',
+    category: 'ENGINEERING EXCELLENCE',
+    badge: 'REACT & TYPESCRIPT',
     status: 'PUBLISHED',
     visible: true,
-    description: 'We architect fast, responsive minimalist web applications using React, TypeScript, Vite, and Tailwind CSS.',
+    summary: 'Our architectural standards for building ultra-fast, zero-bloat web applications using React, TypeScript, and edge static distribution.',
+    description: 'How we engineer high-performance web applications using modern component modularity, client-side caching, and strict responsive design.',
+    fullContent: `# Core Pillar 1: Full-Stack Web & Headless Architecture
+
+Team WhiteHat Dev adheres to uncompromising engineering principles designed for maximum speed, security, and developer clarity.
+
+### Technical Principles:
+1. **Strict Type Safety:** Every model, CMS item, and telemetry event is defined in TypeScript interfaces, eliminating runtime type exceptions.
+2. **Minimalist Aesthetic:** Clean, high-contrast typography, generous negative space, and responsive fluid viewports that adapt from 320px mobile screens to 4K desktop displays.
+3. **Zero-Latency State Management:** Persistent multi-version caching via browser \`localStorage\` and \`sessionStorage\` ensuring instantaneous tab switching and zero layout shifts.`,
     mainImage: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&auto=format&fit=crop&q=80',
     url: 'https://teamwhitehatdev.github.io/#/showcase',
     createdAt: '2026-08-01T00:00:00Z',
-    updatedAt: '2026-10-29T00:00:00Z'
+    updatedAt: '2026-10-30T00:00:00Z'
   },
   {
     id: 'cms-about-2',
@@ -739,15 +905,25 @@ Successful affiliate content creators focus on solving real problems first. When
     contentType: 'Article',
     page: 'about',
     featured: false,
-    title: '2. Mobile & Desktop Utilities',
-    category: 'CORE PILLAR',
+    title: 'Core Pillar 2: Cross-Platform Mobile & Desktop Systems',
+    category: 'CROSS-PLATFORM DEV',
+    badge: 'ANDROID & DESKTOP',
     status: 'PUBLISHED',
     visible: true,
-    description: 'Our engineering team builds cross-platform Android, iOS, and Python desktop diagnostic applications.',
+    summary: 'Engineering cross-platform utilities for Android Google Play Store, Windows desktop frameworks, and Python GUI diagnostic consoles.',
+    description: 'We develop native and hybrid applications featuring local network packet diagnostics, hardware monitoring, and offline-first workflows.',
+    fullContent: `# Core Pillar 2: Cross-Platform Mobile & Desktop Systems
+
+From mobile productivity suites on the Google Play Store to standalone Windows diagnostic binaries, our software bridges user convenience with low-level systems programming.
+
+### Focus Areas:
+- **Android Ecosystem:** Lightweight APKs verified by Google Play Protect with adaptive icons and responsive UI layouts.
+- **Python Systems Tools:** Standalone diagnostic GUIs utilizing Scapy, Socket, and PyQt5 for real-time network interface analysis and egress IP verification.
+- **Offline Reliability:** Critical utility functions operate seamlessly even when internet connectivity is intermittent.`,
     mainImage: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=80',
     url: 'https://teamwhitehatdev.github.io/#/showcase',
     createdAt: '2026-08-02T00:00:00Z',
-    updatedAt: '2026-10-29T00:00:00Z'
+    updatedAt: '2026-10-30T00:00:00Z'
   },
   {
     id: 'cms-about-3',
@@ -756,15 +932,25 @@ Successful affiliate content creators focus on solving real problems first. When
     contentType: 'Article',
     page: 'about',
     featured: false,
-    title: '3. Cybersecurity & Data Protection',
-    category: 'CORE PILLAR',
+    title: 'Core Pillar 3: Ethical Cybersecurity & Threat Intelligence',
+    category: 'DEFENSIVE CYBERSECURITY',
+    badge: 'SECURITY PROTOCOLS',
     status: 'PUBLISHED',
     visible: true,
-    description: 'We implement strict credential hygiene, client-side XSS/SQLi sanitization, and IP firewall controls to keep digital assets safe.',
+    summary: 'Our defense-in-depth security approach: rate-limited authentication, client-side cryptographic vaults, egress IP verification, and vulnerability prevention.',
+    description: 'We build defensive cybersecurity controls into every product, adhering to OWASP guidelines, strict input sanitization, and brute-force lockout protections.',
+    fullContent: `# Core Pillar 3: Ethical Cybersecurity & Threat Intelligence
+
+Security is not an afterthought or an add-on—it is the foundation of everything we build.
+
+### Defensive Protocols:
+- **Brute-Force Rate Limiting:** All administrative access is guarded by stateful rate limiting that automatically enforces timed lockouts after repeated failed attempts.
+- **Input Sanitization:** Multi-layer regex sanitization protects against Cross-Site Scripting (XSS), SQL injection, and parameter tampering.
+- **Zero Plain-Text Storage:** Sensitive keys and master passwords are never exposed in public DOM attributes or client logs.`,
     mainImage: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&auto=format&fit=crop&q=80',
     url: 'https://teamwhitehatdev.github.io/#/about',
     createdAt: '2026-08-03T00:00:00Z',
-    updatedAt: '2026-10-29T00:00:00Z'
+    updatedAt: '2026-10-30T00:00:00Z'
   },
   {
     id: 'cms-about-4',
@@ -773,15 +959,117 @@ Successful affiliate content creators focus on solving real problems first. When
     contentType: 'Article',
     page: 'about',
     featured: false,
-    title: '4. Free VA & AI Automation Portal',
-    category: 'CORE PILLAR',
+    title: 'Core Pillar 4: The 100% Free Remote VA & AI Career Mission',
+    category: 'FREE EDUCATION MISSION',
+    badge: 'ZERO COST PORTAL',
     status: 'PUBLISHED',
     visible: true,
-    description: 'We publish free step-by-step career guides, visual AI automation diagrams, and templates for Virtual Assistants and freelancers.',
+    summary: 'Why Team WhiteHat Dev publishes high-tier Virtual Assistant career guides, node-by-node automation diagrams, and client outreach scripts at zero cost.',
+    description: 'Empowering global aspiring freelancers and Virtual Assistants with practical, hands-on digital skills without expensive $997 course paywalls.',
+    fullContent: `# Core Pillar 4: The 100% Free Remote VA & AI Career Mission
+
+We believe that high-quality, practical digital education should be accessible to anyone with an internet connection, regardless of geography or financial background.
+
+### Why Our Content is 100% Free:
+- **Zero Course Paywalls:** We do not sell high-ticket $997 guru courses. All 15 numbered niche guides and visual automation diagrams are completely free to read, bookmark, and share.
+- **Sustained by Transparent Partnerships:** Our platform is independently funded through ethical software referral partnerships (Hostinger, Meshy AI, Suno AI) and non-intrusive Google AdSense impressions.
+- **Actionable Blueprints:** Every tutorial includes real math, realistic timelines, copy-paste email templates, and verified software links.`,
     mainImage: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200&auto=format&fit=crop&q=80',
     url: 'https://teamwhitehatdev.github.io/#/ai',
     createdAt: '2026-08-04T00:00:00Z',
-    updatedAt: '2026-10-29T00:00:00Z'
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+
+  // =========================================================================
+  // 🌟 SHOWCASE PAGE OWNER (DETAILED FLAGSHIP PORTFOLIO PROJECTS)
+  // =========================================================================
+  {
+    id: 'cms-showcase-1',
+    pageOwner: 'showcase',
+    homeFeatured: false,
+    contentType: 'Project',
+    page: 'showcase',
+    featured: true,
+    title: 'Enterprise Minimalist Portfolio & All-in-One CMS Platform',
+    category: 'WEB DEVELOPMENT',
+    badge: 'LIVE SYSTEM',
+    status: 'PUBLISHED',
+    visible: true,
+    summary: 'An ultra-fast client-side static web application with dynamic navigation manager, live telemetry radar, and drag-and-drop website builder.',
+    description: 'Architected with React 18, TypeScript, Tailwind CSS, and Vite. Features client-side rate-limiting, live visitor geolocation telemetry, and Wix-style page builder with code export.',
+    fullContent: `# Enterprise Minimalist Portfolio & All-in-One CMS Platform
+
+A full-stack client-side application designed for maximum performance, security, and content flexibility.
+
+### Key Capabilities:
+- **Drag & Drop Website Builder:** 13 customizable visual block components with live style inspector and 1-click HTML/TSX code exporter.
+- **Real-Time Telemetry Radar:** Real visitor IP and geolocation resolution mapped to an interactive world radar with country metrics.
+- **Instant Search Across All Views:** Multi-field live filtering across titles, descriptions, categories, and tags.`,
+    mainImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&auto=format&fit=crop&q=80',
+    metrics: 'React 18 • TypeScript • Tailwind CSS • Vite • Sub-Second Load Time',
+    url: 'https://teamwhitehatdev.github.io/#/showcase',
+    buttonText: 'View Project Architecture →',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+  {
+    id: 'cms-showcase-2',
+    pageOwner: 'showcase',
+    homeFeatured: false,
+    contentType: 'Project',
+    page: 'showcase',
+    featured: false,
+    title: 'Network & Data Diagnostics GUI Utility',
+    category: 'CYBERSECURITY',
+    badge: 'DESKTOP TOOL',
+    status: 'PUBLISHED',
+    visible: true,
+    summary: 'A standalone desktop diagnostic utility designed to monitor network interface traffic, detect VPN tunnels, and inspect hardware performance.',
+    description: 'Built with Python, Scapy, and PyQt5. Provides real-time bandwidth graphing, active adapter classification, and public egress IP geolocation.',
+    fullContent: `# Network & Data Diagnostics GUI Utility
+
+A native desktop diagnostic tool for network administrators, developers, and cybersecurity analysts.
+
+### Core Modules:
+- **Packet Sniffing & Interface Monitoring:** Real-time capture of TCP/UDP packet throughput across active Ethernet and Wi-Fi adapters.
+- **VPN / VPS Tunnel Classification:** Detects DNS leaks and verifies egress IP masking.
+- **System Resource Telemetry:** Live CPU, memory, and disk I/O metrics visualized with clean retro-cyber charts.`,
+    mainImage: './media_1787649227371.webp',
+    metrics: 'Python 3.11 • Scapy • PyQt5 • Multi-Threading • Zero Data Telemetry',
+    url: 'https://futuristicsoftwares.gumroad.com/l/NETWORKANDDATAINFORMATIONS-GUI-TOOLS?a=815255139',
+    buttonText: 'Inspect Desktop Utility →',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
+  },
+  {
+    id: 'cms-showcase-3',
+    pageOwner: 'showcase',
+    homeFeatured: false,
+    contentType: 'Project',
+    page: 'showcase',
+    featured: false,
+    title: 'Automated Speed-to-Lead CRM Pipeline & Webhook Router',
+    category: 'AUTOMATION',
+    badge: 'ENTERPRISE FLOW',
+    status: 'PUBLISHED',
+    visible: true,
+    summary: 'An automated lead-routing engine that ingests incoming webhook leads, enriches contact details with AI, and notifies sales reps in 30 seconds.',
+    description: 'Orchestrated with Make.com, OpenAI API, Airtable, and Twilio SMS. Eliminates response delays and increases lead conversion rates by 4x.',
+    fullContent: `# Automated Speed-to-Lead CRM Pipeline & Webhook Router
+
+Studies show that contacting an inbound lead within 5 minutes results in a **21x higher qualification rate** compared to waiting 30 minutes.
+
+### Pipeline Architecture:
+1. **Webhook Trigger:** Ingests form payloads from Webflow, WordPress, or Typeform.
+2. **AI Lead Scoring:** Evaluates budget, company size, and project scope using GPT-4o-mini with structured JSON outputs.
+3. **CRM Record Creation:** Adds or updates the prospect record in Airtable / HubSpot with clean formatting.
+4. **Instant Rep Alert:** Dispatches an SMS alert to the account executive with one-click dial buttons.`,
+    mainImage: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&auto=format&fit=crop&q=80',
+    metrics: 'Make.com • OpenAI API • Airtable • Twilio • 30s Speed-to-Lead',
+    url: 'https://teamwhitehatdev.github.io/#/ai',
+    buttonText: 'Explore Automation Flow →',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-10-30T00:00:00Z'
   }
 ];
 
@@ -808,8 +1096,11 @@ export const DEFAULT_PLAY_STORE_CONFIG: PlayStoreAppConfig = {
   hideBannerImage: false,
   appIconUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80',
   hideAppIcon: false,
-  popupDelaySeconds: 4,
+  popupDelaySeconds: 1,
   reopenOnRefresh: true,
+  autoFadeoutSeconds: 5,
+  autoFadeoutEnabled: true,
+  compactMinimalist: true,
   featuresList: [
     'Military-Grade Network & Packet Security Diagnostics',
     'AI Virtual Assistant Automation Workflows Offline',

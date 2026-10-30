@@ -1,38 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ExternalLink,
   X,
   Minus,
-  Square,
-  ShieldCheck,
   Star,
   Download,
-  CheckCircle2,
-  Maximize2
+  ShieldCheck,
+  Maximize2,
+  Clock
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 /**
- * Authentic Windows Frame Google Play Store Android App Popup
- * 100% Configurable & Manageable from /#/admin CMS:
- * - Modify/edit/hide/unhide app info, ratings, downloads, descriptions
- * - Upload local banner images or paste image URLs
- * - Destination Google Play Store link (app or publisher URL)
- * - Minimize to taskbar pill, maximize, and close controls
+ * High-Performance Minimalistic Google Play Store Android App Popup
+ * Features:
+ * - Limited display duration (3 to 5 seconds auto fade-out)
+ * - Sleek, small, and non-intrusive Windows frame design
+ * - Smooth CSS fade-in & fade-out transitions
+ * - Hover-to-pause auto-close timer (user friendly UX)
+ * - Auto-refreshes / re-displays every page refresh or re-visit
+ * - 100% Manageable from /#/admin CMS
  */
 export const PlayStoreModal: React.FC = () => {
   const { playStoreConfig } = useApp();
   const [isOpen, setIsOpen] = useState(false);
+  const [isFadingOut, setIsFadingOut] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [isMaximized, setIsMaximized] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [remainingSeconds, setRemainingSeconds] = useState(5);
 
+  const durationSec = Math.max(3, Math.min(15, playStoreConfig?.autoFadeoutSeconds ?? 5));
+  const autoFadeEnabled = playStoreConfig?.autoFadeoutEnabled !== false;
+  const isCompact = playStoreConfig?.compactMinimalist !== false;
+
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Trigger popup on page load / refresh
   useEffect(() => {
     if (!playStoreConfig || !playStoreConfig.enabled) {
       setIsOpen(false);
       return;
     }
 
-    // Check if user previously closed it in this session (unless reopenOnRefresh is forced)
+    // Check session dismissal if reopenOnRefresh is explicitly disabled
     if (!playStoreConfig.reopenOnRefresh) {
       try {
         const closed = sessionStorage.getItem('wh_playstore_modal_dismissed');
@@ -44,21 +55,64 @@ export const PlayStoreModal: React.FC = () => {
       }
     }
 
-    const delayMs = Math.max(500, (playStoreConfig.popupDelaySeconds ?? 4) * 1000);
-    const timer = setTimeout(() => {
+    // Initial popup delay (default 1-2 seconds)
+    const delayMs = Math.max(300, (playStoreConfig.popupDelaySeconds ?? 1.5) * 1000);
+    const initialTimer = setTimeout(() => {
       setIsOpen(true);
+      setIsFadingOut(false);
       setIsMinimized(false);
+      setRemainingSeconds(durationSec);
     }, delayMs);
 
-    return () => clearTimeout(timer);
-  }, [playStoreConfig]);
+    return () => clearTimeout(initialTimer);
+  }, [playStoreConfig, durationSec]);
 
-  if (!playStoreConfig || !playStoreConfig.enabled || !isOpen) {
-    return null;
-  }
+  // Handle Auto-Fadeout Countdown
+  useEffect(() => {
+    if (!isOpen || isMinimized || !autoFadeEnabled) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      return;
+    }
+
+    if (isPaused) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      return;
+    }
+
+    // Countdown interval for visual progress indicator
+    intervalRef.current = setInterval(() => {
+      setRemainingSeconds((prev) => {
+        if (prev <= 1) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    // Fade-out trigger
+    timerRef.current = setTimeout(() => {
+      triggerFadeOut();
+    }, remainingSeconds * 1000);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [isOpen, isMinimized, isPaused, autoFadeEnabled, remainingSeconds]);
+
+  const triggerFadeOut = () => {
+    setIsFadingOut(true);
+    setTimeout(() => {
+      setIsOpen(false);
+      setIsFadingOut(false);
+    }, 600); // Wait for smooth CSS exit animation
+  };
 
   const handleClose = () => {
-    setIsOpen(false);
+    triggerFadeOut();
     if (!playStoreConfig.reopenOnRefresh) {
       try {
         sessionStorage.setItem('wh_playstore_modal_dismissed', 'true');
@@ -74,195 +128,173 @@ export const PlayStoreModal: React.FC = () => {
 
   const handleRestore = () => {
     setIsMinimized(false);
+    setIsFadingOut(false);
+    setRemainingSeconds(durationSec);
   };
 
-  const handleToggleMaximize = () => {
-    setIsMaximized(!isMaximized);
-  };
+  if (!playStoreConfig || !playStoreConfig.enabled || !isOpen) {
+    return null;
+  }
 
-  // Minimized Floating Windows Taskbar Button
+  // Minimized Floating Pill
   if (isMinimized) {
     return (
-      <div className="fixed bottom-4 right-4 z-50 animate-bounce">
+      <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={handleRestore}
           title="Restore Google Play Store Window"
-          className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white border border-emerald-500/80 shadow-xl cursor-pointer text-xs font-semibold select-none group transition-all"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/95 hover:bg-slate-900 text-white border border-emerald-500/80 shadow-lg cursor-pointer text-xs font-semibold backdrop-blur-sm transition-all active:scale-95 group"
         >
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping inline-block" />
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block" />
           <span className="text-emerald-400 font-bold">▶ Google Play App</span>
-          <span className="text-slate-400 font-mono text-[11px]">★ {playStoreConfig.rating}</span>
-          <Maximize2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
+          <span className="text-slate-400 font-mono text-[10px]">★ {playStoreConfig.rating}</span>
+          <Maximize2 className="w-3 h-3 text-slate-400 group-hover:text-white" />
         </button>
       </div>
     );
   }
 
+  const progressPercent = Math.max(0, Math.min(100, (remainingSeconds / durationSec) * 100));
+
   return (
     <aside
       aria-label="Google Play Store App Showcase Window"
-      className={`fixed z-50 font-sans transition-all duration-200 select-none ${
-        isMaximized
-          ? 'bottom-4 right-4 left-4 sm:left-auto sm:w-[500px] max-h-[90vh]'
-          : 'bottom-4 right-4 w-[calc(100vw-2rem)] sm:w-[390px] max-h-[88vh]'
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      className={`fixed z-50 bottom-4 right-4 font-sans select-none transition-all duration-500 ease-out ${
+        isFadingOut
+          ? 'opacity-0 translate-y-4 scale-95 pointer-events-none'
+          : 'opacity-100 translate-y-0 scale-100'
+      } ${
+        isCompact
+          ? 'w-[calc(100vw-2rem)] sm:w-[320px]'
+          : 'w-[calc(100vw-2rem)] sm:w-[360px]'
       }`}
     >
       {/* WINDOWS FRAME CONTAINER */}
-      <div className="bg-white border-2 border-slate-700/80 rounded-2xl shadow-[0_20px_60px_-15px_rgba(15,23,42,0.35),0_0_0_1px_rgba(34,197,94,0.3)] overflow-hidden flex flex-col">
+      <div className="bg-white/95 backdrop-blur-md border border-slate-700/80 rounded-2xl shadow-[0_16px_40px_-10px_rgba(15,23,42,0.35),0_0_0_1px_rgba(16,185,129,0.35)] overflow-hidden flex flex-col">
         {/* ================================================================= */}
-        {/* 1. RETRO-MODERN WINDOWS TITLE BAR                                 */}
+        {/* RETRO-MODERN COMPACT WINDOWS TITLE BAR                            */}
         {/* ================================================================= */}
-        <header className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white px-3.5 py-2 flex items-center justify-between border-b border-slate-800 select-none">
-          <div className="flex items-center space-x-2 min-w-0">
-            {/* Google Play / Android Icon */}
-            <div className="w-4 h-4 shrink-0 rounded bg-emerald-500 flex items-center justify-center text-slate-950 font-black text-[10px]">
+        <header className="relative bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white px-3 py-1.5 flex items-center justify-between border-b border-slate-800 select-none">
+          <div className="flex items-center space-x-1.5 min-w-0 pr-2">
+            <div className="w-3.5 h-3.5 shrink-0 rounded bg-emerald-500 flex items-center justify-center text-slate-950 font-black text-[9px] shadow-xs">
               ▶
             </div>
-            <span className="font-mono text-xs font-bold text-slate-200 truncate tracking-wide">
-              {playStoreConfig.windowTitle || 'Google Play™ Store - Android App Showcase.exe'}
+            <span className="font-mono text-[11px] font-bold text-slate-200 truncate tracking-tight">
+              {playStoreConfig.windowTitle || 'Google Play™ Store.exe'}
             </span>
           </div>
 
-          {/* Windows Control Buttons (Minimize, Maximize, Close) */}
-          <div className="flex items-center space-x-1 shrink-0 ml-2">
-            {/* Minimize _ */}
+          {/* Right Action Icons: Timer Badge & Window Controls */}
+          <div className="flex items-center space-x-1 shrink-0">
+            {autoFadeEnabled && (
+              <span
+                title={isPaused ? 'Auto-close paused on hover' : `Closing in ${remainingSeconds}s`}
+                className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-800 text-emerald-400 border border-slate-700 flex items-center gap-0.5"
+              >
+                <Clock className="w-2.5 h-2.5 animate-spin" style={{ animationDuration: '4s' }} />
+                <span>{isPaused ? 'HOLD' : `${remainingSeconds}s`}</span>
+              </span>
+            )}
+
+            {/* Minimize */}
             <button
               onClick={handleMinimize}
-              title="Minimize to taskbar"
-              className="w-6 h-6 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+              title="Minimize to pill"
+              className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
             >
-              <Minus className="w-3.5 h-3.5" />
+              <Minus className="w-3 h-3" />
             </button>
-            {/* Maximize / Restore □ */}
-            <button
-              onClick={handleToggleMaximize}
-              title={isMaximized ? 'Restore Window' : 'Maximize Window'}
-              className="w-6 h-6 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
-            >
-              <Square className="w-3 h-3" />
-            </button>
-            {/* Close ✕ */}
+
+            {/* Close */}
             <button
               onClick={handleClose}
-              title="Close Window"
-              className="w-6 h-6 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-rose-600 transition-colors cursor-pointer"
+              title="Dismiss"
+              className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-rose-600 transition-colors cursor-pointer"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-3 h-3" />
             </button>
           </div>
+
+          {/* Auto-Close Countdown Progress Bar Line */}
+          {autoFadeEnabled && !isPaused && (
+            <div
+              className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 transition-all duration-1000 ease-linear"
+              style={{ width: `${progressPercent}%` }}
+            />
+          )}
         </header>
 
         {/* ================================================================= */}
-        {/* 2. WINDOW CONTENT SCROLLABLE BODY                                 */}
+        {/* COMPACT & MINIMALISTIC WINDOW BODY                                */}
         {/* ================================================================= */}
-        <div className="p-4 space-y-3.5 overflow-y-auto max-h-[calc(88vh-44px)] bg-slate-50/60">
-          {/* Banner Image (if provided and not hidden) */}
-          {playStoreConfig.bannerImageUrl && !playStoreConfig.hideBannerImage && (
-            <div className="relative rounded-xl overflow-hidden border border-slate-200/90 shadow-2xs group bg-slate-900 aspect-16/8 sm:aspect-16/7">
-              <img
-                src={playStoreConfig.bannerImageUrl}
-                alt={playStoreConfig.appName}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-              <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-emerald-500/90 text-slate-950 font-mono font-bold text-[10px] uppercase tracking-wider backdrop-blur-xs flex items-center gap-1 shadow-xs">
-                <span>{playStoreConfig.tagline || 'OFFICIAL ANDROID APP'}</span>
-              </div>
-              {playStoreConfig.badgeText && (
-                <div className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-white/95 text-slate-900 font-bold text-[10px] shadow-xs flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
-                  <span>{playStoreConfig.badgeText}</span>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* App Header & Identity */}
-          <div className="flex items-start space-x-3 bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
+        <div className="p-3 space-y-2.5 bg-slate-50/80">
+          {/* App Header Card */}
+          <div className="flex items-center space-x-2.5 bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
             {/* App Icon */}
             {playStoreConfig.appIconUrl && !playStoreConfig.hideAppIcon ? (
               <img
                 src={playStoreConfig.appIconUrl}
                 alt={playStoreConfig.appName}
-                className="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-xs shrink-0"
+                className="w-10 h-10 rounded-xl object-cover border border-slate-200 shadow-xs shrink-0"
                 loading="lazy"
               />
             ) : (
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-lg shadow-xs shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-sm shadow-xs shrink-0">
                 ▶
               </div>
             )}
 
             <div className="flex-1 min-w-0 space-y-0.5">
-              <h4 className="text-sm font-extrabold text-slate-900 leading-snug line-clamp-2">
-                {playStoreConfig.appName || 'WhiteHat Android Application'}
+              <h4 className="text-xs font-extrabold text-slate-900 leading-tight truncate">
+                {playStoreConfig.appName || 'WhiteHat Android App'}
               </h4>
-              <p className="text-[11px] font-medium text-emerald-700">
+              <p className="text-[10px] font-semibold text-emerald-700 truncate">
                 {playStoreConfig.developerName || 'Team WhiteHat Dev'}
               </p>
-              <div className="flex items-center gap-2 pt-0.5 text-[11px] text-slate-600">
+              <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
                 <span className="flex items-center gap-0.5 font-bold text-amber-600">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
+                  <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-500" />
                   {playStoreConfig.rating || 4.9}
                 </span>
                 <span className="text-slate-300">•</span>
-                <span className="text-slate-500">{playStoreConfig.reviewsCount || '10K+'}</span>
-                <span className="text-slate-300">•</span>
                 <span className="flex items-center gap-0.5 text-slate-600 font-medium">
-                  <Download className="w-3 h-3 text-slate-400" />
+                  <Download className="w-2.5 h-2.5 text-slate-400" />
                   {playStoreConfig.downloadsCount || '50K+'}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Description */}
+          {/* Optional Short Description (Minimalist 1 line teaser) */}
           {playStoreConfig.description && (
-            <p className="text-xs text-slate-700 leading-relaxed bg-white p-3 rounded-xl border border-slate-200">
+            <p className="text-[11px] text-slate-600 leading-snug line-clamp-2 px-0.5">
               {playStoreConfig.description}
             </p>
           )}
 
-          {/* Features Highlight (if any) */}
-          {playStoreConfig.featuresList && playStoreConfig.featuresList.length > 0 && (
-            <div className="space-y-1.5 bg-white p-3 rounded-xl border border-slate-200 text-xs text-slate-700">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                Key Features Included:
-              </span>
-              {playStoreConfig.featuresList.map((feat, idx) => (
-                <div key={idx} className="flex items-center space-x-1.5 text-[11px] text-slate-700">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>{feat}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Security & Verification Pill */}
-          <div className="flex items-center justify-between text-[11px] text-slate-500 px-1">
+          {/* Minimalist Verified Badge */}
+          <div className="flex items-center justify-between text-[10px] text-slate-500 px-0.5">
             <span className="flex items-center gap-1 text-emerald-700 font-medium">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              Verified by Google Play Protect
+              <ShieldCheck className="w-3 h-3 text-emerald-600" />
+              Google Play Protect
             </span>
-            <span className="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-mono font-semibold">
+            <span className="bg-slate-200/90 text-slate-700 px-1.5 py-0.2 rounded font-mono font-semibold text-[9px]">
               {playStoreConfig.categoryBadge || 'Tools'}
             </span>
           </div>
 
-          {/* ================================================================= */}
-          {/* 3. GOOGLE PLAY STORE CTA BUTTON (THEMEFOREST HIGH CTR)             */}
-          {/* ================================================================= */}
+          {/* Direct Minimalist Google Play Button */}
           <a
             href={playStoreConfig.playStoreUrl || 'https://play.google.com/store/apps'}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleClose}
-            className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-extrabold text-xs uppercase rounded-xl text-center shadow-lg hover:shadow-emerald-500/20 transition-all flex items-center justify-center space-x-2 cursor-pointer border border-slate-800 group"
+            className="w-full py-2.5 px-3 bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-extrabold text-[11px] uppercase rounded-xl text-center shadow-md hover:shadow-emerald-500/20 transition-all flex items-center justify-center space-x-1.5 cursor-pointer border border-slate-800 group"
           >
-            {/* Google Play colored triangle badge */}
             <svg
-              className="w-4 h-4 shrink-0 transition-transform group-hover:scale-110"
+              className="w-3.5 h-3.5 shrink-0 transition-transform group-hover:scale-110"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -284,21 +316,11 @@ export const PlayStoreModal: React.FC = () => {
                 fill="#00B0FF"
               />
             </svg>
-            <span className="tracking-wider">
-              {playStoreConfig.ctaButtonText || 'GET IT ON GOOGLE PLAY'}
+            <span className="tracking-wide">
+              {playStoreConfig.ctaButtonText || 'GET ON GOOGLE PLAY'}
             </span>
-            <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
+            <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-white" />
           </a>
-
-          {/* Dismiss button text */}
-          <div className="text-center pt-0.5">
-            <button
-              onClick={handleClose}
-              className="text-[11px] text-slate-500 hover:text-slate-800 hover:underline cursor-pointer"
-            >
-              Maybe later (close window)
-            </button>
-          </div>
         </div>
       </div>
     </aside>

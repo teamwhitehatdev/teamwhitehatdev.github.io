@@ -227,7 +227,17 @@ export interface NavTabConfig {
 
 // CMS BACKEND EDUCATIONAL TYPES
 export type CMSPageOwnerType = 'showcase' | 'services' | 'web-hosting' | 'about' | 'affiliate-guide' | 'ai' | 'home' | string;
-export type CMSContentType = 'Tutorial' | 'Guide' | 'Article' | 'Resource' | 'Service' | 'Showcase' | 'Affiliate' | 'Discussion';
+export type CMSContentType =
+  | 'Tutorial'
+  | 'Guide'
+  | 'Article'
+  | 'Resource'
+  | 'Service'
+  | 'Showcase'
+  | 'Affiliate'
+  | 'Discussion'
+  | 'Playbook'
+  | 'Project';
 export type CMSPageType = CMSPageOwnerType | 'home' | 'va-hub' | 'freelancing' | 'affiliate-learning';
 export type CMSStatusType = 'DRAFT' | 'PUBLISHED' | 'SCHEDULED';
 export type CMSVisibilityType = 'PUBLIC' | 'HIDDEN';
@@ -489,6 +499,9 @@ export interface PlayStoreAppConfig {
   hideAppIcon?: boolean;        // Toggle: Hide/Unhide app icon
   popupDelaySeconds: number;    // Seconds to wait before popping out on refresh
   reopenOnRefresh: boolean;     // If true, pops out on every refresh; if false, remembers dismissal per session
+  autoFadeoutSeconds?: number;  // Display duration in seconds before auto-fading out (e.g. 3 to 5 seconds)
+  autoFadeoutEnabled?: boolean; // Master toggle: automatically fade out after limited time
+  compactMinimalist?: boolean;  // Render in small minimalistic floating card style
   featuresList: string[];       // Bullet highlights of app features
   updatedAt: string;
 }
