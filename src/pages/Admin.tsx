@@ -2648,10 +2648,11 @@ export const Admin: React.FC = () => {
                     </button>
                     <button
                       onClick={() => handleOpenEditTopic(topic)}
-                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold flex items-center gap-1 cursor-pointer"
+                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold flex items-center gap-1 cursor-pointer shadow-xs"
+                      title="Edit this Niche & Customize Sub-Items"
                     >
-                      <Edit className="w-3.5 h-3.5" />
-                      <span>Edit</span>
+                      <Edit className="w-3.5 h-3.5 text-cyan-300" />
+                      <span>Edit Niche</span>
                     </button>
                     <button
                       onClick={() => {

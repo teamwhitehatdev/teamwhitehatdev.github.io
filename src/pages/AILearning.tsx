@@ -79,7 +79,13 @@ export const AILearning: React.FC = () => {
 
   const uniqueArticlesMap = new Map<string, CMSItem>();
   cmsAIItems.forEach((item) => {
-    uniqueArticlesMap.set(item.id, item);
+    const normalizedTitle = item.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const alreadyExists = Array.from(uniqueArticlesMap.values()).some(
+      (existing) => existing.title.toLowerCase().replace(/[^a-z0-9]/g, '') === normalizedTitle
+    );
+    if (!uniqueArticlesMap.has(item.id) && !alreadyExists) {
+      uniqueArticlesMap.set(item.id, item);
+    }
   });
 
   const allArticles = Array.from(uniqueArticlesMap.values());

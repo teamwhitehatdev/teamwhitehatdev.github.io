@@ -321,16 +321,6 @@ export const AffiliateGuide: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
-                      <Link
-                        to="/admin"
-                        onClick={(e) => e.stopPropagation()}
-                        className="hidden md:inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-bold text-slate-700 hover:text-emerald-700 bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-xl shadow-2xs transition-all cursor-pointer"
-                        title="Edit this Niche, Upload Images & Customize in Admin CMS"
-                      >
-                        <Edit className="w-3 h-3 text-emerald-600" />
-                        <span>Edit Niche</span>
-                      </Link>
-
                       <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs shadow-2xs">
                         <span className="hidden sm:inline">{isOpen ? 'Collapse' : 'Expand'}</span>
                         {isOpen ? (

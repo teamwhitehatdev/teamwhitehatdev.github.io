@@ -24,7 +24,6 @@ import {
   Terminal,
   Code2,
   ShieldCheck,
-  Eye,
   Activity,
   PhoneCall,
   Video,
@@ -32,7 +31,12 @@ import {
   X,
   ArrowRight,
   Bot,
-  Sliders
+  Sliders,
+  Maximize2,
+  Minimize2,
+  Network,
+  Server,
+  Radio
 } from 'lucide-react';
 
 const MESHY_REFERRAL_URL =
@@ -44,6 +48,9 @@ export interface TopologyNode {
   type: 'TRIGGER' | 'ENRICH' | 'AI BRAIN' | 'ROUTER' | 'ACTION';
   title: string;
   tool: string;
+  ipAddress: string;
+  port: string;
+  protocolBadge: string;
   description: string;
   inputPayload: string;
   processingLogic: string;
@@ -68,6 +75,7 @@ export interface WorkflowBlueprint {
   badge: string;
   title: string;
   subtitle: string;
+  networkTopologyTitle: string;
   timeSaved: string;
   vaServiceValue: string;
   tools: string[];
@@ -86,6 +94,7 @@ export const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
     title: 'Real-Time Webhook Inbound → AI Qualification & Scoring → CRM & Slack VIP Dispatch',
     subtitle:
       'Autonomous pipeline capturing website inquiries, enriching company firmographics, scoring leads (0–100) with Claude 3.7 JSON Mode, and generating custom proposal drafts in under 4 seconds.',
+    networkTopologyTitle: 'B2B Sales Ingress & Cognitive Qualification Mesh Architecture (VPC 10.0.0.0/16)',
     timeSaved: '15+ Hours / Week',
     vaServiceValue: '$600 – $1,500 Setup Fee',
     tools: ['Make.com / n8n', 'Typeform / Webhook', 'Claude 3.7 / GPT-4o', 'Notion / HubSpot CRM', 'Slack Webhook', 'Gmail API'],
@@ -94,7 +103,10 @@ export const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         step: '01',
         type: 'TRIGGER',
         title: 'Webhook Event Ingestion',
-        tool: 'Typeform / Webflow Form POST',
+        tool: 'Typeform / Webflow Ingress',
+        ipAddress: '10.0.1.10',
+        port: '443',
+        protocolBadge: 'HTTPS / TLS 1.3',
         description: 'Listens for instant HTTP POST payloads upon prospect form submission with cryptographic HMAC validation.',
         inputPayload: '{\n  "prospect_name": "Sarah Jenkins",\n  "company_domain": "apexstudio.io",\n  "monthly_budget": "$5,000",\n  "pain_point": "Manual onboarding delays"\n}',
         processingLogic: 'Validates payload structure, checks rate limits, and sanitizes input fields against SQL/XSS injections.',
@@ -116,6 +128,9 @@ export const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         type: 'ENRICH',
         title: 'Domain & Firmographic Scraping',
         tool: 'Perplexity API / ScrapingBee',
+        ipAddress: '10.0.2.20',
+        port: '8080',
+        protocolBadge: 'REST / gRPC Mesh',
         description: 'Queries domain metadata, company tech stack, employee count, and recent press releases for full context.',
         inputPayload: '{\n  "domain": "apexstudio.io"\n}',
         processingLogic: 'Fetches homepage meta tags, LinkedIn summary, and tech stack fingerprints via automated headless browser.',
@@ -137,6 +152,9 @@ export const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         type: 'AI BRAIN',
         title: 'Cognitive Scoring & Reply Drafting',
         tool: 'Claude 3.7 Sonnet (JSON Mode)',
+        ipAddress: '10.0.3.100',
+        port: '8443',
+        protocolBadge: 'Structured JSON Core',
         description: 'Analyzes prospect fit against Ideal Customer Profile (ICP), computes lead score (0-100), and drafts tailored consultative reply.',
         inputPayload: '{\n  "prospect": { "name": "Sarah", "budget": 5000 },\n  "company": { "industry": "Design Agency", "team_size": "25-50" }\n}',
         processingLogic: 'Executes system prompt with strict schema enforcement. Scores 94/100, assigns HIGH_VIP tier, writes 3-paragraph consultative reply.',
@@ -157,7 +175,10 @@ export const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         step: '04',
         type: 'ROUTER',
         title: 'Conditional VIP Logic Router',
-        tool: 'Make.com Router Node',
+        tool: 'Make.com CIDR Decision Switch',
+        ipAddress: '10.0.4.50',
+        port: '5000',
+        protocolBadge: 'CIDR Routing Switch',
         description: 'Splits execution into distinct high-speed branches based on lead score threshold (Score >= 80 vs < 80).',
         inputPayload: '{\n  "lead_score": 94,\n  "priority_tier": "HIGH_VIP"\n}',
         processingLogic: 'Condition: `lead_score >= 80` -> Route to Fast-Track Branch A (Instant Deal + Slack VIP Ping); else Route to Branch B (Email Nurture).',
@@ -179,6 +200,9 @@ export const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         type: 'ACTION',
         title: 'Multi-App CRM & Notification Dispatch',
         tool: 'Notion CRM + Gmail Draft + Slack VIP',
+        ipAddress: '10.0.5.15',
+        port: '443',
+        protocolBadge: 'Egress API Gateway',
         description: 'Creates Deal Card in Notion/HubSpot, stages personalized reply in Gmail drafts with booking link, and pings #vip-leads Slack.',
         inputPayload: '{\n  "deal_title": "Apex Studio ($5k/mo)",\n  "contact": "sarah@apexstudio.io",\n  "draft": "Hi Sarah..."\n}',
         processingLogic: 'Executes parallel API calls to Notion Database, Gmail API (createDraft), and Slack Incoming Webhook with sound chime.',
@@ -228,6 +252,7 @@ Return strictly valid JSON matching this schema:
     title: 'Gmail / Outlook Event Watcher → Semantic SOP Vector Search → Human-in-the-Loop Slack Approval',
     subtitle:
       'How Virtual Assistants handle 200+ high-urgency client emails daily with zero hallucinations by anchoring replies strictly to company SOPs in Pinecone.',
+    networkTopologyTitle: 'Enterprise Support RAG & Vector Semantic Bus Architecture',
     timeSaved: '12+ Hours / Week',
     vaServiceValue: '$500 – $1,200 / Month Retainer',
     tools: ['Gmail Watcher', 'OpenAI Classifier', 'Pinecone / Vector DB', 'Claude 3.7 Sonnet', 'Slack Block Kit'],
@@ -237,6 +262,9 @@ Return strictly valid JSON matching this schema:
         type: 'TRIGGER',
         title: 'Inbound Email Stream Watcher',
         tool: 'Gmail Pub/Sub / Outlook Webhook',
+        ipAddress: '10.0.1.12',
+        port: '443',
+        protocolBadge: 'Pub/Sub Ingress',
         description: 'Monitors client inbox in real-time for new customer emails, stripping newsletters and automated spam.',
         inputPayload: '{\n  "thread_id": "th_1892",\n  "from": "marcus@clientcorp.com",\n  "subject": "Question about Q4 plan upgrade and refund policy"\n}',
         processingLogic: 'Filters incoming message headers against blocklists, checks thread history, extracts clean plain-text body.',
@@ -258,6 +286,9 @@ Return strictly valid JSON matching this schema:
         type: 'AI BRAIN',
         title: 'Intent & Urgency Classification',
         tool: 'GPT-4o-mini Classifier',
+        ipAddress: '10.0.2.14',
+        port: '8080',
+        protocolBadge: 'Zero-Shot Classifier',
         description: 'Categorizes email into [1] Billing, [2] Technical Bug, [3] Sales Inquiry, or [4] Urgent Escalation.',
         inputPayload: '{\n  "text": "Do you offer prorated refunds if our team scales down in month 3?"\n}',
         processingLogic: 'Zero-shot classification assigning category: BILLING_REFUND, urgency: HIGH, sentiment: NEUTRAL.',
@@ -279,6 +310,9 @@ Return strictly valid JSON matching this schema:
         type: 'ENRICH',
         title: 'SOP Knowledge Base RAG Retrieval',
         tool: 'Pinecone Vector DB (text-embedding-3)',
+        ipAddress: '10.0.2.45',
+        port: '6379',
+        protocolBadge: 'Vector Semantic Bus',
         description: 'Performs cosine similarity search against company handbook, refund clauses, and SLA guidelines.',
         inputPayload: '{\n  "query": "prorated refund policy team scale down",\n  "top_k": 3\n}',
         processingLogic: 'Converts query to 1536-dim vector embedding. Retrieves Section 4.2: "Prorated Billing & Grace Period Terms".',
@@ -300,6 +334,9 @@ Return strictly valid JSON matching this schema:
         type: 'AI BRAIN',
         title: 'Strict Grounded Reply Generation',
         tool: 'Claude 3.7 Sonnet',
+        ipAddress: '10.0.3.110',
+        port: '8443',
+        protocolBadge: 'Zero-Hallucination Core',
         description: 'Synthesizes professional reply citing official policy strictly without hallucinating non-existent promises.',
         inputPayload: '{\n  "customer_inquiry": "Do you offer prorated refunds...",\n  "sop_context": "Clause 4.2: Enterprise teams..."\n}',
         processingLogic: 'Enforces strict grounding guardrails. Generates polite, clear email with precise policy citations.',
@@ -321,6 +358,9 @@ Return strictly valid JSON matching this schema:
         type: 'ACTION',
         title: 'Slack Block Kit 1-Click Approval',
         tool: 'Slack Interactive App + Gmail API',
+        ipAddress: '10.0.5.25',
+        port: '443',
+        protocolBadge: 'Approval Webhook Mesh',
         description: 'Presents interactive draft in Slack with "✅ Approve & Send", "✏️ Edit Draft", and "❌ Escalate" buttons.',
         inputPayload: '{\n  "thread_id": "th_1892",\n  "draft": "Hi Marcus...",\n  "recipient": "marcus@clientcorp.com"\n}',
         processingLogic: 'On VA click "✅ Approve", fires Gmail API `messages.send` and tags thread "Resolved by AI + VA".',
@@ -366,6 +406,7 @@ Rules:
     title: 'Product Photo Upload → Vision Analysis → Meshy AI 3D Generation → GLB Web Optimization & Shopify Sync',
     subtitle:
       'Turn flat 2D client product photos into interactive, WebGL-ready 3D models (.GLB / .USDZ) automatically using Meshy AI text/image-to-3D synthesis.',
+    networkTopologyTitle: 'High-Throughput Spatial 3D Asset & WebGL CDN Pipeline',
     timeSaved: '20+ Hours / Week',
     vaServiceValue: '$800 – $2,500 / Project Package',
     tools: ['AWS S3 / Cloudinary', 'GPT-4o Vision', 'Meshy AI 3D Generator', 'Draco Mesh Optimizer', 'Shopify GraphQL API'],
@@ -375,6 +416,9 @@ Rules:
         type: 'TRIGGER',
         title: 'Product Image Upload Trigger',
         tool: 'Cloudinary / S3 Webhook Dropzone',
+        ipAddress: '10.0.1.18',
+        port: '443',
+        protocolBadge: 'S3 Ingestion Gateway',
         description: 'Listens for high-resolution product photos uploaded by client via client portal or Dropbox folder.',
         inputPayload: '{\n  "file_url": "https://cdn.store.com/uploads/sneaker_orthopedic_v2.png",\n  "sku": "SKU-9941",\n  "category": "footwear"\n}',
         processingLogic: 'Validates image dimensions, strips background artifacts, and prepares clean RGBA PNG file.',
@@ -396,6 +440,9 @@ Rules:
         type: 'ENRICH',
         title: 'Multimodal Vision & PBR Prompt Synthesis',
         tool: 'GPT-4o Vision Analyzer',
+        ipAddress: '10.0.2.32',
+        port: '8080',
+        protocolBadge: 'Vision Optical Parser',
         description: 'Analyzes material properties (matte mesh, brushed leather, rubber tread) and creates optimal 3D generation prompts.',
         inputPayload: '{\n  "image": "sneaker_orthopedic.png"\n}',
         processingLogic: 'Extracts surface texture characteristics, color palette hex codes, and structural geometric contours.',
@@ -417,6 +464,9 @@ Rules:
         type: 'AI BRAIN',
         title: 'Meshy AI 3D Mesh & Texture Generation',
         tool: 'Meshy AI 3D API (Image-to-3D Mode)',
+        ipAddress: '10.0.3.150',
+        port: '443',
+        protocolBadge: 'Neural 3D Synthesizer',
         description: 'Synthesizes complete 3D polygon geometry, UV unwrap maps, normal maps, and roughness maps (.GLB/.OBJ).',
         inputPayload: '{\n  "image_url": "sneaker_orthopedic.png",\n  "ai_prompt": "Ergonomic running sneaker...",\n  "texture_richness": "high"\n}',
         processingLogic: 'Meshy AI generative neural pipeline builds 3D volume, bakes 4K PBR textures, and exports .GLB & .USDZ.',
@@ -438,6 +488,9 @@ Rules:
         type: 'ROUTER',
         title: 'Draco Compression & WebGL LOD Optimizer',
         tool: 'Node.js Draco WebAssembly Pipeline',
+        ipAddress: '10.0.4.60',
+        port: '3000',
+        protocolBadge: 'Binary Codec Optimizer',
         description: 'Compresses geometry from 28MB down to 2.4MB for instant mobile web loading without visual quality loss.',
         inputPayload: '{\n  "raw_glb_url": "sneaker_orthopedic.glb",\n  "target_size_mb": 3.0\n}',
         processingLogic: 'Applies Draco compression to vertex positions, normal vectors, and texture WebP conversions.',
@@ -459,6 +512,9 @@ Rules:
         type: 'ACTION',
         title: 'Shopify 3D Viewer & CDN Asset Sync',
         tool: 'Shopify GraphQL Admin API',
+        ipAddress: '10.0.5.40',
+        port: '443',
+        protocolBadge: 'E-Commerce CDN Sync',
         description: 'Attaches 3D model to product listing with interactive 360-degree orbit viewer and AR Quick Look for iOS/Android.',
         inputPayload: '{\n  "sku": "SKU-9941",\n  "model_glb": "sneaker_orthopedic_opt.glb"\n}',
         processingLogic: 'Calls Shopify `productCreateMedia` mutation. Activates AR camera preview on customer mobile devices.',
@@ -503,6 +559,7 @@ Analyze this client product photo and generate the exact prompt for Meshy AI Ima
     title: 'Content Topic Ingestion → Viral Script Brain → ElevenLabs Voice + Suno Music → Auto-Render & Social Post',
     subtitle:
       'Generate 10+ TikTok, Reels, and Shorts daily by connecting script generation, ElevenLabs neural voiceover, Suno AI custom music tracks, and automated video rendering.',
+    networkTopologyTitle: 'Autonomous Media Generation & Cross-Platform Video Engine',
     timeSaved: '22+ Hours / Week',
     vaServiceValue: '$900 – $2,200 / Month Package',
     tools: ['Notion Calendar', 'Claude 3.7 Scripting', 'ElevenLabs Voice AI', 'Suno AI Music Studio', 'Shotstack / Creatomate', 'Metricool API'],
@@ -512,6 +569,9 @@ Analyze this client product photo and generate the exact prompt for Meshy AI Ima
         type: 'TRIGGER',
         title: 'Content Queue & Topic Trigger',
         tool: 'Notion Database / RSS Feed',
+        ipAddress: '10.0.1.22',
+        port: '443',
+        protocolBadge: 'Content Inbound Queue',
         description: 'Triggers daily at 8:00 AM or when a new topic row is marked "Ready for Production" in Notion.',
         inputPayload: '{\n  "topic": "3 AI Tools Saving Remote VAs 10 Hours a Week",\n  "target_audience": "Freelancers & VAs"\n}',
         processingLogic: 'Fetches article references, verifies target duration (30-45 seconds), and initiates video build run.',
@@ -533,6 +593,9 @@ Analyze this client product photo and generate the exact prompt for Meshy AI Ima
         type: 'AI BRAIN',
         title: 'Viral Hook & 30-Second Script Engine',
         tool: 'Claude 3.7 Sonnet',
+        ipAddress: '10.0.3.115',
+        port: '8443',
+        protocolBadge: 'LLM Script Core',
         description: 'Generates 3-second visual text hook, dynamic 75-word voiceover script, and Suno AI music style prompt.',
         inputPayload: '{\n  "topic": "3 AI Tools Saving Remote VAs..."\n}',
         processingLogic: 'Applies retention framework: Hook -> Problem -> Agitate -> 3 Tools -> Call-to-Action.',
@@ -554,6 +617,9 @@ Analyze this client product photo and generate the exact prompt for Meshy AI Ima
         type: 'ENRICH',
         title: 'ElevenLabs Voice & Suno AI Music Synthesis',
         tool: 'ElevenLabs Voice + Suno Music Studio',
+        ipAddress: '10.0.2.65',
+        port: '8080',
+        protocolBadge: 'Audio Synthesis Bus',
         description: 'Synthesizes studio-grade neural voiceover and generates matching royalty-free background beat via Suno AI.',
         inputPayload: '{\n  "voice_text": "If you are still copying...",\n  "suno_prompt": "Upbeat lo-fi electronic synthwave..."\n}',
         processingLogic: 'ElevenLabs renders emotional human inflection; Suno produces synchronized instrumental backing track.',
@@ -575,6 +641,9 @@ Analyze this client product photo and generate the exact prompt for Meshy AI Ima
         type: 'ACTION',
         title: 'Cloud Video Render & Kinetic Subtitles',
         tool: 'Creatomate / Shotstack Cloud API',
+        ipAddress: '10.0.4.80',
+        port: '443',
+        protocolBadge: 'Video Transcode Cluster',
         description: 'Combines voiceover, background music, B-roll stock footage, and animated word-by-word karaoke captions.',
         inputPayload: '{\n  "voice_url": "voice_994.mp3",\n  "music_url": "suno_994.mp3",\n  "hook": "Stop doing this..."\n}',
         processingLogic: 'Renders 1080x1920 MP4 at 60fps with dynamic audio ducking (-14dB music under voiceover).',
@@ -596,6 +665,9 @@ Analyze this client product photo and generate the exact prompt for Meshy AI Ima
         type: 'ACTION',
         title: 'Multi-Platform Auto-Schedule & Post',
         tool: 'Buffer / Metricool / YouTube API',
+        ipAddress: '10.0.5.50',
+        port: '443',
+        protocolBadge: 'Social Graph Egress',
         description: 'Distributes completed video simultaneously to Instagram Reels, TikTok, YouTube Shorts, and Facebook Reels.',
         inputPayload: '{\n  "video_url": "reel_994_final.mp4",\n  "caption": "How AI saves 10 hrs/wk #productivity #freelancing"\n}',
         processingLogic: 'Schedules post for peak audience time window (6:30 PM) and stores metrics tracking IDs.',
@@ -640,6 +712,7 @@ Generate:
     title: 'Inbound Twilio Voice Stream → Whisper Live Transcribe → LLM Slot Negotiator → Calendar & SMS Dispatch',
     subtitle:
       'Ultra-low-latency voice receptionist answering client phone calls, negotiating appointment times in real time, and booking Google Calendar events in under 400ms.',
+    networkTopologyTitle: 'Low-Latency Full-Duplex WebRTC Telephony Architecture',
     timeSaved: '18+ Hours / Week',
     vaServiceValue: '$800 – $2,000 Setup Fee',
     tools: ['Twilio Voice SIP', 'Deepgram Nova-2', 'GPT-4o Realtime', 'Google Calendar API', 'Twilio SMS'],
@@ -649,6 +722,9 @@ Generate:
         type: 'TRIGGER',
         title: 'Inbound Phone Call Event',
         tool: 'Twilio Voice WebRTC / SIP Stream',
+        ipAddress: '10.0.1.25',
+        port: '5060',
+        protocolBadge: 'SIP / WebRTC Stream',
         description: 'Answers customer phone calls within 1 ring, establishing a full-duplex audio stream over WebSockets.',
         inputPayload: '{\n  "call_sid": "CA991823901",\n  "caller_number": "+14155552671",\n  "call_status": "in-progress"\n}',
         processingLogic: 'Initializes bi-directional audio bridge (<40ms latency) and connects to speech pipeline.',
@@ -670,6 +746,9 @@ Generate:
         type: 'ENRICH',
         title: 'Speech-to-Text Live Transcription',
         tool: 'Deepgram Nova-2 Real-Time Stream',
+        ipAddress: '10.0.2.70',
+        port: '443',
+        protocolBadge: 'Live Neural STT',
         description: 'Transcribes human speech into text in under 120ms with noise suppression and accent handling.',
         inputPayload: '{\n  "raw_audio_chunk": "pcm_16000_audio_buffer"\n}',
         processingLogic: 'Real-time neural transcription emits finalized words as the caller speaks.',
@@ -691,6 +770,9 @@ Generate:
         type: 'AI BRAIN',
         title: 'Voice LLM Slot Negotiation Brain',
         tool: 'GPT-4o Realtime / Claude 3.7',
+        ipAddress: '10.0.3.120',
+        port: '8443',
+        protocolBadge: 'Realtime Audio Brain',
         description: 'Understands intent, queries open calendar slots via function calling, and generates natural spoken response.',
         inputPayload: '{\n  "caller_text": "Schedule consultation this Friday afternoon",\n  "open_slots": ["2:00 PM", "4:30 PM"]\n}',
         processingLogic: 'Selects available candidate slots and formulates natural conversational dialogue.',
@@ -712,6 +794,9 @@ Generate:
         type: 'ROUTER',
         title: 'Calendar Concurrency Lock Router',
         tool: 'Google Calendar API Gateway',
+        ipAddress: '10.0.4.75',
+        port: '443',
+        protocolBadge: 'Optimistic Lock Switch',
         description: 'Applies optimistic locking to guarantee that the selected slot cannot be double-booked during the call.',
         inputPayload: '{\n  "requested_slot": "2026-11-06T14:00:00Z"\n}',
         processingLogic: 'Checks real-time calendar availability: IF slot is free, places 5-minute temporary hold; ELSE suggests alternate time.',
@@ -733,6 +818,9 @@ Generate:
         type: 'ACTION',
         title: 'Calendar Booking & Instant SMS Confirmation',
         tool: 'Google Calendar + Twilio SMS API',
+        ipAddress: '10.0.5.60',
+        port: '443',
+        protocolBadge: 'SMS & Calendar Sink',
         description: 'Creates confirmed calendar invite, logs patient/client profile in CRM, and texts instant SMS with directions.',
         inputPayload: '{\n  "phone": "+14155552671",\n  "confirmed_time": "Friday Nov 6 @ 2:00 PM"\n}',
         processingLogic: 'Sends SMS confirmation text: "Your consultation is confirmed for Friday at 2:00 PM. Click here to reschedule if needed."',
@@ -779,6 +867,7 @@ Key Voice Rules:
     title: 'Multi-Channel Executive Inbound → Multimodal Vision Invoice OCR → Expense Routing → QuickBooks & Daily Briefing',
     subtitle:
       'Turn scattered executive Slack/Telegram requests and receipt photos into categorized QuickBooks ledger entries and daily 5-bullet KPI briefings.',
+    networkTopologyTitle: 'Enterprise Operations & Financial Intelligence Mesh',
     timeSaved: '16+ Hours / Week',
     vaServiceValue: '$600 – $1,800 / Month Retainer',
     tools: ['Telegram / Slack Bot', 'GPT-4o Vision OCR', 'Make.com Router', 'QuickBooks Online API', 'Notion Executive Wiki'],
@@ -788,6 +877,9 @@ Key Voice Rules:
         type: 'TRIGGER',
         title: 'Multi-Channel Executive Message Inbound',
         tool: 'Telegram Bot / Slack Private Channel',
+        ipAddress: '10.0.1.30',
+        port: '443',
+        protocolBadge: 'Bot Webhook Ingress',
         description: 'Captures voice memos, receipt photos, and quick instructions sent by founders while traveling.',
         inputPayload: '{\n  "from": "CEO_Direct",\n  "message_text": "Review attached software receipt for $2,400 and book my flight to Austin",\n  "has_media": true\n}',
         processingLogic: 'Detects compound intent: [1] Document Expense Processing, [2] Travel Logistics Booking.',
@@ -809,6 +901,9 @@ Key Voice Rules:
         type: 'ENRICH',
         title: 'Multimodal Vision Document OCR',
         tool: 'GPT-4o Vision OCR Engine',
+        ipAddress: '10.0.2.80',
+        port: '8080',
+        protocolBadge: 'Vision OCR Cluster',
         description: 'Scans PDF invoices or wrinkled receipt photos, extracting vendor, tax ID, line items, and totals.',
         inputPayload: '{\n  "document_url": "inv_oct_2026.pdf"\n}',
         processingLogic: 'Extracts vendor: "AWS Cloud Services", invoice_id: "INV-9921", subtotal: $2,400.00, date: "2026-10-28".',
@@ -830,6 +925,9 @@ Key Voice Rules:
         type: 'AI BRAIN',
         title: 'Cognitive Task Decomposition & Policy Check',
         tool: 'Claude 3.7 Sonnet',
+        ipAddress: '10.0.3.130',
+        port: '8443',
+        protocolBadge: 'Task Decomposition Core',
         description: 'Applies corporate spending policies, verifies receipt legitimacy, and drafts flight itinerary options.',
         inputPayload: '{\n  "expense": { "amount": 2400, "vendor": "AWS" },\n  "travel_request": "Austin on Monday"\n}',
         processingLogic: 'Confirms AWS hosting is pre-authorized. Queries Google Flights API for Austin nonstop flights.',
@@ -851,6 +949,9 @@ Key Voice Rules:
         type: 'ROUTER',
         title: 'Executive Approval Threshold Gateway',
         tool: 'Make.com Financial Router',
+        ipAddress: '10.0.4.90',
+        port: '3000',
+        protocolBadge: 'Financial Policy Router',
         description: 'Routes expenses < $1,000 to automatic ledger sync; expenses >= $1,000 require 1-click founder button approval.',
         inputPayload: '{\n  "amount": 2400.00,\n  "threshold": 1000.00\n}',
         processingLogic: 'Condition: `amount >= 1000` -> Route to Telegram approval card with [Approve] / [Deny] buttons.',
@@ -872,6 +973,9 @@ Key Voice Rules:
         type: 'ACTION',
         title: 'QuickBooks Ledger Write & Executive Evening Briefing',
         tool: 'QuickBooks Online API + Telegram Bot',
+        ipAddress: '10.0.5.80',
+        port: '443',
+        protocolBadge: 'Accounting Ledger Egress',
         description: 'Creates journal entry in QuickBooks, archives PDF in Google Drive, and sends CEO a 4-bullet evening summary.',
         inputPayload: '{\n  "vendor": "AWS Cloud Services",\n  "amount": 2400.00,\n  "flight_booked": "United 1420"\n}',
         processingLogic: 'Writes purchase transaction to QuickBooks chart of accounts and posts cleanly formatted evening briefing.',
@@ -1088,7 +1192,9 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   const [activeSimStep, setActiveSimStep] = useState<number>(0); // 0 = idle, 1..5 = active step
   const [isSimulating, setIsSimulating] = useState<boolean>(false);
   const [simSpeed, setSimSpeed] = useState<1 | 2>(1);
-  const [inspectedNode, setInspectedNode] = useState<TopologyNode | null>(null);
+  const [selectedNodeIndex, setSelectedNodeIndex] = useState<number>(0);
+  const [diagramMode, setDiagramMode] = useState<'full-network' | 'pipeline'>('full-network');
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [simLogs, setSimLogs] = useState<Array<{ id: string; time: string; text: string; type: 'info' | 'success' | 'warn' | 'active' }>>([]);
   const simTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -1130,6 +1236,8 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     );
   }, [activeBlueprintId]);
 
+  const selectedNode = activeBlueprint.nodes[selectedNodeIndex] || activeBlueprint.nodes[0];
+
   // Initial simulation logs when blueprint switches
   useEffect(() => {
     setIsSimulating(false);
@@ -1141,22 +1249,21 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
       {
         id: 'init-1',
         time: timeStr,
-        text: `[SYSTEM] Topology Engine initialized: ${activeBlueprint.title}`,
+        text: `[NET-TOPOLOGY] Virtual Private Cloud initialized: ${activeBlueprint.networkTopologyTitle}`,
         type: 'info'
       },
       {
         id: 'init-2',
         time: timeStr,
-        text: `[STATUS] Ready to execute reactive event flow across 5 nodes. Click "Run Flow Simulation".`,
+        text: `[ROUTING] Gateways, Neural Reasoning Core & Egress Sinks online. Bandwidth: 10Gbps | Drop: 0.00%`,
         type: 'info'
       }
     ]);
-  }, [activeBlueprintId, activeBlueprint.title]);
+  }, [activeBlueprintId, activeBlueprint.networkTopologyTitle]);
 
   // Handle Live Simulation Loop
   const runSimulation = () => {
     if (isSimulating) {
-      // Pause
       setIsSimulating(false);
       if (simTimerRef.current) clearInterval(simTimerRef.current);
       return;
@@ -1165,6 +1272,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     setIsSimulating(true);
     let step = 1;
     setActiveSimStep(1);
+    setSelectedNodeIndex(0);
 
     const appendLog = (stepNum: number) => {
       const node = activeBlueprint.nodes[stepNum - 1];
@@ -1173,7 +1281,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
       const logEntry = {
         id: `sim-${Date.now()}-${stepNum}`,
         time: timeStr,
-        text: `[NODE ${node.step} • ${node.type}] ${node.title} (${node.tool}) ➔ Processed payload successfully in ${node.latency}`,
+        text: `[ZONE ${node.step} • ${node.protocolBadge}] ${node.title} @ ${node.ipAddress}:${node.port} ➔ Transferred packet in ${node.latency}`,
         type: (stepNum === 5 ? 'success' : stepNum === 3 ? 'active' : 'info') as 'info' | 'success' | 'warn' | 'active'
       };
       setSimLogs((prev) => [logEntry, ...prev.slice(0, 15)]);
@@ -1186,9 +1294,9 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     simTimerRef.current = setInterval(() => {
       step += 1;
       if (step > 5) {
-        // Complete
         setIsSimulating(false);
         setActiveSimStep(5);
+        setSelectedNodeIndex(4);
         if (simTimerRef.current) clearInterval(simTimerRef.current);
         const now = new Date();
         const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -1196,7 +1304,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           {
             id: `done-${Date.now()}`,
             time: timeStr,
-            text: `[FLOW COMPLETE] All 5 stages finished. Estimated human time saved: ${activeBlueprint.timeSaved}.`,
+            text: `[ROUTING COMPLETE] End-to-end packet cycle finalized across all subnets. Estimated time saved: ${activeBlueprint.timeSaved}.`,
             type: 'success'
           },
           ...prev.slice(0, 15)
@@ -1204,6 +1312,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
         return;
       }
       setActiveSimStep(step);
+      setSelectedNodeIndex(step - 1);
       appendLog(step);
     }, intervalTime);
   };
@@ -1218,7 +1327,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
       {
         id: `reset-${Date.now()}`,
         time: timeStr,
-        text: `[RESET] Simulation buffer cleared. Ready for next packet flow.`,
+        text: `[SYSTEM] Network packet buffer cleared. Telemetry monitor ready.`,
         type: 'info'
       }
     ]);
@@ -1233,9 +1342,13 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   return (
     <div id={id} className="space-y-12">
       {/* =====================================================================
-          SECTION 1: THE ANIMATED BLACK TOPOLOGY CANVAS & DIAGRAM WORKFLOW
+          SECTION 1: THE ANIMATED REAL FULL-VIEW NETWORKING TOPOLOGY DIAGRAM
       ====================================================================== */}
-      <section className="relative rounded-3xl bg-[#060813] border border-cyan-500/30 shadow-2xl p-4 sm:p-7 lg:p-8 overflow-hidden text-slate-100">
+      <section
+        className={`relative rounded-3xl bg-[#060813] border border-cyan-500/30 shadow-2xl p-4 sm:p-7 lg:p-8 overflow-hidden text-slate-100 transition-all ${
+          isExpanded ? 'fixed inset-4 z-50 overflow-y-auto' : ''
+        }`}
+      >
         {/* ANIMATED BACKGROUND MATRIX GRID & SUBTLE GLOWING RADIAL CONDUITS */}
         <div
           className="absolute inset-0 pointer-events-none opacity-20"
@@ -1258,7 +1371,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
               </span>
-              <span>LIVE ANIMATED TOPOLOGY WORKFLOW &bull; NODE-BY-NODE SPECIFICATION</span>
+              <span>ENTERPRISE NETWORK TOPOLOGY &bull; FULL ARCHITECTURE DIAGRAM VIEW</span>
             </div>
 
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
@@ -1271,35 +1384,42 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2 shrink-0 font-mono text-xs">
-            <div className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-300 flex items-center gap-2">
-              <Activity className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Saves: <strong className="text-emerald-300">{activeBlueprint.timeSaved}</strong></span>
+            {/* View Mode Toggle: Full Network vs Linear Pipeline */}
+            <div className="flex items-center rounded-xl bg-slate-900 border border-slate-800 p-1 text-xs">
+              <button
+                onClick={() => setDiagramMode('full-network')}
+                className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                  diagramMode === 'full-network'
+                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_12px_rgba(56,189,248,0.3)]'
+                    : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                <Network className="w-3.5 h-3.5" />
+                <span>Full Network Topology</span>
+              </button>
+              <button
+                onClick={() => setDiagramMode('pipeline')}
+                className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                  diagramMode === 'pipeline'
+                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_12px_rgba(56,189,248,0.3)]'
+                    : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                <Radio className="w-3.5 h-3.5" />
+                <span>Pipeline View</span>
+              </button>
             </div>
-            <div className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-300 flex items-center gap-2">
-              <Zap className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Value: <strong className="text-cyan-300">{activeBlueprint.vaServiceValue}</strong></span>
-            </div>
+
+            {/* Expand / Minimize Fullscreen Toggle */}
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition-colors cursor-pointer"
+              title={isExpanded ? 'Exit Full View' : 'Full View Canvas'}
+            >
+              {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </button>
           </div>
         </div>
-
-        {/* SEARCH MATCH NOTIFICATION (IF SEARCH QUERY PRESENT) */}
-        {query && (
-          <div className="relative z-10 my-4 p-3 rounded-xl bg-cyan-950/60 border border-cyan-500/40 flex items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2 text-cyan-200">
-              <Search className="w-4 h-4 text-cyan-400 shrink-0" />
-              <span>
-                Search filter active for <strong className="text-white">"{searchQuery}"</strong>:{' '}
-                {matchingBlueprintIds.length > 0 ? (
-                  <span className="text-emerald-300">
-                    Found {matchingBlueprintIds.length} matching workflow {matchingBlueprintIds.length === 1 ? 'blueprint' : 'blueprints'}
-                  </span>
-                ) : (
-                  <span className="text-amber-300">No blueprint titles directly match, showing full diagram suite</span>
-                )}
-              </span>
-            </div>
-          </div>
-        )}
 
         {/* CATEGORY WORKFLOW SELECTOR TABS (6 DISTINCT AUTOMATION NICHES) */}
         <div className="relative z-10 my-6">
@@ -1315,7 +1435,10 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
               return (
                 <button
                   key={bp.id}
-                  onClick={() => setActiveBlueprintId(bp.id)}
+                  onClick={() => {
+                    setActiveBlueprintId(bp.id);
+                    setSelectedNodeIndex(0);
+                  }}
                   className={`text-left p-3 rounded-xl border transition-all flex flex-col justify-between gap-1.5 cursor-pointer relative overflow-hidden ${
                     isSelected
                       ? 'bg-cyan-950/90 border-cyan-400 text-white shadow-[0_0_20px_rgba(56,189,248,0.25)] ring-1 ring-cyan-400'
@@ -1340,255 +1463,418 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           </div>
         </div>
 
-        {/* ⚡ ANIMATED SVG FLOW DIAGRAM TOPOLOGY & CONNECTION WIRING */}
-        <div className="relative z-10 bg-black/60 border border-slate-800/90 rounded-2xl p-4 sm:p-6 overflow-x-auto shadow-inner">
-          <div className="min-w-[920px]">
-            <svg
-              viewBox="0 0 960 210"
-              className="w-full h-auto select-none"
-              role="img"
-              aria-label={`Animated AI Flow Diagram Topology for ${activeBlueprint.title}`}
-            >
-              <defs>
-                {/* Circuit Gradient Conduits */}
-                <linearGradient id="cyberWireGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#0284c7" />
-                  <stop offset="50%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#10b981" />
-                </linearGradient>
-
-                {/* Animated Dash Conduit Pattern */}
-                <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-              </defs>
-
-              {/* Background cyber circuit lines */}
-              <g opacity="0.35">
-                <line x1="20" y1="20" x2="940" y2="20" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
-                <line x1="20" y1="190" x2="940" y2="190" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
-              </g>
-
-              {/* BEZIER CONNECTING WIRES WITH ANIMATED DASHES & TRAVELING PACKETS */}
-              {/* Wire 1 -> 2 */}
-              <path
-                id="wire-1-2"
-                d="M 172 105 C 190 105, 192 105, 206 105"
-                fill="none"
-                stroke="#0284c7"
-                strokeWidth="2.5"
-                strokeDasharray="4 4"
-                className="animate-wire-dash"
-              />
-              <circle r="4" fill="#38bdf8" filter="url(#neonGlow)">
-                <animateMotion dur="2.4s" repeatCount="indefinite" path="M 172 105 C 190 105, 192 105, 206 105" />
-              </circle>
-
-              {/* Wire 2 -> 3 */}
-              <path
-                id="wire-2-3"
-                d="M 362 105 C 380 105, 382 105, 396 105"
-                fill="none"
-                stroke="#38bdf8"
-                strokeWidth="2.5"
-                strokeDasharray="4 4"
-                className="animate-wire-dash"
-              />
-              <circle r="4" fill="#38bdf8" filter="url(#neonGlow)">
-                <animateMotion dur="2.4s" begin="0.6s" repeatCount="indefinite" path="M 362 105 C 380 105, 382 105, 396 105" />
-              </circle>
-
-              {/* Wire 3 -> 4 */}
-              <path
-                id="wire-3-4"
-                d="M 562 105 C 580 105, 582 105, 596 105"
-                fill="none"
-                stroke="#38bdf8"
-                strokeWidth="2.5"
-                strokeDasharray="4 4"
-                className="animate-wire-dash"
-              />
-              <circle r="4" fill="#10b981" filter="url(#neonGlow)">
-                <animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M 562 105 C 580 105, 582 105, 596 105" />
-              </circle>
-
-              {/* Wire 4 -> 5 */}
-              <path
-                id="wire-4-5"
-                d="M 752 105 C 770 105, 772 105, 786 105"
-                fill="none"
-                stroke="#10b981"
-                strokeWidth="2.5"
-                strokeDasharray="4 4"
-                className="animate-wire-dash"
-              />
-              <circle r="4" fill="#10b981" filter="url(#neonGlow)">
-                <animateMotion dur="2.4s" begin="1.8s" repeatCount="indefinite" path="M 752 105 C 770 105, 772 105, 786 105" />
-              </circle>
-
-              {/* NODE 01: TRIGGER */}
-              <g transform="translate(18, 38)" className="cursor-pointer" onClick={() => setInspectedNode(activeBlueprint.nodes[0])}>
-                <rect
-                  width="154"
-                  height="134"
-                  rx="14"
-                  fill="#0c1322"
-                  stroke={activeSimStep === 1 ? '#38bdf8' : '#1e293b'}
-                  strokeWidth={activeSimStep === 1 ? '2.5' : '1.5'}
-                  filter={activeSimStep === 1 ? 'url(#neonGlow)' : undefined}
-                />
-                <rect x="10" y="10" width="76" height="20" rx="5" fill="#0369a1" />
-                <text x="48" y="24" textAnchor="middle" fill="#ffffff" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                  01 TRIGGER
-                </text>
-                <text x="12" y="52" fill="#ffffff" fontSize="11" fontWeight="bold">
-                  {activeBlueprint.nodes[0].title.slice(0, 19)}
-                </text>
-                <text x="12" y="70" fill="#94a3b8" fontSize="9.5">
-                  {activeBlueprint.nodes[0].tool.slice(0, 22)}
-                </text>
-                <rect x="10" y="86" width="134" height="20" rx="4" fill="#0f172a" />
-                <text x="77" y="100" textAnchor="middle" fill="#38bdf8" fontSize="9" fontFamily="monospace">
-                  ⚡ {activeBlueprint.nodes[0].latency}
-                </text>
-                <text x="12" y="124" fill="#64748b" fontSize="8.5" fontFamily="monospace">
-                  Click to inspect payload ↗
-                </text>
-              </g>
-
-              {/* NODE 02: ENRICH */}
-              <g transform="translate(208, 38)" className="cursor-pointer" onClick={() => setInspectedNode(activeBlueprint.nodes[1])}>
-                <rect
-                  width="154"
-                  height="134"
-                  rx="14"
-                  fill="#0c1322"
-                  stroke={activeSimStep === 2 ? '#38bdf8' : '#1e293b'}
-                  strokeWidth={activeSimStep === 2 ? '2.5' : '1.5'}
-                  filter={activeSimStep === 2 ? 'url(#neonGlow)' : undefined}
-                />
-                <rect x="10" y="10" width="82" height="20" rx="5" fill="#1e293b" />
-                <text x="51" y="24" textAnchor="middle" fill="#38bdf8" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                  02 CONTEXT
-                </text>
-                <text x="12" y="52" fill="#ffffff" fontSize="11" fontWeight="bold">
-                  {activeBlueprint.nodes[1].title.slice(0, 19)}
-                </text>
-                <text x="12" y="70" fill="#94a3b8" fontSize="9.5">
-                  {activeBlueprint.nodes[1].tool.slice(0, 22)}
-                </text>
-                <rect x="10" y="86" width="134" height="20" rx="4" fill="#0f172a" />
-                <text x="77" y="100" textAnchor="middle" fill="#38bdf8" fontSize="9" fontFamily="monospace">
-                  🔍 {activeBlueprint.nodes[1].latency}
-                </text>
-                <text x="12" y="124" fill="#64748b" fontSize="8.5" fontFamily="monospace">
-                  Click to inspect payload ↗
-                </text>
-              </g>
-
-              {/* NODE 03: AI LLM COGNITIVE CORE (HERO HIGHLIGHT) */}
-              <g transform="translate(398, 28)" className="cursor-pointer" onClick={() => setInspectedNode(activeBlueprint.nodes[2])}>
-                <rect
-                  width="164"
-                  height="154"
-                  rx="16"
-                  fill="#081026"
-                  stroke={activeSimStep === 3 ? '#38bdf8' : '#0284c7'}
-                  strokeWidth={activeSimStep === 3 ? '3' : '2'}
-                  filter="url(#neonGlow)"
-                />
-                <rect x="10" y="10" width="102" height="22" rx="6" fill="#0284c7" />
-                <text x="61" y="25" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                  03 AI LLM BRAIN
-                </text>
-                <text x="12" y="56" fill="#ffffff" fontSize="12" fontWeight="extrabold">
-                  {activeBlueprint.nodes[2].title.slice(0, 20)}
-                </text>
-                <text x="12" y="76" fill="#38bdf8" fontSize="10" fontWeight="bold">
-                  {activeBlueprint.nodes[2].tool.slice(0, 23)}
-                </text>
-                <rect x="10" y="94" width="144" height="26" rx="6" fill="#032b4d" />
-                <text x="82" y="111" textAnchor="middle" fill="#7dd3fc" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                  🧠 Structured JSON Mode
-                </text>
-                <text x="12" y="142" fill="#38bdf8" fontSize="8.5" fontFamily="monospace">
-                  ⚡ {activeBlueprint.nodes[2].latency} &bull; Click to inspect
-                </text>
-              </g>
-
-              {/* NODE 04: ROUTER */}
-              <g transform="translate(598, 38)" className="cursor-pointer" onClick={() => setInspectedNode(activeBlueprint.nodes[3])}>
-                <rect
-                  width="154"
-                  height="134"
-                  rx="14"
-                  fill="#0c1322"
-                  stroke={activeSimStep === 4 ? '#10b981' : '#1e293b'}
-                  strokeWidth={activeSimStep === 4 ? '2.5' : '1.5'}
-                  filter={activeSimStep === 4 ? 'url(#neonGlow)' : undefined}
-                />
-                <rect x="10" y="10" width="76" height="20" rx="5" fill="#1e293b" />
-                <text x="48" y="24" textAnchor="middle" fill="#10b981" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                  04 ROUTER
-                </text>
-                <text x="12" y="52" fill="#ffffff" fontSize="11" fontWeight="bold">
-                  {activeBlueprint.nodes[3].title.slice(0, 19)}
-                </text>
-                <text x="12" y="70" fill="#94a3b8" fontSize="9.5">
-                  {activeBlueprint.nodes[3].tool.slice(0, 22)}
-                </text>
-                <rect x="10" y="86" width="134" height="20" rx="4" fill="#0f172a" />
-                <text x="77" y="100" textAnchor="middle" fill="#10b981" fontSize="9" fontFamily="monospace">
-                  🔀 {activeBlueprint.nodes[3].latency}
-                </text>
-                <text x="12" y="124" fill="#64748b" fontSize="8.5" fontFamily="monospace">
-                  Click to inspect payload ↗
-                </text>
-              </g>
-
-              {/* NODE 05: ACTION */}
-              <g transform="translate(788, 38)" className="cursor-pointer" onClick={() => setInspectedNode(activeBlueprint.nodes[4])}>
-                <rect
-                  width="154"
-                  height="134"
-                  rx="14"
-                  fill="#0c1322"
-                  stroke={activeSimStep === 5 ? '#10b981' : '#1e293b'}
-                  strokeWidth={activeSimStep === 5 ? '2.5' : '1.5'}
-                  filter={activeSimStep === 5 ? 'url(#neonGlow)' : undefined}
-                />
-                <rect x="10" y="10" width="76" height="20" rx="5" fill="#047857" />
-                <text x="48" y="24" textAnchor="middle" fill="#ffffff" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                  05 ACTION
-                </text>
-                <text x="12" y="52" fill="#ffffff" fontSize="11" fontWeight="bold">
-                  {activeBlueprint.nodes[4].title.slice(0, 19)}
-                </text>
-                <text x="12" y="70" fill="#94a3b8" fontSize="9.5">
-                  {activeBlueprint.nodes[4].tool.slice(0, 22)}
-                </text>
-                <rect x="10" y="86" width="134" height="20" rx="4" fill="#0f172a" />
-                <text x="77" y="100" textAnchor="middle" fill="#10b981" fontSize="9" fontFamily="monospace">
-                  ✅ {activeBlueprint.nodes[4].latency}
-                </text>
-                <text x="12" y="124" fill="#64748b" fontSize="8.5" fontFamily="monospace">
-                  Click to inspect payload ↗
-                </text>
-              </g>
-            </svg>
+        {/* 🌐 REAL FULL VIEW NETWORKING TOPOLOGY DIAGRAM */}
+        <div className="relative z-10 bg-black/70 border border-slate-800/90 rounded-2xl p-4 sm:p-6 overflow-x-auto shadow-inner">
+          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pb-3 border-b border-slate-800/80 mb-4">
+            <span className="flex items-center gap-2">
+              <Server className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{activeBlueprint.networkTopologyTitle}</span>
+            </span>
+            <div className="flex items-center gap-4 text-[10px]">
+              <span className="text-emerald-400">● 99.98% UPTIME</span>
+              <span className="text-cyan-400">⚡ PACKET LATENCY: ~14ms</span>
+              <span className="text-purple-400">🔒 ENCRYPTION: TLS 1.3 / AES-256</span>
+            </div>
           </div>
+
+          {diagramMode === 'full-network' ? (
+            // =================================================================
+            // 🌐 REAL MULTI-TIER NETWORK TOPOLOGY MAP (FULL ARCHITECTURE)
+            // =================================================================
+            <div className="min-w-[1020px]">
+              <svg
+                viewBox="0 0 1040 380"
+                className="w-full h-auto select-none"
+                role="img"
+                aria-label={`Real Networking Topology Diagram for ${activeBlueprint.title}`}
+              >
+                <defs>
+                  <linearGradient id="netTrunkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#0284c7" />
+                    <stop offset="50%" stopColor="#38bdf8" />
+                    <stop offset="100%" stopColor="#10b981" />
+                  </linearGradient>
+
+                  <filter id="neonGlowFull" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+
+                {/* Subnet background boundaries */}
+                <rect x="15" y="15" width="220" height="350" rx="16" fill="#080e1a" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
+                <text x="30" y="38" fill="#64748b" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  [SUBNET 10.0.1.0/24 • INGRESS ZONE]
+                </text>
+
+                <rect x="255" y="15" width="450" height="350" rx="16" fill="#060c18" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
+                <text x="270" y="38" fill="#64748b" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  [SUBNET 10.0.2.0/24 • AI &amp; CONTEXT CLUSTER]
+                </text>
+
+                <rect x="725" y="15" width="300" height="350" rx="16" fill="#080e1a" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
+                <text x="740" y="38" fill="#64748b" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  [SUBNET 10.0.5.0/24 • EGRESS DISPATCH]
+                </text>
+
+                {/* NETWORK BACKBONE CONDUITS */}
+                {/* Conduit: Ingress Node 1 -> Context Node 2 */}
+                <path
+                  d="M 200 115 C 240 115, 250 115, 290 115"
+                  fill="none"
+                  stroke={activeSimStep >= 1 ? '#38bdf8' : '#0284c7'}
+                  strokeWidth="2.5"
+                  strokeDasharray="4 4"
+                  className="animate-wire-dash"
+                />
+                <circle r="4" fill="#38bdf8" filter="url(#neonGlowFull)">
+                  <animateMotion dur="2.4s" repeatCount="indefinite" path="M 200 115 C 240 115, 250 115, 290 115" />
+                </circle>
+
+                {/* Conduit: Context Node 2 -> Neural Brain Node 3 */}
+                <path
+                  d="M 450 115 C 470 115, 470 215, 490 215"
+                  fill="none"
+                  stroke={activeSimStep >= 2 ? '#38bdf8' : '#1e293b'}
+                  strokeWidth="2.5"
+                  strokeDasharray="4 4"
+                  className="animate-wire-dash"
+                />
+                <circle r="4" fill="#38bdf8" filter="url(#neonGlowFull)">
+                  <animateMotion dur="2.4s" begin="0.5s" repeatCount="indefinite" path="M 450 115 C 470 115, 470 215, 490 215" />
+                </circle>
+
+                {/* Conduit: Ingress directly to Neural Core (Secondary Event Bus) */}
+                <path
+                  d="M 200 150 C 320 150, 320 230, 490 230"
+                  fill="none"
+                  stroke="#1e293b"
+                  strokeWidth="1.5"
+                  strokeDasharray="3 3"
+                />
+
+                {/* Conduit: Neural Brain Node 3 -> Router Switch Node 4 */}
+                <path
+                  d="M 670 220 C 700 220, 710 115, 750 115"
+                  fill="none"
+                  stroke={activeSimStep >= 3 ? '#10b981' : '#1e293b'}
+                  strokeWidth="2.5"
+                  strokeDasharray="4 4"
+                  className="animate-wire-dash"
+                />
+                <circle r="4" fill="#10b981" filter="url(#neonGlowFull)">
+                  <animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M 670 220 C 700 220, 710 115, 750 115" />
+                </circle>
+
+                {/* Conduit: Router Switch Node 4 -> Egress Sink Node 5 */}
+                <path
+                  d="M 850 115 C 870 115, 875 115, 895 115"
+                  fill="none"
+                  stroke={activeSimStep >= 4 ? '#10b981' : '#047857'}
+                  strokeWidth="2.5"
+                  strokeDasharray="4 4"
+                  className="animate-wire-dash"
+                />
+                <circle r="4" fill="#10b981" filter="url(#neonGlowFull)">
+                  <animateMotion dur="2.4s" begin="1.8s" repeatCount="indefinite" path="M 850 115 C 870 115, 875 115, 895 115" />
+                </circle>
+
+                {/* Conduit: Router Switch Node 4 -> Dead Letter Queue DLQ Failover */}
+                <path
+                  d="M 800 185 C 800 240, 850 260, 895 260"
+                  fill="none"
+                  stroke="#ef4444"
+                  strokeWidth="1.5"
+                  strokeDasharray="3 3"
+                  opacity="0.6"
+                />
+
+                {/* NODE 01: INGRESS GATEWAY */}
+                <g
+                  transform="translate(30, 55)"
+                  className="cursor-pointer"
+                  onClick={() => setSelectedNodeIndex(0)}
+                >
+                  <rect
+                    width="170"
+                    height="120"
+                    rx="12"
+                    fill="#0f172a"
+                    stroke={selectedNodeIndex === 0 || activeSimStep === 1 ? '#38bdf8' : '#1e293b'}
+                    strokeWidth={selectedNodeIndex === 0 || activeSimStep === 1 ? '2.5' : '1.5'}
+                    filter={selectedNodeIndex === 0 || activeSimStep === 1 ? 'url(#neonGlowFull)' : undefined}
+                  />
+                  <rect x="10" y="10" width="70" height="18" rx="4" fill="#0369a1" />
+                  <text x="45" y="23" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                    01 INGRESS
+                  </text>
+                  <text x="10" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
+                    {activeBlueprint.nodes[0].title.slice(0, 20)}
+                  </text>
+                  <text x="10" y="65" fill="#38bdf8" fontSize="9.5" fontFamily="monospace">
+                    IP: {activeBlueprint.nodes[0].ipAddress}:{activeBlueprint.nodes[0].port}
+                  </text>
+                  <text x="10" y="82" fill="#94a3b8" fontSize="9">
+                    {activeBlueprint.nodes[0].tool.slice(0, 22)}
+                  </text>
+                  <rect x="10" y="93" width="150" height="18" rx="4" fill="#032b4d" />
+                  <text x="85" y="105" textAnchor="middle" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">
+                    {activeBlueprint.nodes[0].protocolBadge} &bull; {activeBlueprint.nodes[0].latency}
+                  </text>
+                </g>
+
+                {/* CLIENT ORIGIN CLOUD */}
+                <g transform="translate(30, 200)">
+                  <rect width="170" height="70" rx="10" fill="#0b1120" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
+                  <text x="12" y="24" fill="#94a3b8" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
+                    CLIENT EDGE ORIGIN
+                  </text>
+                  <text x="12" y="42" fill="#cbd5e1" fontSize="9">
+                    IP: 198.51.100.24 (Public)
+                  </text>
+                  <text x="12" y="58" fill="#38bdf8" fontSize="8.5" fontFamily="monospace">
+                    Cloudflare Edge WAF Active
+                  </text>
+                </g>
+
+                {/* NODE 02: KNOWLEDGE & VECTOR MESH */}
+                <g
+                  transform="translate(280, 55)"
+                  className="cursor-pointer"
+                  onClick={() => setSelectedNodeIndex(1)}
+                >
+                  <rect
+                    width="170"
+                    height="120"
+                    rx="12"
+                    fill="#0f172a"
+                    stroke={selectedNodeIndex === 1 || activeSimStep === 2 ? '#38bdf8' : '#1e293b'}
+                    strokeWidth={selectedNodeIndex === 1 || activeSimStep === 2 ? '2.5' : '1.5'}
+                    filter={selectedNodeIndex === 1 || activeSimStep === 2 ? 'url(#neonGlowFull)' : undefined}
+                  />
+                  <rect x="10" y="10" width="70" height="18" rx="4" fill="#1e293b" />
+                  <text x="45" y="23" textAnchor="middle" fill="#38bdf8" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                    02 CONTEXT
+                  </text>
+                  <text x="10" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
+                    {activeBlueprint.nodes[1].title.slice(0, 20)}
+                  </text>
+                  <text x="10" y="65" fill="#38bdf8" fontSize="9.5" fontFamily="monospace">
+                    IP: {activeBlueprint.nodes[1].ipAddress}:{activeBlueprint.nodes[1].port}
+                  </text>
+                  <text x="10" y="82" fill="#94a3b8" fontSize="9">
+                    {activeBlueprint.nodes[1].tool.slice(0, 22)}
+                  </text>
+                  <rect x="10" y="93" width="150" height="18" rx="4" fill="#032b4d" />
+                  <text x="85" y="105" textAnchor="middle" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">
+                    {activeBlueprint.nodes[1].protocolBadge} &bull; {activeBlueprint.nodes[1].latency}
+                  </text>
+                </g>
+
+                {/* REDIS PUB/SUB BUS SATELLITE */}
+                <g transform="translate(280, 200)">
+                  <rect width="170" height="70" rx="10" fill="#0b1120" stroke="#334155" strokeWidth="1" />
+                  <text x="12" y="24" fill="#94a3b8" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
+                    EVENT QUEUE / BUS
+                  </text>
+                  <text x="12" y="42" fill="#cbd5e1" fontSize="9">
+                    Redis Cluster: 10.0.1.20:6379
+                  </text>
+                  <text x="12" y="58" fill="#10b981" fontSize="8.5" fontFamily="monospace">
+                    0.00% Packet Loss &bull; In-Memory
+                  </text>
+                </g>
+
+                {/* NODE 03: CENTRAL NEURAL COGNITIVE CORE (AI LLM) */}
+                <g
+                  transform="translate(490, 160)"
+                  className="cursor-pointer"
+                  onClick={() => setSelectedNodeIndex(2)}
+                >
+                  <rect
+                    width="180"
+                    height="130"
+                    rx="14"
+                    fill="#081026"
+                    stroke={selectedNodeIndex === 2 || activeSimStep === 3 ? '#38bdf8' : '#0284c7'}
+                    strokeWidth={selectedNodeIndex === 2 || activeSimStep === 3 ? '3' : '2'}
+                    filter="url(#neonGlowFull)"
+                  />
+                  <rect x="10" y="10" width="100" height="20" rx="4" fill="#0284c7" />
+                  <text x="60" y="24" textAnchor="middle" fill="#ffffff" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
+                    03 NEURAL CORE
+                  </text>
+                  <text x="10" y="50" fill="#ffffff" fontSize="12" fontWeight="extrabold">
+                    {activeBlueprint.nodes[2].title.slice(0, 20)}
+                  </text>
+                  <text x="10" y="68" fill="#38bdf8" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
+                    IP: {activeBlueprint.nodes[2].ipAddress}:{activeBlueprint.nodes[2].port}
+                  </text>
+                  <text x="10" y="86" fill="#cbd5e1" fontSize="9">
+                    {activeBlueprint.nodes[2].tool.slice(0, 24)}
+                  </text>
+                  <rect x="10" y="98" width="160" height="20" rx="4" fill="#032b4d" />
+                  <text x="90" y="112" textAnchor="middle" fill="#7dd3fc" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                    {activeBlueprint.nodes[2].protocolBadge} &bull; {activeBlueprint.nodes[2].latency}
+                  </text>
+                </g>
+
+                {/* NODE 04: NETWORK DECISION & ROUTING SWITCH */}
+                <g
+                  transform="translate(735, 55)"
+                  className="cursor-pointer"
+                  onClick={() => setSelectedNodeIndex(3)}
+                >
+                  <rect
+                    width="170"
+                    height="120"
+                    rx="12"
+                    fill="#0f172a"
+                    stroke={selectedNodeIndex === 3 || activeSimStep === 4 ? '#10b981' : '#1e293b'}
+                    strokeWidth={selectedNodeIndex === 3 || activeSimStep === 4 ? '2.5' : '1.5'}
+                    filter={selectedNodeIndex === 3 || activeSimStep === 4 ? 'url(#neonGlowFull)' : undefined}
+                  />
+                  <rect x="10" y="10" width="70" height="18" rx="4" fill="#1e293b" />
+                  <text x="45" y="23" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                    04 ROUTER
+                  </text>
+                  <text x="10" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
+                    {activeBlueprint.nodes[3].title.slice(0, 20)}
+                  </text>
+                  <text x="10" y="65" fill="#10b981" fontSize="9.5" fontFamily="monospace">
+                    IP: {activeBlueprint.nodes[3].ipAddress}:{activeBlueprint.nodes[3].port}
+                  </text>
+                  <text x="10" y="82" fill="#94a3b8" fontSize="9">
+                    {activeBlueprint.nodes[3].tool.slice(0, 22)}
+                  </text>
+                  <rect x="10" y="93" width="150" height="18" rx="4" fill="#052e16" />
+                  <text x="85" y="105" textAnchor="middle" fill="#86efac" fontSize="8.5" fontFamily="monospace">
+                    {activeBlueprint.nodes[3].protocolBadge} &bull; {activeBlueprint.nodes[3].latency}
+                  </text>
+                </g>
+
+                {/* NODE 05: EGRESS MULTI-APP DISPATCH */}
+                <g
+                  transform="translate(850, 55)"
+                  className="cursor-pointer"
+                  onClick={() => setSelectedNodeIndex(4)}
+                >
+                  <rect
+                    width="170"
+                    height="120"
+                    rx="12"
+                    fill="#0f172a"
+                    stroke={selectedNodeIndex === 4 || activeSimStep === 5 ? '#10b981' : '#1e293b'}
+                    strokeWidth={selectedNodeIndex === 4 || activeSimStep === 5 ? '2.5' : '1.5'}
+                    filter={selectedNodeIndex === 4 || activeSimStep === 5 ? 'url(#neonGlowFull)' : undefined}
+                  />
+                  <rect x="10" y="10" width="70" height="18" rx="4" fill="#047857" />
+                  <text x="45" y="23" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                    05 EGRESS
+                  </text>
+                  <text x="10" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
+                    {activeBlueprint.nodes[4].title.slice(0, 20)}
+                  </text>
+                  <text x="10" y="65" fill="#10b981" fontSize="9.5" fontFamily="monospace">
+                    IP: {activeBlueprint.nodes[4].ipAddress}:{activeBlueprint.nodes[4].port}
+                  </text>
+                  <text x="10" y="82" fill="#94a3b8" fontSize="9">
+                    {activeBlueprint.nodes[4].tool.slice(0, 22)}
+                  </text>
+                  <rect x="10" y="93" width="150" height="18" rx="4" fill="#052e16" />
+                  <text x="85" y="105" textAnchor="middle" fill="#86efac" fontSize="8.5" fontFamily="monospace">
+                    {activeBlueprint.nodes[4].protocolBadge} &bull; {activeBlueprint.nodes[4].latency}
+                  </text>
+                </g>
+
+                {/* DEAD LETTER QUEUE (DLQ) SATELLITE */}
+                <g transform="translate(850, 225)">
+                  <rect width="170" height="70" rx="10" fill="#180c10" stroke="#7f1d1d" strokeWidth="1" strokeDasharray="3 3" />
+                  <text x="12" y="24" fill="#f87171" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
+                    DEAD LETTER QUEUE (DLQ)
+                  </text>
+                  <text x="12" y="42" fill="#cbd5e1" fontSize="9">
+                    IP: 10.0.4.99 &bull; SQS Fallback
+                  </text>
+                  <text x="12" y="58" fill="#fca5a5" fontSize="8.5" fontFamily="monospace">
+                    Automated Circuit Breaker
+                  </text>
+                </g>
+              </svg>
+            </div>
+          ) : (
+            // =================================================================
+            // ⚡ LINEAR PIPELINE VIEW
+            // =================================================================
+            <div className="min-w-[960px]">
+              <svg
+                viewBox="0 0 960 195"
+                className="w-full h-auto select-none"
+                role="img"
+                aria-label={`Linear Pipeline View for ${activeBlueprint.title}`}
+              >
+                <defs>
+                  <filter id="neonGlowLine" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+
+                {/* Wires */}
+                <path d="M 172 105 C 190 105, 192 105, 206 105" fill="none" stroke="#0284c7" strokeWidth="2.5" strokeDasharray="4 4" className="animate-wire-dash" />
+                <path d="M 362 105 C 380 105, 382 105, 396 105" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeDasharray="4 4" className="animate-wire-dash" />
+                <path d="M 562 105 C 580 105, 582 105, 596 105" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeDasharray="4 4" className="animate-wire-dash" />
+                <path d="M 752 105 C 770 105, 772 105, 786 105" fill="none" stroke="#10b981" strokeWidth="2.5" strokeDasharray="4 4" className="animate-wire-dash" />
+
+                {activeBlueprint.nodes.map((n, i) => {
+                  const xOffsets = [18, 208, 398, 598, 788];
+                  const x = xOffsets[i];
+                  const isSel = selectedNodeIndex === i || activeSimStep === i + 1;
+                  return (
+                    <g key={n.step} transform={`translate(${x}, 38)`} className="cursor-pointer" onClick={() => setSelectedNodeIndex(i)}>
+                      <rect
+                        width="154"
+                        height="134"
+                        rx="14"
+                        fill="#0c1322"
+                        stroke={isSel ? '#38bdf8' : '#1e293b'}
+                        strokeWidth={isSel ? '2.5' : '1.5'}
+                        filter={isSel ? 'url(#neonGlowLine)' : undefined}
+                      />
+                      <rect x="10" y="10" width="76" height="20" rx="5" fill={i === 2 ? '#0284c7' : i >= 3 ? '#047857' : '#0369a1'} />
+                      <text x="48" y="24" textAnchor="middle" fill="#ffffff" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
+                        0{i + 1} {n.type}
+                      </text>
+                      <text x="12" y="52" fill="#ffffff" fontSize="11" fontWeight="bold">
+                        {n.title.slice(0, 19)}
+                      </text>
+                      <text x="12" y="70" fill="#94a3b8" fontSize="9.5">
+                        {n.tool.slice(0, 22)}
+                      </text>
+                      <rect x="10" y="86" width="134" height="20" rx="4" fill="#0f172a" />
+                      <text x="77" y="100" textAnchor="middle" fill="#38bdf8" fontSize="9" fontFamily="monospace">
+                        ⚡ {n.latency}
+                      </text>
+                      <text x="12" y="124" fill="#64748b" fontSize="8.5" fontFamily="monospace">
+                        IP: {n.ipAddress}:{n.port}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+          )}
         </div>
 
-        {/* 5-NODE WELL-DETAILED BOXES (NODE BY NODE WITH INPUT, LOGIC & OUTPUT SPECS) */}
+        {/* 5-NODE WELL-DETAILED BOXES (ALL SPECIFICATIONS DIRECTLY DISPLAYED) */}
         <div className="relative z-10 my-6 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <Code2 className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Node-by-Node Technical Blueprint &bull; Detailed Input / Logic / Output Specifications:</span>
+              <span>Node Architecture &amp; Execution Specifications (Node by Node):</span>
             </span>
             <span className="text-[11px] text-cyan-300 font-mono">
-              Tip: Click any node box to inspect raw schema &amp; fallback logic
+              Active Focus: Node {selectedNode.step} &bull; {selectedNode.title}
             </span>
           </div>
 
@@ -1596,17 +1882,18 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
             {activeBlueprint.nodes.map((node, index) => {
               const nodeNum = index + 1;
               const isActiveStep = activeSimStep === nodeNum;
+              const isSelected = selectedNodeIndex === index;
               return (
                 <div
                   key={node.step}
-                  onClick={() => setInspectedNode(node)}
+                  onClick={() => setSelectedNodeIndex(index)}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden ${
-                    isActiveStep
+                    isSelected || isActiveStep
                       ? 'bg-slate-900 border-cyan-400 shadow-[0_0_24px_rgba(56,189,248,0.35)] ring-1 ring-cyan-400'
                       : 'bg-slate-900/80 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
                   }`}
                 >
-                  {isActiveStep && (
+                  {(isSelected || isActiveStep) && (
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-400 animate-pulse" />
                   )}
 
@@ -1624,9 +1911,9 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                       {node.title}
                     </h4>
 
-                    <div className="text-xs font-semibold text-cyan-400 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                      <span>{node.tool}</span>
+                    <div className="text-xs font-semibold text-cyan-400 flex items-center justify-between">
+                      <span className="truncate">{node.tool}</span>
+                      <span className="text-[10px] font-mono text-slate-400 shrink-0">:{node.port}</span>
                     </div>
 
                     <p className="text-[11px] text-slate-300 leading-relaxed line-clamp-2">
@@ -1634,32 +1921,72 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                     </p>
                   </div>
 
-                  {/* MINI PAYLOAD PREVIEW */}
+                  {/* INLINE NETWORK SPECIFICATION */}
                   <div className="space-y-1.5 pt-2 border-t border-slate-800/80 font-mono text-[10px]">
                     <div className="text-slate-400 flex items-center justify-between">
-                      <span>IN ➔ OUT</span>
-                      <span className="text-emerald-400">{node.latency}</span>
+                      <span>{node.protocolBadge}</span>
+                      <span className="text-emerald-400 font-bold">{node.latency}</span>
                     </div>
-                    <div className="p-2 rounded-lg bg-black/50 border border-slate-800/80 text-slate-300 truncate">
-                      {node.inputPayload.split('\n')[1] || node.inputPayload}
+                    <div className="p-2 rounded-lg bg-black/50 border border-slate-800/80 text-slate-300 text-[10px] truncate">
+                      IP: {node.ipAddress} &bull; SLA {node.statusUptime}
                     </div>
                   </div>
-
-                  <button
-                    type="button"
-                    className="w-full py-1.5 px-2 bg-slate-800/90 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 text-slate-300 text-[11px] font-medium rounded-lg transition-colors flex items-center justify-center gap-1"
-                  >
-                    <Eye className="w-3 h-3" />
-                    <span>Inspect Specs</span>
-                  </button>
                 </div>
               );
             })}
           </div>
         </div>
 
+        {/* 🔍 DIRECT INLINE SPECIFICATION INSPECTOR (NO POPUP MODALS) */}
+        <div className="relative z-10 bg-slate-950 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-1 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold">
+                NODE {selectedNode.step} &bull; {selectedNode.type}
+              </span>
+              <h3 className="text-base sm:text-lg font-extrabold text-white">
+                {selectedNode.title} ({selectedNode.tool})
+              </h3>
+            </div>
+            <div className="flex items-center gap-3 text-xs font-mono">
+              <span className="text-slate-400">Endpoint: <strong className="text-cyan-300">{selectedNode.detailedSpecs.endpoint}</strong></span>
+              <span className="text-emerald-400 font-bold">Latency: {selectedNode.latency}</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs font-mono">
+            <div className="space-y-1.5">
+              <span className="text-[11px] text-slate-400 uppercase tracking-wider block">
+                Input Schema Payload Stream:
+              </span>
+              <pre className="bg-black/90 border border-slate-800 text-cyan-200 p-3 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap max-h-36">
+                {selectedNode.inputPayload}
+              </pre>
+            </div>
+
+            <div className="space-y-1.5">
+              <span className="text-[11px] text-slate-400 uppercase tracking-wider block">
+                Output Return Payload:
+              </span>
+              <pre className="bg-black/90 border border-slate-800 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap max-h-36">
+                {selectedNode.outputPayload}
+              </pre>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
+            <div className="text-slate-300">
+              <span className="text-slate-400">Retry Policy: </span>
+              {selectedNode.detailedSpecs.retryPolicy}
+            </div>
+            <div className="text-amber-300 shrink-0">
+              Fallback: {selectedNode.detailedSpecs.fallbackAction}
+            </div>
+          </div>
+        </div>
+
         {/* 🕹️ LIVE FLOW SIMULATION ENGINE & TERMINAL CONSOLE */}
-        <div className="relative z-10 bg-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
+        <div className="relative z-10 my-6 bg-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <Terminal className="w-4 h-4 text-cyan-400" />
@@ -1812,82 +2139,6 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           </div>
         </div>
       </section>
-
-      {/* =====================================================================
-          NODE DEEP-DIVE INSPECTION MODAL / DRAWER
-      ====================================================================== */}
-      {inspectedNode && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0b1120] border border-cyan-500/40 rounded-3xl max-w-2xl w-full p-6 space-y-5 text-slate-100 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setInspectedNode(null)}
-              className="absolute top-5 right-5 p-1.5 rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30 text-xs font-mono">
-                <span>NODE {inspectedNode.step}</span>
-                <span>&bull;</span>
-                <span>{inspectedNode.type}</span>
-              </div>
-              <h3 className="text-xl font-extrabold text-white">{inspectedNode.title}</h3>
-              <p className="text-xs text-cyan-400 font-mono">Integration: {inspectedNode.tool}</p>
-            </div>
-
-            <p className="text-sm text-slate-300 leading-relaxed">
-              {inspectedNode.description}
-            </p>
-
-            <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-              <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-                <span className="text-slate-400 block text-[10px]">PROTOCOL</span>
-                <span className="text-white font-bold">{inspectedNode.detailedSpecs.protocol}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-                <span className="text-slate-400 block text-[10px]">AVG LATENCY</span>
-                <span className="text-emerald-400 font-bold">{inspectedNode.latency} ({inspectedNode.statusUptime} SLA)</span>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider block">
-                Input Schema Payload:
-              </span>
-              <pre className="bg-black/90 border border-slate-800 text-cyan-200 p-3 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap">
-                {inspectedNode.inputPayload}
-              </pre>
-            </div>
-
-            <div className="space-y-1.5">
-              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider block">
-                Output Dispatch Payload:
-              </span>
-              <pre className="bg-black/90 border border-slate-800 text-emerald-300 p-3 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap">
-                {inspectedNode.outputPayload}
-              </pre>
-            </div>
-
-            <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1 text-xs">
-              <span className="text-slate-400 font-mono text-[10px] block">ERROR RETRY &amp; FALLBACK POLICY</span>
-              <p className="text-slate-300 leading-relaxed">{inspectedNode.detailedSpecs.retryPolicy}</p>
-              <p className="text-amber-300 text-[11px] pt-1">
-                Fallback: {inspectedNode.detailedSpecs.fallbackAction}
-              </p>
-            </div>
-
-            <div className="pt-2 flex justify-end">
-              <button
-                onClick={() => setInspectedNode(null)}
-                className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition-all"
-              >
-                Close Node Inspector
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* =====================================================================
           SECTION 2: AI & ITS 6 CORE CAPABILITIES (COMPLETE FREE VISUAL GUIDE)

@@ -520,7 +520,7 @@ When you own a professional, fast-loading website filled with genuinely helpful 
     contentType: 'Resource',
     page: 'home',
     featured: true,
-    title: 'AI 3D Model Generator: Create 3D from Text & Images | Meshy',
+    title: 'Featured Partner: Meshy AI 3D Generative Studio (Text & Image to 3D)',
     category: 'MESHY AI 3D DIVISION',
     badge: 'Free Bonus Credits',
     status: 'PUBLISHED',
@@ -602,30 +602,6 @@ Successful affiliate content creators focus on solving real problems first. When
     updatedAt: '2026-10-28T00:00:00Z'
   },
 
-  // =========================================================================
-  // 💻 SHOWCASE PAGE OWNER ONLY (homeFeatured = false, UNIQUE IMAGE)
-  // =========================================================================
-  {
-    id: 'cms-showcase-1',
-    pageOwner: 'showcase',
-    homeFeatured: false,
-    contentType: 'Showcase',
-    page: 'showcase',
-    featured: false,
-    title: 'Minimalist Portfolio & All-in-One CMS Architecture',
-    category: 'Web App',
-    status: 'PUBLISHED',
-    visible: true,
-    description: 'High-performance React & TypeScript application featuring real-time visitor telemetry, client-side security guards, and a unified All-in-One CMS.',
-    mainImage: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&auto=format&fit=crop&q=80',
-    galleryImages: [
-      'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&auto=format&fit=crop&q=80'
-    ],
-    url: 'https://teamwhitehatdev.github.io/',
-    metrics: '99.9% Uptime • <400ms Load',
-    createdAt: '2026-08-01T00:00:00Z',
-    updatedAt: '2026-10-28T00:00:00Z'
-  },
 
   // =========================================================================
   // 🛠️ SERVICES PAGE OWNER ONLY (URL-ONLY /#/services — ULTRA-AFFORDABLE)
