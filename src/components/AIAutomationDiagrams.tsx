@@ -18,10 +18,6 @@ import {
   GraduationCap,
   Briefcase,
   ExternalLink,
-  Play,
-  Pause,
-  RotateCcw,
-  Terminal,
   Code2,
   ShieldCheck,
   Activity,
@@ -140,7 +136,7 @@ export const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         outputPayload: '{\n  "company_name": "Apex Studio",\n  "industry": "B2B Design Agency",\n  "team_size": "25-50",\n  "tech_stack": ["Figma", "Webflow", "HubSpot"]\n}',
         latency: '~380ms',
         statusUptime: '99.95%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'REST GET with Bearer Token',
           endpoint: 'https://api.perplexity.ai/context/domain-enrich',
@@ -322,7 +318,7 @@ Return strictly valid JSON matching this schema:
         outputPayload: '{\n  "matched_chunks": [\n    "Clause 4.2: Enterprise teams may downgrade at any billing cycle end with 14 days notice. Prorated credits apply to next invoice."\n  ],\n  "similarity_score": 0.89\n}',
         latency: '~55ms',
         statusUptime: '99.95%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'gRPC / HTTPS Vector Query',
           endpoint: 'https://company-sops-prod.pinecone.io/query',
@@ -452,7 +448,7 @@ Rules:
         outputPayload: '{\n  "meshy_prompt": "Ergonomic running sneaker, matte technical mesh upper, pure white midsole with hexagonal grip texture, studio lighting PBR maps",\n  "geometry": "watertight_mesh"\n}',
         latency: '~680ms',
         statusUptime: '99.95%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'HTTPS POST /v1/chat/completions (Vision)',
           endpoint: 'https://api.openai.com/v1/chat/completions',
@@ -758,7 +754,7 @@ Generate:
         outputPayload: '{\n  "transcribed_utterance": "Hi, I would like to schedule a consultation this Friday afternoon.",\n  "confidence": 0.97\n}',
         latency: '~115ms',
         statusUptime: '99.97%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'WebSocket Audio Streaming Protocol',
           endpoint: 'wss://api.deepgram.com/v1/listen?encoding=linear16&sample_rate=16000',
@@ -913,7 +909,7 @@ Key Voice Rules:
         outputPayload: '{\n  "vendor": "AWS Cloud Services",\n  "amount_usd": 2400.00,\n  "tax_deductible": true,\n  "category": "Software & Hosting Infrastructure"\n}',
         latency: '~740ms',
         statusUptime: '99.96%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'HTTPS POST /v1/chat/completions (Document)',
           endpoint: 'https://api.openai.com/v1/chat/completions',
@@ -1025,36 +1021,36 @@ Given an incoming directive from the CEO:
     categoryKey: 'seo-publishing',
     categoryLabel: 'AI SEO & Programmatic Publisher',
     badge: 'TOPOLOGY BLUEPRINT 07 • PROGRAMMATIC SEARCH ENGINE',
-    title: 'Google Trends & Semrush Webhook → Keyword Cluster Brain → AI WebP Image Gen → WordPress / Ghost Auto-Publish',
+    title: 'Autonomous Keyword Cluster Brain → Neural Semantic Intent → AI WebP Image Gen → WordPress / Ghost Auto-Publish',
     subtitle:
       'Continuous programmatic SEO pipeline monitoring trending search queries, generating 2,500-word comprehensive markdown tutorials with WebP visuals, and publishing directly to your CMS with schema metadata.',
     networkTopologyTitle: 'Autonomous Programmatic SEO & Content Publishing Cloud Architecture',
     timeSaved: '25+ Hours / Week',
     vaServiceValue: '$1,000 – $2,500 / Month Retainer',
-    tools: ['Semrush API', 'Claude 3.7 Sonnet', 'DALL-E 3 / Flux', 'WordPress REST API', 'Cloudflare Cache Purge'],
+    tools: ['Claude 3.7 Sonnet', 'Perplexity API', 'DALL-E 3 / Flux', 'WordPress REST API', 'Cloudflare Cache Purge'],
     nodes: [
       {
         step: '01',
         type: 'TRIGGER',
-        title: 'Keyword Trend & Search Ingestion',
-        tool: 'Semrush / Google Trends API',
+        title: 'Autonomous AI Keyword Cluster & Semantic Intent Engine',
+        tool: 'Claude 3.7 Sonnet / Neural Semantic Clustering',
         ipAddress: '10.0.1.35',
         port: '443',
-        protocolBadge: 'Search Stream Ingress',
-        description: 'Scans high-volume, low-competition keyword opportunities daily (Volume > 1,500/mo, Keyword Difficulty < 25).',
+        protocolBadge: 'Semantic Clustering Core',
+        description: 'Synthesizes seed topics into high-ROI keyword clusters, search intent matrices, and topical authority silos using neural embedding reasoning.',
         inputPayload: '{\n  "seed_niche": "AI Automation Workflows",\n  "max_kd": 25,\n  "intent": "Informational"\n}',
         processingLogic: 'Extracts primary keyword, 8 secondary semantic variants, search intent, and top 5 competitor URLs.',
         outputPayload: '{\n  "target_keyword": "How to automate client onboarding",\n  "search_vol": 2400,\n  "serp_urls": ["competitor1.com", "competitor2.com"]\n}',
         latency: '~140ms',
         statusUptime: '99.98%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
-          protocol: 'REST GET with API Key',
-          endpoint: 'https://api.semrush.com/v1/keywords/trending',
+          protocol: 'HTTPS POST /v1/messages (Semantic Intent)',
+          endpoint: 'https://api.anthropic.com/v1/messages',
           retryPolicy: 'Exponential backoff on 429 rate limit',
-          secretKeys: ['SEMRUSH_API_KEY'],
-          payloadSchema: 'Keyword metrics JSON payload',
-          fallbackAction: 'Pulls from pre-approved internal keyword library.'
+          secretKeys: ['ANTHROPIC_API_KEY'],
+          payloadSchema: 'Topical Authority Keyword Cluster payload',
+          fallbackAction: 'Pulls from pre-approved internal semantic keyword library.'
         }
       },
       {
@@ -1071,7 +1067,7 @@ Given an incoming directive from the CEO:
         outputPayload: '{\n  "content_gap_analysis": ["Missing pricing comparison", "Lacks Make.com blueprint"],\n  "avg_word_count": 2100\n}',
         latency: '~850ms',
         statusUptime: '99.95%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'gRPC Headless Worker Pool',
           endpoint: 'https://scraping.internal.cluster/serp-audit',
@@ -1431,7 +1427,7 @@ Generate a personalized executive welcome note:
         outputPayload: '{\n  "subscriber_id": "sub_9921",\n  "status": "CONFIRMED_OPTIN"\n}',
         latency: '~160ms',
         statusUptime: '99.99%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'REST API with Bearer Token',
           endpoint: 'https://api.convertkit.com/v3/subscribers',
@@ -1536,7 +1532,7 @@ When an Instagram user comments "BLUEPRINT":
         outputPayload: '{\n  "word_timestamps_count": 2180,\n  "srt_url": "podcast_ep_42.srt"\n}',
         latency: '~8.4s',
         statusUptime: '99.95%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'REST Audio Processing API',
           endpoint: 'https://api.openai.com/v1/audio/transcriptions',
@@ -1690,7 +1686,7 @@ Critical Rules:
         outputPayload: '{\n  "primed_system_prompt": "<role>Expert</role><rules>Output JSON only</rules><examples>...</examples>",\n  "total_context_tokens": 1840\n}',
         latency: '~65ms',
         statusUptime: '99.96%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'gRPC Internal Mesh',
           endpoint: 'semantic-vault.internal.mesh:50051',
@@ -1891,7 +1887,7 @@ Return valid JSON adhering to:
         outputPayload: '{\n  "viral_hooks": [\n    "Most founders lose $10k/mo on bad software setups. Here are 3 tools we deleted.",\n    "The 4-sentence email proposal that closed $84,000 in agency retainers."\n  ]\n}',
         latency: '~780ms',
         statusUptime: '99.95%',
-        iconType: 'search',
+        iconType: 'brain',
         detailedSpecs: {
           protocol: 'REST POST with API Key',
           endpoint: 'https://api.openai.com/v1/audio/transcriptions',
@@ -2188,22 +2184,13 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   activeCategory = ''
 }) => {
   const [activeBlueprintId, setActiveBlueprintId] = useState<string>('lead-triage');
-  const [activeSimStep, setActiveSimStep] = useState<number>(0); // 0 = idle, 1..5 = active step
-  const [isSimulating, setIsSimulating] = useState<boolean>(false);
-  const [simSpeed, setSimSpeed] = useState<1 | 2>(1);
+
+
+
   const [selectedNodeIndex, setSelectedNodeIndex] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isInboundIngestionExpanded, setIsInboundIngestionExpanded] = useState<boolean>(false);
-  const [simLogs, setSimLogs] = useState<Array<{ id: string; time: string; text: string; type: 'info' | 'success' | 'warn' | 'active' }>>([
-    {
-      id: 'init-telemetry',
-      time: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-      text: 'Production Event Listener initialized on port 443 (TLS 1.3). Ready for API trigger event.',
-      type: 'info'
-    }
-  ]);
-  const simTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // DRAGGABLE NODES ENGINE STATE
   const [nodePositions, setNodePositions] = useState<Array<{ x: number; y: number }>>(DEFAULT_NODE_POSITIONS);
@@ -2283,28 +2270,6 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     setSelectedNodeIndex(0);
   }, [activeBlueprintId]);
 
-  // Initial simulation logs when blueprint switches
-  useEffect(() => {
-    setIsSimulating(false);
-    setActiveSimStep(0);
-    if (simTimerRef.current) clearInterval(simTimerRef.current);
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    setSimLogs([
-      {
-        id: 'init-1',
-        time: timeStr,
-        text: `[NET-TOPOLOGY] Full view canvas online: ${activeBlueprint.networkTopologyTitle}`,
-        type: 'info'
-      },
-      {
-        id: 'init-2',
-        time: timeStr,
-        text: `[ENGINE] Interactive node dragging enabled. Drag any node box to customize your diagram flow.`,
-        type: 'info'
-      }
-    ]);
-  }, [activeBlueprintId, activeBlueprint.networkTopologyTitle]);
 
   // Handle Dragging in SVG
   const getSVGCoordinates = (clientX: number, clientY: number) => {
@@ -2365,93 +2330,6 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     return wires;
   }, [nodePositions]);
 
-  // Production Telemetry & Real-Time Event Dispatch Engine
-  const runSimulation = () => {
-    if (isSimulating) {
-      setIsSimulating(false);
-      if (simTimerRef.current) clearInterval(simTimerRef.current);
-      return;
-    }
-
-    setIsSimulating(true);
-    let step = 1;
-    setActiveSimStep(1);
-    setSelectedNodeIndex(0);
-
-    const appendLog = (stepNum: number) => {
-      const node = activeBlueprint.nodes[stepNum - 1];
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '.' + Math.floor(Math.random() * 900 + 100);
-      const traceId = 'trc_' + Math.random().toString(36).substring(2, 10);
-      
-      let telemetryMsg = '';
-      if (node.type === 'TRIGGER') {
-        telemetryMsg = `POST ${node.detailedSpecs.endpoint} HTTP/2 200 OK | trace_id: ${traceId} | TLS 1.3 | remote_ip: ${node.ipAddress}:${node.port} | payload: ${node.detailedSpecs.payloadSchema} (Validated in ${node.latency})`;
-      } else if (node.type === 'ENRICH') {
-        telemetryMsg = `GET ${node.detailedSpecs.endpoint} HTTP/2 200 OK | trace_id: ${traceId} | upstream: ${node.tool} | firmographics: RESOLVED | latency: ${node.latency} | cache: HIT`;
-      } else if (node.type === 'AI BRAIN') {
-        telemetryMsg = `POST /v1/chat/completions HTTP/2 200 OK | trace_id: ${traceId} | model: Claude 3.7 Sonnet (JSON Mode) | prompt_tokens: 840 | completion_tokens: 312 | latency: ${node.latency} | cost: $0.0028`;
-      } else if (node.type === 'ROUTER') {
-        telemetryMsg = `POST ${node.detailedSpecs.endpoint} HTTP/2 200 OK | trace_id: ${traceId} | condition_eval: TRUE | route: VIP_CONDUIT | latency: ${node.latency}`;
-      } else {
-        telemetryMsg = `POST ${node.detailedSpecs.endpoint} HTTP/2 200 OK | trace_id: ${traceId} | downstream: ${node.tool} | status: RECORD_SYNCHRONIZED | alert: DISPATCHED`;
-      }
-
-      const logEntry = {
-        id: `telemetry-${Date.now()}-${stepNum}`,
-        time: timeStr,
-        text: telemetryMsg,
-        type: (stepNum === 5 ? 'success' : stepNum === 3 ? 'active' : 'info') as 'info' | 'success' | 'warn' | 'active'
-      };
-      setSimLogs((prev) => [logEntry, ...prev.slice(0, 15)]);
-    };
-
-    appendLog(1);
-
-    const intervalTime = simSpeed === 2 ? 1000 : 1800;
-
-    simTimerRef.current = setInterval(() => {
-      step += 1;
-      if (step > 5) {
-        setIsSimulating(false);
-        setActiveSimStep(5);
-        setSelectedNodeIndex(4);
-        if (simTimerRef.current) clearInterval(simTimerRef.current);
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '.' + Math.floor(Math.random() * 900 + 100);
-        setSimLogs((prev) => [
-          {
-            id: `done-${Date.now()}`,
-            time: timeStr,
-            text: `[PIPELINE EXECUTED 200 OK] Finished all 5 automated stages in 1,280ms. End-to-end telemetry verified. Time saved: ${activeBlueprint.timeSaved}.`,
-            type: 'success'
-          },
-          ...prev.slice(0, 15)
-        ]);
-        return;
-      }
-      setActiveSimStep(step);
-      setSelectedNodeIndex(step - 1);
-      appendLog(step);
-    }, intervalTime);
-  };
-
-  const resetSimulation = () => {
-    setIsSimulating(false);
-    setActiveSimStep(0);
-    if (simTimerRef.current) clearInterval(simTimerRef.current);
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '.' + Math.floor(Math.random() * 900 + 100);
-    setSimLogs([
-      {
-        id: `reset-${Date.now()}`,
-        time: timeStr,
-        text: `[STANDBY] Event dispatcher active on port 443 (TLS 1.3). Ready for next real-time production webhook.`,
-        type: 'info'
-      }
-    ]);
-  };
-
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
@@ -2461,99 +2339,52 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   return (
     <div id={id} className="space-y-12">
       {/* =====================================================================
-          SECTION 1: THE ANIMATED REAL FULL-VIEW NETWORKING TOPOLOGY DIAGRAM
+          SECTION 1: AI AUTOMATION CATEGORY SELECTION & OVERVIEW BLUEPRINT
       ====================================================================== */}
-      <section
-        className={`relative rounded-3xl bg-white border-2 border-slate-200 shadow-sm p-5 sm:p-8 lg:p-9 overflow-hidden text-slate-900 transition-all ${
-          isExpanded ? 'fixed inset-3 z-50 overflow-y-auto' : ''
-        }`}
-      >
-        {/* ANIMATED BACKGROUND MATRIX GRID & SUBTLE GLOWING RADIAL CONDUITS */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-25"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, #38bdf8 1px, transparent 0)`,
-            backgroundSize: '24px 24px'
-          }}
-        />
-
-        {/* Ambient neon radial glows */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
-
-        {/* TOP HUD RETICLE & PROMINENT HIGHLIGHTED HEADLINE */}
-        <div className="relative z-10 space-y-4 pb-6 border-b border-slate-200">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-100 border border-cyan-400 text-slate-950 text-xs font-mono font-bold tracking-wider uppercase shadow-xs">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
-              </span>
-              <span>LIVE ANIMATED TOPOLOGY WORKFLOW &bull; DRAGGABLE FULL VIEW CANVAS</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={resetNodePositions}
-                className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 hover:text-white border border-slate-700 text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
-                title="Reset Draggable Nodes to Default Positions"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Reset Node Layout</span>
-              </button>
-
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors cursor-pointer"
-                title={isExpanded ? 'Exit Fullscreen' : 'Expand to Fullscreen'}
-              >
-                {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-              </button>
-            </div>
+      <section className="bg-white border-2 border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+        {/* Active Blueprint Badge, Title, Subtitle */}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-3 py-1 rounded-full bg-slate-900 text-cyan-300 text-xs font-mono font-bold uppercase tracking-wider">
+              {activeBlueprint.badge}
+            </span>
+            <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-mono font-bold">
+              Time Saved: {activeBlueprint.timeSaved}
+            </span>
+            <span className="px-3 py-1 rounded-full bg-cyan-100 text-cyan-900 border border-cyan-300 text-xs font-mono font-bold">
+              VA Service Value: {activeBlueprint.vaServiceValue}
+            </span>
           </div>
 
-          {/* HIGH-CONTRAST HEADLINE BANNER (BLACK BOLD READABLE TEXT) */}
-          <div className="space-y-3 bg-white/95 rounded-2xl p-4 sm:p-5 border border-cyan-400 shadow-[0_0_25px_rgba(56,189,248,0.25)]">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-slate-900 text-cyan-300 text-[10px] font-mono font-bold uppercase tracking-wider">
-                {activeBlueprint.badge}
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-950 leading-tight">
+            {activeBlueprint.title}
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-700 max-w-4xl leading-relaxed font-semibold">
+            {activeBlueprint.subtitle}
+          </p>
+
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            <span className="text-xs font-mono text-slate-950 font-black uppercase tracking-wider">
+              Production Stack:
+            </span>
+            {activeBlueprint.tools.map((tool, idx) => (
+              <span
+                key={idx}
+                className="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-300 text-slate-900 font-mono text-xs font-bold"
+              >
+                {tool}
               </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-950 leading-tight">
-              {activeBlueprint.title}
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-700 max-w-4xl leading-relaxed font-semibold">
-              {activeBlueprint.subtitle}
-            </p>
+            ))}
           </div>
         </div>
 
-        {/* TOPOLOGY TITLE BAR IN FULL VIEW (NO SPLIT DIVISIONS) */}
-        <div className="relative z-10 my-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-white border-2 border-slate-300 text-xs font-mono shadow-xs text-slate-900">
-          <div className="flex items-center gap-2.5">
-            <Server className="w-4 h-4 text-cyan-400 shrink-0" />
-            <span className="text-slate-950 font-black text-sm sm:text-base tracking-wide">
-              {activeBlueprint.networkTopologyTitle}
-            </span>
-          </div>
-          <div className="flex flex-wrap items-center gap-3 text-[11px]">
-            <span className="text-emerald-700 font-bold flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              UPTIME 99.98%
-            </span>
-            <span className="text-slate-900 font-bold">P99 LATENCY: ~14ms</span>
-            <span className="text-slate-900 font-bold">ENCRYPTION: TLS 1.3 / AES-256</span>
-            <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white font-bold text-[10px]">
-              DRAG NODES TO REPOSITION
-            </span>
-          </div>
-        </div>
-
-        {/* CATEGORY WORKFLOW SELECTOR TABS (DYNAMIC HIGH-DEMAND AUTOMATION NICHES) */}
-        <div className="relative z-10 my-5 space-y-2">
-          <div className="text-xs font-mono text-slate-950 uppercase tracking-wider flex items-center gap-2 font-black pb-1">
+        {/* Category Switcher Tabs */}
+        <div className="space-y-3 pt-4 border-t border-slate-200">
+          <div className="text-xs font-mono text-slate-950 uppercase tracking-wider flex items-center gap-2 font-black">
             <Sliders className="w-4 h-4 text-slate-900" />
-            <span className="text-slate-950 font-black">Select AI Automation Category &bull; Instant Topology Switching ({WORKFLOW_BLUEPRINTS.length} Workflows):</span>
+            <span className="text-slate-950 font-black">
+              Select AI Automation Category • Instant Topology Switching ({WORKFLOW_BLUEPRINTS.length} Workflows):
+            </span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
@@ -2583,14 +2414,90 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                     </span>
                     <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-cyan-400 animate-ping' : 'bg-slate-700'}`} />
                   </div>
-                  <div className={`font-black text-xs leading-snug line-clamp-2 ${isSelected ? 'text-white' : 'text-slate-950'}`}>{bp.categoryLabel}</div>
+                  <div className={`font-black text-xs leading-snug line-clamp-2 ${isSelected ? 'text-white' : 'text-slate-950'}`}>
+                    {bp.categoryLabel}
+                  </div>
                 </button>
               );
             })}
           </div>
         </div>
+      </section>
 
-        {/* 🌐 DRAGGABLE FULL VIEW NETWORKING TOPOLOGY CANVAS */}
+      {/* =====================================================================
+          SECTION 2: DEDICATED SEPARATED SECTION:
+          LIVE ANIMATED TOPOLOGY WORKFLOW • DRAGGABLE FULL VIEW CANVAS
+      ====================================================================== */}
+      <section
+        className={`relative rounded-3xl bg-white border-2 border-slate-300 shadow-md p-5 sm:p-8 lg:p-9 overflow-hidden text-slate-900 transition-all ${
+          isExpanded ? 'fixed inset-3 z-50 overflow-y-auto' : ''
+        }`}
+      >
+        {/* Animated matrix dots background */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-25"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, #38bdf8 1px, transparent 0)`,
+            backgroundSize: '24px 24px'
+          }}
+        />
+
+        {/* Ambient neon radial glows */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
+
+        {/* TOP HUD RETICLE & DEDICATED CONTROLS */}
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-slate-200">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-100 border border-cyan-400 text-slate-950 text-xs font-mono font-bold tracking-wider uppercase shadow-xs">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
+            </span>
+            <span>LIVE ANIMATED TOPOLOGY WORKFLOW • DRAGGABLE FULL VIEW CANVAS</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={resetNodePositions}
+              className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 hover:text-white border border-slate-700 text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+              title="Reset Draggable Nodes to Default Positions"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Reset Node Layout</span>
+            </button>
+
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors cursor-pointer"
+              title={isExpanded ? 'Exit Fullscreen' : 'Expand to Fullscreen'}
+            >
+              {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* TOPOLOGY TITLE BAR */}
+        <div className="relative z-10 my-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-white border-2 border-slate-300 text-xs font-mono shadow-xs text-slate-900">
+          <div className="flex items-center gap-2.5">
+            <Server className="w-4 h-4 text-cyan-600 shrink-0" />
+            <span className="text-slate-950 font-black text-sm sm:text-base tracking-wide">
+              {activeBlueprint.networkTopologyTitle}
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center gap-3 text-[11px]">
+            <span className="text-emerald-700 font-bold flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              UPTIME 99.98%
+            </span>
+            <span className="text-slate-900 font-bold">P99 LATENCY: ~14ms</span>
+            <span className="text-slate-900 font-bold">ENCRYPTION: TLS 1.3 / AES-256</span>
+            <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white font-bold text-[10px]">
+              DRAG NODES TO REPOSITION
+            </span>
+          </div>
+        </div>
+
+        {/* DRAGGABLE FULL VIEW NETWORKING TOPOLOGY CANVAS */}
         <div className="relative z-10 bg-black/80 border border-slate-800 rounded-2xl p-3 sm:p-5 overflow-x-auto shadow-inner">
           <div className="min-w-[1150px]">
             <svg
@@ -2618,10 +2525,9 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
 
               {/* DYNAMIC BEZIER CONNECTING WIRES WITH TRAVELING PACKETS */}
               {dynamicWires.map((wire, idx) => {
-                const isActiveConduit = activeSimStep > idx;
+                const isActiveConduit = selectedNodeIndex > idx;
                 return (
                   <g key={`wire-${idx}`}>
-                    {/* Background glow conduit */}
                     <path
                       d={wire.d}
                       fill="none"
@@ -2630,8 +2536,6 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                       strokeDasharray="4 4"
                       className="animate-wire-dash"
                     />
-
-                    {/* Traveling Data Packet Particle */}
                     <circle r="4.5" fill={idx >= 2 ? '#10b981' : '#38bdf8'} filter="url(#neonGlowDraggable)">
                       <animateMotion
                         dur="2.4s"
@@ -2648,7 +2552,6 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
               {activeBlueprint.nodes.map((node, i) => {
                 const pos = nodePositions[i] || DEFAULT_NODE_POSITIONS[i];
                 const isSelected = selectedNodeIndex === i;
-                const isActiveSim = activeSimStep === i + 1;
                 const isBrainNode = i === 2;
                 const nodeW = isBrainNode ? 185 : 180;
                 const nodeH = isBrainNode ? 155 : 145;
@@ -2659,50 +2562,44 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                     transform={`translate(${pos.x}, ${pos.y})`}
                     className="cursor-grab active:cursor-grabbing transition-transform"
                     onMouseDown={(e) => handleNodeMouseDown(i, e)}
+                    onClick={() => setSelectedNodeIndex(i)}
                   >
-                    {/* Node Container Box */}
                     <rect
                       width={nodeW}
                       height={nodeH}
                       rx="14"
                       fill={isBrainNode ? '#081026' : '#0f172a'}
-                      stroke={isSelected || isActiveSim ? '#38bdf8' : isBrainNode ? '#0284c7' : '#1e293b'}
-                      strokeWidth={isSelected || isActiveSim ? '2.5' : '1.5'}
-                      filter={isSelected || isActiveSim ? 'url(#neonGlowDraggable)' : undefined}
+                      stroke={isSelected ? '#38bdf8' : isBrainNode ? '#0284c7' : '#1e293b'}
+                      strokeWidth={isSelected ? '2.5' : '1.5'}
+                      filter={isSelected ? 'url(#neonGlowDraggable)' : undefined}
                     />
 
-                    {/* Drag Handle Bar Header */}
                     <rect x="8" y="8" width={nodeW - 16} height="22" rx="5" fill="#1e293b" />
                     <circle cx="18" cy="19" r="3" fill="#10b981" />
                     <text x="30" y="23" fill="#38bdf8" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                      NODE {node.step} &bull; {node.type}
+                      NODE {node.step} • {node.type}
                     </text>
                     <text x={nodeW - 16} y="22" textAnchor="end" fill="#64748b" fontSize="10" fontFamily="monospace">
                       :::
                     </text>
 
-                    {/* Node Title */}
                     <text x="12" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
                       {node.title.slice(0, 21)}
                     </text>
 
-                    {/* Tool / System */}
                     <text x="12" y="65" fill="#38bdf8" fontSize="9.5" fontWeight="semibold">
                       {node.tool.slice(0, 23)}
                     </text>
 
-                    {/* IP & Port */}
                     <text x="12" y="81" fill="#94a3b8" fontSize="9" fontFamily="monospace">
                       IP: {node.ipAddress}:{node.port}
                     </text>
 
-                    {/* Protocol & Latency Badge */}
                     <rect x="10" y="93" width={nodeW - 20} height="20" rx="4" fill="#032b4d" />
                     <text x={nodeW / 2} y="107" textAnchor="middle" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace" fontWeight="bold">
-                      {node.protocolBadge} &bull; {node.latency}
+                      {node.protocolBadge} • {node.latency}
                     </text>
 
-                    {/* SLA Status Indicator */}
                     <text x="12" y="132" fill="#10b981" fontSize="8.5" fontFamily="monospace">
                       ● UPTIME {node.statusUptime}
                     </text>
@@ -2713,131 +2610,136 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           </div>
         </div>
 
-        {/* 5-NODE WELL-DETAILED BOXES (ALL SPECIFICATIONS DIRECTLY DISPLAYED) */}
-        <div className="relative z-10 my-6 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-slate-950 uppercase tracking-wider flex items-center gap-1.5 font-black">
-              <Code2 className="w-4 h-4 text-slate-900" />
-              <span className="text-slate-950 font-black">Node Architecture &amp; Execution Specifications (Node by Node):</span>
-            </span>
-            <span className="text-xs text-slate-900 font-bold font-mono">
-              Active Focus: Node {selectedNode.step} &bull; {selectedNode.title}
-            </span>
+        <div className="relative z-10 pt-3 flex flex-wrap items-center justify-between text-xs text-slate-600 font-mono">
+          <span>💡 Tip: Click any node box to inspect its runtime payload and schema specifications below.</span>
+          <span className="text-slate-900 font-bold">Active Focus: Node {selectedNode.step} • {selectedNode.title}</span>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          SECTION 3: NODE ARCHITECTURE & EXECUTION SPECIFICATIONS (NODE BY NODE)
+      ====================================================================== */}
+      <section className="bg-white border-2 border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
+          <div className="text-xs font-mono text-slate-950 uppercase tracking-wider flex items-center gap-1.5 font-black">
+            <Code2 className="w-4 h-4 text-slate-900" />
+            <span className="text-slate-950 font-black">Node Architecture & Execution Specifications (Node by Node):</span>
           </div>
-
-          {/* EXPANDABLE MULTI-SOURCE INGESTION STREAM SPECIFICATION (OPTIONAL TO SHOW) */}
-          <div className="rounded-2xl border-2 border-slate-300 bg-white p-4 space-y-3 shadow-xs text-slate-900">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-xs sm:text-sm font-mono font-black text-slate-950 uppercase tracking-wider">
-                  Autonomous Inbound Lead Capture &amp; Sanitization (Multi-Source AI Lead Ingestion Stream)
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-900 border border-slate-300 font-bold">
-                  {isInboundIngestionExpanded ? 'EXPANDED VIEW' : 'CLICK TO EXPAND'}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsInboundIngestionExpanded(!isInboundIngestionExpanded)}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-bold border border-slate-900 flex items-center gap-1.5 cursor-pointer transition-all shrink-0 shadow-xs"
-              >
-                <span>{isInboundIngestionExpanded ? '[-] Collapse Ingestion Stream' : '[+] Expand Multi-Source Ingestion Stream'}</span>
-              </button>
-            </div>
-
-            {isInboundIngestionExpanded && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-slate-200 text-xs font-mono">
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                  <div className="text-slate-950 font-black text-xs">Stream 01: High-Speed Webhook Ingress</div>
-                  <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/stream (TLS 1.3)</div>
-                  <p className="text-slate-800 text-xs leading-relaxed font-medium">
-                    Captures submissions from Typeform, Webflow, and custom landing page forms in ~12ms with cryptographic payload signature verification.
-                  </p>
-                </div>
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                  <div className="text-slate-950 font-black text-xs">Stream 02: Calendly Meeting Ingress</div>
-                  <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/calendly (OAuth2)</div>
-                  <p className="text-slate-800 text-xs leading-relaxed font-medium">
-                    Streams newly scheduled discovery calls, auto-normalizes invitee contact data, and triggers firmographic enrichment pre-call.
-                  </p>
-                </div>
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                  <div className="text-slate-950 font-black text-xs">Stream 03: LinkedIn Lead Gen Ads</div>
-                  <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/linkedin (Webhooks API)</div>
-                  <p className="text-slate-800 text-xs leading-relaxed font-medium">
-                    Instant lead ingestion from sponsored LinkedIn Lead Gen ad forms, resolving company size, verified work emails, and seniority.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-            {activeBlueprint.nodes.map((node, index) => {
-              const nodeNum = index + 1;
-              const isActiveStep = activeSimStep === nodeNum;
-              const isSelected = selectedNodeIndex === index;
-              return (
-                <div
-                  key={node.step}
-                  onClick={() => setSelectedNodeIndex(index)}
-                  className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden shadow-xs ${
-                    isSelected || isActiveStep
-                      ? 'bg-white border-cyan-500 shadow-md ring-2 ring-cyan-400 text-slate-950'
-                      : 'bg-white border-slate-200 hover:border-slate-400 hover:bg-slate-50 text-slate-950'
-                  }`}
-                >
-                  {(isSelected || isActiveStep) && (
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-400 animate-pulse" />
-                  )}
-
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-[10px] font-mono font-bold">
-                      <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-900 border border-slate-300 font-bold">
-                        NODE {node.step}
-                      </span>
-                      <span className="px-2 py-0.5 rounded-full bg-slate-900 text-white font-bold uppercase">
-                        {node.type}
-                      </span>
-                    </div>
-
-                    <h4 className="font-black text-sm text-slate-950 leading-snug line-clamp-1">
-                      {node.title}
-                    </h4>
-
-                    <div className="text-xs font-bold text-slate-900 flex items-center justify-between">
-                      <span className="truncate">{node.tool}</span>
-                      <span className="text-[10px] font-mono text-slate-600 font-bold shrink-0">:{node.port}</span>
-                    </div>
-
-                    <p className="text-[11px] text-slate-700 font-medium leading-relaxed line-clamp-2">
-                      {node.description}
-                    </p>
-                  </div>
-
-                  {/* INLINE NETWORK SPECIFICATION */}
-                  <div className="space-y-1.5 pt-2 border-t border-slate-200 font-mono text-[10px]">
-                    <div className="text-slate-600 font-bold flex items-center justify-between">
-                      <span>{node.protocolBadge}</span>
-                      <span className="text-emerald-700 font-bold">{node.latency}</span>
-                    </div>
-                    <div className="p-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-900 font-bold text-[10px] truncate">
-                      IP: {node.ipAddress} &bull; SLA {node.statusUptime}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <span className="text-xs text-slate-900 font-bold font-mono">
+            Active Focus: Node {selectedNode.step} • {selectedNode.title}
+          </span>
         </div>
 
-        {/* 🔍 DIRECT INLINE SPECIFICATION INSPECTOR (NO POPUP MODALS) */}
-        <div className="relative z-10 bg-white border-2 border-slate-300 rounded-2xl p-5 space-y-4 shadow-xs text-slate-900">
+        {/* EXPANDABLE MULTI-SOURCE INGESTION STREAM SPECIFICATION (OPTIONAL TO SHOW) */}
+        <div className="rounded-2xl border-2 border-slate-300 bg-white p-4 space-y-3 shadow-xs text-slate-900">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs sm:text-sm font-mono font-black text-slate-950 uppercase tracking-wider">
+                Autonomous Inbound Lead Capture & Sanitization (Multi-Source AI Lead Ingestion Stream)
+              </span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-900 border border-slate-300 font-bold">
+                {isInboundIngestionExpanded ? 'EXPANDED VIEW' : 'CLICK TO EXPAND'}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsInboundIngestionExpanded(!isInboundIngestionExpanded)}
+              className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-mono font-bold border border-slate-900 flex items-center gap-1.5 cursor-pointer transition-all shrink-0 shadow-xs"
+            >
+              <span>{isInboundIngestionExpanded ? '[-] Collapse Ingestion Stream' : '[+] Expand Multi-Source Ingestion Stream'}</span>
+            </button>
+          </div>
+
+          {isInboundIngestionExpanded && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-slate-200 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <div className="text-slate-950 font-black text-xs">Stream 01: High-Speed Webhook Ingress</div>
+                <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/stream (TLS 1.3)</div>
+                <p className="text-slate-800 text-xs leading-relaxed font-medium">
+                  Captures submissions from Typeform, Webflow, and custom landing page forms in ~12ms with cryptographic payload signature verification.
+                </p>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <div className="text-slate-950 font-black text-xs">Stream 02: Calendly Meeting Ingress</div>
+                <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/calendly (OAuth2)</div>
+                <p className="text-slate-800 text-xs leading-relaxed font-medium">
+                  Streams newly scheduled discovery calls, auto-normalizes invitee contact data, and triggers firmographic enrichment pre-call.
+                </p>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <div className="text-slate-950 font-black text-xs">Stream 03: LinkedIn Lead Gen Ads</div>
+                <div className="text-slate-600 text-[10px] font-bold">Endpoint: /v1/leads/linkedin (Webhooks API)</div>
+                <p className="text-slate-800 text-xs leading-relaxed font-medium">
+                  Instant lead ingestion from sponsored LinkedIn Lead Gen ad forms, resolving company size, verified work emails, and seniority.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 5 NODE CARDS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+          {activeBlueprint.nodes.map((node, index) => {
+            const isSelected = selectedNodeIndex === index;
+            return (
+              <div
+                key={node.step}
+                onClick={() => setSelectedNodeIndex(index)}
+                className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-3 relative overflow-hidden shadow-xs ${
+                  isSelected
+                    ? 'bg-white border-cyan-500 shadow-md ring-2 ring-cyan-400 text-slate-950'
+                    : 'bg-white border-slate-200 hover:border-slate-400 hover:bg-slate-50 text-slate-950'
+                }`}
+              >
+                {isSelected && (
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-400 animate-pulse" />
+                )}
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-[10px] font-mono font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-900 border border-slate-300 font-bold">
+                      NODE {node.step}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-slate-900 text-white font-bold uppercase">
+                      {node.type}
+                    </span>
+                  </div>
+
+                  <h4 className="font-black text-sm text-slate-950 leading-snug line-clamp-1">
+                    {node.title}
+                  </h4>
+
+                  <div className="text-xs font-bold text-slate-900 flex items-center justify-between">
+                    <span className="truncate">{node.tool}</span>
+                    <span className="text-[10px] font-mono text-slate-600 font-bold shrink-0">:{node.port}</span>
+                  </div>
+
+                  <p className="text-[11px] text-slate-700 font-medium leading-relaxed line-clamp-2">
+                    {node.description}
+                  </p>
+                </div>
+
+                <div className="space-y-1.5 pt-2 border-t border-slate-200 font-mono text-[10px]">
+                  <div className="text-slate-600 font-bold flex items-center justify-between">
+                    <span>{node.protocolBadge}</span>
+                    <span className="text-emerald-700 font-bold">{node.latency}</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-slate-100 border border-slate-200 text-slate-900 font-bold text-[10px] truncate">
+                    IP: {node.ipAddress} • SLA {node.statusUptime}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* DIRECT INLINE SPECIFICATION INSPECTOR */}
+        <div className="bg-white border-2 border-slate-300 rounded-2xl p-5 space-y-4 shadow-xs text-slate-900">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-900 border border-slate-300 text-xs font-mono font-bold">
-                NODE {selectedNode.step} &bull; {selectedNode.type}
+                NODE {selectedNode.step} • {selectedNode.type}
               </span>
               <h3 className="text-base sm:text-lg font-black text-slate-950">
                 {selectedNode.title} ({selectedNode.tool})
@@ -2879,158 +2781,84 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
             </div>
           </div>
         </div>
+      </section>
 
-        {/* PRODUCTION TELEMETRY & REAL-TIME EVENT DISPATCH CONSOLE */}
-        <div className="relative z-10 my-6 bg-white border-2 border-slate-300 rounded-2xl p-4 sm:p-5 space-y-4 shadow-xs text-slate-900">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-slate-900" />
-              <span className="text-xs sm:text-sm font-mono font-black uppercase tracking-wider text-slate-950">
-                Production Telemetry &bull; Real-Time Event Dispatch Console
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-mono font-bold">
-                {isSimulating ? 'DISPATCHING LIVE EVENTS' : activeSimStep > 0 ? 'PIPELINE EXECUTED (200 OK)' : 'STANDBY (PORT 443)'}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={runSimulation}
-                className="px-3.5 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(56,189,248,0.4)] cursor-pointer"
-              >
-                {isSimulating ? (
-                  <>
-                    <Pause className="w-3.5 h-3.5" />
-                    <span>Pause Stream</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="w-3.5 h-3.5 fill-current" />
-                    <span>Execute Live Event Dispatch</span>
-                  </>
-                )}
-              </button>
-
-              <button
-                onClick={resetSimulation}
-                className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors cursor-pointer"
-                title="Reset Telemetry Console"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-              </button>
-
-              <div className="flex items-center rounded-xl bg-slate-900 border border-slate-800 p-0.5 text-[10px] font-mono text-slate-400">
-                <button
-                  onClick={() => setSimSpeed(1)}
-                  className={`px-2 py-1 rounded-lg ${simSpeed === 1 ? 'bg-slate-800 text-cyan-300 font-bold' : 'hover:text-white'}`}
-                >
-                  1x
-                </button>
-                <button
-                  onClick={() => setSimSpeed(2)}
-                  className={`px-2 py-1 rounded-lg ${simSpeed === 2 ? 'bg-slate-800 text-cyan-300 font-bold' : 'hover:text-white'}`}
-                >
-                  2x Speed
-                </button>
-              </div>
-            </div>
+      {/* =====================================================================
+          SECTION 4: MASTER PROMPTS & STEP-BY-STEP IMPLEMENTATION GUIDE
+      ====================================================================== */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left: AI Prompt & JSON Output */}
+        <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-7 space-y-4 shadow-xs text-slate-900">
+          <div className="flex items-center justify-between">
+            <span className="text-xs sm:text-sm font-mono font-black uppercase tracking-wider text-slate-950 flex items-center gap-1.5">
+              <Bot className="w-4 h-4 text-slate-900" />
+              <span>Suggested Master Prompts & Prompt Engineering Architecture</span>
+            </span>
+            <button
+              onClick={() => handleCopy(activeBlueprint.aiPromptSample, `prompt-${activeBlueprint.id}`)}
+              className="inline-flex items-center gap-1 text-xs font-bold text-slate-900 hover:bg-slate-200 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-300 transition-colors cursor-pointer"
+            >
+              {copiedId === `prompt-${activeBlueprint.id}` ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy Prompt</span>
+                </>
+              )}
+            </button>
           </div>
 
-          {/* TELEMETRY TERMINAL OUTPUT */}
-          <div className="bg-black/90 border border-slate-800/90 rounded-xl p-3 max-h-36 overflow-y-auto font-mono text-xs space-y-1 scrollbar-thin">
-            {simLogs.map((log) => (
-              <div
-                key={log.id}
-                className={`flex items-start gap-2 ${
-                  log.type === 'success'
-                    ? 'text-emerald-400 font-semibold'
-                    : log.type === 'active'
-                    ? 'text-cyan-300 font-semibold'
-                    : 'text-slate-300'
-                }`}
-              >
-                <span className="text-slate-500 shrink-0 select-none">[{log.time}]</span>
-                <span>{log.text}</span>
-              </div>
-            ))}
+          <pre className="bg-black/80 border border-slate-800 text-cyan-200/90 p-3.5 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
+            {activeBlueprint.aiPromptSample}
+          </pre>
+
+          <div className="space-y-1.5">
+            <span className="text-[11px] font-mono font-black uppercase tracking-wider text-slate-900 block">
+              Structured JSON Returned to Make.com / n8n Router:
+            </span>
+            <pre className="bg-black/80 border border-slate-800 text-emerald-300/90 p-3.5 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
+              {activeBlueprint.jsonOutputSample}
+            </pre>
           </div>
         </div>
 
-        {/* SUGGESTED MASTER PROMPTS & PROMPT ENGINEERING BLUEPRINT */}
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-5 pt-4">
-          {/* Left: AI Prompt & JSON Output */}
-          <div className="bg-white border-2 border-slate-300 rounded-2xl p-5 space-y-4 shadow-xs text-slate-900">
+        {/* Right: How to Build It Step-by-Step */}
+        <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4 shadow-xs text-slate-900">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs sm:text-sm font-mono font-black uppercase tracking-wider text-slate-950 flex items-center gap-1.5">
-                <Bot className="w-4 h-4 text-slate-900" />
-                <span>Suggested Master Prompts &amp; Prompt Engineering Architecture</span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Step-by-Step Implementation Guide (Zero Coding Required)</span>
               </span>
-              <button
-                onClick={() => handleCopy(activeBlueprint.aiPromptSample, `prompt-${activeBlueprint.id}`)}
-                className="inline-flex items-center gap-1 text-xs font-bold text-slate-900 hover:bg-slate-200 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-300 transition-colors cursor-pointer"
-              >
-                {copiedId === `prompt-${activeBlueprint.id}` ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Copied!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy Prompt</span>
-                  </>
-                )}
-              </button>
             </div>
 
-            <pre className="bg-black/80 border border-slate-800 text-cyan-200/90 p-3.5 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
-              {activeBlueprint.aiPromptSample}
-            </pre>
-
-            <div className="space-y-1.5">
-              <span className="text-[11px] font-mono font-black uppercase tracking-wider text-slate-900 block">
-                Structured JSON Returned to Make.com / n8n Router:
-              </span>
-              <pre className="bg-black/80 border border-slate-800 text-emerald-300/90 p-3.5 rounded-xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
-                {activeBlueprint.jsonOutputSample}
-              </pre>
-            </div>
+            <ol className="space-y-2.5">
+              {activeBlueprint.implementationSteps.map((step, i) => (
+                <li
+                  key={i}
+                  className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium"
+                >
+                  <span className="w-6 h-6 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                    {i + 1}
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
           </div>
 
-          {/* Right: How to Build It Step-by-Step */}
-          <div className="bg-white border-2 border-slate-300 rounded-2xl p-5 flex flex-col justify-between space-y-4 shadow-xs text-slate-900">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-mono font-black uppercase tracking-wider text-slate-950 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Step-by-Step Implementation Guide (Zero Coding Required)</span>
-                </span>
-              </div>
-
-              <ol className="space-y-2.5">
-                {activeBlueprint.implementationSteps.map((step, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium"
-                  >
-                    <span className="w-6 h-6 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
-                      {i + 1}
-                    </span>
-                    <span>{step}</span>
-                  </li>
-                ))}
-              </ol>
+          <div className="p-4 rounded-xl bg-slate-100 border border-slate-300 space-y-2 text-slate-900">
+            <div className="text-xs font-mono font-black text-slate-950 uppercase tracking-wide flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-slate-900" />
+              <span>Pro Tip for Aspiring Virtual Assistants & Freelancers:</span>
             </div>
-
-            <div className="p-4 rounded-xl bg-slate-100 border border-slate-300 space-y-2 text-slate-900">
-              <div className="text-xs font-mono font-black text-slate-950 uppercase tracking-wide flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-slate-900" />
-                <span>Pro Tip for Aspiring Virtual Assistants &amp; Freelancers:</span>
-              </div>
-              <p className="text-xs text-slate-800 leading-relaxed font-medium">
-                Build this exact workflow in a free Make.com or n8n account, record a 90-second Loom video walking through how the nodes connect, and attach that link to your Upwork / OnlineJobs.ph proposals. Clients hire VAs who demonstrate real working systems!
-              </p>
-            </div>
+            <p className="text-xs text-slate-800 leading-relaxed font-medium">
+              Build this exact workflow in a free Make.com or n8n account, record a 90-second Loom video walking through how the nodes connect, and attach that link to your Upwork / OnlineJobs.ph proposals. Clients hire VAs who demonstrate real working systems!
+            </p>
           </div>
         </div>
       </section>

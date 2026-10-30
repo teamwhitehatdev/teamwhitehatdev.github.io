@@ -549,7 +549,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // ==========================================
   const [affiliateTopics, setAffiliateTopics] = useState<AffiliateCollapsibleTopic[]>(() => {
     try {
-      const saved = localStorage.getItem('wh_affiliate_topics_v5730');
+      const saved = localStorage.getItem('wh_affiliate_topics_v5740');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -566,7 +566,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     try {
-      localStorage.setItem('wh_affiliate_topics_v5730', JSON.stringify(affiliateTopics));
+      localStorage.setItem('wh_affiliate_topics_v5740', JSON.stringify(affiliateTopics));
     } catch (e) {
       console.error('Error saving affiliate topics to localStorage:', e);
     }
