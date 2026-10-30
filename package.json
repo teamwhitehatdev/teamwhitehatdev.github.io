@@ -5,8 +5,10 @@
   "type": "module",
   "homepage": "https://teamwhitehatdev.github.io",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/prepare-build.js && vite",
+    "prebuild": "node scripts/prepare-build.js",
     "build": "tsc && vite build",
+    "postbuild": "node scripts/sync-dist.js",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
   },
