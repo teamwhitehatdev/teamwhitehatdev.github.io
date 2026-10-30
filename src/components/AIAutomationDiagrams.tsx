@@ -36,7 +36,10 @@ import {
   Minimize2,
   Network,
   Server,
-  Radio
+  Radio,
+  GripHorizontal,
+  Move,
+  RefreshCw
 } from 'lucide-react';
 
 const MESHY_REFERRAL_URL =
@@ -175,7 +178,7 @@ export const WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = [
         step: '04',
         type: 'ROUTER',
         title: 'Conditional VIP Logic Router',
-        tool: 'Make.com CIDR Decision Switch',
+        tool: 'Make.com Decision Switch',
         ipAddress: '10.0.4.50',
         port: '5000',
         protocolBadge: 'CIDR Routing Switch',
@@ -401,7 +404,7 @@ Rules:
   {
     id: 'ecommerce-3d',
     categoryKey: '3d-mesh',
-    categoryLabel: '3D E-Commerce & Asset Pipeline (Meshy AI)',
+    categoryLabel: '3D E-Commerce Asset Pipeline (Meshy AI)',
     badge: 'TOPOLOGY BLUEPRINT 03 • 3D SPATIAL & E-COMMERCE PIPELINE',
     title: 'Product Photo Upload → Vision Analysis → Meshy AI 3D Generation → GLB Web Optimization & Shopify Sync',
     subtitle:
@@ -875,7 +878,7 @@ Key Voice Rules:
       {
         step: '01',
         type: 'TRIGGER',
-        title: 'Multi-Channel Executive Message Inbound',
+        title: 'Multi-Channel Executive Inbound',
         tool: 'Telegram Bot / Slack Private Channel',
         ipAddress: '10.0.1.30',
         port: '443',
@@ -971,7 +974,7 @@ Key Voice Rules:
       {
         step: '05',
         type: 'ACTION',
-        title: 'QuickBooks Ledger Write & Executive Evening Briefing',
+        title: 'QuickBooks Ledger Write & Daily Briefing',
         tool: 'QuickBooks Online API + Telegram Bot',
         ipAddress: '10.0.5.80',
         port: '443',
@@ -1015,6 +1018,625 @@ Given an incoming directive from the CEO:
       'Connect QuickBooks Online using OAuth2 to auto-create purchase records in the correct expense account.',
       'Set up a conditional filter requiring 1-click founder button confirmation on any expense over $1,000.',
       'Send an automated 5-bullet executive summary every day at 5:00 PM recapping all processed actions.'
+    ]
+  },
+  {
+    id: 'seo-content-publisher',
+    categoryKey: 'seo-publishing',
+    categoryLabel: 'AI SEO & Programmatic Publisher',
+    badge: 'TOPOLOGY BLUEPRINT 07 • PROGRAMMATIC SEARCH ENGINE',
+    title: 'Google Trends & Semrush Webhook → Keyword Cluster Brain → AI WebP Image Gen → WordPress / Ghost Auto-Publish',
+    subtitle:
+      'Continuous programmatic SEO pipeline monitoring trending search queries, generating 2,500-word comprehensive markdown tutorials with WebP visuals, and publishing directly to your CMS with schema metadata.',
+    networkTopologyTitle: 'Autonomous Programmatic SEO & Content Publishing Cloud Architecture',
+    timeSaved: '25+ Hours / Week',
+    vaServiceValue: '$1,000 – $2,500 / Month Retainer',
+    tools: ['Semrush API', 'Claude 3.7 Sonnet', 'DALL-E 3 / Flux', 'WordPress REST API', 'Cloudflare Cache Purge'],
+    nodes: [
+      {
+        step: '01',
+        type: 'TRIGGER',
+        title: 'Keyword Trend & Search Ingestion',
+        tool: 'Semrush / Google Trends API',
+        ipAddress: '10.0.1.35',
+        port: '443',
+        protocolBadge: 'Search Stream Ingress',
+        description: 'Scans high-volume, low-competition keyword opportunities daily (Volume > 1,500/mo, Keyword Difficulty < 25).',
+        inputPayload: '{\n  "seed_niche": "AI Automation Workflows",\n  "max_kd": 25,\n  "intent": "Informational"\n}',
+        processingLogic: 'Extracts primary keyword, 8 secondary semantic variants, search intent, and top 5 competitor URLs.',
+        outputPayload: '{\n  "target_keyword": "How to automate client onboarding",\n  "search_vol": 2400,\n  "serp_urls": ["competitor1.com", "competitor2.com"]\n}',
+        latency: '~140ms',
+        statusUptime: '99.98%',
+        iconType: 'search',
+        detailedSpecs: {
+          protocol: 'REST GET with API Key',
+          endpoint: 'https://api.semrush.com/v1/keywords/trending',
+          retryPolicy: 'Exponential backoff on 429 rate limit',
+          secretKeys: ['SEMRUSH_API_KEY'],
+          payloadSchema: 'Keyword metrics JSON payload',
+          fallbackAction: 'Pulls from pre-approved internal keyword library.'
+        }
+      },
+      {
+        step: '02',
+        type: 'ENRICH',
+        title: 'SERP Competitor Content Scraper',
+        tool: 'Perplexity API / ScrapingBee',
+        ipAddress: '10.0.2.40',
+        port: '8080',
+        protocolBadge: 'Headless Browser Cluster',
+        description: 'Scrapes top-ranking Google articles to identify missing subtopics, table structures, and FAQ gaps.',
+        inputPayload: '{\n  "keyword": "How to automate client onboarding",\n  "num_urls": 3\n}',
+        processingLogic: 'Extracts H2/H3 heading structures, average word count (2,100 words), and common schema markup types.',
+        outputPayload: '{\n  "content_gap_analysis": ["Missing pricing comparison", "Lacks Make.com blueprint"],\n  "avg_word_count": 2100\n}',
+        latency: '~850ms',
+        statusUptime: '99.95%',
+        iconType: 'search',
+        detailedSpecs: {
+          protocol: 'gRPC Headless Worker Pool',
+          endpoint: 'https://scraping.internal.cluster/serp-audit',
+          retryPolicy: 'Rotates residential proxy IPs automatically',
+          secretKeys: ['SCRAPING_API_KEY'],
+          payloadSchema: 'SERP headings and text density payload',
+          fallbackAction: 'Proceeds with standard topical outline template.'
+        }
+      },
+      {
+        step: '03',
+        type: 'AI BRAIN',
+        title: 'Long-Form SEO Synthesis Engine',
+        tool: 'Claude 3.7 Sonnet (Markdown Mode)',
+        ipAddress: '10.0.3.140',
+        port: '8443',
+        protocolBadge: 'Long-Form Neural Core',
+        description: 'Generates comprehensive 2,500-word article with semantic H2/H3 tags, comparison tables, and FAQPage JSON-LD schema.',
+        inputPayload: '{\n  "primary_keyword": "How to automate client onboarding",\n  "gaps": ["Make.com blueprint"]\n}',
+        processingLogic: 'Writes human-like, non-repetitive prose adhering to Google Helpful Content guidelines and GEO standards.',
+        outputPayload: '{\n  "article_markdown": "# Complete Guide to Client Onboarding...",\n  "meta_title": "How to Automate Client Onboarding in 2026",\n  "meta_desc": "Save 15 hrs/wk with our step-by-step automated onboarding guide."\n}',
+        latency: '~3.2s',
+        statusUptime: '99.98%',
+        iconType: 'brain',
+        detailedSpecs: {
+          protocol: 'HTTPS POST /v1/messages',
+          endpoint: 'https://api.anthropic.com/v1/messages',
+          retryPolicy: 'Stream timeout 60s with automatic resume',
+          secretKeys: ['ANTHROPIC_API_KEY'],
+          payloadSchema: 'Structured Markdown article object with SEO tags',
+          fallbackAction: 'Routes to editor review queue if completion length < 1,500 words.'
+        }
+      },
+      {
+        step: '04',
+        type: 'ENRICH',
+        title: 'AI WebP Hero & Diagram Synthesizer',
+        tool: 'DALL-E 3 / Flux API + Sharp',
+        ipAddress: '10.0.2.90',
+        port: '5000',
+        protocolBadge: 'Image Generation Node',
+        description: 'Creates a custom 1200x630px WebP hero banner and technical workflow diagrams with compressed file size (<150KB).',
+        inputPayload: '{\n  "prompt": "Minimalist modern digital workspace showing automation wires connecting forms to databases, 3D style"\n}',
+        processingLogic: 'Generates PNG visual, applies lossless WebP compression, and injects primary keyword into image alt metadata.',
+        outputPayload: '{\n  "webp_url": "https://cdn.agency.com/seo/client_onboarding_hero.webp",\n  "file_size": "112KB",\n  "alt_text": "Automated client onboarding workflow diagram"\n}',
+        latency: '~5.8s',
+        statusUptime: '99.92%',
+        iconType: 'box',
+        detailedSpecs: {
+          protocol: 'REST Image Generation API + Sharp Wasm',
+          endpoint: 'https://api.openai.com/v1/images/generations',
+          retryPolicy: '2 retries with modified seed on moderation flag',
+          secretKeys: ['OPENAI_API_KEY'],
+          payloadSchema: 'Image binary transform payload',
+          fallbackAction: 'Uses curated high-res Unsplash photo.'
+        }
+      },
+      {
+        step: '05',
+        type: 'ACTION',
+        title: 'WordPress / Ghost CMS Publish & Indexing Ping',
+        tool: 'WordPress REST API + IndexNow',
+        ipAddress: '10.0.5.70',
+        port: '443',
+        protocolBadge: 'CMS Egress & IndexNow',
+        description: 'Publishes article with tags, categories, featured image, and pings Google/Bing IndexNow API for instant crawling.',
+        inputPayload: '{\n  "title": "How to Automate Client Onboarding",\n  "content": "<p>...</p>",\n  "image_id": 912\n}',
+        processingLogic: 'Creates published post, purges Cloudflare edge cache, and submits URL to IndexNow protocol.',
+        outputPayload: '{\n  "post_url": "https://blog.agency.com/automate-client-onboarding",\n  "indexnow_status": 200,\n  "status": "LIVE_AND_INDEXED"\n}',
+        latency: '~380ms',
+        statusUptime: '99.99%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'OAuth2 WordPress REST API & IndexNow HTTP POST',
+          endpoint: 'https://blog.agency.com/wp-json/wp/v2/posts',
+          retryPolicy: 'Idempotent slug check to prevent duplicate articles',
+          secretKeys: ['WP_APPLICATION_PASSWORD', 'INDEXNOW_KEY'],
+          payloadSchema: 'WordPress Post Create payload',
+          fallbackAction: 'Saves as Draft in WordPress and alerts admin in Slack.'
+        }
+      }
+    ],
+    aiPromptSample: `SYSTEM PROMPT (Programmatic SEO Author):
+You are an Elite Technical Content Strategist.
+Write a 2,500-word authoritative guide for: [Target Keyword].
+Must include:
+1. Executive Summary box for fast readers.
+2. Comparison table analyzing top 3 tools or methodologies.
+3. Node-by-node architecture diagram explanation in markdown.
+4. FAQ section answering top 5 Google People Also Ask questions.
+5. Strict JSON-LD FAQPage schema block ready for search injection.`,
+    jsonOutputSample: `{
+  "article_title": "How to Automate Client Onboarding: 4-Step Agency Architecture",
+  "word_count": 2480,
+  "primary_keyword": "How to automate client onboarding",
+  "reading_time_minutes": 8,
+  "faq_schema_generated": true,
+  "status": "READY_FOR_CMS_DISPATCH"
+}`,
+    implementationSteps: [
+      'Connect Semrush or Ahrefs API to a weekly cron schedule in Make.com.',
+      'Filter for low-competition keywords in your niche with KD < 25.',
+      'Pass search intent into Claude 3.7 with the comprehensive outline system prompt.',
+      'Generate compressed WebP hero images via Flux or DALL-E 3.',
+      'Publish automatically via WordPress / Ghost REST API and trigger an IndexNow ping.'
+    ]
+  },
+  {
+    id: 'client-onboarding',
+    categoryKey: 'client-ops',
+    categoryLabel: 'Automated Client Onboarding & Provisioning',
+    badge: 'TOPOLOGY BLUEPRINT 08 • ZERO-HUMAN-TOUCH ONBOARDING',
+    title: 'Stripe / Contract Signature → Drive Folder Provisioning → Notion Portal Generator → Welcome Email Dispatch',
+    subtitle:
+      'Instantly onboard new high-ticket clients the moment their payment clears: provisions dedicated Google Drive directories, duplicates a custom Notion workspace, invites them to Slack, and sends credentials in 3 seconds.',
+    networkTopologyTitle: 'Transactional Client Provisioning & Multi-SaaS Mesh',
+    timeSaved: '14+ Hours / Week',
+    vaServiceValue: '$500 – $1,200 Setup Fee',
+    tools: ['Stripe Webhook', 'Google Drive API', 'Notion API', 'Slack SCIM API', 'Resend Email API'],
+    nodes: [
+      {
+        step: '01',
+        type: 'TRIGGER',
+        title: 'Stripe Payment / Contract Signature',
+        tool: 'Stripe Webhook (checkout.session.completed)',
+        ipAddress: '10.0.1.40',
+        port: '443',
+        protocolBadge: 'Payment Event Inbound',
+        description: 'Triggers immediately upon client paying retainer invoice or signing PandaDoc agreement.',
+        inputPayload: '{\n  "customer_name": "Apex Studio",\n  "customer_email": "sarah@apexstudio.io",\n  "amount_paid": "$2,500.00",\n  "plan": "Growth Retainer"\n}',
+        processingLogic: 'Verifies Stripe webhook HMAC signature and extracts client company name, email, and contract terms.',
+        outputPayload: '{\n  "client_id": "cli_9912",\n  "clean_name": "Apex Studio",\n  "email": "sarah@apexstudio.io"\n}',
+        latency: '~10ms',
+        statusUptime: '100%',
+        iconType: 'webhook',
+        detailedSpecs: {
+          protocol: 'HTTPS POST with Stripe Webhook Signature',
+          endpoint: 'https://hook.agency.com/v1/stripe-onboard',
+          retryPolicy: 'Stripe automatic 72-hour webhook retry schedule',
+          secretKeys: ['STRIPE_WEBHOOK_SECRET'],
+          payloadSchema: 'Stripe Event Object Draft 2026',
+          fallbackAction: 'Pings founder phone if payment fails validation.'
+        }
+      },
+      {
+        step: '02',
+        type: 'ACTION',
+        title: 'Google Drive Directory Provisioning',
+        tool: 'Google Drive API v3',
+        ipAddress: '10.0.5.18',
+        port: '443',
+        protocolBadge: 'Cloud Storage Provisioner',
+        description: 'Provisions client master folder with standardized subfolders: [01_Brand_Assets, 02_Raw_Footage, 03_Final_Deliverables, 04_Contracts].',
+        inputPayload: '{\n  "folder_name": "[Apex Studio] Master Workspace"\n}',
+        processingLogic: 'Clones master folder template, creates 4 sub-directories, and grants client email write permissions.',
+        outputPayload: '{\n  "drive_folder_id": "1g9821-xyz",\n  "shared_url": "https://drive.google.com/drive/folders/1g9821-xyz"\n}',
+        latency: '~420ms',
+        statusUptime: '99.98%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'OAuth2 REST API (Google Drive v3)',
+          endpoint: 'https://www.googleapis.com/drive/v3/files',
+          retryPolicy: 'Auto-retry with exponential backoff on 500 error',
+          secretKeys: ['GOOGLE_SERVICE_ACCOUNT_KEY'],
+          payloadSchema: 'Google Drive file resource schema',
+          fallbackAction: 'Logs to manual provisioning checklist.'
+        }
+      },
+      {
+        step: '03',
+        type: 'ACTION',
+        title: 'Notion Client Portal Duplicate',
+        tool: 'Notion API (duplicatePage & update)',
+        ipAddress: '10.0.5.22',
+        port: '443',
+        protocolBadge: 'Workspace Generator',
+        description: 'Duplicates master agency client dashboard template, inserts client branding, and embeds the new Google Drive link.',
+        inputPayload: '{\n  "client_name": "Apex Studio",\n  "drive_url": "https://drive.google.com/..."\n}',
+        processingLogic: 'Clones 12-page agency portal with task boards, content calendar, asset database, and invoice logs.',
+        outputPayload: '{\n  "notion_portal_url": "https://notion.so/agency/apex-studio-portal",\n  "page_id": "notion_pg_882"\n}',
+        latency: '~650ms',
+        statusUptime: '99.96%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'Notion REST API 2026-10',
+          endpoint: 'https://api.notion.com/v1/pages',
+          retryPolicy: '3 retries on Notion rate-limit header',
+          secretKeys: ['NOTION_API_SECRET'],
+          payloadSchema: 'Notion page properties payload',
+          fallbackAction: 'Alerts operations VA.'
+        }
+      },
+      {
+        step: '04',
+        type: 'ACTION',
+        title: 'Private Slack Channel Provisioning',
+        tool: 'Slack Conversations API',
+        ipAddress: '10.0.5.35',
+        port: '443',
+        protocolBadge: 'Team Chat Provisioner',
+        description: 'Creates dedicated `#client-apex-studio` channel, invites internal agency specialists, and posts welcome instructions.',
+        inputPayload: '{\n  "channel_name": "client-apex-studio",\n  "invite_email": "sarah@apexstudio.io"\n}',
+        processingLogic: 'Executes `conversations.create`, sets channel topic to Notion portal link, and invites team members.',
+        outputPayload: '{\n  "channel_id": "C098129",\n  "channel_name": "#client-apex-studio"\n}',
+        latency: '~210ms',
+        statusUptime: '99.99%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'Slack Web API (OAuth2 Bot)',
+          endpoint: 'https://slack.com/api/conversations.create',
+          retryPolicy: 'Channel name sanitization and retry if name collision occurs',
+          secretKeys: ['SLACK_BOT_TOKEN'],
+          payloadSchema: 'Slack conversation creation payload',
+          fallbackAction: 'Creates standard ticket in general client channel.'
+        }
+      },
+      {
+        step: '05',
+        type: 'ACTION',
+        title: 'Personalized Welcome Email Dispatch',
+        tool: 'Resend API / Postmark',
+        ipAddress: '10.0.5.90',
+        port: '443',
+        protocolBadge: 'Transactional Email Relay',
+        description: 'Sends founder-signed welcome email containing direct links to their private Notion portal, Drive folder, and Slack invite.',
+        inputPayload: '{\n  "to": "sarah@apexstudio.io",\n  "portal_url": "https://notion.so/...",\n  "drive_url": "https://drive.google.com/..."\n}',
+        processingLogic: 'Compiles dynamic HTML email template, generates calendar kickoff invite, and dispatches via dedicated IP relay.',
+        outputPayload: '{\n  "email_id": "re_88192",\n  "delivery_status": "DELIVERED",\n  "total_onboarding_seconds": 2.8\n}',
+        latency: '~90ms',
+        statusUptime: '100%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'Resend HTTPS API / SMTP TLS 1.3',
+          endpoint: 'https://api.resend.com/emails',
+          retryPolicy: 'Auto-fallback to AWS SES backup SMTP',
+          secretKeys: ['RESEND_API_KEY'],
+          payloadSchema: 'Transactional email dispatch schema',
+          fallbackAction: 'Logs email body to customer Notion card.'
+        }
+      }
+    ],
+    aiPromptSample: `SYSTEM PROMPT (Client Welcome Strategy):
+Given New Client Name: "Apex Studio" & Plan: "Monthly Retainer $2,500"
+Generate a personalized executive welcome note:
+- State onboarding kick-off call date.
+- Provide Notion Portal link & Google Drive assets folder link.
+- Reassure them that Week 1 priorities are already queued in their task board.`,
+    jsonOutputSample: `{
+  "onboarding_summary": "All 4 systems provisioned in 2.8 seconds. Drive, Notion, Slack, and Welcome Email active.",
+  "client_email": "sarah@apexstudio.io",
+  "status": "COMPLETED_ZERO_TOUCH"
+}`,
+    implementationSteps: [
+      'Connect Stripe webhook for `checkout.session.completed` in Make.com.',
+      'Add Google Drive module to create folder structure from template.',
+      'Add Notion API module to clone your client workspace dashboard.',
+      'Add Slack module to create `#client-[name]` channel and invite client email.',
+      'Dispatch branded welcome email via Resend with links to all 3 tools in under 3 seconds!'
+    ]
+  },
+  {
+    id: 'social-community-dm',
+    categoryKey: 'social-growth',
+    categoryLabel: 'Social Media Growth & Auto-DM Lead Magnet',
+    badge: 'TOPOLOGY BLUEPRINT 09 • SOCIAL CONVERSION FLYWHEEL',
+    title: 'Instagram / X Comment Ingestion → Intent Classifier → Meta Graph Auto-DM → Notion Lead Capture',
+    subtitle:
+      'Convert viral social views into high-ticket email subscribers: automatically detects comments like "BLUEPRINT" or "AI", validates follower status, dispatches instant personalized DMs with download links, and logs leads in Notion.',
+    networkTopologyTitle: 'Social Graph Webhook & Conversational Funnel Engine',
+    timeSaved: '18+ Hours / Week',
+    vaServiceValue: '$600 – $1,500 / Month Retainer',
+    tools: ['Meta Graph API', 'Claude 3.7 Classifier', 'ManyChat / Custom Webhook', 'Notion CRM', 'Email Opt-In'],
+    nodes: [
+      {
+        step: '01',
+        type: 'TRIGGER',
+        title: 'Social Comment & Mention Ingestion',
+        tool: 'Meta Graph API / X Webhook',
+        ipAddress: '10.0.1.45',
+        port: '443',
+        protocolBadge: 'Social Webhook Ingress',
+        description: 'Listens for real-time comments on client Instagram Reels, TikToks, or YouTube videos containing trigger keywords.',
+        inputPayload: '{\n  "platform": "instagram",\n  "username": "@marcus_creative",\n  "comment_text": "Please send me the BLUEPRINT!",\n  "post_id": "media_9921"\n}',
+        processingLogic: 'Captures webhook event, parses comment text, and verifies trigger keyword matches ("BLUEPRINT", "AI", "GUIDE").',
+        outputPayload: '{\n  "user_handle": "marcus_creative",\n  "keyword_detected": "BLUEPRINT",\n  "post_id": "media_9921"\n}',
+        latency: '~15ms',
+        statusUptime: '99.99%',
+        iconType: 'webhook',
+        detailedSpecs: {
+          protocol: 'Meta Graph Webhook (Instagram Messaging)',
+          endpoint: 'https://graph.facebook.com/v21.0/me/subscribed_apps',
+          retryPolicy: 'Auto-ACK within 200ms to maintain Meta webhook compliance',
+          secretKeys: ['META_PAGE_ACCESS_TOKEN', 'META_APP_SECRET'],
+          payloadSchema: 'Meta Webhook Entry Array payload',
+          fallbackAction: 'Logs unhandled comment to review queue.'
+        }
+      },
+      {
+        step: '02',
+        type: 'AI BRAIN',
+        title: 'Sentiment & Follower Status Assessor',
+        tool: 'Claude 3.7 Sonnet / GPT-4o-mini',
+        ipAddress: '10.0.3.145',
+        port: '8443',
+        protocolBadge: 'Conversational Brain',
+        description: 'Analyzes user profile bio and comment sentiment; selects the most relevant variation of the direct message.',
+        inputPayload: '{\n  "user": "marcus_creative",\n  "bio": "Video editor & agency founder",\n  "comment": "Please send BLUEPRINT"\n}',
+        processingLogic: 'Customizes greeting referencing their agency background: selects High-Ticket Creator variation.',
+        outputPayload: '{\n  "dm_text": "Hey Marcus! Saw you are running a creative agency—here is the exact automation blueprint we use...",\n  "lead_magnet_url": "https://link.agency/blueprint-pdf"\n}',
+        latency: '~240ms',
+        statusUptime: '99.98%',
+        iconType: 'brain',
+        detailedSpecs: {
+          protocol: 'HTTPS POST /v1/messages',
+          endpoint: 'https://api.anthropic.com/v1/messages',
+          retryPolicy: 'Fallback to deterministic template if LLM latency exceeds 1.5s',
+          secretKeys: ['ANTHROPIC_API_KEY'],
+          payloadSchema: 'Conversational message payload',
+          fallbackAction: 'Sends verified high-converting default message.'
+        }
+      },
+      {
+        step: '03',
+        type: 'ACTION',
+        title: 'Instant Instagram Direct Message Dispatch',
+        tool: 'Meta Graph Messages API',
+        ipAddress: '10.0.5.45',
+        port: '443',
+        protocolBadge: 'Private DM Gateway',
+        description: 'Dispatches instant direct message to the user with interactive buttons: [Download PDF] and [Book 15-Min Call].',
+        inputPayload: '{\n  "recipient_id": "ig_user_8819",\n  "message": "Hey Marcus...",\n  "buttons": ["Get Free Guide"]\n}',
+        processingLogic: 'Calls `me/messages` endpoint with generic template buttons within the 24-hour messaging window.',
+        outputPayload: '{\n  "message_id": "mid.19821",\n  "status": "SENT_TO_INBOX",\n  "delivery_time_ms": 110\n}',
+        latency: '~110ms',
+        statusUptime: '99.97%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'Meta Graph REST API v21.0',
+          endpoint: 'https://graph.facebook.com/v21.0/me/messages',
+          retryPolicy: '24-hour policy window compliance check',
+          secretKeys: ['META_USER_TOKEN'],
+          payloadSchema: 'Interactive button message schema',
+          fallbackAction: 'Replies directly to comment publicly with shortened link.'
+        }
+      },
+      {
+        step: '04',
+        type: 'ENRICH',
+        title: 'Opt-In Page & Email Lead Capture',
+        tool: 'ConvertKit / Beehiiv API',
+        ipAddress: '10.0.2.95',
+        port: '443',
+        protocolBadge: 'Email Subscriber Mesh',
+        description: 'Captures verified email address when user opens the lead magnet link and automatically tags their subscriber profile.',
+        inputPayload: '{\n  "source": "instagram_reels",\n  "lead_keyword": "BLUEPRINT",\n  "tag": "High_Value_Creator"\n}',
+        processingLogic: 'Records subscriber, triggers 3-part welcome email nurture sequence, and issues instant download token.',
+        outputPayload: '{\n  "subscriber_id": "sub_9921",\n  "status": "CONFIRMED_OPTIN"\n}',
+        latency: '~160ms',
+        statusUptime: '99.99%',
+        iconType: 'search',
+        detailedSpecs: {
+          protocol: 'REST API with Bearer Token',
+          endpoint: 'https://api.convertkit.com/v3/subscribers',
+          retryPolicy: 'Automatic queue on network interruption',
+          secretKeys: ['CONVERTKIT_API_SECRET'],
+          payloadSchema: 'Subscriber creation object',
+          fallbackAction: 'Logs lead to Google Sheets backup.'
+        }
+      },
+      {
+        step: '05',
+        type: 'ACTION',
+        title: 'Notion CRM Prospect Record Write',
+        tool: 'Notion CRM Database API',
+        ipAddress: '10.0.5.55',
+        port: '443',
+        protocolBadge: 'CRM Lead Sink',
+        description: 'Logs prospect profile, source post ID, Instagram handle, and lead score in Notion for sales team follow-up.',
+        inputPayload: '{\n  "handle": "@marcus_creative",\n  "source_post": "media_9921",\n  "status": "Lead Magnet Sent"\n}',
+        processingLogic: 'Creates deal card with 48-hour follow-up reminder for the sales assistant.',
+        outputPayload: '{\n  "crm_card_id": "notion_lead_1928",\n  "status": "LOGGED"\n}',
+        latency: '~120ms',
+        statusUptime: '99.98%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'Notion Pages API',
+          endpoint: 'https://api.notion.com/v1/pages',
+          retryPolicy: 'Idempotent handle check',
+          secretKeys: ['NOTION_INTEGRATION_TOKEN'],
+          payloadSchema: 'Notion page properties payload',
+          fallbackAction: 'Sends Slack message to account manager.'
+        }
+      }
+    ],
+    aiPromptSample: `SYSTEM PROMPT (Conversational DM Engine):
+When an Instagram user comments "BLUEPRINT":
+1. Check their bio to determine if they are a Founder, Freelancer, or Creator.
+2. Formulate a 2-sentence warm DM delivering the resource without being spammy.
+3. Include trackable link to our free Notion workflow guide.`,
+    jsonOutputSample: `{
+  "dm_dispatched": true,
+  "recipient": "@marcus_creative",
+  "open_rate_expected": 0.88,
+  "status": "CONVERSION_COMPLETED"
+}`,
+    implementationSteps: [
+      'Connect Instagram Professional account to ManyChat or a Make.com webhook.',
+      'Set trigger rule: When user comments "BLUEPRINT" on any Reel.',
+      'Configure auto-DM with trackable download link to your free PDF or Notion template.',
+      'Connect opt-in page to ConvertKit/Beehiiv to capture their verified email address.',
+      'Log leads directly into Notion CRM for automated 48-hour follow-ups!'
+    ]
+  },
+  {
+    id: 'voice-dubbing-studio',
+    categoryKey: 'dubbing-media',
+    categoryLabel: 'Multilingual AI Video Dubbing & Lip-Sync',
+    badge: 'TOPOLOGY BLUEPRINT 10 • GLOBAL AUDIENCE MULTIPLIER',
+    title: 'English Master Video → Whisper Timestamped SRT → Claude Neural Translation → ElevenLabs Voice Cloning → Multi-Language Video Egress',
+    subtitle:
+      'Translate and re-voice long-form client videos into 12 languages automatically with cloned speaker voice, accurate timestamps, and synchronized subtitles for global YouTube and TikTok channels.',
+    networkTopologyTitle: 'Global Neural Audio Transcoding & Lip-Sync Architecture',
+    timeSaved: '28+ Hours / Week',
+    vaServiceValue: '$1,200 – $3,500 / Month Package',
+    tools: ['Whisper Speech-to-Text', 'Claude 3.7 Neural Translator', 'ElevenLabs Voice Cloning', 'FFmpeg Transcoder', 'YouTube Data API'],
+    nodes: [
+      {
+        step: '01',
+        type: 'TRIGGER',
+        title: 'Master English Video Ingestion',
+        tool: 'AWS S3 / Google Drive Watcher',
+        ipAddress: '10.0.1.50',
+        port: '443',
+        protocolBadge: 'Video Inbound Stream',
+        description: 'Fires when a client exports their finished English YouTube video or podcast into the assets dropzone.',
+        inputPayload: '{\n  "video_url": "https://cdn.agency.com/masters/podcast_ep_42.mp4",\n  "target_languages": ["es", "pt", "de", "fr"]\n}',
+        processingLogic: 'Extracts 48kHz audio track via FFmpeg and prepares clean vocal stream for acoustic alignment.',
+        outputPayload: '{\n  "audio_wav": "podcast_ep_42_vocal.wav",\n  "duration": "14:28"\n}',
+        latency: '~1.8s',
+        statusUptime: '99.98%',
+        iconType: 'webhook',
+        detailedSpecs: {
+          protocol: 'S3 Event Notification + FFmpeg Serverless Worker',
+          endpoint: 'https://transcoder.internal.agency/extract-audio',
+          retryPolicy: 'Auto-retry on transient audio transcode error',
+          secretKeys: ['AWS_KEY', 'AWS_SECRET'],
+          payloadSchema: 'Media metadata payload',
+          fallbackAction: 'Logs video specs to processing dashboard.'
+        }
+      },
+      {
+        step: '02',
+        type: 'ENRICH',
+        title: 'Word-Level Timestamped Transcription',
+        tool: 'OpenAI Whisper Large-v3',
+        ipAddress: '10.0.2.88',
+        port: '8080',
+        protocolBadge: 'Neural STT Cluster',
+        description: 'Transcribes speech into exact word-by-word timestamps (.SRT / .VTT format) with millisecond accuracy.',
+        inputPayload: '{\n  "audio_file": "podcast_ep_42_vocal.wav"\n}',
+        processingLogic: 'Processes multi-speaker audio, identifies speaker diarization tags, and exports timestamped cues.',
+        outputPayload: '{\n  "word_timestamps_count": 2180,\n  "srt_url": "podcast_ep_42.srt"\n}',
+        latency: '~8.4s',
+        statusUptime: '99.95%',
+        iconType: 'search',
+        detailedSpecs: {
+          protocol: 'REST Audio Processing API',
+          endpoint: 'https://api.openai.com/v1/audio/transcriptions',
+          retryPolicy: 'Chunks audio into 25MB slices for reliable upload',
+          secretKeys: ['OPENAI_API_KEY'],
+          payloadSchema: 'Detailed verbose JSON transcript schema',
+          fallbackAction: 'Switches to Deepgram fallback cluster.'
+        }
+      },
+      {
+        step: '03',
+        type: 'AI BRAIN',
+        title: 'Nuanced Neural Translation & Syllable Timing',
+        tool: 'Claude 3.7 Sonnet (Localization Mode)',
+        ipAddress: '10.0.3.155',
+        port: '8443',
+        protocolBadge: 'Localization Brain',
+        description: 'Translates colloquial English idioms into natural Spanish, Portuguese, German, and French while preserving syllable count for pacing.',
+        inputPayload: '{\n  "source_srt": "podcast_ep_42.srt",\n  "target_lang": "es"\n}',
+        processingLogic: 'Matches speaker tone, preserves technical vocabulary, and adjusts sentence length to prevent audio desync.',
+        outputPayload: '{\n  "spanish_srt": "podcast_ep_42_es.srt",\n  "timing_variance": "< 4%"\n}',
+        latency: '~2.8s',
+        statusUptime: '99.98%',
+        iconType: 'brain',
+        detailedSpecs: {
+          protocol: 'HTTPS POST /v1/messages',
+          endpoint: 'https://api.anthropic.com/v1/messages',
+          retryPolicy: 'Deterministic temperature 0.1 for translation fidelity',
+          secretKeys: ['ANTHROPIC_API_KEY'],
+          payloadSchema: 'Bilingual SRT alignment payload',
+          fallbackAction: 'Falls back to DeepL Pro API.'
+        }
+      },
+      {
+        step: '04',
+        type: 'ENRICH',
+        title: 'Voice Cloning & Multilingual Narration',
+        tool: 'ElevenLabs Voice Cloning API',
+        ipAddress: '10.0.2.98',
+        port: '443',
+        protocolBadge: 'Voice Cloning Engine',
+        description: 'Synthesizes translated Spanish audio using the creator’s cloned authentic voice, matching pitch, cadence, and emotion.',
+        inputPayload: '{\n  "voice_id": "creator_cloned_voice",\n  "script": "podcast_ep_42_es.srt",\n  "model": "eleven_multilingual_v2"\n}',
+        processingLogic: 'Generates studio-mastered vocal track synchronized to original video video pacing cues.',
+        outputPayload: '{\n  "spanish_audio_url": "podcast_ep_42_es_vocal.mp3",\n  "sync_score": 0.96\n}',
+        latency: '~14.2s',
+        statusUptime: '99.92%',
+        iconType: 'music',
+        detailedSpecs: {
+          protocol: 'ElevenLabs Streaming REST API',
+          endpoint: 'https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream',
+          retryPolicy: 'Automatic queueing on concurrent stream limit',
+          secretKeys: ['ELEVENLABS_API_KEY'],
+          payloadSchema: 'Audio stream binary chunk response',
+          fallbackAction: 'Uses licensed voice clone profile.'
+        }
+      },
+      {
+        step: '05',
+        type: 'ACTION',
+        title: 'Multi-Track YouTube & CDN Upload',
+        tool: 'YouTube Data API v3 (Multi-Audio Tracks)',
+        ipAddress: '10.0.5.95',
+        port: '443',
+        protocolBadge: 'Multi-Audio Video Sink',
+        description: 'Attaches the new Spanish audio track directly to the YouTube video via Multi-Language Audio feature, reaching global audiences.',
+        inputPayload: '{\n  "youtube_video_id": "dQw4w9WgXcQ",\n  "audio_track": "podcast_ep_42_es_vocal.mp3",\n  "language": "es"\n}',
+        processingLogic: 'Calls YouTube `captions.insert` and `videos.update` to attach multi-audio language track and translated description.',
+        outputPayload: '{\n  "status": "MULTI_LANGUAGE_ACTIVE",\n  "languages_live": ["en", "es"],\n  "global_reach_multiplier": "2.4x"\n}',
+        latency: '~650ms',
+        statusUptime: '99.99%',
+        iconType: 'action',
+        detailedSpecs: {
+          protocol: 'YouTube Data API v3 OAuth2',
+          endpoint: 'https://www.googleapis.com/youtube/v3/videos',
+          retryPolicy: 'Quota-managed API calls with exponential backoff',
+          secretKeys: ['YOUTUBE_OAUTH_REFRESH_TOKEN'],
+          payloadSchema: 'YouTube multi-language audio track payload',
+          fallbackAction: 'Saves rendered MP4 to Google Drive "Ready to Upload" folder.'
+        }
+      }
+    ],
+    aiPromptSample: `SYSTEM PROMPT (Multilingual Video Localizer):
+Translate this timestamped English transcript into Spanish.
+Critical Rules:
+- Keep the exact millisecond start and end timestamps.
+- Match syllable pacing so the audio duration does not overrun the video cut.
+- Use natural Latin American Spanish phrasing for digital creators.`,
+    jsonOutputSample: `{
+  "dubbing_completed": true,
+  "languages_processed": ["Spanish (Latin America)", "Portuguese (Brazil)"],
+  "sync_accuracy": "98.4%",
+  "status": "READY_FOR_YOUTUBE_MULTI_TRACK"
+}`,
+    implementationSteps: [
+      'Export audio track from master video and transcribe with Whisper timestamps.',
+      'Translate script with Claude 3.7 using syllable-timing constraints.',
+      'Clone creator voice on ElevenLabs with the `eleven_multilingual_v2` model.',
+      'Re-encode audio with FFmpeg and attach multi-language audio track via YouTube API.',
+      'Double your channel views from international markets automatically!'
     ]
   }
 ];
@@ -1179,6 +1801,15 @@ Have a great weekend!
   }
 ];
 
+// DEFAULT POSITIONS FOR THE 5 NODES (BALANCED FULL VIEW, NO SPLIT DIVISIONS)
+const DEFAULT_NODE_POSITIONS = [
+  { x: 30, y: 135 },
+  { x: 260, y: 135 },
+  { x: 490, y: 110 },
+  { x: 720, y: 135 },
+  { x: 950, y: 135 }
+];
+
 interface AIAutomationDiagramsProps {
   id?: string;
   searchQuery?: string;
@@ -1193,11 +1824,16 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   const [isSimulating, setIsSimulating] = useState<boolean>(false);
   const [simSpeed, setSimSpeed] = useState<1 | 2>(1);
   const [selectedNodeIndex, setSelectedNodeIndex] = useState<number>(0);
-  const [diagramMode, setDiagramMode] = useState<'full-network' | 'pipeline'>('full-network');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [simLogs, setSimLogs] = useState<Array<{ id: string; time: string; text: string; type: 'info' | 'success' | 'warn' | 'active' }>>([]);
   const simTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // DRAGGABLE NODES ENGINE STATE
+  const [nodePositions, setNodePositions] = useState<Array<{ x: number; y: number }>>(DEFAULT_NODE_POSITIONS);
+  const [draggingNodeIndex, setDraggingNodeIndex] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
   // Filter or detect blueprints matching search query
   const query = searchQuery.trim().toLowerCase();
@@ -1238,6 +1874,12 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
 
   const selectedNode = activeBlueprint.nodes[selectedNodeIndex] || activeBlueprint.nodes[0];
 
+  // Reset positions to default when blueprint changes
+  useEffect(() => {
+    setNodePositions(DEFAULT_NODE_POSITIONS);
+    setSelectedNodeIndex(0);
+  }, [activeBlueprintId]);
+
   // Initial simulation logs when blueprint switches
   useEffect(() => {
     setIsSimulating(false);
@@ -1249,17 +1891,76 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
       {
         id: 'init-1',
         time: timeStr,
-        text: `[NET-TOPOLOGY] Virtual Private Cloud initialized: ${activeBlueprint.networkTopologyTitle}`,
+        text: `[NET-TOPOLOGY] Full view canvas online: ${activeBlueprint.networkTopologyTitle}`,
         type: 'info'
       },
       {
         id: 'init-2',
         time: timeStr,
-        text: `[ROUTING] Gateways, Neural Reasoning Core & Egress Sinks online. Bandwidth: 10Gbps | Drop: 0.00%`,
+        text: `[ENGINE] Interactive node dragging enabled. Drag any node box to customize your diagram flow.`,
         type: 'info'
       }
     ]);
   }, [activeBlueprintId, activeBlueprint.networkTopologyTitle]);
+
+  // Handle Dragging in SVG
+  const getSVGCoordinates = (clientX: number, clientY: number) => {
+    if (!svgRef.current) return { x: 0, y: 0 };
+    const pt = svgRef.current.createSVGPoint();
+    pt.x = clientX;
+    pt.y = clientY;
+    const ctm = svgRef.current.getScreenCTM();
+    if (!ctm) return { x: 0, y: 0 };
+    const transformed = pt.matrixTransform(ctm.inverse());
+    return { x: transformed.x, y: transformed.y };
+  };
+
+  const handleNodeMouseDown = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const coords = getSVGCoordinates(e.clientX, e.clientY);
+    setDraggingNodeIndex(index);
+    setSelectedNodeIndex(index);
+    setDragOffset({
+      x: coords.x - nodePositions[index].x,
+      y: coords.y - nodePositions[index].y
+    });
+  };
+
+  const handleSVGMouseMove = (e: React.MouseEvent) => {
+    if (draggingNodeIndex === null) return;
+    const coords = getSVGCoordinates(e.clientX, e.clientY);
+    const newX = Math.max(10, Math.min(1150 - 190, coords.x - dragOffset.x));
+    const newY = Math.max(10, Math.min(420 - 165, coords.y - dragOffset.y));
+
+    setNodePositions((prev) => {
+      const next = [...prev];
+      next[draggingNodeIndex] = { x: newX, y: newY };
+      return next;
+    });
+  };
+
+  const handleSVGMouseUp = () => {
+    setDraggingNodeIndex(null);
+  };
+
+  const resetNodePositions = () => {
+    setNodePositions(DEFAULT_NODE_POSITIONS);
+  };
+
+  // Dynamic Bezier Paths connecting nodes
+  const dynamicWires = useMemo(() => {
+    const wires: Array<{ d: string; from: number; to: number }> = [];
+    for (let i = 0; i < 4; i++) {
+      const startX = nodePositions[i].x + (i === 2 ? 185 : 180);
+      const startY = nodePositions[i].y + (i === 2 ? 77 : 72);
+      const endX = nodePositions[i + 1].x;
+      const endY = nodePositions[i + 1].y + (i + 1 === 2 ? 77 : 72);
+      const deltaX = Math.max(25, Math.abs(endX - startX) * 0.45);
+      const d = `M ${startX} ${startY} C ${startX + deltaX} ${startY}, ${endX - deltaX} ${endY}, ${endX} ${endY}`;
+      wires.push({ d, from: i, to: i + 1 });
+    }
+    return wires;
+  }, [nodePositions]);
 
   // Handle Live Simulation Loop
   const runSimulation = () => {
@@ -1281,7 +1982,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
       const logEntry = {
         id: `sim-${Date.now()}-${stepNum}`,
         time: timeStr,
-        text: `[ZONE ${node.step} • ${node.protocolBadge}] ${node.title} @ ${node.ipAddress}:${node.port} ➔ Transferred packet in ${node.latency}`,
+        text: `[STAGE ${node.step} • ${node.protocolBadge}] ${node.title} @ ${node.ipAddress}:${node.port} ➔ Transferred packet in ${node.latency}`,
         type: (stepNum === 5 ? 'success' : stepNum === 3 ? 'active' : 'info') as 'info' | 'success' | 'warn' | 'active'
       };
       setSimLogs((prev) => [logEntry, ...prev.slice(0, 15)]);
@@ -1304,7 +2005,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           {
             id: `done-${Date.now()}`,
             time: timeStr,
-            text: `[ROUTING COMPLETE] End-to-end packet cycle finalized across all subnets. Estimated time saved: ${activeBlueprint.timeSaved}.`,
+            text: `[FLOW COMPLETE] Finished all 5 automated stages. Time saved: ${activeBlueprint.timeSaved}.`,
             type: 'success'
           },
           ...prev.slice(0, 15)
@@ -1327,7 +2028,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
       {
         id: `reset-${Date.now()}`,
         time: timeStr,
-        text: `[SYSTEM] Network packet buffer cleared. Telemetry monitor ready.`,
+        text: `[RESET] Telemetry packet buffer cleared. Ready for next simulation.`,
         type: 'info'
       }
     ]);
@@ -1345,90 +2046,97 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           SECTION 1: THE ANIMATED REAL FULL-VIEW NETWORKING TOPOLOGY DIAGRAM
       ====================================================================== */}
       <section
-        className={`relative rounded-3xl bg-[#060813] border border-cyan-500/30 shadow-2xl p-4 sm:p-7 lg:p-8 overflow-hidden text-slate-100 transition-all ${
-          isExpanded ? 'fixed inset-4 z-50 overflow-y-auto' : ''
+        className={`relative rounded-3xl bg-[#060813] border border-cyan-500/40 shadow-[0_0_50px_rgba(2,132,199,0.15)] p-5 sm:p-8 lg:p-9 overflow-hidden text-slate-100 transition-all ${
+          isExpanded ? 'fixed inset-3 z-50 overflow-y-auto' : ''
         }`}
       >
         {/* ANIMATED BACKGROUND MATRIX GRID & SUBTLE GLOWING RADIAL CONDUITS */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-20"
+          className="absolute inset-0 pointer-events-none opacity-25"
           style={{
             backgroundImage: `radial-gradient(circle at 1px 1px, #38bdf8 1px, transparent 0)`,
-            backgroundSize: '28px 28px'
+            backgroundSize: '24px 24px'
           }}
         />
 
         {/* Ambient neon radial glows */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-64 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
-        {/* TOP HUD RETICLE & TELEMETRY HEADER */}
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-500/40 text-cyan-300 text-[11px] font-mono tracking-wider uppercase">
+        {/* TOP HUD RETICLE & PROMINENT HIGHLIGHTED HEADLINE */}
+        <div className="relative z-10 space-y-4 pb-6 border-b border-slate-800">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/90 border border-cyan-400 text-cyan-300 text-xs font-mono font-bold tracking-wider uppercase shadow-[0_0_15px_rgba(56,189,248,0.25)]">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
               </span>
-              <span>ENTERPRISE NETWORK TOPOLOGY &bull; FULL ARCHITECTURE DIAGRAM VIEW</span>
+              <span>LIVE ANIMATED TOPOLOGY WORKFLOW &bull; DRAGGABLE FULL VIEW CANVAS</span>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-              <span>{activeBlueprint.title}</span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={resetNodePositions}
+                className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 hover:text-white border border-slate-700 text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                title="Reset Draggable Nodes to Default Positions"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Reset Node Layout</span>
+              </button>
+
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors cursor-pointer"
+                title={isExpanded ? 'Exit Fullscreen' : 'Expand to Fullscreen'}
+              >
+                {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          {/* VIBRANT GLOWING HEADLINE TITLE */}
+          <div className="space-y-2">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white drop-shadow-[0_2px_12px_rgba(56,189,248,0.3)]">
+              <span className="bg-gradient-to-r from-white via-cyan-100 to-sky-300 bg-clip-text text-transparent">
+                {activeBlueprint.title}
+              </span>
             </h2>
 
-            <p className="text-xs sm:text-sm text-slate-300 max-w-4xl leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-200 max-w-4xl leading-relaxed font-medium">
               {activeBlueprint.subtitle}
             </p>
           </div>
+        </div>
 
-          <div className="flex flex-wrap items-center gap-2 shrink-0 font-mono text-xs">
-            {/* View Mode Toggle: Full Network vs Linear Pipeline */}
-            <div className="flex items-center rounded-xl bg-slate-900 border border-slate-800 p-1 text-xs">
-              <button
-                onClick={() => setDiagramMode('full-network')}
-                className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
-                  diagramMode === 'full-network'
-                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_12px_rgba(56,189,248,0.3)]'
-                    : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                <Network className="w-3.5 h-3.5" />
-                <span>Full Network Topology</span>
-              </button>
-              <button
-                onClick={() => setDiagramMode('pipeline')}
-                className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
-                  diagramMode === 'pipeline'
-                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_12px_rgba(56,189,248,0.3)]'
-                    : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                <Radio className="w-3.5 h-3.5" />
-                <span>Pipeline View</span>
-              </button>
-            </div>
-
-            {/* Expand / Minimize Fullscreen Toggle */}
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition-colors cursor-pointer"
-              title={isExpanded ? 'Exit Full View' : 'Full View Canvas'}
-            >
-              {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-            </button>
+        {/* 🌐 TOPOLOGY TITLE BAR IN FULL VIEW (NO SPLIT DIVISIONS) */}
+        <div className="relative z-10 my-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-900/90 border border-slate-700 text-xs font-mono shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <Server className="w-4 h-4 text-cyan-400 shrink-0" />
+            <span className="text-white font-extrabold text-sm tracking-wide">
+              {activeBlueprint.networkTopologyTitle}
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center gap-3 text-[11px]">
+            <span className="text-emerald-400 font-bold flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              UPTIME 99.98%
+            </span>
+            <span className="text-cyan-300 font-bold">⚡ P99 LATENCY: ~14ms</span>
+            <span className="text-purple-300 font-bold">🔒 ENCRYPTION: TLS 1.3 / AES-256</span>
+            <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-bold">
+              🖱️ DRAG NODES TO REPOSITION
+            </span>
           </div>
         </div>
 
-        {/* CATEGORY WORKFLOW SELECTOR TABS (6 DISTINCT AUTOMATION NICHES) */}
-        <div className="relative z-10 my-6">
-          <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2.5 flex items-center gap-2">
+        {/* CATEGORY WORKFLOW SELECTOR TABS (10 HIGH-DEMAND AUTOMATION NICHES) */}
+        <div className="relative z-10 my-5 space-y-2">
+          <div className="text-[11px] font-mono text-cyan-300 uppercase tracking-wider flex items-center gap-2 font-bold">
             <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Select AI Automation Category &bull; Instant Topology Switching:</span>
+            <span>Select AI Automation Category &bull; Instant Topology Switching (10 Workflows):</span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
             {WORKFLOW_BLUEPRINTS.map((bp, idx) => {
               const isSelected = bp.id === activeBlueprintId;
               const matchesSearch = matchingBlueprintIds.includes(bp.id);
@@ -1437,12 +2145,11 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                   key={bp.id}
                   onClick={() => {
                     setActiveBlueprintId(bp.id);
-                    setSelectedNodeIndex(0);
                   }}
                   className={`text-left p-3 rounded-xl border transition-all flex flex-col justify-between gap-1.5 cursor-pointer relative overflow-hidden ${
                     isSelected
-                      ? 'bg-cyan-950/90 border-cyan-400 text-white shadow-[0_0_20px_rgba(56,189,248,0.25)] ring-1 ring-cyan-400'
-                      : 'bg-slate-900/70 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-900'
+                      ? 'bg-cyan-950/95 border-cyan-400 text-white shadow-[0_0_20px_rgba(56,189,248,0.3)] ring-1 ring-cyan-400'
+                      : 'bg-slate-900/80 border-slate-800 text-slate-300 hover:border-slate-600 hover:bg-slate-900'
                   }`}
                 >
                   {matchesSearch && query && (
@@ -1463,413 +2170,133 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           </div>
         </div>
 
-        {/* 🌐 REAL FULL VIEW NETWORKING TOPOLOGY DIAGRAM */}
-        <div className="relative z-10 bg-black/70 border border-slate-800/90 rounded-2xl p-4 sm:p-6 overflow-x-auto shadow-inner">
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pb-3 border-b border-slate-800/80 mb-4">
-            <span className="flex items-center gap-2">
-              <Server className="w-3.5 h-3.5 text-cyan-400" />
-              <span>{activeBlueprint.networkTopologyTitle}</span>
-            </span>
-            <div className="flex items-center gap-4 text-[10px]">
-              <span className="text-emerald-400">● 99.98% UPTIME</span>
-              <span className="text-cyan-400">⚡ PACKET LATENCY: ~14ms</span>
-              <span className="text-purple-400">🔒 ENCRYPTION: TLS 1.3 / AES-256</span>
-            </div>
-          </div>
+        {/* 🌐 DRAGGABLE FULL VIEW NETWORKING TOPOLOGY CANVAS */}
+        <div className="relative z-10 bg-black/80 border border-slate-800 rounded-2xl p-3 sm:p-5 overflow-x-auto shadow-inner">
+          <div className="min-w-[1150px]">
+            <svg
+              ref={svgRef}
+              viewBox="0 0 1150 420"
+              className="w-full h-auto select-none"
+              role="img"
+              aria-label={`Draggable Networking Topology Diagram for ${activeBlueprint.title}`}
+              onMouseMove={handleSVGMouseMove}
+              onMouseUp={handleSVGMouseUp}
+              onMouseLeave={handleSVGMouseUp}
+            >
+              <defs>
+                <linearGradient id="trunkGradLive" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#0284c7" />
+                  <stop offset="50%" stopColor="#38bdf8" />
+                  <stop offset="100%" stopColor="#10b981" />
+                </linearGradient>
 
-          {diagramMode === 'full-network' ? (
-            // =================================================================
-            // 🌐 REAL MULTI-TIER NETWORK TOPOLOGY MAP (FULL ARCHITECTURE)
-            // =================================================================
-            <div className="min-w-[1020px]">
-              <svg
-                viewBox="0 0 1040 380"
-                className="w-full h-auto select-none"
-                role="img"
-                aria-label={`Real Networking Topology Diagram for ${activeBlueprint.title}`}
-              >
-                <defs>
-                  <linearGradient id="netTrunkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#0284c7" />
-                    <stop offset="50%" stopColor="#38bdf8" />
-                    <stop offset="100%" stopColor="#10b981" />
-                  </linearGradient>
+                <filter id="neonGlowDraggable" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
 
-                  <filter id="neonGlowFull" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                  </filter>
-                </defs>
+              {/* DYNAMIC BEZIER CONNECTING WIRES WITH TRAVELING PACKETS */}
+              {dynamicWires.map((wire, idx) => {
+                const isActiveConduit = activeSimStep > idx;
+                return (
+                  <g key={`wire-${idx}`}>
+                    {/* Background glow conduit */}
+                    <path
+                      d={wire.d}
+                      fill="none"
+                      stroke={isActiveConduit ? '#38bdf8' : '#0284c7'}
+                      strokeWidth="2.5"
+                      strokeDasharray="4 4"
+                      className="animate-wire-dash"
+                    />
 
-                {/* Subnet background boundaries */}
-                <rect x="15" y="15" width="220" height="350" rx="16" fill="#080e1a" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
-                <text x="30" y="38" fill="#64748b" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  [SUBNET 10.0.1.0/24 • INGRESS ZONE]
-                </text>
-
-                <rect x="255" y="15" width="450" height="350" rx="16" fill="#060c18" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
-                <text x="270" y="38" fill="#64748b" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  [SUBNET 10.0.2.0/24 • AI &amp; CONTEXT CLUSTER]
-                </text>
-
-                <rect x="725" y="15" width="300" height="350" rx="16" fill="#080e1a" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
-                <text x="740" y="38" fill="#64748b" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  [SUBNET 10.0.5.0/24 • EGRESS DISPATCH]
-                </text>
-
-                {/* NETWORK BACKBONE CONDUITS */}
-                {/* Conduit: Ingress Node 1 -> Context Node 2 */}
-                <path
-                  d="M 200 115 C 240 115, 250 115, 290 115"
-                  fill="none"
-                  stroke={activeSimStep >= 1 ? '#38bdf8' : '#0284c7'}
-                  strokeWidth="2.5"
-                  strokeDasharray="4 4"
-                  className="animate-wire-dash"
-                />
-                <circle r="4" fill="#38bdf8" filter="url(#neonGlowFull)">
-                  <animateMotion dur="2.4s" repeatCount="indefinite" path="M 200 115 C 240 115, 250 115, 290 115" />
-                </circle>
-
-                {/* Conduit: Context Node 2 -> Neural Brain Node 3 */}
-                <path
-                  d="M 450 115 C 470 115, 470 215, 490 215"
-                  fill="none"
-                  stroke={activeSimStep >= 2 ? '#38bdf8' : '#1e293b'}
-                  strokeWidth="2.5"
-                  strokeDasharray="4 4"
-                  className="animate-wire-dash"
-                />
-                <circle r="4" fill="#38bdf8" filter="url(#neonGlowFull)">
-                  <animateMotion dur="2.4s" begin="0.5s" repeatCount="indefinite" path="M 450 115 C 470 115, 470 215, 490 215" />
-                </circle>
-
-                {/* Conduit: Ingress directly to Neural Core (Secondary Event Bus) */}
-                <path
-                  d="M 200 150 C 320 150, 320 230, 490 230"
-                  fill="none"
-                  stroke="#1e293b"
-                  strokeWidth="1.5"
-                  strokeDasharray="3 3"
-                />
-
-                {/* Conduit: Neural Brain Node 3 -> Router Switch Node 4 */}
-                <path
-                  d="M 670 220 C 700 220, 710 115, 750 115"
-                  fill="none"
-                  stroke={activeSimStep >= 3 ? '#10b981' : '#1e293b'}
-                  strokeWidth="2.5"
-                  strokeDasharray="4 4"
-                  className="animate-wire-dash"
-                />
-                <circle r="4" fill="#10b981" filter="url(#neonGlowFull)">
-                  <animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M 670 220 C 700 220, 710 115, 750 115" />
-                </circle>
-
-                {/* Conduit: Router Switch Node 4 -> Egress Sink Node 5 */}
-                <path
-                  d="M 850 115 C 870 115, 875 115, 895 115"
-                  fill="none"
-                  stroke={activeSimStep >= 4 ? '#10b981' : '#047857'}
-                  strokeWidth="2.5"
-                  strokeDasharray="4 4"
-                  className="animate-wire-dash"
-                />
-                <circle r="4" fill="#10b981" filter="url(#neonGlowFull)">
-                  <animateMotion dur="2.4s" begin="1.8s" repeatCount="indefinite" path="M 850 115 C 870 115, 875 115, 895 115" />
-                </circle>
-
-                {/* Conduit: Router Switch Node 4 -> Dead Letter Queue DLQ Failover */}
-                <path
-                  d="M 800 185 C 800 240, 850 260, 895 260"
-                  fill="none"
-                  stroke="#ef4444"
-                  strokeWidth="1.5"
-                  strokeDasharray="3 3"
-                  opacity="0.6"
-                />
-
-                {/* NODE 01: INGRESS GATEWAY */}
-                <g
-                  transform="translate(30, 55)"
-                  className="cursor-pointer"
-                  onClick={() => setSelectedNodeIndex(0)}
-                >
-                  <rect
-                    width="170"
-                    height="120"
-                    rx="12"
-                    fill="#0f172a"
-                    stroke={selectedNodeIndex === 0 || activeSimStep === 1 ? '#38bdf8' : '#1e293b'}
-                    strokeWidth={selectedNodeIndex === 0 || activeSimStep === 1 ? '2.5' : '1.5'}
-                    filter={selectedNodeIndex === 0 || activeSimStep === 1 ? 'url(#neonGlowFull)' : undefined}
-                  />
-                  <rect x="10" y="10" width="70" height="18" rx="4" fill="#0369a1" />
-                  <text x="45" y="23" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                    01 INGRESS
-                  </text>
-                  <text x="10" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
-                    {activeBlueprint.nodes[0].title.slice(0, 20)}
-                  </text>
-                  <text x="10" y="65" fill="#38bdf8" fontSize="9.5" fontFamily="monospace">
-                    IP: {activeBlueprint.nodes[0].ipAddress}:{activeBlueprint.nodes[0].port}
-                  </text>
-                  <text x="10" y="82" fill="#94a3b8" fontSize="9">
-                    {activeBlueprint.nodes[0].tool.slice(0, 22)}
-                  </text>
-                  <rect x="10" y="93" width="150" height="18" rx="4" fill="#032b4d" />
-                  <text x="85" y="105" textAnchor="middle" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">
-                    {activeBlueprint.nodes[0].protocolBadge} &bull; {activeBlueprint.nodes[0].latency}
-                  </text>
-                </g>
-
-                {/* CLIENT ORIGIN CLOUD */}
-                <g transform="translate(30, 200)">
-                  <rect width="170" height="70" rx="10" fill="#0b1120" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
-                  <text x="12" y="24" fill="#94a3b8" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                    CLIENT EDGE ORIGIN
-                  </text>
-                  <text x="12" y="42" fill="#cbd5e1" fontSize="9">
-                    IP: 198.51.100.24 (Public)
-                  </text>
-                  <text x="12" y="58" fill="#38bdf8" fontSize="8.5" fontFamily="monospace">
-                    Cloudflare Edge WAF Active
-                  </text>
-                </g>
-
-                {/* NODE 02: KNOWLEDGE & VECTOR MESH */}
-                <g
-                  transform="translate(280, 55)"
-                  className="cursor-pointer"
-                  onClick={() => setSelectedNodeIndex(1)}
-                >
-                  <rect
-                    width="170"
-                    height="120"
-                    rx="12"
-                    fill="#0f172a"
-                    stroke={selectedNodeIndex === 1 || activeSimStep === 2 ? '#38bdf8' : '#1e293b'}
-                    strokeWidth={selectedNodeIndex === 1 || activeSimStep === 2 ? '2.5' : '1.5'}
-                    filter={selectedNodeIndex === 1 || activeSimStep === 2 ? 'url(#neonGlowFull)' : undefined}
-                  />
-                  <rect x="10" y="10" width="70" height="18" rx="4" fill="#1e293b" />
-                  <text x="45" y="23" textAnchor="middle" fill="#38bdf8" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                    02 CONTEXT
-                  </text>
-                  <text x="10" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
-                    {activeBlueprint.nodes[1].title.slice(0, 20)}
-                  </text>
-                  <text x="10" y="65" fill="#38bdf8" fontSize="9.5" fontFamily="monospace">
-                    IP: {activeBlueprint.nodes[1].ipAddress}:{activeBlueprint.nodes[1].port}
-                  </text>
-                  <text x="10" y="82" fill="#94a3b8" fontSize="9">
-                    {activeBlueprint.nodes[1].tool.slice(0, 22)}
-                  </text>
-                  <rect x="10" y="93" width="150" height="18" rx="4" fill="#032b4d" />
-                  <text x="85" y="105" textAnchor="middle" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">
-                    {activeBlueprint.nodes[1].protocolBadge} &bull; {activeBlueprint.nodes[1].latency}
-                  </text>
-                </g>
-
-                {/* REDIS PUB/SUB BUS SATELLITE */}
-                <g transform="translate(280, 200)">
-                  <rect width="170" height="70" rx="10" fill="#0b1120" stroke="#334155" strokeWidth="1" />
-                  <text x="12" y="24" fill="#94a3b8" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                    EVENT QUEUE / BUS
-                  </text>
-                  <text x="12" y="42" fill="#cbd5e1" fontSize="9">
-                    Redis Cluster: 10.0.1.20:6379
-                  </text>
-                  <text x="12" y="58" fill="#10b981" fontSize="8.5" fontFamily="monospace">
-                    0.00% Packet Loss &bull; In-Memory
-                  </text>
-                </g>
-
-                {/* NODE 03: CENTRAL NEURAL COGNITIVE CORE (AI LLM) */}
-                <g
-                  transform="translate(490, 160)"
-                  className="cursor-pointer"
-                  onClick={() => setSelectedNodeIndex(2)}
-                >
-                  <rect
-                    width="180"
-                    height="130"
-                    rx="14"
-                    fill="#081026"
-                    stroke={selectedNodeIndex === 2 || activeSimStep === 3 ? '#38bdf8' : '#0284c7'}
-                    strokeWidth={selectedNodeIndex === 2 || activeSimStep === 3 ? '3' : '2'}
-                    filter="url(#neonGlowFull)"
-                  />
-                  <rect x="10" y="10" width="100" height="20" rx="4" fill="#0284c7" />
-                  <text x="60" y="24" textAnchor="middle" fill="#ffffff" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                    03 NEURAL CORE
-                  </text>
-                  <text x="10" y="50" fill="#ffffff" fontSize="12" fontWeight="extrabold">
-                    {activeBlueprint.nodes[2].title.slice(0, 20)}
-                  </text>
-                  <text x="10" y="68" fill="#38bdf8" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                    IP: {activeBlueprint.nodes[2].ipAddress}:{activeBlueprint.nodes[2].port}
-                  </text>
-                  <text x="10" y="86" fill="#cbd5e1" fontSize="9">
-                    {activeBlueprint.nodes[2].tool.slice(0, 24)}
-                  </text>
-                  <rect x="10" y="98" width="160" height="20" rx="4" fill="#032b4d" />
-                  <text x="90" y="112" textAnchor="middle" fill="#7dd3fc" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                    {activeBlueprint.nodes[2].protocolBadge} &bull; {activeBlueprint.nodes[2].latency}
-                  </text>
-                </g>
-
-                {/* NODE 04: NETWORK DECISION & ROUTING SWITCH */}
-                <g
-                  transform="translate(735, 55)"
-                  className="cursor-pointer"
-                  onClick={() => setSelectedNodeIndex(3)}
-                >
-                  <rect
-                    width="170"
-                    height="120"
-                    rx="12"
-                    fill="#0f172a"
-                    stroke={selectedNodeIndex === 3 || activeSimStep === 4 ? '#10b981' : '#1e293b'}
-                    strokeWidth={selectedNodeIndex === 3 || activeSimStep === 4 ? '2.5' : '1.5'}
-                    filter={selectedNodeIndex === 3 || activeSimStep === 4 ? 'url(#neonGlowFull)' : undefined}
-                  />
-                  <rect x="10" y="10" width="70" height="18" rx="4" fill="#1e293b" />
-                  <text x="45" y="23" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                    04 ROUTER
-                  </text>
-                  <text x="10" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
-                    {activeBlueprint.nodes[3].title.slice(0, 20)}
-                  </text>
-                  <text x="10" y="65" fill="#10b981" fontSize="9.5" fontFamily="monospace">
-                    IP: {activeBlueprint.nodes[3].ipAddress}:{activeBlueprint.nodes[3].port}
-                  </text>
-                  <text x="10" y="82" fill="#94a3b8" fontSize="9">
-                    {activeBlueprint.nodes[3].tool.slice(0, 22)}
-                  </text>
-                  <rect x="10" y="93" width="150" height="18" rx="4" fill="#052e16" />
-                  <text x="85" y="105" textAnchor="middle" fill="#86efac" fontSize="8.5" fontFamily="monospace">
-                    {activeBlueprint.nodes[3].protocolBadge} &bull; {activeBlueprint.nodes[3].latency}
-                  </text>
-                </g>
-
-                {/* NODE 05: EGRESS MULTI-APP DISPATCH */}
-                <g
-                  transform="translate(850, 55)"
-                  className="cursor-pointer"
-                  onClick={() => setSelectedNodeIndex(4)}
-                >
-                  <rect
-                    width="170"
-                    height="120"
-                    rx="12"
-                    fill="#0f172a"
-                    stroke={selectedNodeIndex === 4 || activeSimStep === 5 ? '#10b981' : '#1e293b'}
-                    strokeWidth={selectedNodeIndex === 4 || activeSimStep === 5 ? '2.5' : '1.5'}
-                    filter={selectedNodeIndex === 4 || activeSimStep === 5 ? 'url(#neonGlowFull)' : undefined}
-                  />
-                  <rect x="10" y="10" width="70" height="18" rx="4" fill="#047857" />
-                  <text x="45" y="23" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                    05 EGRESS
-                  </text>
-                  <text x="10" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
-                    {activeBlueprint.nodes[4].title.slice(0, 20)}
-                  </text>
-                  <text x="10" y="65" fill="#10b981" fontSize="9.5" fontFamily="monospace">
-                    IP: {activeBlueprint.nodes[4].ipAddress}:{activeBlueprint.nodes[4].port}
-                  </text>
-                  <text x="10" y="82" fill="#94a3b8" fontSize="9">
-                    {activeBlueprint.nodes[4].tool.slice(0, 22)}
-                  </text>
-                  <rect x="10" y="93" width="150" height="18" rx="4" fill="#052e16" />
-                  <text x="85" y="105" textAnchor="middle" fill="#86efac" fontSize="8.5" fontFamily="monospace">
-                    {activeBlueprint.nodes[4].protocolBadge} &bull; {activeBlueprint.nodes[4].latency}
-                  </text>
-                </g>
-
-                {/* DEAD LETTER QUEUE (DLQ) SATELLITE */}
-                <g transform="translate(850, 225)">
-                  <rect width="170" height="70" rx="10" fill="#180c10" stroke="#7f1d1d" strokeWidth="1" strokeDasharray="3 3" />
-                  <text x="12" y="24" fill="#f87171" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                    DEAD LETTER QUEUE (DLQ)
-                  </text>
-                  <text x="12" y="42" fill="#cbd5e1" fontSize="9">
-                    IP: 10.0.4.99 &bull; SQS Fallback
-                  </text>
-                  <text x="12" y="58" fill="#fca5a5" fontSize="8.5" fontFamily="monospace">
-                    Automated Circuit Breaker
-                  </text>
-                </g>
-              </svg>
-            </div>
-          ) : (
-            // =================================================================
-            // ⚡ LINEAR PIPELINE VIEW
-            // =================================================================
-            <div className="min-w-[960px]">
-              <svg
-                viewBox="0 0 960 195"
-                className="w-full h-auto select-none"
-                role="img"
-                aria-label={`Linear Pipeline View for ${activeBlueprint.title}`}
-              >
-                <defs>
-                  <filter id="neonGlowLine" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                  </filter>
-                </defs>
-
-                {/* Wires */}
-                <path d="M 172 105 C 190 105, 192 105, 206 105" fill="none" stroke="#0284c7" strokeWidth="2.5" strokeDasharray="4 4" className="animate-wire-dash" />
-                <path d="M 362 105 C 380 105, 382 105, 396 105" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeDasharray="4 4" className="animate-wire-dash" />
-                <path d="M 562 105 C 580 105, 582 105, 596 105" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeDasharray="4 4" className="animate-wire-dash" />
-                <path d="M 752 105 C 770 105, 772 105, 786 105" fill="none" stroke="#10b981" strokeWidth="2.5" strokeDasharray="4 4" className="animate-wire-dash" />
-
-                {activeBlueprint.nodes.map((n, i) => {
-                  const xOffsets = [18, 208, 398, 598, 788];
-                  const x = xOffsets[i];
-                  const isSel = selectedNodeIndex === i || activeSimStep === i + 1;
-                  return (
-                    <g key={n.step} transform={`translate(${x}, 38)`} className="cursor-pointer" onClick={() => setSelectedNodeIndex(i)}>
-                      <rect
-                        width="154"
-                        height="134"
-                        rx="14"
-                        fill="#0c1322"
-                        stroke={isSel ? '#38bdf8' : '#1e293b'}
-                        strokeWidth={isSel ? '2.5' : '1.5'}
-                        filter={isSel ? 'url(#neonGlowLine)' : undefined}
+                    {/* Traveling Data Packet Particle */}
+                    <circle r="4.5" fill={idx >= 2 ? '#10b981' : '#38bdf8'} filter="url(#neonGlowDraggable)">
+                      <animateMotion
+                        dur="2.4s"
+                        begin={`${idx * 0.55}s`}
+                        repeatCount="indefinite"
+                        path={wire.d}
                       />
-                      <rect x="10" y="10" width="76" height="20" rx="5" fill={i === 2 ? '#0284c7' : i >= 3 ? '#047857' : '#0369a1'} />
-                      <text x="48" y="24" textAnchor="middle" fill="#ffffff" fontSize="9.5" fontWeight="bold" fontFamily="monospace">
-                        0{i + 1} {n.type}
-                      </text>
-                      <text x="12" y="52" fill="#ffffff" fontSize="11" fontWeight="bold">
-                        {n.title.slice(0, 19)}
-                      </text>
-                      <text x="12" y="70" fill="#94a3b8" fontSize="9.5">
-                        {n.tool.slice(0, 22)}
-                      </text>
-                      <rect x="10" y="86" width="134" height="20" rx="4" fill="#0f172a" />
-                      <text x="77" y="100" textAnchor="middle" fill="#38bdf8" fontSize="9" fontFamily="monospace">
-                        ⚡ {n.latency}
-                      </text>
-                      <text x="12" y="124" fill="#64748b" fontSize="8.5" fontFamily="monospace">
-                        IP: {n.ipAddress}:{n.port}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
-            </div>
-          )}
+                    </circle>
+                  </g>
+                );
+              })}
+
+              {/* 5 DRAGGABLE NODE BOXES */}
+              {activeBlueprint.nodes.map((node, i) => {
+                const pos = nodePositions[i] || DEFAULT_NODE_POSITIONS[i];
+                const isSelected = selectedNodeIndex === i;
+                const isActiveSim = activeSimStep === i + 1;
+                const isBrainNode = i === 2;
+                const nodeW = isBrainNode ? 185 : 180;
+                const nodeH = isBrainNode ? 155 : 145;
+
+                return (
+                  <g
+                    key={`node-${node.step}`}
+                    transform={`translate(${pos.x}, ${pos.y})`}
+                    className="cursor-grab active:cursor-grabbing transition-transform"
+                    onMouseDown={(e) => handleNodeMouseDown(i, e)}
+                  >
+                    {/* Node Container Box */}
+                    <rect
+                      width={nodeW}
+                      height={nodeH}
+                      rx="14"
+                      fill={isBrainNode ? '#081026' : '#0f172a'}
+                      stroke={isSelected || isActiveSim ? '#38bdf8' : isBrainNode ? '#0284c7' : '#1e293b'}
+                      strokeWidth={isSelected || isActiveSim ? '2.5' : '1.5'}
+                      filter={isSelected || isActiveSim ? 'url(#neonGlowDraggable)' : undefined}
+                    />
+
+                    {/* Drag Handle Bar Header */}
+                    <rect x="8" y="8" width={nodeW - 16} height="22" rx="5" fill="#1e293b" />
+                    <circle cx="18" cy="19" r="3" fill="#10b981" />
+                    <text x="30" y="23" fill="#38bdf8" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                      NODE {node.step} &bull; {node.type}
+                    </text>
+                    <text x={nodeW - 16} y="22" textAnchor="end" fill="#64748b" fontSize="10" fontFamily="monospace">
+                      :::
+                    </text>
+
+                    {/* Node Title */}
+                    <text x="12" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
+                      {node.title.slice(0, 21)}
+                    </text>
+
+                    {/* Tool / System */}
+                    <text x="12" y="65" fill="#38bdf8" fontSize="9.5" fontWeight="semibold">
+                      {node.tool.slice(0, 23)}
+                    </text>
+
+                    {/* IP & Port */}
+                    <text x="12" y="81" fill="#94a3b8" fontSize="9" fontFamily="monospace">
+                      IP: {node.ipAddress}:{node.port}
+                    </text>
+
+                    {/* Protocol & Latency Badge */}
+                    <rect x="10" y="93" width={nodeW - 20} height="20" rx="4" fill="#032b4d" />
+                    <text x={nodeW / 2} y="107" textAnchor="middle" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace" fontWeight="bold">
+                      {node.protocolBadge} &bull; {node.latency}
+                    </text>
+
+                    {/* SLA Status Indicator */}
+                    <text x="12" y="132" fill="#10b981" fontSize="8.5" fontFamily="monospace">
+                      ● UPTIME {node.statusUptime}
+                    </text>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
         </div>
 
         {/* 5-NODE WELL-DETAILED BOXES (ALL SPECIFICATIONS DIRECTLY DISPLAYED) */}
         <div className="relative z-10 my-6 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="text-[11px] font-mono text-cyan-300 uppercase tracking-wider flex items-center gap-1.5 font-bold">
               <Code2 className="w-3.5 h-3.5 text-cyan-400" />
               <span>Node Architecture &amp; Execution Specifications (Node by Node):</span>
             </span>
@@ -1956,7 +2383,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs font-mono">
             <div className="space-y-1.5">
-              <span className="text-[11px] text-slate-400 uppercase tracking-wider block">
+              <span className="text-[11px] text-slate-400 uppercase tracking-wider block font-bold">
                 Input Schema Payload Stream:
               </span>
               <pre className="bg-black/90 border border-slate-800 text-cyan-200 p-3 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap max-h-36">
@@ -1965,7 +2392,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
             </div>
 
             <div className="space-y-1.5">
-              <span className="text-[11px] text-slate-400 uppercase tracking-wider block">
+              <span className="text-[11px] text-slate-400 uppercase tracking-wider block font-bold">
                 Output Return Payload:
               </span>
               <pre className="bg-black/90 border border-slate-800 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap max-h-36">
@@ -1976,10 +2403,10 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
 
           <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
             <div className="text-slate-300">
-              <span className="text-slate-400">Retry Policy: </span>
+              <span className="text-slate-400 font-bold">Retry Policy: </span>
               {selectedNode.detailedSpecs.retryPolicy}
             </div>
-            <div className="text-amber-300 shrink-0">
+            <div className="text-amber-300 shrink-0 font-bold">
               Fallback: {selectedNode.detailedSpecs.fallbackAction}
             </div>
           </div>
