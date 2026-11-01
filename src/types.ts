@@ -113,7 +113,7 @@ export interface VisitorLog {
 }
 
 // ============================================================================
-// DRAG & DROP WEBSITE BUILDER TYPES (WIX / WORDPRESS / ELEMENTOR STYLE)
+// DRAG & DROP WEBSITE BUILDER TYPES (NO CODING REQUIRED)
 // ============================================================================
 export type BuilderBlockType =
   | 'hero'

@@ -27,6 +27,65 @@ export interface WorkflowStrategy {
   }>;
 }
 
+/**
+ * ============================================================================
+ * DEVELOPER & ADMIN REFERRAL LINKS REGISTRY (CENTRALIZED DIRECTORY)
+ * ============================================================================
+ * Developers: Update any default referral or affiliate destination URLs below.
+ * Admins: You can also edit any link directly in the browser on the "/ai" page
+ * using the "Edit Link" button on any card or the "Admin Referral Manager" modal.
+ * Live browser edits persist automatically in localStorage ('wh_ai_custom_referral_links_v1').
+ */
+export const DEFAULT_TOOL_REFERRAL_LINKS: Record<string, string> = {
+  'Make.com': 'https://www.make.com/en/register?pc=teamwhitehatdev',
+  'Make.com / n8n': 'https://www.make.com/en/register?pc=teamwhitehatdev',
+  'Meshy 3D AI': 'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
+  'Suno AI Music': 'https://suno.com/@chillvibemusics',
+  'Anthropic Claude Console': 'https://console.anthropic.com',
+  'Anthropic Console': 'https://console.anthropic.com',
+  'OpenAI Platform': 'https://platform.openai.com',
+  'OpenAI Embeddings': 'https://platform.openai.com',
+  'OpenAI Vision API': 'https://platform.openai.com',
+  'Perplexity API': 'https://www.perplexity.ai',
+  'Slack Developer Portal': 'https://api.slack.com',
+  'Pinecone Vector DB': 'https://www.pinecone.io',
+  'Zendesk Developer API': 'https://developer.zendesk.com',
+  'LangSmith / LangChain': 'https://www.langchain.com',
+  'Cloudflare R2': 'https://www.cloudflare.com/developer-platform/r2/',
+  'Google Model-Viewer': 'https://modelviewer.dev',
+  'Shopify Partners': 'https://www.shopify.com/partners',
+  'Deepgram Nova-2': 'https://deepgram.com',
+  'Remotion': 'https://www.remotion.dev',
+  'Ayrshare': 'https://www.ayrshare.com',
+  'ElevenLabs': 'https://elevenlabs.io',
+  'ElevenLabs Voice Dubbing': 'https://elevenlabs.io',
+  'Twilio Voice': 'https://www.twilio.com/voice',
+  'Vapi.ai': 'https://vapi.ai',
+  'Cal.com API': 'https://cal.com',
+  'Groq Cloud': 'https://groq.com',
+  'QuickBooks Online API': 'https://developer.intuit.com',
+  'Telegram Bot API': 'https://core.telegram.org/bots/api',
+  'WordPress REST API': 'https://developer.wordpress.org/rest-api/',
+  'Cloudflare Cache API': 'https://developers.cloudflare.com/cache/',
+  'IndexNow Protocol': 'https://www.indexnow.org',
+  'Stripe API': 'https://stripe.com/docs/api',
+  'PandaDoc API': 'https://developers.pandadoc.com',
+  'Notion API': 'https://developers.notion.com',
+  'Resend': 'https://resend.com',
+  'Typefully': 'https://typefully.com',
+  'Bannerbear': 'https://www.bannerbear.com',
+  'Buffer API': 'https://buffer.com',
+  'Feedbin RSS': 'https://feedbin.com',
+  'DeepL API': 'https://www.deepl.com/pro-api',
+  'FFmpeg': 'https://ffmpeg.org',
+  'YouTube Data API': 'https://developers.google.com/youtube/v3',
+  'OpenRouter': 'https://openrouter.ai',
+  'Helicone': 'https://www.helicone.ai',
+  'DEV.to API': 'https://developers.forem.com/api',
+  'Hashnode API': 'https://apidocs.hashnode.com',
+  'Medium API': 'https://github.com/Medium/medium-api-docs'
+};
+
 export const WORKFLOW_STRATEGY_DATA: Record<string, WorkflowStrategy> = {
   'lead-triage': {
     planTitle: 'Autonomous Speed-to-Lead Rollout Plan & High-ROI Progression',

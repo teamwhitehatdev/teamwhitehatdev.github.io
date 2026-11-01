@@ -446,7 +446,7 @@ function renderBlockJsx(block: BuilderBlock): string {
  */
 export function generateJsonSchema(blocks: BuilderBlock[], settings: BuilderPageSettings): string {
   const schema = {
-    generator: 'Team WhiteHat Dev Visual Page Builder (Wix / WordPress Style)',
+    generator: 'Team WhiteHat Dev Visual Page Builder (No Coding Required)',
     exportedAt: new Date().toISOString(),
     version: '1.0.0',
     settings,

@@ -974,7 +974,7 @@ We believe that high-quality, practical digital education should be accessible t
     status: 'PUBLISHED',
     visible: true,
     summary: 'An ultra-fast client-side static web application with dynamic navigation manager, live telemetry radar, and drag-and-drop website builder.',
-    description: 'Architected with React 18, TypeScript, Tailwind CSS, and Vite. Features client-side rate-limiting, live visitor geolocation telemetry, and Wix-style page builder with code export.',
+    description: 'Architected with React 18, TypeScript, Tailwind CSS, and Vite. Features client-side rate-limiting, live visitor geolocation telemetry, and No-Coding-Required Drag & Drop visual page builder with code export.',
     fullContent: `# Enterprise Minimalist Portfolio & All-in-One CMS Platform
 
 A full-stack client-side application designed for maximum performance, security, and content flexibility.

@@ -34,7 +34,14 @@ import {
   ChevronDown,
   ChevronUp,
   Columns,
-  Globe
+  Globe,
+  Undo2,
+  Redo2,
+  ZoomIn,
+  ZoomOut,
+  Sliders,
+  Wand2,
+  LayoutTemplate
 } from 'lucide-react';
 import {
   BuilderBlock,
@@ -122,6 +129,166 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   const [importJsonText, setImportJsonText] = useState<string>('');
   const [importError, setImportError] = useState<string>('');
 
+  // Undo / Redo history tracking
+  const [history, setHistory] = useState<BuilderBlock[][]>([blocks]);
+  const [historyIndex, setHistoryIndex] = useState<number>(0);
+
+  const pushHistory = (newBlocks: BuilderBlock[]) => {
+    const nextHistory = history.slice(0, historyIndex + 1);
+    setHistory([...nextHistory, newBlocks]);
+    setHistoryIndex(nextHistory.length);
+  };
+
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      const prevIndex = historyIndex - 1;
+      setHistoryIndex(prevIndex);
+      setBlocks(history[prevIndex]);
+      showToast('Undo action');
+    }
+  };
+
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1) {
+      const nextIndex = historyIndex + 1;
+      setHistoryIndex(nextIndex);
+      setBlocks(history[nextIndex]);
+      showToast('Redo action');
+    }
+  };
+
+  // Zoom Level on Canvas
+  const [zoomLevel, setZoomLevel] = useState<'100%' | '85%' | '70%'>('100%');
+
+  // Left Tool Dock Active Item
+  const [activeLeftTool, setActiveLeftTool] = useState<'elements' | 'layers' | 'themes' | 'ai' | 'templates'>('elements');
+
+  // AI Generator state
+  const [aiPromptInput, setAiPromptInput] = useState<string>('');
+  const [isGeneratingAi, setIsGeneratingAi] = useState<boolean>(false);
+
+  // Global Site Design Theme Palettes
+  const SITE_DESIGN_THEMES = [
+    {
+      id: 'modern-studio',
+      name: 'Modern Studio Cyan',
+      tagline: 'Clean white background with vibrant cyan accents and sharp typography',
+      bgColor: '#ffffff',
+      accentColor: '#0891b2',
+      textColor: '#0f172a',
+      font: 'inter' as const,
+      previewBg: 'bg-white',
+      previewAccent: 'bg-cyan-500'
+    },
+    {
+      id: 'clean-monochrome',
+      name: 'Clean Minimalist White',
+      tagline: 'Ultra-pure white aesthetic with bold slate-950 headings',
+      bgColor: '#f8fafc',
+      accentColor: '#0f172a',
+      textColor: '#020617',
+      font: 'sans' as const,
+      previewBg: 'bg-slate-50',
+      previewAccent: 'bg-slate-900'
+    },
+    {
+      id: 'cyber-dark',
+      name: 'Cyber Dark Slate',
+      tagline: 'High-tech dark canvas with neon emerald highlights',
+      bgColor: '#020617',
+      accentColor: '#10b981',
+      textColor: '#f8fafc',
+      font: 'mono' as const,
+      previewBg: 'bg-slate-950',
+      previewAccent: 'bg-emerald-500'
+    },
+    {
+      id: 'royal-indigo',
+      name: 'Royal Indigo SaaS',
+      tagline: 'Vibrant Silicon Valley purple-indigo gradient scheme',
+      bgColor: '#f5f3ff',
+      accentColor: '#4f46e5',
+      textColor: '#1e1b4b',
+      font: 'poppins' as const,
+      previewBg: 'bg-indigo-50',
+      previewAccent: 'bg-indigo-600'
+    },
+    {
+      id: 'luxury-emerald',
+      name: 'Luxury Emerald Agency',
+      tagline: 'High-end agency green with champagne gold and slate tones',
+      bgColor: '#f0fdf4',
+      accentColor: '#059669',
+      textColor: '#064e3b',
+      font: 'serif' as const,
+      previewBg: 'bg-emerald-50',
+      previewAccent: 'bg-emerald-600'
+    }
+  ];
+
+  const handleApplyTheme = (theme: (typeof SITE_DESIGN_THEMES)[0]) => {
+    setPageSettings((prev) => ({
+      ...prev,
+      backgroundColor: theme.bgColor,
+      fontFamily: theme.font
+    }));
+    const updated = blocks.map((b) => ({
+      ...b,
+      styles: {
+        ...b.styles,
+        fontFamily: theme.font,
+        textColor: b.styles.textColor ? theme.textColor : undefined,
+        borderColor: theme.bgColor === '#020617' ? '#1e293b' : '#e2e8f0'
+      }
+    }));
+    setBlocks(updated);
+    pushHistory(updated);
+    showToast(`Applied "${theme.name}" Theme Palette!`);
+  };
+
+  const AI_SECTION_PRESETS = [
+    {
+      label: 'High-Impact Hero with Video & Dual CTAs',
+      type: 'hero' as BuilderBlockType,
+      title: 'Accelerate Your Operations with AI-Powered Workflows',
+      subtitle: 'Deploy autonomous intelligence across customer support, marketing automation, and 3D visual pipelines in under 24 hours.'
+    },
+    {
+      label: '3-Column VA & Automation Features Grid',
+      type: 'features-grid' as BuilderBlockType,
+      title: 'Engineered for Flawless Remote Execution',
+      subtitle: 'Discover how our specialized automation toolchains eliminate manual friction.'
+    },
+    {
+      label: 'Interactive Collapsible FAQ Accordion',
+      type: 'accordion' as BuilderBlockType,
+      title: 'Frequently Asked Questions & Implementation Guide',
+      subtitle: 'Clear answers on setup timelines, custom domain provisioning, and client handoffs.'
+    },
+    {
+      label: 'High-Converting Action Banner (CTA)',
+      type: 'call-to-action' as BuilderBlockType,
+      title: 'Ready to Modernize Your Website & Workflow?',
+      subtitle: 'Launch your project with zero coding required. Fast, accessible, and high-performance.'
+    }
+  ];
+
+  const handleGenerateAiSection = (presetIndex?: number) => {
+    setIsGeneratingAi(true);
+    setTimeout(() => {
+      let blockType: BuilderBlockType = 'hero';
+      if (presetIndex !== undefined && AI_SECTION_PRESETS[presetIndex]) {
+        const p = AI_SECTION_PRESETS[presetIndex];
+        blockType = p.type;
+      }
+
+      handleAddBlock(blockType);
+      setIsGeneratingAi(false);
+      setAiPromptInput('');
+      showToast('AI Section generated and added to canvas!');
+    }, 500);
+  };
+
   // Toast feedback
   const [toastMessage, setToastMessage] = useState<string>('');
   const showToast = (msg: string) => {
@@ -138,7 +305,7 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   // --------------------------------------------------------------------------
   // BLOCK MANIPULATION ACTIONS
   // --------------------------------------------------------------------------
-  const handleAddBlock = (type: BuilderBlockType) => {
+  const handleAddBlock = (type: BuilderBlockType, targetIndex?: number) => {
     const newId = `block-${Date.now()}`;
     let newBlock: BuilderBlock;
 
@@ -374,7 +541,15 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
         };
     }
 
-    setBlocks((prev) => [...prev, newBlock]);
+    let nextBlocks: BuilderBlock[];
+    if (targetIndex !== undefined && targetIndex >= 0 && targetIndex <= blocks.length) {
+      nextBlocks = [...blocks];
+      nextBlocks.splice(targetIndex, 0, newBlock);
+    } else {
+      nextBlocks = [...blocks, newBlock];
+    }
+    setBlocks(nextBlocks);
+    pushHistory(nextBlocks);
     setSelectedBlockId(newId);
     showToast(`Added new ${type} element to page`);
   };
@@ -394,7 +569,9 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   };
 
   const handleDeleteBlock = (id: string) => {
-    setBlocks((prev) => prev.filter((b) => b.id !== id));
+    const updated = blocks.filter((b) => b.id !== id);
+    setBlocks(updated);
+    pushHistory(updated);
     if (selectedBlockId === id) {
       setSelectedBlockId(null);
     }
@@ -412,6 +589,7 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
     const newBlocks = [...blocks];
     newBlocks.splice(index + 1, 0, duplicated);
     setBlocks(newBlocks);
+    pushHistory(newBlocks);
     setSelectedBlockId(duplicated.id);
     showToast('Block duplicated');
   };
@@ -424,6 +602,7 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
     newBlocks[index] = newBlocks[targetIndex];
     newBlocks[targetIndex] = temp;
     setBlocks(newBlocks);
+    pushHistory(newBlocks);
   };
 
   // Drag and drop reordering
@@ -589,11 +768,11 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block leading-tight">
-                WordPress &amp; Wix Style Engine
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 block leading-tight">
+                Live Visual Prototype Engine • Zero Coding Required
               </span>
               <h1 className="text-sm sm:text-base font-extrabold text-slate-900 leading-tight">
-                Visual Drag &amp; Drop Website Builder
+                Drag &amp; Drop Website Builder (No Coding Required)
               </h1>
             </div>
           </div>
@@ -617,6 +796,65 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
 
         {/* VIEWPORT SWITCHER + ACTION BUTTONS */}
         <div className="flex items-center gap-2">
+          {/* Undo / Redo History Controls */}
+          <div className="hidden md:inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+            <button
+              onClick={handleUndo}
+              disabled={historyIndex <= 0}
+              className={`p-1.5 rounded-lg transition-all ${
+                historyIndex > 0
+                  ? 'text-slate-800 hover:bg-white hover:shadow-2xs cursor-pointer'
+                  : 'text-slate-300 cursor-not-allowed'
+              }`}
+              title="Undo (Ctrl+Z)"
+            >
+              <Undo2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleRedo}
+              disabled={historyIndex >= history.length - 1}
+              className={`p-1.5 rounded-lg transition-all ${
+                historyIndex < history.length - 1
+                  ? 'text-slate-800 hover:bg-white hover:shadow-2xs cursor-pointer'
+                  : 'text-slate-300 cursor-not-allowed'
+              }`}
+              title="Redo (Ctrl+Y)"
+            >
+              <Redo2 className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Zoom Level Switcher */}
+          <div className="hidden xl:inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-mono font-bold">
+            <button
+              onClick={() => setZoomLevel('100%')}
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                zoomLevel === '100%' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+              }`}
+              title="Zoom 100%"
+            >
+              100%
+            </button>
+            <button
+              onClick={() => setZoomLevel('85%')}
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                zoomLevel === '85%' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+              }`}
+              title="Zoom 85%"
+            >
+              85%
+            </button>
+            <button
+              onClick={() => setZoomLevel('70%')}
+              className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                zoomLevel === '70%' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+              }`}
+              title="Zoom 70%"
+            >
+              70%
+            </button>
+          </div>
+
           {/* Responsive Device Switcher */}
           <div className="hidden sm:inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
             <button

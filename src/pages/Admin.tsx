@@ -1459,7 +1459,7 @@ export const Admin: React.FC = () => {
           className="px-4 py-2.5 rounded-xl font-bold flex items-center space-x-2 transition-all cursor-pointer bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-700 hover:to-indigo-700 text-white shadow-xs"
         >
           <Sparkles className="w-4 h-4 text-emerald-200" />
-          <span>Drag &amp; Drop Website Builder (Wix Style)</span>
+          <span>Drag &amp; Drop Website Builder (No Coding Required)</span>
         </button>
 
         <button
@@ -5062,7 +5062,7 @@ export const Admin: React.FC = () => {
               <div className="space-y-0.5">
                 <span className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-emerald-600" />
-                  <span>Wix &amp; WordPress Drag &amp; Drop Builder</span>
+                  <span>Drag &amp; Drop Website Builder (No Coding Required)</span>
                 </span>
                 <p className="text-[11px] text-slate-600">
                   Build custom sections, containers, videos, images, and export clean HTML/TSX code.
@@ -5214,7 +5214,7 @@ export const Admin: React.FC = () => {
         </div>
       )}
       {/* ========================================================================= */}
-      {/* 🎨 DRAG & DROP WEBSITE BUILDER (WIX / WORDPRESS STYLE INTERACTIVE TOOL)     */}
+      {/* 🎨 DRAG & DROP WEBSITE BUILDER (NO CODING REQUIRED)                         */}
       {/* ========================================================================= */}
       {isVisualBuilderOpen && (
         <VisualPageBuilder
