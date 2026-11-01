@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   X,
   Calendar,
@@ -11,7 +11,9 @@ import {
   Lightbulb,
   ArrowRight,
   Copy,
-  Check
+  Check,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { CMSItem } from '../types';
 import { useApp } from '../context/AppContext';
@@ -27,10 +29,18 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, isOpen, onC
   const { cmsItems } = useApp();
   const [activeArticle, setActiveArticle] = useState<CMSItem | null>(article);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
+  const [showMediaSection, setShowMediaSection] = useState(false);
+  const modalContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setActiveArticle(article);
-  }, [article]);
+    setShowMediaSection(false);
+    if (isOpen) {
+      if (modalContentRef.current) {
+        modalContentRef.current.scrollTop = 0;
+      }
+    }
+  }, [article, isOpen]);
 
   if (!isOpen || !activeArticle) return null;
 
@@ -189,22 +199,22 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, isOpen, onC
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6"
+      className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-xs flex items-start justify-center p-2 sm:p-4 pt-2 sm:pt-3 pb-8 min-h-screen"
       onClick={onClose}
     >
       <div
-        className="relative bg-white border border-slate-200 rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden"
+        className="relative bg-white border border-slate-200 rounded-2xl sm:rounded-3xl max-w-5xl w-full max-h-[95vh] flex flex-col shadow-2xl overflow-hidden my-auto sm:my-1"
         onClick={(e) => e.stopPropagation()}
       >
         {/* MODAL HEADER */}
-        <div className="p-5 sm:p-6 border-b border-slate-200 flex items-start justify-between bg-white">
+        <div className="p-4 sm:p-6 border-b border-slate-200 flex items-start justify-between bg-white shrink-0">
           <div className="space-y-2 pr-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 bg-slate-100 text-slate-800 text-xs font-semibold rounded-full border border-slate-200 uppercase">
+              <span className="px-3 py-0.5 bg-slate-100 text-slate-800 text-xs font-semibold rounded-full border border-slate-200 uppercase">
                 {activeArticle.category}
               </span>
               {activeArticle.badge && (
-                <span className="px-3 py-1 bg-slate-900 text-white text-xs font-bold rounded-full uppercase">
+                <span className="px-3 py-0.5 bg-slate-900 text-white text-xs font-bold rounded-full uppercase">
                   {activeArticle.badge}
                 </span>
               )}
@@ -220,67 +230,95 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, isOpen, onC
               )}
             </div>
 
-            <h2 className="text-lg sm:text-2xl font-extrabold text-slate-900 leading-tight">
+            <h2 className="text-lg sm:text-2xl font-black text-slate-950 leading-tight">
               {activeArticle.title}
             </h2>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all shrink-0 cursor-pointer"
+            className="p-2 text-slate-500 hover:text-slate-950 hover:bg-slate-100 rounded-xl transition-all shrink-0 cursor-pointer"
             aria-label="Close"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        {/* MODAL BODY */}
-        <div className="p-5 sm:p-8 overflow-y-auto space-y-6 flex-1 text-slate-700 text-sm leading-relaxed bg-white">
-          {/* VIDEO PLAYER IF PRESENT & NOT HIDDEN */}
-          {embedUrl && (
-            <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 w-full">
-              <div className="px-4 py-2 bg-slate-100 border-b border-slate-200 text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <PlayCircle className="w-4 h-4 text-slate-700" />
-                <span>Featured Video Walkthrough</span>
-              </div>
-              <div className="aspect-video w-full">
-                {embedUrl.startsWith('http') && embedUrl.includes('embed') ? (
-                  <iframe
-                    src={embedUrl}
-                    title={activeArticle.title}
-                    className="w-full h-full border-0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <video src={embedUrl} controls className="w-full h-full object-contain bg-slate-50" />
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* MAIN IMAGE IF PRESENT & NOT HIDDEN */}
-          {showImage && (
-            <div className="w-full h-60 sm:h-80 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
-              <img
-                src={activeArticle.mainImage}
-                alt={activeArticle.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
-
-          {/* EXECUTIVE OVERVIEW CALLOUT */}
+        {/* MODAL BODY (AUTOSCROLLED TO TOP ON OPEN, IMMEDIATE NICHE CONTENT VISIBILITY) */}
+        <div
+          ref={modalContentRef}
+          className="p-4 sm:p-7 overflow-y-auto space-y-5 flex-1 text-slate-700 text-sm leading-relaxed bg-white"
+        >
+          {/* EXECUTIVE OVERVIEW CALLOUT (DISPLAYED AT VERY TOP - ZERO SCROLLING NEEDED) */}
           {activeArticle.description && (
-            <div className="p-4 sm:p-5 bg-slate-50 border-l-4 border-slate-900 rounded-r-2xl text-slate-800 text-sm space-y-1">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">
+            <div className="p-4 bg-indigo-50/60 border-l-4 border-indigo-600 rounded-r-2xl text-slate-900 text-sm space-y-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 block">
                 Executive Overview &amp; Learning Objective
               </span>
-              <p className="font-semibold leading-relaxed">{activeArticle.description}</p>
+              <p className="font-semibold text-slate-900 leading-relaxed">{activeArticle.description}</p>
             </div>
           )}
 
-          {/* PRIMARY TUTORIAL / ARTICLE CONTENT */}
+          {/* COMPACT MEDIA DRAWER (PREVENTS LARGE BLACK/EMPTY GAPS & DOES NOT PUSH CONTENT DOWN) */}
+          {(embedUrl || showImage) && (
+            <div className="rounded-xl border border-slate-200 bg-slate-50/80 overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setShowMediaSection(!showMediaSection)}
+                className="w-full px-3.5 py-2.5 flex items-center justify-between text-left hover:bg-slate-100 transition-colors cursor-pointer text-xs font-semibold text-slate-900"
+              >
+                <div className="flex items-center gap-2">
+                  {embedUrl ? (
+                    <PlayCircle className="w-4 h-4 text-indigo-600" />
+                  ) : (
+                    <Sparkles className="w-4 h-4 text-amber-600" />
+                  )}
+                  <span className="font-bold text-slate-900">
+                    {embedUrl ? 'Video Walkthrough Available' : 'Featured Visual Asset / Infographic'}
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200/90 text-slate-800 font-mono font-bold">
+                    {showMediaSection ? 'Click to Minimize' : 'Click to View Media'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 text-[11px] font-mono text-slate-600 font-bold">
+                  <span>{showMediaSection ? 'Hide' : 'Expand Media'}</span>
+                  {showMediaSection ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                </div>
+              </button>
+
+              {showMediaSection && (
+                <div className="p-3 border-t border-slate-200 space-y-3 bg-white">
+                  {embedUrl && (
+                    <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-900 w-full aspect-video">
+                      {embedUrl.startsWith('http') && embedUrl.includes('embed') ? (
+                        <iframe
+                          src={embedUrl}
+                          title={activeArticle.title}
+                          className="w-full h-full border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <video src={embedUrl} controls className="w-full h-full object-contain" />
+                      )}
+                    </div>
+                  )}
+
+                  {showImage && (
+                    <div className="w-full max-h-72 rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                      <img
+                        src={activeArticle.mainImage}
+                        alt={activeArticle.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* PRIMARY TUTORIAL / ARTICLE CONTENT (IMMEDIATELY VISIBLE AT EYE-LEVEL) */}
           <div className="space-y-1.5">
             {renderFormattedMarkdown(activeArticle.fullContent || activeArticle.description)}
           </div>
