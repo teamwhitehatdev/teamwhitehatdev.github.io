@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Lock, Unlock, ShieldCheck, X, AlertCircle, KeyRound, CheckCircle2 } from 'lucide-react';
 import { verifyAdminCredentials, revokeAdminSession, isUserAdminOrDeveloper } from '../utils/adminAuth';
 
@@ -49,8 +50,8 @@ export const AdminDevUnlockModal: React.FC<AdminDevUnlockModalProps> = ({
     }, 1000);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-fade-in">
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-fade-in">
       <div className="bg-white border-2 border-slate-300 rounded-3xl w-full max-w-md p-6 shadow-2xl relative overflow-hidden">
         {/* Subtle Top Accent */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500" />
@@ -177,6 +178,7 @@ export const AdminDevUnlockModal: React.FC<AdminDevUnlockModalProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
