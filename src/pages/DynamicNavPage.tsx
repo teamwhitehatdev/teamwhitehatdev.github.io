@@ -12,6 +12,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 import { CMSItem, BuilderBlock } from '../types';
 import { ArticleModal } from '../components/ArticleModal';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';

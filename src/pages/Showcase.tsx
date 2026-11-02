@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { HUDPanel } from '../components/HUDPanel';
+import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 import { Project, Service, PromoItem } from '../types';
 import { isUserAdminOrDeveloper } from '../utils/adminAuth';
 import { AdminDevUnlockModal } from '../components/AdminDevUnlockModal';
@@ -34,6 +35,20 @@ export const Showcase: React.FC = () => {
   const [contentTypeFilter, setContentTypeFilter] = useState<'ALL' | 'PROJECT' | 'SERVICE'>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
+  const { navTabs, updateNavTab } = useApp();
+  const showcaseTab = (navTabs || []).find((t) => t.id === 'nav_showcase' || t.slug === 'showcase');
+  if (showcaseTab?.pageLayoutType === 'builder' && showcaseTab.builderBlocks && showcaseTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={showcaseTab.builderBlocks}
+        settings={showcaseTab.builderPageSettings}
+        tab={showcaseTab}
+        onRevertDefault={() => {
+          updateNavTab(showcaseTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
 
   // STRICT DEVELOPER & ADMIN ACCESS CONTROL
   const [isAdminOrDev, setIsAdminOrDev] = useState<boolean>(() => isUserAdminOrDeveloper());

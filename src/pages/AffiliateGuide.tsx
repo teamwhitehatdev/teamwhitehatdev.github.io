@@ -28,18 +28,33 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
+import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 import { INITIAL_AFFILIATE_TOPICS } from '../utils/initialAffiliateTopics';
 import { AffiliateCollapsibleTopic } from '../types';
 import { isUserAdminOrDeveloper } from '../utils/adminAuth';
 import { AdminDevUnlockModal } from '../components/AdminDevUnlockModal';
 
 export const AffiliateGuide: React.FC = () => {
-  const { affiliateTopics, updateAffiliateTopic, addAffiliateTopic, resetAffiliateTopicsToDefault, cmsItems } = useApp();
+  const { affiliateTopics, updateAffiliateTopic, addAffiliateTopic, resetAffiliateTopicsToDefault, cmsItems, navTabs, updateNavTab } = useApp();
   const [copiedCoupon, setCopiedCoupon] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [sortMode, setSortMode] = useState<'number' | 'category'>('number');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
+
+  const affiliateTab = (navTabs || []).find((t) => t.id === 'nav_affiliate' || t.slug === 'affiliate-guide');
+  if (affiliateTab?.pageLayoutType === 'builder' && affiliateTab.builderBlocks && affiliateTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={affiliateTab.builderBlocks}
+        settings={affiliateTab.builderPageSettings}
+        tab={affiliateTab}
+        onRevertDefault={() => {
+          updateNavTab(affiliateTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
 
   // STRICT DEVELOPER & ADMIN ACCESS CONTROL
   // Visitors, readers, audience, and viewers are restricted to read-only mode.

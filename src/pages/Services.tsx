@@ -15,6 +15,7 @@ import {
   Tag
 } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
+import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 import { SERVICES } from '../utils/initialData';
 import { validateEmailAndAntiBot, recordSuccessfulSubmission } from '../utils/emailValidator';
 import { sanitizeUserInput } from '../components/SecurityEngine';
@@ -24,7 +25,7 @@ interface ServicesProps {
 }
 
 export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
-  const { getPublicPageCMSItems, services: contextServices, addInquiry, addHireVaInquiry } =
+  const { getPublicPageCMSItems, services: contextServices, addInquiry, addHireVaInquiry, navTabs, updateNavTab } =
     useApp();
 
   const [name, setName] = useState('');
@@ -34,6 +35,23 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
   const [message, setMessage] = useState('');
   const [honeypot, setHoneypot] = useState('');
   const [validationError, setValidationError] = useState('');
+
+  const servicesTab = (navTabs || []).find(
+    (t) => t.id === 'nav_services' || t.slug === 'services'
+  );
+
+  if (servicesTab?.pageLayoutType === 'builder' && servicesTab.builderBlocks && servicesTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={servicesTab.builderBlocks}
+        settings={servicesTab.builderPageSettings}
+        tab={servicesTab}
+        onRevertDefault={() => {
+          updateNavTab(servicesTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
   const [submitted, setSubmitted] = useState(false);
 
   // FETCH SERVICES CONTENT MANAGED VIA CMS (pageOwner === 'services')

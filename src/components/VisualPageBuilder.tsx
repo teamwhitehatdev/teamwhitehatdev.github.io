@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Layers,
   Layout,
@@ -41,7 +41,8 @@ import {
   ZoomOut,
   Sliders,
   Wand2,
-  LayoutTemplate
+  LayoutTemplate,
+  Zap
 } from 'lucide-react';
 import {
   BuilderBlock,
@@ -53,6 +54,8 @@ import {
   BuilderAccordionItem
 } from '../types';
 import { PREBUILT_BUILDER_TEMPLATES } from '../utils/builderTemplates';
+import { generateDefaultBlocksForExistedTab } from '../utils/existedTabDefaultBlocks';
+import { AutomatedWebsiteGeneratorModal } from './AutomatedWebsiteGeneratorModal';
 import {
   generateStandaloneHtml,
   generateReactJsx,
@@ -118,6 +121,50 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
 
   // Preview Mode Toggle
   const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
+  const [isAutoGeneratorOpen, setIsAutoGeneratorOpen] = useState<boolean>(false);
+  const [autoSaveStatus, setAutoSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const [lastSavedTime, setLastSavedTime] = useState<string | null>(null);
+
+  // Switch Target Tab & Automatically Load or Synthesize Existed Page Blocks
+  const handleSelectTab = (tabId: string) => {
+    setSelectedTabId(tabId);
+    if (tabId === 'new') {
+      setNewTabLabel('My Custom Landing Page');
+      setNewTabSlug('new-landing-page');
+      return;
+    }
+    const targetTab = navTabs.find((t) => t.id === tabId);
+    if (targetTab) {
+      if (targetTab.builderBlocks && targetTab.builderBlocks.length > 0) {
+        setBlocks(targetTab.builderBlocks);
+        if (targetTab.builderPageSettings) {
+          setPageSettings(targetTab.builderPageSettings);
+        }
+        pushHistory(targetTab.builderBlocks);
+        showToast(`Loaded ${targetTab.builderBlocks.length} builder blocks from "${targetTab.label}"!`);
+      } else {
+        // Automatically synthesize realistic editable blocks for this existed tab!
+        const def = generateDefaultBlocksForExistedTab(targetTab);
+        setBlocks(def.blocks);
+        setPageSettings(def.settings);
+        pushHistory(def.blocks);
+        showToast(`Synthesized editable blocks for "${targetTab.label}". Click Save to publish!`);
+      }
+    }
+  };
+
+  // Automated Debounced Auto-Save for selected tab
+  useEffect(() => {
+    if (selectedTabId === 'new') return;
+    setAutoSaveStatus('saving');
+    const timer = setTimeout(() => {
+      onSaveToTab(selectedTabId, blocks, pageSettings);
+      setAutoSaveStatus('saved');
+      setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [blocks, pageSettings, selectedTabId]);
 
   // Export Modal State
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
@@ -778,19 +825,48 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
           </div>
 
           <div className="hidden lg:flex items-center gap-2 ml-4 pl-4 border-l border-slate-200 text-xs">
-            <span className="font-semibold text-slate-500">Target Tab:</span>
+            <span className="font-semibold text-slate-500">Editing Page:</span>
             <select
               value={selectedTabId}
-              onChange={(e) => setSelectedTabId(e.target.value)}
-              className="bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1 font-bold text-xs text-slate-800 focus:outline-none focus:border-slate-900 cursor-pointer"
+              onChange={(e) => handleSelectTab(e.target.value)}
+              className="bg-slate-100 hover:bg-slate-200/80 border border-slate-300 rounded-lg px-2.5 py-1 font-bold text-xs text-slate-900 focus:outline-none focus:border-indigo-600 cursor-pointer shadow-2xs max-w-xs truncate"
             >
-              <option value="new">+ Create As Brand New Navigation Tab</option>
-              {navTabs.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.label} (/{t.path.replace(/^\//, '')})
-                </option>
-              ))}
+              <optgroup label="🌟 Existed Main Website Pages">
+                {navTabs.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.label} (/{t.slug || t.path.replace(/^\//, '')}) {t.pageLayoutType === 'builder' ? '• [Custom Builder Layout]' : '• [Standard Code]'}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="✨ Create New Tab">
+                <option value="new">+ Create As Brand New Navigation Tab</option>
+              </optgroup>
             </select>
+
+            {/* 1-Click Automated Generator Button */}
+            <button
+              type="button"
+              onClick={() => setIsAutoGeneratorOpen(true)}
+              className="px-3 py-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all cursor-pointer ml-1"
+              title="Generate a Complete, Real WordPress-grade website in 1 click"
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-300" />
+              <span>⚡ Automated Generator</span>
+            </button>
+
+            {/* Auto-save live indicator */}
+            {autoSaveStatus === 'saved' && (
+              <span className="hidden xl:inline-flex items-center gap-1 text-[11px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Auto-Saved {lastSavedTime ? `at ${lastSavedTime}` : ''}</span>
+              </span>
+            )}
+            {autoSaveStatus === 'saving' && (
+              <span className="hidden xl:inline-flex items-center gap-1 text-[11px] font-mono text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping" />
+                <span>Saving changes...</span>
+              </span>
+            )}
           </div>
         </div>
 

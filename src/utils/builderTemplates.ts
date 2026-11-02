@@ -656,6 +656,385 @@ export const PREBUILT_BUILDER_TEMPLATES: PrebuiltTemplate[] = [
     ]
   },
   {
+    id: 'template-wp-portfolio-studio',
+    name: 'WordPress Creative Studio & Designer Portfolio',
+    description: 'Modern creative agency portfolio with hero, 3-column project showcase with image cards, client case study, and interactive inquiry form.',
+    category: 'wordpress',
+    badge: 'Creative Studio',
+    settings: {
+      pageTitle: 'Creative Design Studio & Brand Architecture',
+      pageSubtitle: 'Crafting memorable visual identities, bespoke web experiences, and digital design systems.',
+      maxWidth: 'max-w-7xl',
+      backgroundColor: '#f8fafc',
+      fontFamily: 'poppins'
+    },
+    blocks: [
+      {
+        id: 'wp-port-hero',
+        type: 'hero',
+        badgeText: 'CREATIVE STUDIO • DIGITAL ART & WEB DESIGN',
+        badgeColor: '#8b5cf6',
+        title: 'We Design Engaging Brand Identities & High-Impact Digital Experiences',
+        subtitle: 'From brand identity to custom interactive web applications, we partner with visionary founders to build products that captivate and convert.',
+        buttonText: 'View Selected Works',
+        buttonLink: '#/showcase',
+        buttonStyle: 'indigo',
+        secondaryButtonText: 'Start a Project',
+        secondaryButtonLink: '#/admin',
+        styles: {
+          backgroundColor: '#ffffff',
+          borderRadius: '3xl',
+          paddingY: 'xl',
+          paddingX: 'lg',
+          textAlign: 'center',
+          borderColor: '#e2e8f0',
+          borderWidth: 'thin',
+          shadow: 'lg'
+        }
+      },
+      {
+        id: 'wp-port-works',
+        type: 'features-grid',
+        title: 'Featured Client Works & Visual Case Studies',
+        subtitle: 'Carefully crafted digital assets delivered for global brands.',
+        columns: 3,
+        gridItems: [
+          {
+            id: 'work-1',
+            title: 'Fintech Mobile Banking Experience',
+            description: 'Redesigned core mobile wallet architecture resulting in a 44% increase in daily active transactions.',
+            badge: 'UI/UX Design',
+            imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
+            link: '#/showcase',
+            linkText: 'View Case Study →'
+          },
+          {
+            id: 'work-2',
+            title: 'SaaS Design System & Component Library',
+            description: 'Comprehensive Figma & React design system with 200+ accessible components adhering to WCAG 2.1 AA.',
+            badge: 'Design System',
+            imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80',
+            link: '#/showcase',
+            linkText: 'View Case Study →'
+          },
+          {
+            id: 'work-3',
+            title: 'Modern E-Commerce Fashion Storefront',
+            description: 'High-converting headless WooCommerce architecture with sub-second page loads and 100/100 Core Web Vitals.',
+            badge: 'Web App',
+            imageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80',
+            link: '#/showcase',
+            linkText: 'View Case Study →'
+          }
+        ],
+        styles: {
+          backgroundColor: '#ffffff',
+          borderRadius: '2xl',
+          paddingY: 'lg',
+          paddingX: 'lg',
+          borderColor: '#e2e8f0',
+          borderWidth: 'thin'
+        }
+      },
+      {
+        id: 'wp-port-cta',
+        type: 'call-to-action',
+        title: 'Have a Project in Mind? Let’s Build Something Exceptional',
+        content: 'We take on a limited number of clients per quarter to maintain the highest standard of craftsmanship.',
+        buttonText: 'Book Strategy Consultation',
+        buttonLink: '#/admin',
+        buttonStyle: 'indigo',
+        styles: {
+          backgroundColor: '#0f172a',
+          textColor: '#ffffff',
+          borderRadius: '3xl',
+          paddingY: 'xl',
+          paddingX: 'lg',
+          textAlign: 'center'
+        }
+      }
+    ]
+  },
+  {
+    id: 'template-wp-course-academy',
+    name: 'WordPress Masterclass & Online Course Academy',
+    description: 'High-converting educational portal featuring instructor authority hero, video curriculum preview, syllabus modules accordion, and enrollment CTA.',
+    category: 'wordpress',
+    badge: 'Course Academy',
+    settings: {
+      pageTitle: 'AI Masterclass & Virtual Assistant Academy',
+      pageSubtitle: 'Step-by-step masterclasses designed to take you from beginner to $3,000/mo remote practitioner.',
+      maxWidth: 'max-w-7xl',
+      backgroundColor: '#f8fafc',
+      fontFamily: 'inter'
+    },
+    blocks: [
+      {
+        id: 'wp-acad-hero',
+        type: 'hero',
+        badgeText: 'ONLINE ACADEMY • 100% FREE TUITION',
+        badgeColor: '#10b981',
+        title: 'Master Autonomous AI Workflows & Modern Virtual Assistance',
+        subtitle: 'Comprehensive video tutorials, downloadable Standard Operating Procedures (SOPs), and direct mentor playbooks with zero paywalls.',
+        buttonText: 'Enroll in Free Academy Now',
+        buttonLink: '#/ai',
+        buttonStyle: 'apple-green',
+        secondaryButtonText: 'View Course Syllabus',
+        secondaryButtonLink: '#/ai',
+        styles: {
+          backgroundColor: '#ffffff',
+          borderRadius: '3xl',
+          paddingY: 'xl',
+          paddingX: 'lg',
+          textAlign: 'center',
+          borderColor: '#e2e8f0',
+          borderWidth: 'thin',
+          shadow: 'lg'
+        }
+      },
+      {
+        id: 'wp-acad-curriculum',
+        type: 'accordion',
+        title: 'Complete Course Syllabus & Practical Lab Modules',
+        accordionItems: [
+          {
+            id: 'mod-1',
+            question: 'Module 01: High-Leverage Prompt Engineering Fundamentals',
+            answer: 'Master CREATE and RTF frameworks, few-shot calibration, system prompt firewalls against prompt injection, and deterministic JSON schemas.'
+          },
+          {
+            id: 'mod-2',
+            question: 'Module 02: Event-Driven Automation Pipelines with n8n & Make.com',
+            answer: 'Learn webhook security, token rate limiting, error fallbacks, and building self-healing lead triage engines connecting CRMs and Slack.'
+          },
+          {
+            id: 'mod-3',
+            question: 'Module 03: Social Media Management & Organic Growth Mechanics',
+            answer: 'Understand 2026 algorithm signals across LinkedIn, X, and YouTube. Structure viral hook carousels and monetize community retention.'
+          },
+          {
+            id: 'mod-4',
+            question: 'Module 04: International Client Acquisition & $2,500/mo Retainers',
+            answer: 'Pitching frameworks, audit blueprints, contract terms, billing with Stripe/Wise, and delivering professional End-of-Day (EOD) status reports.'
+          }
+        ],
+        styles: {
+          backgroundColor: '#ffffff',
+          borderRadius: '2xl',
+          paddingY: 'lg',
+          paddingX: 'lg',
+          borderColor: '#e2e8f0',
+          borderWidth: 'thin'
+        }
+      },
+      {
+        id: 'wp-acad-cta',
+        type: 'call-to-action',
+        title: 'Start Learning Today — 100% Free With Zero Tuition',
+        content: 'Join over 14,000 active freelancers and remote operators advancing their careers.',
+        buttonText: 'Start Module 01 Free',
+        buttonLink: '#/ai',
+        buttonStyle: 'apple-green',
+        styles: {
+          backgroundColor: '#064e3b',
+          textColor: '#ffffff',
+          borderRadius: '3xl',
+          paddingY: 'xl',
+          paddingX: 'lg',
+          textAlign: 'center'
+        }
+      }
+    ]
+  },
+  {
+    id: 'template-wp-affiliate-comparison',
+    name: 'WordPress Affiliate Authority Hub & Tool Comparison',
+    description: 'Full affiliate review architecture featuring star ratings, pros & cons matrix, FTC disclaimer, and high-converting partner links.',
+    category: 'wordpress',
+    badge: 'Affiliate Authority',
+    settings: {
+      pageTitle: 'Curated Software Reviews & Verified Benchmarks',
+      pageSubtitle: 'Transparent, unbiased testing of top remote toolkits and cloud software.',
+      maxWidth: 'max-w-7xl',
+      backgroundColor: '#f8fafc',
+      fontFamily: 'inter'
+    },
+    blocks: [
+      {
+        id: 'wp-aff-hero',
+        type: 'hero',
+        badgeText: 'INDEPENDENT BENCHMARKS • VERIFIED CODES',
+        badgeColor: '#f59e0b',
+        title: 'The Best AI Tools, Cloud Hosting & Software of 2026 Tested',
+        subtitle: 'We spend 40+ hours rigorously testing software uptime, customer support response speeds, and real feature throughput so you can make informed decisions.',
+        buttonText: 'Browse Top Rated Software',
+        buttonLink: '#/web-hosting',
+        buttonStyle: 'apple-green',
+        secondaryButtonText: 'Read Review Methodology',
+        secondaryButtonLink: '#/about',
+        styles: {
+          backgroundColor: '#ffffff',
+          borderRadius: '3xl',
+          paddingY: 'xl',
+          paddingX: 'lg',
+          textAlign: 'center',
+          borderColor: '#e2e8f0',
+          borderWidth: 'thin',
+          shadow: 'lg'
+        }
+      },
+      {
+        id: 'wp-aff-matrix',
+        type: 'features-grid',
+        title: 'Top Editor Picks & Verified Exclusive Coupon Codes',
+        subtitle: 'Click below to claim reader-only promotional bonuses.',
+        columns: 3,
+        gridItems: [
+          {
+            id: 'tool-1',
+            title: 'Hostinger Cloud Hosting (Score: 9.8/10)',
+            description: 'Ultra-fast NVMe storage, free domain, automated SSL, and 24/7 live chat support. Use code DPDCABINCEHM for 75% off.',
+            badge: 'Best Value Host',
+            link: 'https://hostinger.com?REFERRALCODE=WHITEHATDEV',
+            linkText: 'Claim 75% Discount →'
+          },
+          {
+            id: 'tool-2',
+            title: 'Meshy AI 3D Studio (Score: 9.6/10)',
+            description: 'Turn 2D images and text prompts into textured .GLB models in seconds. Use code ER3M3J for 200 free generation credits.',
+            badge: 'Top AI 3D Tool',
+            link: 'https://www.meshy.ai',
+            linkText: 'Get Free Credits →'
+          },
+          {
+            id: 'tool-3',
+            title: 'Suno AI Music Suite (Score: 9.5/10)',
+            description: 'High-fidelity audio generator for podcast intros, YouTube background themes, and commercial client videos.',
+            badge: 'Top Audio Suite',
+            link: 'https://suno.com',
+            linkText: 'Compose Audio →'
+          }
+        ],
+        styles: {
+          backgroundColor: '#ffffff',
+          borderRadius: '2xl',
+          paddingY: 'lg',
+          paddingX: 'lg',
+          borderColor: '#e2e8f0',
+          borderWidth: 'thin'
+        }
+      },
+      {
+        id: 'wp-aff-cta',
+        type: 'call-to-action',
+        title: 'Need a Custom Tool Recommendation for Your Workflow?',
+        content: 'Tell us your team size and budget, and we’ll recommend the highest-ROI software stack for your needs.',
+        buttonText: 'Contact Our Research Desk',
+        buttonLink: '#/admin',
+        buttonStyle: 'apple-green',
+        styles: {
+          backgroundColor: '#1e1b4b',
+          textColor: '#ffffff',
+          borderRadius: '3xl',
+          paddingY: 'xl',
+          paddingX: 'lg',
+          textAlign: 'center'
+        }
+      }
+    ]
+  },
+  {
+    id: 'template-wp-corporate-law',
+    name: 'WordPress Corporate Law & Financial Consulting',
+    description: 'Prestige navy & gold corporate consulting theme with practice areas grid, senior partner credentials, trust certifications, and confidential booking.',
+    category: 'wordpress',
+    badge: 'Advisory Firm',
+    settings: {
+      pageTitle: 'Apex Advisory Group — Strategic Consulting & Legal Operations',
+      pageSubtitle: 'Trusted corporate counsel, risk mitigation, and compliance frameworks for global enterprises.',
+      maxWidth: 'max-w-7xl',
+      backgroundColor: '#f8fafc',
+      fontFamily: 'serif'
+    },
+    blocks: [
+      {
+        id: 'wp-corp-hero',
+        type: 'hero',
+        badgeText: 'STRATEGIC COUNSEL • ESTABLISHED 2018',
+        badgeColor: '#d97706',
+        title: 'Institutional Advisory, Regulatory Compliance & Risk Management',
+        subtitle: 'Providing senior counsel to technology founders, private equity firms, and corporate boards navigating complex international regulatory landscapes.',
+        buttonText: 'Request Confidential Consultation',
+        buttonLink: '#/admin',
+        buttonStyle: 'primary',
+        secondaryButtonText: 'Explore Practice Areas',
+        secondaryButtonLink: '#/services',
+        styles: {
+          backgroundColor: '#ffffff',
+          borderRadius: '3xl',
+          paddingY: 'xl',
+          paddingX: 'lg',
+          textAlign: 'center',
+          borderColor: '#e2e8f0',
+          borderWidth: 'thin',
+          shadow: 'lg'
+        }
+      },
+      {
+        id: 'wp-corp-areas',
+        type: 'features-grid',
+        title: 'Core Practice Areas & Advisory Capabilities',
+        subtitle: 'Comprehensive legal and operational governance for emerging markets.',
+        columns: 3,
+        gridItems: [
+          {
+            id: 'area-1',
+            title: 'Cross-Border Corporate Governance',
+            description: 'Multi-jurisdictional entity formation, board resolutions, and bilateral commercial contract enforcement.',
+            badge: 'Corporate Law'
+          },
+          {
+            id: 'area-2',
+            title: 'Intellectual Property & AI Auditing',
+            description: 'Patent and trademark registration, licensing frameworks, and AI data provenance compliance audits.',
+            badge: 'IP & Tech'
+          },
+          {
+            id: 'area-3',
+            title: 'Mergers & Operational Integration',
+            description: 'Buy-side due diligence, risk assessment, employee retention covenants, and transition management.',
+            badge: 'M&A'
+          }
+        ],
+        styles: {
+          backgroundColor: '#ffffff',
+          borderRadius: '2xl',
+          paddingY: 'lg',
+          paddingX: 'lg',
+          borderColor: '#e2e8f0',
+          borderWidth: 'thin'
+        }
+      },
+      {
+        id: 'wp-corp-cta',
+        type: 'call-to-action',
+        title: 'Schedule a Confidential Strategic Consultation',
+        content: 'All communications are protected under bilateral non-disclosure agreements.',
+        buttonText: 'Book Advisory Briefing',
+        buttonLink: '#/admin',
+        buttonStyle: 'primary',
+        styles: {
+          backgroundColor: '#0f172a',
+          textColor: '#ffffff',
+          borderRadius: '3xl',
+          paddingY: 'xl',
+          paddingX: 'lg',
+          textAlign: 'center'
+        }
+      }
+    ]
+  },
+  {
     id: 'template-wp-empty-canvas',
     name: 'Empty Page & Custom Multi-Column Canvas (Blank)',
     description: 'A clean empty page with 1 custom multi-column section ready for you to add your own niche text, images, and destination links.',

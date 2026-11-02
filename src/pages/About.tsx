@@ -2,9 +2,23 @@ import { useApp } from '../context/AppContext';
 import React from 'react';
 import { Terminal, Shield, Code } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
+import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 
 export const About: React.FC = () => {
-  const { getPublicPageCMSItems } = useApp();
+  const { getPublicPageCMSItems, navTabs, updateNavTab } = useApp();
+  const aboutTab = (navTabs || []).find((t) => t.id === 'nav_about' || t.slug === 'about');
+  if (aboutTab?.pageLayoutType === 'builder' && aboutTab.builderBlocks && aboutTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={aboutTab.builderBlocks}
+        settings={aboutTab.builderPageSettings}
+        tab={aboutTab}
+        onRevertDefault={() => {
+          updateNavTab(aboutTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
   const cmsAboutItems = getPublicPageCMSItems('about');
 
   return (

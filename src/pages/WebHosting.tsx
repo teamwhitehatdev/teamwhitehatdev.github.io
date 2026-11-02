@@ -2,9 +2,23 @@ import { useApp } from '../context/AppContext';
 import React from 'react';
 import { ExternalLink, Sparkles, Server, Zap, ShieldCheck, ArrowRight } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
+import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 
 export const WebHosting: React.FC = () => {
-  const { getPublicPageCMSItems } = useApp();
+  const { getPublicPageCMSItems, navTabs, updateNavTab } = useApp();
+  const hostingTab = (navTabs || []).find((t) => t.id === 'nav_hosting' || t.slug === 'web-hosting');
+  if (hostingTab?.pageLayoutType === 'builder' && hostingTab.builderBlocks && hostingTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={hostingTab.builderBlocks}
+        settings={hostingTab.builderPageSettings}
+        tab={hostingTab}
+        onRevertDefault={() => {
+          updateNavTab(hostingTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
   const cmsHostingItems = getPublicPageCMSItems('web-hosting');
   const HOSTINGER_LINK = 'https://www.hostinger.com?REFERRALCODE=DPDCABINCEHM';
 

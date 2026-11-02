@@ -27,6 +27,7 @@ import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { AdSenseSlot } from '../components/AdSenseSlot';
 import { useApp } from '../context/AppContext';
 import { ArticleModal } from '../components/ArticleModal';
+import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 import { CMSItem } from '../types';
 import { Link } from 'react-router-dom';
 
@@ -114,12 +115,29 @@ const getNicheTheme = (category: string = ''): NicheTheme => {
 };
 
 export const HomePage: React.FC<HomePageProps> = () => {
-  const { getHomeFeaturedCMSItems, cmsItems } = useApp();
+  const { getHomeFeaturedCMSItems, cmsItems, navTabs, updateNavTab } = useApp();
   const [displayTestimonials] = useState(() =>
     [...TESTIMONIALS_DATA].sort(() => Math.random() - 0.5)
   );
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const homeTab = (navTabs || []).find(
+    (t) => t.id === 'nav_home' || t.slug === 'home' || t.path === '/'
+  );
+
+  if (homeTab?.pageLayoutType === 'builder' && homeTab.builderBlocks && homeTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={homeTab.builderBlocks}
+        settings={homeTab.builderPageSettings}
+        tab={homeTab}
+        onRevertDefault={() => {
+          updateNavTab(homeTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
   const [selectedArticle, setSelectedArticle] = useState<CMSItem | null>(null);
   const [expandedArticleIds, setExpandedArticleIds] = useState<Record<string, boolean>>({});
   const [customLinks, setCustomLinks] = useState<Record<string, CustomDestinationLink>>(() =>

@@ -26,6 +26,7 @@ import { CMSItem } from '../types';
 import { ArticleModal } from '../components/ArticleModal';
 import { AIAutomationDiagrams } from '../components/AIAutomationDiagrams';
 import { DestinationLinksManagerModal } from '../components/DestinationLinksManagerModal';
+import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 import { AdminDevUnlockModal } from '../components/AdminDevUnlockModal';
 import { isUserAdminOrDeveloper } from '../utils/adminAuth';
 import {
@@ -69,7 +70,7 @@ const HighlightText: React.FC<{ text: string; highlight: string; className?: str
 };
 
 export const AILearning: React.FC = () => {
-  const { getPublicPageCMSItems } = useApp();
+  const { getPublicPageCMSItems, navTabs, updateNavTab } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [selectedArticle, setSelectedArticle] = useState<CMSItem | null>(null);
@@ -82,6 +83,20 @@ export const AILearning: React.FC = () => {
   const [isDestinationManagerOpen, setIsDestinationManagerOpen] = useState(false);
   const [isAdminOrDev, setIsAdminOrDev] = useState<boolean>(() => isUserAdminOrDeveloper());
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const aiTab = (navTabs || []).find((t) => t.id === 'nav_ai' || t.slug === 'ai');
+  if (aiTab?.pageLayoutType === 'builder' && aiTab.builderBlocks && aiTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={aiTab.builderBlocks}
+        settings={aiTab.builderPageSettings}
+        tab={aiTab}
+        onRevertDefault={() => {
+          updateNavTab(aiTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
 
   // Sync auth and custom destination links across components and tabs
   useEffect(() => {

@@ -312,6 +312,20 @@ export const Admin: React.FC = () => {
   const [isNavTabModalOpen, setIsNavTabModalOpen] = useState(false);
   const [isVisualBuilderOpen, setIsVisualBuilderOpen] = useState(false);
   const [visualBuilderTargetTab, setVisualBuilderTargetTab] = useState<NavTabConfig | null>(null);
+
+  // Open Visual Builder automatically if requested via URL hash (e.g. from "Edit Page in Builder")
+  useEffect(() => {
+    const hash = window.location.hash || '';
+    if (hash.includes('builder=true')) {
+      const match = hash.match(/tab=([^&]+)/);
+      const targetId = match ? decodeURIComponent(match[1]) : null;
+      const target = (navTabs || []).find((t) => t.id === targetId || t.slug === targetId);
+      if (target) {
+        setVisualBuilderTargetTab(target);
+      }
+      setIsVisualBuilderOpen(true);
+    }
+  }, [navTabs]);
   const [navTabForm, setNavTabForm] = useState<{
     label: string;
     slug: string;
