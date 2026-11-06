@@ -1,8 +1,10 @@
 import { COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS } from '../data/comprehensiveEducationalData';
 import { ADVANCED_NICHE_CMS_ITEMS } from '../data/advancedNicheCMSData';
+import { VA_FREELANCER_MASTERY_GUIDES } from '../data/vaFreelancerMasteryGuides';
 import { CMSItem, PlayStoreAppConfig, ServicesHeadlineConfig, ServicesPromoAdConfig } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
+  ...VA_FREELANCER_MASTERY_GUIDES,
   // =========================================================================
   // 💰 HIGH-ATTRACTION "MAKE MONEY ONLINE, $100-$500/WEEK & AI INCOME" GUIDES
   // (100% EDITABLE IN /#/ADMIN • NUMBERED & SORTED BY CATEGORY)
@@ -1092,14 +1094,14 @@ export const DEFAULT_PLAY_STORE_CONFIG: PlayStoreAppConfig = {
 // (100% EDITABLE IN /#/ADMIN -> SERVICES MANAGER)
 // ============================================================================
 export const DEFAULT_SERVICES_HEADLINE_CONFIG: ServicesHeadlineConfig = {
-  badgeText: 'Direct-Link Exclusive Rates • Up to 70% Lower Than Traditional Agencies',
-  title: 'Ultra-Affordable Virtual Assistant, AI Automation & Web Packages',
-  description: 'Start small with zero risk. Hire a dedicated Virtual Assistant from just $5/hr ($49/week Starter Pack), automate repetitive workflows for $39, or launch a complete modern website for $99.',
+  badgeText: 'Direct-Link Exclusive Rates • Includes VIP Access to Advanced Skills Vault (/#/exclusive-skills)',
+  title: 'Advanced VA & Freelancer Skill Mastery, AI Automation & Done-For-You Packages',
+  description: 'Hire a dedicated Executive Virtual Assistant from $5/hr ($49/wk), deploy custom Make.com/n8n AI workflows for $39, or accelerate your VA & Freelancer career. Every package includes verified Email Access to our Private Advanced Skills Vault (/#/exclusive-skills).',
   showQuickStats: true,
   quickStats: [
-    { value: '$5 / hr', label: 'Starter VA Rate' },
-    { value: '$39', label: 'AI Workflow Setup' },
-    { value: '$99', label: 'Complete Website' },
+    { value: '$5 / hr', label: 'Executive VA & Coaching' },
+    { value: '$39', label: 'AI Automation Build' },
+    { value: '8 Master Tracks', label: 'VIP Vault Included' },
     { value: '0% Markup', label: 'Cancel Anytime' }
   ]
 };

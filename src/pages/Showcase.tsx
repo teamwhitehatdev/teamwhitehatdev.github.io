@@ -32,7 +32,6 @@ export const Showcase: React.FC = () => {
   const PATREON_CREATOR_LINK = 'https://www.patreon.com/cw/FuturisticSoftwares';
 
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
-  const [contentTypeFilter, setContentTypeFilter] = useState<'ALL' | 'PROJECT' | 'SERVICE'>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
   const { navTabs, updateNavTab } = useApp();
@@ -60,15 +59,12 @@ export const Showcase: React.FC = () => {
     projects,
     updateProject,
     addProject,
-    services,
-    updateService,
-    addService,
     promoItems,
     updatePromoItem,
     addPromoItem
   } = useApp();
 
-  // EDIT STATE FOR SHOWCASE BUILDS & SERVICES
+  // EDIT STATE FOR SHOWCASE BUILDS
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [editItemType, setEditItemType] = useState<'PROJECT' | 'SERVICE' | null>(null);
   const [editFormData, setEditFormData] = useState<{
@@ -86,7 +82,9 @@ export const Showcase: React.FC = () => {
   const [editingPromoId, setEditingPromoId] = useState<string | null>(null);
   const [editPromoFormData, setEditPromoFormData] = useState<Partial<PromoItem>>({});
 
-  const cmsProjects = getPublicPageCMSItems('showcase');
+  const cmsProjects = getPublicPageCMSItems('showcase').filter(
+    (item) => item.pageOwner !== 'services' && item.page !== 'services' && item.contentType !== 'Service'
+  );
   const showcaseAds = getPublicPromoItems('showcase-ad');
   const partnerDeals = getPublicPromoItems('partner-deals');
 
@@ -103,9 +101,9 @@ export const Showcase: React.FC = () => {
     'AI & CLOUD'
   ];
 
-  // 1. Projects mapped to standard showcase format
+  // Projects mapped to standard showcase format (strictly Portfolio Projects, never /services items)
   const contextProjects = (projects || [])
-    .filter((proj) => proj.visible !== false)
+    .filter((proj) => proj.visible !== false && !proj.id.startsWith('s'))
     .map((proj) => ({
       id: proj.id,
       originalId: proj.id,
@@ -134,25 +132,8 @@ export const Showcase: React.FC = () => {
     tags: [item.category || 'CMS Item', item.badge || 'Featured']
   }));
 
-  // 2. Services mapped to standard showcase format so all services and showcase contents are shown
-  const contextServices = (services || [])
-    .filter((s) => s.visible !== false)
-    .map((s) => ({
-      id: s.id,
-      originalId: s.id,
-      itemType: 'SERVICE' as const,
-      title: s.title,
-      category: (s.category || 'VIRTUAL ASSISTANT').toUpperCase(),
-      desc: s.description,
-      img: !s.hideImage ? s.image || '' : '',
-      videoUrl: !s.hideVideo ? s.videoUrl || '' : '',
-      destinationUrl: '/#/contact',
-      earnings: s.price || 'CLIENT SERVICE',
-      tags: s.features || ['Service Solution', 'Client Retainer']
-    }));
-
-  // Combine and deduplicate
-  const combinedRaw = [...formattedCMSProjects, ...contextProjects, ...contextServices];
+  // Combine and deduplicate (strictly Portfolio Builds & Projects — /services is exclusive to /#/services)
+  const combinedRaw = [...formattedCMSProjects, ...contextProjects];
   const seenIds = new Set<string>();
   const allShowcaseItems = combinedRaw.filter((p) => {
     if (seenIds.has(p.id)) return false;
@@ -161,11 +142,6 @@ export const Showcase: React.FC = () => {
   });
 
   const filteredItems = allShowcaseItems.filter((p) => {
-    // Filter by type
-    if (contentTypeFilter !== 'ALL' && p.itemType !== contentTypeFilter) {
-      return false;
-    }
-
     // Filter by category
     if (activeCategory !== 'ALL') {
       const pCat = p.category.toUpperCase();
@@ -208,7 +184,7 @@ export const Showcase: React.FC = () => {
     return true;
   });
 
-  // START EDITING SHOWCASE/SERVICE ITEM
+  // START EDITING SHOWCASE ITEM
   const startEditingItem = (item: (typeof allShowcaseItems)[0]) => {
     if (!isAdminOrDev) {
       setIsUnlockModalOpen(true);
@@ -239,42 +215,29 @@ export const Showcase: React.FC = () => {
       ? editFormData.tags.split(',').map((t) => t.trim()).filter(Boolean)
       : item.tags;
 
-    if (item.itemType === 'PROJECT') {
-      updateProject(item.originalId, {
-        title: editFormData.title ?? item.title,
-        category: editFormData.category ?? item.category,
-        description: editFormData.desc ?? item.desc,
-        image: editFormData.img ?? item.img,
-        videoUrl: editFormData.videoUrl ?? item.videoUrl,
-        liveUrl: editFormData.destinationUrl ?? item.destinationUrl,
-        metrics: editFormData.earnings ?? item.earnings,
-        tags: tagsArray
-      });
-    } else {
-      updateService(item.originalId, {
-        title: editFormData.title ?? item.title,
-        category: editFormData.category ?? item.category,
-        description: editFormData.desc ?? item.desc,
-        image: editFormData.img ?? item.img,
-        videoUrl: editFormData.videoUrl ?? item.videoUrl,
-        price: editFormData.earnings ?? item.earnings,
-        features: tagsArray
-      });
-    }
+    updateProject(item.originalId, {
+      title: editFormData.title ?? item.title,
+      category: editFormData.category ?? item.category,
+      description: editFormData.desc ?? item.desc,
+      image: editFormData.img ?? item.img,
+      videoUrl: editFormData.videoUrl ?? item.videoUrl,
+      liveUrl: editFormData.destinationUrl ?? item.destinationUrl,
+      metrics: editFormData.earnings ?? item.earnings,
+      tags: tagsArray
+    });
 
     setEditingItemId(null);
     setEditItemType(null);
-    setSaveSuccessMsg('Showcase item saved to your browser storage & CMS!');
+    setSaveSuccessMsg('Showcase project saved to your browser storage & CMS!');
     setTimeout(() => setSaveSuccessMsg(null), 3500);
   };
 
-  // ADD NEW PROJECT OR SERVICE
+  // ADD NEW PROJECT
   const handleAddNewBuild = () => {
     if (!isAdminOrDev) {
       setIsUnlockModalOpen(true);
       return;
     }
-    const newId = `proj_${Date.now()}`;
     addProject({
       title: 'New Custom Portfolio Build',
       category: 'web',
@@ -286,24 +249,6 @@ export const Showcase: React.FC = () => {
       visible: true
     });
     setSaveSuccessMsg('New showcase project added! Scroll down to edit.');
-    setTimeout(() => setSaveSuccessMsg(null), 3500);
-  };
-
-  const handleAddNewService = () => {
-    if (!isAdminOrDev) {
-      setIsUnlockModalOpen(true);
-      return;
-    }
-    addService({
-      title: 'Custom Client Engineering & VA Service',
-      category: 'dev',
-      price: '$49 / hour',
-      description: 'Describe your consulting or development service offering, deliverables, and turnaround time.',
-      image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&auto=format&fit=crop&q=80',
-      features: ['Full Stack Development', 'Code Review & Testing', 'Direct Slack Communication'],
-      visible: true
-    });
-    setSaveSuccessMsg('New service solution added! Scroll down to edit.');
     setTimeout(() => setSaveSuccessMsg(null), 3500);
   };
 
@@ -385,13 +330,13 @@ export const Showcase: React.FC = () => {
       <div className="white-glass-card rounded-3xl p-6 sm:p-10 text-center space-y-4">
         <div className="inline-flex items-center space-x-2 bg-slate-100 border border-slate-200 px-3.5 py-1 rounded-full text-xs text-slate-800 font-bold uppercase tracking-wider">
           <Sparkles className="w-3.5 h-3.5 text-slate-700" />
-          <span>Portfolio, Client Services &amp; Digital Builds</span>
+          <span>Portfolio Showcase &bull; Software Engineering &bull; Digital Builds</span>
         </div>
         <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-          Service Solutions, Projects &amp; Digital Assets
+          Software Projects, Architecture &amp; Digital Assets
         </h1>
         <p className="text-sm sm:text-base text-slate-600 max-w-3xl mx-auto leading-relaxed">
-          Explore all authentic software projects, client services, and enterprise automation systems engineered for modern teams, creators, and businesses.
+          Explore all authentic software projects, web applications, diagnostic tools, and enterprise automation systems engineered by Team WhiteHat Dev.
         </p>
 
         {/* TOP QUICK ACTION BUTTONS (DEVELOPER & ADMIN ONLY) */}
@@ -409,13 +354,6 @@ export const Showcase: React.FC = () => {
               <span>Add Showcase Project</span>
             </button>
             <button
-              onClick={handleAddNewService}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
-            >
-              <Briefcase className="w-3.5 h-3.5" />
-              <span>Add Client Service</span>
-            </button>
-            <button
               onClick={() => setIsUnlockModalOpen(true)}
               className="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer"
               title="Lock session and return to visitor mode"
@@ -426,13 +364,13 @@ export const Showcase: React.FC = () => {
           </div>
         )}
 
-        {/* SEARCH & UNIFIED TABS */}
+        {/* SEARCH BAR */}
         <div className="max-w-xl mx-auto pt-3 space-y-3">
           <div className="relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search by title, tech stack (React, Python, Flutter), or service..."
+              placeholder="Search projects by title, tech stack (React, Python, Flutter, Scapy)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-8 py-2 bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-800 transition-colors"
@@ -447,40 +385,6 @@ export const Showcase: React.FC = () => {
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
-          </div>
-
-          {/* VIEW TYPE TABS */}
-          <div className="inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
-            <button
-              onClick={() => setContentTypeFilter('ALL')}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                contentTypeFilter === 'ALL'
-                  ? 'bg-slate-900 text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              All Builds &amp; Services ({allShowcaseItems.length})
-            </button>
-            <button
-              onClick={() => setContentTypeFilter('PROJECT')}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                contentTypeFilter === 'PROJECT'
-                  ? 'bg-slate-900 text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Projects ({contextProjects.length + formattedCMSProjects.length})
-            </button>
-            <button
-              onClick={() => setContentTypeFilter('SERVICE')}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                contentTypeFilter === 'SERVICE'
-                  ? 'bg-emerald-600 text-white shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Services ({contextServices.length})
-            </button>
           </div>
         </div>
 
@@ -502,9 +406,9 @@ export const Showcase: React.FC = () => {
         </div>
       </div>
 
-      {/* SHOWCASE BUILDS & SERVICES GRID */}
+      {/* SHOWCASE BUILDS GRID */}
       <HUDPanel
-        title={`Featured Builds & Client Services (${filteredItems.length})`}
+        title={`Featured Portfolio Projects & Live Builds (${filteredItems.length})`}
         badge="Verified Live Builds"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -512,7 +416,7 @@ export const Showcase: React.FC = () => {
             <div className="col-span-full py-12 text-center space-y-3">
               <Sparkles className="w-8 h-8 text-slate-400 mx-auto" />
               <h4 className="text-base font-bold text-slate-900">
-                No items found matching {searchQuery ? `"${searchQuery}"` : `category "${activeCategory}"`}
+                No projects found matching {searchQuery ? `"${searchQuery}"` : `category "${activeCategory}"`}
               </h4>
               <p className="text-xs text-slate-500">Try searching for other keywords or reset your filters.</p>
               <button
@@ -520,17 +424,16 @@ export const Showcase: React.FC = () => {
                 onClick={() => {
                   setSearchQuery('');
                   setActiveCategory('ALL');
-                  setContentTypeFilter('ALL');
                 }}
                 className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-xs cursor-pointer"
               >
-                Clear Filters &amp; Show All Items
+                Clear Filters &amp; Show All Projects
               </button>
             </div>
           ) : (
             filteredItems.map((p) => {
               const isEditing = editingItemId === p.id;
-              const isService = p.itemType === 'SERVICE';
+              const isService = false;
 
               return (
                 <div

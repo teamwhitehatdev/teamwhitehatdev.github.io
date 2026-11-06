@@ -5,6 +5,24 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
   // 🏷️ PROMO PLACEMENT (PROMO SECTION)
   // =========================================================================
   {
+    id: 'promo-seeedstudio-meshtastic-0',
+    title: 'Wio Tracker L2 Pro for Meshtastic',
+    placement: 'promo',
+    description: 'Black Friday & Thanksgiving Promo — Shop Early & Save Big on Seeed Studio Wio Tracker L2 Pro for Meshtastic, SenseCAP LoRa nodes, reTerminal displays, and AI hardware.',
+    imageUrl: './seeedstudio_affiliate_1200x628.jpg',
+    destinationUrl: 'https://www.seeedstudio.com/Wio-Tracker-L2-Pro-for-Meshtastic-p-0000.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    buttonText: 'SAVE NOW AT SEEED STUDIO →',
+    badge: 'Black Friday & Thanksgiving Promo',
+    promotionLabel: 'Black Friday & Thanksgiving Promo',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 0,
+    openNewTab: true,
+    disclosureNote: 'Official Seeed Studio partner referral link (sensecap_affiliate=LF0tCxl).',
+    createdAt: '2026-11-06T00:00:00Z',
+    updatedAt: '2026-11-06T00:00:00Z'
+  },
+  {
     id: 'promo-meshy-ai-3d-0',
     title: 'AI 3D Model Generator: Create 3D from Text & Images | Meshy',
     placement: 'promo',
@@ -62,6 +80,24 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
   // =========================================================================
   // 🤝 PARTNER DEALS PLACEMENT (PARTNER DEALS / ADS SIDEBAR SECTION)
   // =========================================================================
+  {
+    id: 'deal-seeedstudio-meshtastic-0',
+    title: 'Wio Tracker L2 Pro for Meshtastic',
+    placement: 'partner-deals',
+    description: 'Black Friday & Thanksgiving Promo — Thanksgiving Doorbuster Starts Now! Shop early & save big on Wio Tracker L2 Pro for Meshtastic and Seeed Studio IoT hardware.',
+    imageUrl: './seeedstudio_affiliate_1200x628.jpg',
+    destinationUrl: 'https://www.seeedstudio.com/Wio-Tracker-L2-Pro-for-Meshtastic-p-0000.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    buttonText: 'SHOP EARLY & SAVE BIG →',
+    badge: 'Black Friday & Thanksgiving Promo',
+    promotionLabel: 'Black Friday & Thanksgiving Promo',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 0,
+    openNewTab: true,
+    disclosureNote: 'Official Seeed Studio referral link (LF0tCxl).',
+    createdAt: '2026-11-06T00:00:00Z',
+    updatedAt: '2026-11-06T00:00:00Z'
+  },
   {
     id: 'deal-meshy-ai-3d-1',
     title: 'AI 3D Model Generator: Create 3D from Text & Images | Meshy',

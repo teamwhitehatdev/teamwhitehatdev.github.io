@@ -1,5 +1,6 @@
 import { useApp } from '../context/AppContext';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Cpu,
   CheckCircle2,
@@ -13,13 +14,21 @@ import {
   AlertTriangle,
   ShieldCheck,
   Tag,
-  ExternalLink
+  ExternalLink,
+  Lock,
+  KeyRound,
+  Crown
 } from 'lucide-react';
 import { HUDPanel } from '../components/HUDPanel';
 import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 import { SERVICES } from '../utils/initialData';
 import { validateEmailAndAntiBot, recordSuccessfulSubmission } from '../utils/emailValidator';
 import { sanitizeUserInput } from '../components/SecurityEngine';
+import {
+  registerPurchasedServiceBuyer,
+  buildBuyerEmailDispatchUrl,
+  VerifiedServiceBuyer
+} from '../utils/exclusiveSkillsAuth';
 
 interface ServicesProps {
   onOpenConsultation?: (serviceTitle?: string) => void;
@@ -40,11 +49,12 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [contactInfo, setContactInfo] = useState('');
-  const [service, setService] = useState('Starter Virtual Assistant Trial Pack ($5/hr or $49/wk)');
+  const [service, setService] = useState('Executive VA & Advanced Skill Mastery Starter Pack ($5 / hr ($49 / week))');
   const [message, setMessage] = useState('');
   const [honeypot, setHoneypot] = useState('');
   const [validationError, setValidationError] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [registeredBuyer, setRegisteredBuyer] = useState<VerifiedServiceBuyer | null>(null);
 
   const servicesTab = (navTabs || []).find(
     (t) => t.id === 'nav_services' || t.slug === 'services'
@@ -124,16 +134,11 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
         });
       }
 
+      const verifiedBuyer = registerPurchasedServiceBuyer(cleanName, cleanEmail, service);
+      setRegisteredBuyer(verifiedBuyer);
+
       recordSuccessfulSubmission();
       setSubmitted(true);
-      setTimeout(() => {
-        setSubmitted(false);
-        setName('');
-        setEmail('');
-        setContactInfo('');
-        setMessage('');
-        setHoneypot('');
-      }, 3000);
     }
   };
 
@@ -424,21 +429,156 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
       {/* VERIFIED PARTNER • HOSTING PROMO AD (ABOVE BOOKING FORM POSITION) */}
       {(adPos === 'above-booking' || adPos === 'both') && renderVerifiedPartnerAd()}
 
+      {/* EXCLUSIVE BUYERS-ONLY ADVANCED SKILLS VAULT GATEWAY BANNER (/#/exclusive-skills) */}
+      <div className="rounded-3xl border-2 border-slate-900 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-6 sm:p-8 shadow-xl space-y-5">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-white/15 pb-5">
+          <div className="space-y-2 max-w-3xl">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-[11px] font-black uppercase tracking-wider">
+                <Crown className="w-3.5 h-3.5" />
+                <span>Included With Every Purchased Service Package</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-400/40 text-rose-200 text-[11px] font-bold">
+                <Lock className="w-3.5 h-3.5" />
+                <span>Restricted: Email-Filtered Buyers Only</span>
+              </span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+              Unlock the Private VA &amp; Freelancer Advanced Skills Vault (/#/exclusive-skills)
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Every client or student who purchases/claims a package below receives a verified{' '}
+              <strong className="text-white">VIP Buyer Email &amp; Access Passkey</strong> to our restricted{' '}
+              <strong className="text-amber-300">/#/exclusive-skills</strong> portal—featuring our{' '}
+              <strong className="text-white">Real-Time VA &amp; Freelancer Profit &amp; ROI Simulator</strong> and{' '}
+              <strong className="text-white">8 Full Advanced Curriculum Tracks</strong> with production scripts, JSON schemas, and real-data retainers. Non-buyers are strictly blocked by email filtering.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 w-full lg:w-auto">
+            <Link
+              to="/exclusive-skills"
+              className="px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-md transition-all"
+            >
+              <KeyRound className="w-4 h-4" />
+              <span>Enter Exclusive Skills Vault →</span>
+            </Link>
+            <a
+              href="#direct-booking-form"
+              className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs flex items-center justify-center gap-2 transition-all"
+            >
+              <span>Claim Package to Unlock Email Access</span>
+            </a>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+            <div className="font-black text-amber-300">1. Real-Time ROI Simulator</div>
+            <p className="text-[11px] text-slate-300">
+              Interactive retainer, hourly rate, AI speed multiplier &amp; client labor-savings calculator.
+            </p>
+          </div>
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+            <div className="font-black text-emerald-300">2. 8 Advanced Master Tracks</div>
+            <p className="text-[11px] text-slate-300">
+              Executive Chief-of-Staff, Make/n8n AI Architect, B2B Lead Enrichment, E-Com &amp; Retainer Scaling.
+            </p>
+          </div>
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+            <div className="font-black text-cyan-300">3. Production JSON &amp; Scripts</div>
+            <p className="text-[11px] text-slate-300">
+              1-click copyable system prompts, outreach scripts, SLA contracts &amp; Notion database schemas.
+            </p>
+          </div>
+          <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+            <div className="font-black text-rose-300">4. Strict Email Verification</div>
+            <p className="text-[11px] text-slate-300">
+              Protected by verified buyer email filtering + personal VIP Passkey &amp; direct email link delivery.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* DIRECT INLINE CLIENT INQUIRY FORM (PURE WHITE THEME) */}
-      <HUDPanel title="Direct Booking &amp; Custom Task Inquiry Form" badge="Priority Client Booking">
+      <div id="direct-booking-form">
+      <HUDPanel title="Direct Booking, Service Purchase &amp; VIP Vault Activation Form" badge="Priority Client Booking">
         <div className="p-2 sm:p-4 space-y-6">
           {submitted ? (
-            <div className="text-center py-8 space-y-4 bg-slate-50 border border-slate-200 rounded-2xl">
-              <div className="w-14 h-14 mx-auto rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-900">
+            <div className="p-6 sm:p-8 space-y-5 bg-slate-50 border-2 border-slate-900 rounded-3xl text-center">
+              <div className="w-14 h-14 mx-auto rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-800">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-extrabold text-slate-900">
-                Booking Request Received
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
-                Thank you, <span className="text-slate-900 font-bold">{name}</span>! Your service
-                request has been received by our team. We will reply within 24 hours.
-              </p>
+              <div className="space-y-1.5">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-extrabold uppercase tracking-wider">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Booking Logged &amp; VIP Buyer Email Authorized</span>
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+                  Your Exclusive Advanced Skills Vault Access Is Ready!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto">
+                  Thank you, <span className="text-slate-900 font-bold">{registeredBuyer?.name || name}</span>! Your service package request (<span className="font-bold text-slate-900">{registeredBuyer?.purchasedService || registeredBuyer?.servicePackage || service}</span>) has been registered and your email is now whitelisted for <strong className="text-slate-900">/#/exclusive-skills</strong>.
+                </p>
+              </div>
+
+              {registeredBuyer && (
+                <div className="max-w-lg mx-auto p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-xs text-left space-y-3 text-xs">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                    <span className="font-extrabold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                      <KeyRound className="w-4 h-4 text-indigo-700" />
+                      <span>Your Verified Buyer Credentials</span>
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold text-[10px] border border-emerald-200">
+                      ACTIVE VIP ACCESS
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase block">Verified Buyer Email</span>
+                      <span className="font-mono font-bold text-slate-900 break-all">{registeredBuyer.email}</span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase block">VIP Access Passkey</span>
+                      <span className="font-mono font-black text-indigo-900">{registeredBuyer.accessKey}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
+                    <Link
+                      to={`/exclusive-skills?email=${encodeURIComponent(registeredBuyer.email)}&key=${encodeURIComponent(registeredBuyer.accessKey)}`}
+                      className="flex-1 py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition-all"
+                    >
+                      <Crown className="w-4 h-4 text-amber-400" />
+                      <span>Enter Exclusive Skills Vault Now →</span>
+                    </Link>
+                    <a
+                      href={buildBuyerEmailDispatchUrl(registeredBuyer)}
+                      className="py-3 px-4 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-950 border border-indigo-200 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>Email My Access Link</span>
+                    </a>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSubmitted(false);
+                    setName('');
+                    setEmail('');
+                    setContactInfo('');
+                    setMessage('');
+                    setHoneypot('');
+                  }}
+                  className="text-xs font-bold text-slate-500 hover:text-slate-900 underline cursor-pointer"
+                >
+                  Submit Another Inquiry
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmitInquiry} className="space-y-4 text-xs">
@@ -564,13 +704,14 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                 type="submit"
                 className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center space-x-2 shadow-xs cursor-pointer"
               >
-                <span>Submit Booking Inquiry</span>
+                <span>Submit Booking &amp; Unlock Exclusive Skills Vault Access</span>
                 <Send className="w-4 h-4" />
               </button>
             </form>
           )}
         </div>
       </HUDPanel>
+      </div>
     </div>
   );
 };

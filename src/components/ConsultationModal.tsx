@@ -9,11 +9,18 @@ import {
   User,
   MessageSquare,
   ShieldCheck,
-  AlertTriangle
+  AlertTriangle,
+  KeyRound,
+  Crown
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { validateEmailAndAntiBot, recordSuccessfulSubmission } from '../utils/emailValidator';
 import { sanitizeUserInput } from './SecurityEngine';
+import {
+  registerPurchasedServiceBuyer,
+  buildBuyerEmailDispatchUrl,
+  VerifiedServiceBuyer
+} from '../utils/exclusiveSkillsAuth';
 
 interface ConsultationModalProps {
   isOpen: boolean;
@@ -36,6 +43,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   const [honeypot, setHoneypot] = useState('');
   const [validationError, setValidationError] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [registeredBuyer, setRegisteredBuyer] = useState<VerifiedServiceBuyer | null>(null);
 
   if (!isOpen) return null;
 
@@ -73,17 +81,11 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
         });
       }
 
+      const verifiedBuyer = registerPurchasedServiceBuyer(cleanName, cleanEmail, service);
+      setRegisteredBuyer(verifiedBuyer);
+
       recordSuccessfulSubmission();
       setSubmitted(true);
-      setTimeout(() => {
-        setSubmitted(false);
-        setName('');
-        setEmail('');
-        setContactInfo('');
-        setMessage('');
-        setHoneypot('');
-        onClose();
-      }, 3000);
     }
   };
 
@@ -104,18 +106,60 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
         </button>
 
         {submitted ? (
-          <div className="text-center py-8 space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-900">
-              <CheckCircle2 className="w-10 h-10" />
+          <div className="text-center py-4 space-y-4">
+            <div className="w-14 h-14 mx-auto rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-800">
+              <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-extrabold text-slate-900">Inquiry Logged Securely</h3>
-            <p className="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
-              Thank you, <span className="text-slate-900 font-bold">{name}</span>! Your service request has been received by our project team.
+            <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900">
+              Package Claimed &amp; VIP Vault Unlocked!
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
+              Thank you, <span className="text-slate-900 font-bold">{registeredBuyer?.name || name}</span>! Your email is now verified for the <strong className="text-slate-900">Exclusive VA &amp; Freelancer Advanced Skills Vault (/#/exclusive-skills)</strong>.
             </p>
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center space-x-2">
-              <ShieldCheck className="w-4 h-4 text-slate-700" />
-              <span>Team Review in Progress — Response Within 24 Hours</span>
-            </div>
+
+            {registeredBuyer && (
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-2.5 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="font-extrabold text-slate-900 uppercase flex items-center gap-1">
+                    <KeyRound className="w-3.5 h-3.5 text-indigo-700" />
+                    <span>VIP Buyer Access Credentials</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                    WHITELISTED
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="p-2 rounded-lg bg-white border border-slate-200">
+                    <span className="text-[9px] font-bold text-slate-400 uppercase block">Buyer Email</span>
+                    <span className="font-mono font-bold text-slate-900 break-all">{registeredBuyer.email}</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-white border border-slate-200">
+                    <span className="text-[9px] font-bold text-slate-400 uppercase block">VIP Passkey</span>
+                    <span className="font-mono font-black text-indigo-900">{registeredBuyer.accessKey}</span>
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                  <a
+                    href={`#/exclusive-skills?email=${encodeURIComponent(registeredBuyer.email)}&key=${encodeURIComponent(registeredBuyer.accessKey)}`}
+                    onClick={() => {
+                      setSubmitted(false);
+                      onClose();
+                    }}
+                    className="flex-1 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs flex items-center justify-center gap-1.5"
+                  >
+                    <Crown className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Open Exclusive Skills Vault →</span>
+                  </a>
+                  <a
+                    href={buildBuyerEmailDispatchUrl(registeredBuyer)}
+                    className="py-2.5 px-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-950 border border-indigo-200 font-extrabold text-xs flex items-center justify-center gap-1"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>Email My Access Link</span>
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <>

@@ -400,13 +400,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
           // Auto-migrate any legacy "Academy" strings to "Portal"
-          // And ALWAYS keep Home as 'standard' layout to protect all niche contents
           const sanitized = parsed.map((t: NavTabConfig) => {
-            const isHome = t.id === 'nav_home' || t.slug === 'home' || t.path === '/';
             return {
               ...t,
-              label: t.label ? t.label.replace(/Academy/gi, 'Portal') : t.label,
-              ...(isHome ? { pageLayoutType: 'standard' as const } : {})
+              label: t.label ? t.label.replace(/Academy/gi, 'Portal') : t.label
             };
           });
           const existingIds = new Set(sanitized.map((t: NavTabConfig) => t.id));
@@ -458,9 +455,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setNavTabs((prev) =>
       prev.map((tab) => {
         if (tab.id === id) {
-          const isHome = tab.id === 'nav_home' || tab.slug === 'home' || tab.path === '/';
-          const safeUpdates = isHome ? { ...updates, pageLayoutType: 'standard' as const } : updates;
-          return { ...tab, ...safeUpdates, updatedAt: new Date().toISOString() };
+          return { ...tab, ...updates, updatedAt: new Date().toISOString() };
         }
         return tab;
       })
@@ -506,9 +501,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch {}
   }, []);
 
-  // CORE DATA STATES (Bumped to v5720 for full media/visibility support across all niches)
+  // CORE DATA STATES (Bumped to v5790 for Advanced VA & Freelancer Skill Mastery offers + VIP Vault)
   const [services, setServices] = useState<Service[]>(() => {
-    const saved = localStorage.getItem('wh_services_v5720');
+    const saved = localStorage.getItem('wh_services_v5790');
     return saved ? JSON.parse(saved) : SERVICES;
   });
 
@@ -682,7 +677,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
-    const saved = localStorage.getItem('wh_cms_items_v5770');
+    const saved = localStorage.getItem('wh_cms_items_v5790');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -700,14 +695,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // CMS PROMOTIONAL & ADVERTISEMENTS ITEMS STATE (PARTNER DEALS & PROMO)
   const [promoItems, setPromoItems] = useState<PromoItem[]>(() => {
-    const saved = localStorage.getItem('wh_promo_items_v5720');
+    const saved = localStorage.getItem('wh_promo_items_v5790');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
           const existingIds = new Set(parsed.map((item: PromoItem) => item.id));
           const missingPromos = INITIAL_PROMO_ITEMS.filter((item) => !existingIds.has(item.id));
-          return [...missingPromos, ...parsed];
+          return [...missingPromos, ...parsed].sort((a, b) => (a.sortOrder ?? 99) - (b.sortOrder ?? 99));
         }
       } catch (e) {
         console.error('Failed to parse saved Promo items:', e);
@@ -876,7 +871,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     try {
-      localStorage.setItem('wh_services_v5720', JSON.stringify(services));
+      localStorage.setItem('wh_services_v5790', JSON.stringify(services));
       window.dispatchEvent(new CustomEvent('wh_services_changed', { detail: services }));
     } catch (e) {}
   }, [services]);
@@ -898,11 +893,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsCategories]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_items_v5770', JSON.stringify(cmsItems));
+    localStorage.setItem('wh_cms_items_v5790', JSON.stringify(cmsItems));
   }, [cmsItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_promo_items_v5720', JSON.stringify(promoItems));
+    localStorage.setItem('wh_promo_items_v5790', JSON.stringify(promoItems));
   }, [promoItems]);
 
   useEffect(() => {
@@ -1158,7 +1153,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
           return rawOwner === targetKey;
         })
-        .sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+        .sort((a, b) => (a.sortOrder ?? 99) - (b.sortOrder ?? 99));
 
       return deduplicateCMSItems(filtered);
     },
@@ -1239,7 +1234,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           seenTitles.add(normTitle);
           return true;
         })
-        .sort((a, b) => (a.sortOrder || 99) - (b.sortOrder || 99));
+        .sort((a, b) => (a.sortOrder ?? 99) - (b.sortOrder ?? 99));
     },
     [promoItems]
   );
@@ -1496,10 +1491,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // GOOGLE PLAY STORE ANDROID APP WINDOWS FRAME POPUP STATE
+  const persistPlayStoreToStorage = (configToSave: PlayStoreAppConfig) => {
+    const json = JSON.stringify(configToSave);
+    try {
+      localStorage.setItem('wh_playstore_config_v1', json);
+    } catch (e) {
+      // Free up localStorage space from telemetry/visitor logs if quota was exceeded by base64 images
+      try {
+        localStorage.removeItem('wh_telemetry_events');
+        localStorage.removeItem('wh_visitor_logs');
+        localStorage.setItem('wh_playstore_config_v1', json);
+      } catch (e2) {
+        console.error('Failed to persist PlayStore config to localStorage:', e2);
+      }
+    }
+  };
+
   const [playStoreConfig, setPlayStoreConfig] = useState<PlayStoreAppConfig>(() => {
     try {
       const saved = localStorage.getItem('wh_playstore_config_v1');
-      if (saved) return JSON.parse(saved);
+      if (saved) return { ...DEFAULT_PLAY_STORE_CONFIG, ...JSON.parse(saved) };
     } catch (e) {
       // ignore
     }
@@ -1507,12 +1518,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   useEffect(() => {
-    try {
-      localStorage.setItem('wh_playstore_config_v1', JSON.stringify(playStoreConfig));
-    } catch (e) {
-      // ignore
-    }
+    persistPlayStoreToStorage(playStoreConfig);
   }, [playStoreConfig]);
+
+  useEffect(() => {
+    const handleStorageSync = (e: StorageEvent) => {
+      if (e.key === 'wh_playstore_config_v1' && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          setPlayStoreConfig((prev) => ({ ...prev, ...parsed }));
+        } catch {}
+      }
+    };
+    window.addEventListener('storage', handleStorageSync);
+    return () => window.removeEventListener('storage', handleStorageSync);
+  }, []);
 
   const updatePlayStoreConfig = (updates: Partial<PlayStoreAppConfig>) => {
     setPlayStoreConfig((prev) => {
@@ -1521,8 +1541,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         ...updates,
         updatedAt: new Date().toISOString()
       };
+      persistPlayStoreToStorage(next);
       try {
-        localStorage.setItem('wh_playstore_config_v1', JSON.stringify(next));
         window.dispatchEvent(new CustomEvent('wh_playstore_config_changed', { detail: next }));
       } catch (e) {}
       return next;
@@ -1531,8 +1551,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const resetPlayStoreConfig = () => {
     setPlayStoreConfig(DEFAULT_PLAY_STORE_CONFIG);
+    persistPlayStoreToStorage(DEFAULT_PLAY_STORE_CONFIG);
     try {
-      localStorage.setItem('wh_playstore_config_v1', JSON.stringify(DEFAULT_PLAY_STORE_CONFIG));
       window.dispatchEvent(new CustomEvent('wh_playstore_config_changed', { detail: DEFAULT_PLAY_STORE_CONFIG }));
     } catch (e) {}
   };
@@ -1540,7 +1560,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // SERVICES PAGE HEADLINE CONFIG (/services)
   const [servicesHeadlineConfig, setServicesHeadlineConfig] = useState<ServicesHeadlineConfig>(() => {
     try {
-      const saved = localStorage.getItem('wh_services_headline_v1');
+      const saved = localStorage.getItem('wh_services_headline_v2');
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return DEFAULT_SERVICES_HEADLINE_CONFIG;
@@ -1548,7 +1568,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     try {
-      localStorage.setItem('wh_services_headline_v1', JSON.stringify(servicesHeadlineConfig));
+      localStorage.setItem('wh_services_headline_v2', JSON.stringify(servicesHeadlineConfig));
       window.dispatchEvent(
         new CustomEvent('wh_services_headline_changed', { detail: servicesHeadlineConfig })
       );

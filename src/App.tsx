@@ -14,8 +14,10 @@ import { AffiliateGuide } from './pages/AffiliateGuide';
 import { Admin } from './pages/Admin';
 import { DynamicNavPage } from './pages/DynamicNavPage';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { ExclusiveSkillsVault } from './pages/ExclusiveSkillsVault';
 import { ConsultationModal } from './components/ConsultationModal';
 import { PlayStoreModal } from './components/PlayStoreModal';
+import { SeeedStudioPopupModal } from './components/SeeedStudioPopupModal';
 import { GumroadModal } from './components/GumroadModal';
 import { ElevenLabsModal } from './components/ElevenLabsModal';
 import { StickyConversionBar } from './components/StickyConversionBar';
@@ -56,6 +58,8 @@ function AnimatedAppRoutes({ onOpenConsultation }: { onOpenConsultation: (svc?: 
         <Route path="/about" element={<About />} />
         <Route path="/affiliate-guide" element={<AffiliateGuide />} />
         <Route path="/affiliate-guide/" element={<AffiliateGuide />} />
+        <Route path="/exclusive-skills" element={<ExclusiveSkillsVault />} />
+        <Route path="/exclusive-skills/" element={<ExclusiveSkillsVault />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<PrivacyPolicy />} />
         <Route path="/admin" element={<Admin />} />
@@ -142,6 +146,7 @@ export function AppContent() {
           <LiveActivityTicker />
           <BackToTopButton />
           <CookieConsentBanner />
+          <SeeedStudioPopupModal />
           <PlayStoreModal />
         </div>
       </ThemeEngine>

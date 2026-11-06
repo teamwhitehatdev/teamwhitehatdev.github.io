@@ -51,8 +51,10 @@ import {
   NavTabConfig,
   BuilderBlockStyle,
   BuilderGridItem,
-  BuilderAccordionItem
+  BuilderAccordionItem,
+  CMSItem
 } from '../types';
+import { useApp } from '../context/AppContext';
 import { PREBUILT_BUILDER_TEMPLATES } from '../utils/builderTemplates';
 import { generateDefaultBlocksForExistedTab } from '../utils/existedTabDefaultBlocks';
 import { AutomatedWebsiteGeneratorModal } from './AutomatedWebsiteGeneratorModal';
@@ -78,6 +80,13 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   onCreateNewTabWithBuilder,
   onClose
 }) => {
+  const { cmsItems, updateCMSItem, addCMSItem, deleteCMSItem } = useApp();
+  const [leftSidebarMode, setLeftSidebarMode] = useState<'blocks' | 'niche-cms'>('blocks');
+  const [nicheSearchQuery, setNicheSearchQuery] = useState<string>('');
+  const [editingCmsItemId, setEditingCmsItemId] = useState<string | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
+  const hasUserEditedRef = useRef<boolean>(false);
+
   // Target tab state (or "new" tab)
   const [selectedTabId, setSelectedTabId] = useState<string>(
     initialTab?.id || (navTabs.length > 0 ? navTabs[0].id : 'new')
@@ -85,14 +94,20 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   const [newTabLabel, setNewTabLabel] = useState<string>('My Custom Landing Page');
   const [newTabSlug, setNewTabSlug] = useState<string>('landing-page');
 
+  const initialResolvedTab =
+    initialTab || (navTabs.length > 0 ? navTabs[0] : null);
+
   // Page Settings
   const [pageSettings, setPageSettings] = useState<BuilderPageSettings>(() => {
-    if (initialTab?.builderPageSettings) {
-      return initialTab.builderPageSettings;
+    if (initialResolvedTab?.builderPageSettings) {
+      return initialResolvedTab.builderPageSettings;
+    }
+    if (initialResolvedTab) {
+      return generateDefaultBlocksForExistedTab(initialResolvedTab).settings;
     }
     return {
-      pageTitle: initialTab?.label || 'Custom Landing Page',
-      pageSubtitle: initialTab?.heroSubtitle || 'Built with Team WhiteHat Dev Visual Page Builder.',
+      pageTitle: 'Custom Landing Page',
+      pageSubtitle: 'Built with Team WhiteHat Dev Visual Page Builder.',
       maxWidth: 'max-w-7xl',
       backgroundColor: '#f8fafc',
       fontFamily: 'inter'
@@ -101,10 +116,12 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
 
   // Canvas Blocks
   const [blocks, setBlocks] = useState<BuilderBlock[]>(() => {
-    if (initialTab?.builderBlocks && initialTab.builderBlocks.length > 0) {
-      return initialTab.builderBlocks;
+    if (initialResolvedTab?.builderBlocks && initialResolvedTab.builderBlocks.length > 0) {
+      return initialResolvedTab.builderBlocks;
     }
-    // Default to SaaS starter template
+    if (initialResolvedTab) {
+      return generateDefaultBlocksForExistedTab(initialResolvedTab).blocks;
+    }
     return PREBUILT_BUILDER_TEMPLATES[0].blocks;
   });
 
@@ -127,6 +144,7 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
 
   // Switch Target Tab & Automatically Load or Synthesize Existed Page Blocks
   const handleSelectTab = (tabId: string) => {
+    hasUserEditedRef.current = false;
     setSelectedTabId(tabId);
     if (tabId === 'new') {
       setNewTabLabel('My Custom Landing Page');
@@ -148,20 +166,20 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
         setBlocks(def.blocks);
         setPageSettings(def.settings);
         pushHistory(def.blocks);
-        showToast(`Synthesized editable blocks for "${targetTab.label}". Click Save to publish!`);
+        showToast(`Loaded editable layout for "${targetTab.label}". Drag, drop, or edit any block!`);
       }
     }
   };
 
-  // Automated Debounced Auto-Save for selected tab
+  // Automated Debounced Auto-Save for selected tab (triggers only after user edits/drags/loads)
   useEffect(() => {
-    if (selectedTabId === 'new') return;
+    if (selectedTabId === 'new' || !hasUserEditedRef.current) return;
     setAutoSaveStatus('saving');
     const timer = setTimeout(() => {
       onSaveToTab(selectedTabId, blocks, pageSettings);
       setAutoSaveStatus('saved');
       setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-    }, 2000);
+    }, 1200);
 
     return () => clearTimeout(timer);
   }, [blocks, pageSettings, selectedTabId]);
@@ -595,6 +613,7 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
     } else {
       nextBlocks = [...blocks, newBlock];
     }
+    hasUserEditedRef.current = true;
     setBlocks(nextBlocks);
     pushHistory(nextBlocks);
     setSelectedBlockId(newId);
@@ -602,12 +621,14 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   };
 
   const handleUpdateBlock = (id: string, updates: Partial<BuilderBlock>) => {
+    hasUserEditedRef.current = true;
     setBlocks((prev) =>
       prev.map((b) => (b.id === id ? { ...b, ...updates } : b))
     );
   };
 
   const handleUpdateBlockStyles = (id: string, styleUpdates: Partial<BuilderBlockStyle>) => {
+    hasUserEditedRef.current = true;
     setBlocks((prev) =>
       prev.map((b) =>
         b.id === id ? { ...b, styles: { ...b.styles, ...styleUpdates } } : b
@@ -616,6 +637,7 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   };
 
   const handleDeleteBlock = (id: string) => {
+    hasUserEditedRef.current = true;
     const updated = blocks.filter((b) => b.id !== id);
     setBlocks(updated);
     pushHistory(updated);
@@ -626,6 +648,7 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   };
 
   const handleDuplicateBlock = (id: string) => {
+    hasUserEditedRef.current = true;
     const blockToDup = blocks.find((b) => b.id === id);
     if (!blockToDup) return;
     const duplicated: BuilderBlock = {
@@ -642,6 +665,7 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   };
 
   const handleMoveBlock = (index: number, direction: 'up' | 'down') => {
+    hasUserEditedRef.current = true;
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= blocks.length) return;
     const newBlocks = [...blocks];
@@ -652,39 +676,147 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
     pushHistory(newBlocks);
   };
 
-  // Drag and drop reordering
+  // Drag and drop from Left Palette, WordPress Templates, Niche CMS, or Canvas Reordering
+  const handlePaletteDragStart = (e: React.DragEvent, blockType: BuilderBlockType) => {
+    draggedIndexRef.current = null;
+    e.dataTransfer.setData('application/x-builder-block', blockType);
+    e.dataTransfer.effectAllowed = 'copy';
+  };
+
+  const handleTemplateDragStart = (e: React.DragEvent, templateId: string) => {
+    draggedIndexRef.current = null;
+    e.dataTransfer.setData('application/x-builder-template', templateId);
+    e.dataTransfer.effectAllowed = 'copy';
+  };
+
+  const handleNicheCmsDragStart = (e: React.DragEvent, cmsItem: CMSItem) => {
+    draggedIndexRef.current = null;
+    e.dataTransfer.setData('application/x-builder-cms-item', JSON.stringify(cmsItem));
+    e.dataTransfer.effectAllowed = 'copy';
+  };
+
   const handleDragStart = (index: number) => {
     draggedIndexRef.current = index;
   };
 
   const handleDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
+    if (dropTargetIndex !== index) {
+      setDropTargetIndex(index);
+    }
   };
 
-  const handleDrop = (dropIndex: number) => {
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDropTargetIndex(null);
+
+    // 1. Check if a Component Block was dragged from the Left Sidebar
+    const paletteBlockType = e.dataTransfer.getData('application/x-builder-block') as BuilderBlockType;
+    if (paletteBlockType) {
+      handleAddBlock(paletteBlockType, dropIndex);
+      return;
+    }
+
+    // 2. Check if a WordPress Template was dragged from the Left Sidebar
+    const draggedTemplateId = e.dataTransfer.getData('application/x-builder-template');
+    if (draggedTemplateId) {
+      const tmpl = PREBUILT_BUILDER_TEMPLATES.find((t) => t.id === draggedTemplateId);
+      if (tmpl) {
+        hasUserEditedRef.current = true;
+        const clonedBlocks: BuilderBlock[] = JSON.parse(JSON.stringify(tmpl.blocks)).map(
+          (b: BuilderBlock, i: number) => ({
+            ...b,
+            id: `${b.id}-${Date.now()}-${i}`
+          })
+        );
+        const nextBlocks = [...blocks];
+        nextBlocks.splice(dropIndex, 0, ...clonedBlocks);
+        setBlocks(nextBlocks);
+        pushHistory(nextBlocks);
+        if (clonedBlocks[0]) setSelectedBlockId(clonedBlocks[0].id);
+        showToast(`Dropped WordPress template "${tmpl.name}" onto canvas!`);
+      }
+      return;
+    }
+
+    // 3. Check if a Website Niche / CMS Content Item was dragged onto the canvas
+    const draggedCmsJson = e.dataTransfer.getData('application/x-builder-cms-item');
+    if (draggedCmsJson) {
+      try {
+        const cmsItem = JSON.parse(draggedCmsJson) as CMSItem;
+        hasUserEditedRef.current = true;
+        const newBlock: BuilderBlock = {
+          id: `block-cms-${Date.now()}`,
+          type: cmsItem.mainImage ? '2-column' : 'card',
+          badgeText: `${cmsItem.category}${cmsItem.badge ? ` • ${cmsItem.badge}` : ''}`,
+          title: cmsItem.title,
+          subtitle: cmsItem.summary || 'Featured Website Niche & Content Guide',
+          content: cmsItem.description,
+          imageUrl: cmsItem.mainImage || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+          buttonText: cmsItem.buttonText || 'Read Complete Guide →',
+          buttonLink: cmsItem.url || '#/ai',
+          destinationLink: cmsItem.url || '#/ai',
+          styles: {
+            backgroundColor: '#ffffff',
+            borderRadius: '2xl',
+            paddingY: 'lg',
+            paddingX: 'md',
+            borderColor: '#e2e8f0',
+            borderWidth: 'thin',
+            shadow: 'sm'
+          }
+        };
+        const nextBlocks = [...blocks];
+        nextBlocks.splice(dropIndex, 0, newBlock);
+        setBlocks(nextBlocks);
+        pushHistory(nextBlocks);
+        setSelectedBlockId(newBlock.id);
+        showToast(`Added Niche Content "${cmsItem.title}" to canvas!`);
+      } catch {}
+      return;
+    }
+
+    // 4. Reorder existing canvas blocks
     const dragIndex = draggedIndexRef.current;
     if (dragIndex === null || dragIndex === dropIndex) return;
 
+    hasUserEditedRef.current = true;
     const newBlocks = [...blocks];
     const draggedItem = newBlocks.splice(dragIndex, 1)[0];
     newBlocks.splice(dropIndex, 0, draggedItem);
     setBlocks(newBlocks);
+    pushHistory(newBlocks);
     draggedIndexRef.current = null;
     showToast('Layout reordered');
   };
 
-  // Template loader
-  const handleLoadTemplate = (templateId: string) => {
+  // Template loader (1-Click Load or Append)
+  const handleLoadTemplate = (templateId: string, mode: 'replace' | 'append' = 'replace') => {
     const tmpl = PREBUILT_BUILDER_TEMPLATES.find((t) => t.id === templateId);
     if (!tmpl) return;
-    if (window.confirm(`Load template "${tmpl.name}"? This will replace current blocks.`)) {
-      setBlocks(JSON.parse(JSON.stringify(tmpl.blocks)));
-      setPageSettings(JSON.parse(JSON.stringify(tmpl.settings)));
-      if (tmpl.blocks.length > 0) {
-        setSelectedBlockId(tmpl.blocks[0].id);
-      }
-      showToast(`Loaded "${tmpl.name}" template`);
+    hasUserEditedRef.current = true;
+    const clonedBlocks: BuilderBlock[] = JSON.parse(JSON.stringify(tmpl.blocks)).map(
+      (b: BuilderBlock, i: number) => ({
+        ...b,
+        id: `${b.id}-${Date.now()}-${i}`
+      })
+    );
+    if (mode === 'append') {
+      const next = [...blocks, ...clonedBlocks];
+      setBlocks(next);
+      pushHistory(next);
+      if (clonedBlocks[0]) setSelectedBlockId(clonedBlocks[0].id);
+      showToast(`Appended "${tmpl.name}" WordPress blocks to canvas!`);
+      return;
     }
+    setBlocks(clonedBlocks);
+    setPageSettings(JSON.parse(JSON.stringify(tmpl.settings)));
+    pushHistory(clonedBlocks);
+    if (clonedBlocks.length > 0) {
+      setSelectedBlockId(clonedBlocks[0].id);
+    }
+    showToast(`Loaded "${tmpl.name}" WordPress layout!`);
   };
 
   // Save to Navigation Tab
@@ -1026,222 +1158,534 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
       {/* ===================================================================== */}
       <div className="flex-1 flex overflow-hidden">
         {/* =================================================================== */}
-        {/* 🎨 LEFT PALETTE: WIX / ELEMENTOR STYLE COMPONENT LIBRARY            */}
+        {/* 🎨 LEFT PALETTE: WIX / ELEMENTOR STYLE COMPONENT LIBRARY + NICHE CMS */}
         {/* =================================================================== */}
         {!isPreviewMode && (
-          <aside className="w-64 sm:w-72 bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto">
-            {/* TEMPLATE PICKER ACCORDION */}
-            <div className="p-4 border-b border-slate-100 space-y-2.5 bg-slate-50/50">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                  WordPress &amp; Starter Templates
-                </span>
-                <span className="text-[9px] font-bold bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded-full">
-                  {PREBUILT_BUILDER_TEMPLATES.length} Styles
-                </span>
-              </div>
-
-              {/* QUICK EMPTY PAGE ACTION BUTTON */}
+          <aside className="w-72 sm:w-80 bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto">
+            {/* LEFT SIDEBAR MODE SWITCHER: 1. BUILDER BLOCKS & WP LAYOUTS vs 2. LIVE NICHE & CMS EDITOR */}
+            <div className="p-2.5 bg-slate-900 text-white grid grid-cols-2 gap-1.5 shrink-0">
               <button
                 type="button"
-                onClick={() => {
-                  if (window.confirm('Clear canvas and start with a fresh Empty Page Canvas?')) {
-                    handleLoadTemplate('template-wp-empty-canvas');
-                  }
-                }}
-                className="w-full py-2 px-3 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                onClick={() => setLeftSidebarMode('blocks')}
+                className={`py-2 px-2.5 rounded-xl text-[11px] font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  leftSidebarMode === 'blocks'
+                    ? 'bg-emerald-500 text-slate-950 shadow-xs'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`}
               >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>+ Start Blank Empty Page Canvas</span>
+                <LayoutTemplate className="w-3.5 h-3.5 shrink-0" />
+                <span>WP Layouts &amp; Blocks</span>
               </button>
-
-              <div className="grid grid-cols-2 gap-1.5 text-[11px] max-h-44 overflow-y-auto pr-1">
-                {PREBUILT_BUILDER_TEMPLATES.map((tmpl) => (
-                  <button
-                    key={tmpl.id}
-                    onClick={() => handleLoadTemplate(tmpl.id)}
-                    className="p-2 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/30 text-left transition-all cursor-pointer group"
-                  >
-                    <div className="font-bold text-slate-800 group-hover:text-emerald-700 truncate">
-                      {tmpl.name}
-                    </div>
-                    <span className="text-[9px] text-slate-400 font-semibold">{tmpl.badge}</span>
-                  </button>
-                ))}
-              </div>
+              <button
+                type="button"
+                onClick={() => setLeftSidebarMode('niche-cms')}
+                className={`py-2 px-2.5 rounded-xl text-[11px] font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  leftSidebarMode === 'niche-cms'
+                    ? 'bg-indigo-500 text-white shadow-xs'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`}
+              >
+                <Edit3 className="w-3.5 h-3.5 shrink-0" />
+                <span>Edit Niches &amp; CMS ({cmsItems.length})</span>
+              </button>
             </div>
 
-            {/* DRAGGABLE & CLICKABLE COMPONENT BLOCKS */}
-            <div className="p-4 space-y-5 text-xs">
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                  Layout &amp; Structure
-                </span>
-                <div className="grid grid-cols-2 gap-2">
-                  {/* EMPTY COLUMN / CUSTOM SECTION COMPONENT */}
+            {leftSidebarMode === 'niche-cms' ? (
+              /* =============================================================== */
+              /* ✏️ LIVE WEBSITE NICHE & CMS CONTENT EDITOR + DRAG TO CANVAS     */
+              /* =============================================================== */
+              <div className="p-3.5 space-y-3 text-xs flex-1 overflow-y-auto">
+                <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 space-y-1.5">
+                  <div className="font-extrabold text-indigo-950 flex items-center justify-between">
+                    <span>All Website Niches &amp; Contents</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newId = `cms-custom-${Date.now()}`;
+                        const newItem: CMSItem = {
+                          id: newId,
+                          pageOwner: 'ai',
+                          homeFeatured: true,
+                          contentType: 'Guide',
+                          title: 'New Custom Niche Masterclass & Guide',
+                          category: 'VIRTUAL ASSISTANT CAREER',
+                          description: 'Step-by-step actionable guide, checklist, and real-world workflow.',
+                          fullContent: 'Write your complete tutorial, SOP steps, and takeaways here...',
+                          badge: 'NEW GUIDE',
+                          status: 'PUBLISHED',
+                          visible: true,
+                          createdAt: new Date().toISOString(),
+                          updatedAt: new Date().toISOString()
+                        };
+                        addCMSItem(newItem);
+                        setEditingCmsItemId(newId);
+                        showToast('Created new Niche & Content item!');
+                      }}
+                      className="px-2 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold cursor-pointer"
+                    >
+                      + Add Niche
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-indigo-900/80 leading-relaxed">
+                    Click any Niche / Content item below to edit its live title, category, description, full content, or image across your website — or <strong>drag it onto the canvas</strong>!
+                  </p>
+                </div>
+
+                <input
+                  type="text"
+                  value={nicheSearchQuery}
+                  onChange={(e) => setNicheSearchQuery(e.target.value)}
+                  placeholder="Search niches, guides, AI, VA, SEO..."
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:bg-white focus:border-indigo-600"
+                />
+
+                <div className="space-y-2">
+                  {cmsItems
+                    .filter((item) => {
+                      const q = nicheSearchQuery.toLowerCase().trim();
+                      if (!q) return true;
+                      return (
+                        item.title.toLowerCase().includes(q) ||
+                        item.category.toLowerCase().includes(q) ||
+                        item.description.toLowerCase().includes(q)
+                      );
+                    })
+                    .map((item) => {
+                      const isEditingThis = editingCmsItemId === item.id;
+                      return (
+                        <div
+                          key={item.id}
+                          draggable={!isEditingThis}
+                          onDragStart={(e) => handleNicheCmsDragStart(e, item)}
+                          className={`p-3 rounded-xl border transition-all ${
+                            isEditingThis
+                              ? 'bg-indigo-50/50 border-indigo-400 shadow-sm'
+                              : 'bg-white hover:border-indigo-300 border-slate-200 cursor-grab active:cursor-grabbing'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div
+                              onClick={() => setEditingCmsItemId(isEditingThis ? null : item.id)}
+                              className="space-y-0.5 cursor-pointer flex-1"
+                            >
+                              <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 inline-block">
+                                {item.category}
+                              </span>
+                              <h4 className="font-bold text-slate-900 text-xs leading-snug line-clamp-2">
+                                {item.title}
+                              </h4>
+                            </div>
+                            <div className="flex items-center gap-1 shrink-0">
+                              <button
+                                type="button"
+                                onClick={() => setEditingCmsItemId(isEditingThis ? null : item.id)}
+                                className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-800 font-bold text-[10px] cursor-pointer"
+                              >
+                                {isEditingThis ? 'Done' : 'Edit'}
+                              </button>
+                            </div>
+                          </div>
+
+                          {isEditingThis && (
+                            <div className="mt-3 pt-3 border-t border-indigo-200/80 space-y-2.5">
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-600 block mb-0.5">
+                                  Niche Title
+                                </label>
+                                <input
+                                  type="text"
+                                  value={item.title}
+                                  onChange={(e) => updateCMSItem(item.id, { title: e.target.value })}
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold"
+                                />
+                              </div>
+                              <div className="grid grid-cols-2 gap-1.5">
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5">
+                                    Category
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={item.category}
+                                    onChange={(e) => updateCMSItem(item.id, { category: e.target.value })}
+                                    className="w-full px-2 py-1 bg-white border border-slate-300 rounded-lg text-[11px]"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-600 block mb-0.5">
+                                    Badge
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={item.badge || ''}
+                                    onChange={(e) => updateCMSItem(item.id, { badge: e.target.value })}
+                                    className="w-full px-2 py-1 bg-white border border-slate-300 rounded-lg text-[11px]"
+                                  />
+                                </div>
+                              </div>
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-600 block mb-0.5">
+                                  Summary / Card Description
+                                </label>
+                                <textarea
+                                  rows={2}
+                                  value={item.description}
+                                  onChange={(e) => updateCMSItem(item.id, { description: e.target.value })}
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-[11px]"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-600 block mb-0.5">
+                                  Full Article / Guide Content
+                                </label>
+                                <textarea
+                                  rows={4}
+                                  value={item.fullContent || ''}
+                                  onChange={(e) => updateCMSItem(item.id, { fullContent: e.target.value })}
+                                  className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-[11px] font-mono"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[10px] font-bold text-slate-600 block mb-0.5">
+                                  Destination URL
+                                </label>
+                                <input
+                                  type="text"
+                                  value={item.url || ''}
+                                  onChange={(e) => updateCMSItem(item.id, { url: e.target.value })}
+                                  placeholder="https://..."
+                                  className="w-full px-2.5 py-1 bg-white border border-slate-300 rounded-lg text-[11px]"
+                                />
+                              </div>
+                              <div className="flex items-center justify-between pt-1">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    hasUserEditedRef.current = true;
+                                    const newBlock: BuilderBlock = {
+                                      id: `block-cms-${Date.now()}`,
+                                      type: item.mainImage ? '2-column' : 'card',
+                                      badgeText: `${item.category}${item.badge ? ` • ${item.badge}` : ''}`,
+                                      title: item.title,
+                                      subtitle: item.summary || 'Featured Website Niche & Content Guide',
+                                      content: item.description,
+                                      imageUrl: item.mainImage || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+                                      buttonText: item.buttonText || 'Read Complete Guide →',
+                                      buttonLink: item.url || '#/ai',
+                                      destinationLink: item.url || '#/ai',
+                                      styles: {
+                                        backgroundColor: '#ffffff',
+                                        borderRadius: '2xl',
+                                        paddingY: 'lg',
+                                        paddingX: 'md',
+                                        borderColor: '#e2e8f0',
+                                        borderWidth: 'thin',
+                                        shadow: 'sm'
+                                      }
+                                    };
+                                    const next = [...blocks, newBlock];
+                                    setBlocks(next);
+                                    pushHistory(next);
+                                    setSelectedBlockId(newBlock.id);
+                                    showToast(`Inserted "${item.title}" onto canvas!`);
+                                  }}
+                                  className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] cursor-pointer"
+                                >
+                                  + Insert on Canvas
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (window.confirm(`Delete "${item.title}" from CMS?`)) {
+                                      deleteCMSItem(item.id);
+                                      showToast('Deleted Niche item');
+                                    }
+                                  }}
+                                  className="px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-[10px] cursor-pointer"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* TEMPLATE PICKER ACCORDION (CLICK OR DRAG WORDPRESS TEMPLATES) */}
+                <div className="p-4 border-b border-slate-100 space-y-2.5 bg-slate-50/50">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                      WordPress &amp; Starter Layouts (Click or Drag)
+                    </span>
+                    <span className="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-full">
+                      {PREBUILT_BUILDER_TEMPLATES.length} WordPress Themes
+                    </span>
+                  </div>
+
+                  {/* QUICK EMPTY PAGE ACTION BUTTON */}
                   <button
-                    onClick={() => handleAddBlock('empty-column')}
-                    className="p-3 bg-emerald-50/80 hover:bg-emerald-100/90 hover:border-emerald-500 border border-emerald-300 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1 col-span-2 shadow-2xs"
+                    type="button"
+                    onClick={() => handleLoadTemplate('template-wp-empty-canvas', 'replace')}
+                    className="w-full py-2 px-3 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer"
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 font-bold text-emerald-950">
-                        <Columns className="w-4 h-4 text-emerald-700" />
-                        <span>Empty Column / Custom Section</span>
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>+ Start Blank Empty Page Canvas</span>
+                  </button>
+
+                  <div className="grid grid-cols-1 gap-1.5 text-[11px] max-h-56 overflow-y-auto pr-1">
+                    {PREBUILT_BUILDER_TEMPLATES.map((tmpl) => (
+                      <div
+                        key={tmpl.id}
+                        draggable
+                        onDragStart={(e) => handleTemplateDragStart(e, tmpl.id)}
+                        className="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/30 text-left transition-all cursor-grab active:cursor-grabbing group flex items-center justify-between gap-2 shadow-2xs"
+                      >
+                        <div
+                          onClick={() => handleLoadTemplate(tmpl.id, 'replace')}
+                          className="min-w-0 flex-1 cursor-pointer"
+                        >
+                          <div className="font-bold text-slate-800 group-hover:text-emerald-700 truncate">
+                            ⠿ {tmpl.name}
+                          </div>
+                          <span className="text-[9px] text-slate-400 font-semibold">
+                            {tmpl.badge} • {tmpl.blocks.length} Sections
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => handleLoadTemplate(tmpl.id, 'replace')}
+                            className="px-2 py-1 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] cursor-pointer"
+                            title="Load full WordPress template"
+                          >
+                            Load
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleLoadTemplate(tmpl.id, 'append')}
+                            className="px-2 py-1 rounded-md bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-800 font-bold text-[10px] cursor-pointer"
+                            title="Append template blocks to current canvas"
+                          >
+                            +Add
+                          </button>
+                        </div>
                       </div>
-                      <span className="px-1.5 py-0.5 rounded bg-emerald-200 text-emerald-900 text-[9px] font-bold">Custom</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* DRAGGABLE & CLICKABLE COMPONENT BLOCKS */}
+                <div className="p-4 space-y-5 text-xs">
+                  <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-900 font-semibold flex items-center gap-2">
+                    <span className="text-base">✋</span>
+                    <span><strong>Drag &amp; Drop</strong> any block below onto the canvas — or click to insert immediately!</span>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                      Layout &amp; Structure (Drag or Click)
+                    </span>
+                    <div className="grid grid-cols-2 gap-2">
+                      {/* EMPTY COLUMN / CUSTOM SECTION COMPONENT */}
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'empty-column')}
+                        onClick={() => handleAddBlock('empty-column')}
+                        className="p-3 bg-emerald-50/80 hover:bg-emerald-100/90 hover:border-emerald-500 border border-emerald-300 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1 col-span-2 shadow-2xs"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 font-bold text-emerald-950">
+                            <Columns className="w-4 h-4 text-emerald-700" />
+                            <span>⠿ Empty Column / Custom Section</span>
+                          </div>
+                          <span className="px-1.5 py-0.5 rounded bg-emerald-200 text-emerald-900 text-[9px] font-bold">Drag / Click</span>
+                        </div>
+                        <span className="text-[10px] text-emerald-800">1 to 4 customizable columns • Add custom niche text, media &amp; destination links</span>
+                      </button>
+
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'hero')}
+                        onClick={() => handleAddBlock('hero')}
+                        className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Layout className="w-4 h-4 text-emerald-600" />
+                        <span className="font-bold text-slate-900">⠿ Hero Banner</span>
+                        <span className="text-[10px] text-slate-500">Headline + CTA</span>
+                      </button>
+
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, '2-column')}
+                        onClick={() => handleAddBlock('2-column')}
+                        className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Square className="w-4 h-4 text-emerald-600" />
+                        <span className="font-bold text-slate-900">⠿ 2-Column Split</span>
+                        <span className="text-[10px] text-slate-500">Text + Media</span>
+                      </button>
+
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'features-grid')}
+                        onClick={() => handleAddBlock('features-grid')}
+                        className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Layers className="w-4 h-4 text-emerald-600" />
+                        <span className="font-bold text-slate-900">⠿ 3-Col Grid</span>
+                        <span className="text-[10px] text-slate-500">Feature Cards</span>
+                      </button>
+
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'card')}
+                        onClick={() => handleAddBlock('card')}
+                        className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Square className="w-4 h-4 text-emerald-600" />
+                        <span className="font-bold text-slate-900">⠿ Panel Card</span>
+                        <span className="text-[10px] text-slate-500">Glass Panel</span>
+                      </button>
                     </div>
-                    <span className="text-[10px] text-emerald-800">1 to 4 customizable columns • Add custom niche text, media &amp; destination links</span>
-                  </button>
+                  </div>
 
-                  <button
-                    onClick={() => handleAddBlock('hero')}
-                    className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Layout className="w-4 h-4 text-emerald-600" />
-                    <span className="font-bold text-slate-900">Hero Banner</span>
-                    <span className="text-[10px] text-slate-500">Headline + CTA</span>
-                  </button>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                      Typography &amp; Content (Drag or Click)
+                    </span>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'heading')}
+                        onClick={() => handleAddBlock('heading')}
+                        className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Type className="w-4 h-4 text-indigo-600" />
+                        <span className="font-bold text-slate-900">⠿ Heading</span>
+                        <span className="text-[10px] text-slate-500">H1, H2, H3</span>
+                      </button>
 
-                  <button
-                    onClick={() => handleAddBlock('2-column')}
-                    className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Square className="w-4 h-4 text-emerald-600" />
-                    <span className="font-bold text-slate-900">2-Column Split</span>
-                    <span className="text-[10px] text-slate-500">Text + Media</span>
-                  </button>
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'paragraph')}
+                        onClick={() => handleAddBlock('paragraph')}
+                        className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Edit3 className="w-4 h-4 text-indigo-600" />
+                        <span className="font-bold text-slate-900">⠿ Paragraph</span>
+                        <span className="text-[10px] text-slate-500">Rich Description</span>
+                      </button>
+                    </div>
+                  </div>
 
-                  <button
-                    onClick={() => handleAddBlock('features-grid')}
-                    className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Layers className="w-4 h-4 text-emerald-600" />
-                    <span className="font-bold text-slate-900">3-Col Grid</span>
-                    <span className="text-[10px] text-slate-500">Feature Cards</span>
-                  </button>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                      Media &amp; Interactive (Drag or Click)
+                    </span>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'image')}
+                        onClick={() => handleAddBlock('image')}
+                        className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <ImageIcon className="w-4 h-4 text-emerald-600" />
+                        <span className="font-bold text-slate-900">⠿ Image Banner</span>
+                        <span className="text-[10px] text-slate-500">Graphic / Photo</span>
+                      </button>
 
-                  <button
-                    onClick={() => handleAddBlock('card')}
-                    className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Square className="w-4 h-4 text-emerald-600" />
-                    <span className="font-bold text-slate-900">Panel Card</span>
-                    <span className="text-[10px] text-slate-500">Glass Panel</span>
-                  </button>
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'video')}
+                        onClick={() => handleAddBlock('video')}
+                        className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Video className="w-4 h-4 text-emerald-600" />
+                        <span className="font-bold text-slate-900">⠿ Video Player</span>
+                        <span className="text-[10px] text-slate-500">YouTube / Stream</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                      Action &amp; Conversion (Drag or Click)
+                    </span>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'button')}
+                        onClick={() => handleAddBlock('button')}
+                        className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <MousePointer className="w-4 h-4 text-indigo-600" />
+                        <span className="font-bold text-slate-900">⠿ CTA Button</span>
+                        <span className="text-[10px] text-slate-500">Action Link</span>
+                      </button>
+
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'call-to-action')}
+                        onClick={() => handleAddBlock('call-to-action')}
+                        className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Megaphone className="w-4 h-4 text-indigo-600" />
+                        <span className="font-bold text-slate-900">⠿ CTA Banner</span>
+                        <span className="text-[10px] text-slate-500">High Converting</span>
+                      </button>
+
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'accordion')}
+                        onClick={() => handleAddBlock('accordion')}
+                        className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <HelpCircle className="w-4 h-4 text-indigo-600" />
+                        <span className="font-bold text-slate-900">⠿ Accordion FAQ</span>
+                        <span className="text-[10px] text-slate-500">Collapsible</span>
+                      </button>
+
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'badge')}
+                        onClick={() => handleAddBlock('badge')}
+                        className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Sparkles className="w-4 h-4 text-indigo-600" />
+                        <span className="font-bold text-slate-900">⠿ Status Badge</span>
+                        <span className="text-[10px] text-slate-500">Cyber Tag</span>
+                      </button>
+
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'divider')}
+                        onClick={() => handleAddBlock('divider')}
+                        className="p-3 bg-slate-50 hover:bg-slate-200 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Minus className="w-4 h-4 text-slate-600" />
+                        <span className="font-bold text-slate-900">⠿ Divider</span>
+                        <span className="text-[10px] text-slate-500">Spacer Line</span>
+                      </button>
+
+                      <button
+                        draggable
+                        onDragStart={(e) => handlePaletteDragStart(e, 'html-embed')}
+                        onClick={() => handleAddBlock('html-embed')}
+                        className="p-3 bg-slate-50 hover:bg-slate-200 border border-slate-200 rounded-xl text-left transition-all cursor-grab active:cursor-grabbing flex flex-col gap-1"
+                      >
+                        <Code className="w-4 h-4 text-slate-600" />
+                        <span className="font-bold text-slate-900">⠿ HTML Embed</span>
+                        <span className="text-[10px] text-slate-500">Raw Script/Iframe</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                  Typography &amp; Content
-                </span>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => handleAddBlock('heading')}
-                    className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Type className="w-4 h-4 text-indigo-600" />
-                    <span className="font-bold text-slate-900">Heading</span>
-                    <span className="text-[10px] text-slate-500">H1, H2, H3</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleAddBlock('paragraph')}
-                    className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Edit3 className="w-4 h-4 text-indigo-600" />
-                    <span className="font-bold text-slate-900">Paragraph</span>
-                    <span className="text-[10px] text-slate-500">Rich Description</span>
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                  Media &amp; Interactive
-                </span>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => handleAddBlock('image')}
-                    className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <ImageIcon className="w-4 h-4 text-emerald-600" />
-                    <span className="font-bold text-slate-900">Image Banner</span>
-                    <span className="text-[10px] text-slate-500">Graphic / Photo</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleAddBlock('video')}
-                    className="p-3 bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Video className="w-4 h-4 text-emerald-600" />
-                    <span className="font-bold text-slate-900">Video Player</span>
-                    <span className="text-[10px] text-slate-500">YouTube / Stream</span>
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                  Action &amp; Conversion
-                </span>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => handleAddBlock('button')}
-                    className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <MousePointer className="w-4 h-4 text-indigo-600" />
-                    <span className="font-bold text-slate-900">CTA Button</span>
-                    <span className="text-[10px] text-slate-500">Action Link</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleAddBlock('call-to-action')}
-                    className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Megaphone className="w-4 h-4 text-indigo-600" />
-                    <span className="font-bold text-slate-900">CTA Banner</span>
-                    <span className="text-[10px] text-slate-500">High Converting</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleAddBlock('accordion')}
-                    className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <HelpCircle className="w-4 h-4 text-indigo-600" />
-                    <span className="font-bold text-slate-900">Accordion FAQ</span>
-                    <span className="text-[10px] text-slate-500">Collapsible</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleAddBlock('badge')}
-                    className="p-3 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-400 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Sparkles className="w-4 h-4 text-indigo-600" />
-                    <span className="font-bold text-slate-900">Status Badge</span>
-                    <span className="text-[10px] text-slate-500">Cyber Tag</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleAddBlock('divider')}
-                    className="p-3 bg-slate-50 hover:bg-slate-200 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Minus className="w-4 h-4 text-slate-600" />
-                    <span className="font-bold text-slate-900">Divider</span>
-                    <span className="text-[10px] text-slate-500">Spacer Line</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleAddBlock('html-embed')}
-                    className="p-3 bg-slate-50 hover:bg-slate-200 border border-slate-200 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1"
-                  >
-                    <Code className="w-4 h-4 text-slate-600" />
-                    <span className="font-bold text-slate-900">HTML Embed</span>
-                    <span className="text-[10px] text-slate-500">Raw Script/Iframe</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+              </>
+            )}
           </aside>
         )}
 
@@ -1250,9 +1694,10 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
         {/* =================================================================== */}
         <main
           className="flex-1 bg-slate-200/70 p-4 sm:p-8 overflow-y-auto flex flex-col items-center"
-          onClick={() => {
-            // Deselect when clicking canvas background
+          onDragOver={(e) => {
+            e.preventDefault();
           }}
+          onDrop={(e) => handleDrop(e, blocks.length)}
         >
           {/* VIEWPORT SIZING CONTAINER */}
           <div
@@ -1268,14 +1713,20 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
             {/* CANVAS BLOCKS CONTAINER */}
             <div className="p-4 sm:p-8 space-y-6">
               {blocks.length === 0 ? (
-                <div className="py-20 text-center space-y-4 bg-white/70 border-2 border-dashed border-slate-300 rounded-3xl p-8">
-                  <Layout className="w-12 h-12 text-slate-400 mx-auto" />
-                  <h3 className="text-lg font-bold text-slate-800">Your Canvas is Empty</h3>
+                <div
+                  onDragOver={(e) => handleDragOver(e, 0)}
+                  onDrop={(e) => handleDrop(e, 0)}
+                  className="py-20 text-center space-y-4 bg-white/80 border-2 border-dashed border-emerald-400 rounded-3xl p-8 transition-all"
+                >
+                  <Layout className="w-12 h-12 text-emerald-600 mx-auto" />
+                  <h3 className="text-lg font-bold text-slate-800">
+                    Drag &amp; Drop Any Block or WordPress Layout Here
+                  </h3>
                   <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                    Click any element from the left library or pick a starter template above to build your page.
+                    Drag any element, WordPress theme, or Niche CMS item from the left library onto this canvas — or click below to load a starter layout.
                   </p>
                   <button
-                    onClick={() => handleLoadTemplate('template-saas-landing')}
+                    onClick={() => handleLoadTemplate('template-saas-landing', 'replace')}
                     className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer"
                   >
                     Load SaaS Starter Template
@@ -1298,12 +1749,19 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                       draggable={!isPreviewMode}
                       onDragStart={() => handleDragStart(index)}
                       onDragOver={(e) => handleDragOver(e, index)}
-                      onDrop={() => handleDrop(index)}
+                      onDragLeave={() => {
+                        if (dropTargetIndex === index) setDropTargetIndex(null);
+                      }}
+                      onDrop={(e) => handleDrop(e, index)}
                       onClick={(e) => {
                         e.stopPropagation();
                         if (!isPreviewMode) setSelectedBlockId(block.id);
                       }}
                       className={`relative group transition-all ${
+                        dropTargetIndex === index
+                          ? 'pt-6 before:content-["↓_DROP_HERE_TO_INSERT_OR_REORDER"] before:absolute before:top-0 before:left-0 before:right-0 before:h-5 before:bg-emerald-500 before:text-slate-950 before:text-[10px] before:font-mono before:font-black before:flex before:items-center before:justify-center before:rounded-lg before:shadow-sm'
+                          : ''
+                      } ${
                         isSelected
                           ? 'ring-2 ring-indigo-600 ring-offset-2 shadow-lg'
                           : 'hover:ring-1 hover:ring-slate-300'
@@ -2562,6 +3020,31 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
           </div>
         </div>
       )}
+
+      {/* ⚡ AUTOMATED WORDPRESS WEBSITE GENERATOR MODAL */}
+      <AutomatedWebsiteGeneratorModal
+        isOpen={isAutoGeneratorOpen}
+        navTabs={navTabs}
+        currentTabId={selectedTabId}
+        onClose={() => setIsAutoGeneratorOpen(false)}
+        onApplyGeneratedSite={(generatedBlocks, generatedSettings, targetTabId) => {
+          hasUserEditedRef.current = true;
+          if (targetTabId && targetTabId !== selectedTabId) {
+            setSelectedTabId(targetTabId);
+          }
+          setBlocks(generatedBlocks);
+          setPageSettings(generatedSettings);
+          pushHistory(generatedBlocks);
+          if (generatedBlocks[0]) {
+            setSelectedBlockId(generatedBlocks[0].id);
+          }
+          if (targetTabId && targetTabId !== 'new') {
+            onSaveToTab(targetTabId, generatedBlocks, generatedSettings);
+          }
+          setIsAutoGeneratorOpen(false);
+          showToast('Generated & applied complete WordPress layout!');
+        }}
+      />
     </div>
   );
 };

@@ -4,12 +4,90 @@ import { useApp } from '../context/AppContext';
 import { AdSenseSlot } from './AdSenseSlot';
 
 export const DynamicAdsSidebar: React.FC = () => {
-  const { getPublicPromoItems } = useApp();
+  const { getPublicPromoItems, playStoreConfig } = useApp();
   const partnerDeals =
     typeof getPublicPromoItems === 'function' ? getPublicPromoItems('partner-deals') : [];
 
   return (
     <div className="space-y-5 select-none">
+      {/* LIVE GOOGLE PLAY STORE SUGGESTED APPLICATION CARD (SYNCED WITH /#/ADMIN POPUP CMS) */}
+      {playStoreConfig && playStoreConfig.enabled !== false && (
+        <div className="white-glass-card rounded-2xl overflow-hidden border border-slate-300 shadow-xs">
+          <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white px-3.5 py-2 flex items-center justify-between text-[10px] font-mono font-bold">
+            <span className="truncate flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block" />
+              <span>{playStoreConfig.windowTitle || 'Google Play™ Store.exe'}</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('wh_playstore_wake_up'))}
+              className="px-2 py-0.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 text-[9px] font-bold cursor-pointer"
+            >
+              Pop Out
+            </button>
+          </div>
+
+          {playStoreConfig.bannerImageUrl && !playStoreConfig.hideBannerImage && (
+            <a
+              href={playStoreConfig.playStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block relative h-36 overflow-hidden border-b border-slate-200 bg-slate-900"
+            >
+              <img
+                src={playStoreConfig.bannerImageUrl}
+                alt={playStoreConfig.appName}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              />
+            </a>
+          )}
+
+          <div className="p-3.5 space-y-2.5">
+            <div className="flex items-center gap-2.5">
+              {playStoreConfig.appIconUrl && !playStoreConfig.hideAppIcon ? (
+                <img
+                  src={playStoreConfig.appIconUrl}
+                  alt={playStoreConfig.appName}
+                  className="w-11 h-11 rounded-xl object-cover border border-slate-200 shrink-0"
+                />
+              ) : (
+                <div className="w-11 h-11 rounded-xl bg-emerald-600 text-white font-black flex items-center justify-center shrink-0">
+                  ▶
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <h4 className="text-xs font-extrabold text-slate-900 truncate">
+                  {playStoreConfig.appName}
+                </h4>
+                <p className="text-[10px] font-semibold text-emerald-700 truncate">
+                  {playStoreConfig.developerName}
+                </p>
+                <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
+                  <span className="font-bold text-amber-600">★ {playStoreConfig.rating || 4.9}</span>
+                  <span>•</span>
+                  <span>{playStoreConfig.downloadsCount || '50K+'}</span>
+                </div>
+              </div>
+            </div>
+
+            {playStoreConfig.description && (
+              <p className="text-[11px] text-slate-600 line-clamp-2 leading-snug">
+                {playStoreConfig.description}
+              </p>
+            )}
+
+            <a
+              href={playStoreConfig.playStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-[11px] uppercase flex items-center justify-center gap-1.5 transition-all"
+            >
+              <span>{playStoreConfig.ctaButtonText || 'GET IT ON GOOGLE PLAY'}</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        </div>
+      )}
       {/* SECTION HEADER: VERIFIED MARKETPLACE STYLE PARTNER DEALS */}
       <div className="flex items-center justify-between white-glass-card p-3.5 rounded-2xl">
         <span className="text-xs font-extrabold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">

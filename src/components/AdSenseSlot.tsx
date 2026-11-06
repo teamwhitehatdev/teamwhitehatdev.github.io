@@ -9,6 +9,21 @@ export interface AdSenseSlotProps {
 
 const PARTNER_FEATURED_ADS = [
   {
+    id: 'partner-seeedstudio-meshtastic',
+    title: 'Wio Tracker L2 Pro for Meshtastic',
+    vendor: 'by Seeed Studio Official Hardware Partner (LF0tCxl)',
+    category: 'Black Friday & Thanksgiving Promo',
+    rating: '5.0',
+    reviews: '3.4k+',
+    sales: 'Doorbuster Promo Live',
+    priceBadge: 'SAVE BIG NOW',
+    subPrice: 'Black Friday & Thanksgiving Promo',
+    badge: 'Black Friday & Thanksgiving Promo',
+    image: './seeedstudio_affiliate_1200x628.jpg',
+    url: 'https://www.seeedstudio.com/Wio-Tracker-L2-Pro-for-Meshtastic-p-0000.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    features: ['Meshtastic LoRa GPS', 'SenseCAP IoT Ecosystem', 'Doorbuster Hardware Deals']
+  },
+  {
     id: 'partner-hostinger-pro',
     title: 'Hostinger Cloud & WordPress Business Hosting — AI Website Builder Suite',
     vendor: 'by Hostinger International in Web Hosting & Cloud',
@@ -139,14 +154,15 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
     return null;
   }
 
-  // Pick item based on placement so each slot shows a distinct verified partner item
+  // Always feature Seeed Studio Wio Tracker L2 Pro for Meshtastic (index 0) on sidebar, header, and footer slots
   const fallbackIndex =
-    placement === 'header' ? 0 : placement === 'in-article' ? 1 : placement === 'footer' ? 2 : 0;
+    placement === 'header' ? 0 : placement === 'sidebar' ? 0 : placement === 'footer' ? 0 : 0;
   const tfItem = PARTNER_FEATURED_ADS[fallbackIndex % PARTNER_FEATURED_ADS.length];
 
   // Also check if admin has custom visible promo items
   const visiblePromos = (promoItems || []).filter((p) => p.visible !== false);
-  const customPromo = visiblePromos[fallbackIndex % Math.max(1, visiblePromos.length)];
+  const seeedPromo = visiblePromos.find((p) => p.id.includes('seeedstudio')) || visiblePromos[0];
+  const customPromo = seeedPromo || visiblePromos[fallbackIndex % Math.max(1, visiblePromos.length)];
 
   const displayTitle = customPromo?.title || tfItem.title;
   const displayImage =

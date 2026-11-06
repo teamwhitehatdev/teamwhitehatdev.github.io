@@ -44,8 +44,10 @@ import {
 import { useApp } from '../context/AppContext';
 import { TelemetryDashboard } from '../components/TelemetryDashboard';
 import { VisualPageBuilder } from '../components/VisualPageBuilder';
+import { ExclusiveBuyersAdminManager } from '../components/ExclusiveBuyersAdminManager';
 import { fetchPlayStoreMetadata } from '../utils/playStoreFetcher';
 import {
+  DEFAULT_PLAY_STORE_CONFIG,
   DEFAULT_SERVICES_HEADLINE_CONFIG,
   DEFAULT_SERVICES_PROMO_AD
 } from '../utils/initialCMSData';
@@ -247,78 +249,128 @@ export const Admin: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (playStoreConfig) {
-      setPlayStoreForm(playStoreConfig);
-    }
-  }, [playStoreConfig]);
+  // Automatically sync any edits in playStoreForm directly to playStoreConfig & localStorage
+  const compressPlayStoreImage = (
+    file: File,
+    maxW: number,
+    maxH: number,
+    quality = 0.84
+  ): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const rawDataUrl = reader.result as string;
+        const img = new Image();
+        img.onload = () => {
+          try {
+            let width = img.width;
+            let height = img.height;
+            if (width > maxW || height > maxH) {
+              const ratio = Math.min(maxW / width, maxH / height);
+              width = Math.round(width * ratio);
+              height = Math.round(height * ratio);
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              ctx.drawImage(img, 0, 0, width, height);
+              const compressed = canvas.toDataURL('image/jpeg', quality);
+              resolve(compressed);
+              return;
+            }
+          } catch {}
+          resolve(rawDataUrl);
+        };
+        img.onerror = () => resolve(rawDataUrl);
+        img.src = rawDataUrl;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
-  const handlePlayStoreBannerUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Auto-persist every change made to playStoreForm in the Admin CMS immediately
+  useEffect(() => {
+    if (activeTab === 'playstore-popup' && playStoreForm) {
+      updatePlayStoreConfig(playStoreForm);
+    }
+  }, [playStoreForm, activeTab]);
+
+  const handlePlayStoreBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Banner image must be under 10MB');
+      return;
+    }
+    const compressedDataUrl = await compressPlayStoreImage(file, 760, 420, 0.84);
+    setPlayStoreForm((prev) => {
+      const next = {
+        ...prev,
+        bannerImageUrl: compressedDataUrl,
+        hideBannerImage: false
+      };
+      updatePlayStoreConfig(next);
+      return next;
+    });
+    showToast('Banner image uploaded & automatically saved to live website!');
+  };
+
+  const handlePlayStoreIconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
-      alert('Banner image must be under 5MB');
+      alert('Icon image must be under 5MB');
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setPlayStoreForm((prev) => ({
-          ...prev,
-          bannerImageUrl: reader.result as string,
-          hideBannerImage: false
-        }));
-        showToast('Banner image uploaded successfully!');
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handlePlayStoreIconUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      alert('Icon image must be under 2MB');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setPlayStoreForm((prev) => ({
-          ...prev,
-          appIconUrl: reader.result as string,
-          hideAppIcon: false
-        }));
-        showToast('App icon uploaded successfully!');
-      }
-    };
-    reader.readAsDataURL(file);
+    const compressedDataUrl = await compressPlayStoreImage(file, 180, 180, 0.9);
+    setPlayStoreForm((prev) => {
+      const next = {
+        ...prev,
+        appIconUrl: compressedDataUrl,
+        hideAppIcon: false
+      };
+      updatePlayStoreConfig(next);
+      return next;
+    });
+    showToast('App icon uploaded & automatically saved to live website!');
   };
 
   const handleAddPlayStoreFeature = () => {
     if (!newFeatureInput.trim()) return;
-    setPlayStoreForm((prev) => ({
-      ...prev,
-      featuresList: [...(prev.featuresList || []), newFeatureInput.trim()]
-    }));
+    setPlayStoreForm((prev) => {
+      const next = {
+        ...prev,
+        featuresList: [...(prev.featuresList || []), newFeatureInput.trim()]
+      };
+      updatePlayStoreConfig(next);
+      return next;
+    });
     setNewFeatureInput('');
   };
 
   const handleRemovePlayStoreFeature = (index: number) => {
-    setPlayStoreForm((prev) => ({
-      ...prev,
-      featuresList: (prev.featuresList || []).filter((_, i) => i !== index)
-    }));
+    setPlayStoreForm((prev) => {
+      const next = {
+        ...prev,
+        featuresList: (prev.featuresList || []).filter((_, i) => i !== index)
+      };
+      updatePlayStoreConfig(next);
+      return next;
+    });
   };
 
   const handleSavePlayStoreConfig = () => {
     updatePlayStoreConfig(playStoreForm);
-    showToast('Google Play Store Popup configuration saved!');
+    window.dispatchEvent(new CustomEvent('wh_playstore_wake_up'));
+    showToast('Google Play Store Popup configuration saved & live on website!');
   };
 
   const handleResetPlayStoreConfig = () => {
     if (window.confirm('Reset Google Play Store Popup to default settings?')) {
       resetPlayStoreConfig();
+      setPlayStoreForm(DEFAULT_PLAY_STORE_CONFIG);
       showToast('Google Play Store Popup restored to default!');
     }
   };
@@ -3083,6 +3135,9 @@ export const Admin: React.FC = () => {
             </div>
           </HUDPanel>
 
+          {/* EXCLUSIVE SKILLS VAULT (/#/exclusive-skills) — VERIFIED BUYER EMAIL FILTER & VIP ACCESS MANAGER */}
+          <ExclusiveBuyersAdminManager showToast={showToast} />
+
           {/* PORTFOLIO SHOWCASE PROJECTS MANAGER */}
           <HUDPanel
             title={`Portfolio Showcase Projects Manager (/#/showcase — ${(projects || []).length} Builds)`}
@@ -4126,8 +4181,8 @@ export const Admin: React.FC = () => {
 
                 {/* Preview Body (Compact & Minimalist) */}
                 <div className="p-3 space-y-2.5 bg-slate-50/80">
-                  {/* Banner (only if expanded and unhidden) */}
-                  {!playStoreForm.compactMinimalist && playStoreForm.bannerImageUrl && !playStoreForm.hideBannerImage && (
+                  {/* Banner (Always shown when bannerImageUrl is set and hideBannerImage is false) */}
+                  {playStoreForm.bannerImageUrl && !playStoreForm.hideBannerImage && (
                     <div className="relative rounded-xl overflow-hidden border border-slate-200 shadow-2xs group bg-slate-900 aspect-16/8">
                       <img
                         src={playStoreForm.bannerImageUrl}

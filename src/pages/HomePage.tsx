@@ -146,17 +146,39 @@ export const HomePage: React.FC<HomePageProps> = () => {
     setExpandedArticleIds((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Featured Home Divisions (Suno AI & Meshy 3D or any custom Home divisions) managed in CMS
-  const homeDivisions = (cmsItems || []).filter(
-    (item) =>
-      item.visible !== false &&
-      item.status === 'PUBLISHED' &&
-      (item.id === 'cms-home-division-suno' ||
-        item.id === 'cms-home-division-meshy' ||
-        item.category.toUpperCase().includes('DIVISION'))
-  );
+  const [highlightNicheFilter, setHighlightNicheFilter] = useState<'ALL' | 'VA' | 'AI' | 'FREELANCE'>('ALL');
 
   const homeCmsItems = typeof getHomeFeaturedCMSItems === 'function' ? getHomeFeaturedCMSItems() : [];
+
+  // Curated Best Niche & Contents Highlights (replaces the old 2-column Ads section on Home)
+  const highlightedBestNicheItems = React.useMemo(() => {
+    const candidates = homeCmsItems.filter(
+      (item) =>
+        item.visible !== false &&
+        item.status === 'PUBLISHED' &&
+        !item.id.includes('division-suno') &&
+        !item.id.includes('division-meshy') &&
+        !item.category.toUpperCase().includes('DIVISION')
+    );
+
+    const filteredByPillar = candidates.filter((item) => {
+      if (highlightNicheFilter === 'ALL') return true;
+      const text = `${item.category} ${item.title} ${item.description}`.toUpperCase();
+      if (highlightNicheFilter === 'VA') {
+        return text.includes('VA') || text.includes('VIRTUAL ASSISTANT') || text.includes('EXECUTIVE') || text.includes('SOP');
+      }
+      if (highlightNicheFilter === 'AI') {
+        return text.includes('AI') || text.includes('AUTOMAT') || text.includes('PROMPT') || text.includes('N8N') || text.includes('MAKE');
+      }
+      if (highlightNicheFilter === 'FREELANCE') {
+        return text.includes('FREELANC') || text.includes('CLIENT') || text.includes('RETAINER') || text.includes('MONEY') || text.includes('SEO');
+      }
+      return true;
+    });
+
+    // Prioritize items with rich fullContent/images or explicit featured badges, returning top 4 for a crisp 2-column showcase
+    return (filteredByPillar.length >= 2 ? filteredByPillar : candidates).slice(0, 4);
+  }, [homeCmsItems, highlightNicheFilter]);
 
   const filteredCmsItems = homeCmsItems.filter((item) => {
     const cat = (item.category || '').toUpperCase();
@@ -236,6 +258,18 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
   return (
     <div className="space-y-12 max-w-7xl mx-auto pb-12 bg-transparent text-slate-900">
+      {/* CUSTOM DRAG & DROP BUILDER BLOCKS ON HOME (RENDERED ABOVE STANDARD NICHE & CMS SECTIONS) */}
+      {homeTab?.pageLayoutType === 'builder' &&
+        homeTab.builderBlocks &&
+        homeTab.builderBlocks.length > 0 && (
+          <div className="rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs bg-white/80">
+            <BuilderPageRenderer
+              blocks={homeTab.builderBlocks}
+              settings={homeTab.builderPageSettings}
+            />
+          </div>
+        )}
+
       {/* ========================================================================= */}
       {/* 🚀 SECTION 1: CLEAN MINIMALIST WHITE PORTFOLIO & ENTERPRISE VA PORTAL HERO */}
       {/* ========================================================================= */}
@@ -356,148 +390,186 @@ export const HomePage: React.FC<HomePageProps> = () => {
       <AdSenseSlot placement="in-article" />
 
       {/* ========================================================================= */}
-      {/* 🎵 & 🧊 CMS-DRIVEN DIVISIONS: SUNO AI MUSIC + MESHY AI 3D GENERATOR        */}
+      {/* 🏆 HIGHLIGHTS: BEST NICHE & CONTENTS (2-COLUMN AUTHORITY SHOWCASE)        */}
       {/* ========================================================================= */}
-      {homeDivisions.length > 0 && (
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-          {homeDivisions.map((divItem) => {
-            const isMeshy =
-              divItem.id.includes('meshy') || divItem.category.toUpperCase().includes('MESHY');
-            const showImg = Boolean(divItem.mainImage && !divItem.hideImage);
-            const showVid = Boolean(divItem.videoUrl && !divItem.hideVideo);
+      {highlightedBestNicheItems.length > 0 && (
+        <section className="white-glass-card rounded-3xl p-6 sm:p-8 space-y-6 border-2 border-indigo-200/80 shadow-md">
+          {/* Section Header + Pillar Switcher */}
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-5 border-b border-slate-200/80">
+            <div className="space-y-1.5 max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 to-emerald-600 text-white text-[11px] font-extrabold uppercase tracking-wider shadow-2xs">
+                <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                <span>HIGHLIGHTS • BEST NICHE &amp; CONTENTS</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+                Featured Best Niche Masterclasses &amp; High-Income VA / Freelancer Blueprints
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Hand-picked flagship guides, real-world Standard Operating Procedures (SOPs), and high-margin skill playbooks to help you master remote operations and land premium retainers.
+              </p>
+            </div>
 
-            return (
-              <div
-                key={divItem.id}
-                className="white-glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-5 hover:-translate-y-0.5 transition-all"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-start gap-4">
-                    {divItem.galleryImages && divItem.galleryImages[0] && !divItem.hideImage ? (
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-xs bg-slate-50">
-                        <img
-                          src={divItem.galleryImages[0]}
-                          alt={divItem.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 shrink-0 shadow-xs bg-slate-900 text-white flex flex-col items-center justify-center">
-                        {isMeshy ? <Box className="w-7 h-7" /> : <Music className="w-7 h-7" />}
-                        <span className="text-[10px] font-extrabold tracking-tight">
-                          {isMeshy ? 'MESHY 3D' : 'SUNO AI'}
-                        </span>
-                      </div>
-                    )}
+            <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl border border-slate-200 text-xs shrink-0">
+              {(
+                [
+                  { id: 'ALL', label: '★ Top Best Niches' },
+                  { id: 'VA', label: 'VA & Executive Ops' },
+                  { id: 'AI', label: 'AI & Automations' },
+                  { id: 'FREELANCE', label: 'Freelance & Retainers' }
+                ] as const
+              ).map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setHighlightNicheFilter(tab.id)}
+                  className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
+                    highlightNicheFilter === tab.id
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'text-slate-700 hover:bg-white hover:text-indigo-700'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-                    <div className="space-y-1.5">
+          {/* 2-Column Highlighted Best Niche Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            {highlightedBestNicheItems.map((nicheItem, idx) => {
+              const theme = getNicheTheme(nicheItem.category);
+              const showImg = Boolean(nicheItem.mainImage && !nicheItem.hideImage);
+              const isExpanded = Boolean(expandedArticleIds[`highlight_${nicheItem.id}`]);
+              const dest = getEffectiveArticleDestination(nicheItem, customLinks);
+
+              return (
+                <div
+                  key={nicheItem.id}
+                  className={`rounded-3xl p-6 sm:p-7 border-2 flex flex-col justify-between space-y-5 transition-all hover:-translate-y-0.5 ${theme.cardBg} ${theme.borderHover} shadow-sm`}
+                >
+                  <div className="space-y-4">
+                    {/* Top Badges */}
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
-                          {isMeshy ? (
-                            <Sparkles className="w-3 h-3 text-slate-700" />
-                          ) : (
-                            <Music className="w-3 h-3 text-slate-700" />
-                          )}
-                          <span>{divItem.category}</span>
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${theme.badgeBg}`}>
+                          {nicheItem.category}
                         </span>
-                        {divItem.badge && (
-                          <span className="px-2 py-0.5 rounded-full bg-slate-50 text-slate-600 border border-slate-200 text-[10px] font-semibold">
-                            {divItem.badge}
-                          </span>
-                        )}
+                        <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1">
+                          <Star className="w-3 h-3 fill-amber-500 text-amber-600" />
+                          <span>Best Niche #{idx + 1}</span>
+                        </span>
                       </div>
-                      <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-                        {divItem.url ? (
-                          <a
-                            href={divItem.url}
-                            target="_blank"
-                            rel="sponsored noopener noreferrer"
-                            className="hover:underline transition-colors"
-                          >
-                            {divItem.title}
-                          </a>
-                        ) : (
-                          divItem.title
-                        )}
-                      </h2>
-                    </div>
-                  </div>
-
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    {divItem.description}
-                  </p>
-
-                  {showVid && (
-                    <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-                      {divItem.videoUrl!.includes('youtube.com') ||
-                      divItem.videoUrl!.includes('youtu.be') ? (
-                        <iframe
-                          src={
-                            divItem.videoUrl!.includes('watch?v=')
-                              ? divItem.videoUrl!.replace('watch?v=', 'embed/')
-                              : divItem.videoUrl
-                          }
-                          title={divItem.title}
-                          className="w-full aspect-video border-0"
-                          allowFullScreen
-                        />
-                      ) : (
-                        <video
-                          src={divItem.videoUrl}
-                          controls
-                          className="w-full max-h-48 object-cover"
-                        />
+                      {nicheItem.badge && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-white/90 text-slate-800 border border-slate-200 text-[10px] font-bold">
+                          {nicheItem.badge}
+                        </span>
                       )}
                     </div>
-                  )}
 
-                  {showImg && (
-                    <div className="overflow-hidden rounded-xl border border-slate-200 h-28 bg-slate-50">
-                      <img
-                        src={divItem.mainImage}
-                        alt={divItem.title}
-                        className="w-full h-full object-cover"
-                      />
+                    {/* Optional Thumbnail + Headline */}
+                    <div className="flex flex-col sm:flex-row items-start gap-4">
+                      {showImg && (
+                        <div
+                          onClick={() => setSelectedArticle(nicheItem)}
+                          className="w-full sm:w-32 h-36 sm:h-24 rounded-2xl overflow-hidden border border-slate-200/90 shrink-0 shadow-xs bg-slate-100 cursor-pointer group"
+                        >
+                          <img
+                            src={nicheItem.mainImage}
+                            alt={nicheItem.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      )}
+                      <div className="space-y-1.5 flex-1">
+                        <h3
+                          onClick={() => setSelectedArticle(nicheItem)}
+                          className="text-lg sm:text-xl font-extrabold text-slate-900 hover:text-indigo-700 hover:underline leading-snug cursor-pointer transition-colors"
+                        >
+                          {nicheItem.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed line-clamp-3">
+                          {nicheItem.description}
+                        </p>
+                      </div>
                     </div>
-                  )}
 
-                  {divItem.metrics && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {divItem.metrics
-                        .split(',')
-                        .map((t) => t.trim())
-                        .filter(Boolean)
-                        .map((tag) => (
-                          <span
-                            key={tag}
-                            className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-semibold"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                    {/* Key Skill & Deliverable Tags */}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {(nicheItem.metrics
+                        ? nicheItem.metrics.split(',').map((t) => t.trim()).filter(Boolean)
+                        : [
+                            'Step-by-Step SOP Blueprint',
+                            'Real-World VA & Freelancer Playbook',
+                            'Copy-Paste Templates Included'
+                          ]
+                      ).map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-1 rounded-lg bg-white/90 border border-slate-200/90 text-slate-800 text-[11px] font-bold shadow-2xs"
+                        >
+                          ✓ {tag}
+                        </span>
+                      ))}
                     </div>
-                  )}
-                </div>
 
-                <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
-                  <span className="text-xs text-slate-500 font-medium">
-                    {divItem.summary || 'Official Partner Division'}
-                  </span>
-                  {divItem.url && (
-                    <a
-                      href={divItem.url}
-                      target="_blank"
-                      rel="sponsored noopener noreferrer"
-                      className="w-full sm:w-auto px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all shadow-xs flex items-center justify-center gap-2"
-                    >
-                      <span>{divItem.buttonText || 'Explore Now'}</span>
-                      <ExternalLink className="w-4 h-4 shrink-0" />
-                    </a>
-                  )}
+                    {/* Inline Expanded Reader Preview */}
+                    {isExpanded && (
+                      <div className="p-4 rounded-2xl bg-white/95 border border-indigo-200 text-xs text-slate-800 whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto shadow-inner">
+                        {nicheItem.fullContent || nicheItem.description}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Footer */}
+                  <div className="pt-4 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedArticle(nicheItem)}
+                        className={`px-4 py-2.5 rounded-xl font-extrabold text-xs flex items-center gap-1.5 cursor-pointer transition-all ${theme.btnPrimary}`}
+                      >
+                        <BookOpen className="w-3.5 h-3.5" />
+                        <span>Read Complete Niche Guide</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedArticleIds((prev) => ({
+                            ...prev,
+                            [`highlight_${nicheItem.id}`]: !prev[`highlight_${nicheItem.id}`]
+                          }))
+                        }
+                        className={`px-3 py-2 rounded-xl text-xs cursor-pointer transition-all ${theme.btnSecondary}`}
+                      >
+                        {isExpanded ? '▲ Hide Preview' : '▼ Quick Preview'}
+                      </button>
+                    </div>
+
+                    {dest.url ? (
+                      <a
+                        href={dest.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-2 rounded-xl bg-white hover:bg-indigo-50 text-indigo-900 border border-indigo-200 font-bold text-xs flex items-center gap-1 transition-all"
+                      >
+                        <span>{dest.label}</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    ) : (
+                      <Link
+                        to="/ai"
+                        className="px-3 py-2 rounded-xl bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-200 font-bold text-xs flex items-center gap-1 transition-all"
+                      >
+                        <span>Explore AI &amp; VA Hub</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </section>
       )}
 

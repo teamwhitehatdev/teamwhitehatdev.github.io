@@ -247,19 +247,23 @@ export const PlayStoreModal: React.FC = () => {
         {/* COMPACT & MINIMALISTIC WINDOW BODY                                */}
         {/* ================================================================= */}
         <div className="p-3 space-y-2.5 bg-slate-50/80">
-          {/* Optional Expanded Banner Image (When not in minimalist mode) */}
-          {!isCompact && playStoreConfig.bannerImageUrl && !playStoreConfig.hideBannerImage && (
-            <div className="relative h-24 overflow-hidden rounded-xl border border-slate-200 shadow-2xs">
+          {/* Banner Image (Always shown when bannerImageUrl is set and hideBannerImage is false) */}
+          {playStoreConfig.bannerImageUrl && !playStoreConfig.hideBannerImage && (
+            <div className="relative h-28 sm:h-32 overflow-hidden rounded-xl border border-slate-200 shadow-2xs bg-slate-900">
               <img
                 src={playStoreConfig.bannerImageUrl}
                 alt={playStoreConfig.appName}
                 className="w-full h-full object-cover"
-                loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent flex items-end p-2">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent flex items-end justify-between p-2">
                 <span className="text-[10px] font-bold text-white tracking-wide uppercase drop-shadow-xs">
                   {playStoreConfig.tagline || 'OFFICIAL ANDROID APP'}
                 </span>
+                {playStoreConfig.badgeText && (
+                  <span className="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-black text-[9px] uppercase">
+                    {playStoreConfig.badgeText}
+                  </span>
+                )}
               </div>
             </div>
           )}
