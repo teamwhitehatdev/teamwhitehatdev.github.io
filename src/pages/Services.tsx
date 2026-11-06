@@ -425,7 +425,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
       {(adPos === 'above-booking' || adPos === 'both') && renderVerifiedPartnerAd()}
 
       {/* DIRECT INLINE CLIENT INQUIRY FORM (PURE WHITE THEME) */}
-      <HUDPanel title="Direct Booking &amp; Custom Task Inquiry Form" badge="Instant CMS Log">
+      <HUDPanel title="Direct Booking &amp; Custom Task Inquiry Form" badge="Priority Client Booking">
         <div className="p-2 sm:p-4 space-y-6">
           {submitted ? (
             <div className="text-center py-8 space-y-4 bg-slate-50 border border-slate-200 rounded-2xl">
@@ -433,11 +433,11 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-extrabold text-slate-900">
-                Booking Request Saved to Admin CMS
+                Booking Request Received
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
                 Thank you, <span className="text-slate-900 font-bold">{name}</span>! Your service
-                request has been logged in our All-in-One CMS. We will reply within 24 hours.
+                request has been received by our team. We will reply within 24 hours.
               </p>
             </div>
           ) : (
@@ -461,8 +461,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenConsultation }) => {
                   Tell Us What Tasks or Project You Need Done
                 </h3>
                 <p className="text-xs text-slate-600">
-                  Fill out the form below. All inquiries are encrypted and stored directly inside
-                  our Admin CMS.
+                  Fill out the form below. All inquiries are encrypted and routed directly to our project engineering team.
                 </p>
               </div>
 

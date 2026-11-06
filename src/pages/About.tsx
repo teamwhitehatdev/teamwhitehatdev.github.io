@@ -64,8 +64,8 @@ export const About: React.FC = () => {
         </div>
       </HUDPanel>
 
-      {/* CMS-DRIVEN CORE PILLARS & ANNOUNCEMENTS (100% EDITABLE WITH IMAGE/VIDEO IN CMS) */}
-      <HUDPanel title="Our Core Pillars &amp; Profile Highlights" badge="CMS Managed">
+      {/* CORE PILLARS & ANNOUNCEMENTS */}
+      <HUDPanel title="Our Core Pillars &amp; Profile Highlights" badge="Core Pillars">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {cmsAboutItems.map((item) => {
             const showImg = Boolean(item.mainImage && !item.hideImage);

@@ -412,7 +412,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, isOpen, onC
                 <span>{destination.label}</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
-              {destination.isCustom && (
+              {isAdminOrDev && destination.isCustom && (
                 <span className="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[9px] font-mono font-bold">
                   Custom
                 </span>
@@ -603,8 +603,8 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, isOpen, onC
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex items-center gap-2 text-slate-900 text-xs font-bold uppercase tracking-wider">
                 <Sparkles className="w-4 h-4 text-indigo-600" />
-                <span>Destination Link &amp; Official Resource</span>
-                {destination.isCustom && (
+                <span>Official Resource &amp; Partner Link</span>
+                {isAdminOrDev && destination.isCustom && (
                   <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold border border-emerald-300">
                     Custom Referral Active
                   </span>

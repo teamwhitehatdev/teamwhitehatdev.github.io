@@ -763,16 +763,8 @@ export const HomePage: React.FC<HomePageProps> = () => {
                                 href={dest.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`px-2.5 py-1.5 border font-bold text-[11px] rounded-lg transition-all flex items-center gap-1 shrink-0 ${
-                                  dest.isCustom
-                                    ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border-emerald-300'
-                                    : 'bg-white/90 hover:bg-indigo-50 text-indigo-900 border-indigo-200'
-                                }`}
-                                title={dest.isCustom ? `Custom Link: ${dest.url}` : undefined}
+                                className="px-2.5 py-1.5 border font-bold text-[11px] rounded-lg transition-all flex items-center gap-1 shrink-0 bg-white/90 hover:bg-indigo-50 text-indigo-900 border-indigo-200"
                               >
-                                {dest.isCustom && (
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
-                                )}
                                 <span>{dest.label}</span>
                                 <ExternalLink className="w-3 h-3 text-slate-500" />
                               </a>

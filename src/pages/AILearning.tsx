@@ -551,27 +551,23 @@ export const AILearning: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {/* BUTTON TO MODIFY ALL DESTINATION LINKS */}
-            <button
-              type="button"
-              onClick={() => {
-                if (isAdminOrDev) {
-                  setIsDestinationManagerOpen(true);
-                } else {
-                  setIsAuthModalOpen(true);
-                }
-              }}
-              className="px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-white font-mono font-bold text-xs flex items-center gap-2 shadow-xs transition-all cursor-pointer border border-slate-800"
-              title="Modify all destination links (referral URLs, affiliate links, and custom destination pages)"
-            >
-              <Link2 className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Manage Destination Links</span>
-              {Object.keys(customLinks).length > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[9px] font-bold">
-                  {Object.keys(customLinks).length} Custom
-                </span>
-              )}
-            </button>
+            {/* BUTTON TO MODIFY ALL DESTINATION LINKS (ADMIN & DEVELOPER ONLY) */}
+            {isAdminOrDev && (
+              <button
+                type="button"
+                onClick={() => setIsDestinationManagerOpen(true)}
+                className="px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-white font-mono font-bold text-xs flex items-center gap-2 shadow-xs transition-all cursor-pointer border border-slate-800"
+                title="Modify all destination links (referral URLs, affiliate links, and custom destination pages)"
+              >
+                <Link2 className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Manage Destination Links</span>
+                {Object.keys(customLinks).length > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[9px] font-bold">
+                    {Object.keys(customLinks).length} Custom
+                  </span>
+                )}
+              </button>
+            )}
 
             {searchQuery && (
               <div className="px-3.5 py-1.5 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-900 text-xs font-semibold">
@@ -831,13 +827,13 @@ const ArticleCard: React.FC<{
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`px-2 py-1.5 font-semibold text-[11px] rounded-lg transition-all flex items-center gap-1 shrink-0 border ${
-                  destination.isCustom
+                  isAdminOrDev && destination.isCustom
                     ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border-emerald-300 font-bold'
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200'
                 }`}
-                title={destination.isCustom ? `Custom Link: ${destination.url}` : undefined}
+                title={isAdminOrDev && destination.isCustom ? `Custom Link: ${destination.url}` : undefined}
               >
-                {destination.isCustom && (
+                {isAdminOrDev && destination.isCustom && (
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
                 )}
                 <span>{destination.label}</span>

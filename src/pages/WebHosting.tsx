@@ -85,8 +85,8 @@ export const WebHosting: React.FC = () => {
         </div>
       </div>
 
-      {/* CMS-DRIVEN HOSTINGER AI & CLOUD FEATURE CARDS (100% EDITABLE IN ADMIN CMS) */}
-      <HUDPanel title="Hostinger AI, Automation &amp; Cloud Hosting Features" badge="CMS Managed">
+      {/* HOSTINGER AI & CLOUD FEATURE CARDS */}
+      <HUDPanel title="Hostinger AI, Automation &amp; Cloud Hosting Features" badge="Cloud Features">
         <div className="space-y-6">
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
             All visitors who register using our Hostinger referral link gain access to built-in AI

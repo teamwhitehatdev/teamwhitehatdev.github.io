@@ -110,7 +110,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
             </div>
             <h3 className="text-2xl font-extrabold text-slate-900">Inquiry Logged Securely</h3>
             <p className="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
-              Thank you, <span className="text-slate-900 font-bold">{name}</span>! Your service request has been saved to our Admin CMS.
+              Thank you, <span className="text-slate-900 font-bold">{name}</span>! Your service request has been received by our project team.
             </p>
             <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center space-x-2">
               <ShieldCheck className="w-4 h-4 text-slate-700" />

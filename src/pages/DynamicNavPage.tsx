@@ -412,7 +412,7 @@ export const DynamicNavPage: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           <HUDPanel
             title={`${currentTab?.label || pageTitle} — Published Content (${filteredItems.length})`}
-            badge="CMS Live"
+            badge="Verified Resources"
           >
             {filteredItems.length === 0 ? (
               <div className="py-12 text-center space-y-3">
@@ -421,8 +421,7 @@ export const DynamicNavPage: React.FC = () => {
                   No Published Content Yet in "{currentTab?.label || pageTitle}"
                 </h3>
                 <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-                  You can add articles, tutorials, images, and videos to this navigation tab anytime
-                  from the Admin CMS under Page Owner: <strong>{effectiveSlug}</strong>.
+                  New tutorials, guides, and resources for this section are coming soon. Explore our main categories or check back shortly!
                 </p>
               </div>
             ) : (
