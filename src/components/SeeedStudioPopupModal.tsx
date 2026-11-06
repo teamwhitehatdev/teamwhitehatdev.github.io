@@ -130,35 +130,15 @@ export const SeeedStudioPopupModal: React.FC = () => {
             </span>
           </div>
 
-          {/* Right Header Controls: 10s Countdown + SKIP ADS + CLOSE ADS */}
+          {/* Right Header Controls: 10s Countdown Only (No duplicate close/skip buttons) */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <span
               title={`Automatically closes in ${remainingSeconds} seconds`}
-              className="px-2 py-0.5 rounded-md text-[10px] font-mono font-extrabold bg-amber-500/20 text-amber-300 border border-amber-400/40 flex items-center gap-1"
+              className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-extrabold bg-amber-500/20 text-amber-300 border border-amber-400/40 flex items-center gap-1"
             >
               <Clock className="w-3 h-3 text-amber-300 animate-pulse" />
-              <span>{remainingSeconds}s</span>
+              <span>Auto-Close: {remainingSeconds}s</span>
             </span>
-
-            <button
-              type="button"
-              onClick={handleDismiss}
-              className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-[10px] uppercase tracking-wider border border-slate-600 flex items-center gap-1 transition-all cursor-pointer active:scale-95"
-              title="Skip Advertisement"
-            >
-              <span>Skip Ads</span>
-              <SkipForward className="w-3 h-3" />
-            </button>
-
-            <button
-              type="button"
-              onClick={handleDismiss}
-              className="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-[10px] uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer active:scale-95"
-              title="Close Advertisement"
-            >
-              <span className="hidden sm:inline">Close Ads</span>
-              <X className="w-3.5 h-3.5" />
-            </button>
           </div>
 
           {/* 10-Second Auto-Close Progress Bar */}
@@ -229,7 +209,7 @@ export const SeeedStudioPopupModal: React.FC = () => {
             </div>
           </div>
 
-          {/* Bottom Interactive Action Bar: Visit Promo + Skip Ads + Close Ads */}
+          {/* Bottom Interactive Action Bar: Visit Promo + ONLY 1 Single Close/Skip Button */}
           <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 border-t border-slate-100">
             <a
               href={SEEED_STUDIO_REFERRAL_URL}
@@ -241,25 +221,15 @@ export const SeeedStudioPopupModal: React.FC = () => {
               <ExternalLink className="w-4 h-4 shrink-0" />
             </a>
 
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleDismiss}
-                className="flex-1 sm:flex-initial px-3.5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-              >
-                <SkipForward className="w-3.5 h-3.5" />
-                <span>SKIP ADS ({remainingSeconds}s)</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleDismiss}
-                className="flex-1 sm:flex-initial px-3.5 py-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-              >
-                <X className="w-3.5 h-3.5" />
-                <span>CLOSE ADS</span>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleDismiss}
+              className="px-4 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer shrink-0 active:scale-95"
+              title="Skip or Close Advertisement"
+            >
+              <X className="w-4 h-4" />
+              <span>CLOSE ADS ({remainingSeconds}s)</span>
+            </button>
           </div>
         </div>
       </div>
