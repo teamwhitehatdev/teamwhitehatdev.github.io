@@ -13,6 +13,8 @@ export const SERVICES: Service[] = [
     description: 'Try a dedicated, pre-vetted Virtual Assistant at our lowest introductory rate. Ideal for inbox triage, calendar scheduling, research, and daily admin tasks.',
     image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&auto=format&fit=crop&q=80',
     visible: true,
+    highlighted: true,
+    badge: 'MOST POPULAR',
     features: ['10 Hours/Week Starter Pack ($49)', 'Inbox Zero & Calendar Management', 'Google Sheets & Notion Data Entry', 'Daily End-of-Day Progress Report']
   },
   {

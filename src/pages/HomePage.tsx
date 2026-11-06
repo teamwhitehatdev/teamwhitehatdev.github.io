@@ -126,18 +126,6 @@ export const HomePage: React.FC<HomePageProps> = () => {
     (t) => t.id === 'nav_home' || t.slug === 'home' || t.path === '/'
   );
 
-  if (homeTab?.pageLayoutType === 'builder' && homeTab.builderBlocks && homeTab.builderBlocks.length > 0) {
-    return (
-      <BuilderPageRenderer
-        blocks={homeTab.builderBlocks}
-        settings={homeTab.builderPageSettings}
-        tab={homeTab}
-        onRevertDefault={() => {
-          updateNavTab(homeTab.id, { pageLayoutType: 'standard' });
-        }}
-      />
-    );
-  }
   const [selectedArticle, setSelectedArticle] = useState<CMSItem | null>(null);
   const [expandedArticleIds, setExpandedArticleIds] = useState<Record<string, boolean>>({});
   const [customLinks, setCustomLinks] = useState<Record<string, CustomDestinationLink>>(() =>

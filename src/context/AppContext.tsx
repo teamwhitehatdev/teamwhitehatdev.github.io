@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
-import { INITIAL_CMS_ITEMS, DEFAULT_PLAY_STORE_CONFIG } from '../utils/initialCMSData';
+import {
+  INITIAL_CMS_ITEMS,
+  DEFAULT_PLAY_STORE_CONFIG,
+  DEFAULT_SERVICES_HEADLINE_CONFIG,
+  DEFAULT_SERVICES_PROMO_AD
+} from '../utils/initialCMSData';
 import { INITIAL_PROMO_ITEMS } from '../utils/initialPromoData';
 import { INITIAL_AFFILIATE_TOPICS } from '../utils/initialAffiliateTopics';
 import {
@@ -20,7 +25,9 @@ import {
   AffiliateCollapsibleTopic,
   NavTabConfig,
   AdSenseConfig,
-  PlayStoreAppConfig
+  PlayStoreAppConfig,
+  ServicesHeadlineConfig,
+  ServicesPromoAdConfig
 } from '../types';
 
 interface AppContextType {
@@ -102,6 +109,19 @@ interface AppContextType {
   updateService: (id: string, service: Partial<Service>) => void;
   deleteService: (id: string) => void;
   toggleServiceVisibility: (id: string) => void;
+  moveService: (id: string, direction: 'up' | 'down') => void;
+  toggleServiceHighlight: (id: string) => void;
+  reorderServices: (newServices: Service[]) => void;
+
+  // SERVICES PAGE HEADLINE CONFIG (/services)
+  servicesHeadlineConfig: ServicesHeadlineConfig;
+  updateServicesHeadlineConfig: (updates: Partial<ServicesHeadlineConfig>) => void;
+  resetServicesHeadlineConfig: () => void;
+
+  // SERVICES PAGE VERIFIED PARTNER • HOSTING PROMO AD CONFIG (/services)
+  servicesPromoAd: ServicesPromoAdConfig;
+  updateServicesPromoAd: (updates: Partial<ServicesPromoAdConfig>) => void;
+  resetServicesPromoAd: () => void;
 
   addProject: (project: Omit<Project, 'id'>) => void;
   updateProject: (id: string, project: Partial<Project>) => void;
@@ -380,10 +400,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
           // Auto-migrate any legacy "Academy" strings to "Portal"
-          const sanitized = parsed.map((t: NavTabConfig) => ({
-            ...t,
-            label: t.label ? t.label.replace(/Academy/gi, 'Portal') : t.label
-          }));
+          // And ALWAYS keep Home as 'standard' layout to protect all niche contents
+          const sanitized = parsed.map((t: NavTabConfig) => {
+            const isHome = t.id === 'nav_home' || t.slug === 'home' || t.path === '/';
+            return {
+              ...t,
+              label: t.label ? t.label.replace(/Academy/gi, 'Portal') : t.label,
+              ...(isHome ? { pageLayoutType: 'standard' as const } : {})
+            };
+          });
           const existingIds = new Set(sanitized.map((t: NavTabConfig) => t.id));
           const missing = DEFAULT_NAV_TABS.filter((t) => !existingIds.has(t.id));
           return [...sanitized, ...missing].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
@@ -431,9 +456,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updateNavTab = useCallback((id: string, updates: Partial<NavTabConfig>) => {
     setNavTabs((prev) =>
-      prev.map((tab) =>
-        tab.id === id ? { ...tab, ...updates, updatedAt: new Date().toISOString() } : tab
-      )
+      prev.map((tab) => {
+        if (tab.id === id) {
+          const isHome = tab.id === 'nav_home' || tab.slug === 'home' || tab.path === '/';
+          const safeUpdates = isHome ? { ...updates, pageLayoutType: 'standard' as const } : updates;
+          return { ...tab, ...safeUpdates, updatedAt: new Date().toISOString() };
+        }
+        return tab;
+      })
     );
   }, []);
 
@@ -845,7 +875,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [bannedIps]);
 
   useEffect(() => {
-    localStorage.setItem('wh_services_v5720', JSON.stringify(services));
+    try {
+      localStorage.setItem('wh_services_v5720', JSON.stringify(services));
+      window.dispatchEvent(new CustomEvent('wh_services_changed', { detail: services }));
+    } catch (e) {}
   }, [services]);
 
   useEffect(() => {
@@ -1326,6 +1359,39 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     );
   };
 
+  const moveService = (id: string, direction: 'up' | 'down') => {
+    setServices((prev) => {
+      const index = prev.findIndex((s) => s.id === id);
+      if (index === -1) return prev;
+      if (direction === 'up' && index === 0) return prev;
+      if (direction === 'down' && index === prev.length - 1) return prev;
+      const targetIndex = direction === 'up' ? index - 1 : index + 1;
+      const next = [...prev];
+      const temp = next[index];
+      next[index] = next[targetIndex];
+      next[targetIndex] = temp;
+      return next;
+    });
+  };
+
+  const toggleServiceHighlight = (id: string) => {
+    setServices((prev) =>
+      prev.map((s) =>
+        s.id === id
+          ? {
+              ...s,
+              highlighted: !s.highlighted,
+              badge: !s.highlighted ? (s.badge || 'MOST POPULAR') : s.badge
+            }
+          : s
+      )
+    );
+  };
+
+  const reorderServices = (newServices: Service[]) => {
+    setServices(newServices);
+  };
+
   const addProject = (project: Omit<Project, 'id'>) => {
     const newProj: Project = {
       ...project,
@@ -1449,15 +1515,78 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [playStoreConfig]);
 
   const updatePlayStoreConfig = (updates: Partial<PlayStoreAppConfig>) => {
-    setPlayStoreConfig((prev) => ({
-      ...prev,
-      ...updates,
-      updatedAt: new Date().toISOString()
-    }));
+    setPlayStoreConfig((prev) => {
+      const next = {
+        ...prev,
+        ...updates,
+        updatedAt: new Date().toISOString()
+      };
+      try {
+        localStorage.setItem('wh_playstore_config_v1', JSON.stringify(next));
+        window.dispatchEvent(new CustomEvent('wh_playstore_config_changed', { detail: next }));
+      } catch (e) {}
+      return next;
+    });
   };
 
   const resetPlayStoreConfig = () => {
     setPlayStoreConfig(DEFAULT_PLAY_STORE_CONFIG);
+    try {
+      localStorage.setItem('wh_playstore_config_v1', JSON.stringify(DEFAULT_PLAY_STORE_CONFIG));
+      window.dispatchEvent(new CustomEvent('wh_playstore_config_changed', { detail: DEFAULT_PLAY_STORE_CONFIG }));
+    } catch (e) {}
+  };
+
+  // SERVICES PAGE HEADLINE CONFIG (/services)
+  const [servicesHeadlineConfig, setServicesHeadlineConfig] = useState<ServicesHeadlineConfig>(() => {
+    try {
+      const saved = localStorage.getItem('wh_services_headline_v1');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return DEFAULT_SERVICES_HEADLINE_CONFIG;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('wh_services_headline_v1', JSON.stringify(servicesHeadlineConfig));
+      window.dispatchEvent(
+        new CustomEvent('wh_services_headline_changed', { detail: servicesHeadlineConfig })
+      );
+    } catch (e) {}
+  }, [servicesHeadlineConfig]);
+
+  const updateServicesHeadlineConfig = (updates: Partial<ServicesHeadlineConfig>) => {
+    setServicesHeadlineConfig((prev) => ({ ...prev, ...updates }));
+  };
+
+  const resetServicesHeadlineConfig = () => {
+    setServicesHeadlineConfig(DEFAULT_SERVICES_HEADLINE_CONFIG);
+  };
+
+  // SERVICES PAGE VERIFIED PARTNER • HOSTING PROMO AD CONFIG (/services)
+  const [servicesPromoAd, setServicesPromoAd] = useState<ServicesPromoAdConfig>(() => {
+    try {
+      const saved = localStorage.getItem('wh_services_promo_ad_v1');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return DEFAULT_SERVICES_PROMO_AD;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('wh_services_promo_ad_v1', JSON.stringify(servicesPromoAd));
+      window.dispatchEvent(
+        new CustomEvent('wh_services_promo_ad_changed', { detail: servicesPromoAd })
+      );
+    } catch (e) {}
+  }, [servicesPromoAd]);
+
+  const updateServicesPromoAd = (updates: Partial<ServicesPromoAdConfig>) => {
+    setServicesPromoAd((prev) => ({ ...prev, ...updates }));
+  };
+
+  const resetServicesPromoAd = () => {
+    setServicesPromoAd(DEFAULT_SERVICES_PROMO_AD);
   };
 
   const isUserBanned = bannedIps.includes(userIp);
@@ -1528,6 +1657,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateService,
         deleteService,
         toggleServiceVisibility,
+        moveService,
+        toggleServiceHighlight,
+        reorderServices,
+        servicesHeadlineConfig,
+        updateServicesHeadlineConfig,
+        resetServicesHeadlineConfig,
+        servicesPromoAd,
+        updateServicesPromoAd,
+        resetServicesPromoAd,
         addProject,
         updateProject,
         deleteProject,

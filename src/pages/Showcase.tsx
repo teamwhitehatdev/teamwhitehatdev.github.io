@@ -37,18 +37,6 @@ export const Showcase: React.FC = () => {
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
   const { navTabs, updateNavTab } = useApp();
   const showcaseTab = (navTabs || []).find((t) => t.id === 'nav_showcase' || t.slug === 'showcase');
-  if (showcaseTab?.pageLayoutType === 'builder' && showcaseTab.builderBlocks && showcaseTab.builderBlocks.length > 0) {
-    return (
-      <BuilderPageRenderer
-        blocks={showcaseTab.builderBlocks}
-        settings={showcaseTab.builderPageSettings}
-        tab={showcaseTab}
-        onRevertDefault={() => {
-          updateNavTab(showcaseTab.id, { pageLayoutType: 'standard' });
-        }}
-      />
-    );
-  }
 
   // STRICT DEVELOPER & ADMIN ACCESS CONTROL
   const [isAdminOrDev, setIsAdminOrDev] = useState<boolean>(() => isUserAdminOrDeveloper());
@@ -369,6 +357,19 @@ export const Showcase: React.FC = () => {
   };
 
   const displayedPartnerOffers = (showcaseAds.length > 0 ? showcaseAds : partnerDeals).slice(0, 6);
+
+  if (showcaseTab?.pageLayoutType === 'builder' && showcaseTab.builderBlocks && showcaseTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={showcaseTab.builderBlocks}
+        settings={showcaseTab.builderPageSettings}
+        tab={showcaseTab}
+        onRevertDefault={() => {
+          updateNavTab(showcaseTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
 
   return (
     <div className="space-y-10 max-w-7xl mx-auto pb-12 bg-transparent text-slate-900">

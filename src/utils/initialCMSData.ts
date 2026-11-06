@@ -1,6 +1,6 @@
 import { COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS } from '../data/comprehensiveEducationalData';
 import { ADVANCED_NICHE_CMS_ITEMS } from '../data/advancedNicheCMSData';
-import { CMSItem, PlayStoreAppConfig } from '../types';
+import { CMSItem, PlayStoreAppConfig, ServicesHeadlineConfig, ServicesPromoAdConfig } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
   // =========================================================================
@@ -1086,4 +1086,50 @@ export const DEFAULT_PLAY_STORE_CONFIG: PlayStoreAppConfig = {
   ],
   updatedAt: '2026-10-29T00:00:00Z'
 };
+
+// ============================================================================
+// DEFAULT SERVICES PAGE HEADLINE CONFIGURATION
+// (100% EDITABLE IN /#/ADMIN -> SERVICES MANAGER)
+// ============================================================================
+export const DEFAULT_SERVICES_HEADLINE_CONFIG: ServicesHeadlineConfig = {
+  badgeText: 'Direct-Link Exclusive Rates • Up to 70% Lower Than Traditional Agencies',
+  title: 'Ultra-Affordable Virtual Assistant, AI Automation & Web Packages',
+  description: 'Start small with zero risk. Hire a dedicated Virtual Assistant from just $5/hr ($49/week Starter Pack), automate repetitive workflows for $39, or launch a complete modern website for $99.',
+  showQuickStats: true,
+  quickStats: [
+    { value: '$5 / hr', label: 'Starter VA Rate' },
+    { value: '$39', label: 'AI Workflow Setup' },
+    { value: '$99', label: 'Complete Website' },
+    { value: '0% Markup', label: 'Cancel Anytime' }
+  ]
+};
+
+// ============================================================================
+// DEFAULT VERIFIED PARTNER • HOSTING PROMO AD CONFIGURATION FOR /#/SERVICES
+// (100% CUSTOMIZABLE / HIDE / UNHIDE / REPLACE IN /#/ADMIN)
+// ============================================================================
+export const DEFAULT_SERVICES_PROMO_AD: ServicesPromoAdConfig = {
+  enabled: true,
+  adSource: 'default-hosting',
+  partnerCategory: 'HOSTING PROMO',
+  vendorName: 'by Hostinger Cloud Infrastructure',
+  title: 'Hostinger Cloud VPS & Premium Web Hosting — Up to 75% Off + Free Domain & SSL',
+  description: 'Deploy ultra-fast websites with 99.9% uptime SLA guarantee, free SSL certificates, automated daily backups, NVMe SSD storage, and 1-click WordPress install. Official verified partner promotion.',
+  badge: 'BESTSELLER',
+  discountText: 'Save Up to 75%',
+  priceBadge: '$2.49 / mo',
+  subPrice: 'Free Domain + SSL',
+  destinationUrl: 'https://hostinger.ph?REFERRALCODE=1JOMAR46',
+  ctaButtonText: 'Claim Hosting Discount (75% Off) →',
+  imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80',
+  hideImage: false,
+  features: [
+    '99.9% Uptime SLA Guarantee',
+    'NVMe High-Speed SSD Storage',
+    'Free Custom Domain & Lifetime SSL',
+    '24/7 Priority Live Support'
+  ],
+  position: 'below-headline'
+};
+
 

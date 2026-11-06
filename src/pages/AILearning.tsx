@@ -85,18 +85,6 @@ export const AILearning: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const aiTab = (navTabs || []).find((t) => t.id === 'nav_ai' || t.slug === 'ai');
-  if (aiTab?.pageLayoutType === 'builder' && aiTab.builderBlocks && aiTab.builderBlocks.length > 0) {
-    return (
-      <BuilderPageRenderer
-        blocks={aiTab.builderBlocks}
-        settings={aiTab.builderPageSettings}
-        tab={aiTab}
-        onRevertDefault={() => {
-          updateNavTab(aiTab.id, { pageLayoutType: 'standard' });
-        }}
-      />
-    );
-  }
 
   // Sync auth and custom destination links across components and tabs
   useEffect(() => {
@@ -317,6 +305,19 @@ export const AILearning: React.FC = () => {
       desc: 'Executive assistant playbooks, client onboarding, retainer contracts, and high-income skill stacks.'
     }
   };
+
+  if (aiTab?.pageLayoutType === 'builder' && aiTab.builderBlocks && aiTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={aiTab.builderBlocks}
+        settings={aiTab.builderPageSettings}
+        tab={aiTab}
+        onRevertDefault={() => {
+          updateNavTab(aiTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
 
   return (
     <div className="space-y-12 max-w-7xl mx-auto pb-16 bg-transparent text-slate-900">

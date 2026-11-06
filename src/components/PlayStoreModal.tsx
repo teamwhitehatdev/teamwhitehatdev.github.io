@@ -67,6 +67,23 @@ export const PlayStoreModal: React.FC = () => {
     return () => clearTimeout(initialTimer);
   }, [playStoreConfig, durationSec]);
 
+  // Listen for live wake-up or config change events from Admin CMS
+  useEffect(() => {
+    const handleWakeUp = () => {
+      setIsOpen(true);
+      setIsFadingOut(false);
+      setIsMinimized(false);
+      setRemainingSeconds(durationSec);
+    };
+
+    window.addEventListener('wh_playstore_wake_up', handleWakeUp);
+    window.addEventListener('wh_playstore_config_changed', handleWakeUp);
+    return () => {
+      window.removeEventListener('wh_playstore_wake_up', handleWakeUp);
+      window.removeEventListener('wh_playstore_config_changed', handleWakeUp);
+    };
+  }, [durationSec]);
+
   // Handle Auto-Fadeout Countdown
   useEffect(() => {
     if (!isOpen || isMinimized || !autoFadeEnabled) {

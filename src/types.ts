@@ -10,6 +10,42 @@ export interface Service {
   hideImage?: boolean;
   hideVideo?: boolean;
   visible?: boolean;
+  highlighted?: boolean;
+  badge?: string;
+  sortOrder?: number;
+}
+
+export interface ServicesQuickStat {
+  value: string;
+  label: string;
+}
+
+export interface ServicesHeadlineConfig {
+  badgeText: string;
+  title: string;
+  description: string;
+  showQuickStats: boolean;
+  quickStats: ServicesQuickStat[];
+}
+
+export interface ServicesPromoAdConfig {
+  enabled: boolean;
+  adSource: 'default-hosting' | 'custom' | 'promo-item';
+  selectedPromoId?: string;
+  partnerCategory: string;
+  vendorName: string;
+  title: string;
+  description: string;
+  badge: string;
+  discountText: string;
+  priceBadge: string;
+  subPrice: string;
+  destinationUrl: string;
+  ctaButtonText: string;
+  imageUrl: string;
+  hideImage: boolean;
+  features: string[];
+  position: 'below-headline' | 'above-booking' | 'both';
 }
 
 export interface Project {

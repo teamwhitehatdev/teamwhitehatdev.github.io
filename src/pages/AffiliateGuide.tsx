@@ -43,18 +43,6 @@ export const AffiliateGuide: React.FC = () => {
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
 
   const affiliateTab = (navTabs || []).find((t) => t.id === 'nav_affiliate' || t.slug === 'affiliate-guide');
-  if (affiliateTab?.pageLayoutType === 'builder' && affiliateTab.builderBlocks && affiliateTab.builderBlocks.length > 0) {
-    return (
-      <BuilderPageRenderer
-        blocks={affiliateTab.builderBlocks}
-        settings={affiliateTab.builderPageSettings}
-        tab={affiliateTab}
-        onRevertDefault={() => {
-          updateNavTab(affiliateTab.id, { pageLayoutType: 'standard' });
-        }}
-      />
-    );
-  }
 
   // STRICT DEVELOPER & ADMIN ACCESS CONTROL
   // Visitors, readers, audience, and viewers are restricted to read-only mode.
@@ -308,6 +296,19 @@ export const AffiliateGuide: React.FC = () => {
       }
     ]
   };
+
+  if (affiliateTab?.pageLayoutType === 'builder' && affiliateTab.builderBlocks && affiliateTab.builderBlocks.length > 0) {
+    return (
+      <BuilderPageRenderer
+        blocks={affiliateTab.builderBlocks}
+        settings={affiliateTab.builderPageSettings}
+        tab={affiliateTab}
+        onRevertDefault={() => {
+          updateNavTab(affiliateTab.id, { pageLayoutType: 'standard' });
+        }}
+      />
+    );
+  }
 
   return (
     <main className="min-h-screen bg-transparent text-slate-900 py-4">

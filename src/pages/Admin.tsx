@@ -38,12 +38,17 @@ import {
   Clock,
   Zap,
   BookOpen,
-  Loader2
+  Loader2,
+  Tag
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { TelemetryDashboard } from '../components/TelemetryDashboard';
 import { VisualPageBuilder } from '../components/VisualPageBuilder';
 import { fetchPlayStoreMetadata } from '../utils/playStoreFetcher';
+import {
+  DEFAULT_SERVICES_HEADLINE_CONFIG,
+  DEFAULT_SERVICES_PROMO_AD
+} from '../utils/initialCMSData';
 import {
   checkAdminRateLimit,
   recordAdminFailedAttempt,
@@ -62,7 +67,9 @@ import {
   Service,
   Project,
   NavTabConfig,
-  PlayStoreAppConfig
+  PlayStoreAppConfig,
+  ServicesHeadlineConfig,
+  ServicesPromoAdConfig
 } from '../types';
 
 export const Admin: React.FC = () => {
@@ -109,6 +116,15 @@ export const Admin: React.FC = () => {
     updateService,
     deleteService,
     toggleServiceVisibility,
+    moveService,
+    toggleServiceHighlight,
+    reorderServices,
+    servicesHeadlineConfig,
+    updateServicesHeadlineConfig,
+    resetServicesHeadlineConfig,
+    servicesPromoAd,
+    updateServicesPromoAd,
+    resetServicesPromoAd,
     projects,
     addProject,
     updateProject,
@@ -409,6 +425,21 @@ export const Admin: React.FC = () => {
     sortOrder: 1
   });
 
+  // SERVICES PAGE HEADLINE & PROMO AD ADMIN STATE
+  const [headlineForm, setHeadlineForm] = useState<ServicesHeadlineConfig>(
+    servicesHeadlineConfig || DEFAULT_SERVICES_HEADLINE_CONFIG
+  );
+  useEffect(() => {
+    if (servicesHeadlineConfig) setHeadlineForm(servicesHeadlineConfig);
+  }, [servicesHeadlineConfig]);
+
+  const [promoAdForm, setPromoAdForm] = useState<ServicesPromoAdConfig>(
+    servicesPromoAd || DEFAULT_SERVICES_PROMO_AD
+  );
+  useEffect(() => {
+    if (servicesPromoAd) setPromoAdForm(servicesPromoAd);
+  }, [servicesPromoAd]);
+
   // SERVICE & PROJECT MANAGER MODAL STATE
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
@@ -423,6 +454,8 @@ export const Admin: React.FC = () => {
     hideImage: boolean;
     hideVideo: boolean;
     visible: boolean;
+    highlighted: boolean;
+    badge: string;
   }>({
     title: '',
     category: 'va',
@@ -433,7 +466,9 @@ export const Admin: React.FC = () => {
     videoUrl: '',
     hideImage: false,
     hideVideo: false,
-    visible: true
+    visible: true,
+    highlighted: false,
+    badge: 'MOST POPULAR'
   });
 
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -736,13 +771,17 @@ export const Admin: React.FC = () => {
       | 'project-video'
       | 'service-image'
       | 'service-video'
+      | 'services-promo-ad-image'
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64Data = reader.result as string;
-      if (target === 'cms-image') {
+      if (target === 'services-promo-ad-image') {
+        setPromoAdForm((prev) => ({ ...prev, imageUrl: base64Data, hideImage: false }));
+        showToast('Services page partner ad banner image uploaded!');
+      } else if (target === 'cms-image') {
         setCmsForm((prev) => ({ ...prev, mainImage: base64Data, hideImage: false }));
         showToast('Image uploaded and attached to content item');
       } else if (target === 'cms-video') {
@@ -1061,7 +1100,9 @@ export const Admin: React.FC = () => {
       videoUrl: '',
       hideImage: false,
       hideVideo: false,
-      visible: true
+      visible: true,
+      highlighted: false,
+      badge: 'MOST POPULAR'
     });
     setIsServiceModalOpen(true);
   };
@@ -1078,7 +1119,9 @@ export const Admin: React.FC = () => {
       videoUrl: svc.videoUrl || '',
       hideImage: Boolean(svc.hideImage),
       hideVideo: Boolean(svc.hideVideo),
-      visible: svc.visible !== false
+      visible: svc.visible !== false,
+      highlighted: Boolean(svc.highlighted),
+      badge: svc.badge || 'MOST POPULAR'
     });
     setIsServiceModalOpen(true);
   };
@@ -1100,7 +1143,9 @@ export const Admin: React.FC = () => {
         videoUrl: serviceForm.videoUrl,
         hideImage: serviceForm.hideImage,
         hideVideo: serviceForm.hideVideo,
-        visible: serviceForm.visible
+        visible: serviceForm.visible,
+        highlighted: serviceForm.highlighted,
+        badge: serviceForm.highlighted ? (serviceForm.badge || 'MOST POPULAR') : undefined
       });
       showToast(`Updated service package "${serviceForm.title}"`);
     } else {
@@ -1114,7 +1159,9 @@ export const Admin: React.FC = () => {
         videoUrl: serviceForm.videoUrl,
         hideImage: serviceForm.hideImage,
         hideVideo: serviceForm.hideVideo,
-        visible: serviceForm.visible
+        visible: serviceForm.visible,
+        highlighted: serviceForm.highlighted,
+        badge: serviceForm.highlighted ? (serviceForm.badge || 'MOST POPULAR') : undefined
       });
       showToast(`Added new affordable service "${serviceForm.title}"`);
     }
@@ -2374,7 +2421,499 @@ export const Admin: React.FC = () => {
       {/* ========================================================================= */}
       {activeTab === 'services-mgr' && (
         <div className="space-y-8">
-          {/* AFFORDABLE SERVICES MANAGER */}
+          {/* ========================================================================= */}
+          {/* 1. SERVICES PAGE HEADLINE & QUICK HIGHLIGHTS CMS (/#/services)           */}
+          {/* ========================================================================= */}
+          <HUDPanel
+            title="Services Page Headline & Value Highlights (/#/services)"
+            badge="Live Page Headline"
+          >
+            <div className="space-y-5">
+              <p className="text-xs text-slate-600">
+                Customize the top badges, main headline, introductory value offer, and 4 quick stat cards displayed on <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-900">/#/services</code>.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">Top Badge Pill Text:</label>
+                  <input
+                    type="text"
+                    value={headlineForm.badgeText}
+                    onChange={(e) => setHeadlineForm({ ...headlineForm, badgeText: e.target.value })}
+                    placeholder="e.g. Direct-Link Exclusive Rates • Up to 70% Lower Than Traditional Agencies"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">Main Page Title / Heading:</label>
+                  <input
+                    type="text"
+                    value={headlineForm.title}
+                    onChange={(e) => setHeadlineForm({ ...headlineForm, title: e.target.value })}
+                    placeholder="e.g. Ultra-Affordable Virtual Assistant, AI Automation & Web Packages"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-extrabold"
+                  />
+                </div>
+              </div>
+
+              <div className="text-xs">
+                <label className="font-bold text-slate-700 block pb-1">Subtitle &amp; Value Description:</label>
+                <textarea
+                  rows={2}
+                  value={headlineForm.description}
+                  onChange={(e) => setHeadlineForm({ ...headlineForm, description: e.target.value })}
+                  placeholder="Describe your pricing tiers and risk-free starter trial packages..."
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 leading-relaxed"
+                />
+              </div>
+
+              {/* 4 Quick Stat Cards */}
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-extrabold text-slate-900 block">
+                      Quick Value Highlights (4 Horizontal Metric Cards)
+                    </span>
+                    <span className="text-[11px] text-slate-500">
+                      Show key rates and guarantees directly beneath the headline
+                    </span>
+                  </div>
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={headlineForm.showQuickStats}
+                      onChange={(e) => setHeadlineForm({ ...headlineForm, showQuickStats: e.target.checked })}
+                      className="w-4 h-4 rounded cursor-pointer"
+                    />
+                    <span>Enable Quick Stat Cards</span>
+                  </label>
+                </div>
+
+                {headlineForm.showQuickStats && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-1">
+                    {(headlineForm.quickStats || []).map((stat, idx) => (
+                      <div key={idx} className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                          Card #{idx + 1} Big Rate / Value:
+                        </label>
+                        <input
+                          type="text"
+                          value={stat.value}
+                          onChange={(e) => {
+                            const next = [...headlineForm.quickStats];
+                            next[idx] = { ...next[idx], value: e.target.value };
+                            setHeadlineForm({ ...headlineForm, quickStats: next });
+                          }}
+                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-black text-slate-900"
+                        />
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                          Card #{idx + 1} Subtitle Label:
+                        </label>
+                        <input
+                          type="text"
+                          value={stat.label}
+                          onChange={(e) => {
+                            const next = [...headlineForm.quickStats];
+                            next[idx] = { ...next[idx], label: e.target.value };
+                            setHeadlineForm({ ...headlineForm, quickStats: next });
+                          }}
+                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetServicesHeadlineConfig();
+                    setHeadlineForm(DEFAULT_SERVICES_HEADLINE_CONFIG);
+                    showToast('Reset Services page headline to clean factory defaults');
+                  }}
+                  className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl border border-slate-200 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Reset Headline Defaults</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    updateServicesHeadlineConfig(headlineForm);
+                    showToast('Saved Services page headline!');
+                  }}
+                  className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl flex items-center gap-1.5 shadow-sm cursor-pointer"
+                >
+                  <CheckCircle className="w-4 h-4 text-emerald-400" />
+                  <span>Save Headline Changes</span>
+                </button>
+              </div>
+            </div>
+          </HUDPanel>
+
+          {/* ========================================================================= */}
+          {/* 2. VERIFIED PARTNER • SERVICES PAGE ADS MANAGER (/#/services)             */}
+          {/* ========================================================================= */}
+          <HUDPanel
+            title="Verified Partner • Services Page Ads Manager (/#/services)"
+            badge="Promo Ad Slot"
+          >
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                <p className="text-xs text-slate-600">
+                  Control the promotional advertisement and affiliate partnership banner displayed on <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-900">/#/services</code>.
+                  Choose to display the default Hostinger Cloud Hosting promo or replace it with your own custom ads, affiliate deals, or any offer you wish.
+                </p>
+                <label className="flex items-center gap-2 p-2 px-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer shrink-0">
+                  <input
+                    type="checkbox"
+                    checked={promoAdForm.enabled}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, enabled: e.target.checked })}
+                    className="w-4 h-4 rounded cursor-pointer"
+                  />
+                  <span className="text-xs font-bold text-slate-900">
+                    {promoAdForm.enabled ? 'Ad Banner: VISIBLE' : 'Ad Banner: HIDDEN'}
+                  </span>
+                </label>
+              </div>
+
+              {/* PRESETS & AUTO-IMPORT BAR */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <span className="font-extrabold text-slate-900 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+                    <span>Quick Ad Presets &amp; Partner Deal Import:</span>
+                  </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPromoAdForm(DEFAULT_SERVICES_PROMO_AD);
+                        showToast('Loaded Hostinger Cloud Hosting Preset');
+                      }}
+                      className="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 rounded-lg font-bold text-[11px] shadow-2xs cursor-pointer"
+                    >
+                      ★ Hostinger Hosting Preset (Default)
+                    </button>
+                    {(promoItems || []).length > 0 && (
+                      <select
+                        onChange={(e) => {
+                          const found = (promoItems || []).find((p) => p.id === e.target.value);
+                          if (found) {
+                            setPromoAdForm((prev) => ({
+                              ...prev,
+                              title: found.title,
+                              description: found.description || found.fullDescription || '',
+                              partnerCategory: found.promotionLabel || 'VERIFIED PARTNER',
+                              badge: found.badge || 'SPECIAL DEAL',
+                              destinationUrl: found.destinationUrl,
+                              ctaButtonText: found.buttonText || 'Claim Deal →',
+                              imageUrl: found.imageUrl || prev.imageUrl,
+                              hideImage: Boolean(found.hideImage)
+                            }));
+                            showToast(`Imported ad details from "${found.title}"`);
+                          }
+                        }}
+                        defaultValue=""
+                        className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-[11px] font-semibold text-slate-800"
+                      >
+                        <option value="" disabled>
+                          Import from Partner Ads (Tab 6)...
+                        </option>
+                        {(promoItems || []).map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.title}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* FORM FIELDS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">
+                    Ad Category / Subtitle Pill:
+                  </label>
+                  <input
+                    type="text"
+                    value={promoAdForm.partnerCategory}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, partnerCategory: e.target.value })}
+                    placeholder="e.g. HOSTING PROMO, SPECIAL DISCOUNT, AI TOOLS"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">
+                    Partner / Vendor Credit:
+                  </label>
+                  <input
+                    type="text"
+                    value={promoAdForm.vendorName}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, vendorName: e.target.value })}
+                    placeholder="e.g. by Hostinger Cloud Infrastructure"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold"
+                  />
+                </div>
+              </div>
+
+              <div className="text-xs">
+                <label className="font-bold text-slate-700 block pb-1">
+                  Main Ad Title / Headline:
+                </label>
+                <input
+                  type="text"
+                  value={promoAdForm.title}
+                  onChange={(e) => setPromoAdForm({ ...promoAdForm, title: e.target.value })}
+                  placeholder="e.g. Hostinger Cloud VPS & Premium Web Hosting — Up to 75% Off + Free Domain & SSL"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-extrabold"
+                />
+              </div>
+
+              <div className="text-xs">
+                <label className="font-bold text-slate-700 block pb-1">
+                  Ad Description &amp; Offer Details:
+                </label>
+                <textarea
+                  rows={2}
+                  value={promoAdForm.description}
+                  onChange={(e) => setPromoAdForm({ ...promoAdForm, description: e.target.value })}
+                  placeholder="Explain the offer, key benefits, and why readers should click..."
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 leading-relaxed"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">Badge Tag:</label>
+                  <input
+                    type="text"
+                    value={promoAdForm.badge}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, badge: e.target.value })}
+                    placeholder="BESTSELLER"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">Discount Tag:</label>
+                  <input
+                    type="text"
+                    value={promoAdForm.discountText}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, discountText: e.target.value })}
+                    placeholder="Save Up to 75%"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">Price Badge:</label>
+                  <input
+                    type="text"
+                    value={promoAdForm.priceBadge}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, priceBadge: e.target.value })}
+                    placeholder="$2.49 / mo"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block pb-1">SubPrice Tag:</label>
+                  <input
+                    type="text"
+                    value={promoAdForm.subPrice}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, subPrice: e.target.value })}
+                    placeholder="Free Domain + SSL"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium"
+                  />
+                </div>
+              </div>
+
+              {/* Destination URL & CTA Button */}
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
+                <div className="sm:col-span-8">
+                  <div className="flex items-center justify-between pb-1">
+                    <label className="font-bold text-slate-700">
+                      Destination / Affiliate Link URL (Editable):
+                    </label>
+                    {promoAdForm.destinationUrl && (
+                      <a
+                        href={promoAdForm.destinationUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-bold text-indigo-600 hover:underline flex items-center gap-1"
+                      >
+                        <span>Test Link</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                  <input
+                    type="url"
+                    value={promoAdForm.destinationUrl}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, destinationUrl: e.target.value })}
+                    placeholder="https://hostinger.ph?REFERRALCODE=1JOMAR46"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono"
+                  />
+                </div>
+                <div className="sm:col-span-4">
+                  <label className="font-bold text-slate-700 block pb-1">CTA Button Label:</label>
+                  <input
+                    type="text"
+                    value={promoAdForm.ctaButtonText}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, ctaButtonText: e.target.value })}
+                    placeholder="Claim Hosting Discount (75% Off) →"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold"
+                  />
+                </div>
+              </div>
+
+              {/* Image & Position */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold text-slate-800">Banner Image URL:</label>
+                    <label className="flex items-center gap-1 cursor-pointer text-slate-700">
+                      <input
+                        type="checkbox"
+                        checked={promoAdForm.hideImage}
+                        onChange={(e) => setPromoAdForm({ ...promoAdForm, hideImage: e.target.checked })}
+                      />
+                      <span>Hide Image</span>
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    value={promoAdForm.imageUrl}
+                    onChange={(e) => setPromoAdForm({ ...promoAdForm, imageUrl: e.target.value })}
+                    placeholder="https://images.unsplash.com/photo-..."
+                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, 'services-promo-ad-image')}
+                    className="w-full text-xs text-slate-600 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-slate-900 file:text-white cursor-pointer"
+                  />
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 flex flex-col justify-between">
+                  <div>
+                    <label className="font-bold text-slate-800 block pb-1">
+                      Placement on /#/services Page:
+                    </label>
+                    <select
+                      value={promoAdForm.position}
+                      onChange={(e) =>
+                        setPromoAdForm({
+                          ...promoAdForm,
+                          position: e.target.value as 'below-headline' | 'above-booking' | 'both'
+                        })
+                      }
+                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl font-semibold text-slate-900"
+                    >
+                      <option value="below-headline">Top: Directly Below Headline (Recommended)</option>
+                      <option value="above-booking">Middle: Directly Above Booking Form</option>
+                      <option value="both">Both: Show at Top and Above Booking Form</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="font-bold text-slate-800 block pb-1">
+                      Included Bullet Features (Comma-Separated):
+                    </label>
+                    <input
+                      type="text"
+                      value={(promoAdForm.features || []).join(', ')}
+                      onChange={(e) =>
+                        setPromoAdForm({
+                          ...promoAdForm,
+                          features: e.target.value
+                            .split(',')
+                            .map((s) => s.trim())
+                            .filter(Boolean)
+                        })
+                      }
+                      placeholder="99.9% Uptime, NVMe SSD Speed, Free Domain & SSL"
+                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl font-medium"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* INTERACTIVE PREVIEW */}
+              <div className="border border-slate-200 rounded-2xl p-4 bg-slate-50 space-y-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">
+                  Interactive Live Preview (How It Appears on /#/services):
+                </span>
+                <div className="border border-slate-200 rounded-2xl bg-white overflow-hidden shadow-2xs">
+                  <div className="bg-gradient-to-r from-purple-50 via-slate-50 to-indigo-50 border-b border-slate-200 px-4 py-2 flex items-center justify-between text-xs">
+                    <span className="font-bold text-purple-900 uppercase">
+                      Verified Partner • {promoAdForm.partnerCategory}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                      Verified Partner
+                    </span>
+                  </div>
+                  <div className="p-4 flex flex-col sm:flex-row gap-4 items-center">
+                    {promoAdForm.imageUrl && !promoAdForm.hideImage && (
+                      <img
+                        src={promoAdForm.imageUrl}
+                        alt="Preview"
+                        className="w-24 h-24 rounded-xl object-cover border border-slate-200 shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 space-y-1">
+                      <h4 className="font-extrabold text-slate-900 text-sm">{promoAdForm.title}</h4>
+                      <p className="text-xs text-slate-600 line-clamp-2">{promoAdForm.description}</p>
+                      <div className="text-xs font-bold text-slate-900 pt-1">
+                        {promoAdForm.priceBadge} <span className="text-slate-500 font-normal">({promoAdForm.subPrice})</span>
+                      </div>
+                    </div>
+                    <a
+                      href={promoAdForm.destinationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold shrink-0"
+                    >
+                      {promoAdForm.ctaButtonText || 'Claim Deal →'}
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* SAVE / RESET ACTIONS */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetServicesPromoAd();
+                    setPromoAdForm(DEFAULT_SERVICES_PROMO_AD);
+                    showToast('Reset partner ad to Hostinger promo default');
+                  }}
+                  className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl border border-slate-200 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Reset to Default Promo</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    updateServicesPromoAd(promoAdForm);
+                    showToast('Saved Services page partner ad!');
+                  }}
+                  className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl flex items-center gap-1.5 shadow-sm cursor-pointer"
+                >
+                  <CheckCircle className="w-4 h-4 text-emerald-400" />
+                  <span>Save Ad Configuration</span>
+                </button>
+              </div>
+            </div>
+          </HUDPanel>
+
+          {/* ========================================================================= */}
+          {/* 3. AFFORDABLE SERVICES MANAGER (PACKAGES LIST)                            */}
+          {/* ========================================================================= */}
           <HUDPanel
             title={`Affordable Services Manager (/#/services — ${(services || []).length} Packages)`}
             badge="URL-Only /#/services"
@@ -2382,7 +2921,7 @@ export const Admin: React.FC = () => {
             <div className="space-y-5">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                 <p className="text-xs text-slate-600">
-                  Manage your affordable service packages displayed on the direct-link <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-900">/#/services</code> page and booking dropdowns.
+                  Manage your affordable service packages displayed on the direct-link <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-900">/#/services</code> page and booking dropdowns. Reorder packages, highlight your best offers, or toggle visibility with 1 click.
                 </p>
                 <button
                   type="button"
@@ -2395,16 +2934,26 @@ export const Admin: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {(services || []).map((svc) => (
+                {(services || []).map((svc, index) => (
                   <div
                     key={svc.id}
-                    className={`p-5 rounded-2xl border flex flex-col justify-between space-y-4 shadow-2xs ${
-                      svc.visible !== false
+                    className={`p-5 rounded-2xl border flex flex-col justify-between space-y-4 shadow-2xs transition-all ${
+                      svc.highlighted
+                        ? 'border-2 border-slate-900 ring-2 ring-slate-900/10 bg-white'
+                        : svc.visible !== false
                         ? 'border-slate-200 bg-white'
                         : 'border-slate-200 bg-slate-50 opacity-60'
                     }`}
                   >
                     <div className="space-y-2">
+                      {/* HIGHLIGHTED BADGE */}
+                      {svc.highlighted && (
+                        <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-white text-[10px] font-black uppercase tracking-wider">
+                          <Sparkles className="w-3 h-3 text-amber-400 fill-amber-400" />
+                          <span>{svc.badge || 'HIGHLIGHTED'}</span>
+                        </div>
+                      )}
+
                       {svc.image && !svc.hideImage && (
                         <div className="h-32 w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-50 relative group">
                           <img src={svc.image} alt={svc.title} className="w-full h-full object-cover" />
@@ -2417,6 +2966,7 @@ export const Admin: React.FC = () => {
                           </button>
                         </div>
                       )}
+
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                           {svc.category === 'va' ? 'Virtual Assistant' : 'Engineering & AI'}
@@ -2434,38 +2984,97 @@ export const Admin: React.FC = () => {
                       </ul>
                     </div>
 
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          toggleServiceVisibility(svc.id);
-                          showToast(`Toggled visibility for service "${svc.title}"`);
-                        }}
-                        className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg font-semibold cursor-pointer"
-                      >
-                        {svc.visible !== false ? 'Hide' : 'Unhide'}
-                      </button>
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => handleOpenEditService(svc)}
-                          className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold flex items-center gap-1 cursor-pointer"
-                        >
-                          <Edit className="w-3.5 h-3.5" />
-                          <span>Edit / Media</span>
-                        </button>
+                    <div className="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                      {/* REORDER & HIGHLIGHT TOOLBAR */}
+                      <div className="flex items-center justify-between gap-1">
+                        {/* Up / Down Reorder */}
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            disabled={index === 0}
+                            onClick={() => {
+                              moveService(svc.id, 'up');
+                              showToast(`Moved "${svc.title}" up`);
+                            }}
+                            className="p-1.5 bg-slate-100 hover:bg-slate-200 disabled:opacity-30 rounded-lg text-slate-700 cursor-pointer"
+                            title="Move Up"
+                          >
+                            <ArrowUp className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={index === (services || []).length - 1}
+                            onClick={() => {
+                              moveService(svc.id, 'down');
+                              showToast(`Moved "${svc.title}" down`);
+                            }}
+                            className="p-1.5 bg-slate-100 hover:bg-slate-200 disabled:opacity-30 rounded-lg text-slate-700 cursor-pointer"
+                            title="Move Down"
+                          >
+                            <ArrowDown className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+
+                        {/* Star Highlight Toggle */}
                         <button
                           type="button"
                           onClick={() => {
-                            if (window.confirm(`Delete service "${svc.title}"?`)) {
-                              deleteService(svc.id);
-                              showToast(`Deleted service "${svc.title}"`);
-                            }
+                            toggleServiceHighlight(svc.id);
+                            showToast(
+                              svc.highlighted
+                                ? `Removed highlight from "${svc.title}"`
+                                : `★ Marked "${svc.title}" as HIGHLIGHTED package!`
+                            );
                           }}
-                          className="p-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg cursor-pointer"
+                          className={`px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer transition-all ${
+                            svc.highlighted
+                              ? 'bg-amber-400 text-slate-950 shadow-xs'
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                          }`}
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Star
+                            className={`w-3.5 h-3.5 ${
+                              svc.highlighted ? 'fill-slate-950 text-slate-950' : 'text-slate-500'
+                            }`}
+                          />
+                          <span>{svc.highlighted ? 'Highlighted' : 'Highlight'}</span>
                         </button>
+                      </div>
+
+                      {/* HIDE / EDIT / DELETE TOOLBAR */}
+                      <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-50">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            toggleServiceVisibility(svc.id);
+                            showToast(`Toggled visibility for service "${svc.title}"`);
+                          }}
+                          className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg font-semibold cursor-pointer"
+                        >
+                          {svc.visible !== false ? 'Hide' : 'Unhide'}
+                        </button>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEditService(svc)}
+                            className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold flex items-center gap-1 cursor-pointer"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                            <span>Edit / Media</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (window.confirm(`Delete service "${svc.title}"?`)) {
+                                deleteService(svc.id);
+                                showToast(`Deleted service "${svc.title}"`);
+                              }
+                            }}
+                            className="p-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -2876,6 +3485,19 @@ export const Admin: React.FC = () => {
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset Defaults</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  updatePlayStoreConfig(playStoreForm);
+                  window.dispatchEvent(new CustomEvent('wh_playstore_wake_up'));
+                  showToast('🚀 Popup triggered! Watch bottom-right of your screen.');
+                }}
+                className="px-3.5 py-2.5 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+                <span>Test / Wake Up Popup Now</span>
               </button>
 
               <button
@@ -4313,6 +4935,41 @@ export const Admin: React.FC = () => {
                   onChange={(e) => handleFileUpload(e, 'service-image')}
                   className="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-900 file:text-white cursor-pointer"
                 />
+              </div>
+
+              {/* HIGHLIGHT PACKAGE CONTROLS */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <label className="font-bold text-slate-800 flex items-center gap-1.5 cursor-pointer">
+                      <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                      <span>Highlight / Feature This Service Package</span>
+                    </label>
+                    <span className="text-[11px] text-slate-500 block">
+                      Displays a prominent border ring, elevated styling, and top ribbon on /#/services
+                    </span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={serviceForm.highlighted}
+                    onChange={(e) => setServiceForm({ ...serviceForm, highlighted: e.target.checked })}
+                    className="w-4 h-4 rounded cursor-pointer"
+                  />
+                </div>
+                {serviceForm.highlighted && (
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 block pb-1">
+                      Highlight Ribbon / Badge Text:
+                    </label>
+                    <input
+                      type="text"
+                      value={serviceForm.badge}
+                      onChange={(e) => setServiceForm({ ...serviceForm, badge: e.target.value })}
+                      placeholder="e.g. MOST POPULAR, CLIENT CHOICE, RECOMMENDED, BEST VALUE"
+                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl font-bold text-slate-900 text-xs"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
