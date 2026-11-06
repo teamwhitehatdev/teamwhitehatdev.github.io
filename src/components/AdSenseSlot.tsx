@@ -24,78 +24,71 @@ interface PartnerFeaturedAd {
   features: string[];
 }
 
-const PARTNER_FEATURED_ADS: PartnerFeaturedAd[] = [
-  {
-    id: 'partner-seeedstudio-xiao-esp32s3-display',
-    title: 'XIAO 1.47" IPS Touch Display Powered by XIAO ESP32-S3 Plus',
+// Strictly unique ads per slot — none of these duplicate any item in 'promo' (AtomeCardPanel) or 'partner-deals' (DynamicAdsSidebar)
+const EXCLUSIVE_SLOT_ADS: Record<'in-article' | 'header' | 'sidebar' | 'footer', PartnerFeaturedAd> = {
+  'in-article': {
+    id: 'partner-seeedstudio-rpi5-8gb-kit',
+    title:
+      'Seeed Studio Raspberry Pi 5 Starter Kit - 8GB RAM，128GB Micro SD Card pre-loaded with 64-bit Raspberry Pi OS',
     vendor: 'by Seeed Studio Official Hardware Partner (LF0tCxl)',
-    category: 'SEEED STUDIO XIAO ESP32S3-PLUS',
+    category: 'SEEED STUDIO RASPBERRY PI 5 STARTER KIT',
     description:
-      'Compact 1.47-inch Capacitive IPS Touch Screen powered by XIAO ESP32-S3 Plus with onboard WiFi + BLE, MicroSD Card Slot, Digital Mic, and 6-Axis IMU.',
+      'The Raspberry Pi 5 Starter Kit is an all-in-one solution for you to dive into the world of computing and electronics. It includes a Raspberry Pi 5 (available in 4GB/8GB RAM) along with all essential accessories to jumpstart Raspberry Pi projects.',
     rating: '5.0',
-    reviews: '2.9k+',
-    sales: 'Official Seeed Studio Hardware',
-    priceBadge: 'NEW HARDWARE',
-    subPrice: 'Powered by XIAO ESP32S3-Plus',
-    badge: 'XIAO 1.47" IPS DISPLAY',
-    image: './seeedstudio_xiao_esp32s3_display.jpg',
-    url: 'https://www.seeedstudio.com/1-47-Inch-Touch-Display-Powered-by-XIAO-ESP32-S3-Plus-p-6996.html?sensecap_affiliate=LF0tCxl&referring_service=link',
-    features: ['Capacitive Touch + WiFi/BLE', 'MicroSD Card Slot', 'Digital Mic + 6-Axis IMU']
+    reviews: '4.2k+',
+    sales: 'All-In-One 8GB Starter Kit',
+    priceBadge: '8GB + 128GB OS',
+    subPrice: 'Pre-loaded 64-bit Raspberry Pi OS',
+    badge: 'RASPBERRY PI 5 KIT',
+    image: './seeedstudio_raspberry_pi5_8gb_kit.jpg',
+    url: 'https://www.seeedstudio.com/Raspberry-Pi5-8GB-Kit-p-6254.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    features: [
+      'Raspberry Pi 5 (8GB RAM)',
+      '128GB MicroSD Pre-Loaded 64-bit OS',
+      'Official Case + Active Cooler + PSU'
+    ]
   },
-  {
-    id: 'partner-seeedstudio-meshtastic',
-    title: 'Wio Tracker L2 Pro for Meshtastic',
+  header: {
+    id: 'partner-seeedstudio-rpi5-8gb-kit-header',
+    title:
+      'Seeed Studio Raspberry Pi 5 Starter Kit - 8GB RAM，128GB Micro SD Card pre-loaded with 64-bit Raspberry Pi OS',
     vendor: 'by Seeed Studio Official Hardware Partner (LF0tCxl)',
-    category: 'Black Friday & Thanksgiving Promo',
+    category: 'SEEED STUDIO RASPBERRY PI 5 STARTER KIT',
     description:
-      'Black Friday & Thanksgiving Promo — Shop Early & Save Big on Seeed Studio Wio Tracker L2 Pro for Meshtastic, SenseCAP LoRa nodes, reTerminal displays, and AI hardware.',
+      'The Raspberry Pi 5 Starter Kit is an all-in-one solution for you to dive into the world of computing and electronics. It includes a Raspberry Pi 5 (available in 4GB/8GB RAM) along with all essential accessories to jumpstart Raspberry Pi projects.',
     rating: '5.0',
-    reviews: '3.4k+',
-    sales: 'Doorbuster Promo Live',
-    priceBadge: 'SAVE BIG NOW',
-    subPrice: 'Black Friday & Thanksgiving Promo',
-    badge: 'Black Friday & Thanksgiving Promo',
-    image: './seeedstudio_affiliate_1200x628.jpg',
-    url: 'https://www.seeedstudio.com/Wio-Tracker-L2-Pro-for-Meshtastic-p-0000.html?sensecap_affiliate=LF0tCxl&referring_service=link',
-    features: ['Meshtastic LoRa GPS', 'SenseCAP IoT Ecosystem', 'Doorbuster Hardware Deals']
+    reviews: '4.2k+',
+    sales: 'All-In-One 8GB Starter Kit',
+    priceBadge: '8GB + 128GB OS',
+    subPrice: 'Pre-loaded 64-bit Raspberry Pi OS',
+    badge: 'RASPBERRY PI 5 KIT',
+    image: './seeedstudio_raspberry_pi5_8gb_kit.jpg',
+    url: 'https://www.seeedstudio.com/Raspberry-Pi5-8GB-Kit-p-6254.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    features: [
+      'Raspberry Pi 5 (8GB RAM)',
+      '128GB MicroSD Pre-Loaded 64-bit OS',
+      'Official Case + Active Cooler + PSU'
+    ]
   },
-  {
-    id: 'partner-hostinger-pro',
-    title: 'Hostinger Cloud & WordPress Business Hosting — AI Website Builder Suite',
-    vendor: 'by Hostinger International in Web Hosting & Cloud',
-    category: 'WEB HOSTING & CLOUD',
+  sidebar: {
+    id: 'partner-elevenlabs-voice-sidebar',
+    title: 'ElevenLabs Prime Voice AI — Ultra-Realistic Multilingual Dubbing & Cloning',
+    vendor: 'by ElevenLabs Audio in AI Voice & Media',
+    category: 'AI VOICE & AUDIO',
     description:
-      'High-speed NVMe cloud hosting, 1-click WordPress staging, free business domain & SSL certificates for remote Virtual Assistants and client agencies.',
+      'Studio-quality AI voice generation, multilingual video dubbing, and custom voice cloning trusted by content creators and marketing agencies.',
     rating: '4.9',
-    reviews: '2.4k+',
-    sales: '29.5K+ Active Sites',
-    priceBadge: 'UP TO 75% OFF',
-    subPrice: 'Free Domain + SSL',
-    badge: 'BESTSELLER',
+    reviews: '3.1k+',
+    sales: '41.0K+ Studios',
+    priceBadge: 'FREE START',
+    subPrice: '29+ Languages',
+    badge: 'STAFF PICK',
     image:
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80',
-    url: 'https://hostinger.ph?REFERRALCODE=1JOMAR46',
-    features: ['99.9% Uptime SLA', 'NVMe SSD Speed', '24/7 Live Support']
+      'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=900&q=80',
+    url: 'https://try.elevenlabs.io/097539247221',
+    features: ['Studio Voice Cloning', 'Automated Dubbing', 'Commercial License']
   },
-  {
-    id: 'partner-meshy-3d',
-    title: 'Meshy 3D AI Studio — Text & Image to PBR 3D Asset Generator Pipeline',
-    vendor: 'by Meshy AI Labs in 3D Generative AI Tools',
-    category: '3D AI & GAME ASSETS',
-    description:
-      'Generate production-ready 3D meshes and 4K PBR textures from text prompts or 2D reference images in seconds for Blender, Unity, and Unreal Engine.',
-    rating: '5.0',
-    reviews: '1.8k+',
-    sales: '18.2K+ Creators',
-    priceBadge: 'FREE TIER',
-    subPrice: 'Instant 3D Export',
-    badge: 'TRENDING #1',
-    image:
-      'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=900&q=80',
-    url: 'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
-    features: ['Text-to-3D Mesh', 'Blender & Unity Ready', '4K PBR Textures']
-  },
-  {
+  footer: {
     id: 'partner-elevenlabs-voice',
     title: 'ElevenLabs Prime Voice AI — Ultra-Realistic Multilingual Dubbing & Cloning',
     vendor: 'by ElevenLabs Audio in AI Voice & Media',
@@ -113,18 +106,7 @@ const PARTNER_FEATURED_ADS: PartnerFeaturedAd[] = [
     url: 'https://try.elevenlabs.io/097539247221',
     features: ['Studio Voice Cloning', 'Automated Dubbing', 'Commercial License']
   }
-];
-
-// Randomize order once per page load while guaranteeing each placement ('header', 'in-article', 'sidebar', 'footer')
-// receives a strictly unique index so NO ad is ever duplicated on the same page.
-const SHUFFLED_PARTNER_ADS: PartnerFeaturedAd[] = (() => {
-  const copy = [...PARTNER_FEATURED_ADS];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-})();
+};
 
 export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className = '' }) => {
   const { adSenseConfig } = useApp();
@@ -202,27 +184,17 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
     );
   }
 
-  // 3. VERIFIED PARTNER MARKETPLACE STYLE SPONSORED CARDS (RANDOMIZED & NON-DUPLICATING PER PLACEMENT)
+  // 3. VERIFIED PARTNER MARKETPLACE STYLE SPONSORED CARDS (CONSISTENT & NON-DUPLICATING)
   if (!adSenseConfig.showPartnerFallbackAds) {
     return null;
   }
 
-  const placementOffset =
-    placement === 'header'
-      ? 0
-      : placement === 'in-article'
-      ? 1
-      : placement === 'sidebar'
-      ? 2
-      : 3;
-  const tfItem = SHUFFLED_PARTNER_ADS[placementOffset % SHUFFLED_PARTNER_ADS.length];
-
+  const tfItem = EXCLUSIVE_SLOT_ADS[placement] || EXCLUSIVE_SLOT_ADS['in-article'];
   const displayTitle = tfItem.title;
   const displayImage = tfItem.image;
   const displayUrl = tfItem.url;
   const displayBadge = tfItem.badge;
   const displayCategory = tfItem.category;
-
   const isSidebar = placement === 'sidebar';
 
   return (
@@ -242,15 +214,14 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
         </div>
       </div>
 
-      {/* DEDICATED VERTICAL SIDEBAR LAYOUT (FIXES ALL DISTORTION & OVERLAPPING) */}
+      {/* DEDICATED VERTICAL SIDEBAR LAYOUT */}
       {isSidebar ? (
         <div className="p-4 space-y-3.5">
-          {/* FULL-WIDTH THUMBNAIL */}
           <a
             href={displayUrl}
             target="_blank"
             rel="sponsored noopener noreferrer"
-            className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-200 shrink-0 group bg-slate-100 block"
+            className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-200 shrink-0 group bg-white block"
           >
             <img
               src={displayImage}
@@ -269,7 +240,6 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
             </div>
           </a>
 
-          {/* ITEM DETAILS */}
           <div className="space-y-2">
             <a
               href={displayUrl}
@@ -280,11 +250,9 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
               {displayTitle}
             </a>
             <p className="text-[11px] text-slate-500 font-medium">{tfItem.vendor}</p>
-
             <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
               {tfItem.description}
             </p>
-
             <div className="flex flex-wrap items-center gap-1.5 pt-1">
               {tfItem.features.map((feat, i) => (
                 <span
@@ -297,7 +265,6 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
             </div>
           </div>
 
-          {/* RATING & SALES ROW */}
           <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px]">
             <div className="flex items-center gap-1 text-amber-500 font-bold">
               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 shrink-0" />
@@ -307,7 +274,6 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
             <div className="text-[10px] text-slate-500 font-semibold">{tfItem.sales}</div>
           </div>
 
-          {/* ACTION BUTTONS */}
           <div className="flex items-center gap-2 pt-1">
             <a
               href={displayUrl}
@@ -333,12 +299,11 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
       ) : (
         /* WIDE HORIZONTAL RESPONSIVE LAYOUT (FOR HEADER, IN-ARTICLE, AND FOOTER) */
         <div className="p-4 sm:p-5 flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 sm:gap-6">
-          {/* PREVIEW THUMBNAIL WITH HOVER OVERLAY */}
           <a
             href={displayUrl}
             target="_blank"
             rel="sponsored noopener noreferrer"
-            className="relative w-full xl:w-56 h-40 xl:h-32 rounded-xl overflow-hidden border border-slate-200 shrink-0 group bg-slate-100 block"
+            className="relative w-full xl:w-60 h-44 xl:h-36 rounded-xl overflow-hidden border border-slate-200 shrink-0 group bg-white block"
           >
             <img
               src={displayImage}
@@ -357,7 +322,6 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
             </div>
           </a>
 
-          {/* MIDDLE ITEM METADATA (VERIFIED PARTNER STYLE) */}
           <div className="flex-1 space-y-2 min-w-0">
             <div>
               <a
@@ -371,7 +335,7 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
               <p className="text-[11px] text-slate-500 font-medium mt-0.5">{tfItem.vendor}</p>
             </div>
 
-            <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               {tfItem.description}
             </p>
 
@@ -387,7 +351,6 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
             </div>
           </div>
 
-          {/* RIGHT PRICE, RATING & SPLIT ACTION BOX (VERIFIED MARKETPLACE COLUMN) */}
           <div className="w-full xl:w-auto xl:border-l border-slate-200 xl:pl-6 flex flex-row xl:flex-col items-center xl:items-end justify-between gap-3 shrink-0 pt-3 xl:pt-0 border-t xl:border-t-0">
             <div className="text-left xl:text-right space-y-0.5">
               <div className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">

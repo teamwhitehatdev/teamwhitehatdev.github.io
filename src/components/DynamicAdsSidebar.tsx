@@ -1,29 +1,39 @@
 import React, { useMemo } from 'react';
 import { Sparkles, ExternalLink, Star, Eye, ShoppingCart, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { AdSenseSlot } from './AdSenseSlot';
 
 export const DynamicAdsSidebar: React.FC = () => {
   const { getPublicPromoItems, playStoreConfig } = useApp();
   const rawPartnerDeals =
     typeof getPublicPromoItems === 'function' ? getPublicPromoItems('partner-deals') : [];
+  const rawPromos =
+    typeof getPublicPromoItems === 'function' ? getPublicPromoItems('promo') : [];
 
-  // Deduplicate by URL & title and randomize order on mount so ads rotate cleanly without duplication
+  // Strictly deduplicate against 'promo' (AtomeCardPanel) and 'in-article'/'footer' (AdSenseSlot)
+  // so no ad is ever duplicated across categories on the same page.
   const partnerDeals = useMemo(() => {
+    const reservedUrls = new Set<string>(
+      rawPromos.map((p) => (p.destinationUrl || '').trim().toLowerCase())
+    );
+    const reservedTitles = new Set<string>(
+      rawPromos.map((p) => (p.title || '').trim().toLowerCase())
+    );
+    // Also reserve the Raspberry Pi 5 Starter Kit URL shown in the main AdSenseSlot banner
+    reservedUrls.add(
+      'https://www.seeedstudio.com/raspberry-pi5-8gb-kit-p-6254.html?sensecap_affiliate=lf0tcxl&referring_service=link'
+    );
+
     const seen = new Set<string>();
-    const unique = rawPartnerDeals.filter((ad) => {
-      const key = `${(ad.destinationUrl || '').trim().toLowerCase()}|${(ad.title || '').trim().toLowerCase()}`;
+    return rawPartnerDeals.filter((ad) => {
+      const urlKey = (ad.destinationUrl || '').trim().toLowerCase();
+      const titleKey = (ad.title || '').trim().toLowerCase();
+      if (reservedUrls.has(urlKey) || reservedTitles.has(titleKey)) return false;
+      const key = `${urlKey}|${titleKey}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
     });
-    const copy = [...unique];
-    for (let i = copy.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [copy[i], copy[j]] = [copy[j], copy[i]];
-    }
-    return copy;
-  }, [rawPartnerDeals]);
+  }, [rawPartnerDeals, rawPromos]);
 
   return (
     <div className="space-y-5 select-none">
@@ -253,9 +263,6 @@ export const DynamicAdsSidebar: React.FC = () => {
           );
         })}
       </div>
-
-      {/* GOOGLE ADSENSE / UNIVERSAL SIDEBAR AD SLOT */}
-      <AdSenseSlot placement="sidebar" />
     </div>
   );
 };
