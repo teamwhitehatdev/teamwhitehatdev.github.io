@@ -7,12 +7,48 @@ export interface AdSenseSlotProps {
   className?: string;
 }
 
-const PARTNER_FEATURED_ADS = [
+interface PartnerFeaturedAd {
+  id: string;
+  title: string;
+  vendor: string;
+  category: string;
+  description: string;
+  rating: string;
+  reviews: string;
+  sales: string;
+  priceBadge: string;
+  subPrice: string;
+  badge: string;
+  image: string;
+  url: string;
+  features: string[];
+}
+
+const PARTNER_FEATURED_ADS: PartnerFeaturedAd[] = [
+  {
+    id: 'partner-seeedstudio-xiao-esp32s3-display',
+    title: 'XIAO 1.47" IPS Touch Display Powered by XIAO ESP32-S3 Plus',
+    vendor: 'by Seeed Studio Official Hardware Partner (LF0tCxl)',
+    category: 'SEEED STUDIO XIAO ESP32S3-PLUS',
+    description:
+      'Compact 1.47-inch Capacitive IPS Touch Screen powered by XIAO ESP32-S3 Plus with onboard WiFi + BLE, MicroSD Card Slot, Digital Mic, and 6-Axis IMU.',
+    rating: '5.0',
+    reviews: '2.9k+',
+    sales: 'Official Seeed Studio Hardware',
+    priceBadge: 'NEW HARDWARE',
+    subPrice: 'Powered by XIAO ESP32S3-Plus',
+    badge: 'XIAO 1.47" IPS DISPLAY',
+    image: './seeedstudio_xiao_esp32s3_display.jpg',
+    url: 'https://www.seeedstudio.com/1-47-Inch-Touch-Display-Powered-by-XIAO-ESP32-S3-Plus-p-6996.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    features: ['Capacitive Touch + WiFi/BLE', 'MicroSD Card Slot', 'Digital Mic + 6-Axis IMU']
+  },
   {
     id: 'partner-seeedstudio-meshtastic',
     title: 'Wio Tracker L2 Pro for Meshtastic',
     vendor: 'by Seeed Studio Official Hardware Partner (LF0tCxl)',
     category: 'Black Friday & Thanksgiving Promo',
+    description:
+      'Black Friday & Thanksgiving Promo — Shop Early & Save Big on Seeed Studio Wio Tracker L2 Pro for Meshtastic, SenseCAP LoRa nodes, reTerminal displays, and AI hardware.',
     rating: '5.0',
     reviews: '3.4k+',
     sales: 'Doorbuster Promo Live',
@@ -28,6 +64,8 @@ const PARTNER_FEATURED_ADS = [
     title: 'Hostinger Cloud & WordPress Business Hosting — AI Website Builder Suite',
     vendor: 'by Hostinger International in Web Hosting & Cloud',
     category: 'WEB HOSTING & CLOUD',
+    description:
+      'High-speed NVMe cloud hosting, 1-click WordPress staging, free business domain & SSL certificates for remote Virtual Assistants and client agencies.',
     rating: '4.9',
     reviews: '2.4k+',
     sales: '29.5K+ Active Sites',
@@ -44,6 +82,8 @@ const PARTNER_FEATURED_ADS = [
     title: 'Meshy 3D AI Studio — Text & Image to PBR 3D Asset Generator Pipeline',
     vendor: 'by Meshy AI Labs in 3D Generative AI Tools',
     category: '3D AI & GAME ASSETS',
+    description:
+      'Generate production-ready 3D meshes and 4K PBR textures from text prompts or 2D reference images in seconds for Blender, Unity, and Unreal Engine.',
     rating: '5.0',
     reviews: '1.8k+',
     sales: '18.2K+ Creators',
@@ -60,6 +100,8 @@ const PARTNER_FEATURED_ADS = [
     title: 'ElevenLabs Prime Voice AI — Ultra-Realistic Multilingual Dubbing & Cloning',
     vendor: 'by ElevenLabs Audio in AI Voice & Media',
     category: 'AI VOICE & AUDIO',
+    description:
+      'Studio-quality AI voice generation, multilingual video dubbing, and custom voice cloning trusted by content creators and marketing agencies.',
     rating: '4.9',
     reviews: '3.1k+',
     sales: '41.0K+ Studios',
@@ -73,8 +115,19 @@ const PARTNER_FEATURED_ADS = [
   }
 ];
 
+// Randomize order once per page load while guaranteeing each placement ('header', 'in-article', 'sidebar', 'footer')
+// receives a strictly unique index so NO ad is ever duplicated on the same page.
+const SHUFFLED_PARTNER_ADS: PartnerFeaturedAd[] = (() => {
+  const copy = [...PARTNER_FEATURED_ADS];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+})();
+
 export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className = '' }) => {
-  const { adSenseConfig, promoItems } = useApp();
+  const { adSenseConfig } = useApp();
 
   const slotId =
     placement === 'header'
@@ -149,29 +202,26 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
     );
   }
 
-  // 3. VERIFIED PARTNER MARKETPLACE STYLE SPONSORED CARDS (WHEN PARTNER FALLBACK IS ENABLED)
+  // 3. VERIFIED PARTNER MARKETPLACE STYLE SPONSORED CARDS (RANDOMIZED & NON-DUPLICATING PER PLACEMENT)
   if (!adSenseConfig.showPartnerFallbackAds) {
     return null;
   }
 
-  // Always feature Seeed Studio Wio Tracker L2 Pro for Meshtastic (index 0) on sidebar, header, and footer slots
-  const fallbackIndex =
-    placement === 'header' ? 0 : placement === 'sidebar' ? 0 : placement === 'footer' ? 0 : 0;
-  const tfItem = PARTNER_FEATURED_ADS[fallbackIndex % PARTNER_FEATURED_ADS.length];
+  const placementOffset =
+    placement === 'header'
+      ? 0
+      : placement === 'in-article'
+      ? 1
+      : placement === 'sidebar'
+      ? 2
+      : 3;
+  const tfItem = SHUFFLED_PARTNER_ADS[placementOffset % SHUFFLED_PARTNER_ADS.length];
 
-  // Also check if admin has custom visible promo items
-  const visiblePromos = (promoItems || []).filter((p) => p.visible !== false);
-  const seeedPromo = visiblePromos.find((p) => p.id.includes('seeedstudio')) || visiblePromos[0];
-  const customPromo = seeedPromo || visiblePromos[fallbackIndex % Math.max(1, visiblePromos.length)];
-
-  const displayTitle = customPromo?.title || tfItem.title;
-  const displayImage =
-    customPromo && !customPromo.hideImage && customPromo.imageUrl
-      ? customPromo.imageUrl
-      : tfItem.image;
-  const displayUrl = customPromo?.destinationUrl || tfItem.url;
-  const displayBadge = customPromo?.badge || tfItem.badge;
-  const displayCategory = customPromo?.promotionLabel || tfItem.category;
+  const displayTitle = tfItem.title;
+  const displayImage = tfItem.image;
+  const displayUrl = tfItem.url;
+  const displayBadge = tfItem.badge;
+  const displayCategory = tfItem.category;
 
   const isSidebar = placement === 'sidebar';
 
@@ -232,8 +282,7 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
             <p className="text-[11px] text-slate-500 font-medium">{tfItem.vendor}</p>
 
             <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
-              {customPromo?.description ||
-                'Production-ready digital toolkit trusted by remote Virtual Assistants, full-stack developers, and digital agencies worldwide.'}
+              {tfItem.description}
             </p>
 
             <div className="flex flex-wrap items-center gap-1.5 pt-1">
@@ -276,7 +325,7 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
               className="flex-1 py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all flex items-center justify-center space-x-1.5 shadow-2xs"
             >
               <ShoppingCart className="w-3.5 h-3.5 shrink-0" />
-              <span className="truncate">{customPromo?.buttonText || 'Get Offer →'}</span>
+              <span className="truncate">Get Offer →</span>
               <ExternalLink className="w-3 h-3 shrink-0 opacity-80" />
             </a>
           </div>
@@ -323,8 +372,7 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
             </div>
 
             <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-              {customPromo?.description ||
-                'Production-ready digital toolkit trusted by remote Virtual Assistants, full-stack developers, and digital agencies worldwide.'}
+              {tfItem.description}
             </p>
 
             <div className="flex flex-wrap items-center gap-2 pt-0.5">
@@ -375,7 +423,7 @@ export const AdSenseSlot: React.FC<AdSenseSlotProps> = ({ placement, className =
                 className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all whitespace-nowrap"
               >
                 <ShoppingCart className="w-3.5 h-3.5" />
-                <span>{customPromo?.buttonText || 'Get Offer →'}</span>
+                <span>Get Offer →</span>
                 <ExternalLink className="w-3 h-3 opacity-80" />
               </a>
             </div>

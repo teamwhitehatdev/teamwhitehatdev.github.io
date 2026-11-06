@@ -5,6 +5,24 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
   // 🏷️ PROMO PLACEMENT (PROMO SECTION)
   // =========================================================================
   {
+    id: 'promo-seeedstudio-xiao-esp32s3-display',
+    title: 'XIAO 1.47" IPS Touch Display Powered by XIAO ESP32-S3 Plus',
+    placement: 'promo',
+    description: 'Compact 1.47-inch Capacitive IPS Touch Display powered by XIAO ESP32-S3 Plus with onboard WiFi + BLE, MicroSD Card Slot, Digital Mic, and 6-Axis IMU.',
+    imageUrl: './seeedstudio_xiao_esp32s3_display.jpg',
+    destinationUrl: 'https://www.seeedstudio.com/1-47-Inch-Touch-Display-Powered-by-XIAO-ESP32-S3-Plus-p-6996.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    buttonText: 'EXPLORE XIAO 1.47" DISPLAY →',
+    badge: 'XIAO ESP32-S3 PLUS',
+    promotionLabel: 'SEEED STUDIO OFFICIAL HARDWARE',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 0,
+    openNewTab: true,
+    disclosureNote: 'Official Seeed Studio partner referral link (sensecap_affiliate=LF0tCxl).',
+    createdAt: '2026-11-06T00:00:00Z',
+    updatedAt: '2026-11-06T00:00:00Z'
+  },
+  {
     id: 'promo-seeedstudio-meshtastic-0',
     title: 'Wio Tracker L2 Pro for Meshtastic',
     placement: 'promo',
@@ -16,7 +34,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'Black Friday & Thanksgiving Promo',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 0,
+    sortOrder: 1,
     openNewTab: true,
     disclosureNote: 'Official Seeed Studio partner referral link (sensecap_affiliate=LF0tCxl).',
     createdAt: '2026-11-06T00:00:00Z',
@@ -81,6 +99,24 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
   // 🤝 PARTNER DEALS PLACEMENT (PARTNER DEALS / ADS SIDEBAR SECTION)
   // =========================================================================
   {
+    id: 'deal-seeedstudio-xiao-esp32s3-display',
+    title: 'XIAO 1.47" IPS Touch Display Powered by XIAO ESP32-S3 Plus',
+    placement: 'partner-deals',
+    description: 'Compact 1.47-inch Capacitive IPS Touch Screen powered by XIAO ESP32-S3 Plus with onboard WiFi + BLE, MicroSD Card Slot, Digital Mic, and 6-Axis IMU.',
+    imageUrl: './seeedstudio_xiao_esp32s3_display.jpg',
+    destinationUrl: 'https://www.seeedstudio.com/1-47-Inch-Touch-Display-Powered-by-XIAO-ESP32-S3-Plus-p-6996.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    buttonText: 'SHOP XIAO 1.47" DISPLAY →',
+    badge: 'XIAO ESP32-S3 PLUS',
+    promotionLabel: 'SEEED STUDIO OFFICIAL HARDWARE',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 0,
+    openNewTab: true,
+    disclosureNote: 'Official Seeed Studio referral link (LF0tCxl).',
+    createdAt: '2026-11-06T00:00:00Z',
+    updatedAt: '2026-11-06T00:00:00Z'
+  },
+  {
     id: 'deal-seeedstudio-meshtastic-0',
     title: 'Wio Tracker L2 Pro for Meshtastic',
     placement: 'partner-deals',
@@ -92,7 +128,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'Black Friday & Thanksgiving Promo',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 0,
+    sortOrder: 1,
     openNewTab: true,
     disclosureNote: 'Official Seeed Studio referral link (LF0tCxl).',
     createdAt: '2026-11-06T00:00:00Z',

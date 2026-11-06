@@ -695,7 +695,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // CMS PROMOTIONAL & ADVERTISEMENTS ITEMS STATE (PARTNER DEALS & PROMO)
   const [promoItems, setPromoItems] = useState<PromoItem[]>(() => {
-    const saved = localStorage.getItem('wh_promo_items_v5800');
+    const saved = localStorage.getItem('wh_promo_items_v5810');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -897,7 +897,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_promo_items_v5800', JSON.stringify(promoItems));
+    localStorage.setItem('wh_promo_items_v5810', JSON.stringify(promoItems));
   }, [promoItems]);
 
   useEffect(() => {

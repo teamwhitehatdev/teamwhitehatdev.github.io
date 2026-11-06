@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Sparkles, ExternalLink, Star, Eye, ShoppingCart, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { AdSenseSlot } from './AdSenseSlot';
 
 export const DynamicAdsSidebar: React.FC = () => {
   const { getPublicPromoItems, playStoreConfig } = useApp();
-  const partnerDeals =
+  const rawPartnerDeals =
     typeof getPublicPromoItems === 'function' ? getPublicPromoItems('partner-deals') : [];
+
+  // Deduplicate by URL & title and randomize order on mount so ads rotate cleanly without duplication
+  const partnerDeals = useMemo(() => {
+    const seen = new Set<string>();
+    const unique = rawPartnerDeals.filter((ad) => {
+      const key = `${(ad.destinationUrl || '').trim().toLowerCase()}|${(ad.title || '').trim().toLowerCase()}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    const copy = [...unique];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }, [rawPartnerDeals]);
 
   return (
     <div className="space-y-5 select-none">

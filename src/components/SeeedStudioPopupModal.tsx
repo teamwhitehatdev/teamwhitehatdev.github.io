@@ -2,48 +2,93 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   ExternalLink,
   X,
-  SkipForward,
   Sparkles,
   Clock,
   ShieldCheck,
   Radio,
   Tag,
-  ShoppingBag
+  ShoppingBag,
+  Cpu
 } from 'lucide-react';
 
 export const SEEED_STUDIO_REFERRAL_URL =
   'https://www.seeedstudio.com/Wio-Tracker-L2-Pro-for-Meshtastic-p-0000.html?sensecap_affiliate=LF0tCxl&referring_service=link';
+export const SEEED_STUDIO_XIAO_DISPLAY_URL =
+  'https://www.seeedstudio.com/1-47-Inch-Touch-Display-Powered-by-XIAO-ESP32-S3-Plus-p-6996.html?sensecap_affiliate=LF0tCxl&referring_service=link';
 export const SEEED_STUDIO_IMAGE_URL = './seeedstudio_affiliate_1200x628.jpg';
+export const SEEED_STUDIO_XIAO_IMAGE_URL = './seeedstudio_xiao_esp32s3_display.jpg';
 export const SEEED_STUDIO_HEADLINE = 'Wio Tracker L2 Pro for Meshtastic';
 export const SEEED_STUDIO_PROMO_NAME = 'Black Friday & Thanksgiving Promo';
 
+export interface SeeedPopupCampaign {
+  id: string;
+  headline: string;
+  promoName: string;
+  subtitle: string;
+  imageUrl: string;
+  referralUrl: string;
+  pill1: string;
+  pill2: string;
+  ctaLabel: string;
+}
+
+export const SEEED_STUDIO_POPUP_CAMPAIGNS: SeeedPopupCampaign[] = [
+  {
+    id: 'seeed-xiao-esp32s3-touch-display',
+    headline: 'XIAO 1.47" IPS Touch Display Powered by XIAO ESP32-S3 Plus',
+    promoName: 'Seeed Studio Official Hardware • Powered by XIAO ESP32S3-Plus',
+    subtitle:
+      'Compact 1.47-Inch Capacitive IPS Touch Display featuring onboard XIAO ESP32-S3 Plus, WiFi + BLE, MicroSD Card Slot, Digital Mic & 6-Axis IMU!',
+    imageUrl: SEEED_STUDIO_XIAO_IMAGE_URL,
+    referralUrl: SEEED_STUDIO_XIAO_DISPLAY_URL,
+    pill1: 'Capacitive Touch + WiFi/BLE',
+    pill2: 'MicroSD + Mic + 6-Axis IMU',
+    ctaLabel: 'Explore XIAO 1.47" IPS Touch Display'
+  },
+  {
+    id: 'seeed-wio-tracker-l2-pro',
+    headline: SEEED_STUDIO_HEADLINE,
+    promoName: SEEED_STUDIO_PROMO_NAME,
+    subtitle:
+      'Shop Early & Save Big on Seeed Studio Meshtastic LoRa Trackers, SenseCAP IoT Hardware, reTerminal Displays & Edge AI Robotics!',
+    imageUrl: SEEED_STUDIO_IMAGE_URL,
+    referralUrl: SEEED_STUDIO_REFERRAL_URL,
+    pill1: 'Meshtastic LoRa GPS Node',
+    pill2: 'Doorbuster Hardware Deals',
+    ctaLabel: 'Explore Wio Tracker L2 Pro for Meshtastic'
+  }
+];
+
 /**
- * Center Pop-Out Windows Frame Ad for Seeed Studio:
- * - Headline Title: Wio Tracker L2 Pro for Meshtastic
- * - Name: Black Friday & Thanksgiving Promo
- * - Image: ./seeedstudio_affiliate_1200x628.jpg (1200x628)
- * - Referral Link: https://www.seeedstudio.com/Wio-Tracker-L2-Pro-for-Meshtastic-p-0000.html?sensecap_affiliate=LF0tCxl&referring_service=link
+ * Center Pop-Out Windows Frame Ad for Seeed Studio (Randomized between official campaigns):
+ * 1) XIAO 1.47" IPS Touch Display Powered by XIAO ESP32-S3 Plus
+ * 2) Wio Tracker L2 Pro for Meshtastic — Black Friday & Thanksgiving Promo
  * - Automatically closes/hides after 10 seconds
- * - Includes explicit "SKIP ADS" and "CLOSE ADS" buttons for visitors on any device
+ * - Includes ONLY 1 single "CLOSE ADS" button (no duplicate skip/close buttons)
  */
 export const SeeedStudioPopupModal: React.FC = () => {
   const DURATION_SECONDS = 10;
   const [isOpen, setIsOpen] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(DURATION_SECONDS);
+  const [campaignIndex, setCampaignIndex] = useState<number>(() =>
+    Math.floor(Math.random() * SEEED_STUDIO_POPUP_CAMPAIGNS.length)
+  );
 
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const autoCloseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Open center pop-out window shortly after page load
+  // Open center pop-out window shortly after page load with a randomized Seeed Studio campaign
   useEffect(() => {
     const openTimer = setTimeout(() => {
+      setCampaignIndex(Math.floor(Math.random() * SEEED_STUDIO_POPUP_CAMPAIGNS.length));
       setIsOpen(true);
       setIsFadingOut(false);
       setRemainingSeconds(DURATION_SECONDS);
     }, 600);
 
     const handleReopen = () => {
+      setCampaignIndex((prev) => (prev + 1) % SEEED_STUDIO_POPUP_CAMPAIGNS.length);
       setIsOpen(true);
       setIsFadingOut(false);
       setRemainingSeconds(DURATION_SECONDS);
@@ -96,13 +141,15 @@ export const SeeedStudioPopupModal: React.FC = () => {
 
   if (!isOpen) return null;
 
+  const activeCampaign =
+    SEEED_STUDIO_POPUP_CAMPAIGNS[campaignIndex % SEEED_STUDIO_POPUP_CAMPAIGNS.length];
   const progressPercent = Math.max(0, Math.min(100, (remainingSeconds / DURATION_SECONDS) * 100));
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={`${SEEED_STUDIO_HEADLINE} - ${SEEED_STUDIO_PROMO_NAME}`}
+      aria-label={`${activeCampaign.headline} - ${activeCampaign.promoName}`}
       onClick={handleDismiss}
       className={`fixed inset-0 z-[9985] flex items-center justify-center p-3 sm:p-5 bg-slate-950/65 backdrop-blur-xs transition-opacity duration-300 ${
         isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
@@ -130,7 +177,7 @@ export const SeeedStudioPopupModal: React.FC = () => {
             </span>
           </div>
 
-          {/* Right Header Controls: 10s Countdown Only (No duplicate close/skip buttons) */}
+          {/* Right Header Controls: 10s Countdown Indicator Only (No duplicate close/skip buttons) */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <span
               title={`Automatically closes in ${remainingSeconds} seconds`}
@@ -156,7 +203,7 @@ export const SeeedStudioPopupModal: React.FC = () => {
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 border border-orange-200 text-orange-900 text-[11px] font-extrabold uppercase tracking-wider">
               <Tag className="w-3.5 h-3.5 text-orange-600 shrink-0" />
-              <span>{SEEED_STUDIO_PROMO_NAME}</span>
+              <span>{activeCampaign.promoName}</span>
             </span>
 
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-bold">
@@ -168,40 +215,44 @@ export const SeeedStudioPopupModal: React.FC = () => {
           {/* Headline Title */}
           <div className="space-y-1">
             <h2 className="text-lg sm:text-2xl font-black text-slate-950 tracking-tight leading-snug">
-              {SEEED_STUDIO_HEADLINE}
+              {activeCampaign.headline}
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Shop Early &amp; Save Big on Seeed Studio Meshtastic LoRa Trackers, SenseCAP IoT Hardware, reTerminal Displays &amp; Edge AI Robotics!
+              {activeCampaign.subtitle}
             </p>
           </div>
 
-          {/* Clickable 1200x628 Attached Banner Image */}
+          {/* Clickable Attached Banner Image */}
           <a
-            href={SEEED_STUDIO_REFERRAL_URL}
+            href={activeCampaign.referralUrl}
             target="_blank"
             rel="sponsored noopener noreferrer"
             className="block relative rounded-2xl overflow-hidden border-2 border-slate-200 hover:border-orange-500 transition-all group shadow-sm bg-slate-950"
           >
             <img
-              src={SEEED_STUDIO_IMAGE_URL}
-              alt={`${SEEED_STUDIO_HEADLINE} — ${SEEED_STUDIO_PROMO_NAME}`}
+              src={activeCampaign.imageUrl}
+              alt={`${activeCampaign.headline} — ${activeCampaign.promoName}`}
               className="w-full aspect-[1200/628] object-cover group-hover:scale-[1.02] transition-transform duration-300"
             />
             <div className="absolute bottom-2.5 right-2.5 px-3 py-1.5 rounded-xl bg-slate-950/90 text-white text-[11px] font-extrabold flex items-center gap-1.5 shadow-md border border-white/15">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Save Now at Seeed Studio →</span>
+              <span>Shop Official Seeed Studio →</span>
             </div>
           </a>
 
           {/* Highlights Pills */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] font-semibold text-slate-700">
             <div className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-1.5">
-              <Radio className="w-3.5 h-3.5 text-orange-600 shrink-0" />
-              <span>Meshtastic LoRa GPS Node</span>
+              {activeCampaign.id === 'seeed-xiao-esp32s3-touch-display' ? (
+                <Cpu className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              ) : (
+                <Radio className="w-3.5 h-3.5 text-orange-600 shrink-0" />
+              )}
+              <span>{activeCampaign.pill1}</span>
             </div>
             <div className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-1.5">
               <ShoppingBag className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span>Doorbuster Hardware Deals</span>
+              <span>{activeCampaign.pill2}</span>
             </div>
             <div className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-slate-700 shrink-0" />
@@ -209,15 +260,15 @@ export const SeeedStudioPopupModal: React.FC = () => {
             </div>
           </div>
 
-          {/* Bottom Interactive Action Bar: Visit Promo + ONLY 1 Single Close/Skip Button */}
+          {/* Bottom Interactive Action Bar: Visit Promo + ONLY 1 Single CLOSE ADS Button */}
           <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 border-t border-slate-100">
             <a
-              href={SEEED_STUDIO_REFERRAL_URL}
+              href={activeCampaign.referralUrl}
               target="_blank"
               rel="sponsored noopener noreferrer"
               className="flex-1 py-3 px-4 rounded-xl bg-slate-900 hover:bg-orange-700 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
             >
-              <span>Explore {SEEED_STUDIO_HEADLINE}</span>
+              <span>{activeCampaign.ctaLabel}</span>
               <ExternalLink className="w-4 h-4 shrink-0" />
             </a>
 
@@ -225,7 +276,7 @@ export const SeeedStudioPopupModal: React.FC = () => {
               type="button"
               onClick={handleDismiss}
               className="px-4 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer shrink-0 active:scale-95"
-              title="Skip or Close Advertisement"
+              title="Close Advertisement"
             >
               <X className="w-4 h-4" />
               <span>CLOSE ADS ({remainingSeconds}s)</span>
