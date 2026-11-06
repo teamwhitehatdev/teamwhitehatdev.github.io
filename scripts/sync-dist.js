@@ -36,3 +36,15 @@ for (const file of assetFiles) {
   fs.copyFileSync(src, dest);
 }
 console.log(`✓ Synced ${assetFiles.length} production assets to root ./assets/ folder.`);
+
+// 3. Copy any static public files in dist/ root (e.g. seeedstudio_affiliate_1200x628.jpg) to repository root
+const distRootFiles = fs.readdirSync(distDir);
+for (const file of distRootFiles) {
+  if (file === 'index.html' || file === 'assets') continue;
+  const src = path.join(distDir, file);
+  const dest = path.join(rootDir, file);
+  if (fs.statSync(src).isFile()) {
+    fs.copyFileSync(src, dest);
+  }
+}
+console.log('✓ Synced static public assets to repository root.');

@@ -501,9 +501,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch {}
   }, []);
 
-  // CORE DATA STATES (Bumped to v5790 for Advanced VA & Freelancer Skill Mastery offers + VIP Vault)
+  // CORE DATA STATES (Bumped to v5800 for Advanced VA & Freelancer Skill Mastery offers + VIP Vault)
   const [services, setServices] = useState<Service[]>(() => {
-    const saved = localStorage.getItem('wh_services_v5790');
+    const saved = localStorage.getItem('wh_services_v5800');
     return saved ? JSON.parse(saved) : SERVICES;
   });
 
@@ -677,7 +677,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
-    const saved = localStorage.getItem('wh_cms_items_v5790');
+    const saved = localStorage.getItem('wh_cms_items_v5800');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -695,7 +695,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // CMS PROMOTIONAL & ADVERTISEMENTS ITEMS STATE (PARTNER DEALS & PROMO)
   const [promoItems, setPromoItems] = useState<PromoItem[]>(() => {
-    const saved = localStorage.getItem('wh_promo_items_v5790');
+    const saved = localStorage.getItem('wh_promo_items_v5800');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -871,7 +871,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     try {
-      localStorage.setItem('wh_services_v5790', JSON.stringify(services));
+      localStorage.setItem('wh_services_v5800', JSON.stringify(services));
       window.dispatchEvent(new CustomEvent('wh_services_changed', { detail: services }));
     } catch (e) {}
   }, [services]);
@@ -893,11 +893,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsCategories]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_items_v5790', JSON.stringify(cmsItems));
+    localStorage.setItem('wh_cms_items_v5800', JSON.stringify(cmsItems));
   }, [cmsItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_promo_items_v5790', JSON.stringify(promoItems));
+    localStorage.setItem('wh_promo_items_v5800', JSON.stringify(promoItems));
   }, [promoItems]);
 
   useEffect(() => {
@@ -977,7 +977,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems((prev) => {
       const updated = [newItem, ...prev];
       try {
-        localStorage.setItem('wh_cms_items_v5770', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5800', JSON.stringify(updated));
       } catch {}
       return updated;
     });
@@ -995,7 +995,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return item;
       });
       try {
-        localStorage.setItem('wh_cms_items_v5770', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5800', JSON.stringify(updated));
       } catch {}
       return updated;
     });
@@ -1005,7 +1005,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCmsItems((prev) => {
       const updated = prev.filter((item) => item.id !== id);
       try {
-        localStorage.setItem('wh_cms_items_v5770', JSON.stringify(updated));
+        localStorage.setItem('wh_cms_items_v5800', JSON.stringify(updated));
       } catch {}
       return updated;
     });
