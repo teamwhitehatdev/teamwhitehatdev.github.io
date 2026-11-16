@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { HUDPanel } from '../components/HUDPanel';
+import { lazyWithRetry } from '../utils/lazyWithRetry';
 import {
   Shield,
   Lock,
@@ -42,9 +43,15 @@ import {
   Tag
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { TelemetryDashboard } from '../components/TelemetryDashboard';
-import { VisualPageBuilder } from '../components/VisualPageBuilder';
-import { ExclusiveBuyersAdminManager } from '../components/ExclusiveBuyersAdminManager';
+const TelemetryDashboard = lazyWithRetry(() =>
+  import('../components/TelemetryDashboard').then((m) => ({ default: m.TelemetryDashboard }))
+);
+const VisualPageBuilder = lazyWithRetry(() =>
+  import('../components/VisualPageBuilder').then((m) => ({ default: m.VisualPageBuilder }))
+);
+const ExclusiveBuyersAdminManager = lazyWithRetry(() =>
+  import('../components/ExclusiveBuyersAdminManager').then((m) => ({ default: m.ExclusiveBuyersAdminManager }))
+);
 import { fetchPlayStoreMetadata } from '../utils/playStoreFetcher';
 import {
   DEFAULT_PLAY_STORE_CONFIG,
@@ -3136,7 +3143,9 @@ export const Admin: React.FC = () => {
           </HUDPanel>
 
           {/* EXCLUSIVE SKILLS VAULT (/#/exclusive-skills) — VERIFIED BUYER EMAIL FILTER & VIP ACCESS MANAGER */}
-          <ExclusiveBuyersAdminManager showToast={showToast} />
+          <Suspense fallback={<div className="p-6 text-xs font-mono text-slate-500">Loading Exclusive Buyers Manager...</div>}>
+            <ExclusiveBuyersAdminManager showToast={showToast} />
+          </Suspense>
 
           {/* PORTFOLIO SHOWCASE PROJECTS MANAGER */}
           <HUDPanel
@@ -4382,7 +4391,17 @@ export const Admin: React.FC = () => {
       {/* ========================================================================= */}
       {/* TAB 7: INSIGHTS & REAL-TIME VISITOR TELEMETRY                             */}
       {/* ========================================================================= */}
-      {activeTab === 'analytics' && <TelemetryDashboard />}
+      {activeTab === 'analytics' && (
+        <Suspense
+          fallback={
+            <div className="p-10 rounded-2xl border border-slate-200 bg-white text-center text-xs font-mono text-slate-600">
+              Loading Telemetry &amp; Global World Map...
+            </div>
+          }
+        >
+          <TelemetryDashboard />
+        </Suspense>
+      )}
 
       {/* ========================================================================= */}
       {/* TAB 8: SECURITY FIREWALL & ALL-IN-ONE DATABASE BACKUP/RESTORE             */}
@@ -5943,30 +5962,40 @@ export const Admin: React.FC = () => {
       {/* 🎨 DRAG & DROP WEBSITE BUILDER (NO CODING REQUIRED)                         */}
       {/* ========================================================================= */}
       {isVisualBuilderOpen && (
-        <VisualPageBuilder
-          initialTab={visualBuilderTargetTab}
-          navTabs={navTabs || []}
-          onSaveToTab={(tabId, blocks, settings) => {
-            updateNavTab(tabId, {
-              builderBlocks: blocks,
-              builderPageSettings: settings,
-              pageLayoutType: 'builder',
-              heroTitle: settings.pageTitle,
-              heroSubtitle: settings.pageSubtitle
-            });
-            setIsVisualBuilderOpen(false);
-            showToast('Saved custom drag & drop page layout to tab!');
-          }}
-          onCreateNewTabWithBuilder={(tabData) => {
-            addNavTab(tabData);
-            setIsVisualBuilderOpen(false);
-            showToast(`Created new navigation tab "${tabData.label}" with custom layout!`);
-          }}
-          onClose={() => {
-            setIsVisualBuilderOpen(false);
-            setVisualBuilderTargetTab(null);
-          }}
-        />
+        <Suspense
+          fallback={
+            <div className="fixed inset-0 z-[9995] bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+              <div className="px-6 py-4 rounded-2xl bg-white text-slate-900 font-mono text-xs font-bold shadow-xl">
+                Loading Visual Drag &amp; Drop Builder...
+              </div>
+            </div>
+          }
+        >
+          <VisualPageBuilder
+            initialTab={visualBuilderTargetTab}
+            navTabs={navTabs || []}
+            onSaveToTab={(tabId, blocks, settings) => {
+              updateNavTab(tabId, {
+                builderBlocks: blocks,
+                builderPageSettings: settings,
+                pageLayoutType: 'builder',
+                heroTitle: settings.pageTitle,
+                heroSubtitle: settings.pageSubtitle
+              });
+              setIsVisualBuilderOpen(false);
+              showToast('Saved custom drag & drop page layout to tab!');
+            }}
+            onCreateNewTabWithBuilder={(tabData) => {
+              addNavTab(tabData);
+              setIsVisualBuilderOpen(false);
+              showToast(`Created new navigation tab "${tabData.label}" with custom layout!`);
+            }}
+            onClose={() => {
+              setIsVisualBuilderOpen(false);
+              setVisualBuilderTargetTab(null);
+            }}
+          />
+        </Suspense>
       )}
     </div>
   );

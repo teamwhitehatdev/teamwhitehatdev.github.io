@@ -316,8 +316,8 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, isOpen, onC
       <div
         className={`relative bg-white border-2 border-slate-300 rounded-2xl sm:rounded-3xl flex flex-col shadow-2xl overflow-hidden transition-all duration-150 animate-in fade-in zoom-in-95 ${
           isMaximized
-            ? 'w-[98vw] h-[96vh] max-w-none max-h-none'
-            : 'max-w-4xl w-full h-[88vh] max-h-[88vh]'
+            ? 'w-[98vw] h-[94dvh] max-w-none max-h-none'
+            : 'max-w-4xl w-full h-[88dvh] max-h-[88dvh]'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -424,7 +424,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, isOpen, onC
         {/* MODAL BODY (SCROLLS SMOOTHLY INSIDE THE FIXED WINDOW) */}
         <div
           ref={modalContentRef}
-          className="p-4 sm:p-7 overflow-y-auto space-y-4 flex-1 text-slate-700 text-sm leading-relaxed bg-white"
+          className="p-4 sm:p-7 overflow-y-auto overflow-touch space-y-4 flex-1 text-slate-700 text-sm leading-relaxed bg-white"
         >
           {/* TOAST MESSAGE IF LINK SAVED */}
           {linkSavedMsg && (

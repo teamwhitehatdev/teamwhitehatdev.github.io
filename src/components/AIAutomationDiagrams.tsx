@@ -3126,7 +3126,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     return { x: transformed.x, y: transformed.y };
   };
 
-  const handleNodeMouseDown = (index: number, e: React.MouseEvent) => {
+  const handleNodePointerDown = (index: number, e: React.PointerEvent<SVGGElement>) => {
     e.stopPropagation();
     const coords = getSVGCoordinates(e.clientX, e.clientY);
     setDraggingNodeIndex(index);
@@ -3138,7 +3138,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     });
   };
 
-  const handleSVGMouseMove = (e: React.MouseEvent) => {
+  const handleSVGPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
     if (draggingNodeIndex === null) return;
     const coords = getSVGCoordinates(e.clientX, e.clientY);
     const newX = Math.max(12, Math.min(1120 - 188, coords.x - dragOffset.x));
@@ -3151,7 +3151,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     });
   };
 
-  const handleSVGMouseUp = () => {
+  const handleSVGPointerUp = () => {
     setDraggingNodeIndex(null);
   };
 
@@ -3694,7 +3694,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                       setIsFlowPlaying(false);
                       setActiveBlueprintId(e.target.value);
                     }}
-                    className="max-w-[290px] px-2.5 py-1 rounded-lg bg-slate-900 text-cyan-200 border border-slate-700 text-[11px] font-mono font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    className="w-full sm:w-auto sm:max-w-[290px] px-2.5 py-1 rounded-lg bg-slate-900 text-cyan-200 border border-slate-700 text-[11px] font-mono font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-500"
                   >
                     <optgroup label="$0 Free Real-Time AI Automations (Recommended)">
                       {ALL_WORKFLOW_BLUEPRINTS.filter((bp) => bp.categoryKey === 'free-realtime').map((bp) => (
@@ -3739,11 +3739,13 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                   ref={svgRef}
                   viewBox="0 0 1120 315"
                   className="w-full h-auto select-none"
+                  style={{ touchAction: draggingNodeIndex !== null ? 'none' : 'pan-x pan-y' }}
                   role="img"
                   aria-label={`Interactive Animated Topology Diagram for ${activeBlueprint.title}`}
-                  onMouseMove={handleSVGMouseMove}
-                  onMouseUp={handleSVGMouseUp}
-                  onMouseLeave={handleSVGMouseUp}
+                  onPointerMove={handleSVGPointerMove}
+                  onPointerUp={handleSVGPointerUp}
+                  onPointerLeave={handleSVGPointerUp}
+                  onPointerCancel={handleSVGPointerUp}
                 >
                   <defs>
                     <filter id="neonGlowDraggable" x="-20%" y="-20%" width="140%" height="140%">
@@ -3969,7 +3971,8 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                         key={`node-${node.step}`}
                         transform={`translate(${pos.x}, ${pos.y})`}
                         className="cursor-grab active:cursor-grabbing"
-                        onMouseDown={(e) => handleNodeMouseDown(i, e)}
+                        style={{ touchAction: 'none' }}
+                        onPointerDown={(e) => handleNodePointerDown(i, e)}
                         onClick={() => {
                           setIsFlowPlaying(false);
                           setSelectedNodeIndex(i);

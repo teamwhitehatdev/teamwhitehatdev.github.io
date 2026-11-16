@@ -3,14 +3,14 @@ import { BookOpen, ArrowRight, GraduationCap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const StickyConversionBar: React.FC<{ onOpenConsultation?: () => void }> = () => (
-  <div className="fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5">
-    <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
-      <div className="flex items-center space-x-2 text-slate-700 font-medium">
+  <div className="fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3 sm:px-4 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+    <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 sm:gap-3 text-xs">
+      <div className="flex items-center space-x-2 text-slate-700 font-medium min-w-0">
         <GraduationCap className="w-4 h-4 text-slate-900 shrink-0" />
         <span className="hidden sm:inline text-slate-800 font-medium">
           100% Free Virtual Assistant &amp; AI Automation Portal — Step-by-step career blueprints &amp; workflow diagrams at zero cost.
         </span>
-        <span className="sm:hidden text-slate-800 font-medium">
+        <span className="sm:hidden text-slate-800 font-medium truncate">
           100% Free VA &amp; AI Automation Guides
         </span>
       </div>

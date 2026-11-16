@@ -28,6 +28,8 @@ html {
   font-size: 16px;
   color-scheme: light;
   background-color: #ffffff;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 @media (min-width: 768px) {
@@ -40,13 +42,18 @@ body {
   background-color: #ffffff;
   color: #0f172a;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  overflow-x: hidden;
+  max-width: 100%;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
+}
+
+button, a, select, input, summary, [role="button"] {
+  touch-action: manipulation;
 }
 
 /* Force clean readable sans-serif on headings while keeping subtle tracking */
@@ -453,6 +460,26 @@ textarea[class*="bg-slate-9"] {
 /* SMOOTH TOUCH SCROLLING FOR IOS & ANDROID TABLETS */
 .overflow-touch {
   -webkit-overflow-scrolling: touch;
+}
+
+/* CLEAN HIDE HORIZONTAL SCROLLBARS IN MOBILE QUICK-NAV */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ACCESSIBILITY FOCUS OUTLINE */

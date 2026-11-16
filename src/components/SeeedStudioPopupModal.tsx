@@ -221,7 +221,7 @@ export const SeeedStudioPopupModal: React.FC = () => {
         {/* ================================================================= */}
         {/* POP-OUT WINDOW CONTENT BODY                                       */}
         {/* ================================================================= */}
-        <div className="p-4 sm:p-5 space-y-3.5 bg-white text-slate-900 max-h-[85vh] overflow-y-auto">
+        <div className="p-3.5 sm:p-5 space-y-3 sm:space-y-3.5 bg-white text-slate-900 max-h-[82dvh] overflow-y-auto overflow-touch">
           {/* 3-Campaign Consistent Switcher Strip */}
           <div className="grid grid-cols-3 gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
             {SEEED_STUDIO_POPUP_CAMPAIGNS.map((camp, idx) => {

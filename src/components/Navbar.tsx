@@ -43,19 +43,19 @@ export const Navbar: React.FC<NavbarProps> = () => {
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-2">
           {/* BRAND TITLE & SUBTITLE */}
-          <Link to="/" className="flex items-center space-x-2.5 group shrink-0">
-            <div className="relative">
+          <Link to="/" className="flex items-center space-x-2.5 group min-w-0 flex-1 xl:flex-initial xl:shrink-0">
+            <div className="relative shrink-0">
               <img
                 src="./favicon.png"
                 alt="Team WhiteHat Dev"
                 className="w-9 h-9 rounded-xl border border-slate-200 object-cover group-hover:border-emerald-500 transition-colors shadow-xs"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-sm sm:text-lg text-slate-900 tracking-tight leading-none group-hover:text-emerald-700 transition-colors">
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-sm sm:text-lg text-slate-900 tracking-tight leading-none group-hover:text-emerald-700 transition-colors truncate">
                 Team WhiteHat Dev
               </span>
-              <span className="text-[10px] text-slate-500 font-medium tracking-wide leading-tight pt-0.5">
+              <span className="text-[10px] text-slate-500 font-medium tracking-wide leading-tight pt-0.5 truncate">
                 Verified Partner Marketplace • Enterprise VA Portal • AI Automations
               </span>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import {
   getCustomDestinationLinks,
   getEffectiveArticleDestination,
@@ -26,10 +26,14 @@ import { AtomeCardPanel } from '../components/AtomeCardPanel';
 import { DynamicAdsSidebar } from '../components/DynamicAdsSidebar';
 import { AdSenseSlot } from '../components/AdSenseSlot';
 import { useApp } from '../context/AppContext';
-import { ArticleModal } from '../components/ArticleModal';
 import { BuilderPageRenderer } from '../components/BuilderPageRenderer';
 import { CMSItem } from '../types';
 import { Link } from 'react-router-dom';
+import { lazyWithRetry } from '../utils/lazyWithRetry';
+
+const ArticleModal = lazyWithRetry(() =>
+  import('../components/ArticleModal').then((m) => ({ default: m.ArticleModal }))
+);
 
 interface HomePageProps {
   onOpenConsultation?: (serviceTitle?: string) => void;
@@ -287,17 +291,17 @@ export const HomePage: React.FC<HomePageProps> = () => {
       {/* ========================================================================= */}
       {/* 🚀 SECTION 1: CLEAN MINIMALIST WHITE PORTFOLIO & ENTERPRISE VA PORTAL HERO */}
       {/* ========================================================================= */}
-      <section className="white-glass-card rounded-3xl p-6 sm:p-10 space-y-8">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pb-8 border-b border-slate-200/80">
-          <div className="space-y-4 max-w-3xl">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
-              <GraduationCap className="w-4 h-4 text-slate-700" />
+      <section className="white-glass-card rounded-3xl p-4 sm:p-8 lg:p-10 space-y-6 sm:space-y-8">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 sm:gap-8 pb-6 sm:pb-8 border-b border-slate-200/80">
+          <div className="space-y-4 max-w-3xl min-w-0">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider">
+              <GraduationCap className="w-4 h-4 text-slate-700 shrink-0" />
               <span>100% Free VA Portal • AI Automation Blueprints • Digital Command Hub</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
               Free Tutorials, AI Automation Diagrams &amp; Career Guides for{' '}
-              <span className="underline decoration-slate-300 underline-offset-8">
+              <span className="underline decoration-slate-300 underline-offset-4 sm:underline-offset-8">
                 Virtual Assistants &amp; Freelancers
               </span>
             </h1>
@@ -491,6 +495,8 @@ export const HomePage: React.FC<HomePageProps> = () => {
                           <img
                             src={nicheItem.mainImage}
                             alt={nicheItem.title}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
@@ -591,9 +597,9 @@ export const HomePage: React.FC<HomePageProps> = () => {
       {/* ========================================================================= */}
       {/* 🌟 SECTION 2: 2-COLUMN GRID: FREE TUTORIALS (LEFT 2/3) + ADS (RIGHT 1/3)  */}
       {/* ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
         {/* 📚 LEFT 2/3 COLUMN: FREE TUTORIALS, GUIDES & REVIEWS */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 min-w-0 space-y-8">
           {/* 🎛️ CMS CONTENT ITEMS (FEATURED EDUCATIONAL TOPICS & GUIDES) */}
           <HUDPanel
             title="Free Tutorials, VA Career Guides &amp; AI Masterclasses"
@@ -719,6 +725,8 @@ export const HomePage: React.FC<HomePageProps> = () => {
                           <img
                             src={item.mainImage}
                             alt={item.title}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
                           />
                           <span className={`absolute top-2.5 left-2.5 px-2.5 py-0.5 text-[10px] font-bold rounded-full uppercase shadow-xs ${theme.badgeBg}`}>
@@ -915,18 +923,22 @@ export const HomePage: React.FC<HomePageProps> = () => {
         </div>
 
         {/* 🚀 RIGHT 1/3 COLUMN: DEDICATED PROMOTIONS & ADS */}
-        <aside className="lg:col-span-1 space-y-6 sticky top-20 self-start">
+        <aside className="lg:col-span-1 min-w-0 space-y-6 lg:sticky lg:top-20 self-start">
           <AtomeCardPanel />
           <DynamicAdsSidebar />
         </aside>
       </div>
 
-      {/* ARTICLE READER MODAL */}
-      <ArticleModal
-        article={selectedArticle}
-        isOpen={!!selectedArticle}
-        onClose={() => setSelectedArticle(null)}
-      />
+      {/* ARTICLE READER MODAL (LAZY-LOADED ONLY WHEN OPENED) */}
+      {selectedArticle && (
+        <Suspense fallback={null}>
+          <ArticleModal
+            article={selectedArticle}
+            isOpen={!!selectedArticle}
+            onClose={() => setSelectedArticle(null)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };

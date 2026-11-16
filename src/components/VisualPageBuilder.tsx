@@ -228,6 +228,9 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
   // Left Tool Dock Active Item
   const [activeLeftTool, setActiveLeftTool] = useState<'elements' | 'layers' | 'themes' | 'ai' | 'templates'>('elements');
 
+  // Responsive mobile pane switcher (< lg devices)
+  const [mobileActivePane, setMobileActivePane] = useState<'palette' | 'canvas' | 'inspector'>('canvas');
+
   // AI Generator state
   const [aiPromptInput, setAiPromptInput] = useState<string>('');
   const [isGeneratingAi, setIsGeneratingAi] = useState<boolean>(false);
@@ -1153,6 +1156,45 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
         </div>
       )}
 
+      {/* MOBILE / TABLET RESPONSIVE WORKSPACE PANE SWITCHER */}
+      {!isPreviewMode && (
+        <div className="lg:hidden bg-slate-900 text-white px-3 py-2 grid grid-cols-3 gap-1.5 shrink-0 border-b border-slate-800 text-[11px] font-bold">
+          <button
+            type="button"
+            onClick={() => setMobileActivePane('palette')}
+            className={`py-1.5 px-2 rounded-lg transition-all cursor-pointer ${
+              mobileActivePane === 'palette'
+                ? 'bg-emerald-500 text-slate-950 shadow-xs'
+                : 'bg-slate-800 text-slate-200 hover:bg-slate-700'
+            }`}
+          >
+            1. Blocks &amp; CMS
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileActivePane('canvas')}
+            className={`py-1.5 px-2 rounded-lg transition-all cursor-pointer ${
+              mobileActivePane === 'canvas'
+                ? 'bg-cyan-500 text-slate-950 shadow-xs'
+                : 'bg-slate-800 text-slate-200 hover:bg-slate-700'
+            }`}
+          >
+            2. Live Canvas
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileActivePane('inspector')}
+            className={`py-1.5 px-2 rounded-lg transition-all cursor-pointer ${
+              mobileActivePane === 'inspector'
+                ? 'bg-indigo-500 text-white shadow-xs'
+                : 'bg-slate-800 text-slate-200 hover:bg-slate-700'
+            }`}
+          >
+            3. Inspector
+          </button>
+        </div>
+      )}
+
       {/* ===================================================================== */}
       {/* 📐 MAIN 3-PANE WORKSPACE: PALETTE (LEFT) + CANVAS (CENTER) + INSPECTOR */}
       {/* ===================================================================== */}
@@ -1161,7 +1203,11 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
         {/* 🎨 LEFT PALETTE: WIX / ELEMENTOR STYLE COMPONENT LIBRARY + NICHE CMS */}
         {/* =================================================================== */}
         {!isPreviewMode && (
-          <aside className="w-72 sm:w-80 bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto">
+          <aside
+            className={`${
+              mobileActivePane === 'palette' ? 'flex w-full' : 'hidden'
+            } lg:flex lg:w-72 xl:w-80 bg-white border-r border-slate-200 flex-col shrink-0 overflow-y-auto`}
+          >
             {/* LEFT SIDEBAR MODE SWITCHER: 1. BUILDER BLOCKS & WP LAYOUTS vs 2. LIVE NICHE & CMS EDITOR */}
             <div className="p-2.5 bg-slate-900 text-white grid grid-cols-2 gap-1.5 shrink-0">
               <button
@@ -1693,7 +1739,9 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
         {/* 🖥️ CENTER CANVAS: INTERACTIVE DRAG & DROP LIVE PREVIEW               */}
         {/* =================================================================== */}
         <main
-          className="flex-1 bg-slate-200/70 p-4 sm:p-8 overflow-y-auto flex flex-col items-center"
+          className={`${
+            isPreviewMode || mobileActivePane === 'canvas' ? 'flex' : 'hidden'
+          } lg:flex flex-1 min-w-0 bg-slate-200/70 p-3 sm:p-6 lg:p-8 overflow-y-auto flex-col items-center`}
           onDragOver={(e) => {
             e.preventDefault();
           }}
@@ -2224,7 +2272,11 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
         {/* 🎛️ RIGHT INSPECTOR: WIX / ELEMENTOR STYLE DESIGN & CONTENT CONTROLS */}
         {/* =================================================================== */}
         {!isPreviewMode && selectedBlock && (
-          <aside className="w-72 sm:w-80 bg-white border-l border-slate-200 flex flex-col shrink-0 overflow-y-auto">
+          <aside
+            className={`${
+              mobileActivePane === 'inspector' ? 'flex w-full' : 'hidden'
+            } lg:flex lg:w-72 xl:w-80 bg-white border-l border-slate-200 flex-col shrink-0 overflow-y-auto`}
+          >
             <div className="p-4 border-b border-slate-100 flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
