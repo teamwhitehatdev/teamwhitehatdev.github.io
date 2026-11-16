@@ -146,7 +146,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
     setExpandedArticleIds((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const [highlightNicheFilter, setHighlightNicheFilter] = useState<'ALL' | 'VA' | 'AI' | 'FREELANCE'>('ALL');
+  const [highlightNicheFilter, setHighlightNicheFilter] = useState<'ALL' | 'FREE_AUTO' | 'VA' | 'AI' | 'FREELANCE'>('ALL');
 
   const homeCmsItems = typeof getHomeFeaturedCMSItems === 'function' ? getHomeFeaturedCMSItems() : [];
 
@@ -164,6 +164,9 @@ export const HomePage: React.FC<HomePageProps> = () => {
     const filteredByPillar = candidates.filter((item) => {
       if (highlightNicheFilter === 'ALL') return true;
       const text = `${item.category} ${item.title} ${item.description}`.toUpperCase();
+      if (highlightNicheFilter === 'FREE_AUTO') {
+        return text.includes('FREE AI AUTOMATION') || text.includes('$0') || text.includes('APPS SCRIPT') || text.includes('NO SUBSCRIPTION');
+      }
       if (highlightNicheFilter === 'VA') {
         return text.includes('VA') || text.includes('VIRTUAL ASSISTANT') || text.includes('EXECUTIVE') || text.includes('SOP');
       }
@@ -187,6 +190,17 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
     const matchesCat = (() => {
       if (selectedCategory === 'ALL') return true;
+
+      if (selectedCategory === 'FREE $0') {
+        return (
+          cat.includes('FREE AI AUTOMATION') ||
+          title.includes('$0') ||
+          title.includes('APPS SCRIPT') ||
+          desc.includes('$0') ||
+          desc.includes('ZERO-SUBSCRIPTION') ||
+          desc.includes('NO SUBSCRIPTION')
+        );
+      }
 
       if (selectedCategory === 'VA') {
         return (
@@ -413,6 +427,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
               {(
                 [
                   { id: 'ALL', label: '★ Top Best Niches' },
+                  { id: 'FREE_AUTO', label: '$0 Free Real-Time AI' },
                   { id: 'VA', label: 'VA & Executive Ops' },
                   { id: 'AI', label: 'AI & Automations' },
                   { id: 'FREELANCE', label: 'Freelance & Retainers' }
@@ -600,7 +615,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
                 {/* CATEGORY FILTER BUTTONS (PURPLE INDIGO & APPLE GREEN HIGHLIGHTS) */}
                 <div className="flex flex-wrap items-center gap-1.5 bg-white/80 backdrop-blur-xs p-1.5 rounded-xl border border-indigo-200/80 text-xs shadow-2xs">
-                  {['ALL', 'MAKE MONEY', 'AI', 'VA', 'FREELANC', 'AUTOMATION', 'DEV'].map((cat, cIdx) => {
+                  {['ALL', 'FREE $0', 'MAKE MONEY', 'AI', 'VA', 'FREELANC', 'AUTOMATION', 'DEV'].map((cat, cIdx) => {
                     const isSelected = selectedCategory === cat;
                     const isAppleGreen = cIdx % 2 === 0;
                     const hoverClass = isAppleGreen

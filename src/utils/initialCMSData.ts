@@ -1,9 +1,11 @@
 import { COMPREHENSIVE_EDUCATIONAL_CMS_ITEMS } from '../data/comprehensiveEducationalData';
 import { ADVANCED_NICHE_CMS_ITEMS } from '../data/advancedNicheCMSData';
 import { VA_FREELANCER_MASTERY_GUIDES } from '../data/vaFreelancerMasteryGuides';
+import { FREE_AI_AUTOMATION_CMS_GUIDES } from '../data/freeAiAutomationGuides';
 import { CMSItem, PlayStoreAppConfig, ServicesHeadlineConfig, ServicesPromoAdConfig } from '../types';
 
 export const INITIAL_CMS_ITEMS: CMSItem[] = [
+  ...FREE_AI_AUTOMATION_CMS_GUIDES,
   ...VA_FREELANCER_MASTERY_GUIDES,
   // =========================================================================
   // 💰 HIGH-ATTRACTION "MAKE MONEY ONLINE, $100-$500/WEEK & AI INCOME" GUIDES
@@ -183,21 +185,28 @@ Business owners know AI exists, but 95% of them **do not have the time to learn 
     contentType: 'Tutorial',
     page: 'ai',
     featured: true,
-    title: 'GUIDE #04: How to Make Money Using AI Automations — Build & Sell Make.com, Zapier & n8n Workflows ($300–$1,500/Setup)',
-    category: 'MAKE MONEY ONLINE',
-    badge: 'ATTRACTION GUIDE #04',
+    title: 'GUIDE #04: How to Build & Sell Real-Time AI Automations ($0/Mo Free Stack with Apps Script, Self-Hosted n8n & Groq/Gemini APIs)',
+    category: 'AI AUTOMATION',
+    badge: '$0 FREE AUTOMATION • GUIDE #04',
     status: 'PUBLISHED',
     visible: true,
     sortOrder: 4,
-    summary: 'Step-by-step blueprint for building and selling high-ROI AI automation pipelines to agencies, realtors, clinics, and e-commerce brands.',
-    description: 'AI Automation is the #1 highest-paid technical skill for non-coders and VAs in 2026. Learn the 5 exact automation blueprints that businesses pay $300 to $1,500+ to have installed, plus how to charge monthly maintenance retainers.',
-    fullContent: `# GUIDE #04: How to Make Money Using AI Automations ($300–$1,500 Per Setup)
+    summary: 'Step-by-step blueprint for building real-time AI automations with $0 subscriptions using Google Apps Script, Gemini/Groq free APIs, and self-hosted n8n — plus how to sell $300–$1,500 setups to clients.',
+    description: 'Start running real-time AI automations for $0/month without any paid subscription. Learn the 5 exact automation blueprints businesses pay $300 to $1,500+ to have installed using Google Apps Script, n8n Community, Ollama, Make.com Free, and Gemini/Groq Free APIs.',
+    fullContent: `# GUIDE #04: Real-Time AI Automations ($0 No-Subscription Stack + Client Blueprints)
 
-If you want to move from $5/hour manual tasks to **$300–$1,500 project fees**, learn **AI Workflow Automation** using **Make.com**, **Zapier**, or **n8n**. You do not need a computer science degree—you only need to understand **Triggers → AI Processing → Actions**.
+If you want to eliminate manual admin work OR move from $5/hour tasks to **$300–$1,500 automation setups**, learn **AI Workflow Automation**. Best of all, you can run every workflow below **100% FREE with zero monthly subscriptions** using **Google Apps Script + Gemini/Groq Free APIs** or **Self-Hosted n8n + Ollama**.
 
 ---
 
-## 1. How an AI Automation Pipeline Works
+## 0. Run 100% Free Forever ($0/Mo Tools — Zero Paid Subscription Required)
+- **Google Apps Script (\`script.google.com\`):** Unlimited free automation inside Gmail, Google Sheets, Forms, and Drive.
+- **Google AI Studio (\`aistudio.google.com\`) & Groq (\`console.groq.com\`):** Free developer API tiers (no paid monthly plan required).
+- **n8n Community Edition + Ollama (\`ollama.com\`):** Run unlimited AI nodes and private local LLMs directly on your computer for $0 forever.
+
+---
+
+## 1. How a Real-Time AI Automation Pipeline Works
 \`\`\`
 [1. TRIGGER] New Lead submits Website Form / Typeform / Facebook Ad
       ↓

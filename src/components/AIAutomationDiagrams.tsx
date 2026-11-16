@@ -59,15 +59,23 @@ import {
 } from 'lucide-react';
 import { WORKFLOW_STRATEGY_DATA, DEFAULT_TOOL_REFERRAL_LINKS, WorkflowStrategy } from '../data/workflowStrategyData';
 import {
-  WORKFLOW_CATEGORIES,
+  WORKFLOW_CATEGORIES as BASE_WORKFLOW_CATEGORIES,
   EXTENDED_WORKFLOW_BLUEPRINTS,
   EXTENDED_WORKFLOW_STRATEGIES,
   WorkflowCategoryMeta
 } from '../data/extendedWorkflowsData';
+import {
+  FREE_WORKFLOW_CATEGORY,
+  FREE_REALTIME_WORKFLOW_BLUEPRINTS,
+  FREE_REALTIME_WORKFLOW_STRATEGIES
+} from '../data/freeZeroCostWorkflows';
 import { isUserAdminOrDeveloper } from '../utils/adminAuth';
 import { AdminDevUnlockModal } from './AdminDevUnlockModal';
 
-export { WORKFLOW_CATEGORIES };
+export const WORKFLOW_CATEGORIES: WorkflowCategoryMeta[] = [
+  FREE_WORKFLOW_CATEGORY,
+  ...BASE_WORKFLOW_CATEGORIES
+];
 export type { WorkflowCategoryMeta };
 
 const renderCategoryIcon = (iconName: string, className = "w-4 h-4") => {
@@ -2507,6 +2515,69 @@ Answer the user's question ONLY using the <retrieved_context> chunks provided be
       'Visual Above-the-Fold CRO Audit Report',
       'Ad Creative Visual Hook Scorecard'
     ]
+  },
+  {
+    id: 'cap-niche-13-free-apps-script-gmail-sheets',
+    capabilityIndex: 3,
+    capabilityBadge: 'CAPABILITY 04 • $0 FREE AUTOMATION (NO SUBSCRIPTION)',
+    nicheCategory: 'Zero-Cost Real-Time Google Workspace Automation',
+    earningRate: '$0/Mo Tools • $400–$800/mo VA Retainer',
+    title: 'Niche #13: $0 Real-Time Gmail Auto-Triage, Form Speed-to-Lead & Sheets =ASK_AI() Bots',
+    summary:
+      'Replace $30–$99/mo Zapier/Make/GPT-for-Sheets subscriptions permanently with free native Google Apps Script + Gemini Free Tier / Groq Llama 3.3 Free API.',
+    fullGuideOverview:
+      'Every standard Gmail / Google Workspace account includes Google Apps Script for $0/month. Combined with free developer API keys from Google AI Studio or Groq Cloud and free Telegram/Discord webhooks, VAs can run real-time form responders, inbox labelers, and receipt OCR ledgers forever with zero SaaS bills.',
+    stepByStepSop: [
+      'Step 1 — Open script.google.com and create a free project with your API key in Project Settings -> Script Properties.',
+      'Step 2 — Paste the Google Apps Script handler (5-min Gmail triage trigger OR instant Google Form onFormSubmit trigger).',
+      'Step 3 — Connect free Telegram Bot API (@BotFather) or Discord Webhook for instant mobile notifications.',
+      'Step 4 — Deliver a zero-overhead automation system that saves your clients $500+/year in recurring SaaS costs.'
+    ],
+    masterPrompt: `Return strictly valid JSON matching this Free Apps Script Automation Contract:
+{
+  "priority": "01-VIP-Client" | "02-Meeting-Request" | "03-Invoice-Receipt" | "04-Newsletter",
+  "lead_score": number,
+  "draft_reply": "Warm, polite concise response ready inside Gmail Drafts"
+}`,
+    deliverables: [
+      'Real-Time Gmail Auto-Triage & Draft Bot ($0/mo)',
+      'Sub-3-Second Form -> Email -> Telegram Lead Responder',
+      'Native Google Sheets =ASK_AI() Bulk Enricher'
+    ],
+    partnerUrl: 'https://script.google.com',
+    partnerCta: 'Launch Google Apps Script Free →'
+  },
+  {
+    id: 'cap-niche-14-free-selfhosted-n8n-ollama',
+    capabilityIndex: 3,
+    capabilityBadge: 'CAPABILITY 04 • $0 UNLIMITED SELF-HOSTED AI',
+    nicheCategory: 'Unlimited Local AI & Open-Source n8n Pipelines',
+    earningRate: '$0 Unlimited Runs • $500–$1,500 Setup',
+    title: 'Niche #14: Unlimited Self-Hosted n8n Community + Ollama Local Offline AI (NDAs & Private Data)',
+    summary:
+      'Run unlimited 5-node AI Agents, webhooks, and confidential contract/NDA analyzers locally for $0/month with zero task limits and 100% client data privacy.',
+    fullGuideOverview:
+      'When clients have confidential contracts, health/financial spreadsheets, or high-volume webhooks, paid cloud automation platforms charge per task. Installing n8n Community Edition + Ollama locally (with free Cloudflare Quick Tunnels) gives freelancers unlimited real-time executions at $0.',
+    stepByStepSop: [
+      'Step 1 — Install Ollama (ollama.com) and run `ollama run llama3.2` for a local API at localhost:11434.',
+      'Step 2 — Launch n8n Community Edition via Docker for an unlimited visual workflow canvas.',
+      'Step 3 — Expose external webhooks for free using `cloudflared tunnel --url http://localhost:5678`.',
+      'Step 4 — Wire Webhook -> Ollama Local LLM -> Notion Free API / Discord for 100% private client delivery.'
+    ],
+    masterPrompt: `Process the confidential client document locally via Ollama with zero external cloud upload. Return JSON:
+{
+  "document_type": string,
+  "key_clauses_and_dates": string[],
+  "risk_flags": string[],
+  "action_checklist": string[]
+}`,
+    deliverables: [
+      'Unlimited Local n8n + Ollama Automation Node Stack',
+      'Free Cloudflare Quick Tunnel HTTPS Webhook',
+      '100% Private Zero-Subscription NDA & Ops Analyzer'
+    ],
+    partnerUrl: 'https://ollama.com',
+    partnerCta: 'Download Ollama Local AI Free →'
   }
 ];
 
@@ -2585,11 +2656,16 @@ Have a great weekend!
   }
 ];
 
-// COMBINED 100+ ADVANCED WORKFLOW BLUEPRINTS (112 TOTAL)
+// COMBINED 118+ ADVANCED & FREE REAL-TIME WORKFLOW BLUEPRINTS
 export const ALL_WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = (() => {
   const map = new Map<string, WorkflowBlueprint>();
-  for (const bp of WORKFLOW_BLUEPRINTS) {
+  for (const bp of FREE_REALTIME_WORKFLOW_BLUEPRINTS) {
     map.set(bp.id, bp);
+  }
+  for (const bp of WORKFLOW_BLUEPRINTS) {
+    if (!map.has(bp.id)) {
+      map.set(bp.id, bp);
+    }
   }
   for (const bp of EXTENDED_WORKFLOW_BLUEPRINTS) {
     if (!map.has(bp.id)) {
@@ -2599,10 +2675,11 @@ export const ALL_WORKFLOW_BLUEPRINTS: WorkflowBlueprint[] = (() => {
   return Array.from(map.values());
 })();
 
-// COMBINED STRATEGY REPOSITORY (ALL 112 BLUEPRINTS + DEFAULT STRATEGIES)
+// COMBINED STRATEGY REPOSITORY (FREE ZERO-COST + ALL 112+ BLUEPRINTS)
 export const ALL_WORKFLOW_STRATEGIES: Record<string, WorkflowStrategy> = {
   ...EXTENDED_WORKFLOW_STRATEGIES,
-  ...WORKFLOW_STRATEGY_DATA
+  ...WORKFLOW_STRATEGY_DATA,
+  ...FREE_REALTIME_WORKFLOW_STRATEGIES
 };
 
 // DEFAULT POSITIONS FOR THE 5 NODES (BALANCED FULL VIEW, NO SPLIT DIVISIONS)
@@ -2671,7 +2748,9 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   useEffect(() => {
     if (!activeCategory || activeCategory === 'ALL') return;
     const catUpper = activeCategory.toUpperCase();
-    if (catUpper.includes('PROMPT')) {
+    if (catUpper.includes('FREE')) {
+      setActiveBlueprintId('free-gmail-triage-apps-script');
+    } else if (catUpper.includes('PROMPT')) {
       setActiveBlueprintId('prompt-engineering-mesh');
     } else if (catUpper.includes('SOCIAL') || catUpper.includes('MARKETING') || catUpper.includes('SMM')) {
       setActiveBlueprintId('social-growth-smm');
@@ -3072,8 +3151,56 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
           </div>
         </div>
 
+        {/* 100% FREE ($0/MO NO-SUBSCRIPTION) REAL-TIME AUTOMATION QUICK LAUNCHERS */}
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-emerald-50/90 via-teal-50/70 to-white border-2 border-emerald-200/90 space-y-2.5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-xs font-mono font-black text-emerald-950 uppercase tracking-wide flex items-center gap-1.5">
+              <Zap className="w-4 h-4 text-emerald-600" />
+              <span>100% Free Real-Time AI Automations ($0/Mo • Zero Subscriptions Needed):</span>
+            </span>
+            <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white">
+              {FREE_REALTIME_WORKFLOW_BLUEPRINTS.length} Ready-to-Use $0 Flows
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+            {FREE_REALTIME_WORKFLOW_BLUEPRINTS.map((fbp, fIdx) => {
+              const isSelected = activeBlueprintId === fbp.id;
+              return (
+                <button
+                  key={fbp.id}
+                  type="button"
+                  onClick={() => setActiveBlueprintId(fbp.id)}
+                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1 ${
+                    isSelected
+                      ? 'bg-emerald-950 border-emerald-500 text-white shadow-sm ring-2 ring-emerald-400/50'
+                      : 'bg-white hover:bg-emerald-50 border-emerald-200 text-slate-900'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[10px] font-mono font-bold">
+                    <span className={isSelected ? 'text-emerald-300' : 'text-emerald-700'}>
+                      FREE #0{fIdx + 1}
+                    </span>
+                    <span
+                      className={`px-1.5 py-0.2 rounded text-[9px] font-extrabold ${
+                        isSelected
+                          ? 'bg-emerald-500 text-slate-950'
+                          : 'bg-emerald-100 text-emerald-900'
+                      }`}
+                    >
+                      $0/mo
+                    </span>
+                  </div>
+                  <div className="text-[11px] font-extrabold leading-snug line-clamp-2">
+                    {fbp.title}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* =====================================================================
-            1 SINGLE COLLAPSIBLE MASTER CONTAINER FOR 112+ WORKFLOWS
+            1 SINGLE COLLAPSIBLE MASTER CONTAINER FOR ALL WORKFLOWS
             (Saves vertical space; expands on click or search; separated by category)
         ====================================================================== */}
         <div className="space-y-3 pt-5 border-t border-slate-200">
@@ -3087,7 +3214,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-xs sm:text-sm font-black text-slate-950 font-mono tracking-tight">
-                      Select AI Automation Category • Instant Topology Switching ({ALL_WORKFLOW_BLUEPRINTS.length}+ Workflows Across 10 Specializations):
+                      Select AI Automation Category • Instant Topology Switching ({ALL_WORKFLOW_BLUEPRINTS.length} Workflows Across {WORKFLOW_CATEGORIES.length} Specializations):
                     </span>
                     <span className="px-2 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-mono font-bold">
                       1 Collapsible Menu
@@ -3115,7 +3242,11 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
                       : 'bg-slate-950 text-white hover:bg-slate-800'
                   }`}
                 >
-                  <span>{isWorkflowsMasterExpanded ? 'Collapse 112+ Workflows' : 'Expand All 112+ Workflows'}</span>
+                  <span>
+                    {isWorkflowsMasterExpanded
+                      ? `Collapse ${ALL_WORKFLOW_BLUEPRINTS.length} Workflows`
+                      : `Expand All ${ALL_WORKFLOW_BLUEPRINTS.length} Workflows`}
+                  </span>
                   {isWorkflowsMasterExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                 </button>
               </div>

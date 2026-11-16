@@ -83,7 +83,17 @@ export const DEFAULT_TOOL_REFERRAL_LINKS: Record<string, string> = {
   'Helicone': 'https://www.helicone.ai',
   'DEV.to API': 'https://developers.forem.com/api',
   'Hashnode API': 'https://apidocs.hashnode.com',
-  'Medium API': 'https://github.com/Medium/medium-api-docs'
+  'Medium API': 'https://github.com/Medium/medium-api-docs',
+  'Google Apps Script': 'https://script.google.com',
+  'Google AI Studio (Gemini Free)': 'https://aistudio.google.com',
+  'Groq Cloud (Free API)': 'https://console.groq.com',
+  'Ollama (Free Local AI)': 'https://ollama.com',
+  'n8n Community Edition': 'https://github.com/n8n-io/n8n',
+  'Cloudflare Quick Tunnel': 'https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/do-more-with-tunnels/trycloudflare/',
+  'Cloudflare Workers Free': 'https://workers.cloudflare.com',
+  'GitHub Actions Free': 'https://github.com/features/actions',
+  'Cal.com Free Plan': 'https://cal.com',
+  'Tally Forms Free': 'https://tally.so'
 };
 
 export const WORKFLOW_STRATEGY_DATA: Record<string, WorkflowStrategy> = {

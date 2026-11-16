@@ -145,6 +145,7 @@ export const AILearning: React.FC = () => {
 
   const categories = [
     'ALL',
+    'FREE AI AUTOMATION',
     'PROMPT ENGINEERING & MASTER PROMPTS',
     'AI AUTOMATION',
     'AI CAPABILITIES',
@@ -158,11 +159,12 @@ export const AILearning: React.FC = () => {
   ];
 
   const CATEGORY_ORDER = [
+    'FREE AI AUTOMATION',
     'VIRTUAL ASSISTANT CAREER',
     'FREELANCING MASTERY',
     'DIGITAL SKILLS',
-    'PROMPT ENGINEERING & MASTER PROMPTS',
     'AI AUTOMATION',
+    'PROMPT ENGINEERING & MASTER PROMPTS',
     'AI CAPABILITIES',
     'SOCIAL MEDIA & MARKETING',
     'SEO & METADATA',
@@ -171,18 +173,18 @@ export const AILearning: React.FC = () => {
   ];
 
   const quickSearchTags = [
+    '$0 No Subscription',
+    'Apps Script',
+    'Gemini Free',
+    'Groq Free',
     'START HERE #01',
     'Skill Matrix',
     'Executive VA',
     'Loom Audit Proposal',
     'Prompt Engineering',
-    'Master Prompts',
     'CRM & Lead Ops',
-    'Social Media Manager',
-    'Algorithm Mechanics',
-    'SEO & Metadata',
     'Speed-to-Lead',
-    'Meshy 3D'
+    'Self-Hosted n8n'
   ];
 
   const SKILL_LEARNING_TRACKS: Array<{
@@ -192,6 +194,12 @@ export const AILearning: React.FC = () => {
     keywords: string[];
   }> = [
     { id: 'ALL', label: 'All Skills & Learnings', badge: 'Complete', keywords: [] },
+    {
+      id: 'FREE_NO_SUB',
+      label: '$0 Free Real-Time Automations',
+      badge: 'No Subscription',
+      keywords: ['$0', 'apps script', 'gemini', 'groq', 'ollama', 'cloudflare workers', 'github actions', 'no subscription', 'telegram']
+    },
     {
       id: 'BEGINNER_VA',
       label: 'Beginner / Foundation VA',
@@ -218,7 +226,7 @@ export const AILearning: React.FC = () => {
     },
     {
       id: 'AUTOMATION_WORKFLOWS',
-      label: 'n8n, Make & Webhook Automation',
+      label: 'Real-Time AI & n8n Workflows',
       badge: 'Stage 4',
       keywords: ['automation', 'webhook', 'make.com', 'n8n', 'zapier', 'workflow', 'pipeline', 'triage', 'agent']
     },
@@ -358,10 +366,15 @@ export const AILearning: React.FC = () => {
       icon: TrendingUp,
       desc: 'Realistic zero-capital income paths, weekly earning math, and remote client acquisition systems.'
     },
+    'FREE AI AUTOMATION': {
+      label: '100% Free Real-Time AI Automations ($0/Mo • No Subscription)',
+      icon: Workflow,
+      desc: 'Ready-to-paste zero-subscription real-time automations using Google Apps Script, Gemini Free API, Groq Llama 3.3 Free, Self-Hosted n8n + Ollama, Cloudflare Workers Free, and Telegram/Discord alerts.'
+    },
     'AI AUTOMATION': {
       label: 'AI Automations & Event-Driven Workflows',
       icon: Workflow,
-      desc: 'Production-ready webhook pipelines, Make.com and n8n blueprints, and automated business integrations.'
+      desc: 'Production-ready webhook pipelines, $0/mo Google Apps Script & self-hosted n8n blueprints, Make.com flows, and automated business integrations.'
     },
     'AI CAPABILITIES': {
       label: 'Core AI Capabilities & Deep Fundamentals',

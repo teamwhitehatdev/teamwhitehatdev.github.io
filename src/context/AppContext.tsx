@@ -677,7 +677,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
-    const saved = localStorage.getItem('wh_cms_items_v5830');
+    const saved = localStorage.getItem('wh_cms_items_v5840');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -893,7 +893,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsCategories]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_items_v5830', JSON.stringify(cmsItems));
+    localStorage.setItem('wh_cms_items_v5840', JSON.stringify(cmsItems));
   }, [cmsItems]);
 
   useEffect(() => {
