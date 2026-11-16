@@ -55,7 +55,14 @@ import {
   UserCheck,
   SlidersHorizontal,
   Lock,
-  Unlock
+  Unlock,
+  Play,
+  Pause,
+  SkipForward,
+  GitBranch,
+  ShieldAlert,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { WORKFLOW_STRATEGY_DATA, DEFAULT_TOOL_REFERRAL_LINKS, WorkflowStrategy } from '../data/workflowStrategyData';
 import {
@@ -2682,13 +2689,65 @@ export const ALL_WORKFLOW_STRATEGIES: Record<string, WorkflowStrategy> = {
   ...FREE_REALTIME_WORKFLOW_STRATEGIES
 };
 
-// DEFAULT POSITIONS FOR THE 5 NODES (BALANCED FULL VIEW, NO SPLIT DIVISIONS)
+interface TopologyStageVisualMeta {
+  laneLabel: string;
+  shortRole: string;
+  accent: string;
+  bgFill: string;
+  badgeBg: string;
+  wireTag: string;
+}
+
+const TOPOLOGY_STAGE_META: TopologyStageVisualMeta[] = [
+  {
+    laneLabel: '01 • TRIGGER / INGRESS',
+    shortRole: 'Event Capture',
+    accent: '#38bdf8',
+    bgFill: '#0b172a',
+    badgeBg: '#082f49',
+    wireTag: 'RAW EVENT'
+  },
+  {
+    laneLabel: '02 • CONTEXT / ENRICH',
+    shortRole: 'Sanitize & Enrich',
+    accent: '#22d3ee',
+    bgFill: '#081b26',
+    badgeBg: '#083344',
+    wireTag: 'CLEAN DATA'
+  },
+  {
+    laneLabel: '03 • AI BRAIN / LLM',
+    shortRole: 'Prompt & JSON Mode',
+    accent: '#818cf8',
+    bgFill: '#0d102b',
+    badgeBg: '#1e1b4b',
+    wireTag: 'AI JSON'
+  },
+  {
+    laneLabel: '04 • ROUTER / GUARD',
+    shortRole: 'Score & Safety Gate',
+    accent: '#fbbf24',
+    bgFill: '#1c1509',
+    badgeBg: '#451a03',
+    wireTag: 'PASS GATE'
+  },
+  {
+    laneLabel: '05 • ACTION / SYNC',
+    shortRole: 'Live App Execution',
+    accent: '#34d399',
+    bgFill: '#071d18',
+    badgeBg: '#022c22',
+    wireTag: 'COMMIT'
+  }
+];
+
+// DEFAULT COMPACT POSITIONS FOR THE 5 NODES (FITS CLEANLY IN 1120x315 VIEWBOX)
 const DEFAULT_NODE_POSITIONS = [
-  { x: 30, y: 135 },
-  { x: 260, y: 135 },
-  { x: 490, y: 110 },
-  { x: 720, y: 135 },
-  { x: 950, y: 135 }
+  { x: 16, y: 66 },
+  { x: 243, y: 66 },
+  { x: 470, y: 61 },
+  { x: 705, y: 66 },
+  { x: 932, y: 66 }
 ];
 
 interface AIAutomationDiagramsProps {
@@ -2708,7 +2767,18 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
 
   const [selectedNodeIndex, setSelectedNodeIndex] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isFlowPlaying, setIsFlowPlaying] = useState<boolean>(false);
+  const [showGuideLines, setShowGuideLines] = useState<boolean>(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // Guided step-by-step live signal simulator when user clicks Play
+  useEffect(() => {
+    if (!isFlowPlaying) return;
+    const timer = window.setInterval(() => {
+      setSelectedNodeIndex((prev) => (prev + 1) % 5);
+    }, 2400);
+    return () => window.clearInterval(timer);
+  }, [isFlowPlaying]);
 
   // AI CAPABILITIES RIGHT-COLUMN COLLAPSIBLE NICHE EXPLORER & FULL-VIEW MODAL STATE
   const [selectedCapabilityFilter, setSelectedCapabilityFilter] = useState<number | 'ALL'>('ALL');
@@ -3061,6 +3131,7 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     const coords = getSVGCoordinates(e.clientX, e.clientY);
     setDraggingNodeIndex(index);
     setSelectedNodeIndex(index);
+    setIsFlowPlaying(false);
     setDragOffset({
       x: coords.x - nodePositions[index].x,
       y: coords.y - nodePositions[index].y
@@ -3070,8 +3141,8 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   const handleSVGMouseMove = (e: React.MouseEvent) => {
     if (draggingNodeIndex === null) return;
     const coords = getSVGCoordinates(e.clientX, e.clientY);
-    const newX = Math.max(10, Math.min(1150 - 190, coords.x - dragOffset.x));
-    const newY = Math.max(10, Math.min(420 - 165, coords.y - dragOffset.y));
+    const newX = Math.max(12, Math.min(1120 - 188, coords.x - dragOffset.x));
+    const newY = Math.max(36, Math.min(315 - 142, coords.y - dragOffset.y));
 
     setNodePositions((prev) => {
       const next = [...prev];
@@ -3088,19 +3159,77 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
     setNodePositions(DEFAULT_NODE_POSITIONS);
   };
 
-  // Dynamic Bezier Paths connecting nodes
+  // Dynamic Bezier Paths connecting compact nodes with midpoint coordinates for flow labels
   const dynamicWires = useMemo(() => {
-    const wires: Array<{ d: string; from: number; to: number }> = [];
+    const wires: Array<{
+      d: string;
+      from: number;
+      to: number;
+      startX: number;
+      startY: number;
+      endX: number;
+      endY: number;
+      midX: number;
+      midY: number;
+    }> = [];
     for (let i = 0; i < 4; i++) {
-      const startX = nodePositions[i].x + (i === 2 ? 185 : 180);
-      const startY = nodePositions[i].y + (i === 2 ? 77 : 72);
+      const startW = i === 2 ? 180 : 172;
+      const startH = i === 2 ? 138 : 128;
+      const endH = i + 1 === 2 ? 138 : 128;
+      const startX = nodePositions[i].x + startW;
+      const startY = nodePositions[i].y + startH / 2;
       const endX = nodePositions[i + 1].x;
-      const endY = nodePositions[i + 1].y + (i + 1 === 2 ? 77 : 72);
-      const deltaX = Math.max(25, Math.abs(endX - startX) * 0.45);
-      const d = `M ${startX} ${startY} C ${startX + deltaX} ${startY}, ${endX - deltaX} ${endY}, ${endX} ${endY}`;
-      wires.push({ d, from: i, to: i + 1 });
+      const endY = nodePositions[i + 1].y + endH / 2;
+      const deltaX = Math.max(18, Math.abs(endX - startX) * 0.45);
+      const d = `M ${startX} ${startY} C ${startX + deltaX} ${startY}, ${endX - deltaX} ${endY}, ${endX - 4} ${endY}`;
+      wires.push({
+        d,
+        from: i,
+        to: i + 1,
+        startX,
+        startY,
+        endX,
+        endY,
+        midX: (startX + endX) / 2,
+        midY: (startY + endY) / 2
+      });
     }
     return wires;
+  }, [nodePositions]);
+
+  const isFreeZeroCost =
+    activeBlueprint.categoryKey === 'free-realtime' ||
+    activeBlueprint.vaServiceValue.includes('$0') ||
+    activeBlueprint.badge.includes('$0');
+
+  const activeStageMeta = TOPOLOGY_STAGE_META[selectedNodeIndex] || TOPOLOGY_STAGE_META[0];
+
+  const guardrailTopology = useMemo(() => {
+    const brainPos = nodePositions[2] || DEFAULT_NODE_POSITIONS[2];
+    const routerPos = nodePositions[3] || DEFAULT_NODE_POSITIONS[3];
+    const actionPos = nodePositions[4] || DEFAULT_NODE_POSITIONS[4];
+
+    const retryStartX = routerPos.x + 76;
+    const retryStartY = routerPos.y + 128;
+    const retryEndX = brainPos.x + 90;
+    const retryEndY = brainPos.y + 138;
+    const guardrailBusY = Math.max(retryStartY, retryEndY) + 38;
+    const retryPathD = `M ${retryStartX} ${retryStartY} C ${retryStartX} ${guardrailBusY}, ${retryEndX} ${guardrailBusY}, ${retryEndX} ${retryEndY + 5}`;
+
+    const fallbackStartX = routerPos.x + 98;
+    const fallbackEndX = actionPos.x + 86;
+    const fallbackEndY = actionPos.y + 128;
+    const fallbackPathD = `M ${fallbackStartX} ${retryStartY} C ${fallbackStartX} ${guardrailBusY}, ${fallbackEndX} ${guardrailBusY}, ${fallbackEndX} ${fallbackEndY + 5}`;
+
+    return {
+      retryStartX,
+      retryEndX,
+      guardrailBusY,
+      retryPathD,
+      fallbackStartX,
+      fallbackEndX,
+      fallbackPathD
+    };
   }, [nodePositions]);
 
   const handleCopy = (text: string, id: string) => {
@@ -3440,249 +3569,583 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
       </section>
 
       {/* =====================================================================
-          SECTION 2: DEDICATED SEPARATED SECTION:
-          LIVE ANIMATED TOPOLOGY WORKFLOW • DRAGGABLE FULL VIEW CANVAS
-          (PURPLE LIGHT HUD THEME MATCHING HOME PAGE TUTORIALS SECTION)
+          SECTION 2: COMPACT LIVE ANIMATED TOPOLOGY WORKFLOW • DRAGGABLE CANVAS
       ====================================================================== */}
       <section
-        className={`relative rounded-3xl bg-gradient-to-br from-indigo-50/85 via-purple-50/70 to-blue-50/80 backdrop-blur-md border-2 border-indigo-200/90 shadow-xl p-5 sm:p-8 lg:p-9 overflow-hidden text-slate-900 transition-all ${
-          isExpanded ? 'fixed inset-3 z-50 overflow-y-auto' : ''
+        className={`relative rounded-2xl bg-gradient-to-br from-indigo-50/90 via-purple-50/75 to-blue-50/85 backdrop-blur-md border-2 border-indigo-200/90 shadow-lg p-3.5 sm:p-5 overflow-hidden text-slate-900 transition-all ${
+          isExpanded ? 'fixed inset-3 z-50 overflow-y-auto shadow-2xl' : ''
         }`}
       >
-        {/* Subtle Top Animated Architectural Shimmer Line */}
-        <div className="relative h-1 w-full -mt-5 sm:-mt-8 lg:-mt-9 -mx-5 sm:-mx-8 lg:-mx-9 mb-5 sm:mb-8 bg-indigo-100/60 overflow-hidden">
-          <div className="absolute top-0 left-0 h-full w-1/3 animate-shimmer-slide bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-        </div>
-        {/* Animated matrix dots background */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-25"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, #38bdf8 1px, transparent 0)`,
-            backgroundSize: '24px 24px'
-          }}
-        />
-
-        {/* Ambient neon radial glows */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
-
-        {/* TOP HUD RETICLE & DEDICATED CONTROLS */}
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-slate-200">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-100/90 border border-indigo-300 text-indigo-950 text-xs font-mono font-bold tracking-wider uppercase shadow-xs">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-500 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600" />
-            </span>
-            <span>LIVE ANIMATED TOPOLOGY WORKFLOW • DRAGGABLE FULL VIEW CANVAS</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={resetNodePositions}
-              className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 hover:text-white border border-slate-700 text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
-              title="Reset Draggable Nodes to Default Positions"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Reset Node Layout</span>
-            </button>
-
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors cursor-pointer"
-              title={isExpanded ? 'Exit Fullscreen' : 'Expand to Fullscreen'}
-            >
-              {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-            </button>
-          </div>
-        </div>
-
-        {/* TOPOLOGY TITLE BAR */}
-        <div className="relative z-10 my-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-white border-2 border-slate-300 text-xs font-mono shadow-xs text-slate-900">
-          <div className="flex items-center gap-2.5">
-            <Server className="w-4 h-4 text-cyan-600 shrink-0" />
-            <span className="text-slate-950 font-black text-sm sm:text-base tracking-wide">
-              {activeBlueprint.networkTopologyTitle}
-            </span>
-          </div>
-          <div className="flex flex-wrap items-center gap-3 text-[11px]">
-            <span className="text-emerald-700 font-bold flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              UPTIME 99.98%
-            </span>
-            <span className="text-slate-900 font-bold">P99 LATENCY: ~14ms</span>
-            <span className="text-slate-900 font-bold">ENCRYPTION: TLS 1.3 / AES-256</span>
-            <span className="px-2.5 py-1 rounded-md bg-slate-900 text-white font-bold text-[10px]">
-              DRAG NODES TO REPOSITION
-            </span>
-          </div>
-        </div>
-
-        {/* DRAGGABLE FULL VIEW NETWORKING TOPOLOGY CANVAS */}
-        <div className="relative z-10 bg-black/80 border border-slate-800 rounded-2xl p-3 sm:p-5 overflow-x-auto shadow-inner">
-          <div className="min-w-[1150px]">
-            <svg
-              ref={svgRef}
-              viewBox="0 0 1150 420"
-              className="w-full h-auto select-none"
-              role="img"
-              aria-label={`Draggable Networking Topology Diagram for ${activeBlueprint.title}`}
-              onMouseMove={handleSVGMouseMove}
-              onMouseUp={handleSVGMouseUp}
-              onMouseLeave={handleSVGMouseUp}
-            >
-              <defs>
-                <linearGradient id="trunkGradLive" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#0284c7" />
-                  <stop offset="50%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#10b981" />
-                </linearGradient>
-
-                <filter id="neonGlowDraggable" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-              </defs>
-
-              {/* DYNAMIC BEZIER CONNECTING WIRES WITH TRAVELING PACKETS */}
-              {dynamicWires.map((wire, idx) => {
-                const isActiveConduit = selectedNodeIndex > idx;
-                return (
-                  <g key={`wire-${idx}`}>
-                    <path
-                      d={wire.d}
-                      fill="none"
-                      stroke={isActiveConduit ? '#38bdf8' : '#0284c7'}
-                      strokeWidth="2.5"
-                      strokeDasharray="4 4"
-                      className="animate-wire-dash"
-                    />
-                    <circle r="4.5" fill={idx >= 2 ? '#10b981' : '#38bdf8'} filter="url(#neonGlowDraggable)">
-                      <animateMotion
-                        dur="2.4s"
-                        begin={`${idx * 0.55}s`}
-                        repeatCount="indefinite"
-                        path={wire.d}
-                      />
-                    </circle>
-                  </g>
-                );
-              })}
-
-              {/* 5 DRAGGABLE NODE BOXES */}
-              {activeBlueprint.nodes.map((node, i) => {
-                const pos = nodePositions[i] || DEFAULT_NODE_POSITIONS[i];
-                const isSelected = selectedNodeIndex === i;
-                const isBrainNode = i === 2;
-                const nodeW = isBrainNode ? 185 : 180;
-                const nodeH = isBrainNode ? 155 : 145;
-
-                return (
-                  <g
-                    key={`node-${node.step}`}
-                    transform={`translate(${pos.x}, ${pos.y})`}
-                    className="cursor-grab active:cursor-grabbing transition-transform"
-                    onMouseDown={(e) => handleNodeMouseDown(i, e)}
-                    onClick={() => setSelectedNodeIndex(i)}
-                  >
-                    <rect
-                      width={nodeW}
-                      height={nodeH}
-                      rx="14"
-                      fill={isBrainNode ? '#081026' : '#0f172a'}
-                      stroke={isSelected ? '#38bdf8' : isBrainNode ? '#0284c7' : '#1e293b'}
-                      strokeWidth={isSelected ? '2.5' : '1.5'}
-                      filter={isSelected ? 'url(#neonGlowDraggable)' : undefined}
-                    />
-
-                    <rect x="8" y="8" width={nodeW - 16} height="22" rx="5" fill="#1e293b" />
-                    <circle cx="18" cy="19" r="3" fill="#10b981" />
-                    <text x="30" y="23" fill="#38bdf8" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                      NODE {node.step} • {node.type}
-                    </text>
-                    <text x={nodeW - 16} y="22" textAnchor="end" fill="#64748b" fontSize="10" fontFamily="monospace">
-                      :::
-                    </text>
-
-                    <text x="12" y="48" fill="#ffffff" fontSize="11" fontWeight="bold">
-                      {node.title.slice(0, 21)}
-                    </text>
-
-                    <text x="12" y="65" fill="#38bdf8" fontSize="9.5" fontWeight="semibold">
-                      {node.tool.slice(0, 23)}
-                    </text>
-
-                    <text x="12" y="81" fill="#94a3b8" fontSize="9" fontFamily="monospace">
-                      IP: {node.ipAddress}:{node.port}
-                    </text>
-
-                    <rect x="10" y="93" width={nodeW - 20} height="20" rx="4" fill="#032b4d" />
-                    <text x={nodeW / 2} y="107" textAnchor="middle" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace" fontWeight="bold">
-                      {node.protocolBadge} • {node.latency}
-                    </text>
-
-                    <text x="12" y="132" fill="#10b981" fontSize="8.5" fontFamily="monospace">
-                      ● UPTIME {node.statusUptime}
-                    </text>
-                  </g>
-                );
-              })}
-            </svg>
-          </div>
-        </div>
-
-        <div className="relative z-10 pt-3 flex flex-wrap items-center justify-between text-xs text-slate-600 font-mono">
-          <span>💡 Tip: Drag any node box on the canvas to customize your interactive workflow layout.</span>
-          <span className="text-slate-900 font-bold">Active Focus: Node {selectedNode.step} • {selectedNode.title}</span>
-        </div>
-
-        {/* ===============================================================
-            SUBSECTION A: DETAILED NODE TELEMETRY & SPECIFICATION INSPECTOR
-        =============================================================== */}
-        <div className="relative z-10 mt-8 pt-6 border-t-2 border-indigo-200/80">
-          {/* Step-by-Step 5-Node Execution Trace Pipeline */}
-          <div className="mb-5 bg-white/95 border-2 border-indigo-200/90 rounded-2xl p-4 shadow-xs">
-            <div className="flex items-center justify-between pb-2 mb-3 border-b border-indigo-100">
-              <span className="text-xs font-mono font-black text-indigo-950 flex items-center gap-1.5 uppercase tracking-wider">
-                <Activity className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Step-by-Step 5-Node Execution Trace Pipeline</span>
-              </span>
-              <span className="text-[11px] font-mono text-slate-500 font-bold">
-                Click any node step to inspect telemetry
-              </span>
+            {/* Subtle Top Animated Architectural Shimmer Line */}
+            <div className="relative h-1 w-full -mt-3.5 sm:-mt-5 -mx-3.5 sm:-mx-5 mb-3 sm:mb-4 bg-indigo-100/70 overflow-hidden">
+              <div className="absolute top-0 left-0 h-full w-1/3 animate-shimmer-slide bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
-              {activeBlueprint.nodes.map((node, i) => {
-                const isCurrent = selectedNodeIndex === i;
-                return (
-                  <button
-                    key={node.step}
-                    type="button"
-                    onClick={() => setSelectedNodeIndex(i)}
-                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-between gap-1 ${
-                      isCurrent
-                        ? 'bg-slate-950 text-white border-2 border-indigo-400 shadow-md ring-2 ring-indigo-400/40'
-                        : 'bg-slate-50 hover:bg-indigo-50/70 border-slate-200 text-slate-900 hover:border-indigo-300'
+            {/* Subtle blueprint grid background */}
+            <div
+              className="absolute inset-0 pointer-events-none opacity-20"
+              style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, #38bdf8 1px, transparent 0)`,
+                backgroundSize: '20px 20px'
+              }}
+            />
+
+            {/* TOP COMPACT HUD HEADER & INTERACTIVE FLOW SIMULATION CONTROLS */}
+            <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-indigo-200/80">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 border border-indigo-300 text-indigo-950 text-[11px] font-mono font-bold tracking-wider uppercase shadow-xs">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600" />
+                </span>
+                <span>LIVE ANIMATED TOPOLOGY WORKFLOW • DRAGGABLE CANVAS</span>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setIsFlowPlaying((prev) => !prev)}
+                  className={`px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-bold flex items-center gap-1.5 border transition-colors cursor-pointer shadow-xs ${
+                    isFlowPlaying
+                      ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-500'
+                      : 'bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-500'
+                  }`}
+                  title="Animate signal step-by-step through every stage"
+                >
+                  {isFlowPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                  <span>{isFlowPlaying ? 'Pause Flow' : 'Play Flow'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsFlowPlaying(false);
+                    setSelectedNodeIndex((prev) => (prev + 1) % 5);
+                  }}
+                  className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-indigo-50 text-slate-800 border border-slate-300 text-[11px] font-mono font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                  title="Advance to next node stage"
+                >
+                  <SkipForward className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Step {selectedNodeIndex + 1}/5</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowGuideLines((prev) => !prev)}
+                  className={`px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-bold flex items-center gap-1 border transition-colors cursor-pointer ${
+                    showGuideLines
+                      ? 'bg-cyan-50 text-cyan-900 border-cyan-300 hover:bg-cyan-100'
+                      : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
+                  }`}
+                  title="Toggle stage guide lanes, protocol labels, and retry/fallback lines"
+                >
+                  {showGuideLines ? <Eye className="w-3.5 h-3.5 text-cyan-600" /> : <EyeOff className="w-3.5 h-3.5" />}
+                  <span>Guide Lines</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={resetNodePositions}
+                  className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 hover:text-white border border-slate-700 text-[11px] font-mono flex items-center gap-1 transition-colors cursor-pointer"
+                  title="Reset Draggable Nodes to Aligned Stage Lanes"
+                >
+                  <RefreshCw className="w-3 h-3" />
+                  <span>Reset</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors cursor-pointer"
+                  title={isExpanded ? 'Exit Fullscreen' : 'Expand Canvas Fullscreen'}
+                >
+                  {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* COMPACT BLUEPRINT SWITCHER + LIVE STAGE NARRATION STRIP */}
+            <div className="relative z-10 my-2.5 p-2.5 sm:px-3.5 rounded-xl bg-white/95 border border-slate-300 text-xs shadow-xs space-y-2">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Server className="w-4 h-4 text-cyan-600 shrink-0" />
+                  <span className="text-slate-950 font-black text-xs sm:text-sm tracking-tight">
+                    {activeBlueprint.networkTopologyTitle}
+                  </span>
+                  <span
+                    className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-extrabold uppercase border ${
+                      isFreeZeroCost
+                        ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                        : 'bg-indigo-100 text-indigo-900 border-indigo-300'
                     }`}
                   >
-                    <div className="flex items-center justify-between text-[10px] font-mono font-bold">
-                      <span className={isCurrent ? 'text-indigo-300 font-extrabold' : 'text-indigo-700'}>
-                        STEP {node.step}
-                      </span>
-                      <span className={`w-1.5 h-1.5 rounded-full ${isCurrent ? 'bg-indigo-400 animate-ping' : 'bg-slate-400'}`} />
-                    </div>
-                    <div className={`font-black text-[11px] line-clamp-1 ${isCurrent ? 'text-white' : 'text-slate-950'}`}>
-                      {node.title}
-                    </div>
-                    <div className="flex items-center justify-between text-[9px] font-mono opacity-80 pt-0.5">
-                      <span className="truncate">{node.tool}</span>
-                      <span className="font-semibold uppercase">{node.type}</span>
-                    </div>
-                  </button>
-                );
-              })}
+                    {isFreeZeroCost ? '$0 FREE REAL-TIME' : 'AGENCY / PRO STACK'}
+                  </span>
+                </div>
+
+                {/* Quick In-Canvas Topology Blueprint Selector */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <label htmlFor="canvas-blueprint-select" className="text-[10px] font-mono font-bold text-slate-500 uppercase">
+                    Switch Flow:
+                  </label>
+                  <select
+                    id="canvas-blueprint-select"
+                    value={activeBlueprintId}
+                    onChange={(e) => {
+                      setIsFlowPlaying(false);
+                      setActiveBlueprintId(e.target.value);
+                    }}
+                    className="max-w-[290px] px-2.5 py-1 rounded-lg bg-slate-900 text-cyan-200 border border-slate-700 text-[11px] font-mono font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  >
+                    <optgroup label="$0 Free Real-Time AI Automations (Recommended)">
+                      {ALL_WORKFLOW_BLUEPRINTS.filter((bp) => bp.categoryKey === 'free-realtime').map((bp) => (
+                        <option key={bp.id} value={bp.id}>
+                          [FREE $0] {bp.title.slice(0, 48)}
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Agency & Enterprise Blueprints">
+                      {ALL_WORKFLOW_BLUEPRINTS.filter((bp) => bp.categoryKey !== 'free-realtime').slice(0, 24).map((bp) => (
+                        <option key={bp.id} value={bp.id}>
+                          [{bp.categoryLabel.slice(0, 14)}] {bp.title.slice(0, 42)}
+                        </option>
+                      ))}
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              {/* Plain-English 1-Line Live Stage Narration */}
+              <div className="flex flex-wrap items-center gap-2 pt-1.5 border-t border-slate-200 text-[11px] font-mono text-slate-700">
+                <span
+                  className="px-2 py-0.5 rounded font-black text-white text-[10px]"
+                  style={{ backgroundColor: '#0f172a', borderLeft: `3px solid ${activeStageMeta.accent}` }}
+                >
+                  STAGE {selectedNode.step} • {selectedNode.type}
+                </span>
+                <span className="font-bold text-slate-900">In:</span>
+                <span className="truncate max-w-[240px] text-slate-700">{selectedNode.inputPayload}</span>
+                <ArrowRight className="w-3 h-3 text-indigo-500 shrink-0" />
+                <span className="font-bold text-indigo-700">[{selectedNode.tool}]</span>
+                <ArrowRight className="w-3 h-3 text-emerald-500 shrink-0" />
+                <span className="font-bold text-emerald-800">Out:</span>
+                <span className="truncate max-w-[250px] text-slate-800 font-semibold">{selectedNode.outputPayload}</span>
+              </div>
             </div>
-          </div>
+
+            {/* COMPACT RESPONSIVE DRAGGABLE TOPOLOGY CANVAS */}
+            <div className="relative z-10 bg-slate-950 border border-slate-800 rounded-xl p-2 sm:p-3 overflow-x-auto shadow-inner">
+              <div className={`${isExpanded ? 'min-w-[900px] w-full' : 'min-w-[780px] lg:min-w-0 max-w-5xl mx-auto'}`}>
+                <svg
+                  ref={svgRef}
+                  viewBox="0 0 1120 315"
+                  className="w-full h-auto select-none"
+                  role="img"
+                  aria-label={`Interactive Animated Topology Diagram for ${activeBlueprint.title}`}
+                  onMouseMove={handleSVGMouseMove}
+                  onMouseUp={handleSVGMouseUp}
+                  onMouseLeave={handleSVGMouseUp}
+                >
+                  <defs>
+                    <filter id="neonGlowDraggable" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="2.5" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+
+                    <marker id="arrowFlowActive" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                      <path d="M0,1 L7,4 L0,7 Z" fill="#38bdf8" />
+                    </marker>
+                    <marker id="arrowFlowIdle" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                      <path d="M0,1 L6,3.5 L0,6 Z" fill="#0ea5e9" opacity="0.85" />
+                    </marker>
+                    <marker id="arrowFlowSuccess" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                      <path d="M0,1 L7,4 L0,7 Z" fill="#34d399" />
+                    </marker>
+                    <marker id="arrowRetry" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                      <path d="M0,1 L6,3.5 L0,6 Z" fill="#fb7185" />
+                    </marker>
+                    <marker id="arrowWarn" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                      <path d="M0,1 L6,3.5 L0,6 Z" fill="#fbbf24" />
+                    </marker>
+                  </defs>
+
+                  {/* ARCHITECTURAL STAGE GUIDE LANES & VERTICAL DIVIDERS */}
+                  {showGuideLines && (
+                    <g opacity="0.95">
+                      {[16, 243, 470, 705, 932].map((laneX, idx) => {
+                        const meta = TOPOLOGY_STAGE_META[idx];
+                        const laneW = idx === 2 ? 180 : 172;
+                        const isLaneFocused = selectedNodeIndex === idx;
+                        return (
+                          <g key={`lane-${idx}`}>
+                            <rect
+                              x={laneX - 4}
+                              y={8}
+                              width={laneW + 8}
+                              height={244}
+                              rx={10}
+                              fill={isLaneFocused ? '#1e293b' : '#0f172a'}
+                              fillOpacity={isLaneFocused ? 0.55 : 0.3}
+                              stroke={isLaneFocused ? meta.accent : '#1e293b'}
+                              strokeWidth={isLaneFocused ? 1.2 : 0.8}
+                              strokeDasharray={isLaneFocused ? undefined : '4 4'}
+                            />
+                            <rect
+                              x={laneX}
+                              y={12}
+                              width={laneW}
+                              height={20}
+                              rx={6}
+                              fill={meta.badgeBg}
+                              stroke={meta.accent}
+                              strokeWidth={0.8}
+                            />
+                            <text
+                              x={laneX + laneW / 2}
+                              y={25}
+                              textAnchor="middle"
+                              fill={meta.accent}
+                              fontSize="8"
+                              fontWeight="bold"
+                              fontFamily="monospace"
+                            >
+                              {meta.laneLabel}
+                            </text>
+                          </g>
+                        );
+                      })}
+                    </g>
+                  )}
+
+                  {/* RETRY & SAFE FALLBACK GUIDE RAILS (NODE 04 GUARDRAIL -> RETRY NODE 03 / FALLBACK NODE 05) */}
+                  {showGuideLines && (
+                    <g>
+                      <path
+                        d={guardrailTopology.retryPathD}
+                        fill="none"
+                        stroke="#fb7185"
+                        strokeWidth="1.6"
+                        strokeDasharray="5 4"
+                        className="animate-fallback-dash"
+                        markerEnd="url(#arrowRetry)"
+                      />
+                      <circle r="2.8" fill="#fb7185">
+                        <animateMotion dur="3.4s" repeatCount="indefinite" path={guardrailTopology.retryPathD} />
+                      </circle>
+                      <rect
+                        x={(guardrailTopology.retryStartX + guardrailTopology.retryEndX) / 2 - 78}
+                        y={guardrailTopology.guardrailBusY - 12}
+                        width="156"
+                        height="16"
+                        rx="4"
+                        fill="#1f0a12"
+                        stroke="#fb7185"
+                        strokeWidth="0.8"
+                      />
+                      <text
+                        x={(guardrailTopology.retryStartX + guardrailTopology.retryEndX) / 2}
+                        y={guardrailTopology.guardrailBusY - 1}
+                        textAnchor="middle"
+                        fill="#fda4af"
+                        fontSize="7.2"
+                        fontFamily="monospace"
+                        fontWeight="bold"
+                      >
+                        ↺ LOW CONFIDENCE / RETRY PROMPT
+                      </text>
+
+                      <path
+                        d={guardrailTopology.fallbackPathD}
+                        fill="none"
+                        stroke="#fbbf24"
+                        strokeWidth="1.4"
+                        strokeDasharray="3 4"
+                        className="animate-fallback-dash"
+                        markerEnd="url(#arrowWarn)"
+                      />
+                      <rect
+                        x={(guardrailTopology.fallbackStartX + guardrailTopology.fallbackEndX) / 2 - 66}
+                        y={guardrailTopology.guardrailBusY - 12}
+                        width="132"
+                        height="16"
+                        rx="4"
+                        fill="#1f1606"
+                        stroke="#fbbf24"
+                        strokeWidth="0.8"
+                      />
+                      <text
+                        x={(guardrailTopology.fallbackStartX + guardrailTopology.fallbackEndX) / 2}
+                        y={guardrailTopology.guardrailBusY - 1}
+                        textAnchor="middle"
+                        fill="#fde68a"
+                        fontSize="7.2"
+                        fontFamily="monospace"
+                        fontWeight="bold"
+                      >
+                        ⚠ SAFE FALLBACK / REVIEW
+                      </text>
+                    </g>
+                  )}
+
+                  {/* PRIMARY HAPPY-PATH ANIMATED WIRES WITH DIRECTIONAL ARROWS & PACKETS */}
+                  {dynamicWires.map((wire, idx) => {
+                    const isFocusedWire = selectedNodeIndex === idx || selectedNodeIndex === idx + 1;
+                    const isCompletedPath = selectedNodeIndex > idx;
+                    const wireColor = idx === 3 ? '#34d399' : isFocusedWire ? '#38bdf8' : '#0284c7';
+                    const wireMarker =
+                      idx === 3 ? 'url(#arrowFlowSuccess)' : isFocusedWire ? 'url(#arrowFlowActive)' : 'url(#arrowFlowIdle)';
+                    const wireTag = TOPOLOGY_STAGE_META[idx]?.wireTag || 'DATA';
+
+                    return (
+                      <g key={`wire-${idx}`}>
+                        {isFocusedWire && (
+                          <path
+                            d={wire.d}
+                            fill="none"
+                            stroke={wireColor}
+                            strokeWidth="6"
+                            strokeOpacity="0.22"
+                            strokeLinecap="round"
+                          />
+                        )}
+                        <path
+                          d={wire.d}
+                          fill="none"
+                          stroke={wireColor}
+                          strokeWidth={isFocusedWire ? '2.8' : isCompletedPath ? '2.4' : '2'}
+                          strokeDasharray="5 4"
+                          className={isFocusedWire ? 'animate-wire-dash-fast' : 'animate-wire-dash'}
+                          markerEnd={wireMarker}
+                        />
+                        {/* Leading data packet dot */}
+                        <circle r="4" fill={idx >= 2 ? '#34d399' : '#38bdf8'} filter="url(#neonGlowDraggable)">
+                          <animateMotion dur="2s" begin={`${idx * 0.45}s`} repeatCount="indefinite" path={wire.d} />
+                        </circle>
+                        {/* Secondary trailing pulse */}
+                        <circle r="2.2" fill="#e0f2fe" opacity="0.85">
+                          <animateMotion dur="2s" begin={`${idx * 0.45 + 0.16}s`} repeatCount="indefinite" path={wire.d} />
+                        </circle>
+
+                        {/* Guide Packet Pill over wire midpoint */}
+                        {showGuideLines && (
+                          <g>
+                            <rect
+                              x={wire.midX - 25}
+                              y={wire.midY - 22}
+                              width="50"
+                              height="14"
+                              rx="4"
+                              fill="#020617"
+                              stroke={wireColor}
+                              strokeWidth="0.9"
+                            />
+                            <text
+                              x={wire.midX}
+                              y={wire.midY - 12}
+                              textAnchor="middle"
+                              fill="#e0f2fe"
+                              fontSize="6.8"
+                              fontFamily="monospace"
+                              fontWeight="bold"
+                            >
+                              {wireTag}
+                            </text>
+                          </g>
+                        )}
+                      </g>
+                    );
+                  })}
+
+                  {/* 5 COMPACT DRAGGABLE NODE CARDS */}
+                  {activeBlueprint.nodes.map((node, i) => {
+                    const pos = nodePositions[i] || DEFAULT_NODE_POSITIONS[i];
+                    const stageMeta = TOPOLOGY_STAGE_META[i] || TOPOLOGY_STAGE_META[0];
+                    const isSelected = selectedNodeIndex === i;
+                    const isBrainNode = i === 2;
+                    const nodeW = isBrainNode ? 180 : 172;
+                    const nodeH = isBrainNode ? 138 : 128;
+
+                    return (
+                      <g
+                        key={`node-${node.step}`}
+                        transform={`translate(${pos.x}, ${pos.y})`}
+                        className="cursor-grab active:cursor-grabbing"
+                        onMouseDown={(e) => handleNodeMouseDown(i, e)}
+                        onClick={() => {
+                          setIsFlowPlaying(false);
+                          setSelectedNodeIndex(i);
+                        }}
+                      >
+                        <rect
+                          width={nodeW}
+                          height={nodeH}
+                          rx="11"
+                          fill={stageMeta.bgFill}
+                          stroke={isSelected ? stageMeta.accent : '#334155'}
+                          strokeWidth={isSelected ? '2.4' : '1.4'}
+                          filter={isSelected ? 'url(#neonGlowDraggable)' : undefined}
+                        />
+
+                        {/* Top Bar */}
+                        <rect x="6" y="6" width={nodeW - 12} height="20" rx="5" fill={stageMeta.badgeBg} />
+                        <circle cx="15" cy="16" r="3" fill={isSelected ? stageMeta.accent : '#10b981'} />
+                        <text x="24" y="19" fill={stageMeta.accent} fontSize="8.5" fontWeight="bold" fontFamily="monospace">
+                          STEP {node.step} • {node.type}
+                        </text>
+                        <text x={nodeW - 12} y="19" textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
+                          :::
+                        </text>
+
+                        {/* Node Title & Tool */}
+                        <text x="10" y="42" fill="#ffffff" fontSize="10.2" fontWeight="bold">
+                          {node.title.length > 22 ? `${node.title.slice(0, 21)}…` : node.title}
+                        </text>
+                        <text x="10" y="57" fill={stageMeta.accent} fontSize="9" fontWeight="bold">
+                          {node.tool.length > 24 ? `${node.tool.slice(0, 23)}…` : node.tool}
+                        </text>
+
+                        {/* Endpoint / Stage Role */}
+                        <text x="10" y="73" fill="#94a3b8" fontSize="8.2" fontFamily="monospace">
+                          {stageMeta.shortRole} • :{node.port}
+                        </text>
+
+                        {/* Protocol + Latency Pill */}
+                        <rect x="9" y="83" width={nodeW - 18} height="19" rx="4" fill="#0f172a" stroke="#1e293b" strokeWidth="0.8" />
+                        <text x={nodeW / 2} y="95.5" textAnchor="middle" fill="#bae6fd" fontSize="8" fontFamily="monospace" fontWeight="bold">
+                          {node.protocolBadge.slice(0, 16)} • {node.latency}
+                        </text>
+
+                        {/* Status Footer */}
+                        <text x="10" y={nodeH - 10} fill="#34d399" fontSize="8" fontFamily="monospace">
+                          ● {node.statusUptime} ONLINE
+                        </text>
+
+                        {/* Input / Output Port Connectors */}
+                        {i > 0 && (
+                          <circle cx="0" cy={nodeH / 2} r="4" fill="#020617" stroke={stageMeta.accent} strokeWidth="1.6" />
+                        )}
+                        {i < 4 && (
+                          <circle cx={nodeW} cy={nodeH / 2} r="4" fill={stageMeta.accent} stroke="#020617" strokeWidth="1.2" />
+                        )}
+                      </g>
+                    );
+                  })}
+
+                  {/* BOTTOM ARCHITECTURAL FLOW BREADCRUMB BAR */}
+                  <g transform="translate(16, 276)">
+                    <rect width="1088" height="28" rx="7" fill="#0f172a" stroke="#1e293b" strokeWidth="1" />
+                    <rect
+                      x="6"
+                      y="5"
+                      width="154"
+                      height="18"
+                      rx="4"
+                      fill={isFreeZeroCost ? '#064e3b' : '#1e1b4b'}
+                      stroke={isFreeZeroCost ? '#34d399' : '#818cf8'}
+                      strokeWidth="0.8"
+                    />
+                    <text
+                      x="83"
+                      y="17"
+                      textAnchor="middle"
+                      fill={isFreeZeroCost ? '#6ee7b7' : '#c7d2fe'}
+                      fontSize="8"
+                      fontFamily="monospace"
+                      fontWeight="bold"
+                    >
+                      {isFreeZeroCost ? '$0 FREE REAL-TIME STACK' : 'AGENCY / PRO STACK'}
+                    </text>
+
+                    <text x="556" y="17" textAnchor="middle" fill="#cbd5e1" fontSize="8.5" fontFamily="monospace">
+                      {`${activeBlueprint.nodes[0]?.tool.slice(0, 15)} ─▶ ${activeBlueprint.nodes[1]?.tool.slice(0, 15)} ─▶ ${activeBlueprint.nodes[2]?.tool.slice(0, 16)} ─▶ ${activeBlueprint.nodes[3]?.tool.slice(0, 14)} ─▶ ${activeBlueprint.nodes[4]?.tool.slice(0, 15)}`}
+                    </text>
+
+                    <text x="1076" y="17" textAnchor="end" fill="#38bdf8" fontSize="8" fontFamily="monospace" fontWeight="bold">
+                      FOCUS: STEP {selectedNode.step} • {selectedNode.latency}
+                    </text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            {/* MINIMAL FLOW LEGEND & TOPOLOGY GUIDE KEY */}
+            <div className="relative z-10 pt-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-700">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="inline-flex items-center gap-1 font-bold text-slate-900">
+                  <GitBranch className="w-3.5 h-3.5 text-indigo-600" />
+                  Flow Guide:
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-sky-400" /> Trigger/Enrich
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-indigo-400" /> AI Brain
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" /> Safety Gate
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" /> Action Sync
+                </span>
+                <span className="inline-flex items-center gap-1 text-rose-700 font-semibold">
+                  <ShieldAlert className="w-3 h-3" /> Dashed Red = Retry/Fallback
+                </span>
+              </div>
+              <span className="text-slate-900 font-bold">
+                💡 Click any node to inspect prompt • Drag nodes to customize layout
+              </span>
+            </div>
+
+            {/* ===============================================================
+                SUBSECTION A: DETAILED NODE TELEMETRY & SPECIFICATION INSPECTOR
+            =============================================================== */}
+            <div className="relative z-10 mt-5 pt-5 border-t-2 border-indigo-200/80">
+              {/* Step-by-Step 5-Node Execution Trace Pipeline */}
+              <div className="mb-4 bg-white/95 border-2 border-indigo-200/90 rounded-2xl p-3.5 shadow-xs">
+                <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-indigo-100">
+                  <span className="text-xs font-mono font-black text-indigo-950 flex items-center gap-1.5 uppercase tracking-wider">
+                    <Activity className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Step-by-Step 5-Node Execution Trace Pipeline</span>
+                  </span>
+                  <span className="text-[11px] font-mono text-slate-500 font-bold">
+                    Click any node step to inspect telemetry & master prompt
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                  {activeBlueprint.nodes.map((node, i) => {
+                    const isCurrent = selectedNodeIndex === i;
+                    return (
+                      <button
+                        key={node.step}
+                        type="button"
+                        onClick={() => {
+                          setIsFlowPlaying(false);
+                          setSelectedNodeIndex(i);
+                        }}
+                        className={`p-2 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-between gap-1 ${
+                          isCurrent
+                            ? 'bg-slate-950 text-white border-2 border-indigo-400 shadow-md ring-2 ring-indigo-400/40'
+                            : 'bg-slate-50 hover:bg-indigo-50/70 border-slate-200 text-slate-900 hover:border-indigo-300'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between text-[10px] font-mono font-bold">
+                          <span className={isCurrent ? 'text-indigo-300 font-extrabold' : 'text-indigo-700'}>
+                            STEP {node.step}
+                          </span>
+                          <span className={`w-1.5 h-1.5 rounded-full ${isCurrent ? 'bg-indigo-400 animate-ping' : 'bg-slate-400'}`} />
+                        </div>
+                        <div className={`font-black text-[11px] line-clamp-1 ${isCurrent ? 'text-white' : 'text-slate-950'}`}>
+                          {node.title}
+                        </div>
+                        <div className="flex items-center justify-between text-[9px] font-mono opacity-80 pt-0.5">
+                          <span className="truncate">{node.tool}</span>
+                          <span className="font-semibold uppercase">{node.type}</span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <div>

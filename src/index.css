@@ -225,6 +225,36 @@ body {
   animation: subtleFloat 5s ease-in-out infinite;
 }
 
+@keyframes wireDashFlow {
+  0% {
+    stroke-dashoffset: 24;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fallbackDashFlow {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -20;
+  }
+}
+
+.animate-wire-dash {
+  animation: wireDashFlow 1.15s linear infinite;
+}
+
+.animate-wire-dash-fast {
+  animation: wireDashFlow 0.6s linear infinite;
+}
+
+.animate-fallback-dash {
+  animation: fallbackDashFlow 2.1s linear infinite;
+}
+
 /* Glassmorphic Minimalist White Surface Styling */
 .white-glass-card {
   background: rgba(255, 255, 255, 0.92);
