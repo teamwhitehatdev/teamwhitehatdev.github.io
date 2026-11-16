@@ -673,7 +673,9 @@ export const Admin: React.FC = () => {
     if (validUsers.includes(userClean) && validPins.includes(inputClean)) {
       resetAdminRateLimit();
       setIsAuthenticated(true);
-      sessionStorage.setItem('wh_admin_session_strict_v5730', 'true');
+      try {
+        sessionStorage.setItem('wh_admin_session_strict_v5730', 'true');
+      } catch {}
       setAuthError('');
       showToast('Authenticated: Welcome Admin & Developer');
       return;

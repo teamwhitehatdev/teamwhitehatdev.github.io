@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { evictDisposableStorage } from '../utils/safeStorage';
 
 interface Props {
   children: ReactNode;
@@ -16,9 +17,13 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   public static getDerivedStateFromError(error: Error): State {
+    const msg = error?.message || 'Unexpected rendering error';
+    if (msg.toLowerCase().includes('quota')) {
+      evictDisposableStorage();
+    }
     return {
       hasError: true,
-      errorMessage: error?.message || 'Unexpected rendering error'
+      errorMessage: msg
     };
   }
 
@@ -27,6 +32,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   private handleReset = () => {
+    evictDisposableStorage();
     this.setState({ hasError: false, errorMessage: '' });
     window.location.reload();
   };

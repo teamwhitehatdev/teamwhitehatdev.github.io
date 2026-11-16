@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import {
+  pruneLegacyAndBloatedStorage,
+  safeLocalStorageGetJson,
+  safeLocalStorageSetJson,
+  safeSessionStorageSet
+} from '../utils/safeStorage';
 import { SERVICES, PROJECTS, INITIAL_TESTIMONIALS } from '../utils/initialData';
 import {
   INITIAL_CMS_ITEMS,
@@ -363,6 +369,13 @@ const DEFAULT_VISITOR_LOGS: VisitorLog[] = [
 ];
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Prune any obsolete/oversized storage keys before initializing state so QuotaExceededError cannot crash mount
+  const didPruneStorageRef = useRef(false);
+  if (!didPruneStorageRef.current) {
+    pruneLegacyAndBloatedStorage();
+    didPruneStorageRef.current = true;
+  }
+
   // USER TELEMETRY STATE (REAL-TIME GEOLOCATION & VISITOR INTELLIGENCE)
   const [userIp, setUserIp] = useState<string>('127.0.0.1');
   const [userCountry, setUserCountry] = useState<string>('Philippines');
@@ -371,21 +384,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number }>({ lat: 14.5995, lng: 120.9842 });
   const [userIsp, setUserIsp] = useState<string>('ISP Network');
   const [userDevice, setUserDevice] = useState<'Desktop' | 'Mobile' | 'Tablet'>('Desktop');
-  const [bannedIps, setBannedIps] = useState<string[]>(() => {
-    const saved = localStorage.getItem('wh_banned_ips');
-    return saved ? JSON.parse(saved) : ['192.168.1.100'];
-  });
+  const [bannedIps, setBannedIps] = useState<string[]>(() =>
+    safeLocalStorageGetJson<string[]>('wh_banned_ips', ['192.168.1.100'])
+  );
 
   // VISITOR NAVIGATION TELEMETRY LOGS
   const [visitorLogs, setVisitorLogs] = useState<VisitorLog[]>(() => {
-    const saved = localStorage.getItem('wh_visitor_logs');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      } catch {}
-    }
-    return DEFAULT_VISITOR_LOGS;
+    const parsed = safeLocalStorageGetJson<VisitorLog[]>('wh_visitor_logs', []);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed.slice(0, 150) : DEFAULT_VISITOR_LOGS;
   });
 
   // CAPTCHA STATE
@@ -417,10 +423,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return DEFAULT_NAV_TABS;
   });
 
+  const isInitialNavMount = useRef(true);
   useEffect(() => {
-    try {
-      localStorage.setItem('wh_nav_tabs_v5720', JSON.stringify(navTabs));
-    } catch {}
+    if (isInitialNavMount.current) {
+      isInitialNavMount.current = false;
+      return;
+    }
+    safeLocalStorageSetJson('wh_nav_tabs_v5720', navTabs);
   }, [navTabs]);
 
   const addNavTab = useCallback(
@@ -497,33 +506,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const resetNavTabsToDefault = useCallback(() => {
     setNavTabs(DEFAULT_NAV_TABS);
     try {
-      localStorage.setItem('wh_nav_tabs_v5720', JSON.stringify(DEFAULT_NAV_TABS));
+      localStorage.removeItem('wh_nav_tabs_v5720');
     } catch {}
   }, []);
 
   // CORE DATA STATES (Bumped to v5800 for Advanced VA & Freelancer Skill Mastery offers + VIP Vault)
-  const [services, setServices] = useState<Service[]>(() => {
-    const saved = localStorage.getItem('wh_services_v5800');
-    return saved ? JSON.parse(saved) : SERVICES;
-  });
+  const [services, setServices] = useState<Service[]>(() =>
+    safeLocalStorageGetJson<Service[]>('wh_services_v5800', SERVICES)
+  );
 
-  const [projects, setProjects] = useState<Project[]>(() => {
-    const saved = localStorage.getItem('wh_projects_v5720');
-    return saved ? JSON.parse(saved) : PROJECTS;
-  });
+  const [projects, setProjects] = useState<Project[]>(() =>
+    safeLocalStorageGetJson<Project[]>('wh_projects_v5720', PROJECTS)
+  );
 
   const [testimonials] = useState<Testimonial[]>(INITIAL_TESTIMONIALS);
 
-  const [inquiries, setInquiries] = useState<ContactInquiry[]>(() => {
-    const saved = localStorage.getItem('wh_inquiries');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [inquiries, setInquiries] = useState<ContactInquiry[]>(() =>
+    safeLocalStorageGetJson<ContactInquiry[]>('wh_inquiries', [])
+  );
 
   // HIRE VA INQUIRIES STATE
-  const [hireVaInquiries, setHireVaInquiries] = useState<HireVaInquiry[]>(() => {
-    const saved = localStorage.getItem('wh_hire_va_inquiries');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [hireVaInquiries, setHireVaInquiries] = useState<HireVaInquiry[]>(() =>
+    safeLocalStorageGetJson<HireVaInquiry[]>('wh_hire_va_inquiries', [])
+  );
 
   // CMS CATEGORIES (COMPREHENSIVE ALL-SECTOR CATEGORY MATRIX)
   const [cmsCategories, setCmsCategories] = useState<string[]>(() => {
@@ -589,12 +594,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return INITIAL_AFFILIATE_TOPICS;
   });
 
+  const isInitialAffiliateMount = useRef(true);
   useEffect(() => {
-    try {
-      localStorage.setItem('wh_affiliate_topics_v5830', JSON.stringify(affiliateTopics));
-    } catch (e) {
-      console.error('Error saving affiliate topics to localStorage:', e);
+    if (isInitialAffiliateMount.current) {
+      isInitialAffiliateMount.current = false;
+      return;
     }
+    safeLocalStorageSetJson('wh_affiliate_topics_v5830', affiliateTopics);
   }, [affiliateTopics]);
 
   const addAffiliateTopic = useCallback(
@@ -670,7 +676,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const resetAffiliateTopicsToDefault = useCallback(() => {
     setAffiliateTopics(INITIAL_AFFILIATE_TOPICS);
     try {
-      localStorage.setItem('wh_affiliate_topics_v5720', JSON.stringify(INITIAL_AFFILIATE_TOPICS));
+      localStorage.removeItem('wh_affiliate_topics_v5830');
     } catch (e) {
       console.error('Error resetting affiliate topics to default:', e);
     }
@@ -804,15 +810,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         timestamp: new Date().toISOString()
       };
 
-      setVisitorLogs((prev) => [newLog, ...prev.slice(0, 4999)]);
+      setVisitorLogs((prev) => [newLog, ...prev.slice(0, 149)]);
 
       // Create or update real LiveVisitorSession in localStorage for TelemetryDashboard & RealWorldMap
       try {
         const sKey = 'wh_telemetry_sessions';
-        const rawSessions = localStorage.getItem(sKey);
-        const existingSessions = rawSessions ? JSON.parse(rawSessions) : [];
+        const existingSessions = safeLocalStorageGetJson<any[]>(sKey, []);
         const mySessionId = sessionStorage.getItem('wh_telemetry_session_id') || ('SESS-' + Date.now().toString(36).toUpperCase());
-        sessionStorage.setItem('wh_telemetry_session_id', mySessionId);
+        safeSessionStorageSet('wh_telemetry_session_id', mySessionId);
 
         const currentSession = {
           id: 'sess_' + Date.now(),
@@ -850,59 +855,73 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           ]
         };
 
-        const updatedSessions = [currentSession, ...existingSessions.filter((s: any) => s.ip !== finalIp).slice(0, 50)];
-        localStorage.setItem(sKey, JSON.stringify(updatedSessions));
+        const updatedSessions = [currentSession, ...existingSessions.filter((s: any) => s.ip !== finalIp).slice(0, 25)];
+        safeLocalStorageSetJson(sKey, updatedSessions);
 
-        // Append to wh_telemetry_events
+        // Append to wh_telemetry_events (capped compactly at 150 events)
         const eKey = 'wh_telemetry_events';
-        const rawEvents = localStorage.getItem(eKey);
-        const existingEvents = rawEvents ? JSON.parse(rawEvents) : [];
-        localStorage.setItem(eKey, JSON.stringify([currentSession.events[0], ...existingEvents.slice(0, 4999)]));
-      } catch (err) {}
+        const existingEvents = safeLocalStorageGetJson<any[]>(eKey, []);
+        safeLocalStorageSetJson(eKey, [currentSession.events[0], ...existingEvents.slice(0, 149)]);
+      } catch {}
     };
 
     fetchGeoData();
   }, []);
 
-  // PERSIST LOCALSTORAGE
+  // PERSIST LOCALSTORAGE SAFELY (NEVER THROW ON BROWSER QUOTA LIMITS & AVOID REDUNDANT STATIC WRITES)
+  const didMountPersistRef = useRef(false);
+
   useEffect(() => {
-    localStorage.setItem('wh_banned_ips', JSON.stringify(bannedIps));
+    if (!didMountPersistRef.current) return;
+    safeLocalStorageSetJson('wh_banned_ips', bannedIps);
   }, [bannedIps]);
 
   useEffect(() => {
+    if (!didMountPersistRef.current) return;
+    safeLocalStorageSetJson('wh_services_v5800', services);
     try {
-      localStorage.setItem('wh_services_v5800', JSON.stringify(services));
       window.dispatchEvent(new CustomEvent('wh_services_changed', { detail: services }));
-    } catch (e) {}
+    } catch {}
   }, [services]);
 
   useEffect(() => {
-    localStorage.setItem('wh_projects_v5720', JSON.stringify(projects));
+    if (!didMountPersistRef.current) return;
+    safeLocalStorageSetJson('wh_projects_v5720', projects);
   }, [projects]);
 
   useEffect(() => {
-    localStorage.setItem('wh_inquiries', JSON.stringify(inquiries));
+    if (!didMountPersistRef.current) return;
+    safeLocalStorageSetJson('wh_inquiries', inquiries);
   }, [inquiries]);
 
   useEffect(() => {
-    localStorage.setItem('wh_hire_va_inquiries', JSON.stringify(hireVaInquiries));
+    if (!didMountPersistRef.current) return;
+    safeLocalStorageSetJson('wh_hire_va_inquiries', hireVaInquiries);
   }, [hireVaInquiries]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_categories', JSON.stringify(cmsCategories));
+    if (!didMountPersistRef.current) return;
+    safeLocalStorageSetJson('wh_cms_categories', cmsCategories);
   }, [cmsCategories]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_items_v5840', JSON.stringify(cmsItems));
+    if (!didMountPersistRef.current) return;
+    safeLocalStorageSetJson('wh_cms_items_v5840', cmsItems);
   }, [cmsItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_promo_items_v5830', JSON.stringify(promoItems));
+    if (!didMountPersistRef.current) return;
+    safeLocalStorageSetJson('wh_promo_items_v5830', promoItems);
   }, [promoItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_visitor_logs', JSON.stringify(visitorLogs.slice(0, 2000)));
+    if (!didMountPersistRef.current) return;
+    safeLocalStorageSetJson('wh_visitor_logs', visitorLogs.slice(0, 150));
   }, [visitorLogs]);
+
+  useEffect(() => {
+    didMountPersistRef.current = true;
+  }, []);
 
   // LOG VISITOR NAVIGATION (REAL-TIME TELEMETRY TRACKER)
   const logVisitorPageNavigation = useCallback(
@@ -923,13 +942,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         pageVisited: pagePath,
         timestamp: new Date().toISOString()
       };
-      setVisitorLogs((prev) => [newLog, ...prev.slice(0, 4999)]);
+      setVisitorLogs((prev) => [newLog, ...prev.slice(0, 149)]);
 
       // Push real-time event into wh_telemetry_events for live radar monitoring
       try {
         const eKey = 'wh_telemetry_events';
-        const raw = localStorage.getItem(eKey);
-        const list = raw ? JSON.parse(raw) : [];
+        const list = safeLocalStorageGetJson<any[]>(eKey, []);
         list.unshift({
           id: 'evt_' + Date.now(),
           sessionId: sessionStorage.getItem('wh_telemetry_session_id') || ('SESS-' + Date.now().toString(36).toUpperCase()),
@@ -946,8 +964,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           os: newLog.os,
           referrer: document.referrer || 'Internal Navigation'
         });
-        localStorage.setItem(eKey, JSON.stringify(list.slice(0, 5000)));
-      } catch (err) {}
+        safeLocalStorageSetJson(eKey, list.slice(0, 150));
+      } catch {}
     },
     [userIp, userCountry, userCity, userRegion, userCoords, userIsp, userDevice]
   );
@@ -976,9 +994,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setCmsItems((prev) => {
       const updated = [newItem, ...prev];
-      try {
-        localStorage.setItem('wh_cms_items_v5800', JSON.stringify(updated));
-      } catch {}
+      safeLocalStorageSetJson('wh_cms_items_v5840', updated);
       return updated;
     });
   };
@@ -994,9 +1010,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
         return item;
       });
-      try {
-        localStorage.setItem('wh_cms_items_v5800', JSON.stringify(updated));
-      } catch {}
+      safeLocalStorageSetJson('wh_cms_items_v5840', updated);
       return updated;
     });
   };
@@ -1004,9 +1018,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const deleteCMSItem = (id: string) => {
     setCmsItems((prev) => {
       const updated = prev.filter((item) => item.id !== id);
-      try {
-        localStorage.setItem('wh_cms_items_v5800', JSON.stringify(updated));
-      } catch {}
+      safeLocalStorageSetJson('wh_cms_items_v5840', updated);
       return updated;
     });
   };

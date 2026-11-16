@@ -1,4 +1,5 @@
 import { TelemetryEvent, TelemetryEventType, LiveVisitorSession, WebPerfTelemetry } from '../types';
+import { safeLocalStorageSetJson, safeSessionStorageSet, safeLocalStorageSet } from './safeStorage';
 
 // STORAGE KEYS
 const STORAGE_SESSION_KEY = 'wh_telemetry_session_id';
@@ -21,21 +22,29 @@ export const generateAnonymousId = (prefix = 'ID'): string => {
 
 // GET OR INITIALIZE SESSION & VISITOR IDS
 export const getSessionId = (): string => {
-  let sessionId = sessionStorage.getItem(STORAGE_SESSION_KEY);
-  if (!sessionId) {
-    sessionId = generateAnonymousId('SESS');
-    sessionStorage.setItem(STORAGE_SESSION_KEY, sessionId);
+  try {
+    let sessionId = sessionStorage.getItem(STORAGE_SESSION_KEY);
+    if (!sessionId) {
+      sessionId = generateAnonymousId('SESS');
+      safeSessionStorageSet(STORAGE_SESSION_KEY, sessionId);
+    }
+    return sessionId;
+  } catch {
+    return generateAnonymousId('SESS');
   }
-  return sessionId;
 };
 
 export const getVisitorId = (): string => {
-  let visitorId = localStorage.getItem(STORAGE_VISITOR_KEY);
-  if (!visitorId) {
-    visitorId = generateAnonymousId('VIS');
-    localStorage.setItem(STORAGE_VISITOR_KEY, visitorId);
+  try {
+    let visitorId = localStorage.getItem(STORAGE_VISITOR_KEY);
+    if (!visitorId) {
+      visitorId = generateAnonymousId('VIS');
+      safeLocalStorageSet(STORAGE_VISITOR_KEY, visitorId);
+    }
+    return visitorId;
+  } catch {
+    return generateAnonymousId('VIS');
   }
-  return visitorId;
 };
 
 // PARSE URL SEARCH FOR UTM PARAMETERS
@@ -116,12 +125,12 @@ export const trackTelemetryEvent = (
     ...extraMeta
   };
 
-  // Save Event to Local Storage (capped at 5,000 events)
+  // Save Event to Local Storage (capped compactly at 150 events)
   try {
     const rawEvents = localStorage.getItem(STORAGE_EVENTS_KEY);
     const events: TelemetryEvent[] = rawEvents ? JSON.parse(rawEvents) : [];
     events.unshift(event);
-    localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(events.slice(0, 5000)));
+    safeLocalStorageSetJson(STORAGE_EVENTS_KEY, events.slice(0, 150));
   } catch (e) {
     console.warn('Telemetry storage cap reached:', e);
   }
@@ -239,9 +248,9 @@ export const getInitialTelemetryData = (): {
     { pagePath: '/#/web-hosting', ttfb: 162, fcp: 510, lcp: 920, cls: 0.022, domLoad: 680, jsErrorsCount: 0, timestamp: new Date().toISOString() }
   ];
 
-  localStorage.setItem(STORAGE_EVENTS_KEY, JSON.stringify(seedEvents));
-  localStorage.setItem(STORAGE_SESSIONS_KEY, JSON.stringify(seedSessions));
-  localStorage.setItem(STORAGE_PERF_KEY, JSON.stringify(seedPerf));
+  safeLocalStorageSetJson(STORAGE_EVENTS_KEY, seedEvents.slice(0, 150));
+  safeLocalStorageSetJson(STORAGE_SESSIONS_KEY, seedSessions);
+  safeLocalStorageSetJson(STORAGE_PERF_KEY, seedPerf);
 
   return { events: seedEvents, sessions: seedSessions, perf: seedPerf };
 };

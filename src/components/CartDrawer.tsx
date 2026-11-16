@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, ShoppingBag, Trash2, CreditCard, ShieldCheck, CheckCircle2, Lock, ExternalLink } from 'lucide-react';
+import { safeLocalStorageGetJson, safeLocalStorageSetJson } from '../utils/safeStorage';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -33,7 +34,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, cart, o
 
   const handleCheckoutSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const activeUser = JSON.parse(localStorage.getItem('wh_active_user') || 'null');
+    const activeUser = safeLocalStorageGetJson<any>('wh_active_user', null);
 
     if (!activeUser) {
       alert('Please log in or register with your real email address before checking out.');
@@ -53,8 +54,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, cart, o
       date: new Date().toISOString().replace('T', ' ').slice(0, 19)
     };
 
-    const existingOrders = JSON.parse(localStorage.getItem('wh_orders_history') || '[]');
-    localStorage.setItem('wh_orders_history', JSON.stringify([newOrder, ...existingOrders]));
+    const existingOrders = safeLocalStorageGetJson<any[]>('wh_orders_history', []);
+    safeLocalStorageSetJson('wh_orders_history', [newOrder, ...existingOrders.slice(0, 100)]);
 
     setTimeout(() => {
       setIsProcessing(false);

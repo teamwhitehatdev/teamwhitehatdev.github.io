@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Lock, Mail, User, ShieldCheck, CheckCircle2, AlertCircle } from 'lucide-react';
+import { safeLocalStorageGetJson, safeLocalStorageSetJson } from '../utils/safeStorage';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -43,7 +44,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
     if (isLogin) {
       // Login flow
-      const users = JSON.parse(localStorage.getItem('wh_registered_users') || '[]');
+      const users = safeLocalStorageGetJson<any[]>('wh_registered_users', []);
       const userMatch = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
 
       const currentUser = {
@@ -52,7 +53,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         status: 'VERIFIED CLIENT',
         verifiedAt: new Date().toISOString()
       };
-      localStorage.setItem('wh_active_user', JSON.stringify(currentUser));
+      safeLocalStorageSetJson('wh_active_user', currentUser);
       onClose();
     } else {
       // Registration flow -> Trigger OTP Verification
@@ -66,7 +67,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     if (otpInput.trim() === generatedOtp || otpInput.trim() === '849201') {
       // Store in real user database registry (localStorage)
-      const existingUsers = JSON.parse(localStorage.getItem('wh_registered_users') || '[]');
+      const existingUsers = safeLocalStorageGetJson<any[]>('wh_registered_users', []);
       
       // Simple cryptographic hash string simulation for storage security
       const passHash = 'sha256_' + Array.from(password).reduce((acc, char) => acc + char.charCodeAt(0).toString(16), '');
@@ -83,8 +84,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       };
 
       const updatedUsers = [newUser, ...existingUsers.filter((u: any) => u.email !== email)];
-      localStorage.setItem('wh_registered_users', JSON.stringify(updatedUsers));
-      localStorage.setItem('wh_active_user', JSON.stringify(newUser));
+      safeLocalStorageSetJson('wh_registered_users', updatedUsers);
+      safeLocalStorageSetJson('wh_active_user', newUser);
 
       setStep('success');
       setTimeout(() => {

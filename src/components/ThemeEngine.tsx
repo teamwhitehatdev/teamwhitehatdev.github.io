@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { safeLocalStorageSet } from '../utils/safeStorage';
 
 export type ThemeName =
   | 'cyberpunk_net'
@@ -109,7 +110,7 @@ export const ThemeProvider: React.FC<{ children?: React.ReactNode }> = ({ childr
   const setTheme = (theme: ThemeName) => {
     if (THEMES[theme]) {
       setCurrentTheme(theme);
-      localStorage.setItem('whitehat_theme', theme);
+      safeLocalStorageSet('whitehat_theme', theme);
     }
   };
 
