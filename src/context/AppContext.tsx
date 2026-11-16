@@ -574,7 +574,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // ==========================================
   const [affiliateTopics, setAffiliateTopics] = useState<AffiliateCollapsibleTopic[]>(() => {
     try {
-      const saved = localStorage.getItem('wh_affiliate_topics_v5740');
+      const saved = localStorage.getItem('wh_affiliate_topics_v5830');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -591,7 +591,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     try {
-      localStorage.setItem('wh_affiliate_topics_v5740', JSON.stringify(affiliateTopics));
+      localStorage.setItem('wh_affiliate_topics_v5830', JSON.stringify(affiliateTopics));
     } catch (e) {
       console.error('Error saving affiliate topics to localStorage:', e);
     }
@@ -677,7 +677,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const [cmsItems, setCmsItems] = useState<CMSItem[]>(() => {
-    const saved = localStorage.getItem('wh_cms_items_v5800');
+    const saved = localStorage.getItem('wh_cms_items_v5830');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -695,7 +695,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // CMS PROMOTIONAL & ADVERTISEMENTS ITEMS STATE (PARTNER DEALS & PROMO)
   const [promoItems, setPromoItems] = useState<PromoItem[]>(() => {
-    const saved = localStorage.getItem('wh_promo_items_v5820');
+    const saved = localStorage.getItem('wh_promo_items_v5830');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -893,11 +893,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cmsCategories]);
 
   useEffect(() => {
-    localStorage.setItem('wh_cms_items_v5800', JSON.stringify(cmsItems));
+    localStorage.setItem('wh_cms_items_v5830', JSON.stringify(cmsItems));
   }, [cmsItems]);
 
   useEffect(() => {
-    localStorage.setItem('wh_promo_items_v5820', JSON.stringify(promoItems));
+    localStorage.setItem('wh_promo_items_v5830', JSON.stringify(promoItems));
   }, [promoItems]);
 
   useEffect(() => {

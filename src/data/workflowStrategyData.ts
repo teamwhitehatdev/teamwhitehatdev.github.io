@@ -57,8 +57,8 @@ export const DEFAULT_TOOL_REFERRAL_LINKS: Record<string, string> = {
   'Deepgram Nova-2': 'https://deepgram.com',
   'Remotion': 'https://www.remotion.dev',
   'Ayrshare': 'https://www.ayrshare.com',
-  'ElevenLabs': 'https://elevenlabs.io',
-  'ElevenLabs Voice Dubbing': 'https://elevenlabs.io',
+  'ElevenLabs': 'https://try.elevenlabs.io/e5xwigkl9igv',
+  'ElevenLabs Voice Dubbing': 'https://try.elevenlabs.io/e5xwigkl9igv',
   'Twilio Voice': 'https://www.twilio.com/voice',
   'Vapi.ai': 'https://vapi.ai',
   'Cal.com API': 'https://cal.com',
@@ -386,7 +386,7 @@ export const WORKFLOW_STRATEGY_DATA: Record<string, WorkflowStrategy> = {
       },
       {
         name: 'ElevenLabs',
-        url: 'https://elevenlabs.io',
+        url: 'https://try.elevenlabs.io/e5xwigkl9igv',
         category: 'Neural Voiceover',
         description: 'Generate hyper-realistic narrator voices for faceless educational and affiliate shorts.',
         role: 'AI Voice Narration'
@@ -839,7 +839,7 @@ export const WORKFLOW_STRATEGY_DATA: Record<string, WorkflowStrategy> = {
     recommendedWebsites: [
       {
         name: 'ElevenLabs Voice Dubbing',
-        url: 'https://elevenlabs.io',
+        url: 'https://try.elevenlabs.io/e5xwigkl9igv',
         category: 'AI Voice Synthesis',
         description: 'Clone speaker voice and synthesize localized dialogue with preserved emotional timbre.',
         role: 'Neural Voice Dubbing'

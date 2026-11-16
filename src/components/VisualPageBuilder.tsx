@@ -1708,7 +1708,16 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                 ? 'max-w-[768px] shadow-2xl rounded-2xl overflow-hidden border-4 border-slate-700 min-h-[700px] bg-slate-50'
                 : `${pageSettings.maxWidth || 'max-w-7xl'}`
             }`}
-            style={{ backgroundColor: pageSettings.backgroundColor || '#f8fafc' }}
+            style={{
+              backgroundColor: pageSettings.backgroundColor || '#f8fafc',
+              transform:
+                zoomLevel === '85%'
+                  ? 'scale(0.85)'
+                  : zoomLevel === '70%'
+                  ? 'scale(0.70)'
+                  : undefined,
+              transformOrigin: 'top center'
+            }}
           >
             {/* CANVAS BLOCKS CONTAINER */}
             <div className="p-4 sm:p-8 space-y-6">
@@ -1733,293 +1742,341 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                   </button>
                 </div>
               ) : (
-                blocks.map((block, index) => {
-                  const isSelected = selectedBlockId === block.id && !isPreviewMode;
-                  const twClasses = getBlockTailwindClasses(block);
-                  const s = block.styles || {};
-                  const inlineStyle = {
-                    backgroundColor: s.backgroundColor || undefined,
-                    color: s.textColor || undefined,
-                    borderColor: s.borderColor || undefined
-                  };
+                <>
+                  {blocks.map((block, index) => {
+                    const isSelected = selectedBlockId === block.id && !isPreviewMode;
+                    const twClasses = getBlockTailwindClasses(block);
+                    const s = block.styles || {};
+                    const inlineStyle = {
+                      backgroundColor: s.backgroundColor || undefined,
+                      color: s.textColor || undefined,
+                      borderColor: s.borderColor || undefined
+                    };
+                    const gapClass =
+                      s.columnGap === 'sm'
+                        ? 'gap-3'
+                        : s.columnGap === 'lg'
+                        ? 'gap-7'
+                        : s.columnGap === 'xl'
+                        ? 'gap-10'
+                        : 'gap-5';
+                    const alignItemsClass =
+                      s.verticalAlign === 'start'
+                        ? 'items-start'
+                        : s.verticalAlign === 'center'
+                        ? 'items-center'
+                        : 'items-stretch';
 
-                  return (
-                    <div
-                      key={block.id}
-                      draggable={!isPreviewMode}
-                      onDragStart={() => handleDragStart(index)}
-                      onDragOver={(e) => handleDragOver(e, index)}
-                      onDragLeave={() => {
-                        if (dropTargetIndex === index) setDropTargetIndex(null);
-                      }}
-                      onDrop={(e) => handleDrop(e, index)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (!isPreviewMode) setSelectedBlockId(block.id);
-                      }}
-                      className={`relative group transition-all ${
-                        dropTargetIndex === index
-                          ? 'pt-6 before:content-["↓_DROP_HERE_TO_INSERT_OR_REORDER"] before:absolute before:top-0 before:left-0 before:right-0 before:h-5 before:bg-emerald-500 before:text-slate-950 before:text-[10px] before:font-mono before:font-black before:flex before:items-center before:justify-center before:rounded-lg before:shadow-sm'
-                          : ''
-                      } ${
-                        isSelected
-                          ? 'ring-2 ring-indigo-600 ring-offset-2 shadow-lg'
-                          : 'hover:ring-1 hover:ring-slate-300'
-                      }`}
-                    >
-                      {/* DRAG HANDLE & QUICK CONTROLS BAR (HOVER / SELECTED) */}
-                      {!isPreviewMode && (
-                        <div
-                          className={`absolute -top-3.5 left-4 z-10 flex items-center gap-1 bg-slate-900 text-white px-2 py-0.5 rounded-lg text-[10px] font-bold shadow-md transition-opacity ${
-                            isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                          }`}
-                        >
-                          <span className="cursor-grab active:cursor-grabbing font-mono">
-                            ⠿ {block.type.toUpperCase()}
-                          </span>
+                    return (
+                      <div
+                        key={block.id}
+                        draggable={!isPreviewMode}
+                        onDragStart={() => handleDragStart(index)}
+                        onDragOver={(e) => handleDragOver(e, index)}
+                        onDragLeave={() => {
+                          if (dropTargetIndex === index) setDropTargetIndex(null);
+                        }}
+                        onDrop={(e) => handleDrop(e, index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (!isPreviewMode) setSelectedBlockId(block.id);
+                        }}
+                        className={`relative group transition-all ${
+                          dropTargetIndex === index
+                            ? 'pt-6 before:content-["↓_DROP_HERE_TO_INSERT_OR_REORDER"] before:absolute before:top-0 before:left-0 before:right-0 before:h-5 before:bg-emerald-500 before:text-slate-950 before:text-[10px] before:font-mono before:font-black before:flex before:items-center before:justify-center before:rounded-lg before:shadow-sm'
+                            : ''
+                        } ${
+                          isSelected
+                            ? 'ring-2 ring-indigo-600 ring-offset-2 shadow-lg rounded-2xl'
+                            : 'hover:ring-1 hover:ring-slate-300 rounded-2xl'
+                        }`}
+                      >
+                        {/* DRAG HANDLE & QUICK CONTROLS BAR (HOVER / SELECTED) */}
+                        {!isPreviewMode && (
+                          <div
+                            className={`absolute -top-3.5 left-4 z-10 flex items-center gap-1 bg-slate-900 text-white px-2.5 py-0.5 rounded-lg text-[10px] font-bold shadow-md transition-opacity ${
+                              isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                            }`}
+                          >
+                            <span className="cursor-grab active:cursor-grabbing font-mono">
+                              ⠿ {block.type.toUpperCase()}
+                            </span>
 
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleMoveBlock(index, 'up');
-                            }}
-                            className="p-1 hover:text-emerald-400 cursor-pointer"
-                            title="Move Up"
-                          >
-                            <ArrowUp className="w-3 h-3" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleMoveBlock(index, 'down');
-                            }}
-                            className="p-1 hover:text-emerald-400 cursor-pointer"
-                            title="Move Down"
-                          >
-                            <ArrowDown className="w-3 h-3" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDuplicateBlock(block.id);
-                            }}
-                            className="p-1 hover:text-indigo-400 cursor-pointer"
-                            title="Duplicate"
-                          >
-                            <Copy className="w-3 h-3" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteBlock(block.id);
-                            }}
-                            className="p-1 hover:text-red-400 cursor-pointer"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
-                        </div>
-                      )}
-
-                      {/* RENDER THE BLOCK PREVIEW */}
-                      <div className={`border border-slate-200/90 ${twClasses}`} style={inlineStyle}>
-                        {block.type === 'hero' && (
-                          <div className="space-y-4 max-w-4xl mx-auto">
-                            {block.badgeText && (
-                              <span
-                                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
-                                style={{
-                                  backgroundColor: block.badgeColor ? `${block.badgeColor}20` : '#10b98120',
-                                  color: block.badgeColor || '#065f46'
-                                }}
-                              >
-                                {block.badgeText}
+                            {(block.type === 'empty-column' ||
+                              block.type === 'features-grid' ||
+                              block.type === '3-column') && (
+                              <span className="ml-1 px-1.5 py-0.2 rounded bg-indigo-600 text-white font-mono text-[9px]">
+                                {block.columns || 3} Cols
                               </span>
                             )}
-                            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-                              {block.title || 'Headline'}
-                            </h2>
-                            {block.subtitle && (
-                              <p className="text-base sm:text-lg opacity-80 max-w-2xl mx-auto leading-relaxed">
-                                {block.subtitle}
-                              </p>
-                            )}
-                            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                              {block.buttonText && (
-                                <span
-                                  className={`px-6 py-3 rounded-xl font-bold text-sm shadow-md cursor-pointer ${
-                                    block.buttonStyle === 'apple-green'
-                                      ? 'bg-emerald-600 text-white'
-                                      : block.buttonStyle === 'indigo'
-                                      ? 'bg-indigo-600 text-white'
-                                      : 'bg-slate-900 text-white'
-                                  }`}
-                                >
-                                  {block.buttonText}
-                                </span>
-                              )}
-                              {block.secondaryButtonText && (
-                                <span className="px-6 py-3 rounded-xl font-bold text-sm border border-slate-300 text-slate-700 bg-white/60">
-                                  {block.secondaryButtonText}
-                                </span>
-                              )}
-                            </div>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMoveBlock(index, 'up');
+                              }}
+                              className="p-1 hover:text-emerald-400 cursor-pointer"
+                              title="Move Up"
+                            >
+                              <ArrowUp className="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMoveBlock(index, 'down');
+                              }}
+                              className="p-1 hover:text-emerald-400 cursor-pointer"
+                              title="Move Down"
+                            >
+                              <ArrowDown className="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDuplicateBlock(block.id);
+                              }}
+                              className="p-1 hover:text-indigo-400 cursor-pointer"
+                              title="Duplicate"
+                            >
+                              <Copy className="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteBlock(block.id);
+                              }}
+                              className="p-1 hover:text-red-400 cursor-pointer"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
                           </div>
                         )}
 
-                        {block.type === 'heading' && (
-                          <div className="space-y-1">
-                            <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                              {block.title || 'Heading'}
-                            </h3>
-                            {block.subtitle && <p className="text-sm opacity-75">{block.subtitle}</p>}
-                          </div>
-                        )}
-
-                        {block.type === 'paragraph' && (
-                          <p className="text-sm sm:text-base leading-relaxed opacity-90">
-                            {block.content || 'Paragraph content...'}
-                          </p>
-                        )}
-
-                        {block.type === '2-column' && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                            <div className="space-y-3">
+                        {/* RENDER THE BLOCK PREVIEW (ACCURATE BORDERS, MARGINS, PADDINGS & COLUMNS) */}
+                        <div className={twClasses} style={inlineStyle}>
+                          {block.type === 'hero' && (
+                            <div className="space-y-4 max-w-4xl mx-auto">
                               {block.badgeText && (
-                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-800">
+                                <span
+                                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+                                  style={{
+                                    backgroundColor: block.badgeColor ? `${block.badgeColor}20` : '#10b98120',
+                                    color: block.badgeColor || '#065f46'
+                                  }}
+                                >
                                   {block.badgeText}
                                 </span>
                               )}
-                              <h3 className="text-2xl font-extrabold">{block.title || 'Two Column Title'}</h3>
-                              <p className="text-sm opacity-85 leading-relaxed">{block.content}</p>
-                              {block.buttonText && (
-                                <span className="inline-block px-4 py-2 bg-slate-900 text-white font-bold text-xs rounded-xl shadow-xs">
-                                  {block.buttonText}
-                                </span>
+                              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                                {block.title || 'Headline'}
+                              </h2>
+                              {block.subtitle && (
+                                <p className="text-base sm:text-lg opacity-80 max-w-2xl mx-auto leading-relaxed">
+                                  {block.subtitle}
+                                </p>
                               )}
-                            </div>
-                            <div>
-                              <img
-                                src={block.imageUrl || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'}
-                                alt="Showcase"
-                                className="w-full h-auto rounded-xl object-cover max-h-72 shadow-sm"
-                              />
-                            </div>
-                          </div>
-                        )}
-
-                        {block.type === 'empty-column' && (
-                          <div className="space-y-5">
-                            {(block.title || block.subtitle) && (
-                              <div className="space-y-1">
-                                {block.title && <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">{block.title}</h3>}
-                                {block.subtitle && <p className="text-xs sm:text-sm opacity-75">{block.subtitle}</p>}
+                              <div
+                                className={`flex flex-wrap items-center gap-3 pt-2 ${
+                                  s.textAlign === 'left'
+                                    ? 'justify-start'
+                                    : s.textAlign === 'right'
+                                    ? 'justify-end'
+                                    : 'justify-center'
+                                }`}
+                              >
+                                {block.buttonText && (
+                                  <span
+                                    className={`px-6 py-3 rounded-xl font-bold text-sm shadow-md cursor-pointer ${
+                                      block.buttonStyle === 'apple-green'
+                                        ? 'bg-emerald-600 text-white'
+                                        : block.buttonStyle === 'indigo'
+                                        ? 'bg-indigo-600 text-white'
+                                        : block.buttonStyle === 'outline'
+                                        ? 'border-2 border-slate-900 text-slate-900'
+                                        : 'bg-slate-900 text-white'
+                                    }`}
+                                  >
+                                    {block.buttonText}
+                                  </span>
+                                )}
+                                {block.secondaryButtonText && (
+                                  <span className="px-6 py-3 rounded-xl font-bold text-sm border border-slate-300 text-slate-700 bg-white/60">
+                                    {block.secondaryButtonText}
+                                  </span>
+                                )}
                               </div>
-                            )}
+                            </div>
+                          )}
 
-                            <div
-                              className={`grid gap-4 ${
-                                block.columns === 1
-                                  ? 'grid-cols-1'
-                                  : block.columns === 2
-                                  ? 'grid-cols-1 md:grid-cols-2'
-                                  : block.columns === 4
-                                  ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
-                                  : 'grid-cols-1 md:grid-cols-3'
-                              }`}
-                            >
-                              {(block.customColumnsData || []).map((col, cIdx) => (
-                                <div
-                                  key={col.id || `col-${cIdx}`}
-                                  className="p-5 rounded-2xl border border-slate-200/90 bg-white/90 space-y-3 shadow-2xs flex flex-col justify-between transition-all hover:border-slate-400"
-                                  style={{ backgroundColor: col.backgroundColor || undefined }}
-                                >
-                                  <div className="space-y-2.5">
-                                    <div className="flex items-center justify-between gap-2">
-                                      {col.badge ? (
-                                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">
-                                          {col.badge}
-                                        </span>
-                                      ) : (
-                                        <span className="text-[10px] text-slate-400 font-mono font-bold">
-                                          Column #{cIdx + 1}
-                                        </span>
+                          {block.type === 'heading' && (
+                            <div className="space-y-1">
+                              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                                {block.title || 'Heading'}
+                              </h3>
+                              {block.subtitle && <p className="text-sm opacity-75">{block.subtitle}</p>}
+                            </div>
+                          )}
+
+                          {block.type === 'paragraph' && (
+                            <p className="text-sm sm:text-base leading-relaxed opacity-90 whitespace-pre-line">
+                              {block.content || 'Paragraph content...'}
+                            </p>
+                          )}
+
+                          {block.type === '2-column' && (
+                            <div className={`grid grid-cols-1 md:grid-cols-2 ${gapClass} items-center`}>
+                              <div className="space-y-3">
+                                {block.badgeText && (
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-800 inline-block">
+                                    {block.badgeText}
+                                  </span>
+                                )}
+                                <h3 className="text-2xl font-extrabold">{block.title || 'Two Column Title'}</h3>
+                                <p className="text-sm opacity-85 leading-relaxed whitespace-pre-line">{block.content}</p>
+                                {block.buttonText && (
+                                  <span className="inline-block px-4 py-2 bg-slate-900 text-white font-bold text-xs rounded-xl shadow-xs">
+                                    {block.buttonText}
+                                  </span>
+                                )}
+                              </div>
+                              <div>
+                                <img
+                                  src={block.imageUrl || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'}
+                                  alt="Showcase"
+                                  className="w-full h-auto rounded-xl object-cover max-h-72 shadow-sm border border-slate-200/80"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {block.type === 'empty-column' && (
+                            <div className="space-y-5">
+                              {(block.title || block.subtitle) && (
+                                <div className="space-y-1">
+                                  {block.title && <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">{block.title}</h3>}
+                                  {block.subtitle && <p className="text-xs sm:text-sm opacity-75">{block.subtitle}</p>}
+                                </div>
+                              )}
+
+                              <div
+                                className={`grid ${gapClass} ${alignItemsClass} ${
+                                  block.columns === 1
+                                    ? 'grid-cols-1'
+                                    : block.columns === 2
+                                    ? 'grid-cols-1 md:grid-cols-2'
+                                    : block.columns === 4
+                                    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+                                    : 'grid-cols-1 md:grid-cols-3'
+                                }`}
+                              >
+                                {(block.customColumnsData || []).map((col, cIdx) => (
+                                  <div
+                                    key={col.id || `col-${cIdx}`}
+                                    className="p-5 rounded-2xl border border-slate-200/90 bg-white/95 space-y-3 shadow-2xs flex flex-col justify-between transition-all hover:border-indigo-400 h-full text-slate-900"
+                                    style={{ backgroundColor: col.backgroundColor || undefined }}
+                                  >
+                                    <div className="space-y-2.5">
+                                      <div className="flex items-center justify-between gap-2">
+                                        {col.badge ? (
+                                          <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">
+                                            {col.badge}
+                                          </span>
+                                        ) : (
+                                          <span className="text-[10px] text-slate-400 font-mono font-bold">
+                                            Column #{cIdx + 1}
+                                          </span>
+                                        )}
+                                      </div>
+
+                                      {col.imageUrl && (
+                                        <div className="overflow-hidden rounded-xl border border-slate-200 h-36 bg-slate-50">
+                                          <img
+                                            src={col.imageUrl}
+                                            alt={col.imageAlt || col.title || 'Column image'}
+                                            className="w-full h-full object-cover"
+                                          />
+                                        </div>
+                                      )}
+
+                                      {col.title && (
+                                        <h4 className="text-base font-bold text-slate-900 leading-snug">{col.title}</h4>
+                                      )}
+                                      {col.subtitle && (
+                                        <p className="text-xs text-indigo-700 font-semibold">{col.subtitle}</p>
+                                      )}
+                                      {col.content && (
+                                        <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-line">{col.content}</p>
                                       )}
                                     </div>
 
-                                    {col.imageUrl && (
-                                      <div className="overflow-hidden rounded-xl border border-slate-200 max-h-40 bg-slate-50">
-                                        <img
-                                          src={col.imageUrl}
-                                          alt={col.imageAlt || col.title || 'Column image'}
-                                          className="w-full h-full object-cover"
-                                        />
+                                    {(col.destinationLink || col.buttonText) && (
+                                      <div className="pt-2 border-t border-slate-100 flex items-center justify-between mt-auto">
+                                        <a
+                                          href={col.destinationLink || '#'}
+                                          target={col.destinationLinkTarget || '_blank'}
+                                          rel="noopener noreferrer"
+                                          onClick={(e) => !isPreviewMode && e.preventDefault()}
+                                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl shadow-2xs transition-all"
+                                        >
+                                          <span>{col.buttonText || 'Explore Link'}</span>
+                                          <ExternalLink className="w-3.5 h-3.5" />
+                                        </a>
                                       </div>
                                     )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
 
-                                    {col.title && (
-                                      <h4 className="text-base font-bold text-slate-900 leading-snug">{col.title}</h4>
-                                    )}
-                                    {col.subtitle && (
-                                      <p className="text-xs text-slate-500 font-medium">{col.subtitle}</p>
-                                    )}
-                                    {col.content && (
-                                      <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-line">{col.content}</p>
+                          {(block.type === 'features-grid' || block.type === '3-column') && (
+                            <div className="space-y-4">
+                              {block.title && (
+                                <div>
+                                  <h3 className="text-2xl font-extrabold">{block.title}</h3>
+                                  {block.subtitle && <p className="text-xs opacity-75">{block.subtitle}</p>}
+                                </div>
+                              )}
+                              <div
+                                className={`grid ${gapClass} ${alignItemsClass} ${
+                                  block.columns === 1
+                                    ? 'grid-cols-1'
+                                    : block.columns === 2
+                                    ? 'grid-cols-1 md:grid-cols-2'
+                                    : block.columns === 4
+                                    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+                                    : 'grid-cols-1 md:grid-cols-3'
+                                }`}
+                              >
+                                {(block.gridItems || []).map((it) => (
+                                  <div
+                                    key={it.id}
+                                    className="p-4 rounded-xl border border-slate-200/80 bg-white/95 space-y-2 shadow-2xs flex flex-col justify-between h-full text-slate-900"
+                                  >
+                                    <div className="space-y-1.5">
+                                      {it.badge && (
+                                        <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase inline-block">
+                                          {it.badge}
+                                        </span>
+                                      )}
+                                      <h4 className="text-sm font-bold text-slate-900">{it.title}</h4>
+                                      <p className="text-xs text-slate-600 leading-relaxed">{it.description}</p>
+                                    </div>
+                                    {it.linkText && (
+                                      <span className="text-xs font-bold text-indigo-600 flex items-center gap-1 pt-2 border-t border-slate-100 mt-auto">
+                                        {it.linkText} &rarr;
+                                      </span>
                                     )}
                                   </div>
-
-                                  {(col.destinationLink || col.buttonText) && (
-                                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                                      <a
-                                        href={col.destinationLink || '#'}
-                                        target={col.destinationLinkTarget || '_blank'}
-                                        rel="noopener noreferrer"
-                                        onClick={(e) => !isPreviewMode && e.preventDefault()}
-                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl shadow-2xs transition-all"
-                                      >
-                                        <span>{col.buttonText || 'Explore Link'}</span>
-                                        <ExternalLink className="w-3.5 h-3.5" />
-                                      </a>
-                                    </div>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {(block.type === 'features-grid' || block.type === '3-column') && (
-                          <div className="space-y-4">
-                            {block.title && (
-                              <div>
-                                <h3 className="text-2xl font-extrabold">{block.title}</h3>
-                                {block.subtitle && <p className="text-xs opacity-75">{block.subtitle}</p>}
+                                ))}
                               </div>
-                            )}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              {(block.gridItems || []).map((it) => (
-                                <div key={it.id} className="p-4 rounded-xl border border-slate-200/80 bg-white/90 space-y-2 shadow-2xs">
-                                  {it.badge && (
-                                    <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">
-                                      {it.badge}
-                                    </span>
-                                  )}
-                                  <h4 className="text-sm font-bold text-slate-900">{it.title}</h4>
-                                  <p className="text-xs text-slate-600 leading-relaxed">{it.description}</p>
-                                  {it.linkText && (
-                                    <span className="text-xs font-bold text-indigo-600 flex items-center gap-1">
-                                      {it.linkText} &rarr;
-                                    </span>
-                                  )}
-                                </div>
-                              ))}
                             </div>
-                          </div>
-                        )}
+                          )}
 
                         {block.type === 'image' && (
                           <div className="space-y-2">
@@ -2138,7 +2195,26 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                       </div>
                     </div>
                   );
-                })
+                })}
+
+                {/* BOTTOM DROP ZONE FOR APPENDING DRAGGED BLOCKS / TEMPLATES / NICHES */}
+                {!isPreviewMode && (
+                  <div
+                    onDragOver={(e) => handleDragOver(e, blocks.length)}
+                    onDragLeave={() => {
+                      if (dropTargetIndex === blocks.length) setDropTargetIndex(null);
+                    }}
+                    onDrop={(e) => handleDrop(e, blocks.length)}
+                    className={`p-4 rounded-2xl border-2 border-dashed text-center text-xs font-bold transition-all ${
+                      dropTargetIndex === blocks.length
+                        ? 'border-emerald-500 bg-emerald-50 text-emerald-900 scale-[1.01]'
+                        : 'border-slate-300 bg-white/60 text-slate-500 hover:border-indigo-400 hover:text-indigo-700'
+                    }`}
+                  >
+                    + Drag &amp; Drop Any Block, WordPress Template, or Niche Content Here to Append Section
+                  </div>
+                )}
+                </>
               )}
             </div>
           </div>
@@ -2795,21 +2871,267 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                   </div>
                 </div>
 
-                {/* Border Radius (Corner Roundness) */}
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1">Corner Roundness</label>
-                  <select
-                    value={selectedBlock.styles?.borderRadius || '2xl'}
-                    onChange={(e) => handleUpdateBlockStyles(selectedBlock.id, { borderRadius: e.target.value as any })}
-                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold cursor-pointer"
-                  >
-                    <option value="none">Square (0px)</option>
-                    <option value="md">Rounded MD (6px)</option>
-                    <option value="xl">Rounded XL (12px)</option>
-                    <option value="2xl">Rounded 2XL (16px)</option>
-                    <option value="3xl">Rounded 3XL (24px)</option>
-                    <option value="full">Full Pill (9999px)</option>
-                  </select>
+                {/* Columns & Grid Layout Controls (For Grid / Multi-Column Blocks) */}
+                {(selectedBlock.type === 'features-grid' ||
+                  selectedBlock.type === '3-column' ||
+                  selectedBlock.type === 'empty-column' ||
+                  selectedBlock.type === '2-column') && (
+                  <div className="p-3 bg-indigo-50/70 border border-indigo-200 rounded-2xl space-y-3">
+                    <span className="font-extrabold text-indigo-950 text-[11px] uppercase tracking-wider block">
+                      Columns &amp; Grid Alignment
+                    </span>
+                    {selectedBlock.type !== '2-column' && (
+                      <div>
+                        <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                          Columns Per Row
+                        </label>
+                        <div className="grid grid-cols-4 gap-1">
+                          {([1, 2, 3, 4] as const).map((colNum) => (
+                            <button
+                              key={colNum}
+                              type="button"
+                              onClick={() => handleUpdateBlock(selectedBlock.id, { columns: colNum })}
+                              className={`py-1.5 rounded-lg font-bold text-xs border transition-all cursor-pointer ${
+                                (selectedBlock.columns || 3) === colNum
+                                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
+                                  : 'bg-white text-slate-700 border-slate-200 hover:bg-indigo-50'
+                              }`}
+                            >
+                              {colNum} Col{colNum > 1 ? 's' : ''}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                          Column Gap
+                        </label>
+                        <select
+                          value={selectedBlock.styles?.columnGap || 'md'}
+                          onChange={(e) =>
+                            handleUpdateBlockStyles(selectedBlock.id, {
+                              columnGap: e.target.value as any
+                            })
+                          }
+                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold cursor-pointer"
+                        >
+                          <option value="sm">Compact (12px)</option>
+                          <option value="md">Balanced (20px)</option>
+                          <option value="lg">Spacious (28px)</option>
+                          <option value="xl">Wide (40px)</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                          Column Height
+                        </label>
+                        <select
+                          value={selectedBlock.styles?.verticalAlign || 'stretch'}
+                          onChange={(e) =>
+                            handleUpdateBlockStyles(selectedBlock.id, {
+                              verticalAlign: e.target.value as any
+                            })
+                          }
+                          className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold cursor-pointer"
+                        >
+                          <option value="stretch">Equal Height</option>
+                          <option value="center">Center Aligned</option>
+                          <option value="start">Top Aligned</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Outer Margins & Inner Paddings (Spacing Matrix) */}
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                  <span className="font-extrabold text-slate-900 text-[11px] uppercase tracking-wider block">
+                    Layout Margins &amp; Paddings
+                  </span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                        Outer Margin (Y)
+                      </label>
+                      <select
+                        value={selectedBlock.styles?.marginY || 'none'}
+                        onChange={(e) =>
+                          handleUpdateBlockStyles(selectedBlock.id, {
+                            marginY: e.target.value as any
+                          })
+                        }
+                        className="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold cursor-pointer"
+                      >
+                        <option value="none">Default (0px)</option>
+                        <option value="sm">Small (8px)</option>
+                        <option value="md">Medium (20px)</option>
+                        <option value="lg">Large (32px)</option>
+                        <option value="xl">XL (48px)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                        Outer Margin (X)
+                      </label>
+                      <select
+                        value={selectedBlock.styles?.marginX || 'none'}
+                        onChange={(e) =>
+                          handleUpdateBlockStyles(selectedBlock.id, {
+                            marginX: e.target.value as any
+                          })
+                        }
+                        className="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold cursor-pointer"
+                      >
+                        <option value="none">Full Width (0px)</option>
+                        <option value="auto">Centered (Auto)</option>
+                        <option value="sm">Inset Small</option>
+                        <option value="md">Inset Medium</option>
+                        <option value="lg">Inset Large</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                        Inner Padding (Y)
+                      </label>
+                      <select
+                        value={selectedBlock.styles?.paddingY || 'md'}
+                        onChange={(e) =>
+                          handleUpdateBlockStyles(selectedBlock.id, {
+                            paddingY: e.target.value as any
+                          })
+                        }
+                        className="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold cursor-pointer"
+                      >
+                        <option value="none">None (0px)</option>
+                        <option value="sm">Compact (16px)</option>
+                        <option value="md">Normal (28px)</option>
+                        <option value="lg">Spacious (40px)</option>
+                        <option value="xl">XL (56px)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                        Inner Padding (X)
+                      </label>
+                      <select
+                        value={selectedBlock.styles?.paddingX || 'md'}
+                        onChange={(e) =>
+                          handleUpdateBlockStyles(selectedBlock.id, {
+                            paddingX: e.target.value as any
+                          })
+                        }
+                        className="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold cursor-pointer"
+                      >
+                        <option value="none">None (0px)</option>
+                        <option value="sm">Compact (16px)</option>
+                        <option value="md">Normal (24px)</option>
+                        <option value="lg">Spacious (32px)</option>
+                        <option value="xl">XL (48px)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Border Width, Style, Radius & Color */}
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                  <span className="font-extrabold text-slate-900 text-[11px] uppercase tracking-wider block">
+                    Layout Borders &amp; Corners
+                  </span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                        Border Width
+                      </label>
+                      <select
+                        value={selectedBlock.styles?.borderWidth || 'thin'}
+                        onChange={(e) =>
+                          handleUpdateBlockStyles(selectedBlock.id, {
+                            borderWidth: e.target.value as any
+                          })
+                        }
+                        className="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold cursor-pointer"
+                      >
+                        <option value="none">No Border (0px)</option>
+                        <option value="thin">Thin (1px)</option>
+                        <option value="medium">Medium (2px)</option>
+                        <option value="thick">Bold (4px)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                        Border Style
+                      </label>
+                      <select
+                        value={selectedBlock.styles?.borderStyle || 'solid'}
+                        onChange={(e) =>
+                          handleUpdateBlockStyles(selectedBlock.id, {
+                            borderStyle: e.target.value as any
+                          })
+                        }
+                        className="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold cursor-pointer"
+                      >
+                        <option value="solid">Solid Line</option>
+                        <option value="dashed">Dashed Line</option>
+                        <option value="dotted">Dotted Line</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                      Corner Roundness
+                    </label>
+                    <select
+                      value={selectedBlock.styles?.borderRadius || '2xl'}
+                      onChange={(e) =>
+                        handleUpdateBlockStyles(selectedBlock.id, {
+                          borderRadius: e.target.value as any
+                        })
+                      }
+                      className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold cursor-pointer"
+                    >
+                      <option value="none">Square (0px)</option>
+                      <option value="md">Rounded MD (6px)</option>
+                      <option value="xl">Rounded XL (12px)</option>
+                      <option value="2xl">Rounded 2XL (16px)</option>
+                      <option value="3xl">Rounded 3XL (24px)</option>
+                      <option value="full">Full Pill (9999px)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1 text-[11px]">
+                      Border Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={selectedBlock.styles?.borderColor || '#e2e8f0'}
+                        onChange={(e) =>
+                          handleUpdateBlockStyles(selectedBlock.id, {
+                            borderColor: e.target.value
+                          })
+                        }
+                        className="w-8 h-8 rounded-lg border border-slate-300 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={selectedBlock.styles?.borderColor || '#e2e8f0'}
+                        onChange={(e) =>
+                          handleUpdateBlockStyles(selectedBlock.id, {
+                            borderColor: e.target.value
+                          })
+                        }
+                        className="flex-1 px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg font-mono text-xs"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Shadows & Glow */}
@@ -2828,41 +3150,6 @@ export const VisualPageBuilder: React.FC<VisualPageBuilderProps> = ({
                     <option value="glow-emerald">Apple Green Neon Glow</option>
                     <option value="glow-indigo">Cyber Indigo Neon Glow</option>
                   </select>
-                </div>
-
-                {/* Vertical Padding */}
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1">Vertical Padding (Spacing)</label>
-                  <select
-                    value={selectedBlock.styles?.paddingY || 'md'}
-                    onChange={(e) => handleUpdateBlockStyles(selectedBlock.id, { paddingY: e.target.value as any })}
-                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold cursor-pointer"
-                  >
-                    <option value="none">None (0px)</option>
-                    <option value="sm">Compact (16px)</option>
-                    <option value="md">Normal (32px)</option>
-                    <option value="lg">Spacious (48px)</option>
-                    <option value="xl">Extra Large (64px)</option>
-                  </select>
-                </div>
-
-                {/* Border Color */}
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1">Border Outline Color</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="color"
-                      value={selectedBlock.styles?.borderColor || '#e2e8f0'}
-                      onChange={(e) => handleUpdateBlockStyles(selectedBlock.id, { borderColor: e.target.value })}
-                      className="w-8 h-8 rounded-lg border border-slate-300 cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={selectedBlock.styles?.borderColor || '#e2e8f0'}
-                      onChange={(e) => handleUpdateBlockStyles(selectedBlock.id, { borderColor: e.target.value })}
-                      className="flex-1 px-2.5 py-1.5 border border-slate-200 rounded-lg font-mono text-xs"
-                    />
-                  </div>
                 </div>
               </div>
             )}

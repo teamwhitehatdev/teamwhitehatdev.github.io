@@ -29,16 +29,17 @@ export function getBlockTailwindClasses(block: BuilderBlock): string {
     }
   }
 
-  // Padding
+  // Padding Y
   switch (s.paddingY) {
     case 'none': classes.push('py-0'); break;
     case 'sm': classes.push('py-4'); break;
-    case 'md': classes.push('py-8'); break;
-    case 'lg': classes.push('py-12'); break;
-    case 'xl': classes.push('py-16'); break;
+    case 'md': classes.push('py-7'); break;
+    case 'lg': classes.push('py-10'); break;
+    case 'xl': classes.push('py-14'); break;
     default: classes.push('py-6');
   }
 
+  // Padding X
   switch (s.paddingX) {
     case 'none': classes.push('px-0'); break;
     case 'sm': classes.push('px-4'); break;
@@ -46,6 +47,49 @@ export function getBlockTailwindClasses(block: BuilderBlock): string {
     case 'lg': classes.push('px-8'); break;
     case 'xl': classes.push('px-12'); break;
     default: classes.push('px-6');
+  }
+
+  // Margin Y (Outer Vertical Spacing)
+  switch (s.marginY) {
+    case 'none': classes.push('my-0'); break;
+    case 'sm': classes.push('my-2'); break;
+    case 'md': classes.push('my-5'); break;
+    case 'lg': classes.push('my-8'); break;
+    case 'xl': classes.push('my-12'); break;
+    default: break;
+  }
+
+  // Margin X (Outer Horizontal Alignment / Spacing)
+  switch (s.marginX) {
+    case 'none': classes.push('mx-0'); break;
+    case 'auto': classes.push('mx-auto'); break;
+    case 'sm': classes.push('mx-2'); break;
+    case 'md': classes.push('mx-4'); break;
+    case 'lg': classes.push('mx-8'); break;
+    default: break;
+  }
+
+  // Border Width & Style
+  switch (s.borderWidth) {
+    case 'none': classes.push('border-0'); break;
+    case 'thin': classes.push('border'); break;
+    case 'medium': classes.push('border-2'); break;
+    case 'thick': classes.push('border-4'); break;
+    default:
+      if (block.type !== 'divider' && block.type !== 'badge' && block.type !== 'button') {
+        classes.push('border');
+      }
+      break;
+  }
+
+  switch (s.borderStyle) {
+    case 'dashed': classes.push('border-dashed'); break;
+    case 'dotted': classes.push('border-dotted'); break;
+    default: classes.push('border-solid'); break;
+  }
+
+  if (!s.borderColor && s.borderWidth !== 'none') {
+    classes.push('border-slate-200/90');
   }
 
   // Border Radius

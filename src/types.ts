@@ -180,10 +180,15 @@ export interface BuilderBlockStyle {
   textColor?: string;
   backgroundColor?: string;
   borderColor?: string;
-  borderWidth?: 'none' | 'thin' | 'medium';
+  borderWidth?: 'none' | 'thin' | 'medium' | 'thick';
+  borderStyle?: 'solid' | 'dashed' | 'dotted';
   borderRadius?: BuilderBorderRadius;
   paddingY?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   paddingX?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  marginY?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  marginX?: 'none' | 'auto' | 'sm' | 'md' | 'lg';
+  columnGap?: 'sm' | 'md' | 'lg' | 'xl';
+  verticalAlign?: 'start' | 'center' | 'stretch';
   textAlign?: BuilderTextAlign;
   fontFamily?: BuilderFontFamily;
   fontSize?: BuilderFontSize;

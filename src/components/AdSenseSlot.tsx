@@ -85,26 +85,26 @@ const EXCLUSIVE_SLOT_ADS: Record<'in-article' | 'header' | 'sidebar' | 'footer',
     badge: 'STAFF PICK',
     image:
       'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=900&q=80',
-    url: 'https://try.elevenlabs.io/097539247221',
+    url: 'https://try.elevenlabs.io/e5xwigkl9igv',
     features: ['Studio Voice Cloning', 'Automated Dubbing', 'Commercial License']
   },
   footer: {
-    id: 'partner-elevenlabs-voice',
-    title: 'ElevenLabs Prime Voice AI — Ultra-Realistic Multilingual Dubbing & Cloning',
-    vendor: 'by ElevenLabs Audio in AI Voice & Media',
-    category: 'AI VOICE & AUDIO',
+    id: 'partner-gumroad-creator-marketplace',
+    title: 'Gumroad Creator Marketplace — Ready-to-Deploy VA Templates, Code & AI Prompts',
+    vendor: 'by Gumroad Digital Marketplace Partner (815255139)',
+    category: 'DIGITAL ASSETS & TEMPLATES',
     description:
-      'Studio-quality AI voice generation, multilingual video dubbing, and custom voice cloning trusted by content creators and marketing agencies.',
+      'Discover thousands of verified Notion operating systems, UI kits, automation scripts, and freelance business templates built by top creators.',
     rating: '4.9',
-    reviews: '3.1k+',
-    sales: '41.0K+ Studios',
-    priceBadge: 'FREE START',
-    subPrice: '29+ Languages',
-    badge: 'STAFF PICK',
+    reviews: '5.2k+',
+    sales: '90.0K+ Creators',
+    priceBadge: 'INSTANT ACCESS',
+    subPrice: 'Templates & Workflows',
+    badge: 'CREATOR PICK',
     image:
-      'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=900&q=80',
-    url: 'https://try.elevenlabs.io/097539247221',
-    features: ['Studio Voice Cloning', 'Automated Dubbing', 'Commercial License']
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80',
+    url: 'https://gumroad.com/discover?a=815255139',
+    features: ['Notion VA Systems', 'Automation Blueprints', 'Commercial Templates']
   }
 };
 

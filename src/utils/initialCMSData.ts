@@ -281,7 +281,7 @@ Short-form vertical video (YouTube Shorts, TikTok, Instagram Reels) and long-for
 3. **Step 3 — Cut Dead Air & Add Visual Pattern Interrupts in CapCut:** Import the voiceover into CapCut, trim pauses between sentences so pacing feels crisp, and change the visual B-roll or screen zoom every 3 to 4 seconds.
 4. **Step 4 — Add Word-by-Word Dynamic Captions & Subtle Sound Design:** Apply clean high-contrast captions, add gentle whoosh/pop transitions at -18dB, and layer a custom Suno AI instrumental track at -26dB underneath.`,
     mainImage: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1200&auto=format&fit=crop&q=80',
-    url: 'https://elevenlabs.io/?from=partnerwhite3942',
+    url: 'https://try.elevenlabs.io/e5xwigkl9igv',
     buttonText: 'TRY ELEVENLABS VOICE AI STUDIO →',
     createdAt: '2026-10-29T00:00:00Z',
     updatedAt: '2026-10-29T00:00:00Z'

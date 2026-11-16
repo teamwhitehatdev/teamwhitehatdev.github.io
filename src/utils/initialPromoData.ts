@@ -2,7 +2,7 @@ import { PromoItem } from '../types';
 
 export const INITIAL_PROMO_ITEMS: PromoItem[] = [
   // =========================================================================
-  // 🏷️ PROMO PLACEMENT (FEATURED PARTNER ADS — STRICTLY UNIQUE, NO DUPLICATES)
+  // 🏷️ PROMO PLACEMENT (FEATURED PARTNER ADS — STRICTLY UNIQUE ON HOME PAGE)
   // =========================================================================
   {
     id: 'promo-seeedstudio-xiao-esp32s3-display',
@@ -22,7 +22,27 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     openNewTab: true,
     disclosureNote: 'Official Seeed Studio partner referral link (sensecap_affiliate=LF0tCxl).',
     createdAt: '2026-11-06T00:00:00Z',
-    updatedAt: '2026-11-06T00:00:00Z'
+    updatedAt: '2026-11-16T00:00:00Z'
+  },
+  {
+    id: 'promo-elevenlabs-voice-ai',
+    title: 'ElevenLabs Prime Voice AI — Ultra-Realistic Voice Cloning & Dubbing',
+    placement: 'promo',
+    description:
+      'Generate studio-grade AI voiceovers in 29+ languages, clone your voice in 60 seconds, and dub client videos globally with commercial licensing.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=800&auto=format&fit=crop&q=80',
+    destinationUrl: 'https://try.elevenlabs.io/e5xwigkl9igv',
+    buttonText: 'TRY ELEVENLABS VOICE AI →',
+    badge: 'AI VOICE & DUBBING',
+    promotionLabel: 'OFFICIAL ELEVENLABS PARTNER',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 1,
+    openNewTab: true,
+    disclosureNote: 'Official ElevenLabs partner referral link (e5xwigkl9igv).',
+    createdAt: '2026-11-16T00:00:00Z',
+    updatedAt: '2026-11-16T00:00:00Z'
   },
   {
     id: 'promo-atome-card-1',
@@ -37,7 +57,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'OFFICIAL PROMO',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 1,
+    sortOrder: 2,
     openNewTab: true,
     disclosureNote: 'Official partner promotion subject to Atome Terms & Conditions.',
     createdAt: '2026-08-01T00:00:00Z',
@@ -57,7 +77,7 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     promotionLabel: 'HOSTING PROMO',
     status: 'PUBLISHED',
     visible: true,
-    sortOrder: 2,
+    sortOrder: 3,
     openNewTab: true,
     disclosureNote: 'Use referral code DPDCABINCEHM at checkout.',
     createdAt: '2026-08-05T00:00:00Z',
@@ -201,5 +221,131 @@ export const INITIAL_PROMO_ITEMS: PromoItem[] = [
     openNewTab: true,
     createdAt: '2026-08-12T00:00:00Z',
     updatedAt: '2026-08-22T00:00:00Z'
+  },
+
+  // =========================================================================
+  // 🏆 SHOWCASE-AD PLACEMENT (DEDICATED PORTFOLIO SHOWCASE SPONSOR OFFERS)
+  // =========================================================================
+  {
+    id: 'showcase-seeedstudio-rpi5-8gb-kit',
+    title:
+      'Seeed Studio Raspberry Pi 5 Starter Kit - 8GB RAM，128GB Micro SD Card pre-loaded with 64-bit Raspberry Pi OS',
+    placement: 'showcase-ad',
+    description:
+      'The Raspberry Pi 5 Starter Kit is an all-in-one solution for you to dive into the world of computing and electronics. It includes a Raspberry Pi 5 (available in 4GB/8GB RAM) along with all essential accessories to jumpstart Raspberry Pi projects.',
+    imageUrl: './seeedstudio_raspberry_pi5_8gb_kit.jpg',
+    destinationUrl:
+      'https://www.seeedstudio.com/Raspberry-Pi5-8GB-Kit-p-6254.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    buttonText: 'GET RASPBERRY PI 5 (8GB) KIT →',
+    badge: 'RASPBERRY PI 5 KIT',
+    promotionLabel: 'SEEED STUDIO OFFICIAL HARDWARE',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 0,
+    openNewTab: true,
+    disclosureNote: 'Official Seeed Studio referral link (LF0tCxl).',
+    createdAt: '2026-11-16T00:00:00Z',
+    updatedAt: '2026-11-16T00:00:00Z'
+  },
+  {
+    id: 'showcase-seeedstudio-xiao-esp32s3-display',
+    title: 'XIAO 1.47" IPS Touch Display Powered by XIAO ESP32-S3 Plus',
+    placement: 'showcase-ad',
+    description:
+      'Compact 1.47-inch Capacitive IPS Touch Display powered by XIAO ESP32-S3 Plus with onboard WiFi + BLE, MicroSD Card Slot, Digital Mic, and 6-Axis IMU.',
+    imageUrl: './seeedstudio_xiao_esp32s3_display.jpg',
+    destinationUrl:
+      'https://www.seeedstudio.com/1-47-Inch-Touch-Display-Powered-by-XIAO-ESP32-S3-Plus-p-6996.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    buttonText: 'EXPLORE XIAO 1.47" DISPLAY →',
+    badge: 'XIAO ESP32-S3 PLUS',
+    promotionLabel: 'SEEED STUDIO OFFICIAL HARDWARE',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 1,
+    openNewTab: true,
+    disclosureNote: 'Official Seeed Studio referral link (LF0tCxl).',
+    createdAt: '2026-11-16T00:00:00Z',
+    updatedAt: '2026-11-16T00:00:00Z'
+  },
+  {
+    id: 'showcase-seeedstudio-meshtastic',
+    title: 'Wio Tracker L2 Pro for Meshtastic — Black Friday & Thanksgiving Promo',
+    placement: 'showcase-ad',
+    description:
+      'Black Friday & Thanksgiving Promo — Shop Early & Save Big on Seeed Studio Wio Tracker L2 Pro for Meshtastic, SenseCAP LoRa nodes, and Edge AI hardware.',
+    imageUrl: './seeedstudio_affiliate_1200x628.jpg',
+    destinationUrl:
+      'https://www.seeedstudio.com/Wio-Tracker-L2-Pro-for-Meshtastic-p-0000.html?sensecap_affiliate=LF0tCxl&referring_service=link',
+    buttonText: 'SAVE NOW AT SEEED STUDIO →',
+    badge: 'Black Friday & Thanksgiving Promo',
+    promotionLabel: 'SEEED STUDIO DOORBUSTER',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 2,
+    openNewTab: true,
+    disclosureNote: 'Official Seeed Studio referral link (LF0tCxl).',
+    createdAt: '2026-11-16T00:00:00Z',
+    updatedAt: '2026-11-16T00:00:00Z'
+  },
+  {
+    id: 'showcase-elevenlabs-voice-ai',
+    title: 'ElevenLabs Prime Voice AI — Ultra-Realistic Multilingual Dubbing & Cloning',
+    placement: 'showcase-ad',
+    description:
+      'Studio-quality AI voice generation, multilingual video dubbing, and custom voice cloning trusted by content creators and marketing agencies.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=800&auto=format&fit=crop&q=80',
+    destinationUrl: 'https://try.elevenlabs.io/e5xwigkl9igv',
+    buttonText: 'TRY ELEVENLABS VOICE AI →',
+    badge: 'AI VOICE STUDIO',
+    promotionLabel: 'OFFICIAL ELEVENLABS PARTNER',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 3,
+    openNewTab: true,
+    disclosureNote: 'Official ElevenLabs referral link (e5xwigkl9igv).',
+    createdAt: '2026-11-16T00:00:00Z',
+    updatedAt: '2026-11-16T00:00:00Z'
+  },
+  {
+    id: 'showcase-meshy-ai-3d',
+    title: 'AI 3D Model Generator: Create 3D from Text & Images | Meshy',
+    placement: 'showcase-ad',
+    description:
+      'Generate production-ready 3D meshes and 4K PBR textures from text prompts or 2D reference images in seconds for Blender, Unity, and Unreal Engine.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=80',
+    destinationUrl:
+      'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends',
+    buttonText: 'TRY MESHY AI 3D FREE →',
+    badge: '3D AI GENERATOR',
+    promotionLabel: 'OFFICIAL AI REFERRAL',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 4,
+    openNewTab: true,
+    disclosureNote: 'Official Meshy AI referral link (ER3M3J).',
+    createdAt: '2026-11-16T00:00:00Z',
+    updatedAt: '2026-11-16T00:00:00Z'
+  },
+  {
+    id: 'showcase-hostinger-cloud',
+    title: 'Hostinger Cloud & WordPress Business Hosting — 75% OFF + Free Domain',
+    placement: 'showcase-ad',
+    description:
+      'High-speed NVMe cloud hosting, 1-click WordPress staging, free business domain & SSL certificates for remote Virtual Assistants and client agencies.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80',
+    destinationUrl: 'https://hostinger.ph?REFERRALCODE=1JOMAR46',
+    buttonText: 'CLAIM 75% OFF HOSTINGER →',
+    badge: '75% OFF HOSTING',
+    promotionLabel: 'OFFICIAL HOSTING PARTNER',
+    status: 'PUBLISHED',
+    visible: true,
+    sortOrder: 5,
+    openNewTab: true,
+    disclosureNote: 'Official Hostinger referral link (1JOMAR46).',
+    createdAt: '2026-11-16T00:00:00Z',
+    updatedAt: '2026-11-16T00:00:00Z'
   }
 ];

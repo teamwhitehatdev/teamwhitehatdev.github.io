@@ -89,6 +89,7 @@ const renderCategoryIcon = (iconName: string, className = "w-4 h-4") => {
 const MESHY_REFERRAL_URL =
   'https://www.meshy.ai/?utm_source=meshy&utm_medium=referral-program&utm_content=ER3M3J&share_type=invite-friends';
 const SUNO_REFERRAL_URL = 'https://suno.com/@chillvibemusics';
+const ELEVENLABS_REFERRAL_URL = 'https://try.elevenlabs.io/e5xwigkl9igv';
 
 export interface TopologyNode {
   step: string;
@@ -2093,6 +2094,8 @@ const AI_CAPABILITIES_MATRIX = [
     ],
     partnerLink: SUNO_REFERRAL_URL,
     partnerLabel: 'Explore Suno AI Music Studio (@chillvibemusics)',
+    secondaryPartnerLink: ELEVENLABS_REFERRAL_URL,
+    secondaryPartnerLabel: 'Try ElevenLabs Voice AI & Dubbing Studio →',
     badgeColor: 'bg-purple-500/10 text-purple-400 border-purple-500/30'
   },
   {
@@ -2133,6 +2136,377 @@ const AI_CAPABILITIES_MATRIX = [
       'Auditing landing page screenshots for conversion rate optimization (CRO)'
     ],
     badgeColor: 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+  }
+];
+
+interface AICapabilityNicheGuide {
+  id: string;
+  capabilityIndex: number;
+  capabilityBadge: string;
+  nicheCategory: string;
+  earningRate: string;
+  title: string;
+  summary: string;
+  fullGuideOverview: string;
+  stepByStepSop: string[];
+  masterPrompt: string;
+  deliverables: string[];
+  partnerUrl?: string;
+  partnerCta?: string;
+}
+
+const AI_CAPABILITIES_NICHE_GUIDES: AICapabilityNicheGuide[] = [
+  {
+    id: 'cap-niche-01-sop-architect',
+    capabilityIndex: 0,
+    capabilityBadge: 'CAPABILITY 01 • LLM & SOPs',
+    nicheCategory: 'Executive Operations & SOP Architecture',
+    earningRate: '$25–$45/hr or $600/SOP Pack',
+    title: 'Niche #01: Turning Messy Zoom Calls & Loom Videos into Structured Notion SOP Manuals',
+    summary:
+      'How Executive VAs charge $600+ to convert a founder’s screen-share recordings into step-by-step company Standard Operating Procedures with checklists and acceptance criteria.',
+    fullGuideOverview:
+      'Founders hate writing documentation. By recording a 10-minute Loom video of any business process, extracting the transcript, and running it through a structured LLM Reasoning Prompt, you can deliver a complete Notion SOP Manual in under 20 minutes.',
+    stepByStepSop: [
+      'Step 1 — Record or ingest the founder’s raw Loom / Zoom walkthrough and export the timestamped transcript.',
+      'Step 2 — Feed the transcript into Claude 3.7 Sonnet or GPT-4o using the XML SOP Architect Master Prompt below.',
+      'Step 3 — Paste the generated Markdown directly into a Notion Database with Owner, Frequency, Tools Required, and QA Checklist properties.',
+      'Step 4 — Add a 60-second summary Loom at the top of the Notion page and deliver to the client.'
+    ],
+    masterPrompt: `<role>You are an Enterprise Operations & SOP Architect.</role>
+<task>Transform the raw meeting/video transcript below into a production-ready Notion Standard Operating Procedure (SOP).</task>
+<output_structure>
+1. SOP Title, Department, Estimated Time & Required Tools
+2. Objective & Definition of Done (3 bullet points)
+3. Step-by-Step Execution Protocol (Numbered steps with exact clicks & inputs)
+4. Quality Assurance (QA) Pre-Flight Checklist
+5. Edge-Case Troubleshooting & Escalation Matrix
+</output_structure>`,
+    deliverables: [
+      'Complete Notion SOP Database Wiki',
+      'Pre-Flight QA Verification Checklists',
+      'New-Hire Onboarding Playbook'
+    ]
+  },
+  {
+    id: 'cap-niche-02-json-extractor',
+    capabilityIndex: 0,
+    capabilityBadge: 'CAPABILITY 01 • LLM & SOPs',
+    nicheCategory: 'B2B Lead Intelligence & Inbox Triage',
+    earningRate: '$20–$40/hr Retainer',
+    title: 'Niche #02: Structured JSON Data Extraction from Unstructured Emails & Contracts',
+    summary:
+      'Use LLM JSON Mode to automatically pull client budgets, deadlines, SKUs, and action items out of long email threads into Google Sheets or Airtable.',
+    fullGuideOverview:
+      'Instead of manually reading 50 emails a day and typing rows into a spreadsheet, structured LLM reasoning converts messy human paragraphs into strict key-value JSON fields with zero formatting errors.',
+    stepByStepSop: [
+      'Step 1 — Define the exact 6–8 columns your client tracks in Google Sheets, Airtable, or HubSpot.',
+      'Step 2 — Configure an OpenAI / Claude module with Response Format set to Strict JSON Schema.',
+      'Step 3 — Map each extracted JSON key directly to the corresponding CRM or spreadsheet column.',
+      'Step 4 — Flag any record with confidence < 0.85 for human VA review in Slack.'
+    ],
+    masterPrompt: `You are a deterministic JSON Data Extraction Engine.
+Extract the following fields from the unstructured email/document below and return ONLY valid JSON:
+{
+  "sender_name": string,
+  "company_name": string,
+  "estimated_budget_usd": number | null,
+  "urgency_level": "CRITICAL" | "HIGH" | "NORMAL",
+  "requested_deliverables": string[],
+  "next_action_item": string
+}`,
+    deliverables: [
+      'Automated Email-to-Airtable Pipeline',
+      'Daily Executive Deal Digest',
+      'Zero-Entry CRM Hygiene System'
+    ]
+  },
+  {
+    id: 'cap-niche-03-meshy-shopify-3d',
+    capabilityIndex: 1,
+    capabilityBadge: 'CAPABILITY 02 • 3D SPATIAL AI',
+    nicheCategory: 'E-Commerce 3D Product Visualization',
+    earningRate: '$350–$1,200 / Store Catalog',
+    title: 'Niche #03: Interactive 3D E-Commerce Product Previews (.GLB / .USDZ) with Meshy AI',
+    summary:
+      'Help Shopify, WooCommerce, and Webflow brands boost conversion rates by 40%+ by turning flat 2D product photos into interactive 360° 3D models & AR previews.',
+    fullGuideOverview:
+      'Online shoppers want to rotate and inspect products in 3D before buying. Using Meshy AI Image-to-3D, Virtual Assistants and freelancers can convert standard product photography into lightweight .GLB and Apple AR .USDZ assets in under 60 seconds.',
+    stepByStepSop: [
+      'Step 1 — Collect high-contrast front-angle product photos from the client’s Shopify catalog.',
+      'Step 2 — Upload to Meshy AI (Image-to-3D) and enable PBR Texture Generation (Albedo, Roughness, Metallic, Normal maps).',
+      'Step 3 — Export the optimized .GLB (<5MB) and upload directly into Shopify’s native 3D Product Media slot.',
+      'Step 4 — Test mobile AR "View in Your Space" on iOS/Android and send the live preview link to the client.'
+    ],
+    masterPrompt: `MESHY AI TEXT-TO-3D / TEXTURE PROMPT:
+"Studio product render of [Product Name], ultra-clean commercial e-commerce lighting, 4K photorealistic PBR materials, accurate surface micro-texture, symmetrical geometry, neutral studio reflections, game-ready clean topology."`,
+    deliverables: [
+      'Web-Ready .GLB & iOS AR .USDZ Assets',
+      '4K PBR Texture Maps for Blender/Unity',
+      'Interactive 360° Shopify Product Embeds'
+    ],
+    partnerUrl: MESHY_REFERRAL_URL,
+    partnerCta: 'Try Meshy AI 3D Generator Free →'
+  },
+  {
+    id: 'cap-niche-04-3d-motion-thumbnails',
+    capabilityIndex: 1,
+    capabilityBadge: 'CAPABILITY 02 • 3D SPATIAL AI',
+    nicheCategory: 'Creator 3D Branding & Motion Assets',
+    earningRate: '$150–$500 / Creator Package',
+    title: 'Niche #04: Custom 3D Logos, Game Props & High-CTR YouTube Thumbnail Assets',
+    summary:
+      'Generate custom 3D mascots, isometric icons, and rotating 3D brand logos for YouTube creators, streamers, and SaaS landing pages.',
+    fullGuideOverview:
+      'Top YouTubers and SaaS brands use 3D icons and isometric props to make their thumbnails and hero sections pop. With Meshy AI Text-to-3D, you can produce a cohesive 10-pack of branded 3D icons in a single afternoon.',
+    stepByStepSop: [
+      'Step 1 — Define the client’s brand color palette and visual style (e.g., glossy clay 3D, cyberpunk metallic, or Pixar-style stylized).',
+      'Step 2 — Generate the 3D mesh in Meshy AI using the Stylized 3D Asset Prompt below.',
+      'Step 3 — Render transparent PNG angles or a 360° looping MP4 turntable animation.',
+      'Step 4 — Package into a reusable Canva / Figma asset library for the client’s design team.'
+    ],
+    masterPrompt: `MESHY AI 3D ICON & MASCOT PROMPT:
+"Stylized 3D isometric icon of [Object/Mascot], soft studio rim lighting, smooth subsurface scattering, vibrant [Brand Color] and matte slate accents, clean minimalist silhouette, 4K render quality."`,
+    deliverables: [
+      '10-Pack Custom 3D Brand Icons (PNG + GLB)',
+      'Rotating 3D Logo Turntable Video',
+      'High-CTR Thumbnail Element Kit'
+    ],
+    partnerUrl: MESHY_REFERRAL_URL,
+    partnerCta: 'Open Meshy AI 3D Studio →'
+  },
+  {
+    id: 'cap-niche-05-elevenlabs-dubbing',
+    capabilityIndex: 2,
+    capabilityBadge: 'CAPABILITY 03 • VOICE & MUSIC AI',
+    nicheCategory: 'Multilingual Video Dubbing & Voice Cloning',
+    earningRate: '$200–$800 / Channel Retainer',
+    title: 'Niche #05: Global YouTube & Course Dubbing Studio with ElevenLabs Prime Voice AI',
+    summary:
+      'Clone a creator’s or founder’s voice (with permission) and dub their English videos into Spanish, Portuguese, Filipino, Hindi, and Japanese to multiply global revenue.',
+    fullGuideOverview:
+      '80% of the world’s internet audience watches content in non-English languages. Using ElevenLabs AI Dubbing & Voice Cloning, VAs help creators and course academies launch localized multi-language audio tracks while preserving the speaker’s authentic emotional tone.',
+    stepByStepSop: [
+      'Step 1 — Upload 60–120 seconds of clean, noise-free reference audio of the client into ElevenLabs Instant/Professional Voice Cloning.',
+      'Step 2 — Import the master video or SRT script into ElevenLabs Dubbing Studio and select target languages (ES, PT, PH, HI, DE).',
+      'Step 3 — Fine-tune Stability (50%–65%) and Similarity Boost (75%–85%) for natural human breathing and inflection.',
+      'Step 4 — Export localized audio stems or full dubbed MP4s and upload as Multi-Language Audio tracks on YouTube.'
+    ],
+    masterPrompt: `VOICEOVER SCRIPT DIRECTION PROMPT:
+"Rewrite the following video script for spoken narration. Use short, punchy sentences (12–16 words max), add natural pause markers ([pause 0.4s]) before key reveals, and emphasize emotional power words so ElevenLabs neural synthesis delivers maximum audience retention."`,
+    deliverables: [
+      'Verified Custom Cloned Voice Profile',
+      'Multi-Language Dubbed Video Tracks (29+ Languages)',
+      '44.1kHz Broadcast-Ready Narration Stems'
+    ],
+    partnerUrl: ELEVENLABS_REFERRAL_URL,
+    partnerCta: 'Try ElevenLabs Voice AI Studio →'
+  },
+  {
+    id: 'cap-niche-06-suno-sonic-branding',
+    capabilityIndex: 2,
+    capabilityBadge: 'CAPABILITY 03 • VOICE & MUSIC AI',
+    nicheCategory: 'Custom AI Music & Podcast Sonic Branding',
+    earningRate: '$150–$450 / Audio Package',
+    title: 'Niche #06: Royalty-Free Podcast Intros, Ad Jingles & Faceless Channel Soundtracks (Suno + ElevenLabs)',
+    summary:
+      'Combine ElevenLabs studio voiceovers with custom Suno AI instrumental tracks to produce 100% copyright-safe Reels, TikToks, podcasts, and commercial ads.',
+    fullGuideOverview:
+      'Creators constantly get hit with copyright claims from stock music. By pairing Suno AI custom instrumental tracks with ElevenLabs voice narration, you can deliver bespoke sonic branding and faceless video packages with zero copyright risk.',
+    stepByStepSop: [
+      'Step 1 — Generate the spoken voiceover narration in ElevenLabs AI and measure the exact duration (e.g., 45 seconds).',
+      'Step 2 — Open Suno AI Music Studio and prompt a custom instrumental backing track matching the brand mood (e.g., Lo-Fi Cyber Chill, Upbeat Corporate Tech).',
+      'Step 3 — Layer the voiceover at -3dB and duck the Suno background track to -24dB in CapCut or Premiere.',
+      'Step 4 — Export the mastered video/audio package with word-by-word captions.'
+    ],
+    masterPrompt: `SUNO AI INSTRUMENTAL STYLE PROMPT:
+"Instrumental lo-fi electronic synthwave beat, warm analog bassline, crisp rimshot groove, 95 BPM, uplifting modern tech podcast background music, clean headroom for voiceover narration, studio mastered."`,
+    deliverables: [
+      'Custom Podcast Intro & Outro Jingle Pack',
+      '10 Royalty-Free Background Loops',
+      'Mastered Faceless Reels/Shorts Audio Mix'
+    ],
+    partnerUrl: ELEVENLABS_REFERRAL_URL,
+    partnerCta: 'Explore ElevenLabs Voice AI →'
+  },
+  {
+    id: 'cap-niche-07-make-speed-to-lead',
+    capabilityIndex: 3,
+    capabilityBadge: 'CAPABILITY 04 • AI AUTOMATION',
+    nicheCategory: 'Speed-to-Lead & CRM Pipeline Automation',
+    earningRate: '$500–$1,500 Setup + $400/mo',
+    title: 'Niche #07: 4-Second Speed-to-Lead Webhook Triage (Make.com / n8n + Claude + Slack)',
+    summary:
+      'Build automated intake pipelines that capture website leads, research their company domain, score them 0–100 with AI, and draft personalized replies in 4 seconds.',
+    fullGuideOverview:
+      'Responding to a new lead within 5 minutes increases close rates by 8x. VAs who build automated Make.com or n8n Speed-to-Lead pipelines command high setup fees and monthly maintenance retainers.',
+    stepByStepSop: [
+      'Step 1 — Create a Custom Webhook trigger in Make.com or n8n connected to Typeform, Tally, or Webflow.',
+      'Step 2 — Add an HTTP enrichment node to fetch the prospect’s website metadata.',
+      'Step 3 — Pass the payload to Claude 3.7 / GPT-4o to score ICP fit (0–100) and draft a tailored 3-paragraph reply.',
+      'Step 4 — Route VIP leads (Score >= 80) to Slack #vip-leads and create a Gmail Draft + HubSpot/Notion deal card.'
+    ],
+    masterPrompt: `SYSTEM PROMPT (Speed-to-Lead Qualifier):
+Analyze the inbound lead payload and company website context. Output strict JSON:
+{
+  "icp_score": number (0-100),
+  "tier": "VIP_FAST_TRACK" | "NURTURE" | "DISQUALIFIED",
+  "pain_point_summary": string,
+  "draft_email_body": string
+}`,
+    deliverables: [
+      'Live 5-Node Make.com / n8n Blueprint',
+      'Slack VIP Instant Alert Integration',
+      'Automated CRM Deal Creation & Gmail Drafts'
+    ]
+  },
+  {
+    id: 'cap-niche-08-omnichannel-repurposer',
+    capabilityIndex: 3,
+    capabilityBadge: 'CAPABILITY 04 • AI AUTOMATION',
+    nicheCategory: 'Autonomous Content Repurposing Engine',
+    earningRate: '$800–$2,000 / Month Retainer',
+    title: 'Niche #08: 1 Video to 15 Social Posts Omnichannel Repurposing Pipeline',
+    summary:
+      'Automatically turn 1 weekly YouTube video or podcast into LinkedIn posts, X threads, Instagram carousels, and blog articles scheduled in Notion.',
+    fullGuideOverview:
+      'Agencies and founders record great long-form videos but never have time to repurpose them. An automated Google Drive -> Whisper -> Claude -> Notion Calendar workflow turns 1 recording into a full week of omnichannel content.',
+    stepByStepSop: [
+      'Step 1 — Watch a shared Google Drive / Dropbox folder for new MP4 or MP3 uploads.',
+      'Step 2 — Transcribe the audio automatically via OpenAI Whisper API.',
+      'Step 3 — Run the Multi-Platform Repurposing Master Prompt to generate LinkedIn, X, Instagram, and Newsletter drafts.',
+      'Step 4 — Populate the client’s Notion Content Calendar for 1-click approval and Buffer auto-publishing.'
+    ],
+    masterPrompt: `Transform the transcript below into:
+1. One 180-word high-retention LinkedIn post (hook + 3 takeaways + CTA).
+2. One 5-post X/Twitter thread.
+3. One 6-slide Instagram Carousel outline (Headline + 20-word body per slide).
+4. One SEO-optimized 600-word blog summary.`,
+    deliverables: [
+      'Automated Drive-to-Notion Repurposing Workflow',
+      '15 Weekly Multi-Platform Social Drafts',
+      'ManyChat Comment-to-DM Lead Magnet Setup'
+    ]
+  },
+  {
+    id: 'cap-niche-09-rag-company-brain',
+    capabilityIndex: 4,
+    capabilityBadge: 'CAPABILITY 05 • RAG & KNOWLEDGE',
+    nicheCategory: 'Custom Company Knowledge Base & AI Brain',
+    earningRate: '$750–$2,500 Setup Fee',
+    title: 'Niche #09: Building Zero-Hallucination "Ask Our Company SOPs" RAG Assistants',
+    summary:
+      'Connect a client’s PDFs, Google Docs, Notion wiki, and refund policies into a private RAG vector knowledge base that answers team & customer questions with citations.',
+    fullGuideOverview:
+      'Generic AI hallucinates when asked about private company rules. Retrieval-Augmented Generation (RAG) indexes the company’s actual documents in a vector database (Pinecone / Supabase) and forces the AI to answer strictly using verified internal citations.',
+    stepByStepSop: [
+      'Step 1 — Audit and clean the client’s core SOPs, pricing sheets, and FAQ documents into clean Markdown sections.',
+      'Step 2 — Chunk documents into 400–600 token segments with metadata tags (Department, Document Title, Last Updated).',
+      'Step 3 — Embed and store chunks in Pinecone, Supabase pgvector, or CustomGPT / Voiceflow.',
+      'Step 4 — Enforce the Strict Citation Guardrail Prompt below so every answer includes the exact source document link.'
+    ],
+    masterPrompt: `<system_guardrail>
+You are the Official Internal Knowledge Assistant for [Company Name].
+Answer the user's question ONLY using the <retrieved_context> chunks provided below.
+- Always cite the exact [Document Title & Section] at the end of every paragraph.
+- If the answer is not explicitly stated in <retrieved_context>, reply: "I do not have verified documentation on that policy—please escalate to #ops-support."
+- Never guess or invent pricing, contract terms, or refund rules.
+</system_guardrail>`,
+    deliverables: [
+      'Indexed Vector Knowledge Base (Pinecone / Notion AI)',
+      '24/7 Internal Team & Customer Support Bot',
+      'Zero-Hallucination Citation Guardrail Prompt'
+    ]
+  },
+  {
+    id: 'cap-niche-10-rag-rfp-responder',
+    capabilityIndex: 4,
+    capabilityBadge: 'CAPABILITY 05 • RAG & KNOWLEDGE',
+    nicheCategory: 'Enterprise RFP & Sales Enablement RAG',
+    earningRate: '$500–$1,500 / Project',
+    title: 'Niche #10: Instant Case-Study & Proposal Drafter Anchored on Past Winning Deals',
+    summary:
+      'Index a freelancer’s or agency’s past winning proposals, case studies, and pricing matrices so they can generate custom client proposals in 90 seconds.',
+    fullGuideOverview:
+      'Agencies lose deals when proposals take 3 days to write. By indexing their top 20 winning proposals and client ROI case studies into a RAG workspace, you can draft hyper-relevant, proof-backed proposals immediately after a discovery call.',
+    stepByStepSop: [
+      'Step 1 — Collect 10–20 past winning proposals, client testimonials, and niche case studies.',
+      'Step 2 — Tag each case study by Industry, Problem Solved, Tech Stack, and Measured ROI.',
+      'Step 3 — After a discovery call, feed the call notes + retrieved matching case studies into Claude.',
+      'Step 4 — Export a polished scope-of-work and 3-tier pricing proposal in Notion or PandaDoc.'
+    ],
+    masterPrompt: `Using the <discovery_call_notes> and our <verified_case_studies>, draft an Executive Proposal containing:
+1. Executive Summary of the Client's Core Bottleneck
+2. Proposed 3-Phase Implementation Architecture
+3. Relevant Proof-of-Work Case Study (with exact metrics from <verified_case_studies>)
+4. 3-Tier Investment Options (Foundation, Growth, Enterprise)`,
+    deliverables: [
+      'Searchable Case-Study & Proof Repository',
+      '90-Second Discovery-to-Proposal Generator',
+      '3-Tier Retainer Pricing Calculator'
+    ]
+  },
+  {
+    id: 'cap-niche-11-vision-receipt-ocr',
+    capabilityIndex: 5,
+    capabilityBadge: 'CAPABILITY 06 • VISION & OCR',
+    nicheCategory: 'Automated Bookkeeping & Financial OCR',
+    earningRate: '$20–$45/hr Financial VA',
+    title: 'Niche #11: Multimodal Receipt, Invoice & Bank Statement OCR to QuickBooks / CSV',
+    summary:
+      'Use Multimodal Vision AI (GPT-4o / Claude 3.7 Vision) to scan photos of crumpled receipts, PDF invoices, and tables into clean accounting spreadsheets.',
+    fullGuideOverview:
+      'Bookkeeping VAs spend hours typing receipt line items into QuickBooks or Xero. Multimodal Vision models read photographed receipts, multi-currency invoices, and PDF tables in seconds with line-item math verification.',
+    stepByStepSop: [
+      'Step 1 — Set up a dedicated Slack channel, Telegram bot, or Google Drive folder where the client snaps photos of receipts.',
+      'Step 2 — Pass the image URL to GPT-4o Vision or Claude 3.7 Sonnet Vision with the Financial OCR Prompt below.',
+      'Step 3 — Automatically verify that `subtotal + tax == total_amount` before logging.',
+      'Step 4 — Append the verified row to Google Sheets / QuickBooks Online with a link to the original receipt image.'
+    ],
+    masterPrompt: `Inspect the attached receipt/invoice image and return strictly valid JSON:
+{
+  "vendor_name": string,
+  "transaction_date_iso": "YYYY-MM-DD",
+  "currency": string,
+  "subtotal": number,
+  "tax_amount": number,
+  "total_amount": number,
+  "expense_category": "Software" | "Travel" | "Meals" | "Advertising" | "Office" | "Other",
+  "math_verified": boolean
+}`,
+    deliverables: [
+      'Automated Receipt-Photo-to-Spreadsheet Bot',
+      'Monthly Categorized Expense Ledger (CSV/QuickBooks)',
+      'Tax-Ready Audit Trail with Receipt Links'
+    ]
+  },
+  {
+    id: 'cap-niche-12-vision-ecommerce-cro',
+    capabilityIndex: 5,
+    capabilityBadge: 'CAPABILITY 06 • VISION & OCR',
+    nicheCategory: 'E-Commerce Catalog & Landing Page CRO Audits',
+    earningRate: '$250–$900 / Audit & Catalog Pack',
+    title: 'Niche #12: Bulk Product Photo SEO Tagging & Visual Landing Page CRO Audits',
+    summary:
+      'Feed product photos or landing page screenshots into Vision AI to generate SEO alt-text, keyword-rich Shopify descriptions, and visual conversion audits.',
+    fullGuideOverview:
+      'E-commerce stores often have hundreds of product photos with blank alt-text and thin descriptions. Multimodal Vision AI inspects each product photo’s color, material, cut, and use case to generate high-ranking SEO metadata and conversion copy automatically.',
+    stepByStepSop: [
+      'Step 1 — Export the client’s Shopify product image CSV or capture full-page screenshots of their landing pages.',
+      'Step 2 — Run each image through Multimodal Vision AI to extract visual attributes (color, material, style, target buyer).',
+      'Step 3 — Generate 125-character accessible SEO alt-text, meta titles, and benefit-driven bullet points.',
+      'Step 4 — Import the enriched CSV back into Shopify or deliver a visual CRO heatmap action plan.'
+    ],
+    masterPrompt: `Analyze this product/landing-page image and return:
+1. SEO Alt-Text (max 125 chars, descriptive & keyword-rich)
+2. Visual Attributes Detected (Material, Color Palette, Style, Use Case)
+3. High-Converting Product Title & 4 Benefit-Driven Bullet Points
+4. 3 Visual Conversion Rate Optimization (CRO) Improvements`,
+    deliverables: [
+      'Bulk Enriched Shopify SEO Alt-Text & Copy CSV',
+      'Visual Above-the-Fold CRO Audit Report',
+      'Ad Creative Visual Hook Scorecard'
+    ]
   }
 ];
 
@@ -2258,6 +2632,34 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
   const [selectedNodeIndex, setSelectedNodeIndex] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // AI CAPABILITIES RIGHT-COLUMN COLLAPSIBLE NICHE EXPLORER & FULL-VIEW MODAL STATE
+  const [selectedCapabilityFilter, setSelectedCapabilityFilter] = useState<number | 'ALL'>('ALL');
+  const [expandedNicheGuideIds, setExpandedNicheGuideIds] = useState<Record<string, boolean>>({
+    'cap-niche-01-sop-architect': true,
+    'cap-niche-03-meshy-shopify-3d': true,
+    'cap-niche-05-elevenlabs-dubbing': true
+  });
+  const [fullViewNicheGuide, setFullViewNicheGuide] = useState<AICapabilityNicheGuide | null>(null);
+
+  const toggleNicheGuideExpand = (guideId: string) => {
+    setExpandedNicheGuideIds((prev) => ({
+      ...prev,
+      [guideId]: !prev[guideId]
+    }));
+  };
+
+  const expandAllNicheGuides = () => {
+    const next: Record<string, boolean> = {};
+    AI_CAPABILITIES_NICHE_GUIDES.forEach((g) => {
+      next[g.id] = true;
+    });
+    setExpandedNicheGuideIds(next);
+  };
+
+  const collapseAllNicheGuides = () => {
+    setExpandedNicheGuideIds({});
+  };
 
   // DRAGGABLE NODES ENGINE STATE
   const [nodePositions, setNodePositions] = useState<Array<{ x: number; y: number }>>(DEFAULT_NODE_POSITIONS);
@@ -3329,6 +3731,115 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
               </div>
             </div>
           </div>
+
+          {/* ===============================================================
+              NODE MASTER PROMPT & HOW-TO-BUILD AI AUTOMATION TEACHING ENGINE
+          =============================================================== */}
+          {(() => {
+            const nodeMasterPrompt = `### MASTER SYSTEM PROMPT FOR NODE ${selectedNode.step} (${selectedNode.type}: ${selectedNode.title})
+<node_identity>
+Blueprint: ${activeBlueprint.title}
+Node Step: Node ${selectedNode.step} (${selectedNode.type})
+Target Platform / Tool: ${selectedNode.tool}
+Protocol & Endpoint: ${selectedNode.detailedSpecs?.protocol || selectedNode.protocolBadge} -> ${selectedNode.detailedSpecs?.endpoint || `${selectedNode.ipAddress}:${selectedNode.port}`}
+</node_identity>
+
+<system_instructions>
+You are the execution intelligence and configuration architect for Node ${selectedNode.step} (${selectedNode.title}).
+1. INBOUND PAYLOAD VALIDATION: Verify incoming payload structure matches:
+${selectedNode.inputPayload}
+
+2. CORE NODE PROCESSING LOGIC:
+${selectedNode.processingLogic}
+
+3. DETERMINISTIC OUTPUT SCHEMA: Emit strictly valid JSON matching this exact downstream contract:
+${selectedNode.outputPayload}
+
+4. ERROR GUARD & FALLBACK POLICY:
+- Retry Strategy: ${selectedNode.detailedSpecs?.retryPolicy || '3 retries with exponential backoff'}
+- Fallback Action: ${selectedNode.detailedSpecs?.fallbackAction || 'Route exception to Slack ops triage channel'}
+</system_instructions>`;
+
+            return (
+              <div className="mt-4 rounded-2xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white border-2 border-indigo-400/50 p-4 sm:p-6 space-y-4 shadow-md">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-indigo-500/30">
+                  <div className="space-y-1">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-cyan-300 text-[10px] font-mono font-extrabold uppercase tracking-wider">
+                      <Bot className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>NODE {selectedNode.step} MASTER PROMPT • AI AUTOMATION BUILDER GUIDE</span>
+                    </div>
+                    <h4 className="text-sm sm:text-base font-black text-white">
+                      Master Prompt &amp; Step-by-Step Guide: How to Make Node {selectedNode.step} ({selectedNode.title}) Work in Production
+                    </h4>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(nodeMasterPrompt, `node-master-prompt-${selectedNode.step}`)}
+                    className="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-extrabold text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer shrink-0"
+                  >
+                    {copiedId === `node-master-prompt-${selectedNode.step}` ? (
+                      <>
+                        <Check className="w-4 h-4 text-slate-950" />
+                        <span>Copied Node {selectedNode.step} Master Prompt!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-4 h-4" />
+                        <span>Copy Node {selectedNode.step} Master Prompt</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+                  {/* Left: Copyable Node Master Prompt (7 cols) */}
+                  <div className="lg:col-span-7 flex flex-col justify-between space-y-2">
+                    <div className="text-[11px] font-mono text-indigo-200 font-bold flex items-center justify-between">
+                      <span>Paste into Make.com / n8n AI Module or Claude / ChatGPT Builder:</span>
+                      <span className="text-cyan-300">{selectedNode.tool}</span>
+                    </div>
+                    <pre className="bg-black/85 border border-indigo-500/40 text-cyan-200 p-3.5 rounded-xl text-[11px] font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-[260px]">
+                      {nodeMasterPrompt}
+                    </pre>
+                  </div>
+
+                  {/* Right: 4-Step How to Make This Node Work in Make.com / n8n (5 cols) */}
+                  <div className="lg:col-span-5 bg-white/10 border border-white/15 rounded-xl p-4 space-y-2.5 text-xs">
+                    <div className="font-mono font-black text-amber-300 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                      <span>How to Wire Node {selectedNode.step} in Make.com / n8n:</span>
+                    </div>
+                    <ol className="space-y-2 text-[11px] text-slate-100 leading-relaxed">
+                      <li className="p-2 rounded-lg bg-slate-900/80 border border-slate-700">
+                        <strong className="text-cyan-300">1. Add Module &amp; Auth:</strong> Insert a{' '}
+                        <span className="underline">{selectedNode.tool}</span> ({selectedNode.type}) node and connect{' '}
+                        <code className="text-amber-300">
+                          {selectedNode.detailedSpecs?.secretKeys?.length
+                            ? selectedNode.detailedSpecs.secretKeys.join(', ')
+                            : 'API_CREDENTIAL_TOKEN'}
+                        </code>.
+                      </li>
+                      <li className="p-2 rounded-lg bg-slate-900/80 border border-slate-700">
+                        <strong className="text-cyan-300">2. Map Inbound JSON:</strong> Map the incoming fields from{' '}
+                        {selectedNodeIndex === 0 ? 'your Webhook trigger' : `Node 0${selectedNodeIndex}`} into the request body using{' '}
+                        <code className="text-emerald-300">{selectedNode.detailedSpecs?.protocol || selectedNode.protocolBadge}</code>.
+                      </li>
+                      <li className="p-2 rounded-lg bg-slate-900/80 border border-slate-700">
+                        <strong className="text-cyan-300">3. Apply Master Prompt &amp; Logic:</strong> Paste the Node {selectedNode.step} Master Prompt on the left so the node enforces:{' '}
+                        <em>{selectedNode.processingLogic}</em>
+                      </li>
+                      <li className="p-2 rounded-lg bg-slate-900/80 border border-slate-700">
+                        <strong className="text-cyan-300">4. Set Error Guardrail:</strong> Configure{' '}
+                        <code className="text-amber-200">{selectedNode.detailedSpecs?.retryPolicy || '3x auto-retry'}</code> and fallback:{' '}
+                        <span>{selectedNode.detailedSpecs?.fallbackAction || 'Route errors to Slack alert channel.'}</span>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </div>
 
         {/* ===============================================================
@@ -4027,82 +4538,533 @@ export const AIAutomationDiagrams: React.FC<AIAutomationDiagramsProps> = ({
       </section>
 
       {/* =====================================================================
-          SECTION 2: AI & ITS 6 CORE CAPABILITIES (COMPLETE FREE VISUAL GUIDE)
+          SECTION 2: AI & ITS 6 CORE CAPABILITIES (2-COLUMN INTERACTIVE MATRIX:
+          LEFT = 6 CORE CAPABILITIES | RIGHT = COLLAPSIBLE & FULL-VIEW NICHE EXPLORER)
       ====================================================================== */}
       <section className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="space-y-2 max-w-3xl">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-slate-100 text-slate-800 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Cpu className="w-3.5 h-3.5 text-slate-800" />
-              <span>AI &amp; Its Capabilities &bull; Complete Educational Matrix</span>
+        <div className="white-glass-card rounded-3xl p-6 sm:p-8 border-2 border-slate-200/90 shadow-xs space-y-6">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-5 border-b border-slate-200/80">
+            <div className="space-y-2 max-w-3xl">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-indigo-950 text-white border border-indigo-800 rounded-full text-xs font-bold uppercase tracking-wider">
+                <Cpu className="w-3.5 h-3.5 text-cyan-400" />
+                <span>AI &amp; Its Capabilities &bull; Complete Educational Matrix</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Understanding Modern AI Capabilities &amp; How to Use Them in Real Projects
+              </h2>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                Artificial Intelligence is not just a chat box. Below are the <strong className="text-slate-900">6 Core Capabilities of Modern AI</strong> on the left and a dedicated <strong className="text-indigo-900">Collapsible &amp; Full-View Niche &amp; Contents Column</strong> on the right showing how Virtual Assistants, freelancers, and creators use them every day to deliver agency-grade work.
+              </p>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Understanding Modern AI Capabilities &amp; How to Use Them in Real Projects
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Artificial Intelligence is not just a chat box. Below are the <strong className="text-slate-900">6 Core Capabilities of Modern AI</strong> and how Virtual Assistants, freelancers, and creators use them every day to deliver agency-grade work.
-            </p>
+
+            {/* Capability Filter Pills for Both Columns */}
+            <div className="flex flex-wrap items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => setSelectedCapabilityFilter('ALL')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                  selectedCapabilityFilter === 'ALL'
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                }`}
+              >
+                All 6 Capabilities ({AI_CAPABILITIES_NICHE_GUIDES.length} Niches)
+              </button>
+              {AI_CAPABILITIES_MATRIX.map((_, cIdx) => (
+                <button
+                  key={cIdx}
+                  type="button"
+                  onClick={() => setSelectedCapabilityFilter(cIdx)}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer border ${
+                    selectedCapabilityFilter === cIdx
+                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
+                      : 'bg-white hover:bg-indigo-50 text-slate-700 border-slate-200'
+                  }`}
+                >
+                  0{cIdx + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 2-COLUMN SPLIT: LEFT = 6 CORE CAPABILITIES | RIGHT = COLLAPSIBLE & EXPANDABLE NICHE CONTENTS */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+            {/* ============================================================= */}
+            {/* LEFT COLUMN (6 COLS): THE 6 CORE CAPABILITIES OF MODERN AI    */}
+            {/* ============================================================= */}
+            <div className="lg:col-span-6 space-y-4">
+              <div className="flex items-center justify-between px-1">
+                <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                  <Layers className="w-4 h-4 text-indigo-600" />
+                  <span>Left Column: 6 Core Capabilities of Modern AI</span>
+                </span>
+                <span className="text-[11px] text-slate-500 font-semibold">
+                  Click any capability to filter right column
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                {AI_CAPABILITIES_MATRIX.map((cap, idx) => {
+                  if (selectedCapabilityFilter !== 'ALL' && selectedCapabilityFilter !== idx) {
+                    return null;
+                  }
+                  const IconComponent = cap.icon;
+                  const matchingGuides = AI_CAPABILITIES_NICHE_GUIDES.filter(
+                    (g) => g.capabilityIndex === idx
+                  );
+                  const isFocused = selectedCapabilityFilter === idx;
+
+                  return (
+                    <div
+                      key={idx}
+                      className={`bg-white border-2 rounded-2xl p-5 shadow-xs transition-all flex flex-col justify-between space-y-4 ${
+                        isFocused
+                          ? 'border-indigo-600 ring-2 ring-indigo-500/20'
+                          : 'border-slate-200/90 hover:border-indigo-400'
+                      }`}
+                    >
+                      <div className="space-y-2.5">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${cap.badgeColor}`}>
+                            {cap.category}
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setSelectedCapabilityFilter(isFocused ? 'ALL' : idx)
+                              }
+                              className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold cursor-pointer transition-all ${
+                                isFocused
+                                  ? 'bg-indigo-600 text-white'
+                                  : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200'
+                              }`}
+                            >
+                              {isFocused ? '✓ Showing Niches' : `Explore ${matchingGuides.length} Niches →`}
+                            </button>
+                            <div className="p-2 rounded-xl bg-slate-50 border border-slate-200">
+                              <IconComponent className="w-4 h-4 text-slate-700" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-extrabold text-slate-900 leading-snug">
+                          {cap.title}
+                        </h3>
+
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                          {cap.description}
+                        </p>
+                      </div>
+
+                      <div className="space-y-3 pt-3 border-t border-slate-100">
+                        <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                          Real VA &amp; Freelancer Use Cases:
+                        </div>
+                        <ul className="space-y-1.5">
+                          {cap.vaUseCases.map((uc, uIdx) => (
+                            <li key={uIdx} className="flex items-start gap-2 text-xs text-slate-700">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                              <span>{uc}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="pt-2 flex flex-wrap items-center gap-2">
+                          {cap.partnerLink && (
+                            <a
+                              href={cap.partnerLink}
+                              target="_blank"
+                              rel="sponsored noopener noreferrer"
+                              className="flex-1 py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5"
+                            >
+                              <span>{cap.partnerLabel}</span>
+                              <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                            </a>
+                          )}
+                          {(cap as any).secondaryPartnerLink && (
+                            <a
+                              href={(cap as any).secondaryPartnerLink}
+                              target="_blank"
+                              rel="sponsored noopener noreferrer"
+                              className="flex-1 py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5"
+                            >
+                              <span>{(cap as any).secondaryPartnerLabel}</span>
+                              <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                            </a>
+                          )}
+                          {matchingGuides[0] && (
+                            <button
+                              type="button"
+                              onClick={() => setFullViewNicheGuide(matchingGuides[0])}
+                              className="py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 font-extrabold text-xs rounded-xl transition-all cursor-pointer"
+                            >
+                              Read Full View
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ============================================================= */}
+            {/* RIGHT COLUMN (6 COLS): COLLAPSIBLE & EXPANDABLE NICHE &       */}
+            {/* CONTENTS DEEP-DIVE EXPLORER (WITH FULL-VIEW MODAL READER)     */}
+            {/* ============================================================= */}
+            <div className="lg:col-span-6 space-y-4">
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white border border-indigo-500/40 shadow-sm space-y-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-[11px] font-mono font-extrabold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                    <span>Right Column • Collapsible Niche &amp; Contents Reader</span>
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={expandAllNicheGuides}
+                      className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono font-bold cursor-pointer transition-colors"
+                    >
+                      Expand All
+                    </button>
+                    <button
+                      type="button"
+                      onClick={collapseAllNicheGuides}
+                      className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-[10px] font-mono font-bold cursor-pointer transition-colors"
+                    >
+                      Collapse All
+                    </button>
+                  </div>
+                </div>
+                <h3 className="text-base sm:text-lg font-black text-white leading-snug">
+                  Actionable AI Capability Niches, SOPs &amp; Master Prompts (Expand Inline or Read in Full View)
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Click any Niche &amp; Content card below to <strong>Expand / Collapse</strong> its complete step-by-step execution SOP and Master Prompt right here, or click <strong>&quot;Read in Full View&quot;</strong> to open the full-screen reader window.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {AI_CAPABILITIES_NICHE_GUIDES.filter(
+                  (g) =>
+                    selectedCapabilityFilter === 'ALL' ||
+                    g.capabilityIndex === selectedCapabilityFilter
+                ).map((guide) => {
+                  const isExpandedCard = Boolean(expandedNicheGuideIds[guide.id]);
+                  return (
+                    <div
+                      key={guide.id}
+                      className={`rounded-2xl border-2 transition-all overflow-hidden ${
+                        isExpandedCard
+                          ? 'bg-indigo-50/40 border-indigo-400 shadow-sm'
+                          : 'bg-white hover:border-indigo-300 border-slate-200/90 shadow-2xs'
+                      }`}
+                    >
+                      {/* Collapsible Header Bar */}
+                      <div
+                        onClick={() => toggleNicheGuideExpand(guide.id)}
+                        className="p-4 sm:p-5 cursor-pointer flex items-start justify-between gap-3 select-none"
+                      >
+                        <div className="space-y-1.5 flex-1">
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className="px-2 py-0.5 rounded-md bg-slate-900 text-cyan-300 font-mono font-extrabold text-[10px]">
+                              {guide.capabilityBadge}
+                            </span>
+                            <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 font-mono font-bold text-[10px]">
+                              {guide.earningRate}
+                            </span>
+                            <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                              {guide.nicheCategory}
+                            </span>
+                          </div>
+
+                          <h4 className="text-sm sm:text-base font-extrabold text-slate-950 group-hover:text-indigo-700 leading-snug">
+                            {guide.title}
+                          </h4>
+
+                          <p className="text-xs text-slate-600 leading-relaxed">
+                            {guide.summary}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-col items-end gap-1.5 shrink-0">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFullViewNicheGuide(guide);
+                            }}
+                            className="px-2.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] flex items-center gap-1 shadow-2xs cursor-pointer"
+                            title="Open Niche Content in Full-Screen View"
+                          >
+                            <Maximize2 className="w-3 h-3" />
+                            <span>Full View</span>
+                          </button>
+
+                          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-lg">
+                            {isExpandedCard ? (
+                              <>
+                                <ChevronUp className="w-3.5 h-3.5 text-indigo-600" />
+                                <span>Collapse</span>
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="w-3.5 h-3.5 text-slate-600" />
+                                <span>Expand SOP</span>
+                              </>
+                            )}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Collapsible & Expandable Deep-Dive Body */}
+                      {isExpandedCard && (
+                        <div className="px-4 sm:px-5 pb-5 pt-3 border-t border-indigo-200/80 bg-white space-y-4 text-xs animate-in fade-in duration-150">
+                          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 leading-relaxed font-medium">
+                            {guide.fullGuideOverview}
+                          </div>
+
+                          {/* Step-by-Step SOP */}
+                          <div className="space-y-2">
+                            <span className="text-[11px] font-mono font-black uppercase tracking-wider text-indigo-950 block">
+                              Step-by-Step Real-Project Execution SOP:
+                            </span>
+                            <ul className="space-y-1.5">
+                              {guide.stepByStepSop.map((step, sIdx) => (
+                                <li
+                                  key={sIdx}
+                                  className="p-2.5 rounded-xl bg-indigo-50/50 border border-indigo-100 text-slate-800 flex items-start gap-2 leading-relaxed"
+                                >
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 shrink-0 mt-0.5" />
+                                  <span>{step}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Copyable Master Prompt */}
+                          <div className="space-y-1.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-mono font-black uppercase tracking-wider text-slate-900">
+                                Copy-Paste Master Prompt:
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(guide.masterPrompt, `cap-niche-prompt-${guide.id}`)}
+                                className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-mono font-bold text-[10px] flex items-center gap-1 cursor-pointer"
+                              >
+                                {copiedId === `cap-niche-prompt-${guide.id}` ? (
+                                  <>
+                                    <Check className="w-3 h-3 text-emerald-400" />
+                                    <span>Copied Prompt!</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="w-3 h-3" />
+                                    <span>Copy Master Prompt</span>
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                            <pre className="bg-slate-950 text-cyan-300 p-3 rounded-xl text-[11px] font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                              {guide.masterPrompt}
+                            </pre>
+                          </div>
+
+                          {/* Client Deliverables + Full View / Partner Action Bar */}
+                          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                            <div className="flex flex-wrap gap-1.5">
+                              {guide.deliverables.map((deliv, dIdx) => (
+                                <span
+                                  key={dIdx}
+                                  className="px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-900 font-bold text-[10px]"
+                                >
+                                  ✓ {deliv}
+                                </span>
+                              ))}
+                            </div>
+
+                            <div className="flex items-center gap-2 ml-auto">
+                              {guide.partnerUrl && (
+                                <a
+                                  href={guide.partnerUrl}
+                                  target="_blank"
+                                  rel="sponsored noopener noreferrer"
+                                  className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-1"
+                                >
+                                  <span>{guide.partnerCta || 'Open Partner Tool'}</span>
+                                  <ExternalLink className="w-3 h-3" />
+                                </a>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => setFullViewNicheGuide(guide)}
+                                className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-1 cursor-pointer"
+                              >
+                                <Maximize2 className="w-3 h-3" />
+                                <span>Read in Full View</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {AI_CAPABILITIES_MATRIX.map((cap, idx) => {
-            const IconComponent = cap.icon;
-            return (
-              <div
-                key={idx}
-                className="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl p-6 shadow-xs transition-all flex flex-col justify-between space-y-5"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${cap.badgeColor}`}>
-                      {cap.category}
+        {/* FULL-VIEW NICHE & CONTENT READER MODAL */}
+        {fullViewNicheGuide && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={() => setFullViewNicheGuide(null)}
+            className="fixed inset-0 z-[9990] bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white border-2 border-slate-900 rounded-3xl max-w-3xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden text-slate-900"
+            >
+              {/* Modal Header */}
+              <div className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 text-white px-5 py-4 flex items-center justify-between gap-3 border-b border-slate-800">
+                <div className="space-y-0.5 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 font-mono text-[10px] font-bold">
+                      {fullViewNicheGuide.capabilityBadge}
                     </span>
-                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-200">
-                      <IconComponent className="w-5 h-5 text-slate-700" />
-                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-mono text-[10px] font-bold">
+                      {fullViewNicheGuide.earningRate}
+                    </span>
                   </div>
-
-                  <h3 className="text-lg font-extrabold text-slate-900 leading-snug">
-                    {cap.title}
+                  <h3 className="text-base sm:text-xl font-black text-white truncate">
+                    {fullViewNicheGuide.title}
                   </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setFullViewNicheGuide(null)}
+                  className="p-2 rounded-xl bg-white/10 hover:bg-rose-600 text-white transition-colors cursor-pointer shrink-0"
+                  title="Close Full View Reader"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    {cap.description}
+              {/* Modal Body */}
+              <div className="p-5 sm:p-7 overflow-y-auto space-y-5 text-xs sm:text-sm">
+                <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-1.5">
+                  <span className="text-[11px] font-mono font-black uppercase tracking-wider text-indigo-900 block">
+                    Executive Niche Overview &amp; Why Clients Pay For This:
+                  </span>
+                  <p className="text-slate-800 leading-relaxed font-medium">
+                    {fullViewNicheGuide.fullGuideOverview}
                   </p>
                 </div>
 
-                <div className="space-y-3 pt-2 border-t border-slate-100">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                    Real VA &amp; Freelancer Use Cases:
-                  </div>
-                  <ul className="space-y-1.5">
-                    {cap.vaUseCases.map((uc, uIdx) => (
-                      <li key={uIdx} className="flex items-start gap-2 text-xs text-slate-700">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-slate-800 shrink-0 mt-0.5" />
-                        <span>{uc}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {cap.partnerLink && (
-                    <div className="pt-2">
-                      <a
-                        href={cap.partnerLink}
-                        target="_blank"
-                        rel="sponsored noopener noreferrer"
-                        className="w-full py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5"
+                <div className="space-y-2.5">
+                  <h4 className="text-sm sm:text-base font-black text-slate-950 uppercase tracking-wide">
+                    Step-by-Step Production Implementation Protocol
+                  </h4>
+                  <div className="space-y-2">
+                    {fullViewNicheGuide.stepByStepSop.map((step, idx) => (
+                      <div
+                        key={idx}
+                        className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3 text-slate-800 font-medium leading-relaxed"
                       >
-                        <span>{cap.partnerLabel}</span>
-                        <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                      </a>
-                    </div>
-                  )}
+                        <span className="w-6 h-6 rounded-full bg-slate-900 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                          {idx + 1}
+                        </span>
+                        <span>{step}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-black text-slate-950 uppercase tracking-wide">
+                      Copy-Paste Master Prompt Blueprint
+                    </h4>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleCopy(
+                          fullViewNicheGuide.masterPrompt,
+                          `modal-prompt-${fullViewNicheGuide.id}`
+                        )
+                      }
+                      className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-mono font-bold text-xs flex items-center gap-1.5 cursor-pointer"
+                    >
+                      {copiedId === `modal-prompt-${fullViewNicheGuide.id}` ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>Copied Master Prompt!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copy Master Prompt</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <pre className="bg-slate-950 text-cyan-300 p-4 rounded-2xl text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                    {fullViewNicheGuide.masterPrompt}
+                  </pre>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="text-sm font-black text-slate-950 uppercase tracking-wide">
+                    Client Deliverables Checklist
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    {fullViewNicheGuide.deliverables.map((d, i) => (
+                      <div
+                        key={i}
+                        className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 font-bold text-xs flex items-center gap-2"
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>{d}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              {/* Modal Footer */}
+              <div className="px-5 py-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                {fullViewNicheGuide.partnerUrl ? (
+                  <a
+                    href={fullViewNicheGuide.partnerUrl}
+                    target="_blank"
+                    rel="sponsored noopener noreferrer"
+                    className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs flex items-center gap-2 shadow-xs"
+                  >
+                    <span>{fullViewNicheGuide.partnerCta || 'Open Recommended Partner Tool'}</span>
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                ) : (
+                  <span className="text-xs font-mono text-slate-500">
+                    100% Free Practitioner Guide • Team WhiteHat Dev
+                  </span>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => setFullViewNicheGuide(null)}
+                  className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs cursor-pointer"
+                >
+                  Close Full View
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* =====================================================================

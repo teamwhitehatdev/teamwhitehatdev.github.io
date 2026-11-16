@@ -281,7 +281,7 @@ export const INITIAL_AFFILIATE_TOPICS: AffiliateCollapsibleTopic[] = [
     "iconEmoji": "",
     "themeColor": "emerald",
     "headerBannerImage": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1200&auto=format&fit=crop&q=80",
-    "referralUrl": "https://elevenlabs.io/?from=teamwhitehatdev",
+    "referralUrl": "https://try.elevenlabs.io/e5xwigkl9igv",
     "primaryCtaText": "TEST ELEVENLABS AI →",
     "discountBadgeText": "NICHE #07 • 22% LIFETIME RECURRING",
     "markdownContent": "Neural voice synthesis has reached human parity. Platforms like ElevenLabs, Play.ht, and Murf.ai allow creators to synthesize emotional voiceovers in 30+ languages, clone their own voice with 60 seconds of reference audio, and automatically translate video dialogue while matching speaker timbre and lip synchronization.\n\nThis technology powers commercial audiobooks, e-learning academies, YouTube faceless channels, automated customer service IVRs, and podcast dubbing.\n\nBecause audio creators continuously burn through monthly character allotments, promoting these platforms yields predictable, compounding lifetime monthly commissions averaging $15 to $85 per active customer.",
